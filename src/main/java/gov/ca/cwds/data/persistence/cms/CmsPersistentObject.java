@@ -72,11 +72,12 @@ public abstract class CmsPersistentObject implements PersistentObject {
     return lastUpdatedTime;
   }
 
-  /**
-   * {@inheritDoc}
+  /*
+   * (non-Javadoc)
    * 
-   * @see gov.ca.cwds.rest.api.persistence.PersistentObject#getPrimaryKey()
+   * @see gov.ca.cwds.data.persistence.PersistentObject#getPrimaryKey()
    */
   @Override
   public abstract Serializable getPrimaryKey();
+
 }
