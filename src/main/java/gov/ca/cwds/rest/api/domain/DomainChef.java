@@ -15,13 +15,6 @@ import gov.ca.cwds.rest.api.ApiException;
 public class DomainChef {
 
   /**
-   * Constructor
-   * 
-   * Private to prevent construction
-   */
-  private DomainChef() {}
-
-  /**
    * Common date format for domain classes.
    */
   public static final String DATE_FORMAT = "yyyy-MM-dd";
@@ -38,6 +31,13 @@ public class DomainChef {
 
   protected static final String ZIP_ALL_ZEROES = "00000";
   protected static final Pattern ZIPCODE_PATTERN = Pattern.compile("0*([1-9]*)");
+
+  /**
+   * Constructor
+   * 
+   * Private to prevent construction
+   */
+  private DomainChef() {}
 
   public static String cookBoolean(Boolean uncookedBoolean) {
     if (uncookedBoolean != null) {
@@ -121,7 +121,7 @@ public class DomainChef {
   public static String cookZipcodeNumber(Integer zipcodeNumber) {
     String zipcode = "";
     if (zipcodeNumber != null && zipcodeNumber > 0) {
-      String draft = (ZIP_ALL_ZEROES + zipcodeNumber.toString());
+      String draft = ZIP_ALL_ZEROES + zipcodeNumber.toString();
       zipcode = draft.substring(draft.length() - 5, draft.length());
     }
     return zipcode;

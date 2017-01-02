@@ -4,6 +4,11 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Read JSON configuration for Swagger settings.
+ * 
+ * @author CWDS API Team
+ */
 public class SwaggerConfiguration {
 
   @JsonProperty

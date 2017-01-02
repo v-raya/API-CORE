@@ -37,6 +37,7 @@ import io.swagger.jaxrs.listing.ApiListingResource;
  * Base execution class for CWDS REST API applications.
  * 
  * @author CWDS API Team
+ * @param <T> type of configuration
  */
 public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends Application<T> {
   private static final Logger LOGGER = LoggerFactory.getLogger(BaseApiApplication.class);
@@ -72,7 +73,7 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
 
   /**
    * Extending cannot implement the run method, this is their chance to complete tasks which would
-   * normall go in run
+   * normally go in run.
    * 
    * @param configuration The configuration
    * @param environment The environment
