@@ -6,12 +6,14 @@ import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.IdClass;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import gov.ca.cwds.data.persistence.cms.VarargPrimaryKey;
 
 /**
  * Hibernate "embeddable" class for composite primary keys. For use in entity classes.
  * 
- * <h2>Entity Class Usage</h2>
+ * <h2>Entity Class Usage:</h2>
  * 
  * <h3>Add an EmbeddablePrimaryKey member to the entity class:</h3>
  *
@@ -28,13 +30,13 @@ import gov.ca.cwds.data.persistence.cms.VarargPrimaryKey;
  * <pre>
  * public OtherClientName() {
  *   super();
- *   this.id = new OtherClientName.EmbeddablePrimaryKey();
+ *   this.id = new EmbeddablePrimaryKey();
  * }
  * 
  * public OtherClientName(String clientId, String firstName, String lastName, String middleName,
  * String namePrefixDescription, Short nameType, String suffixTitleDescription, String thirdId) {
  * super();
- * this.id = new OtherClientName.EmbeddablePrimaryKey(clientId, thirdId);
+ * this.id = new EmbeddablePrimaryKey(clientId, thirdId);
  * this.firstName = firstName;
  * </pre>
  *
@@ -44,7 +46,7 @@ import gov.ca.cwds.data.persistence.cms.VarargPrimaryKey;
  * 
  * <pre>
  * &#64;Override
- * public OtherClientName.EmbeddablePrimaryKey getPrimaryKey() {
+ * public EmbeddablePrimaryKey getPrimaryKey() {
  *   return this.id;
  * }
  * 
@@ -81,7 +83,7 @@ import gov.ca.cwds.data.persistence.cms.VarargPrimaryKey;
  *      ret = prime * ret + ((firstName == null) ? 0 : firstName.hashCode());
  * </pre>
  * 
- * <h2>Alternative Approaches</h2>
+ * <h2>Alternative Approaches:</h2>
  * 
  * <p>
  * Prefer the embeddable approach over Hibernate annotation {@link IdClass} due to usage
@@ -131,13 +133,26 @@ public final class EmbeddablePrimaryKey implements Serializable {
   }
 
   /**
+   * Construct from arguments.
+   * 
+   * @param id1 generic id 1
+   * @param id2 generic id 2
+   * @param id3 generic id 3
+   */
+  public EmbeddablePrimaryKey(String id1, String id2, String id3) {
+    this.id1 = id1;
+    this.id2 = id2;
+    this.id3 = id3;
+  }
+
+  /**
    * {@inheritDoc}
    * 
    * @see java.lang.Object#toString()
    */
   @Override
   public String toString() {
-    return "referralId=" + id2.trim() + ",clientId=" + id1.trim();
+    return "embed_key__{" + id1.trim() + "_" + id2.trim() + "_" + id3.trim() + "}";
   }
 
   /**
@@ -162,40 +177,9 @@ public final class EmbeddablePrimaryKey implements Serializable {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-
-    EmbeddablePrimaryKey other = (EmbeddablePrimaryKey) obj;
-
-    if (id1 == null) {
-      if (other.id1 != null)
-        return false;
-    } else if (!id1.equals(other.id1))
-      return false;
-
-    if (id2 == null) {
-      if (other.id2 != null)
-        return false;
-    } else if (!id2.equals(other.id2))
-      return false;
-
-    if (id2 == null) {
-      if (other.id2 != null)
-        return false;
-    } else if (!id2.equals(other.id2))
-      return false;
-
-    if (id3 == null) {
-      if (other.id3 != null)
-        return false;
-    } else if (!id3.equals(other.id3))
-      return false;
-
-    return true;
+    // Reduce cognitive complexity and eliminate human error -- at the expense of slightly slower
+    // performance.
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
   /**
