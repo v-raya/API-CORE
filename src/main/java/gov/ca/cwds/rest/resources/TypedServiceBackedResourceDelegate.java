@@ -25,9 +25,9 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
  * {@link Annotation} for RESTful resources.
  * 
  * @author CWDS API Team
- * @param <P> primary key type
- * @param <Q> request type
- * @param <S> response type
+ * @param <P> Primary key type
+ * @param <Q> reQuest type
+ * @param <S> reSponse type
  */
 public final class TypedServiceBackedResourceDelegate<P extends Serializable, Q extends Request, S extends gov.ca.cwds.rest.api.Response>
     implements TypedResourceDelegate<P, Q> {

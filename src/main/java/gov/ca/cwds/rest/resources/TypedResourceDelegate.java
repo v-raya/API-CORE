@@ -13,8 +13,8 @@ import gov.ca.cwds.rest.api.domain.DomainObject;
  * {@link Response} types.
  * 
  * @author CWDS API Team
- * @param <P> primary key type
- * @param <Q> request (input) type
+ * @param <P> Primary key type
+ * @param <Q> reQuest (input) type
  */
 public interface TypedResourceDelegate<P extends Serializable, Q extends Request> {
 
