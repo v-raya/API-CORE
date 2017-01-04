@@ -40,9 +40,7 @@ import gov.ca.cwds.data.persistence.cms.VarargPrimaryKey;
  * this.firstName = firstName;
  * </pre>
  *
- * <p>
  * <h3>Create delegate getters/setters and set appropriate JSON field names on those methods:</h3>
- * </p>
  * 
  * <pre>
  * &#64;Override
