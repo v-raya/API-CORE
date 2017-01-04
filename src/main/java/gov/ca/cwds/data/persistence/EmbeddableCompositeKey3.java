@@ -1,12 +1,8 @@
 package gov.ca.cwds.data.persistence;
 
-import java.io.Serializable;
-
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.IdClass;
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import gov.ca.cwds.data.persistence.cms.VarargPrimaryKey;
 
@@ -101,21 +97,19 @@ import gov.ca.cwds.data.persistence.cms.VarargPrimaryKey;
  * @see VarargPrimaryKey
  */
 @Embeddable
-public final class EmbeddablePrimaryKey implements Serializable {
+public class EmbeddableCompositeKey3 extends EmbeddableCompositeKey2 {
 
   /**
    * Base serialization version. Increment by version or create a unique number.
    */
   private static final long serialVersionUID = 1L;
 
-  private String id1 = "";
-  private String id2 = "";
   private String id3 = "";
 
   /**
    * Default constructor.
    */
-  public EmbeddablePrimaryKey() {
+  public EmbeddableCompositeKey3() {
     // Default, empty values for all key columns.
   }
 
@@ -125,9 +119,8 @@ public final class EmbeddablePrimaryKey implements Serializable {
    * @param id1 generic id 1
    * @param id2 generic id 2
    */
-  public EmbeddablePrimaryKey(String id1, String id2) {
-    this.id1 = id1;
-    this.id2 = id2;
+  public EmbeddableCompositeKey3(String id1, String id2) {
+    super(id1, id2);
   }
 
   /**
@@ -137,9 +130,8 @@ public final class EmbeddablePrimaryKey implements Serializable {
    * @param id2 generic id 2
    * @param id3 generic id 3
    */
-  public EmbeddablePrimaryKey(String id1, String id2, String id3) {
-    this.id1 = id1;
-    this.id2 = id2;
+  public EmbeddableCompositeKey3(String id1, String id2, String id3) {
+    super(id1, id2);
     this.id3 = id3;
   }
 
@@ -150,62 +142,7 @@ public final class EmbeddablePrimaryKey implements Serializable {
    */
   @Override
   public String toString() {
-    return "embed_key__{" + id1.trim() + "_" + id2.trim() + "_" + id3.trim() + "}";
-  }
-
-  /**
-   * {@inheritDoc}
-   * 
-   * @see java.lang.Object#hashCode()
-   */
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((id1 == null) ? 0 : id1.hashCode());
-    result = prime * result + ((id2 == null) ? 0 : id2.hashCode());
-    result = prime * result + ((id3 == null) ? 0 : id3.hashCode());
-    return result;
-  }
-
-  /**
-   * {@inheritDoc}
-   * 
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
-  @Override
-  public boolean equals(Object obj) {
-    // Reduce cognitive complexity and eliminate human error -- at the expense of slightly slower
-    // performance.
-    return EqualsBuilder.reflectionEquals(this, obj, false);
-  }
-
-  /**
-   * @return arbitrary id column, {@link #id1}.
-   */
-  public String getId1() {
-    return id1;
-  }
-
-  /**
-   * @param id1 arbitrary id column, {@link #id1}.
-   */
-  public void setId1(String id1) {
-    this.id1 = id1;
-  }
-
-  /**
-   * @return arbitrary id column, {@link #id2}.
-   */
-  public String getId2() {
-    return id2;
-  }
-
-  /**
-   * @param id2 arbitrary id column, {@link #id2}.
-   */
-  public void setId2(String id2) {
-    this.id2 = id2;
+    return "embed_key3__{" + getId1().trim() + "_" + getId2().trim() + "_" + getId3().trim() + "}";
   }
 
   /**
