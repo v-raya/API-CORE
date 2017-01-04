@@ -104,7 +104,6 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
     LOGGER.info("Application name: {}, Version: {}", configuration.getApplicationName(),
         configuration.getVersion());
 
-    LOGGER.info("Migrating Database");
     migrateDatabase(configuration);
 
     LOGGER.info("Configuring CORS: Cross-Origin Resource Sharing");
@@ -161,13 +160,22 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
     environment.jersey().register(swaggerResource);
   }
 
+  private final boolean isFlywayConfigured(final T configuration) {
+    return configuration.getFlywayFactory() != null;
+  }
+
   private final void migrateDatabase(final T configuration) {
-    Flyway flyway = new Flyway();
-    flyway.setDataSource(flywayBundle.getDataSourceFactory(configuration).build(null, "ds"));
-    List<String> locations = flywayBundle.getFlywayFactory(configuration).getLocations();
-    flyway.setLocations(locations.toArray(new String[locations.size()]));
-    flyway.setSqlMigrationPrefix(
-        flywayBundle.getFlywayFactory(configuration).getSqlMigrationPrefix());
-    flyway.migrate();
+    if (isFlywayConfigured(configuration)) {
+      LOGGER.info("Migrating New System Database");
+      Flyway flyway = new Flyway();
+      flyway.setDataSource(flywayBundle.getDataSourceFactory(configuration).build(null, "ds"));
+      List<String> locations = flywayBundle.getFlywayFactory(configuration).getLocations();
+      flyway.setLocations(locations.toArray(new String[locations.size()]));
+      flyway.setSqlMigrationPrefix(
+          flywayBundle.getFlywayFactory(configuration).getSqlMigrationPrefix());
+      flyway.migrate();
+    } else {
+      LOGGER.info("No Flyway Factory found - not migrating New System Database");
+    }
   }
 }
