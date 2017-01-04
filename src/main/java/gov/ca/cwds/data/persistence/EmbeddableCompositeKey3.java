@@ -11,28 +11,29 @@ import gov.ca.cwds.data.persistence.cms.VarargPrimaryKey;
  * 
  * <h2>Entity Class Usage:</h2>
  * 
- * <h3>Add an EmbeddablePrimaryKey member to the entity class:</h3>
+ * <h3>Add an EmbeddableCompositeKey3 member to the entity class:</h3>
  *
  * <pre>
  * &#64;AttributeOverrides({
  *     &#64;AttributeOverride(name = "id1", column = @Column(name = "FKCLIENT_T", length = CMS_ID_LEN)),
- *     &#64;AttributeOverride(name = "id2", column = @Column(name = "THIRD_ID", length = CMS_ID_LEN))})
+ *     &#64;AttributeOverride(name = "id2", column = @Column(name = "FKREFERL_T", length = CMS_ID_LEN)),
+ *     &#64;AttributeOverride(name = "id3", column = @Column(name = "THIRD_ID", length = CMS_ID_LEN))})
  * &#64;EmbeddedId
- * private EmbeddablePrimaryKey id;
+ * private EmbeddableCompositeKey3 id;
  * </pre>
  *
  * <h3>Create the primary key object in the entity constructors:</h3>
  *
  * <pre>
- * public OtherClientName() {
+ * public XYZEntity() {
  *   super();
- *   this.id = new EmbeddablePrimaryKey();
+ *   this.id = new EmbeddableCompositeKey3();
  * }
  * 
- * public OtherClientName(String clientId, String firstName, String lastName, String middleName,
+ * public XYZEntity(String clientId, String referralId, String firstName, String lastName, String middleName,
  * String namePrefixDescription, Short nameType, String suffixTitleDescription, String thirdId) {
  * super();
- * this.id = new EmbeddablePrimaryKey(clientId, thirdId);
+ * this.id = new EmbeddableCompositeKey3(clientId, referralId, thirdId);
  * this.firstName = firstName;
  * </pre>
  *
@@ -40,28 +41,38 @@ import gov.ca.cwds.data.persistence.cms.VarargPrimaryKey;
  * 
  * <pre>
  * &#64;Override
- * public EmbeddablePrimaryKey getPrimaryKey() {
+ * public EmbeddableCompositeKey3 getPrimaryKey() {
  *   return this.id;
  * }
  * 
- * &#64;JsonProperty(value = "clientId")
+ * &#64;JsonProperty(value = "client_id")
  * public String getClientId() {
  *   return StringUtils.trimToEmpty(id.getId1());
  * }
  * 
- * &#64;JsonProperty(value = "thirdId")
- * public String getThirdId() {
+ * &#64;JsonProperty(value = "referral_id")
+ * public String getReferralId() {
  *   return StringUtils.trimToEmpty(id.getId2());
  * }
  * 
- * &#64;JsonProperty(value = "clientId")
+ * &#64;JsonProperty(value = "third_id")
+ * public String getThirdId() {
+ *   return StringUtils.trimToEmpty(id.getId3());
+ * }
+ * 
+ * &#64;JsonProperty(value = "client_id")
  * public void setClientId(String clientId) {
  *   id.setId1(clientId);
  * }
  * 
- * &#64;JsonProperty(value = "thirdId")
+ * &#64;JsonProperty(value = "referral_id")
+ * public void setReferralId(String referralId) {
+ *   id.setId2(referralId);
+ * }
+ * 
+ * &#64;JsonProperty(value = "third_id")
  * public void setThirdId(String thirdId) {
- *   id.setId2(thirdId);
+ *   id.setId3(thirdId);
  * }
  * </pre>
  *
@@ -74,6 +85,7 @@ import gov.ca.cwds.data.persistence.cms.VarargPrimaryKey;
  *      int ret = 1;
  *      ret = prime * ret + ((id == null || id.getId1() == null) ? 0 : id.getId1().hashCode());
  *      ret = prime * ret + ((id == null || id.getId2() == null) ? 0 : id.getId2().hashCode());
+ *      ret = prime * ret + ((id == null || id.getId3() == null) ? 0 : id.getId3().hashCode());
  *      ret = prime * ret + ((firstName == null) ? 0 : firstName.hashCode());
  * </pre>
  * 

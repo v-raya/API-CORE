@@ -16,14 +16,14 @@ import gov.ca.cwds.data.persistence.cms.VarargPrimaryKey;
  * 
  * <h2>Entity Class Usage:</h2>
  * 
- * <h3>Add an EmbeddablePrimaryKey member to the entity class:</h3>
+ * <h3>Add an EmbeddableCompositeKey2 member to the entity class:</h3>
  *
  * <pre>
  * &#64;AttributeOverrides({
  *     &#64;AttributeOverride(name = "id1", column = @Column(name = "FKCLIENT_T", length = CMS_ID_LEN)),
  *     &#64;AttributeOverride(name = "id2", column = @Column(name = "THIRD_ID", length = CMS_ID_LEN))})
  * &#64;EmbeddedId
- * private EmbeddablePrimaryKey id;
+ * private EmbeddableCompositeKey2 id;
  * </pre>
  *
  * <h3>Create the primary key object in the entity constructors:</h3>
@@ -31,13 +31,13 @@ import gov.ca.cwds.data.persistence.cms.VarargPrimaryKey;
  * <pre>
  * public OtherClientName() {
  *   super();
- *   this.id = new EmbeddablePrimaryKey();
+ *   this.id = new EmbeddableCompositeKey2();
  * }
  * 
  * public OtherClientName(String clientId, String firstName, String lastName, String middleName,
  * String namePrefixDescription, Short nameType, String suffixTitleDescription, String thirdId) {
  * super();
- * this.id = new EmbeddablePrimaryKey(clientId, thirdId);
+ * this.id = new EmbeddableCompositeKey2(clientId, thirdId);
  * this.firstName = firstName;
  * </pre>
  *
@@ -45,26 +45,26 @@ import gov.ca.cwds.data.persistence.cms.VarargPrimaryKey;
  * 
  * <pre>
  * &#64;Override
- * public EmbeddablePrimaryKey getPrimaryKey() {
+ * public EmbeddableCompositeKey2 getPrimaryKey() {
  *   return this.id;
  * }
  * 
- * &#64;JsonProperty(value = "clientId")
+ * &#64;JsonProperty(value = "client_id")
  * public String getClientId() {
  *   return StringUtils.trimToEmpty(id.getId1());
  * }
  * 
- * &#64;JsonProperty(value = "thirdId")
+ * &#64;JsonProperty(value = "third_id")
  * public String getThirdId() {
  *   return StringUtils.trimToEmpty(id.getId2());
  * }
  * 
- * &#64;JsonProperty(value = "clientId")
+ * &#64;JsonProperty(value = "client_id")
  * public void setClientId(String clientId) {
  *   id.setId1(clientId);
  * }
  * 
- * &#64;JsonProperty(value = "thirdId")
+ * &#64;JsonProperty(value = "third_id")
  * public void setThirdId(String thirdId) {
  *   id.setId2(thirdId);
  * }
