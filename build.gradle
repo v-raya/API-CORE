@@ -8,7 +8,7 @@ apply plugin: 'maven-publish'
 sourceCompatibility = 1.8
 
 project.ext {
-    apiVersion = 0.13
+    apiVersion = "0.13"
     configPath = "$rootProject.projectDir/config/"
     dropwizardVersion = "1.0.5"
     dropwizardFlywayVersion = "1.0.0-1"
@@ -39,6 +39,9 @@ dependencies {
         compile group: 'io.swagger', name: 'swagger-jersey2-jaxrs', version: '1.5.9'
         compile group: 'io.swagger', name: 'swagger-annotations', version: '1.5.9'
         compile group: "org.postgresql", name: "postgresql", version: "9.4.1208.jre7"
+		compile group: 'org.apache.commons', name: 'commons-compress', version: '1.12'
+
+
 
         testCompile group: "io.dropwizard", name: "dropwizard-testing", version: dropwizardVersion
         testCompile 'org.mockito:mockito-core:2.0.54-beta'
