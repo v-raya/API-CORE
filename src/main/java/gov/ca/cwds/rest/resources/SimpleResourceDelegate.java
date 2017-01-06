@@ -5,6 +5,7 @@ import java.lang.annotation.Annotation;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -30,7 +31,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * @param <S> Service type
  * @see ISimpleResourceService
  */
-public final class SimpleResourceDelegate<K extends Serializable, Q extends Request, P extends gov.ca.cwds.rest.api.Response, S extends ISimpleResourceService<K, Q, P>>
+public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P extends gov.ca.cwds.rest.api.Response, S extends ISimpleResourceService<K, Q, P>>
     implements ISimpleResourceDelegate<K, Q, P, S> {
 
   /**
@@ -77,7 +78,7 @@ public final class SimpleResourceDelegate<K extends Serializable, Q extends Requ
    * @throws ApiException if service call fails, catch and throw an ApiException
    */
   @Override
-  public Response find(K id) throws ApiException {
+  public final Response find(@NotNull K id) throws ApiException {
     Response wsResponse = null;
     try {
       wsResponse = Response.status(Response.Status.OK).entity(getService().find(id)).build();
@@ -110,7 +111,7 @@ public final class SimpleResourceDelegate<K extends Serializable, Q extends Requ
    * @return the underlying, wrapped {@link ISimpleResourceService}
    */
   @Override
-  public S getService() {
+  public final S getService() {
     return this.service;
   }
 
