@@ -40,4 +40,6 @@ public interface ISimpleResourceService<K extends Serializable, Q extends Reques
    */
   P find(K id) throws ServiceException;
 
+
+
 }

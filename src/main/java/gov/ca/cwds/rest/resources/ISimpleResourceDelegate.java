@@ -3,6 +3,7 @@ package gov.ca.cwds.rest.resources;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Response;
 
 import gov.ca.cwds.rest.api.ApiException;
@@ -33,7 +34,7 @@ public interface ISimpleResourceDelegate<K extends Serializable, Q extends Reque
    * @return The API {@link Response}
    * @throws ApiException if service call fails, catch and throw an ApiException
    */
-  Response find(K id) throws ApiException;
+  Response find(@NotNull K id) throws ApiException;
 
   /**
    * Exposes the wrapped {@link ISimpleResourceService}.
@@ -73,5 +74,5 @@ public interface ISimpleResourceDelegate<K extends Serializable, Q extends Reque
    * @throws ApiException if service call fails, catch and throw an ApiException
    * @see ISimpleResourceService#handle(Request)
    */
-  Response handle(Q req) throws ApiException;
+  Response handle(@NotNull Q req) throws ApiException;
 }
