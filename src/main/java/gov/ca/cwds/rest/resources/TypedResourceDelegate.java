@@ -8,9 +8,9 @@ import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 
 /**
- * Interface for Resource delegates. All resources should have at a minimum a GET, POST, PUT, and
- * DELETE. Those implementation should be fairly generic other than {@link Request} and
- * {@link Response} types.
+ * Interface for Resource delegates, intended for use by CRUD-aware resources. All resources should
+ * have at a minimum a GET, POST, PUT, and DELETE. Those implementations should be fairly generic
+ * other than {@link Request} and {@link Response} types.
  * 
  * @author CWDS API Team
  * @param <P> Primary key type

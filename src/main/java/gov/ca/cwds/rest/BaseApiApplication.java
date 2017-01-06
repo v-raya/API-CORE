@@ -40,6 +40,7 @@ import io.swagger.jaxrs.listing.ApiListingResource;
  * @param <T> type of configuration
  */
 public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends Application<T> {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(BaseApiApplication.class);
 
   private GuiceBundle<T> guiceBundle;
@@ -65,9 +66,9 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
   public abstract Module applicationModule(Bootstrap<T> bootstrap);
 
   /**
-   * Extending classes can do any intialization specific to their applications here.
+   * Extending classes can do any initialization specific to their applications here.
    * 
-   * @param bootstrap The bootrap for this application
+   * @param bootstrap The bootstrap for this application
    */
   public void initializeInternal(Bootstrap<T> bootstrap) {}
 
@@ -86,14 +87,12 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
         bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor(false)));
 
     bootstrap.addBundle(new ViewBundle<T>());
-
     guiceBundle = GuiceBundle.<T>newBuilder().addModule(applicationModule(bootstrap))
         .setConfigClass(bootstrap.getApplication().getConfigurationClass())
         .enableAutoConfig(getClass().getPackage().getName()).build();
 
     bootstrap.addBundle(guiceBundle);
     bootstrap.addBundle(flywayBundle);
-
     initializeInternal(bootstrap);
   }
 
