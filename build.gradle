@@ -1,10 +1,11 @@
 plugins {
     id "java"
-	id 'net.saliman.cobertura' version '2.3.2'
+	id 'net.saliman.cobertura' version '2.4.0'
     id "org.sonarqube" version "2.2.1"
 }
 
 apply plugin: 'maven-publish'
+apply plugin: 'net.saliman.cobertura'
 sourceCompatibility = 1.8
 
 project.ext {
@@ -22,6 +23,7 @@ version = apiVersion
 repositories {
     mavenCentral()
     maven {
+    	url "https://plugins.gradle.org/m2/"
         url "http://maven2.cwds.tabordasolutions.net"
     }
 }
@@ -72,8 +74,9 @@ task integrationTest(type: Test, dependsOn: testClasses) {
 cobertura {
 	coverageFormats = ['xml', 'html']
 	coverageIgnoreTrivial = true
-	coverageIgnores = ['org.slf4j.Logger.*']
+	coverageIgnores = ['org.slf4j.Logger.*', 'gov.ca.cwds.rest.resources.*']
 	coverageReportDir = new File("$buildDir/reports/cobertura")
+	coverageIgnoreMethodAnnotations = ['gov.ca.cwds.rest.resources.CoverageIgnore']
 }
 
 publishing {

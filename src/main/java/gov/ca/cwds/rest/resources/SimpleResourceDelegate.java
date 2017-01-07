@@ -32,7 +32,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * <p>
  * Non-CRUD resources delegate to this class with the decoration being Swagger {@link Annotation}
  * classes for documentation and Jersey {@link Annotation} for RESTful resources.
- * <p>
+ * </p>
  * 
  * <p>
  * NOTE: CRUD resources should use {@link TypedResourceDelegate} instead, which provides methods to
@@ -132,7 +132,7 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
    * <li>{@link javax.ws.rs.core.Response.Status#SERVICE_UNAVAILABLE}</li>
    * </ul>
    * 
-   * @param req input CWDS API {@link Request}
+   * @param e {@link ServiceException} to inspect
    * @return web service {@link Response}
    * @see ISimpleResourceService#handle(Request)
    * @see ISimpleResourceService#find(Serializable)

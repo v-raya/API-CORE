@@ -56,7 +56,7 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
   /**
    * Validate an incoming key, type K.
    * 
-   * @param req API request
+   * @param key serializable key, type K
    * @throws ConstraintViolationException if the incoming key fails validation
    */
   protected final void validateRequest(K key) throws ConstraintViolationException {
@@ -88,16 +88,26 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
    * 
    * @param e Exception to handle throws ServiceException on runtime error
    */
+  @CoverageIgnore
   protected void handleException(Exception e) throws ServiceException {
 
     if (e.getCause() instanceof ConstraintViolationException) {
       LOGGER.error("Failed validation! {}", e.getMessage(), e);
 
       ConstraintViolationException cve = (ConstraintViolationException) e.getCause();
+
+      // TODO: Story #137202471:
+      // Cobertura cannot handle Java 8 features released YEARS ago.
+
       // cve.getConstraintViolations().stream().forEach(System.out::println);
-      cve.getConstraintViolations().stream()
-          .forEach(err -> LOGGER.error("validation error: {}, invalid value: {}", err.getMessage(),
-              err.getInvalidValue()));
+      // cve.getConstraintViolations().stream()
+      // .forEach(err -> LOGGER.error("validation error: {}, invalid value: {}", err.getMessage(),
+      // err.getInvalidValue()));
+
+      for (ConstraintViolation cv : cve.getConstraintViolations()) {
+        LOGGER.error("validation error: {}, invalid value: {}", cv.getMessage(),
+            cv.getInvalidValue());
+      }
 
       throw new ServiceException("Failed validation! " + e.getMessage(), cve);
     } else if (e.getCause() instanceof EntityNotFoundException) {
@@ -122,6 +132,7 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
 
   }
 
+  @CoverageIgnore
   @Override
   public P handle(Q req) throws ServiceException {
     P apiResponse = null;
@@ -134,6 +145,7 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
     return apiResponse;
   }
 
+  @CoverageIgnore
   @Override
   public P find(K id) throws ServiceException {
     P apiResponse = null;
