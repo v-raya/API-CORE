@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
@@ -12,6 +14,7 @@ import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +54,7 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
   /**
    * Logger for this class.
    */
-  static final Logger LOGGER = LoggerFactory.getLogger(ISimpleResourceDelegate.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ISimpleResourceDelegate.class);
 
   /**
    * The wrapped CRUD service.
@@ -66,6 +69,72 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
   @Inject
   public SimpleResourceDelegate(S service) {
     this.service = service;
+  }
+
+  /**
+   * <p>
+   * Handle API request by delegating to service method,
+   * {@link ISimpleResourceService#handle(Request)} and wrapping resulting API
+   * {@link gov.ca.cwds.rest.api.Response} with a Java standard web service response.
+   * </p>
+   * 
+   * <p>
+   * See method {@link #handleException(Exception)} for the list of possible HTTP Response Codes.
+   * </p>
+   * 
+   * @param req input CWDS API {@link Request}
+   * @return web service {@link Response}
+   * @throws ApiException if service call fails, catch and throw an ApiException
+   * @see ISimpleResourceService#handle(Request)
+   */
+  @Override
+  public final Response handle(@NotNull Q req) throws ApiException {
+    Response wsResponse = null;
+    try {
+      validateRequest(req);
+      wsResponse = Response.status(Response.Status.OK).entity(execHandle(req)).build();
+    } catch (Exception e) {
+      wsResponse = handleException(e);
+    }
+    return wsResponse;
+  }
+
+  /**
+   * Find object by its key by delegating to wrapped service method,
+   * {@link ISimpleResourceService#find(Serializable)}.
+   * 
+   * <p>
+   * See method {@link #handleException(Exception)} for the list of possible HTTP Response Codes.
+   * </p>
+   * 
+   * @param key key to search for
+   * @return The API {@link Response}
+   * @throws ApiException if service call fails, catch and throw an ApiException
+   */
+  @Override
+  public final Response find(@NotNull K key) throws ApiException {
+    Response wsResponse = null;
+    try {
+      validateKey(key);
+      wsResponse = Response.status(Response.Status.OK).entity(execFind(key)).build();
+    } catch (Exception e) {
+      wsResponse = handleException(e);
+    }
+    return wsResponse;
+  }
+
+  /**
+   * Exposes the wrapped {@link ISimpleResourceService}.
+   * 
+   * <p>
+   * Usually you don't need to call this, but the interface is exposed for convenience.
+   * </p>
+   * 
+   * @return the underlying, wrapped {@link ISimpleResourceService}
+   */
+  @Override
+  public final S getService() {
+    return this.service;
   }
 
   /**
@@ -99,34 +168,14 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
   }
 
   /**
-   * Find object by its key by delegating to wrapped service method,
-   * {@link ISimpleResourceService#find(Serializable)}.
-   * 
-   * <p>
-   * See method {@link #handleException(Exception)} for the list of possible HTTP Response Codes.
-   * </p>
-   * 
-   * @param key key to search for
-   * @return The API {@link Response}
-   * @throws ApiException if service call fails, catch and throw an ApiException
-   */
-  @Override
-  public final Response find(@NotNull K key) throws ApiException {
-    Response wsResponse = null;
-    try {
-      validateKey(key);
-      wsResponse = Response.status(Response.Status.OK).entity(getService().find(key)).build();
-    } catch (Exception e) {
-      handleException(e);
-    }
-    return wsResponse;
-  }
-
-  /**
    * <p>
    * Handle API request by delegating to service method,
    * {@link ISimpleResourceService#handle(Request)} and wrapping resulting API
    * {@link gov.ca.cwds.rest.api.Response} with a Java standard web service response.
+   * </p>
+   * 
+   * <p>
+   * Web Service Response, not a CWDS API Response.
    * </p>
    * 
    * <p>
@@ -150,72 +199,43 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
    * @see ISimpleResourceService#find(Serializable)
    */
   protected Response handleException(Exception e) {
-    Response wsResponse = null;
+    Response ret;
 
     if (e.getCause() != null) {
-      // if (e.getCause() instanceof EntityNotFoundException) {
-      // wsResponse = Response.status(Response.Status.NOT_FOUND).entity(null).build();
-      // } else if (e.getCause() instanceof EntityExistsException) {
-      // wsResponse = Response.status(Response.Status.CONFLICT).entity(null).build();
-      // } else if (e.getCause() instanceof NullPointerException) {
-      // wsResponse = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(null).build();
-      // } else if (e.getCause() instanceof ClassNotFoundException) {
-      // LOGGER.error("Class not found! {}", e.getMessage(), e);
-      // wsResponse = Response.status(Response.Status.EXPECTATION_FAILED).entity(null).build();
-      // } else if (e.getCause() instanceof NotImplementedException) {
-      // LOGGER.error("Not implemented", e);
-      // wsResponse = Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
-      // } else {
-      // LOGGER.error("Unable to handle request", e);
-      // wsResponse = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
-      // }
-
-      throw new ApiException(e);
+      if (e.getCause() instanceof EntityNotFoundException) {
+        ret = Response.status(Response.Status.NOT_FOUND).entity(null).build();
+      } else if (e.getCause() instanceof EntityExistsException) {
+        ret = Response.status(Response.Status.CONFLICT).entity(null).build();
+      } else if (e.getCause() instanceof NullPointerException) {
+        ret = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(null).build();
+      } else if (e.getCause() instanceof ClassNotFoundException) {
+        LOGGER.error("Class not found! {}", e.getMessage(), e);
+        ret = Response.status(Response.Status.EXPECTATION_FAILED).entity(null).build();
+      } else if (e.getCause() instanceof NotImplementedException) {
+        LOGGER.error("Not implemented", e);
+        ret = Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
+      } else {
+        LOGGER.error("Unable to handle request", e);
+        ret = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
+      }
+    } else if (e instanceof ServiceException) {
+      final ServiceException svcEx = (ServiceException) e;
+      LOGGER.error("ServiceException without attached cause: {}", svcEx.getMessage(), e);
+      ret = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
+    } else {
+      LOGGER.error("Unhandled error condition: {}", e.getMessage(), e);
+      ret = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
     }
 
-    return wsResponse;
+    return ret;
   }
 
-  /**
-   * Exposes the wrapped {@link ISimpleResourceService}.
-   * 
-   * <p>
-   * Usually you don't need to call this, but the interface is exposed for convenience.
-   * </p>
-   * 
-   * @return the underlying, wrapped {@link ISimpleResourceService}
-   */
-  @Override
-  public final S getService() {
-    return this.service;
+  protected P execFind(@NotNull K key) throws ServiceException {
+    return getService().find(key);
   }
 
-  /**
-   * <p>
-   * Handle API request by delegating to service method,
-   * {@link ISimpleResourceService#handle(Request)} and wrapping resulting API
-   * {@link gov.ca.cwds.rest.api.Response} with a Java standard web service response.
-   * </p>
-   * 
-   * <p>
-   * See method {@link #handleException(Exception)} for the list of possible HTTP Response Codes.
-   * </p>
-   * 
-   * @param req input CWDS API {@link Request}
-   * @return web service {@link Response}
-   * @throws ApiException if service call fails, catch and throw an ApiException
-   * @see ISimpleResourceService#handle(Request)
-   */
-  @Override
-  public Response handle(@NotNull Q req) throws ApiException {
-    Response wsResponse = null;
-    try {
-      validateRequest(req);
-      wsResponse = Response.status(Response.Status.OK).entity(getService().handle(req)).build();
-    } catch (Exception e) {
-      handleException(e);
-    }
-    return wsResponse;
+  protected P execHandle(@NotNull Q req) throws ServiceException {
+    return getService().handle(req);
   }
 
 }

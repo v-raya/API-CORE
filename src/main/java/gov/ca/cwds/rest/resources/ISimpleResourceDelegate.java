@@ -11,17 +11,18 @@ import gov.ca.cwds.rest.api.Request;
 
 /**
  * <p>
- * Implements the {@link ResourceDelegate} and passes work to the service layer. All
- * {@link Resource} should decorate this class. Resources will delegate to this class with the
- * decoration being swagger {@link Annotation} classes for documentation and Jersey
- * {@link Annotation} for RESTful resources.
+ * Implements the {@link ResourceDelegate} and passes work to the service layer. All non-CRUD
+ * {@link Resource}'s may implement this interface multiple times, once for each distinct
+ * Request/Response type. Resources will delegate to this class with the decoration being swagger
+ * {@link Annotation} classes for documentation and Jersey {@link Annotation} for RESTful resources.
  * </p>
  * 
- * @author CWDS API Team
  * @param <K> Key type
  * @param <Q> reQuest type
  * @param <P> resPonse type
  * @param <S> Service type
+ * 
+ * @author CWDS API Team
  * @see ISimpleResourceService
  */
 public interface ISimpleResourceDelegate<K extends Serializable, Q extends Request, P extends gov.ca.cwds.rest.api.Response, S extends ISimpleResourceService<K, Q, P>> {

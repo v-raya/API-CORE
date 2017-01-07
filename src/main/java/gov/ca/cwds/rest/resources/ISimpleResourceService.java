@@ -10,10 +10,11 @@ import gov.ca.cwds.rest.services.ServiceException;
  * Typed interface for Service classes, intended for use by non-CRUD, read-only services, such as
  * ElasticSearch, NOT CRUD services.
  * 
+ * @param <K> Key: uniquely identifies a record
+ * @param <Q> reQuest: domain input type
+ * @param <P> resPonse: domain output type
+ * 
  * @author CWDS API Team
- * @param <K> Key type
- * @param <Q> reQuest (input) type
- * @param <P> reSponse (output) type
  */
 public interface ISimpleResourceService<K extends Serializable, Q extends Request, P extends Response> {
 
@@ -32,7 +33,7 @@ public interface ISimpleResourceService<K extends Serializable, Q extends Reques
   P handle(Q request) throws ServiceException;
 
   /**
-   * Look up object by key.
+   * Look up object/record by key.
    * 
    * @param key key to search for
    * @return API response

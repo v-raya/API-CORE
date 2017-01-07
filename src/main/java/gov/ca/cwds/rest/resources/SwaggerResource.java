@@ -14,17 +14,22 @@ import gov.ca.cwds.rest.SwaggerConfiguration;
 import gov.ca.cwds.rest.views.SwaggerView;
 import io.swagger.annotations.Api;
 
+/**
+ * CWDS API implementation of the API {@link Resource} marker interface to interact with Swagger.
+ * 
+ * @author CWDS API Team
+ */
 @Api(value = "swagger", hidden = true)
 @Path(value = "swagger")
 @Produces(MediaType.TEXT_HTML)
 public class SwaggerResource implements Resource {
+
   private SwaggerConfiguration swaggerConfiguration;
 
   @Inject
   public SwaggerResource(SwaggerConfiguration swaggerConfiguration) {
     super();
     this.swaggerConfiguration = swaggerConfiguration;
-
   }
 
   @GET

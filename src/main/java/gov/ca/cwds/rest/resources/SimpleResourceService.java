@@ -37,7 +37,7 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
   /**
    * Logger for this class.
    */
-  static final Logger LOGGER = LoggerFactory.getLogger(SimpleResourceService.class);
+  protected static final Logger LOGGER = LoggerFactory.getLogger(SimpleResourceService.class);
 
   /**
    * Validate an incoming API request, {@link Request}, type Q.
@@ -95,21 +95,17 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
 
     if (e.getCause() instanceof ConstraintViolationException) {
       LOGGER.error("Failed validation! {}", e.getMessage(), e);
-
       ConstraintViolationException cve = (ConstraintViolationException) e.getCause();
-
-      // TODO: Story #137202471:
-      // Cobertura cannot handle Java 8 features released YEARS ago.
-
-      // cve.getConstraintViolations().stream().forEach(System.out::println);
-      // cve.getConstraintViolations().stream()
-      // .forEach(err -> LOGGER.error("validation error: {}, invalid value: {}", err.getMessage(),
-      // err.getInvalidValue()));
-
       for (ConstraintViolation<?> cv : cve.getConstraintViolations()) {
         LOGGER.error("validation error: {}, invalid value: {}", cv.getMessage(),
             cv.getInvalidValue());
       }
+
+      // TODO: Story #137202471: Cobertura doesn't handle Java 8 features.
+      // cve.getConstraintViolations().stream().forEach(System.out::println);
+      // cve.getConstraintViolations().stream()
+      // .forEach(err -> LOGGER.error("validation error: {}, invalid value: {}", err.getMessage(),
+      // err.getInvalidValue()));
 
       throw new ServiceException("Failed validation! " + e.getMessage(), cve);
     } else if (e.getCause() instanceof EntityNotFoundException) {
@@ -127,11 +123,10 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
     } else if (e.getCause() instanceof NotImplementedException) {
       LOGGER.error("Not implemented", e);
       throw new ServiceException("Not implemented", e);
-    } else {
-      LOGGER.error("Unable to handle request", e);
-      throw new ServiceException(e);
     }
 
+    LOGGER.error("Unable to handle request", e);
+    throw new ServiceException(e);
   }
 
   @CoverageIgnore

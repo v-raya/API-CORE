@@ -3,7 +3,6 @@ package gov.ca.cwds.rest.resources;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -43,8 +42,13 @@ public class SimpleResourceDelegateTest {
     }
 
     @Override
-    public Response handle(TestApiRequest req) throws ApiException {
-      return super.handle(req);
+    public TestApiResponse execFind(String key) throws ApiException {
+      return super.execFind(key);
+    }
+
+    @Override
+    public TestApiResponse execHandle(TestApiRequest req) throws ApiException {
+      return super.execHandle(req);
     }
 
   }
@@ -87,17 +91,10 @@ public class SimpleResourceDelegateTest {
 
   @Test
   public void find_A$Object_T$ApiException() throws Exception {
-    String id = "asdfasdf";
-    try {
-      when(svc.find(any()))
-          .thenThrow(new ApiException(new ServiceException(new IllegalArgumentException())));
-      target.find(id);
-      fail("Expected exception was not thrown!");
-    } catch (ApiException e) {
-      // then all good
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    final String key = "asdfasdf";
+    when(svc.find(any())).thenThrow(new ServiceException(new IllegalArgumentException()));
+    final Response response = target.find(key);
+    assertTrue(response.getStatus() != Response.Status.OK.ordinal());
   }
 
   @Test
@@ -116,14 +113,11 @@ public class SimpleResourceDelegateTest {
   @Test
   public void handle_A$Object_T$ApiException() throws Exception {
     TestApiRequest req = new TestApiRequest();
-    try {
-      when(svc.handle(req))
-          .thenThrow(new ApiException(new ServiceException(new IllegalArgumentException())));
-      target.handle(req);
-      fail("Expected exception was not thrown!");
-    } catch (ApiException e) {
-      // then all good
-    }
+    when(svc.handle(req))
+        .thenThrow(new ApiException(new ServiceException(new IllegalArgumentException())));
+    target.handle(req);
+    final Response response = target.handle(req);
+    assertTrue(response.getStatus() != Response.Status.OK.ordinal());
   }
 
 }
