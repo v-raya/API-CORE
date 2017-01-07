@@ -2,15 +2,10 @@ package gov.ca.cwds.rest.resources;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
-import java.util.Set;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Response;
 
@@ -144,12 +139,7 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
    * @throws ConstraintViolationException if the request fails validation
    */
   protected void validateRequest(Q req) throws ConstraintViolationException {
-    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-    Validator validator = factory.getValidator();
-    final Set<ConstraintViolation<Q>> violations = validator.validate(req);
-    if (!violations.isEmpty()) {
-      throw new ConstraintViolationException(violations);
-    }
+    ResourceParamValidator.<Q>validate(req);
   }
 
   /**
@@ -159,12 +149,7 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
    * @throws ConstraintViolationException if the key fails validation
    */
   protected void validateKey(K key) throws ConstraintViolationException {
-    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-    Validator validator = factory.getValidator();
-    final Set<ConstraintViolation<K>> violations = validator.validate(key);
-    if (!violations.isEmpty()) {
-      throw new ConstraintViolationException(violations);
-    }
+    ResourceParamValidator.<K>validate(key);
   }
 
   /**
@@ -230,10 +215,32 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
     return ret;
   }
 
+  /**
+   * Default behavior for {@link #find(Serializable)} method. Delegates to service.
+   * 
+   * <p>
+   * Implementations are free to override this behavior, as needed.
+   * </p>
+   * 
+   * @param key Serializable, unique key
+   * @return API Response
+   * @throws ServiceException on service error
+   */
   protected P execFind(@NotNull K key) throws ServiceException {
     return getService().find(key);
   }
 
+  /**
+   * Default behavior for {@link #handle(Request)} method. Delegates to service.
+   * 
+   * <p>
+   * Implementations are free to override this behavior, as needed.
+   * </p>
+   * 
+   * @param req API Request
+   * @return API Response
+   * @throws ServiceException on service error
+   */
   protected P execHandle(@NotNull Q req) throws ServiceException {
     return getService().handle(req);
   }

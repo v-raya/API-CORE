@@ -1,15 +1,11 @@
 package gov.ca.cwds.rest.resources;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -46,12 +42,7 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
    * @throws ConstraintViolationException if the incoming request fails validation
    */
   protected final void validateRequest(Q req) throws ConstraintViolationException {
-    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-    Validator validator = factory.getValidator();
-    final Set<ConstraintViolation<Q>> violations = validator.validate(req);
-    if (!violations.isEmpty()) {
-      throw new ConstraintViolationException(violations);
-    }
+    ResourceParamValidator.<Q>validate(req);
   }
 
   /**
@@ -61,12 +52,7 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
    * @throws ConstraintViolationException if the incoming key fails validation
    */
   protected final void validateKey(K key) throws ConstraintViolationException {
-    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-    Validator validator = factory.getValidator();
-    final Set<ConstraintViolation<K>> violations = validator.validate(key);
-    if (!violations.isEmpty()) {
-      throw new ConstraintViolationException(violations);
-    }
+    ResourceParamValidator.<K>validate(key);
   }
 
   /**
