@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
@@ -14,7 +12,6 @@ import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,24 +84,39 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
   }
 
   /**
+   * Validate an incoming key, type K.
+   * 
+   * @param key key to validate
+   * @throws ConstraintViolationException if the key fails validation
+   */
+  protected void validateKey(K key) throws ConstraintViolationException {
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    Validator validator = factory.getValidator();
+    final Set<ConstraintViolation<K>> violations = validator.validate(key);
+    if (!violations.isEmpty()) {
+      throw new ConstraintViolationException(violations);
+    }
+  }
+
+  /**
    * Find object by its key by delegating to wrapped service method,
    * {@link ISimpleResourceService#find(Serializable)}.
    * 
    * <p>
-   * See method {@link #handleException(ServiceException)} for the list of possible HTTP Response
-   * Codes.
+   * See method {@link #handleException(Exception)} for the list of possible HTTP Response Codes.
    * </p>
    * 
-   * @param id key to search for
+   * @param key key to search for
    * @return The API {@link Response}
    * @throws ApiException if service call fails, catch and throw an ApiException
    */
   @Override
-  public final Response find(@NotNull K id) throws ApiException {
+  public final Response find(@NotNull K key) throws ApiException {
     Response wsResponse = null;
     try {
-      wsResponse = Response.status(Response.Status.OK).entity(getService().find(id)).build();
-    } catch (ServiceException e) {
+      validateKey(key);
+      wsResponse = Response.status(Response.Status.OK).entity(getService().find(key)).build();
+    } catch (Exception e) {
       handleException(e);
     }
     return wsResponse;
@@ -137,23 +149,28 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
    * @see ISimpleResourceService#handle(Request)
    * @see ISimpleResourceService#find(Serializable)
    */
-  protected Response handleException(ServiceException e) {
-    Response wsResponse;
-    if (e.getCause() instanceof EntityNotFoundException) {
-      wsResponse = Response.status(Response.Status.NOT_FOUND).entity(null).build();
-    } else if (e.getCause() instanceof EntityExistsException) {
-      wsResponse = Response.status(Response.Status.CONFLICT).entity(null).build();
-    } else if (e.getCause() instanceof NullPointerException) {
-      wsResponse = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(null).build();
-    } else if (e.getCause() instanceof ClassNotFoundException) {
-      LOGGER.error("Class not found! {}", e.getMessage(), e);
-      wsResponse = Response.status(Response.Status.EXPECTATION_FAILED).entity(null).build();
-    } else if (e.getCause() instanceof NotImplementedException) {
-      LOGGER.error("Not implemented", e);
-      wsResponse = Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
-    } else {
-      LOGGER.error("Unable to handle request", e);
-      wsResponse = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
+  protected Response handleException(Exception e) {
+    Response wsResponse = null;
+
+    if (e.getCause() != null) {
+      // if (e.getCause() instanceof EntityNotFoundException) {
+      // wsResponse = Response.status(Response.Status.NOT_FOUND).entity(null).build();
+      // } else if (e.getCause() instanceof EntityExistsException) {
+      // wsResponse = Response.status(Response.Status.CONFLICT).entity(null).build();
+      // } else if (e.getCause() instanceof NullPointerException) {
+      // wsResponse = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(null).build();
+      // } else if (e.getCause() instanceof ClassNotFoundException) {
+      // LOGGER.error("Class not found! {}", e.getMessage(), e);
+      // wsResponse = Response.status(Response.Status.EXPECTATION_FAILED).entity(null).build();
+      // } else if (e.getCause() instanceof NotImplementedException) {
+      // LOGGER.error("Not implemented", e);
+      // wsResponse = Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
+      // } else {
+      // LOGGER.error("Unable to handle request", e);
+      // wsResponse = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
+      // }
+
+      throw new ApiException(e);
     }
 
     return wsResponse;
@@ -181,8 +198,7 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
    * </p>
    * 
    * <p>
-   * See method {@link #handleException(ServiceException)} for the list of possible HTTP Response
-   * Codes.
+   * See method {@link #handleException(Exception)} for the list of possible HTTP Response Codes.
    * </p>
    * 
    * @param req input CWDS API {@link Request}
@@ -196,7 +212,7 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
     try {
       validateRequest(req);
       wsResponse = Response.status(Response.Status.OK).entity(getService().handle(req)).build();
-    } catch (ServiceException e) {
+    } catch (Exception e) {
       handleException(e);
     }
     return wsResponse;

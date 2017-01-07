@@ -34,12 +34,10 @@ public interface ISimpleResourceService<K extends Serializable, Q extends Reques
   /**
    * Look up object by key.
    * 
-   * @param id key to search for
+   * @param key key to search for
    * @return API response
    * @throws ServiceException on disconnect or other serious error
    */
-  P find(K id) throws ServiceException;
-
-
+  P find(K key) throws ServiceException;
 
 }

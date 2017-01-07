@@ -79,7 +79,7 @@ public class SimpleResourceDelegateTest {
 
   @Test
   public void find_A$Object() throws Exception {
-    String id = null;
+    String id = "1234";
     when(svc.find(id)).thenReturn(new TestApiResponse());
     Response actual = target.find(id);
     assertTrue(actual.getEntity() instanceof TestApiResponse);
@@ -87,14 +87,16 @@ public class SimpleResourceDelegateTest {
 
   @Test
   public void find_A$Object_T$ApiException() throws Exception {
-    String id = null;
+    String id = "asdfasdf";
     try {
-      when(svc.find(id))
+      when(svc.find(any()))
           .thenThrow(new ApiException(new ServiceException(new IllegalArgumentException())));
       target.find(id);
       fail("Expected exception was not thrown!");
     } catch (ApiException e) {
       // then all good
+    } catch (Exception e) {
+      e.printStackTrace();
     }
   }
 

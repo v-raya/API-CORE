@@ -10,6 +10,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
@@ -59,7 +60,7 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
    * @param key serializable key, type K
    * @throws ConstraintViolationException if the incoming key fails validation
    */
-  protected final void validateRequest(K key) throws ConstraintViolationException {
+  protected final void validateKey(K key) throws ConstraintViolationException {
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     Validator validator = factory.getValidator();
     final Set<ConstraintViolation<K>> violations = validator.validate(key);
@@ -87,6 +88,7 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
    * </ul>
    * 
    * @param e Exception to handle throws ServiceException on runtime error
+   * @throws ServiceException wraps incoming exception in a ServiceException
    */
   @CoverageIgnore
   protected void handleException(Exception e) throws ServiceException {
@@ -104,7 +106,7 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
       // .forEach(err -> LOGGER.error("validation error: {}, invalid value: {}", err.getMessage(),
       // err.getInvalidValue()));
 
-      for (ConstraintViolation cv : cve.getConstraintViolations()) {
+      for (ConstraintViolation<?> cv : cve.getConstraintViolations()) {
         LOGGER.error("validation error: {}, invalid value: {}", cv.getMessage(),
             cv.getInvalidValue());
       }
@@ -147,19 +149,31 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
 
   @CoverageIgnore
   @Override
-  public P find(K id) throws ServiceException {
+  public P find(@NotNull K key) throws ServiceException {
     P apiResponse = null;
     try {
-      validateRequest(id);
-      apiResponse = handleFind(id);
+      validateKey(key);
+      apiResponse = handleFind(key);
     } catch (Exception e) {
       handleException(e);
     }
     return apiResponse;
   }
 
-  protected abstract P handleRequest(Q req);
+  /**
+   * Required implementation method to handle an incoming API {@link Request}.
+   * 
+   * @param req incoming API Request
+   * @return API Response
+   */
+  protected abstract P handleRequest(@NotNull Q req);
 
-  protected abstract P handleFind(K id);
+  /**
+   * Required implementation method to find a record by key.
+   * 
+   * @param id incoming serializable key
+   * @return API Response
+   */
+  protected abstract P handleFind(@NotNull K id);
 
 }

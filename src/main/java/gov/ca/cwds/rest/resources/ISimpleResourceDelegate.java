@@ -30,11 +30,11 @@ public interface ISimpleResourceDelegate<K extends Serializable, Q extends Reque
    * Find object by its key by delegating to wrapped service method,
    * {@link ISimpleResourceService#find(Serializable)}.
    * 
-   * @param id key to search for
+   * @param key key to search for
    * @return The API {@link Response}
    * @throws ApiException if service call fails, catch and throw an ApiException
    */
-  Response find(@NotNull K id) throws ApiException;
+  Response find(@NotNull K key) throws ApiException;
 
   /**
    * Exposes the wrapped {@link ISimpleResourceService}.
