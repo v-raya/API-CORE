@@ -26,7 +26,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
-import gov.ca.cwds.data.es.ElasticsearchDao;
 import gov.ca.cwds.rest.ElasticsearchConfiguration;
 import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.api.domain.es.ESSearchRequest;
@@ -36,7 +35,7 @@ import gov.ca.cwds.rest.api.domain.es.ESSearchRequest;
  * 
  * @author CWDS API Team
  */
-public class ElasticsearchDaoTest {
+public final class ElasticsearchDaoTest {
 
   private static final String TEST_HOST = "localhost";
   private static final String TEST_PORT = "9300";

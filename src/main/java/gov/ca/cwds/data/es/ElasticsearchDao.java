@@ -25,6 +25,7 @@ import gov.ca.cwds.rest.api.domain.es.ESSearchRequest;
 import gov.ca.cwds.rest.api.domain.es.ESSearchRequest.ESFieldSearchEntry;
 import gov.ca.cwds.rest.api.domain.es.ESSearchRequest.ESSearchElement;
 import gov.ca.cwds.rest.api.domain.es.ESSearchRequest.ElementType;
+import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * A DAO for Elasticsearch.
@@ -226,6 +227,10 @@ public class ElasticsearchDao {
     return client.prepareSearch(indexName).setTypes(documentType)
         .setSearchType(SearchType.QUERY_AND_FETCH).setQuery(qb).setFrom(0)
         .setSize(DEFAULT_MAX_RESULTS).setExplain(true).execute().actionGet().getHits().getHits();
+  }
+
+  public SearchHit[] personAutoComplete(ESSearchRequest req) throws ServiceException {
+    return null;
   }
 
   // ===================
