@@ -38,6 +38,9 @@ public class ElasticsearchDao {
 
   private static final int DEFAULT_MAX_RESULTS = 60;
 
+  /**
+   * Client is thread safe.
+   */
   private Client client;
 
   private TransportAddress transportAddress;
@@ -45,6 +48,7 @@ public class ElasticsearchDao {
   private final String host;
   private final String port;
   private final String clusterName;
+
   private String indexName;
   private String documentType;
 
@@ -83,6 +87,7 @@ public class ElasticsearchDao {
    */
   protected synchronized void init() throws ApiException {
     if (this.client == null) {
+      LOGGER.debug("ElasticSearchDao.init(): client is null. Initialize.");
       try {
         Settings settings = Settings.settingsBuilder().put("cluster.name", clusterName).build();
         this.client = TransportClient.builder().settings(settings).build()
@@ -90,6 +95,7 @@ public class ElasticsearchDao {
                 : new InetSocketTransportAddress(InetAddress.getByName(host),
                     Integer.parseInt(port)));
       } catch (Exception e) {
+        LOGGER.error("Error initializing Elasticsearch client: {}", e.getMessage(), e);
         throw new ApiException("Error initializing Elasticsearch client: " + e.getMessage(), e);
       }
     }
@@ -107,11 +113,11 @@ public class ElasticsearchDao {
    * @see #init()
    */
   protected void start() throws ApiException {
-
-    LOGGER.debug("ElasticSearchDao.start()");
+    LOGGER.trace("ElasticSearchDao.start()");
 
     // Enter synchronized init method ONLY if client is not initialized.
     if (this.client == null) {
+      LOGGER.debug("ElasticSearchDao.start(): call init()");
       init();
     }
   }
@@ -229,7 +235,13 @@ public class ElasticsearchDao {
         .setSize(DEFAULT_MAX_RESULTS).setExplain(true).execute().actionGet().getHits().getHits();
   }
 
-  public SearchHit[] personAutoComplete(ESSearchRequest req) throws ServiceException {
+  /**
+   * 
+   * @param req
+   * @return
+   * @throws ServiceException
+   */
+  public SearchHit[] autoCompletePerson(ESSearchRequest req) throws ServiceException {
     return null;
   }
 

@@ -15,7 +15,7 @@ import gov.ca.cwds.rest.resources.ResourceParamValidator;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
- * Java port of gov.ca.cwds.rest.util.jni.KeyJNI and underlying shared library, .
+ * Java port of gov.ca.cwds.rest.util.jni.KeyJNI and underlying shared library.
  * 
  * @author CWDS API Team
  */
@@ -37,6 +37,11 @@ public class CmsKeyIdGenerator {
     @Pattern(regexp = "[a-zA-Z0-9]+")
     private String value;
 
+    /**
+     * Constructor.
+     * 
+     * @param value String to evaluate
+     */
     public StringKey(String value) {
       this.value = value;
     }
@@ -105,6 +110,12 @@ public class CmsKeyIdGenerator {
       'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
       'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 
+  /**
+   * Core method.
+   * 
+   * @param staffId 3-char, base-62 staff id
+   * @return generated 10 char, base-62 key
+   */
   public String generateKeyFromStaff(final String staffId) {
     return generateKeyFromStaff(new StringKey(staffId));
   }

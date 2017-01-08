@@ -12,6 +12,24 @@ import org.apache.commons.lang3.StringUtils;
 
 import gov.ca.cwds.rest.api.ApiException;
 
+/**
+ * Utility class for CWDS API domain field data conversion.
+ * 
+ * <h4>Class Naming Convention</h4>
+ * <p>
+ * <ul>
+ * <li>"Cook": convert String parameter to strong type</li>
+ * <li>"Uncook": convert strong type parameter to String</li>
+ * </ul>
+ * </p>
+ *
+ * <p>
+ * Some methods may throw {@link ApiException}, if data conversion is logically impossible, where
+ * noted. Otherwise, conversion methods may return null.
+ * </p>
+ * 
+ * @author CWDS API Team
+ */
 public class DomainChef {
 
   /**
@@ -49,8 +67,7 @@ public class DomainChef {
   public static Boolean uncookBooleanString(String cookedBoolean) {
     if ("N".equalsIgnoreCase(cookedBoolean)) {
       return Boolean.FALSE;
-    }
-    if ("Y".equalsIgnoreCase(cookedBoolean)) {
+    } else if ("Y".equalsIgnoreCase(cookedBoolean)) {
       return Boolean.TRUE;
     } else if (StringUtils.trimToNull(cookedBoolean) == null) {
       return null;

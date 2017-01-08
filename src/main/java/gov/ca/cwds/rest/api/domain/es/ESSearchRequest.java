@@ -11,7 +11,7 @@ import gov.ca.cwds.rest.api.domain.DomainObject;
 import io.dropwizard.jackson.JsonSnakeCase;
 
 /**
- * Domain request class for ElasticSearch.
+ * Domain API {@link Request} class for ElasticSearch.
  * 
  * @author CWDS API Team
  */
@@ -23,39 +23,148 @@ public final class ESSearchRequest extends DomainObject implements Request {
   // ================
 
   /**
-   * ElasticSearch 2.x prefers MUST/MUST_NOT/SHOULD over AND/OR/NOT. In fact, ES has deprecated the
-   * latter support classes.
+   * ElasticSearch 2.x prefers MUST/MUST_NOT/SHOULD over AND/OR/NOT. In fact, ElasticSearch has
+   * deprecated the latter operation classes.
    * 
    * <p>
    * ORIGINAL IDEA: nest logical operations like a traditional database WHERE clause, but ES now
    * prefers "must", "must not", "should".
    * </p>
+   * 
+   * @author CWDS API Team
    */
   public enum LogicalOperation {
-    AND("AND"), OR("OR"), NOT("OR"), MUST("MUST"), MUST_NOT("MUST_NOT"), SHOULD("SHOULD");
+    /**
+     * Legacy ElasticSearch operation, boolean AND.
+     */
+    AND("AND"),
 
+    /**
+     * Legacy ElasticSearch operation, boolean OR.
+     */
+    OR("OR"),
+
+    /**
+     * Legacy ElasticSearch operation, boolean NOT.
+     */
+    NOT("OR"),
+
+    /**
+     * Preferred ElasticSearch operation, MUST.
+     */
+    MUST("MUST"),
+
+    /**
+     * Preferred ElasticSearch operation, MUST NOT.
+     */
+    MUST_NOT("MUST_NOT"),
+
+    /**
+     * Preferred ElasticSearch operation, SHOULD.
+     * 
+     * <p>
+     * Perceived accuracy of the normative "should" depends on the query type.
+     * </p>
+     */
+    SHOULD("SHOULD");
+
+    /**
+     * The actual ElasticSearch operation command.
+     */
     private final String text;
 
+    /**
+     * Enum constructor sets immutable members.
+     * 
+     * @param text ElasticSearch operation text
+     */
     LogicalOperation(String text) {
       this.text = text;
     }
 
-    public String text() {
+    /**
+     * Getter for ElasticSearch operation text.
+     * 
+     * @return ElasticSearch operation text
+     */
+    public final String text() {
       return text;
     }
   }
 
+  /**
+   * Type of ElasticSearch query.
+   * 
+   * <p>
+   * Some query types take multiple parameters, such as range and terms queries.
+   * </p>
+   * 
+   * @author CWDS API Team
+   */
   public enum QueryType {
-    MATCH("MATCH"), TERM("TERM"), FUZZY("FUZZY"), RANGE("RANGE"), SIMPLE("SIMPLE"), REGEXP(
-        "REGEXP"), WILDCARD("WILDCARD"), ALL("ALL");
+
+    /**
+     * ElasticSearch query type, match.
+     */
+    MATCH("match"),
+
+    /**
+     * ElasticSearch query type, term.
+     */
+    TERM("term"),
+
+    /**
+     * ElasticSearch query type, terms.
+     */
+    TERMS("terms"),
+
+    /**
+     * ElasticSearch query type, fuzzy.
+     */
+    FUZZY("FUZZY"),
+
+    /**
+     * ElasticSearch query type, range.
+     */
+    RANGE("RANGE"),
+
+    /**
+     * ElasticSearch query type, simple.
+     */
+    SIMPLE("SIMPLE"),
+
+    /**
+     * ElasticSearch query type, regular expression.
+     */
+    REGEXP("REGEXP"),
+
+    /**
+     * ElasticSearch query type, wildcard.
+     */
+    WILDCARD("WILDCARD"),
+
+    /**
+     * ElasticSearch query type, "all".
+     */
+    ALL("ALL");
 
     private final String text;
 
+    /**
+     * Enum constructor sets immutable members.
+     * 
+     * @param text ElasticSearch operation text
+     */
     QueryType(String text) {
       this.text = text;
     }
 
-    public String text() {
+    /**
+     * Getter for ElasticSearch query text.
+     * 
+     * @return ElasticSearch query text
+     */
+    public final String text() {
       return text;
     }
   }
@@ -86,7 +195,7 @@ public final class ESSearchRequest extends DomainObject implements Request {
   @JsonSnakeCase
   public static final class ESSearchGroup implements ESSearchElement {
     private LogicalOperation logic = LogicalOperation.OR;
-    private List<ESSearchElement> elems = new ArrayList<ESSearchElement>();
+    private List<ESSearchElement> elems = new ArrayList<>();
 
     public ESSearchGroup() {}
 

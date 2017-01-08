@@ -43,7 +43,6 @@ public final class ElasticsearchDaoTest {
   private static final String TEST_INDEXNAME = "people";
   private static final String TEST_INDEXTYPE = "person";
 
-
   @InjectMocks
   @Spy
   private ElasticsearchDao cut = new ElasticsearchDao(TEST_HOST, TEST_PORT, TEST_CLUSTERNAME);
@@ -135,7 +134,6 @@ public final class ElasticsearchDaoTest {
     when(config.getElasticsearchCluster()).thenReturn(TEST_CLUSTERNAME);
 
     ElasticsearchDao cut2 = new ElasticsearchDao(config);
-
     assertThat("host", TEST_HOST.equals(cut2.getHost()));
     assertThat("port", TEST_PORT.equals(cut2.getPort()));
     assertThat("cluster", TEST_CLUSTERNAME.equals(cut2.getClusterName()));
@@ -199,6 +197,5 @@ public final class ElasticsearchDaoTest {
     final SearchHit[] results = cut.queryPersonOr(req);
     assertThat("hits", results != null && results.length > 0);
   }
-
 
 }
