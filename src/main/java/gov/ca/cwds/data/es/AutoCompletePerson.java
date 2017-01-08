@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import gov.ca.cwds.data.IAddressAware;
 import gov.ca.cwds.data.IPersonAware;
 import gov.ca.cwds.rest.api.Request;
 
@@ -150,7 +151,12 @@ public class AutoCompletePerson implements Serializable, IPersonAware {
     Home, School, Work, Placement, Homeless, Other
   }
 
-  public static final class AutoCompletePersonAddress implements Serializable {
+  /**
+   * Child class. Represents the Address section of Intake Auto-complete.
+   * 
+   * @author CWDS API Team
+   */
+  public static final class AutoCompletePersonAddress implements Serializable, IAddressAware {
 
     /**
      * Base version. Increment by version.
@@ -172,34 +178,42 @@ public class AutoCompletePerson implements Serializable, IPersonAware {
       this.id = id;
     }
 
+    @Override
     public String getStreetAddress() {
       return streetAddress;
     }
 
+    @Override
     public void setStreetAddress(String streetAddress) {
       this.streetAddress = streetAddress;
     }
 
+    @Override
     public String getCity() {
       return city;
     }
 
+    @Override
     public void setCity(String city) {
       this.city = city;
     }
 
+    @Override
     public String getState() {
       return state;
     }
 
+    @Override
     public void setState(String state) {
       this.state = state;
     }
 
+    @Override
     public String getZip() {
       return zip;
     }
 
+    @Override
     public void setZip(String zip) {
       this.zip = zip;
     }
@@ -267,7 +281,7 @@ public class AutoCompletePerson implements Serializable, IPersonAware {
 
 
   @JsonProperty("id")
-  private Long id;
+  private String id;
 
   @JsonProperty("first_name")
   private String firstName;
@@ -296,42 +310,56 @@ public class AutoCompletePerson implements Serializable, IPersonAware {
   @JsonProperty("phone_numbers")
   private List<AutoCompletePersonPhone> phoneNumbers;
 
+  /**
+   * Default constructor.
+   */
   public AutoCompletePerson() {
-
+    // Default, no-op.
   }
 
-  // public AutoCompletePersonResponse(esperson) {
-  //
-  // }
+  /**
+   * Construct from incoming ElasticSearchPerson.
+   * 
+   * @param esp incoming {@link ElasticSearchPerson}
+   */
+  public AutoCompletePerson(ElasticSearchPerson esp) {
+    this.setId(esp.getId());
+  }
 
-  public Long getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(String id) {
     this.id = id;
   }
 
+  @Override
   public String getFirstName() {
     return firstName;
   }
 
+  @Override
   public void setFirstName(String firstName) {
     this.firstName = firstName;
   }
 
+  @Override
   public String getMiddleName() {
     return middleName;
   }
 
+  @Override
   public void setMiddleName(String middleName) {
     this.middleName = middleName;
   }
 
+  @Override
   public String getLastName() {
     return lastName;
   }
 
+  @Override
   public void setLastName(String lastName) {
     this.lastName = lastName;
   }
@@ -344,18 +372,22 @@ public class AutoCompletePerson implements Serializable, IPersonAware {
     this.nameSuffix = nameSuffix;
   }
 
+  @Override
   public String getGender() {
     return gender;
   }
 
+  @Override
   public void setGender(String gender) {
     this.gender = gender;
   }
 
+  @Override
   public String getSsn() {
     return ssn;
   }
 
+  @Override
   public void setSsn(String ssn) {
     this.ssn = ssn;
   }
@@ -382,6 +414,16 @@ public class AutoCompletePerson implements Serializable, IPersonAware {
 
   public void setPhoneNumbers(List<AutoCompletePersonPhone> phoneNumbers) {
     this.phoneNumbers = phoneNumbers;
+  }
+
+  @Override
+  public String getBirthDate() {
+    return getDateOfBirth();
+  }
+
+  @Override
+  public void setBirthDate(String birthDate) {
+    setDateOfBirth(birthDate);
   }
 
 }

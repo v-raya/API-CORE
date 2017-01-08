@@ -12,6 +12,7 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.DummyTransportAddress;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.transport.TransportAddress;
+import org.elasticsearch.index.query.DisMaxQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
@@ -245,6 +246,12 @@ public class ElasticsearchDao {
    * name, first name, city, state, language, and so forth.
    * </p>
    * 
+   * <p>
+   * This method calls Elasticsearch's <a href=
+   * "https://www.elastic.co/guide/en/elasticsearch/guide/current/_best_fields.html#dis-max-query">"dis
+   * max"</a> query feature.
+   * </p>
+   * 
    * @param req ES search request
    * @return array of Elasticsearch SearchHit
    * @throws ApiElasticSearchException unable to connect, disconnect, bad hair day, etc.
@@ -254,20 +261,104 @@ public class ElasticsearchDao {
     start();
 
     final String s = req.getSearchCriteria().trim().toLowerCase();
-    QueryBuilder qb;
 
+    // SAMPLE AUTO-COMPLETE RESULT:
+    // [{
+    // "id": 1,
+    // "date_of_birth": "1964-01-14",
+    // "first_name": "John",
+    // "gender": null,
+    // "last_name": "Smith",
+    // "middle_name": null,
+    // "ssn": "858584561",
+    // "name_suffix": null,
+    // "addresses": [
+    // {
+    // "city": "city",
+    // "id": 6,
+    // "state": "IN",
+    // "street_address": "876 home",
+    // "zip": "66666",
+    // "type": "Placement"
+    // }
+    // ],
+    // "phone_numbers": [],
+    // "languages": []
+    // }]
+
+    // SAMPLE DOCUMENT:
+    // {
+    // "first_name": "Todd",
+    // "last_name": "B.",
+    // "gender": "",
+    // "birth_date": "",
+    // "ssn": "",
+    // "id": "TZDqRCG0XH",
+    // "type": "gov.ca.cwds.data.persistence.cms.Reporter",
+    // "source_object": {
+    // "lastUpdatedId": "0XH",
+    // "lastUpdatedTime": 1479394080309,
+    // "referralId": "TZDqRCG0XH",
+    // "badgeNumber": "",
+    // "cityName": "Police",
+    // "colltrClientRptrReltnshpType": 0,
+    // "communicationMethodType": 410,
+    // "confidentialWaiverIndicator": "Y",
+    // "employerName": "test name",
+    // "feedbackDate": 1479340800000,
+    // "feedbackRequiredIndicator": "Y",
+    // "firstName": "Todd",
+    // "lastName": "B.",
+    // "mandatedReporterIndicator": "Y",
+    // "messagePhoneExtensionNumber": 0,
+    // "messagePhoneNumber": 0,
+    // "middleInitialName": "",
+    // "namePrefixDescription": "Mr.",
+    // "primaryPhoneNumber": 4650009886,
+    // "primaryPhoneExtensionNumber": 0,
+    // "stateCodeType": 1828,
+    // "streetName": "Mock Plaza",
+    // "streetNumber": "2323",
+    // "suffixTitleDescription": "",
+    // "zipNumber": 95656,
+    // "zipSuffixNumber": 0,
+    // "countySpecificCode": "28",
+    // "primaryKey": "TZDqRCG0XH"
+    // }
+    // },
+
+    // TODO: #136994539: translate county and state code to sys id and vice versa.
+
+    DisMaxQueryBuilder qb = QueryBuilders.disMaxQuery();
     if (StringUtils.isNumeric(s)) {
       // Only query numeric fields.
+      addNumericPersonPrefixQueries(qb, s);
+    } else if (StringUtils.isAlpha(s)) {
+      // Only query alphabetic fields.
+      addNonNumericPersonPrefixQueries(qb, s);
+    } else {
+      addNumericPersonPrefixQueries(qb, s);
+      addNonNumericPersonPrefixQueries(qb, s);
     }
 
-    // if ((value.contains("*") || value.contains("?"))
-    // && (!value.startsWith("?") && !value.startsWith("*"))) {
-    // qb = QueryBuilders.wildcardQuery(field, value);
-    // } else {
-    // qb = QueryBuilders.matchQuery(field, value);
-    // }
+    return client.prepareSearch(indexName).setTypes(documentType)
+        .setSearchType(SearchType.QUERY_AND_FETCH).setQuery(qb).setFrom(0)
+        .setSize(DEFAULT_MAX_RESULTS).setExplain(true).execute().actionGet().getHits().getHits();
+  }
 
-    return null;
+  protected DisMaxQueryBuilder addNumericPersonPrefixQueries(DisMaxQueryBuilder qb, String s) {
+    return qb.add(QueryBuilders.prefixQuery("birth_date", s))
+        .add(QueryBuilders.prefixQuery("ssn", s))
+        .add(QueryBuilders.prefixQuery("primaryPhoneNumber", s))
+        .add(QueryBuilders.prefixQuery("zipNumber", s))
+        .add(QueryBuilders.prefixQuery("streetNumber", s));
+  }
+
+  protected DisMaxQueryBuilder addNonNumericPersonPrefixQueries(DisMaxQueryBuilder qb, String s) {
+    return qb.add(QueryBuilders.prefixQuery("first_name", s))
+        .add(QueryBuilders.prefixQuery("last_name", s)).add(QueryBuilders.prefixQuery("gender", s))
+        .add(QueryBuilders.prefixQuery("cityName", s))
+        .add(QueryBuilders.prefixQuery("streetName", s));
   }
 
   // ===================

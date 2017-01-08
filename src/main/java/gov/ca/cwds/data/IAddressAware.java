@@ -2,7 +2,8 @@ package gov.ca.cwds.data;
 
 /**
  * Interface defines naming standard methods for persistence classes that represent Address. Allows
- * DAO and service classes to operate on Address-aware objects without knowledge of their concrete
+ * DAO and service classes to operate on Address-aware objects without knowledge of their
+ * implementation.
  * 
  * @author CWDS API Team
  */

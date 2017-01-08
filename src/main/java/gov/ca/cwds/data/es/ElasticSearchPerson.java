@@ -24,47 +24,6 @@ import gov.ca.cwds.rest.services.ServiceException;
  */
 public class ElasticSearchPerson implements Serializable {
 
-  // =========================
-  // PRIVATE STATIC:
-  // =========================
-
-  /**
-   * Base version. Increment by class version.
-   */
-  private static final long serialVersionUID = 1L;
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchPerson.class);
-
-  /**
-   * {@link ObjectMapper}, used to unmarshall JSON Strings from member {@link #sourceJson} into
-   * instances of {@link #sourceType}.
-   * 
-   * <p>
-   * This mapper is thread-safe and reusable across multiple threads, yet any configuration made to
-   * it, such as ignoring unknown JSON properties, applies to ALL target class types.
-   * </p>
-   */
-  private static final ObjectMapper MAPPER;
-
-  // =========================
-  // STATIC INITIALIZATION:
-  // =========================
-
-  /**
-   * Relax strict constraints regarding unknown JSON properties, since API classes may change over
-   * time, and not all classes emit version information in JSON.
-   */
-  static {
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    mapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
-    MAPPER = mapper;
-  }
-
-  // =========================
-  // PUBLIC STATIC:
-  // =========================
-
   /**
    * ElasticSearch field names for document type people.person.
    * 
@@ -127,7 +86,7 @@ public class ElasticSearchPerson implements Serializable {
     final Object defaultVal;
 
     /**
-     * Enum constructor populates immutable members.
+     * Constructor populates immutable members.
      * 
      * @param col ES column name
      * @param klazz Java Class of value
@@ -161,6 +120,76 @@ public class ElasticSearchPerson implements Serializable {
       return defaultVal;
     }
   }
+
+  // =========================
+  // PRIVATE STATIC:
+  // =========================
+
+  /**
+   * Base serialization version. Increment by class version.
+   */
+  private static final long serialVersionUID = 1L;
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchPerson.class);
+
+  /**
+   * {@link ObjectMapper}, used to unmarshall JSON Strings from member {@link #sourceJson} into
+   * instances of {@link #sourceType}.
+   * 
+   * <p>
+   * This mapper is thread-safe and reusable across multiple threads, yet any configuration made to
+   * it, such as ignoring unknown JSON properties, applies to ALL target class types.
+   * </p>
+   */
+  private static final ObjectMapper MAPPER;
+
+  // =========================
+  // STATIC INITIALIZATION:
+  // =========================
+
+  /**
+   * Relax strict constraints regarding unknown JSON properties, since API classes may change over
+   * time, and not all classes emit version information in JSON.
+   */
+  static {
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    mapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
+    MAPPER = mapper;
+  }
+
+  // =========================
+  // PROTECTED STATIC:
+  // =========================
+
+  /**
+   * Extract field's value from an ElasticSearch result {@link Map} (key: field name), using the
+   * field's ES column name and data type.
+   * 
+   * @param <T> expected data type
+   * @param m ES result map
+   * @param f field to extract
+   * @return field value as specified type T
+   */
+  @SuppressWarnings("unchecked")
+  protected static <T extends Serializable> T pullCol(final Map<String, Object> m, ESColumn f) {
+    return (T) f.klazz.cast(m.getOrDefault(f.col, f.defaultVal));
+  }
+
+  /**
+   * Trim excess whitespace from ElasticSearch results. Non-null input of all whitespace returns
+   * empty String, null input returns null.
+   * 
+   * @param s String to trim
+   * @return String trimmed of outer whitespace or null if input is null
+   */
+  protected static String trim(String s) {
+    return s != null ? s.trim() : null;
+  }
+
+  // =========================
+  // PUBLIC STATIC:
+  // =========================
 
   /**
    * Produce an ESPerson domain from native ElasticSearch {@link SearchHit}. Parse JSON results and
@@ -231,35 +260,6 @@ public class ElasticSearchPerson implements Serializable {
     }
 
     return ret;
-  }
-
-  // =========================
-  // PROTECTED STATIC:
-  // =========================
-
-  /**
-   * Extract field's value from an ElasticSearch result {@link Map} (key: field name), using the
-   * field's ES column name and data type.
-   * 
-   * @param <T> expected data type
-   * @param m ES result map
-   * @param f field to extract
-   * @return field value as specified type T
-   */
-  @SuppressWarnings("unchecked")
-  protected static <T extends Serializable> T pullCol(final Map<String, Object> m, ESColumn f) {
-    return (T) f.klazz.cast(m.getOrDefault(f.col, f.defaultVal));
-  }
-
-  /**
-   * Trim excess whitespace from ElasticSearch results. Non-null input of all whitespace returns
-   * empty String, null input returns null.
-   * 
-   * @param s String to trim
-   * @return String trimmed of outer whitespace or null if input is null
-   */
-  protected static String trim(String s) {
-    return s != null ? s.trim() : null;
   }
 
   // ================
@@ -379,6 +379,78 @@ public class ElasticSearchPerson implements Serializable {
    */
   public Object getSourceObj() {
     return sourceObj;
+  }
+
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  public String getGender() {
+    return gender;
+  }
+
+  public void setGender(String gender) {
+    this.gender = gender;
+  }
+
+  public String getDateOfBirth() {
+    return dateOfBirth;
+  }
+
+  public void setDateOfBirth(String dateOfBirth) {
+    this.dateOfBirth = dateOfBirth;
+  }
+
+  public String getSsn() {
+    return ssn;
+  }
+
+  public void setSsn(String ssn) {
+    this.ssn = ssn;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public String getSource() {
+    return source;
+  }
+
+  public void setSource(String source) {
+    this.source = source;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public void setSourceType(String sourceType) {
+    this.sourceType = sourceType;
+  }
+
+  public void setSourceJson(String sourceJson) {
+    this.sourceJson = sourceJson;
+  }
+
+  public void setSourceObj(Object sourceObj) {
+    this.sourceObj = sourceObj;
   }
 
 }
