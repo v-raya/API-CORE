@@ -21,7 +21,7 @@ public abstract class NsElasticsearchObject {
    * Default constructor
    */
   protected NsElasticsearchObject() {
-
+    // Default, no-op.
   }
 
   /**

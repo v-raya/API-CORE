@@ -30,6 +30,17 @@ import gov.ca.cwds.rest.api.domain.es.ESSearchRequest.ElementType;
 /**
  * A DAO for Elasticsearch.
  * 
+ * <p>
+ * OPTION: In order to avoid minimize connections to Elasticsearch, this DAO class should either be
+ * final, so that other classes cannot instantiate a client or else the ES client should be injected
+ * by the framework.
+ * </p>
+ * 
+ * <p>
+ * OPTION: allow child DAO classes to connect to a configured index of choice and read specified
+ * document type(s).
+ * </p>
+ * 
  * @author CWDS API Team
  */
 public class ElasticsearchDao {
@@ -262,7 +273,7 @@ public class ElasticsearchDao {
 
     final String s = req.getSearchCriteria().trim().toLowerCase();
 
-    // SAMPLE AUTO-COMPLETE RESULT:
+    // SAMPLE AUTO-COMPLETE RESULT: (Intake assumes all fields are potentially searchable.)
     // [{
     // "id": 1,
     // "date_of_birth": "1964-01-14",
@@ -337,15 +348,22 @@ public class ElasticsearchDao {
       // Only query alphabetic fields.
       addNonNumericPersonPrefixQueries(qb, s);
     } else {
+      // Query on all searchable fields.
       addNumericPersonPrefixQueries(qb, s);
       addNonNumericPersonPrefixQueries(qb, s);
     }
 
-    return client.prepareSearch(indexName).setTypes(documentType)
-        .setSearchType(SearchType.QUERY_AND_FETCH).setQuery(qb).setFrom(0)
+    return client.prepareSearch(indexName).setTypes(documentType).setQuery(qb).setFrom(0)
         .setSize(DEFAULT_MAX_RESULTS).setExplain(true).execute().actionGet().getHits().getHits();
   }
 
+  /**
+   * Build a prefix query on numeric Person fields.
+   * 
+   * @param qb DisMaxQueryBuilder
+   * @param s search term
+   * @return DisMaxQueryBuilder
+   */
   protected DisMaxQueryBuilder addNumericPersonPrefixQueries(DisMaxQueryBuilder qb, String s) {
     return qb.add(QueryBuilders.prefixQuery("birth_date", s))
         .add(QueryBuilders.prefixQuery("ssn", s))
@@ -354,6 +372,13 @@ public class ElasticsearchDao {
         .add(QueryBuilders.prefixQuery("streetNumber", s));
   }
 
+  /**
+   * Build a prefix query on non-numeric Person fields.
+   * 
+   * @param qb DisMaxQueryBuilder
+   * @param s search term
+   * @return DisMaxQueryBuilder
+   */
   protected DisMaxQueryBuilder addNonNumericPersonPrefixQueries(DisMaxQueryBuilder qb, String s) {
     return qb.add(QueryBuilders.prefixQuery("first_name", s))
         .add(QueryBuilders.prefixQuery("last_name", s)).add(QueryBuilders.prefixQuery("gender", s))

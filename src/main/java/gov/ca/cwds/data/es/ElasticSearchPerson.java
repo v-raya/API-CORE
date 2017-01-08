@@ -381,54 +381,119 @@ public class ElasticSearchPerson implements Serializable {
     return sourceObj;
   }
 
+  /**
+   * Getter for first name.
+   * 
+   * @return first name
+   */
   public String getFirstName() {
     return firstName;
   }
 
+  /**
+   * Setter for first name
+   * 
+   * @param firstName first name
+   */
   public void setFirstName(String firstName) {
     this.firstName = firstName;
   }
 
+  /**
+   * Getter for last name.
+   * 
+   * @return last name
+   */
   public String getLastName() {
     return lastName;
   }
 
+  /**
+   * Setter for last name.
+   * 
+   * @param lastName last name
+   */
   public void setLastName(String lastName) {
     this.lastName = lastName;
   }
 
+  /**
+   * Getter for gender.
+   * 
+   * @return gender
+   */
   public String getGender() {
     return gender;
   }
 
+  /**
+   * Setter for gender.
+   * 
+   * @param gender gender code (not sys id)
+   */
   public void setGender(String gender) {
     this.gender = gender;
   }
 
+  /**
+   * Getter for date of birth.
+   * 
+   * @return date of birth
+   */
   public String getDateOfBirth() {
     return dateOfBirth;
   }
 
+  /**
+   * Setter for dateOfBirth.
+   * 
+   * @param dateOfBirth birth date
+   */
   public void setDateOfBirth(String dateOfBirth) {
     this.dateOfBirth = dateOfBirth;
   }
 
+  /**
+   * Getter for SSN.
+   * 
+   * @return SSN
+   */
   public String getSsn() {
     return ssn;
   }
 
+  /**
+   * Setter for ssn
+   * 
+   * @param ssn the ssn
+   */
   public void setSsn(String ssn) {
     this.ssn = ssn;
   }
 
+  /**
+   * Getter for nested document type.
+   * 
+   * @return nested document type as an API class
+   */
   public String getType() {
     return type;
   }
 
+  /**
+   * Setter for nested document type.
+   * 
+   * @param type nested document type as an API class
+   */
   public void setType(String type) {
     this.type = type;
   }
 
+  /**
+   * Getter for source.
+   * 
+   * @return source object JSON
+   */
   public String getSource() {
     return source;
   }
@@ -437,14 +502,29 @@ public class ElasticSearchPerson implements Serializable {
     this.source = source;
   }
 
+  /**
+   * Setter for id.
+   * 
+   * @param id legacy String identifier
+   */
   public void setId(String id) {
     this.id = id;
   }
 
+  /**
+   * Setter for API class type of nested JSON.
+   * 
+   * @param sourceType fully-qualified API class of nested JSON
+   */
   public void setSourceType(String sourceType) {
     this.sourceType = sourceType;
   }
 
+  /**
+   * Setter for source JSON.
+   * 
+   * @param sourceJson JSON of the nested API class
+   */
   public void setSourceJson(String sourceJson) {
     this.sourceJson = sourceJson;
   }
