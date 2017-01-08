@@ -15,13 +15,14 @@ import gov.ca.cwds.rest.api.ApiException;
 /**
  * Utility class for CWDS API domain field data conversion.
  * 
- * <h4>Class Naming Convention</h4>
  * <p>
+ * Class Naming Convention
+ * </p>
+ * 
  * <ul>
  * <li>"Cook": convert String parameter to strong type</li>
  * <li>"Uncook": convert strong type parameter to String</li>
  * </ul>
- * </p>
  *
  * <p>
  * Some methods may throw {@link ApiException}, if data conversion is logically impossible, where

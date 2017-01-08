@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import gov.ca.cwds.data.IPersonAware;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
@@ -180,13 +181,15 @@ public class ElasticSearchPerson implements Serializable {
    */
   public static ElasticSearchPerson makeESPerson(SearchHit hit) {
     final Map<String, Object> m = hit.getSource();
-    ElasticSearchPerson ret = new ElasticSearchPerson(ElasticSearchPerson.<String>pullCol(m, ESColumn.ID),
-        ElasticSearchPerson.<String>pullCol(m, ESColumn.FIRST_NAME),
-        ElasticSearchPerson.<String>pullCol(m, ESColumn.LAST_NAME),
-        ElasticSearchPerson.<String>pullCol(m, ESColumn.GENDER),
-        ElasticSearchPerson.<String>pullCol(m, ESColumn.BIRTH_DATE), ElasticSearchPerson.<String>pullCol(m, ESColumn.SSN),
-        ElasticSearchPerson.<String>pullCol(m, ESColumn.TYPE), ElasticSearchPerson.<String>pullCol(m, ESColumn.SOURCE),
-        null);
+    ElasticSearchPerson ret =
+        new ElasticSearchPerson(ElasticSearchPerson.<String>pullCol(m, ESColumn.ID),
+            ElasticSearchPerson.<String>pullCol(m, ESColumn.FIRST_NAME),
+            ElasticSearchPerson.<String>pullCol(m, ESColumn.LAST_NAME),
+            ElasticSearchPerson.<String>pullCol(m, ESColumn.GENDER),
+            ElasticSearchPerson.<String>pullCol(m, ESColumn.BIRTH_DATE),
+            ElasticSearchPerson.<String>pullCol(m, ESColumn.SSN),
+            ElasticSearchPerson.<String>pullCol(m, ESColumn.TYPE),
+            ElasticSearchPerson.<String>pullCol(m, ESColumn.SOURCE), null);
 
     if (!StringUtils.isBlank(ret.getSourceType()) && !StringUtils.isBlank(ret.getSourceJson())) {
       try {
@@ -292,8 +295,7 @@ public class ElasticSearchPerson implements Serializable {
   private String sourceType;
 
   /**
-   * Raw, nested, child document (typically inherited from {@link @Person} in JSON from object
-   * {@link #sourceType} and stored in ES document.
+   * Raw, nested, child document JSON of an API class that implements {@link IPersonAware}.
    * 
    * <p>
    * Note that JSON marshalling intentionally ignores this member, since it represents the JSON to
@@ -324,8 +326,9 @@ public class ElasticSearchPerson implements Serializable {
    * @param sourceJson raw, nested child document as JSON
    * @param address address, if any
    */
-  public ElasticSearchPerson(String id, String firstName, String lastName, String gender, String birthDate,
-      String ssn, String sourceType, String sourceJson, ElasticSearchAddress address) {
+  public ElasticSearchPerson(String id, String firstName, String lastName, String gender,
+      String birthDate, String ssn, String sourceType, String sourceJson,
+      ElasticSearchAddress address) {
 
     this.firstName = trim(firstName);
     this.lastName = trim(lastName);

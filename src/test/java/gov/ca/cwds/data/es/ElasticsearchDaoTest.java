@@ -27,7 +27,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
 import gov.ca.cwds.rest.ElasticsearchConfiguration;
-import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.api.domain.es.ESSearchRequest;
 
 /**
@@ -114,14 +113,14 @@ public final class ElasticsearchDaoTest {
 
   @Test
   public void testIndexNameEmptyFails() throws Exception {
-    thrown.expect(ApiException.class);
+    thrown.expect(ApiElasticSearchException.class);
     thrown.expectMessage(startsWith("Elasticsearch Index Name must be provided"));
     cut.setIndexName("");
   }
 
   @Test
   public void testDocumentTypeEmptyFails() throws Exception {
-    thrown.expect(ApiException.class);
+    thrown.expect(ApiElasticSearchException.class);
     thrown.expectMessage(startsWith("Elasticsearch Index Type must be provided"));
     cut.setDocumentType("");
   }

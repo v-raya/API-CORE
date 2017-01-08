@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import gov.ca.cwds.data.IPersonAware;
 import gov.ca.cwds.rest.api.Request;
 
 /**
@@ -26,7 +27,7 @@ import gov.ca.cwds.rest.api.Request;
  * 
  * @author CWDS API Team
  */
-public class AutoCompletePerson implements Serializable {
+public class AutoCompletePerson implements Serializable, IPersonAware {
 
   /**
    * Base version. Increment by class version.
