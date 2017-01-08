@@ -1,13 +1,12 @@
 package gov.ca.cwds.rest.api.domain.es;
 
 import java.io.Serializable;
-import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import gov.ca.cwds.data.es.AutoCompletePerson;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
+import io.dropwizard.jackson.JsonSnakeCase;
+import io.swagger.annotations.ApiModel;
 
 /**
  * A domain API {@link Request} for Intake Person Auto-complete feature to Elasticsearch.
@@ -22,10 +21,12 @@ import gov.ca.cwds.rest.api.Response;
  * 
  * @author CWDS API Team
  */
+@ApiModel
+@JsonSnakeCase
 public class AutoCompletePersonResponse implements Serializable, Response {
 
   /**
-   * Base version. Increment by version.
+   * Base version. Increment by class version.
    */
   private static final long serialVersionUID = 1L;
 
@@ -52,149 +53,32 @@ public class AutoCompletePersonResponse implements Serializable, Response {
   // "languages": []
   // }]
 
+  private AutoCompletePerson[] persons;
 
-  // Address:
-  // type: object
-  // properties:
-  // street_address:
-  // type: string
-  // city:
-  // type: string
-  // state:
-  // type: string
-  // zip:
-  // type: string
-  // type:
-  // type: string
-  // enum:
-
-  @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-  public enum AutoCompletePersonAddressType {
-    Home, School, Work, Placement, Homeless, Other
+  /**
+   * Disallow calls to default constructor.
+   */
+  @SuppressWarnings("unused")
+  private AutoCompletePersonResponse() {
+    // Default, no-op.
   }
 
-  public static final class AutoCompletePersonAddress implements Serializable {
-
-    /**
-     * Base version. Increment by version.
-     */
-    private static final long serialVersionUID = 1L;
-
-    private long id;
-    private String streetAddress;
-    private String city;
-    private String state;
-    private String zip;
-    private AutoCompletePersonAddressType type;
-
+  /**
+   * Preferred constructor. Build from person array.
+   * 
+   * @param persons array of {@link AutoCompletePerson}
+   */
+  public AutoCompletePersonResponse(AutoCompletePerson[] persons) {
+    this.persons = persons;
   }
 
-  @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-  public enum AutoCompletePersonPhoneType {
-    Cell, Work, Home, Other
+  public AutoCompletePerson[] getPersons() {
+    return persons;
   }
 
-  public static final class AutoCompletePersonPhone implements Serializable {
-
-    /**
-     * Base version. Increment by version.
-     */
-    private static final long serialVersionUID = 1L;
-
-    private long id;
-    private AutoCompletePersonPhoneType type;
-    private String number;
-
-
+  public void setPersons(AutoCompletePerson[] persons) {
+    this.persons = persons;
   }
 
-
-  @JsonProperty("id")
-  private long id;
-
-  @JsonProperty("first_name")
-  private String firstName;
-
-  @JsonProperty("middle_name")
-  private String middleName;
-
-  @JsonProperty("last_name")
-  private String lastName;
-
-  @JsonProperty("name_suffix")
-  private String nameSuffix;
-
-  @JsonProperty("type")
-  private String gender;
-
-  @JsonProperty("type")
-  private String ssn;
-
-  @JsonProperty("date_of_birth")
-  private String dateOfBirth;
-
-  @JsonProperty("addresses")
-  private List<AutoCompletePersonAddress> addresses;
-
-  @JsonProperty("phone_numbers")
-  private List<AutoCompletePersonPhone> phoneNumbers;
-
-  // name_suffix:
-  // enum:
-  // - esq
-  // - ii
-  // - iii
-  // - iv
-  // - jr
-  // - sr
-  // - md
-  // - phd
-  // - jd
-  //
-  // gender:
-  // type: string
-  // enum:
-  // - male
-  // - female
-
-  // languages:
-  // type: array
-  // items:
-  // type: string
-  // enum:
-  // - American Sign Language
-  // - Arabic
-  // - Armenian
-  // - Cambodian
-  // - Cantonese
-  // - English
-  // - Farsi
-  // - Filipino
-  // - French
-  // - German
-  // - Hawaiian
-  // - Hebrew
-  // - Hmong
-  // - Ilacano
-  // - Indochinese
-  // - Italian
-  // - Japanese
-  // - Korean
-  // - Lao
-  // - Mandarin
-  // - Mien
-  // - Other Chinese
-  // - Other Non-English
-  // - Polish
-  // - Portuguese
-  // - Romanian
-  // - Russian
-  // - Samoan
-  // - Sign Language (Not ASL)
-  // - Spanish
-  // - Tagalog
-  // - Thai
-  // - Turkish
-  // - Vietnamese
 
 }

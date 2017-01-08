@@ -131,7 +131,7 @@ public class CmsKeyIdGenerator {
 
   protected String createTimestampStr() {
     double nTimestamp = 0;
-    double nPreviousTimestamp = 0; // previous value - used for UNIQUENESS!!!
+    double nPreviousTimestamp = 0; // previous value - used for UNIQUENESS!
 
     while (true) {
       nTimestamp = timestampToDouble(getCurrentDate());
@@ -171,11 +171,11 @@ public class CmsKeyIdGenerator {
     double nInteger;
     char[] szDstStr = new char[8];
 
-    // determine the largest power of the number
+    // Determine the largest power of the number.
     for (i = 0; nSrcVal >= pnPowVec[i]; i++, nPower++);
 
     LOGGER.debug("nPower::" + nPower);
-    // use the destination string width to left-pad the string.
+    // Use the destination string width to left-pad the string.
     final int nPad = nDstStrWidth - nPower;
     LOGGER.debug("nPad::" + nPad);
 

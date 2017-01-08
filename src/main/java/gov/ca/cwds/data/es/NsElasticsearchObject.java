@@ -7,7 +7,7 @@ import javax.persistence.MappedSuperclass;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 
 /**
- * Base class of objects in the elasticsearch layer.
+ * Base class of objects in the Elasticsearch layer.
  * 
  * @author CWDS API Team
  */

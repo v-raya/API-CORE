@@ -20,12 +20,11 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.rest.ElasticsearchConfiguration;
-import gov.ca.cwds.rest.api.ApiException;
+import gov.ca.cwds.rest.api.domain.es.AutoCompletePersonRequest;
 import gov.ca.cwds.rest.api.domain.es.ESSearchRequest;
 import gov.ca.cwds.rest.api.domain.es.ESSearchRequest.ESFieldSearchEntry;
 import gov.ca.cwds.rest.api.domain.es.ESSearchRequest.ESSearchElement;
 import gov.ca.cwds.rest.api.domain.es.ESSearchRequest.ElementType;
-import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * A DAO for Elasticsearch.
@@ -83,9 +82,9 @@ public class ElasticsearchDao {
    * Initialize ElasticSearch client once. Synchronized to prevent race conditions and multiple
    * connections.
    * 
-   * @throws ApiException if host not found
+   * @throws ApiElasticSearchException if host not found
    */
-  protected synchronized void init() throws ApiException {
+  protected synchronized void init() throws ApiElasticSearchException {
     if (this.client == null) {
       LOGGER.debug("ElasticSearchDao.init(): client is null. Initialize.");
       try {
@@ -96,7 +95,8 @@ public class ElasticsearchDao {
                     Integer.parseInt(port)));
       } catch (Exception e) {
         LOGGER.error("Error initializing Elasticsearch client: {}", e.getMessage(), e);
-        throw new ApiException("Error initializing Elasticsearch client: " + e.getMessage(), e);
+        throw new ApiElasticSearchException(
+            "Error initializing Elasticsearch client: " + e.getMessage(), e);
       }
     }
   }
@@ -109,10 +109,10 @@ public class ElasticsearchDao {
    * {@link #client} is not initialized.
    * </p>
    * 
-   * @throws ApiException I/O error or unknown host
+   * @throws ApiElasticSearchException I/O error or unknown host
    * @see #init()
    */
-  protected void start() throws ApiException {
+  protected void start() throws ApiElasticSearchException {
     LOGGER.trace("ElasticSearchDao.start()");
 
     // Enter synchronized init method ONLY if client is not initialized.
@@ -126,9 +126,9 @@ public class ElasticsearchDao {
    * Only stop the ElasticSearch client, when the container stops or if the connection becomes
    * unhealthy.
    * 
-   * @throws ApiException if ElasticSearch client fails to close properly.
+   * @throws ApiElasticSearchException if ElasticSearch client fails to close properly.
    */
-  protected void stop() throws ApiException {
+  protected void stop() throws ApiElasticSearchException {
     LOGGER.debug("ElasticSearchDao.stop()");
     this.client.close();
     setClient(null);
@@ -140,9 +140,9 @@ public class ElasticsearchDao {
    * instantiate a new client with {@link InetSocketTransportAddress}.
    * 
    * @param client custom client, used for testing
-   * @throws ApiException I/O error or unknown host
+   * @throws ApiElasticSearchException I/O error or unknown host
    */
-  public void reset(Client client) throws ApiException {
+  public void reset(Client client) throws ApiElasticSearchException {
     LOGGER.debug("ElasticSearchDao.stop()");
     stop();
     setClient(client);
@@ -156,9 +156,9 @@ public class ElasticsearchDao {
    * @param document JSON of document
    * @param id the unique identifier
    * @return true if document is indexed false if updated
-   * @throws ApiException exception on create document
+   * @throws ApiElasticSearchException exception on create document
    */
-  public boolean index(String document, String id) throws ApiException {
+  public boolean index(String document, String id) throws ApiElasticSearchException {
     LOGGER.info("ElasticSearchDao.createDocument(): " + document);
     start();
     IndexResponse response = client.prepareIndex(indexName, documentType, id)
@@ -191,10 +191,10 @@ public class ElasticsearchDao {
    * </blockquote>
    * 
    * @return array of generic ElasticSearch {@link SearchHit}
-   * @throws ApiException unable to connect to ElasticSearch, or client disconnects unexpectedly,
-   *         etc.
+   * @throws ApiElasticSearchException unable to connect to ElasticSearch, or client disconnects
+   *         unexpectedly, etc.
    */
-  public SearchHit[] fetchAllPerson() throws ApiException {
+  public SearchHit[] fetchAllPerson() throws ApiElasticSearchException {
     start();
 
     return client.prepareSearch(indexName).setTypes(documentType)
@@ -207,9 +207,9 @@ public class ElasticsearchDao {
    * 
    * @param req boolean hierarchy search request
    * @return array of raw ElasticSearch hits
-   * @throws ApiException unable to connect, disconnect, bad hair day, etc.
+   * @throws ApiElasticSearchException unable to connect, disconnect, bad hair day, etc.
    */
-  public SearchHit[] queryPersonOr(ESSearchRequest req) throws ApiException {
+  public SearchHit[] queryPersonOr(ESSearchRequest req) throws ApiElasticSearchException {
     start();
 
     String field = "";
@@ -236,12 +236,37 @@ public class ElasticsearchDao {
   }
 
   /**
+   * The Intake Auto-complete for Person takes a single search term, which is used to query
+   * Elasticsearch Person documents by ALL relevant fields.
    * 
-   * @param req
-   * @return
-   * @throws ServiceException
+   * <p>
+   * For example, search strings consisting of only digits could be phone numbers, social security
+   * numbers, or street address numbers. Search strings consisting of only letters could be last
+   * name, first name, city, state, language, and so forth.
+   * </p>
+   * 
+   * @param req ES search request
+   * @return array of Elasticsearch SearchHit
+   * @throws ApiElasticSearchException unable to connect, disconnect, bad hair day, etc.
    */
-  public SearchHit[] autoCompletePerson(ESSearchRequest req) throws ServiceException {
+  public SearchHit[] autoCompletePerson(AutoCompletePersonRequest req)
+      throws ApiElasticSearchException {
+    start();
+
+    final String s = req.getSearchCriteria().trim().toLowerCase();
+    QueryBuilder qb;
+
+    if (StringUtils.isNumeric(s)) {
+      // Only query numeric fields.
+    }
+
+    // if ((value.contains("*") || value.contains("?"))
+    // && (!value.startsWith("?") && !value.startsWith("*"))) {
+    // qb = QueryBuilders.wildcardQuery(field, value);
+    // } else {
+    // qb = QueryBuilders.matchQuery(field, value);
+    // }
+
     return null;
   }
 
@@ -284,7 +309,7 @@ public class ElasticsearchDao {
     if (StringUtils.isNotBlank(indexName)) {
       this.indexName = indexName;
     } else {
-      throw new ApiException("Elasticsearch Index Name must be provided");
+      throw new ApiElasticSearchException("Elasticsearch Index Name must be provided");
     }
   }
 
@@ -297,7 +322,7 @@ public class ElasticsearchDao {
     if (StringUtils.isNotBlank(docType)) {
       this.documentType = docType;
     } else {
-      throw new ApiException("Elasticsearch Index Type must be provided");
+      throw new ApiElasticSearchException("Elasticsearch Index Type must be provided");
     }
   }
 
