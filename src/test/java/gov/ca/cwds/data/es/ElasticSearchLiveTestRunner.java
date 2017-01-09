@@ -10,7 +10,6 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import gov.ca.cwds.rest.ElasticsearchConfiguration;
 import gov.ca.cwds.rest.api.ApiException;
-import gov.ca.cwds.rest.api.domain.es.AutoCompletePersonRequest;
 
 /**
  * Runs live tests of ElasticSearch modules.
@@ -55,8 +54,7 @@ public class ElasticSearchLiveTestRunner implements Runnable {
   public void run() {
     try {
 
-      final ElasticSearchPerson[] hits =
-          dao.autoCompletePerson(new AutoCompletePersonRequest("bart"));
+      final ElasticSearchPerson[] hits = dao.autoCompletePerson("bart");
       if (hits != null && hits.length > 0) {
         for (ElasticSearchPerson hit : hits) {
           LOGGER.info(hit);

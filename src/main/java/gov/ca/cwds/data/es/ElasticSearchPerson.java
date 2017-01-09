@@ -337,14 +337,17 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
   public ElasticSearchPerson(String id, String firstName, String lastName, String gender,
       String birthDate, String ssn, String sourceType, String sourceJson) {
 
+    // CMS/legacy String id:
+    this.id = id;
+
+    // Incorporate Person fields:
     this.firstName = trim(firstName);
     this.lastName = trim(lastName);
     trim(gender);
     trim(birthDate);
     trim(ssn);
 
-    // this.address = address;
-    this.id = id;
+    // Nested document:
     this.sourceType = sourceType;
     this.sourceJson = sourceJson;
   }

@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.rest.ElasticsearchConfiguration;
-import gov.ca.cwds.rest.api.domain.es.AutoCompletePersonRequest;
 import gov.ca.cwds.rest.api.domain.es.ESSearchRequest;
 import gov.ca.cwds.rest.api.domain.es.ESSearchRequest.ESFieldSearchEntry;
 import gov.ca.cwds.rest.api.domain.es.ESSearchRequest.ESSearchElement;
@@ -273,11 +272,11 @@ public class ElasticsearchDao {
    * @return array of AutoCompletePerson
    * @throws ApiElasticSearchException unable to connect, disconnect, bad hair day, etc.
    */
-  public ElasticSearchPerson[] autoCompletePerson(AutoCompletePersonRequest req)
+  public ElasticSearchPerson[] autoCompletePerson(final String req)
       throws ApiElasticSearchException {
     start();
 
-    final String s = req.getSearchCriteria().trim().toLowerCase();
+    final String s = req.trim().toLowerCase();
 
     // SAMPLE AUTO-COMPLETE RESULT: (Intake assumes all fields are potentially searchable.)
     // [{
