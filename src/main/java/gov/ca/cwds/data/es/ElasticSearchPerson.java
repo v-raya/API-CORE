@@ -15,7 +15,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.data.IPersonAware;
 import gov.ca.cwds.data.ITypedIdentifier;
 import gov.ca.cwds.rest.services.ServiceException;
 
@@ -306,7 +305,8 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
   private String sourceType;
 
   /**
-   * Raw, nested, child document JSON of an API class that implements {@link IPersonAware}.
+   * Raw, nested, child document JSON of an API class that implements the CWDS API interface,
+   * IPersonAware.
    * 
    * <p>
    * Note that JSON marshalling intentionally ignores this member, since it represents the JSON to
