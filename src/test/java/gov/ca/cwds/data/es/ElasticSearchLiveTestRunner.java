@@ -1,18 +1,30 @@
 package gov.ca.cwds.data.es;
 
-import java.io.File;
+import java.io.InputStream;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.google.inject.Inject;
 
 import gov.ca.cwds.rest.ElasticsearchConfiguration;
 import gov.ca.cwds.rest.api.ApiException;
+import io.dropwizard.configuration.ConfigurationSourceProvider;
+import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
+import io.dropwizard.configuration.FileConfigurationSourceProvider;
+import io.dropwizard.configuration.SubstitutingSourceProvider;
 
 /**
  * Runs live tests of ElasticSearch modules.
+ * 
+ * <p>
+ * Reason For Existence. Since ore Elasticsearch components are shared by CWDS sub-systems, they are
+ * housed in api-core. However, api-core itself lacked its own live test runner, requiring
+ * developers to repeatedly check in code to api-core in order to test on other projects. Therefore,
+ * this test class was added to better test core Elasticsearch code and reduce commit churn.
+ * </p>
  * 
  * @author CWDS API Team
  */
@@ -21,40 +33,81 @@ public class ElasticSearchLiveTestRunner implements Runnable {
   private static final Logger LOGGER = LogManager.getLogger(ElasticSearchLiveTestRunner.class);
 
   private static final ObjectMapper YAML_MAPPER = new ObjectMapper(new YAMLFactory());
-  private static final ObjectMapper MAPPER = new ObjectMapper();
+
+  private static final class AutoCloseElasticsearchDao extends ElasticsearchDao
+      implements AutoCloseable {
+
+    public AutoCloseElasticsearchDao(String host, String port, String clusterName) {
+      super(host, port, clusterName);
+    }
+
+    /**
+     * Constructor. Construct from YAML configuration.
+     * 
+     * @param config The ES configuration
+     */
+    @Inject
+    public AutoCloseElasticsearchDao(ElasticsearchConfiguration config) {
+      super(config);
+    }
+
+    @Override
+    public void close() throws Exception {
+      stop();
+    }
+
+  }
 
   private ElasticsearchDao dao;
 
-  public ElasticSearchLiveTestRunner(ElasticsearchDao dao) {
+  private String searchTerm;
+
+  /**
+   * Protected constructor. Only this class and its children can call it.
+   * 
+   * @param dao ES DAO
+   */
+  protected ElasticSearchLiveTestRunner(ElasticsearchDao dao, String searchTerm) {
     this.dao = dao;
+    this.searchTerm = searchTerm.trim().toLowerCase();
   }
 
+  /**
+   * Let 'er rip!
+   * 
+   * @param args command line
+   * @throws Exception Exception rises to the top
+   */
   public static void main(String... args) throws Exception {
 
-    if (args.length < 1) {
-      throw new ApiException(
-          "Usage: java " + ElasticSearchLiveTestRunner.class.getName() + " <ES config file>");
+    if (args.length < 2) {
+      throw new ApiException("Usage: java " + ElasticSearchLiveTestRunner.class.getName()
+          + " <ES config file> <search terms>");
     }
 
-    final File file = new File(args[0]);
-    gov.ca.cwds.rest.ElasticsearchConfiguration configuration =
-        YAML_MAPPER.readValue(file, ElasticsearchConfiguration.class);
+    final String path = args[0];
+    final String searchFor = args[1];
 
-    ElasticSearchLiveTestRunner job =
-        new ElasticSearchLiveTestRunner(new ElasticsearchDao(configuration));
+    final ConfigurationSourceProvider provider = new SubstitutingSourceProvider(
+        new FileConfigurationSourceProvider(), new EnvironmentVariableSubstitutor(false));
 
-    try {
+    ElasticsearchConfiguration config;
+    try (InputStream iss = provider.open(path)) {
+      config = YAML_MAPPER.readValue(iss, ElasticsearchConfiguration.class);
+    }
+
+    try (AutoCloseElasticsearchDao autoCloseDao = new AutoCloseElasticsearchDao(config)) {
+      ElasticSearchLiveTestRunner job = new ElasticSearchLiveTestRunner(autoCloseDao, searchFor);
       job.run();
-    } catch (Exception e) {
-      LOGGER.error("Oops!", e);
     }
+
   }
 
   @Override
   public void run() {
     try {
 
-      final ElasticSearchPerson[] hits = dao.autoCompletePerson("bart");
+      final ElasticSearchPerson[] hits = dao.autoCompletePerson(this.searchTerm);
       if (hits != null && hits.length > 0) {
         for (ElasticSearchPerson hit : hits) {
           LOGGER.info(hit);
@@ -62,14 +115,8 @@ public class ElasticSearchLiveTestRunner implements Runnable {
       }
 
     } catch (Exception e) {
+      LOGGER.error("Well, this is awkward. " + e.getMessage(), e);
       throw new ApiException(e);
-    } finally {
-      // TODO: #136701343: exception handling in service layer.
-      try {
-        dao.stop();
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
     }
   }
 

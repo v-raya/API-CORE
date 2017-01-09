@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -552,10 +554,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
 
   @Override
   public String toString() {
-    return "ElasticSearchPerson [firstName=" + firstName + ", lastName=" + lastName
-        + ", dateOfBirth=" + dateOfBirth + ", gender=" + gender + ", ssn=" + ssn + ", type=" + type
-        + ", source=" + source + ", id=" + id + ", sourceType=" + sourceType + ", sourceObj="
-        + sourceObj + "]";
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
   }
 
 }

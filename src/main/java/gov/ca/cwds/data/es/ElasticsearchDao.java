@@ -268,15 +268,14 @@ public class ElasticsearchDao {
    * max"</a> query feature.
    * </p>
    * 
-   * @param req ES search request
+   * @param searchFor ES search request
    * @return array of AutoCompletePerson
    * @throws ApiElasticSearchException unable to connect, disconnect, bad hair day, etc.
    */
-  public ElasticSearchPerson[] autoCompletePerson(final String req)
+  public ElasticSearchPerson[] autoCompletePerson(final String searchFor)
       throws ApiElasticSearchException {
     start();
-
-    final String s = req.trim().toLowerCase();
+    final String s = searchFor.trim().toLowerCase();
 
     // SAMPLE AUTO-COMPLETE RESULT: (Intake assumes all fields are potentially searchable.)
     // [{

@@ -153,6 +153,15 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
   }
 
   /**
+   * Convenience method. Returns the typed parameters for this class.
+   * 
+   * @return typed parameters
+   */
+  public final Object[] getTypeParams() {
+    return this.getClass().getTypeParameters();
+  }
+
+  /**
    * <p>
    * Handle API request by delegating to service method,
    * {@link ISimpleResourceService#handle(Request)} and wrapping resulting API
