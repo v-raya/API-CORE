@@ -138,13 +138,19 @@ public class ElasticsearchDao {
    * Only stop the ElasticSearch client, when the container stops or if the connection becomes
    * unhealthy.
    * 
+   * <p>
+   * Thread safe.
+   * </p>
+   * 
    * @throws ApiElasticSearchException if ElasticSearch client fails to close properly.
    */
-  protected void stop() throws ApiElasticSearchException {
-    LOGGER.debug("ElasticSearchDao.stop()");
-    this.client.close();
-    setClient(null);
-    setTransportAddress(null);
+  protected synchronized void stop() throws ApiElasticSearchException {
+    if (this.client != null) {
+      LOGGER.debug("ElasticSearchDao.stop()");
+      this.client.close();
+      setClient(null);
+      setTransportAddress(null);
+    }
   }
 
   /**
@@ -264,10 +270,10 @@ public class ElasticsearchDao {
    * </p>
    * 
    * @param req ES search request
-   * @return array of Elasticsearch SearchHit
+   * @return array of AutoCompletePerson
    * @throws ApiElasticSearchException unable to connect, disconnect, bad hair day, etc.
    */
-  public SearchHit[] autoCompletePerson(AutoCompletePersonRequest req)
+  public ElasticSearchPerson[] autoCompletePerson(AutoCompletePersonRequest req)
       throws ApiElasticSearchException {
     start();
 
@@ -297,7 +303,7 @@ public class ElasticsearchDao {
     // "languages": []
     // }]
 
-    // SAMPLE DOCUMENT:
+    // SAMPLE ELASTICSEARCH PERSON DOCUMENT:
     // {
     // "first_name": "Todd",
     // "last_name": "B.",
@@ -338,7 +344,7 @@ public class ElasticsearchDao {
     // }
     // },
 
-    // TODO: #136994539: translate county and state code to sys id and vice versa.
+    // TODO: #136994539: translate county and state code to SYS ID and vice versa.
 
     DisMaxQueryBuilder qb = QueryBuilders.disMaxQuery();
     if (StringUtils.isNumeric(s)) {
@@ -353,8 +359,17 @@ public class ElasticsearchDao {
       addNonNumericPersonPrefixQueries(qb, s);
     }
 
-    return client.prepareSearch(indexName).setTypes(documentType).setQuery(qb).setFrom(0)
-        .setSize(DEFAULT_MAX_RESULTS).setExplain(true).execute().actionGet().getHits().getHits();
+    final SearchHit[] hits = client.prepareSearch(indexName).setTypes(documentType).setQuery(qb)
+        .setFrom(0).setSize(DEFAULT_MAX_RESULTS).setExplain(true).execute().actionGet().getHits()
+        .getHits();
+
+    final ElasticSearchPerson[] persons = new ElasticSearchPerson[hits.length];
+    int counter = -1;
+    for (SearchHit hit : hits) {
+      persons[++counter] = ElasticSearchPerson.makeESPerson(hit);
+    }
+
+    return persons;
   }
 
   /**

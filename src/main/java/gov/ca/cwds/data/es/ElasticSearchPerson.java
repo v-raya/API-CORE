@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.data.IPersonAware;
+import gov.ca.cwds.data.ITypedIdentifier;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
@@ -22,7 +23,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * 
  * @author CWDS API Team
  */
-public class ElasticSearchPerson implements Serializable {
+public class ElasticSearchPerson implements Serializable, ITypedIdentifier<String> {
 
   /**
    * ElasticSearch field names for document type people.person.
@@ -208,7 +209,9 @@ public class ElasticSearchPerson implements Serializable {
    * @return populated domain-level ES object
    * @see #pullCol(Map, ESColumn)
    */
-  public static ElasticSearchPerson makeESPerson(SearchHit hit) {
+  public static ElasticSearchPerson makeESPerson(final SearchHit hit) {
+
+    // ElasticSearch Java API returns this overly broad result of Map<String,Object>.
     final Map<String, Object> m = hit.getSource();
     ElasticSearchPerson ret =
         new ElasticSearchPerson(ElasticSearchPerson.<String>pullCol(m, ESColumn.ID),
@@ -218,7 +221,7 @@ public class ElasticSearchPerson implements Serializable {
             ElasticSearchPerson.<String>pullCol(m, ESColumn.BIRTH_DATE),
             ElasticSearchPerson.<String>pullCol(m, ESColumn.SSN),
             ElasticSearchPerson.<String>pullCol(m, ESColumn.TYPE),
-            ElasticSearchPerson.<String>pullCol(m, ESColumn.SOURCE), null);
+            ElasticSearchPerson.<String>pullCol(m, ESColumn.SOURCE));
 
     if (!StringUtils.isBlank(ret.getSourceType()) && !StringUtils.isBlank(ret.getSourceJson())) {
       try {
@@ -266,10 +269,16 @@ public class ElasticSearchPerson implements Serializable {
   // MEMBERS:
   // ================
 
+  @JsonProperty("first_name")
   private String firstName;
+
+  @JsonProperty("last_name")
   private String lastName;
-  private String gender;
+
+  @JsonProperty("date_of_birth")
   private String dateOfBirth;
+
+  private String gender;
   private String ssn;
   private String type;
   private String source;
@@ -324,11 +333,9 @@ public class ElasticSearchPerson implements Serializable {
    * @param ssn SSN without dashes
    * @param sourceType fully-qualified, persistence-level source class
    * @param sourceJson raw, nested child document as JSON
-   * @param address address, if any
    */
   public ElasticSearchPerson(String id, String firstName, String lastName, String gender,
-      String birthDate, String ssn, String sourceType, String sourceJson,
-      ElasticSearchAddress address) {
+      String birthDate, String ssn, String sourceType, String sourceJson) {
 
     this.firstName = trim(firstName);
     this.lastName = trim(lastName);
@@ -347,6 +354,7 @@ public class ElasticSearchPerson implements Serializable {
    * 
    * @return the id
    */
+  @Override
   public String getId() {
     return id;
   }
@@ -507,6 +515,7 @@ public class ElasticSearchPerson implements Serializable {
    * 
    * @param id legacy String identifier
    */
+  @Override
   public void setId(String id) {
     this.id = id;
   }
@@ -529,8 +538,21 @@ public class ElasticSearchPerson implements Serializable {
     this.sourceJson = sourceJson;
   }
 
+  /**
+   * Setter for source object.
+   * 
+   * @param sourceObj live CWDS API class instance
+   */
   public void setSourceObj(Object sourceObj) {
     this.sourceObj = sourceObj;
+  }
+
+  @Override
+  public String toString() {
+    return "ElasticSearchPerson [firstName=" + firstName + ", lastName=" + lastName
+        + ", dateOfBirth=" + dateOfBirth + ", gender=" + gender + ", ssn=" + ssn + ", type=" + type
+        + ", source=" + source + ", id=" + id + ", sourceType=" + sourceType + ", sourceObj="
+        + sourceObj + "]";
   }
 
 }

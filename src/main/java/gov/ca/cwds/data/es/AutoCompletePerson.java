@@ -5,9 +5,11 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import gov.ca.cwds.data.IAddressAware;
 import gov.ca.cwds.data.IPersonAware;
+import gov.ca.cwds.data.ITypedIdentifier;
 import gov.ca.cwds.rest.api.Request;
 
 /**
@@ -137,6 +139,7 @@ public class AutoCompletePerson implements Serializable, IPersonAware {
       return sysId;
     }
 
+    @JsonValue
     public String getDescription() {
       return description;
     }
@@ -156,12 +159,13 @@ public class AutoCompletePerson implements Serializable, IPersonAware {
    * 
    * @author CWDS API Team
    */
-  public static final class AutoCompletePersonAddress implements Serializable, IAddressAware {
+  public static final class AutoCompletePersonAddress
+      implements Serializable, IAddressAware, ITypedIdentifier<Long> {
 
     /**
      * Base version. Increment by version.
      */
-    private static final Long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private Long id;
     private String streetAddress;
@@ -170,10 +174,12 @@ public class AutoCompletePerson implements Serializable, IPersonAware {
     private String zip;
     private AutoCompletePersonAddressType type;
 
+    @Override
     public Long getId() {
       return id;
     }
 
+    @Override
     public void setId(Long id) {
       this.id = id;
     }
@@ -392,6 +398,11 @@ public class AutoCompletePerson implements Serializable, IPersonAware {
     this.ssn = ssn;
   }
 
+  /**
+   * Getter for date of birth
+   * 
+   * @return date of birth
+   */
   public String getDateOfBirth() {
     return dateOfBirth;
   }
@@ -400,6 +411,11 @@ public class AutoCompletePerson implements Serializable, IPersonAware {
     this.dateOfBirth = dateOfBirth;
   }
 
+  /**
+   * Getter for list of addresses
+   * 
+   * @return list of addresses
+   */
   public List<AutoCompletePersonAddress> getAddresses() {
     return addresses;
   }
@@ -408,6 +424,11 @@ public class AutoCompletePerson implements Serializable, IPersonAware {
     this.addresses = addresses;
   }
 
+  /**
+   * Getter for list of phone numbers.
+   * 
+   * @return list of phone numbers
+   */
   public List<AutoCompletePersonPhone> getPhoneNumbers() {
     return phoneNumbers;
   }
@@ -416,6 +437,11 @@ public class AutoCompletePerson implements Serializable, IPersonAware {
     this.phoneNumbers = phoneNumbers;
   }
 
+  /**
+   * Getter for birth date. Alias to {@link #getDateOfBirth()}.
+   * 
+   * @return date of birth
+   */
   @Override
   public String getBirthDate() {
     return getDateOfBirth();
