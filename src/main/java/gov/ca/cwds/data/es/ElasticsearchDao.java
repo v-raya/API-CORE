@@ -12,7 +12,6 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.DummyTransportAddress;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.transport.TransportAddress;
-import org.elasticsearch.index.query.DisMaxQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
@@ -253,8 +252,8 @@ public class ElasticsearchDao {
   }
 
   /**
-   * The Intake Auto-complete for Person takes a single search term, which is used to query
-   * Elasticsearch Person documents by ALL relevant fields.
+   * The Intake Auto-complete for Person takes a single search term, used to query Elasticsearch
+   * Person documents on ALL relevant fields.
    * 
    * <p>
    * For example, search strings consisting of only digits could be phone numbers, social security
@@ -277,89 +276,12 @@ public class ElasticsearchDao {
     start();
     final String s = searchFor.trim().toLowerCase();
 
-    // SAMPLE AUTO-COMPLETE RESULT: (Intake assumes all fields are potentially searchable.)
-    // [{
-    // "id": 1,
-    // "date_of_birth": "1964-01-14",
-    // "first_name": "John",
-    // "gender": null,
-    // "last_name": "Smith",
-    // "middle_name": null,
-    // "ssn": "858584561",
-    // "name_suffix": null,
-    // "addresses": [
-    // {
-    // "city": "city",
-    // "id": 6,
-    // "state": "IN",
-    // "street_address": "876 home",
-    // "zip": "66666",
-    // "type": "Placement"
-    // }
-    // ],
-    // "phone_numbers": [],
-    // "languages": []
-    // }]
+    // TODO: #136994539: translate stored system codes.
 
-    // SAMPLE ELASTICSEARCH PERSON DOCUMENT:
-    // {
-    // "first_name": "Todd",
-    // "last_name": "B.",
-    // "gender": "",
-    // "birth_date": "",
-    // "ssn": "",
-    // "id": "TZDqRCG0XH",
-    // "type": "gov.ca.cwds.data.persistence.cms.Reporter",
-    // "source_object": {
-    // "lastUpdatedId": "0XH",
-    // "lastUpdatedTime": 1479394080309,
-    // "referralId": "TZDqRCG0XH",
-    // "badgeNumber": "",
-    // "cityName": "Police",
-    // "colltrClientRptrReltnshpType": 0,
-    // "communicationMethodType": 410,
-    // "confidentialWaiverIndicator": "Y",
-    // "employerName": "test name",
-    // "feedbackDate": 1479340800000,
-    // "feedbackRequiredIndicator": "Y",
-    // "firstName": "Todd",
-    // "lastName": "B.",
-    // "mandatedReporterIndicator": "Y",
-    // "messagePhoneExtensionNumber": 0,
-    // "messagePhoneNumber": 0,
-    // "middleInitialName": "",
-    // "namePrefixDescription": "Mr.",
-    // "primaryPhoneNumber": 4650009886,
-    // "primaryPhoneExtensionNumber": 0,
-    // "stateCodeType": 1828,
-    // "streetName": "Mock Plaza",
-    // "streetNumber": "2323",
-    // "suffixTitleDescription": "",
-    // "zipNumber": 95656,
-    // "zipSuffixNumber": 0,
-    // "countySpecificCode": "28",
-    // "primaryKey": "TZDqRCG0XH"
-    // }
-    // },
-
-    // TODO: #136994539: translate county and state code to SYS ID and vice versa.
-
-    DisMaxQueryBuilder qb = QueryBuilders.disMaxQuery();
-    if (StringUtils.isNumeric(s)) {
-      // Only query numeric fields.
-      addNumericPersonPrefixQueries(qb, s);
-    } else if (StringUtils.isAlpha(s)) {
-      // Only query alphabetic fields.
-      addNonNumericPersonPrefixQueries(qb, s);
-    } else {
-      // Query on all searchable fields.
-      addNumericPersonPrefixQueries(qb, s);
-      addNonNumericPersonPrefixQueries(qb, s);
-    }
-
-    final SearchHit[] hits = client.prepareSearch(indexName).setTypes(documentType).setQuery(qb)
-        .setFrom(0).setSize(DEFAULT_MAX_RESULTS).setExplain(true).execute().actionGet().getHits()
-        .getHits();
+    // Search EVERY field!
+    final SearchHit[] hits = client.prepareSearch(indexName).setTypes(documentType)
+        .setQuery(QueryBuilders.queryStringQuery(s)).setFrom(0).setSize(DEFAULT_MAX_RESULTS)
+        .setExplain(true).execute().actionGet().getHits().getHits();
 
     final ElasticSearchPerson[] persons = new ElasticSearchPerson[hits.length];
     int counter = -1;
@@ -368,35 +290,6 @@ public class ElasticsearchDao {
     }
 
     return persons;
-  }
-
-  /**
-   * Build a prefix query on numeric Person fields.
-   * 
-   * @param qb DisMaxQueryBuilder
-   * @param s search term
-   * @return DisMaxQueryBuilder
-   */
-  protected DisMaxQueryBuilder addNumericPersonPrefixQueries(DisMaxQueryBuilder qb, String s) {
-    return qb.add(QueryBuilders.prefixQuery("birth_date", s))
-        .add(QueryBuilders.prefixQuery("ssn", s))
-        .add(QueryBuilders.prefixQuery("primaryPhoneNumber", s))
-        .add(QueryBuilders.prefixQuery("zipNumber", s))
-        .add(QueryBuilders.prefixQuery("streetNumber", s));
-  }
-
-  /**
-   * Build a prefix query on non-numeric Person fields.
-   * 
-   * @param qb DisMaxQueryBuilder
-   * @param s search term
-   * @return DisMaxQueryBuilder
-   */
-  protected DisMaxQueryBuilder addNonNumericPersonPrefixQueries(DisMaxQueryBuilder qb, String s) {
-    return qb.add(QueryBuilders.prefixQuery("first_name", s))
-        .add(QueryBuilders.prefixQuery("last_name", s)).add(QueryBuilders.prefixQuery("gender", s))
-        .add(QueryBuilders.prefixQuery("cityName", s))
-        .add(QueryBuilders.prefixQuery("streetName", s));
   }
 
   // ===================

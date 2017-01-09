@@ -115,7 +115,7 @@ public class ElasticSearchLiveTestRunner implements Runnable {
       }
 
     } catch (Exception e) {
-      LOGGER.error("Well, this is awkward. " + e.getMessage(), e);
+      LOGGER.error("Well, this is awkward.\n******* ERROR ******* " + e.getMessage(), e);
       throw new ApiException(e);
     }
   }
