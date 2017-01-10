@@ -56,6 +56,15 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
   }
 
   /**
+   * Convenience method. Returns the typed parameters for this class.
+   * 
+   * @return typed parameters
+   */
+  public final Object[] getTypeParams() {
+    return this.getClass().getTypeParameters();
+  }
+
+  /**
    * <p>
    * Handle common exceptions uniformly and throw a wrapping {@link ServiceException}.
    * </p>

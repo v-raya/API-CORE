@@ -87,7 +87,9 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
     Response wsResponse = null;
     try {
       validateRequest(req);
-      wsResponse = Response.status(Response.Status.OK).entity(execHandle(req)).build();
+      final P resp = execHandle(req);
+      validateResponse(resp);
+      wsResponse = Response.status(Response.Status.OK).entity(resp).build();
     } catch (Exception e) {
       wsResponse = handleException(e);
     }
@@ -111,7 +113,9 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
     Response wsResponse = null;
     try {
       validateKey(key);
-      wsResponse = Response.status(Response.Status.OK).entity(execFind(key)).build();
+      final P resp = execFind(key);
+      validateResponse(resp);
+      wsResponse = Response.status(Response.Status.OK).entity(resp).build();
     } catch (Exception e) {
       wsResponse = handleException(e);
     }
@@ -122,7 +126,7 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
    * Exposes the wrapped {@link ISimpleResourceService}.
    * 
    * <p>
-   * Usually you don't need to call this, but the interface is exposed for convenience.
+   * Usually not needed, but the interface is exposed for convenience.
    * </p>
    * 
    * @return the underlying, wrapped {@link ISimpleResourceService}
@@ -133,7 +137,17 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
   }
 
   /**
-   * Validate an incoming API request, {@link Request}, type Q.
+   * Validate an outbound API {@link Response}, type P.
+   * 
+   * @param resp API response
+   * @throws ConstraintViolationException if the response fails validation
+   */
+  protected void validateResponse(P resp) throws ConstraintViolationException {
+    ResourceParamValidator.<P>validate(resp);
+  }
+
+  /**
+   * Validate an incoming API {@link Request}, type Q.
    * 
    * @param req API request
    * @throws ConstraintViolationException if the request fails validation
@@ -195,6 +209,7 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
   protected Response handleException(Exception e) {
     Response ret;
 
+    // Gold plating. Waiting for further requirements.
     if (e.getCause() != null) {
       if (e.getCause() instanceof EntityNotFoundException) {
         ret = Response.status(Response.Status.NOT_FOUND).entity(null).build();

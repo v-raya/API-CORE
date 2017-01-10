@@ -301,7 +301,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
    * Original, fully-qualified, persistence-level source class, such
    * "gov.ca.cwds.rest.api.persistence.cms.OtherClientName".
    */
-  @JsonProperty("type")
+  @JsonProperty("source_type")
   private String sourceType;
 
   /**
@@ -442,7 +442,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
   /**
    * Setter for gender.
    * 
-   * @param gender gender code (not sys id)
+   * @param gender gender code (not SYS_ID)
    */
   public void setGender(String gender) {
     this.gender = gender;
