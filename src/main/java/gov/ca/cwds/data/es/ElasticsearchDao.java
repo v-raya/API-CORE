@@ -267,14 +267,14 @@ public class ElasticsearchDao {
    * max"</a> query feature.
    * </p>
    * 
-   * @param searchFor ES search request
+   * @param searchTerm ES search String
    * @return array of AutoCompletePerson
    * @throws ApiElasticSearchException unable to connect, disconnect, bad hair day, etc.
    */
-  public ElasticSearchPerson[] autoCompletePerson(final String searchFor)
+  public ElasticSearchPerson[] autoCompletePerson(final String searchTerm)
       throws ApiElasticSearchException {
     start();
-    final String s = searchFor.trim().toLowerCase();
+    final String s = searchTerm.trim().toLowerCase();
 
     // TODO: #136994539: translate stored system codes.
 
@@ -283,13 +283,13 @@ public class ElasticsearchDao {
         .setQuery(QueryBuilders.queryStringQuery(s)).setFrom(0).setSize(DEFAULT_MAX_RESULTS)
         .setExplain(true).execute().actionGet().getHits().getHits();
 
-    final ElasticSearchPerson[] persons = new ElasticSearchPerson[hits.length];
+    final ElasticSearchPerson[] ret = new ElasticSearchPerson[hits.length];
     int counter = -1;
     for (SearchHit hit : hits) {
-      persons[++counter] = ElasticSearchPerson.makeESPerson(hit);
+      ret[++counter] = ElasticSearchPerson.makeESPerson(hit);
     }
 
-    return persons;
+    return ret;
   }
 
   // ===================
