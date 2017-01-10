@@ -276,8 +276,6 @@ public class ElasticsearchDao {
     start();
     final String s = searchTerm.trim().toLowerCase();
 
-    // TODO: #136994539: translate stored system codes.
-
     // Search EVERY field!
     final SearchHit[] hits = client.prepareSearch(indexName).setTypes(documentType)
         .setQuery(QueryBuilders.queryStringQuery(s)).setFrom(0).setSize(DEFAULT_MAX_RESULTS)

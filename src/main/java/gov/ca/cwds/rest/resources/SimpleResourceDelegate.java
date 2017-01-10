@@ -6,6 +6,7 @@ import java.lang.annotation.Annotation;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Response;
 
@@ -83,7 +84,7 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
    * @see ISimpleResourceService#handle(Request)
    */
   @Override
-  public final Response handle(@NotNull Q req) throws ApiException {
+  public final Response handle(@Valid @NotNull Q req) throws ApiException {
     Response wsResponse = null;
     try {
       validateRequest(req);
@@ -109,7 +110,7 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
    * @throws ApiException if service call fails, catch and throw an ApiException
    */
   @Override
-  public final Response find(@NotNull K key) throws ApiException {
+  public final Response find(@Valid @NotNull K key) throws ApiException {
     Response wsResponse = null;
     try {
       validateKey(key);

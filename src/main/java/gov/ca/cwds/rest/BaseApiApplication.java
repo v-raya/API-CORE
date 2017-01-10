@@ -83,6 +83,15 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
 
   @Override
   public final void initialize(Bootstrap<T> bootstrap) {
+
+    // DropWizard/Guice integration error. Call in run() instead. :-(
+    // Occurs in GuiceServiceLocatorGeneratorStub.create(). The "throw" is unnecessary.
+    // https://github.com/HubSpot/dropwizard-guice/issues/95
+    // https://github.com/Squarespace/jersey2-guice/pull/39/files#diff-a1f0825aeeb627cc56eb829c34394860R50
+
+    // #136994539: GOAL: Deserialize enums without resorting to hacks.
+    // bootstrap.getObjectMapper().enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
+
     bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(
         bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor(false)));
 
@@ -103,6 +112,9 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
     LOGGER.info("Application name: {}, Version: {}", configuration.getApplicationName(),
         configuration.getVersion());
 
+    // #136994539: GOAL: Deserialize enums without resorting to hacks.
+    // environment.getObjectMapper().enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
+    // environment.getObjectMapper().enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
     migrateDatabase(configuration);
 
     LOGGER.info("Configuring CORS: Cross-Origin Resource Sharing");
