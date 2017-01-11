@@ -14,6 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.ca.cwds.rest.api.ApiException;
+
 /**
  * Basic system code cache facility to translate common CMS codes.
  * 
@@ -25,17 +27,15 @@ public class CmsSystemCodeCache implements Serializable {
 
   private static final int INITIALIZE_SIZE = 7253;
 
-  private final List<CmsSystemCode> codes;
   private final Map<Integer, CmsSystemCode> idxSysId;
   private final Map<String, List<CmsSystemCode>> idxMeta;
 
   /**
    * Default constructor is off limits.
    */
+  @SuppressWarnings("unused")
   private CmsSystemCodeCache() {
-    codes = null;
-    idxSysId = null;
-    idxMeta = null;
+    throw new ApiException("Not supported.");
   }
 
   /**
@@ -43,11 +43,9 @@ public class CmsSystemCodeCache implements Serializable {
    * 
    * @param codes all system codes.
    */
-  protected CmsSystemCodeCache(List<CmsSystemCode> codes) {
-    this.codes = Collections.unmodifiableList(codes);
-
-    Map<Integer, CmsSystemCode> anIdxSysId = new ConcurrentHashMap<>(INITIALIZE_SIZE);
-    Map<String, List<CmsSystemCode>> anIdxMeta = new ConcurrentHashMap<>(INITIALIZE_SIZE);
+  protected CmsSystemCodeCache(final List<CmsSystemCode> codes) {
+    Map<Integer, CmsSystemCode> anIdxSysId = new ConcurrentHashMap<>(codes.size());
+    Map<String, List<CmsSystemCode>> anIdxMeta = new ConcurrentHashMap<>(codes.size());
 
     for (CmsSystemCode code : codes) {
       anIdxSysId.put(code.sysId, code);
@@ -65,7 +63,37 @@ public class CmsSystemCodeCache implements Serializable {
     this.idxMeta = Collections.unmodifiableMap(anIdxMeta);
   }
 
+  /**
+   * Core method. Look up (translate) an incoming system id.
+   * 
+   * @param sysId unique system id
+   * @return return the found system code or null if none found
+   */
+  public CmsSystemCode lookup(int sysId) {
+    return this.idxSysId.get(sysId);
+  }
+
+  /**
+   * Get all system codes for a system code category.
+   * 
+   * @param meta system code category (aka, "meta")
+   * @return List of system codes for this category
+   */
+  public List<CmsSystemCode> getCategory(final String meta) {
+    return this.idxMeta.get(meta);
+  }
+
+  /**
+   * Represents a CMS system code entry.
+   * 
+   * @author CWDS API Team
+   */
   public static class CmsSystemCode implements Serializable {
+
+    /**
+     * Base serialization value. Increment by class change.
+     */
+    private static final long serialVersionUID = 1L;
 
     private final int sysId;
     private final String fksMetaT;
@@ -99,7 +127,8 @@ public class CmsSystemCodeCache implements Serializable {
      * SYS_ID, FKS_META_T, SHORT_DSC, LGC_ID, INACTV_IND, CATEGORY_ID, OTHER_CD, LONG_DSC
      * </p>
      * 
-     * @param line delimited system code line
+     * @param line delimited system code line to parse
+     * @param delim chose delimiter
      * @return prepared CmsSystemCode
      */
     public static CmsSystemCode produce(final String line, final String delim) {
@@ -129,6 +158,12 @@ public class CmsSystemCodeCache implements Serializable {
           longDsc);
     }
 
+    /**
+     * See method {@link #produce(String, String)}. Delimiter defaults to tab.
+     * 
+     * @param line delimited system code line to parse
+     * @return prepared CmsSystemCode
+     */
     public static CmsSystemCode produce(final String line) {
       return produce(line, "\t");
     }
@@ -174,20 +209,19 @@ public class CmsSystemCodeCache implements Serializable {
    * @return initialized system cache
    * @throws IOException if unable to read
    */
-  public static CmsSystemCodeCache produce(BufferedReader reader) throws IOException {
-    CmsSystemCodeCache ret = new CmsSystemCodeCache();
-    List<CmsSystemCode> codes = new ArrayList<>(INITIALIZE_SIZE);
+  protected static CmsSystemCodeCache produce(BufferedReader reader) throws IOException {
+    List<CmsSystemCode> codes = new ArrayList<>();
 
     String line;
     while ((line = reader.readLine()) != null) {
       if (line.startsWith("SYS_ID")) {
         continue;
       }
-      LOGGER.debug("line: {}", line);
+      LOGGER.trace("line: {}", line);
       codes.add(CmsSystemCode.produce(line));
     }
 
-    return ret;
+    return new CmsSystemCodeCache(codes);
   }
 
   /**
@@ -206,12 +240,18 @@ public class CmsSystemCodeCache implements Serializable {
     return ret;
   }
 
-  public static void main(String[] args) {
-    try {
-      final CmsSystemCodeCache cache = CmsSystemCodeCache.produce(new File(args[0]));
-    } catch (IOException e) {
-      LOGGER.error("FATAL ERROR", e);
-    }
+  /**
+   * Convenience method. Produce the system cache facility from a file stored in this package.
+   * 
+   * @return initialized system cache
+   * @throws IOException if unable to read
+   */
+  public static CmsSystemCodeCache produce() throws IOException {
+    LOGGER.info(CmsSystemCodeCache.class.getPackage().getName());
+    return CmsSystemCodeCache.produce(new File(CmsSystemCodeCache.class
+        .getResource("/" + CmsSystemCodeCache.class.getPackage().getName().replace('.', '/') + '/'
+            + "system_codes.tsv")
+        .getFile()));
   }
 
 }
