@@ -6,6 +6,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -41,8 +42,12 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
    * @param req API request
    * @throws ConstraintViolationException if the incoming request fails validation
    */
-  protected final void validateRequest(Q req) throws ConstraintViolationException {
-    ResourceParamValidator.<Q>validate(req);
+  protected final void validateRequest(Q req) throws ServiceException {
+    try {
+      ResourceParamValidator.<Q>validate(req);
+    } catch (Exception e) {
+      throw new ServiceException("Validation error. " + e.getMessage(), e);
+    }
   }
 
   /**
@@ -51,8 +56,12 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
    * @param key serializable key, type K
    * @throws ConstraintViolationException if the incoming key fails validation
    */
-  protected final void validateKey(K key) throws ConstraintViolationException {
-    ResourceParamValidator.<K>validate(key);
+  protected final void validateKey(K key) throws ServiceException {
+    try {
+      ResourceParamValidator.<K>validate(key);
+    } catch (Exception e) {
+      throw new ServiceException("Validation error. " + e.getMessage(), e);
+    }
   }
 
   /**
@@ -126,7 +135,7 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
 
   @CoverageIgnore
   @Override
-  public P handle(Q req) throws ServiceException {
+  public P handle(@Valid @NotNull Q req) throws ServiceException {
     P apiResponse = null;
     try {
       validateRequest(req);
@@ -139,7 +148,7 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
 
   @CoverageIgnore
   @Override
-  public P find(@NotNull K key) throws ServiceException {
+  public P find(@Valid @NotNull K key) throws ServiceException {
     P apiResponse = null;
     try {
       validateKey(key);
@@ -156,7 +165,7 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
    * @param req incoming API Request
    * @return API Response
    */
-  protected abstract P handleRequest(@NotNull Q req);
+  protected abstract P handleRequest(@Valid @NotNull Q req);
 
   /**
    * Required implementation method to find a record by key.
@@ -164,6 +173,6 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
    * @param id incoming serializable key
    * @return API Response
    */
-  protected abstract P handleFind(@NotNull K id);
+  protected abstract P handleFind(@Valid @NotNull K id);
 
 }

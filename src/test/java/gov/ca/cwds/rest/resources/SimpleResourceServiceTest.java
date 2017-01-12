@@ -188,15 +188,11 @@ public class SimpleResourceServiceTest {
     }
   }
 
-  @Test
+  @Test(expected = ServiceException.class)
   public void handle_A$Object_T$ServiceException__NullParm() throws Exception {
     TestApiRequest req = null;
-    try {
-      target.handle(req);
-      fail("Expected exception was not thrown!");
-    } catch (ServiceException e) {
-      assertTrue(e.getCause() instanceof IllegalArgumentException);
-    }
+    target.handle(req);
+    fail("Expected exception was not thrown!");
   }
 
   @Test
@@ -218,15 +214,11 @@ public class SimpleResourceServiceTest {
     }
   }
 
-  @Test
+  @Test(expected = ServiceException.class)
   public void find_A$Object_T$ServiceException_NullParm() throws Exception {
     String key = null;
-    try {
-      target.find(key);
-      fail("Expected exception was not thrown!");
-    } catch (ServiceException e) {
-      assertTrue(e.getCause() instanceof IllegalArgumentException);
-    }
+    target.find(key);
+    fail("Expected exception was not thrown!");
   }
 
 }
