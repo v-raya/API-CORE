@@ -48,7 +48,7 @@ public class ESSearchRequestTest {
   }
 
   @Test
-  public void equalsHashCodeWork() throws Exception {
+  public void testEqualsHashCodeWork() throws Exception {
     EqualsVerifier.forClass(ESSearchRequest.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
