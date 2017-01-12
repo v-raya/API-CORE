@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.elasticsearch.search.SearchHit;
@@ -212,7 +214,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
    */
   public static ElasticSearchPerson makeESPerson(final SearchHit hit) {
 
-    // ElasticSearch Java API returns this overly broad result of Map<String,Object>.
+    // ElasticSearch Java API returns an overly broad type of Map<String,Object>.
     final Map<String, Object> m = hit.getSource();
     ElasticSearchPerson ret =
         new ElasticSearchPerson(ElasticSearchPerson.<String>pullCol(m, ESColumn.ID),
@@ -226,7 +228,6 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
 
     if (!StringUtils.isBlank(ret.getSourceType()) && !StringUtils.isBlank(ret.getSourceJson())) {
       try {
-
         // TODO: STORY #137216799:
         // Tech debt: reverse compatibility with existing ElasticSearch documents.
         if (ret.getSourceType().startsWith("gov.ca.cwds.rest.api.")) {
@@ -235,7 +236,6 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
         }
 
         if (!StringUtils.isBlank(ret.getSourceJson())) {
-
           // Remove excess whitespace.
           // No job should store excess whitespace in ElasticSearch!
           final String json = ret.getSourceJson().replaceAll("\\s+\",", "\",");
@@ -555,6 +555,16 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
   @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+  }
+
+  @Override
+  public final int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public final boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

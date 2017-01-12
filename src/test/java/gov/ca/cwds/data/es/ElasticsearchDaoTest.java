@@ -1,7 +1,11 @@
 package gov.ca.cwds.data.es;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.startsWith;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -13,6 +17,7 @@ import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.SearchHit;
@@ -50,7 +55,7 @@ public final class ElasticsearchDaoTest {
   private TransportClient.Builder clientBuilder;
 
   @Mock
-  private TransportClient client;
+  private Client client;
 
   @Mock
   private SearchRequestBuilder srb;
@@ -195,6 +200,135 @@ public final class ElasticsearchDaoTest {
     req.getRoot().addElem(new ESSearchRequest.ESFieldSearchEntry("first_name", "bart"));
     final SearchHit[] results = cut.queryPersonOr(req);
     assertThat("hits", results != null && results.length > 0);
+  }
+
+  @Test
+  public void type() throws Exception {
+    assertThat(ElasticsearchDao.class, notNullValue());
+  }
+
+  @Test
+  public void instantiation() throws Exception {
+    String host = null;
+    String port = null;
+    String clusterName = null;
+    ElasticsearchDao target = new ElasticsearchDao(host, port, clusterName);
+    assertThat(target, notNullValue());
+  }
+
+  @Test(expected = ApiElasticSearchException.class)
+  public void start_Args$_Throws$ApiElasticSearchException() throws Exception {
+    String host = null;
+    String port = null;
+    String clusterName = null;
+    ElasticsearchDao target = new ElasticsearchDao(host, port, clusterName);
+    target.start();
+  }
+
+  @Test
+  public void stop_Args$() throws Exception {
+    String host = null;
+    String port = null;
+    String clusterName = null;
+    ElasticsearchDao target = new ElasticsearchDao(host, port, clusterName);
+    target.stop();
+  }
+
+  @Test(expected = ApiElasticSearchException.class)
+  public void autoCompletePerson_Args$String_throw$NPE() throws Exception {
+    String host = null;
+    String port = null;
+    String clusterName = null;
+    ElasticsearchDao target = new ElasticsearchDao(host, port, clusterName);
+
+    String searchTerm = null;
+    ElasticSearchPerson[] actual = target.autoCompletePerson(searchTerm);
+    ElasticSearchPerson[] expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test(expected = ApiElasticSearchException.class)
+  public void autoCompletePerson_Args$String_Throws$ApiElasticSearchException() throws Exception {
+    String host = null;
+    String port = null;
+    String clusterName = null;
+
+    ElasticsearchDao target = new ElasticsearchDao(host, port, clusterName);
+    String searchTerm = null;
+    target.autoCompletePerson(searchTerm);
+    fail("Expected exception was not thrown!");
+  }
+
+
+  @Test
+  public void autoCompletePerson_Args$String_mock_client() throws Exception {
+    String host = null;
+    String port = null;
+    String clusterName = null;
+
+    ElasticsearchDao target = new ElasticsearchDao(host, port, clusterName);
+
+    // Search EVERY field!
+    // final SearchHit[] hits = client.prepareSearch(indexName).setTypes(documentType)
+    // .setQuery(QueryBuilders.queryStringQuery(s)).setFrom(0).setSize(DEFAULT_MAX_RESULTS)
+    // .setExplain(true).execute().actionGet().getHits().getHits();
+
+    // when(client.prepareSearch(any())).thenReturn(srb);
+    // when(srb.setTypes(any())).thenReturn(srb);
+    target.setClient(client);
+
+    String searchTerm = "junk";
+    final ElasticSearchPerson[] actual = target.autoCompletePerson(searchTerm);
+    System.out.println(actual);
+    assertThat("nothing returned", actual != null);
+  }
+
+  @Test
+  public void getHost_Args$() throws Exception {
+    String host = null;
+    String port = null;
+    String clusterName = null;
+    ElasticsearchDao target = new ElasticsearchDao(host, port, clusterName);
+    // given
+    // e.g. : given(mocked.called()).willReturn(1);
+    // when
+    String actual = target.getHost();
+    // then
+    // e.g. : verify(mocked).called();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getPort_Args$() throws Exception {
+    String host = null;
+    String port = null;
+    String clusterName = null;
+    ElasticsearchDao target = new ElasticsearchDao(host, port, clusterName);
+    // given
+    // e.g. : given(mocked.called()).willReturn(1);
+    // when
+    String actual = target.getPort();
+    // then
+    // e.g. : verify(mocked).called();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getClusterName_Args$() throws Exception {
+    String host = null;
+    String port = null;
+    String clusterName = null;
+    ElasticsearchDao target = new ElasticsearchDao(host, port, clusterName);
+    // given
+    // e.g. : given(mocked.called()).willReturn(1);
+    // when
+    String actual = target.getClusterName();
+    // then
+    // e.g. : verify(mocked).called();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
   }
 
 }
