@@ -7,21 +7,25 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Spliterator;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.rest.api.ApiException;
+import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * Basic system code cache facility to translate common CMS codes.
  * 
  * @author CWDS API Team
  */
-public class CmsSystemCodeCache implements Serializable {
+public class CmsSystemCodeCache implements Serializable, Iterable<CmsSystemCode> {
 
   /**
    * Base serialization version. Increment per class change.
@@ -29,6 +33,13 @@ public class CmsSystemCodeCache implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsSystemCodeCache.class);
+
+  private static String fileLocation;
+
+  static {
+    fileLocation = "/" + CmsSystemCodeCache.class.getPackage().getName().replace('.', '/') + '/'
+        + "system_codes.tsv";
+  }
 
   private final Map<Integer, CmsSystemCode> idxSysId;
   private final Map<String, List<CmsSystemCode>> idxMeta;
@@ -53,15 +64,15 @@ public class CmsSystemCodeCache implements Serializable {
     Map<String, List<CmsSystemCode>> anIdxMeta = new ConcurrentHashMap<>(codes.size());
 
     for (CmsSystemCode code : codes) {
-      anIdxSysId.put(code.sysId, code);
+      anIdxSysId.put(code.getSysId(), code);
 
-      if (anIdxMeta.get(code.fksMetaT) == null) {
-        anIdxMeta.put(code.fksMetaT, new ArrayList<>());
+      if (anIdxMeta.get(code.getFksMetaT()) == null) {
+        anIdxMeta.put(code.getFksMetaT(), new ArrayList<>());
       }
 
-      List<CmsSystemCode> category = anIdxMeta.get(code.fksMetaT);
+      List<CmsSystemCode> category = anIdxMeta.get(code.getFksMetaT());
       category.add(code);
-      anIdxMeta.put(code.fksMetaT, category);
+      anIdxMeta.put(code.getFksMetaT(), category);
     }
 
     this.idxSysId = Collections.unmodifiableMap(anIdxSysId);
@@ -86,172 +97,6 @@ public class CmsSystemCodeCache implements Serializable {
    */
   public List<CmsSystemCode> getCategory(final String meta) {
     return this.idxMeta.get(meta);
-  }
-
-  /**
-   * Represents a CMS system code entry.
-   * 
-   * @author CWDS API Team
-   */
-  public static class CmsSystemCode implements Serializable {
-
-    /**
-     * Base serialization value. Increment per class change.
-     */
-    private static final long serialVersionUID = 1L;
-
-    private final int sysId;
-    private final String fksMetaT;
-    private final String shortDsc;
-    private final String lgcId;
-    private final String inactvInd;
-    private final String categoryId;
-    private final String otherCd;
-    private final String longDsc;
-
-    /**
-     * Construct from field values.
-     * 
-     * @param sysId unique system code id
-     * @param fksMetaT system code category
-     * @param shortDsc short description (e.g., "California")
-     * @param lgcId logical id. Usually zero-padded sort order (e.g., "0002")
-     * @param inactvInd inactive flag (N or Y)
-     * @param categoryId sub-category
-     * @param otherCd optional, 2 character code, such as "CA" for the State of California.
-     * @param longDsc long description. Only populated occasionally.
-     */
-    public CmsSystemCode(int sysId, String fksMetaT, String shortDsc, String lgcId,
-        String inactvInd, String categoryId, String otherCd, String longDsc) {
-      this.sysId = sysId;
-      this.fksMetaT = fksMetaT;
-      this.shortDsc = shortDsc;
-      this.lgcId = lgcId;
-      this.inactvInd = inactvInd;
-      this.categoryId = categoryId;
-      this.otherCd = otherCd;
-      this.longDsc = longDsc;
-    }
-
-    /**
-     * Produce a {@link CmsSystemCode} from a delimited String.
-     * 
-     * <p>
-     * Expected file layout.
-     * </p>
-     * 
-     * <p>
-     * SYS_ID, FKS_META_T, SHORT_DSC, LGC_ID, INACTV_IND, CATEGORY_ID, OTHER_CD, LONG_DSC
-     * </p>
-     * 
-     * @param line delimited system code line to parse
-     * @param delim chose delimiter
-     * @return prepared CmsSystemCode
-     */
-    public static CmsSystemCode produce(final String line, final String delim) {
-      int sysId;
-      String fksMetaT;
-      String shortDsc;
-      String lgcId;
-      String inactvInd;
-      String categoryId;
-      String otherCd;
-      String longDsc;
-
-      // WARNING: if a column has zero width, then String.split() will NOT yield a token.
-      // For now, all columns in the incoming line should contain some value, even spaces.
-      final String[] tokens = line.split(delim);
-
-      sysId = Integer.parseInt(tokens[0]);
-      fksMetaT = tokens[1].trim();
-      shortDsc = tokens[2].trim();
-      lgcId = tokens[3].trim();
-      inactvInd = tokens[4].trim();
-      categoryId = tokens[5].trim();
-      otherCd = tokens[6].trim();
-      longDsc = tokens[7].trim();
-
-      return new CmsSystemCode(sysId, fksMetaT, shortDsc, lgcId, inactvInd, categoryId, otherCd,
-          longDsc);
-    }
-
-    /**
-     * See method {@link #produce(String, String)}. Delimiter defaults to tab.
-     * 
-     * @param line delimited system code line to parse
-     * @return prepared CmsSystemCode
-     */
-    public static CmsSystemCode produce(final String line) {
-      return produce(line, "\t");
-    }
-
-    /**
-     * Getter for system code id.
-     * 
-     * @return sys id
-     */
-    public int getSysId() {
-      return sysId;
-    }
-
-    /**
-     * Getter for "meta" (system code category).
-     * 
-     * @return system code category
-     */
-    public String getFksMetaT() {
-      return fksMetaT;
-    }
-
-    /**
-     * Getter for short description, "California" instead of "CA".
-     * 
-     * @return short description
-     */
-    public String getShortDsc() {
-      return shortDsc;
-    }
-
-    /**
-     * Getter for logical id, the zero-padded sort order (e.g., "0001").
-     * 
-     * @return logical id
-     */
-    public String getLgcId() {
-      return lgcId;
-    }
-
-    /**
-     * Getter for inactive flag.
-     * 
-     * @return inactive flag
-     */
-    public String getInactvInd() {
-      return inactvInd;
-    }
-
-    public String getCategoryId() {
-      return categoryId;
-    }
-
-    /**
-     * Getter for "other code", an optional short code for some categories.
-     * 
-     * @return other code
-     */
-    public String getOtherCd() {
-      return otherCd;
-    }
-
-    /**
-     * Getter for long description.
-     * 
-     * @return long description
-     */
-    public String getLongDsc() {
-      return longDsc;
-    }
-
   }
 
   /**
@@ -281,12 +126,15 @@ public class CmsSystemCodeCache implements Serializable {
    * 
    * @param file source, delimited file
    * @return initialized system cache
-   * @throws IOException if unable to read
+   * @throws ServiceException if unable to parse the file
    */
-  public static CmsSystemCodeCache produce(File file) throws IOException {
+  public static CmsSystemCodeCache produce(File file) throws ServiceException {
     CmsSystemCodeCache ret;
     try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
       ret = produce(reader);
+    } catch (Exception e) {
+      LOGGER.error("Unable to read system code file", e);
+      throw new ServiceException("Unable to read system code file", e);
     }
 
     return ret;
@@ -296,14 +144,46 @@ public class CmsSystemCodeCache implements Serializable {
    * Convenience method. Produce the system cache facility from a file stored in this package.
    * 
    * @return initialized system cache
-   * @throws IOException if unable to read
+   * @throws ServiceException if unable to read the default system code file
    */
-  public static CmsSystemCodeCache produce() throws IOException {
+  public static CmsSystemCodeCache produce() throws ServiceException {
     LOGGER.info(CmsSystemCodeCache.class.getPackage().getName());
-    return CmsSystemCodeCache.produce(new File(CmsSystemCodeCache.class
-        .getResource("/" + CmsSystemCodeCache.class.getPackage().getName().replace('.', '/') + '/'
-            + "system_codes.tsv")
-        .getFile()));
+    return CmsSystemCodeCache
+        .produce(new File(CmsSystemCodeCache.class.getResource(getFileLocation()).getFile()));
+  }
+
+  @Override
+  public Iterator<CmsSystemCode> iterator() {
+    return this.idxSysId.values().iterator();
+  }
+
+  @Override
+  public void forEach(Consumer<? super CmsSystemCode> action) {
+    // #137202471: Tech debt: Cobertura can't deal with Java 8 features.
+    Iterable.super.forEach(action);
+  }
+
+  @Override
+  public Spliterator<CmsSystemCode> spliterator() {
+    return this.idxSysId.values().spliterator();
+  }
+
+  /**
+   * Get the default location of the system codes file.
+   * 
+   * @return location of the system codes file
+   */
+  public static String getFileLocation() {
+    return CmsSystemCodeCache.fileLocation;
+  }
+
+  /**
+   * Set the default location of the system codes file. Used mostly to validate new codes.
+   * 
+   * @param fileLocation location of the system codes file
+   */
+  public static void setFileLocation(String fileLocation) {
+    CmsSystemCodeCache.fileLocation = fileLocation;
   }
 
 }
