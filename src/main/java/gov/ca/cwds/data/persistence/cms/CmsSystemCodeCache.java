@@ -23,19 +23,24 @@ import gov.ca.cwds.rest.api.ApiException;
  */
 public class CmsSystemCodeCache implements Serializable {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CmsSystemCodeCache.class);
+  /**
+   * Base serialization version. Increment per class change.
+   */
+  private static final long serialVersionUID = 1L;
 
-  private static final int INITIALIZE_SIZE = 7253;
+  private static final Logger LOGGER = LoggerFactory.getLogger(CmsSystemCodeCache.class);
 
   private final Map<Integer, CmsSystemCode> idxSysId;
   private final Map<String, List<CmsSystemCode>> idxMeta;
 
   /**
    * Default constructor is off limits.
+   * 
+   * @see #produce()
    */
   @SuppressWarnings("unused")
   private CmsSystemCodeCache() {
-    throw new ApiException("Not supported.");
+    throw new ApiException("Access prohibited.");
   }
 
   /**
@@ -91,7 +96,7 @@ public class CmsSystemCodeCache implements Serializable {
   public static class CmsSystemCode implements Serializable {
 
     /**
-     * Base serialization value. Increment by class change.
+     * Base serialization value. Increment per class change.
      */
     private static final long serialVersionUID = 1L;
 
@@ -104,6 +109,18 @@ public class CmsSystemCodeCache implements Serializable {
     private final String otherCd;
     private final String longDsc;
 
+    /**
+     * Construct from field values.
+     * 
+     * @param sysId unique system code id
+     * @param fksMetaT system code category
+     * @param shortDsc short description (e.g., "California")
+     * @param lgcId logical id. Usually zero-padded sort order (e.g., "0002")
+     * @param inactvInd inactive flag (N or Y)
+     * @param categoryId sub-category
+     * @param otherCd optional, 2 character code, such as "CA" for the State of California.
+     * @param longDsc long description. Only populated occasionally.
+     */
     public CmsSystemCode(int sysId, String fksMetaT, String shortDsc, String lgcId,
         String inactvInd, String categoryId, String otherCd, String longDsc) {
       this.sysId = sysId;
@@ -141,9 +158,9 @@ public class CmsSystemCodeCache implements Serializable {
       String otherCd;
       String longDsc;
 
-      // WARNING: if a column has no width, then String.split() will NOT yield a token.
+      // WARNING: if a column has zero width, then String.split() will NOT yield a token.
       // For now, all columns in the incoming line should contain some value, even spaces.
-      final String[] tokens = line.split("\t");
+      final String[] tokens = line.split(delim);
 
       sysId = Integer.parseInt(tokens[0]);
       fksMetaT = tokens[1].trim();
@@ -168,22 +185,47 @@ public class CmsSystemCodeCache implements Serializable {
       return produce(line, "\t");
     }
 
+    /**
+     * Getter for system code id.
+     * 
+     * @return sys id
+     */
     public int getSysId() {
       return sysId;
     }
 
+    /**
+     * Getter for "meta" (system code category).
+     * 
+     * @return system code category
+     */
     public String getFksMetaT() {
       return fksMetaT;
     }
 
+    /**
+     * Getter for short description, "California" instead of "CA".
+     * 
+     * @return short description
+     */
     public String getShortDsc() {
       return shortDsc;
     }
 
+    /**
+     * Getter for logical id, the zero-padded sort order (e.g., "0001").
+     * 
+     * @return logical id
+     */
     public String getLgcId() {
       return lgcId;
     }
 
+    /**
+     * Getter for inactive flag.
+     * 
+     * @return inactive flag
+     */
     public String getInactvInd() {
       return inactvInd;
     }
@@ -192,10 +234,20 @@ public class CmsSystemCodeCache implements Serializable {
       return categoryId;
     }
 
+    /**
+     * Getter for "other code", an optional short code for some categories.
+     * 
+     * @return other code
+     */
     public String getOtherCd() {
       return otherCd;
     }
 
+    /**
+     * Getter for long description.
+     * 
+     * @return long description
+     */
     public String getLongDsc() {
       return longDsc;
     }
