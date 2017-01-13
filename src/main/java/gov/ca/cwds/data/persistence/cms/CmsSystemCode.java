@@ -2,8 +2,17 @@ package gov.ca.cwds.data.persistence.cms;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.StringUtils;
+
+import gov.ca.cwds.rest.services.ServiceException;
+
 /**
  * Represents a CMS system code entry.
+ * 
+ * <p>
+ * Optionally construct by parsing a delimited String of system codes column via method
+ * {@link #produce(String, String)}.
+ * </p>
  * 
  * @author CWDS API Team
  */
@@ -61,8 +70,15 @@ public final class CmsSystemCode implements Serializable {
    * @param line delimited system code line to parse
    * @param delim chose delimiter
    * @return prepared CmsSystemCode
+   * @throws ServiceException if line is blank
    */
-  public static CmsSystemCode produce(final String line, final String delim) {
+  public static CmsSystemCode produce(final String line, final String delim)
+      throws ServiceException {
+
+    if (StringUtils.isBlank(line)) {
+      throw new ServiceException("System code line cannot be empty");
+    }
+
     int sysId;
     String fksMetaT;
     String shortDsc;
@@ -94,8 +110,9 @@ public final class CmsSystemCode implements Serializable {
    * 
    * @param line delimited system code line to parse
    * @return prepared CmsSystemCode
+   * @throws ServiceException if line is blank
    */
-  public static CmsSystemCode produce(final String line) {
+  public static CmsSystemCode produce(final String line) throws ServiceException {
     return produce(line, "\t");
   }
 
@@ -144,6 +161,11 @@ public final class CmsSystemCode implements Serializable {
     return inactvInd;
   }
 
+  /**
+   * Getter for the system code category.
+   * 
+   * @return the system code category
+   */
   public String getCategoryId() {
     return categoryId;
   }
