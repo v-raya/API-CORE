@@ -3,7 +3,6 @@ package gov.ca.cwds.data.persistence.cms;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -103,19 +102,26 @@ public class CmsSystemCodeCacheTest {
 
   @Test
   public void produce_Args$BufferedReader_matches() throws Exception {
-    BufferedReader reader = new BufferedReader(new FileReader(new File(CmsSystemCodeCache.class
-        .getResource("/" + CmsSystemCodeCache.class.getPackage().getName().replace('.', '/') + '/'
-            + "test_system_codes.tsv")
-        .getFile())));
+    BufferedReader reader = makeBufferedReader();
     final CmsSystemCodeCache cache = CmsSystemCodeCache.produce(reader);
     assertThat(cache, hasItem(cache.lookup(4)));
   }
 
   @Test
   public void produce_Args$BufferedReader_empty() throws Exception {
-    BufferedReader reader = mock(BufferedReader.class);
+    BufferedReader reader = makeBufferedReader();
     final CmsSystemCodeCache cache = CmsSystemCodeCache.produce(reader);
-    assertThat(cache, not(hasItem(cache.lookup(4))));
+    final CmsSystemCode actual = cache.lookup(4);
+
+    // public CmsSystemCode(int sysId, String fksMetaT, String shortDsc, String lgcId, String
+    // inactvInd, String categoryId, String otherCd, String longDsc) {
+    final CmsSystemCode expected = new CmsSystemCode(4, "ABS_BPTC", "Arm", "25", "N", "", "", "");
+
+    // #137202471: Tech debt: Cobertura can't deal with Java 8 features.
+    // Cobertura can't handle interface Iterable<CmsSystemCode>, which is required for
+    // CoreMatchers.hasItem().
+    // assertThat(cache, not(hasItem(cache.lookup(4))));
+    assertThat(actual, is(equalTo(expected)));
   }
 
   @Test(expected = ServiceException.class)
@@ -124,6 +130,26 @@ public class CmsSystemCodeCacheTest {
     final CmsSystemCodeCache actual = CmsSystemCodeCache.produce(file);
     CmsSystemCodeCache expected = null;
     assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getFileLocation_Args$() throws Exception {
+    final String actual = CmsSystemCodeCache.getFileLocation();
+    final String expected = "/gov/ca/cwds/data/persistence/cms/system_codes.tsv";
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setFileLocation_Args$String() throws Exception {
+
+    // given
+    final String fileLocation = null;
+    // e.g. : given(mocked.called()).willReturn(1);
+    // when
+    CmsSystemCodeCache.setFileLocation(fileLocation);
+    // then
+    // e.g. : verify(mocked).called();
+    assertThat(CmsSystemCodeCache.getFileLocation(), is(equalTo(fileLocation)));
   }
 
 }

@@ -3,6 +3,8 @@ package gov.ca.cwds.data.persistence.cms;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import gov.ca.cwds.rest.services.ServiceException;
 
@@ -186,6 +188,17 @@ public final class CmsSystemCode implements Serializable {
    */
   public String getLongDsc() {
     return longDsc;
+  }
+
+
+  @Override
+  public final int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public final boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

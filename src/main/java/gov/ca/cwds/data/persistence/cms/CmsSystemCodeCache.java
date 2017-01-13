@@ -14,6 +14,8 @@ import java.util.Spliterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -133,7 +135,7 @@ public class CmsSystemCodeCache implements Serializable, Iterable<CmsSystemCode>
     try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
       ret = produce(reader);
     } catch (Exception e) {
-      LOGGER.error("Unable to read system code file", e);
+      LOGGER.error("Unable to read system code file");
       throw new ServiceException("Unable to read system code file", e);
     }
 
@@ -184,6 +186,16 @@ public class CmsSystemCodeCache implements Serializable, Iterable<CmsSystemCode>
    */
   public static void setFileLocation(String fileLocation) {
     CmsSystemCodeCache.fileLocation = fileLocation;
+  }
+
+  @Override
+  public final int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public final boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }
