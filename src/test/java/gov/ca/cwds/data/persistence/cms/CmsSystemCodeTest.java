@@ -8,6 +8,8 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 import gov.ca.cwds.rest.services.ServiceException;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 public class CmsSystemCodeTest {
 
@@ -196,6 +198,11 @@ public class CmsSystemCodeTest {
     // e.g. : verify(mocked).called();
     String expected = null;
     assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void testEquals_Args$Object() throws Exception {
+    EqualsVerifier.forClass(CmsSystemCode.class).suppress(Warning.NONFINAL_FIELDS).verify();
   }
 
 }

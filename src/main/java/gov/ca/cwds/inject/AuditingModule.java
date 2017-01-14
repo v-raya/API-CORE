@@ -27,5 +27,4 @@ public class AuditingModule extends AbstractModule {
     return LoggerFactory.getLogger("AUDIT");
   }
 
-
 }
