@@ -61,7 +61,6 @@ public class FileSystemCodeDaoTest {
     fail("Expected exception was not thrown!");
   }
 
-  // @Test(expected = ServiceException.class)
   @Test
   public void produce_Args$File() throws Exception {
     FileSystemCodeDao target = new FileSystemCodeDao();
@@ -69,9 +68,8 @@ public class FileSystemCodeDaoTest {
         .getResource(target.getFileLocation().replaceAll("system_codes", "test_system_codes"))
         .getFile());
     final List<CmsSystemCode> actual = target.produce(file);
-    // verify(file).canRead();
-    List<CmsSystemCode> expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    final CmsSystemCode expected = new CmsSystemCode(4, "ABS_BPTC", "Arm", "25", "N", "", "", "");
+    assertThat(actual, is(hasItem(expected)));
   }
 
   @Test(expected = ServiceException.class)
@@ -86,7 +84,7 @@ public class FileSystemCodeDaoTest {
   public void produce_Args$() throws Exception {
     FileSystemCodeDao target = new FileSystemCodeDao();
     final List<CmsSystemCode> actual = target.produce();
-    final CmsSystemCode expected = new CmsSystemCode(4, "ABS_BPTC", "Arm", "25", "N", "", "", "");;
+    final CmsSystemCode expected = new CmsSystemCode(4, "ABS_BPTC", "Arm", "25", "N", "", "", "");
     assertThat(actual, is(hasItem(expected)));
   }
 
@@ -94,7 +92,7 @@ public class FileSystemCodeDaoTest {
   public void getAllSystemCodes_Args$() throws Exception {
     FileSystemCodeDao target = spy(new FileSystemCodeDao());
     final List<CmsSystemCode> actual = target.getAllSystemCodes();
-    final CmsSystemCode expected = new CmsSystemCode(4, "ABS_BPTC", "Arm", "25", "N", "", "", "");;
+    final CmsSystemCode expected = new CmsSystemCode(4, "ABS_BPTC", "Arm", "25", "N", "", "", "");
     assertThat(actual, is(hasItem(expected)));
   }
 
