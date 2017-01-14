@@ -1,9 +1,9 @@
 package gov.ca.cwds.data.persistence.cms;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,18 +17,18 @@ import gov.ca.cwds.rest.services.ServiceException;
  * 
  * @author CWDS API Team
  */
-public class FileSystemCodeDao implements ISystemCodeDao {
+public class SystemCodeDaoFileImpl implements ISystemCodeDao {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(FileSystemCodeDao.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SystemCodeDaoFileImpl.class);
 
   private String fileLocation =
-      "/" + CmsSystemCodeCacheService.class.getPackage().getName().replace('.', '/') + '/'
+      "/" + SystemCodeDaoFileImpl.class.getPackage().getName().replace('.', '/') + '/'
           + "system_codes.tsv";
 
   /**
    * Default constructor.
    */
-  public FileSystemCodeDao() {
+  public SystemCodeDaoFileImpl() {
     // Default, no-op.
   }
 
@@ -57,17 +57,17 @@ public class FileSystemCodeDao implements ISystemCodeDao {
   /**
    * Convenience method. Produce the system cache facility from a file.
    * 
-   * @param file source, delimited file
+   * @param iss delimited system code file as a stream
    * @return initialized system cache
    * @throws ServiceException if unable to parse the file
    */
-  public List<CmsSystemCode> produce(File file) throws ServiceException {
+  public List<CmsSystemCode> produce(InputStream iss) throws ServiceException {
     List<CmsSystemCode> ret;
-    try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(iss))) {
       ret = produce(reader);
     } catch (Exception e) {
       LOGGER.error("Unable to read system code file");
-      throw new ServiceException("Unable to read system code file", e);
+      throw new ServiceException("Unable to read system code file stream", e);
     }
 
     return ret;
@@ -80,8 +80,15 @@ public class FileSystemCodeDao implements ISystemCodeDao {
    * @throws ServiceException if unable to read the default system code file
    */
   protected List<CmsSystemCode> produce() throws ServiceException {
-    LOGGER.info(FileSystemCodeDao.class.getPackage().getName());
-    return produce(new File(FileSystemCodeDao.class.getResource(getFileLocation()).getFile()));
+    final String pkg = SystemCodeDaoFileImpl.class.getPackage().getName();
+    LOGGER.info("package: " + pkg);
+
+    final String fileName =
+        "/" + SystemCodeDaoFileImpl.class.getPackage().getName().replace('.', '/') + '/'
+            + "system_codes.tsv";
+
+    // Find file from api-core.jar or from a file on the file system.
+    return produce(this.getClass().getResourceAsStream(fileName));
   }
 
   @Override

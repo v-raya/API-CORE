@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.data.persistence.cms.CmsSystemCodeCacheService;
-import gov.ca.cwds.data.persistence.cms.FileSystemCodeDao;
+import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
 import gov.ca.cwds.data.persistence.cms.ISystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.ISystemCodeDao;
 import gov.ca.cwds.rest.services.ServiceException;
@@ -20,7 +20,7 @@ public class CmsSystemCodeCacheLoader {
 
   public static void main(String[] args) {
     try {
-      ISystemCodeDao dao = new FileSystemCodeDao();
+      ISystemCodeDao dao = new SystemCodeDaoFileImpl();
 
       if (args.length > 1) {
         // dao = new FileSystemCodeDao(new File(args[0]));

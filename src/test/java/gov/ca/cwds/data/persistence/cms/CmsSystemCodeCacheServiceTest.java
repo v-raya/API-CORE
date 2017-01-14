@@ -18,7 +18,7 @@ import nl.jqno.equalsverifier.Warning;
 public class CmsSystemCodeCacheServiceTest {
 
   private static CmsSystemCodeCacheService makeCache() throws IOException {
-    return new CmsSystemCodeCacheService(new FileSystemCodeDao());
+    return new CmsSystemCodeCacheService(new SystemCodeDaoFileImpl());
   }
 
   private static BufferedReader makeBufferedReader() throws IOException {
