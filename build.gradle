@@ -44,6 +44,7 @@ dependencies {
         compile group: "org.postgresql", name: "postgresql", version: "9.4.1208.jre7"
 		compile group: 'org.apache.commons', name: 'commons-compress', version: '1.12'
 		compile group: 'org.slf4j', name: 'slf4j-ext', version: '1.7.22'
+		compile 'com.fasterxml.jackson.module:jackson-module-guice:2.8.6'
 
 		// TEST:
         testCompile group: "io.dropwizard", name: "dropwizard-testing", version: dropwizardVersion
