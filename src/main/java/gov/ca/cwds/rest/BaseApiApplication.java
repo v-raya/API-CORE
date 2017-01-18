@@ -13,12 +13,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.module.guice.ObjectMapperModule;
+import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.hubspot.dropwizard.guice.GuiceBundle;
 
+import gov.ca.cwds.data.CmsSystemCodeSerializer;
+import gov.ca.cwds.data.persistence.cms.ISystemCodeCache;
 import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
 import gov.ca.cwds.rest.resources.SwaggerResource;
 import io.dropwizard.Application;
@@ -115,35 +121,23 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
     LOGGER.info("Registering Filters");
     registerFilters(environment);
 
-    // Let Guice know about our ObjectMapper.
-    ObjectMapperModule omm =
-        new ObjectMapperModule().withObjectMapper(environment.getObjectMapper());
-    // final Injector injector = Guice.createInjector(omm, new Module() {
-    // @Override
-    // public void configure(Binder binder) {
-    // binder.bind(ObjectMapper.class).toInstance(environment.getObjectMapper());
-    // }
-    // });
-
-    // Inject system code cache.
-    // SimpleModule module =
-    // new SimpleModule("SystemCodeModule", new Version(0, 1, 0, "a", "alpha", ""));
-    // module.addSerializer(Short.class,
-    // new CmsSystemCodeSerializer(Guice.createInjector().getInstance(ISystemCodeCache.class)));
-    // Guice.createInjector().getInstance(ObjectMapper.class).registerModule(module);
-
-    // Inject system code cache.
-    // SimpleModule module =
-    // new SimpleModule("SystemCodeModule", new Version(0, 1, 0, "a", "alpha", ""));
-    // module.addSerializer(Short.class,
-    // new CmsSystemCodeSerializer(Guice.createInjector().getInstance(ISystemCodeCache.class)));
-    // environment.getObjectMapper().registerModule(module);
-
     runInternal(configuration, environment);
   }
 
   private final void registerFilters(final Environment environment) {
     Injector injector = guiceBundle.getInjector();
+
+    // Register the ObjectMapper with Guice.
+    ObjectMapperModule omm =
+        new ObjectMapperModule().withObjectMapper(environment.getObjectMapper());
+    // Inject system code cache.
+    SimpleModule module =
+        new SimpleModule("SystemCodeModule", new Version(0, 1, 0, "a", "alpha", ""));
+    module.addSerializer(Short.class,
+        new CmsSystemCodeSerializer(injector.getInstance(ISystemCodeCache.class)));
+    environment.getObjectMapper().registerModule(module);
+    Guice.createInjector().getInstance(ObjectMapper.class).registerModule(module);
+
     environment.servlets()
         .addFilter("AuditAndLoggingFilter",
             injector.getInstance(RequestResponseLoggingFilter.class))
