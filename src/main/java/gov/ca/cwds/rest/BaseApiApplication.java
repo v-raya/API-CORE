@@ -13,11 +13,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.hubspot.dropwizard.guice.GuiceBundle;
 
+import gov.ca.cwds.data.ContextualSystemCodeSerializer;
 import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
 import gov.ca.cwds.rest.resources.SwaggerResource;
 import io.dropwizard.Application;
@@ -115,6 +118,10 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
     // #136994539: GOAL: Deserialize enums without resorting to hacks.
     // environment.getObjectMapper().enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
     // environment.getObjectMapper().enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
+    SimpleModule module =
+        new SimpleModule("SystemCodeModule", new Version(0, 1, 0, "a", "alpha", ""));
+    module.addSerializer(Short.class, new ContextualSystemCodeSerializer());
+    environment.getObjectMapper().registerModule(module);
     migrateDatabase(configuration);
 
     LOGGER.info("Configuring CORS: Cross-Origin Resource Sharing");

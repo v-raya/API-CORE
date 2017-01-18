@@ -90,10 +90,7 @@ public final class CmsSystemCode implements Serializable {
     String otherCd;
     String longDsc;
 
-    // WARNING: if a column has zero width, then String.split() will NOT yield a token.
-    // For now, all columns in the incoming line should contain some value, even spaces.
     final String[] tokens = line.split(delim);
-
     sysId = Integer.parseInt(tokens[0]);
     fksMetaT = tokens[1].trim();
     shortDsc = tokens[2].trim();
@@ -115,7 +112,7 @@ public final class CmsSystemCode implements Serializable {
    * @throws ServiceException if line is blank
    */
   public static CmsSystemCode produce(final String line) throws ServiceException {
-    return produce(line, "\t");
+    return produce(line, "\\t");
   }
 
   /**

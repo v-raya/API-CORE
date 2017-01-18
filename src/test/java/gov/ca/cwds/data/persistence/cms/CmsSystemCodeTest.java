@@ -51,6 +51,22 @@ public class CmsSystemCodeTest {
   }
 
   @Test
+  public void produce_Args$String_tab_delim_no_space() throws Exception {
+    final String line = "4\tABS_BPTC\tArm\t25\tN\t\t\t ";
+    final CmsSystemCode actual = CmsSystemCode.produce(line);
+    final CmsSystemCode expected = new CmsSystemCode(4, "ABS_BPTC", "Arm", "25", "", "", "N", "");
+    assertThat(actual.getFksMetaT(), is(equalTo(expected.getFksMetaT())));
+  }
+
+  @Test
+  public void produce_Args$String_comma_delim_good() throws Exception {
+    final String line = "4,ABS_BPTC,Arm,25,N, , , ";
+    final CmsSystemCode actual = CmsSystemCode.produce(line, ",");
+    final CmsSystemCode expected = new CmsSystemCode(4, "ABS_BPTC", "Arm", "25", "", "", "N", "");
+    assertThat(actual.getFksMetaT(), is(equalTo(expected.getFksMetaT())));
+  }
+
+  @Test
   public void getSysId_Args$() throws Exception {
     int sysId = 0;
     String fksMetaT = null;
@@ -156,7 +172,6 @@ public class CmsSystemCodeTest {
 
   @Test
   public void getOtherCd_Args$() throws Exception {
-
     int sysId = 0;
     String fksMetaT = null;
     String shortDsc = null;
@@ -179,7 +194,6 @@ public class CmsSystemCodeTest {
 
   @Test
   public void getLongDsc_Args$() throws Exception {
-
     int sysId = 0;
     String fksMetaT = null;
     String shortDsc = null;
