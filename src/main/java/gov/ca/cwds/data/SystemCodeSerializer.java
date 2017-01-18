@@ -15,7 +15,17 @@ import com.fasterxml.jackson.annotation.JacksonAnnotation;
 @JacksonAnnotation
 public @interface SystemCodeSerializer {
 
+  /**
+   * Print the short description field, such as "California".
+   * 
+   * @return whether to print short description
+   */
   boolean description() default true;
 
+  /**
+   * Print the "other code" field, as "CA" for California.
+   * 
+   * @return whether to print other code
+   */
   boolean other() default false;
 }

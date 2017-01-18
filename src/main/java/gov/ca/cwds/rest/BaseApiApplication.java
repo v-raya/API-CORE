@@ -20,7 +20,9 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.hubspot.dropwizard.guice.GuiceBundle;
 
-import gov.ca.cwds.data.ContextualSystemCodeSerializer;
+import gov.ca.cwds.data.CmsSystemCodeSerializer;
+import gov.ca.cwds.data.persistence.cms.CmsSystemCodeCacheService;
+import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
 import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
 import gov.ca.cwds.rest.resources.SwaggerResource;
 import io.dropwizard.Application;
@@ -118,10 +120,25 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
     // #136994539: GOAL: Deserialize enums without resorting to hacks.
     // environment.getObjectMapper().enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
     // environment.getObjectMapper().enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
+
     SimpleModule module =
         new SimpleModule("SystemCodeModule", new Version(0, 1, 0, "a", "alpha", ""));
-    module.addSerializer(Short.class, new ContextualSystemCodeSerializer());
+
+    // TODO: #137548119: Inject system code cache.
+    module.addSerializer(Short.class,
+        new CmsSystemCodeSerializer(new CmsSystemCodeCacheService(new SystemCodeDaoFileImpl())));
     environment.getObjectMapper().registerModule(module);
+
+    // Guice.createInjector(modules)
+
+    // Binding doesn't work because Short is a final class; cannot extend it.
+    // final Injector injector = Guice.createInjector(environment.getObjectMapper(), new Module() {
+    // @Override
+    // public void configure(Binder binder) {
+    // binder.bind(Short.class).annotatedWith(SystemCodeSerializer.class).toInstance(3);
+    // }
+    // });
+
     migrateDatabase(configuration);
 
     LOGGER.info("Configuring CORS: Cross-Origin Resource Sharing");

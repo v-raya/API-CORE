@@ -1,14 +1,14 @@
 package gov.ca.cwds.rest;
 
-import io.dropwizard.Configuration;
-import io.dropwizard.db.DataSourceFactory;
-import io.dropwizard.flyway.FlywayFactory;
-
 import javax.annotation.Nullable;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.dropwizard.Configuration;
+import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.flyway.FlywayFactory;
 
 public class BaseApiConfiguration extends Configuration {
   /**
@@ -126,7 +126,5 @@ public class BaseApiConfiguration extends Configuration {
   public void setSmartystreetsConfiguration(SmartyStreetsConfiguration smartyStreetsConfiguration) {
     this.smartyStreetsConfiguration = smartyStreetsConfiguration;
   }
-
-
 
 }
