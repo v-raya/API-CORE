@@ -25,6 +25,12 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
   protected final boolean useShortDescription;
   protected final boolean useOtherCd;
 
+  public enum SystemCodeField {
+
+  }
+
+  // protected static Map<K, V> serializerStyle = new ConcurrentHashMap<K, V>();
+
   @Inject
   public CmsSystemCodeSerializer(ISystemCodeCache cache) {
     this.cache = cache;
@@ -82,12 +88,12 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
             jgen.writeStringField("description", code.getShortDsc());
           }
           if (this.useOtherCd) {
-            jgen.writeStringField("other_cd", code.getLgcId());
+            jgen.writeStringField("logical_id", code.getLgcId());
           }
         } else {
           // Default.
           jgen.writeStringField("description", "");
-          jgen.writeStringField("other_cd", "");
+          jgen.writeStringField("logical_id", "");
         }
       } else {
         jgen.writeNull();

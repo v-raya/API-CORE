@@ -17,7 +17,6 @@ import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.module.guice.ObjectMapperModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -25,6 +24,7 @@ import com.hubspot.dropwizard.guice.GuiceBundle;
 
 import gov.ca.cwds.data.CmsSystemCodeSerializer;
 import gov.ca.cwds.data.persistence.cms.ISystemCodeCache;
+import gov.ca.cwds.rest.filters.DiscardErrors;
 import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
 import gov.ca.cwds.rest.resources.SwaggerResource;
 import io.dropwizard.Application;
@@ -119,7 +119,10 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
     configureSwagger(configuration, environment);
 
     LOGGER.info("Registering Filters");
-    registerFilters(environment);
+
+    // TESTING: #129093035.
+    // registerFilters(environment);
+    environment.jersey().register(new DiscardErrors("search_person"));
 
     runInternal(configuration, environment);
   }
@@ -127,9 +130,11 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
   private final void registerFilters(final Environment environment) {
     Injector injector = guiceBundle.getInjector();
 
+    // Drop to Jackson 2.7.8. Runtime incompatibility with 2.8.6.
     // Register the ObjectMapper with Guice.
-    ObjectMapperModule omm =
-        new ObjectMapperModule().withObjectMapper(environment.getObjectMapper());
+    // ObjectMapperModule omm =
+    // new ObjectMapperModule().withObjectMapper(environment.getObjectMapper());
+
     // Inject system code cache.
     SimpleModule module =
         new SimpleModule("SystemCodeModule", new Version(0, 1, 0, "a", "alpha", ""));
