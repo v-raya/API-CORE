@@ -52,7 +52,7 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
     }
 
     if (ann == null) {
-      // prov.find
+      // Default Short. No translation.
       return new CmsSystemCodeSerializer(this.cache, false, false);
     }
 
@@ -62,25 +62,35 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
   @Override
   public void serialize(Short s, JsonGenerator jgen, SerializerProvider sp)
       throws IOException, JsonGenerationException {
-    LOGGER.warn("thread id={}", Thread.currentThread().getId());
+    LOGGER.debug("thread id={}", Thread.currentThread().getId());
 
     if (!useOtherCd && !useShortDescription) {
-      jgen.writeNumber(s);
+      // Write ordinary Short.
+      if (s != null) {
+        jgen.writeNumber(s);
+      } else {
+        jgen.writeNull();
+      }
     } else {
+      // Write translated system code.
       jgen.writeStartObject();
-      jgen.writeNumberField("id", s);
-
-      if (cache != null && s != null && s.intValue() != 0) {
-        final CmsSystemCode code = cache.lookup(s.intValue());
-        if (this.useShortDescription) {
-          jgen.writeStringField("description", code.getShortDsc());
-        }
-        if (this.useOtherCd) {
-          jgen.writeStringField("other", code.getOtherCd());
+      if (s != null) {
+        jgen.writeNumberField("sys_id", s);
+        if (cache != null && s.intValue() != 0) {
+          final CmsSystemCode code = cache.lookup(s.intValue());
+          if (this.useShortDescription) {
+            jgen.writeStringField("description", code.getShortDsc());
+          }
+          if (this.useOtherCd) {
+            jgen.writeStringField("other_cd", code.getLgcId());
+          }
+        } else {
+          // Default.
+          jgen.writeStringField("description", "");
+          jgen.writeStringField("other_cd", "");
         }
       } else {
-        // Default.
-        jgen.writeStringField("description", "");
+        jgen.writeNull();
       }
 
       jgen.writeEndObject();

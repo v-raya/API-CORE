@@ -16,13 +16,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.hubspot.dropwizard.guice.GuiceBundle;
 
 import gov.ca.cwds.data.CmsSystemCodeSerializer;
-import gov.ca.cwds.data.persistence.cms.CmsSystemCodeCacheService;
-import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
+import gov.ca.cwds.data.persistence.cms.ISystemCodeCache;
 import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
 import gov.ca.cwds.rest.resources.SwaggerResource;
 import io.dropwizard.Application;
@@ -88,15 +88,6 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
 
   @Override
   public final void initialize(Bootstrap<T> bootstrap) {
-
-    // DropWizard/Guice integration error. Call in run() instead. :-(
-    // Occurs in GuiceServiceLocatorGeneratorStub.create(). The "throw" is unnecessary.
-    // https://github.com/HubSpot/dropwizard-guice/issues/95
-    // https://github.com/Squarespace/jersey2-guice/pull/39/files#diff-a1f0825aeeb627cc56eb829c34394860R50
-
-    // #136994539: GOAL: Deserialize enums without resorting to hacks.
-    // bootstrap.getObjectMapper().enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
-
     bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(
         bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor(false)));
 
@@ -117,27 +108,12 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
     LOGGER.info("Application name: {}, Version: {}", configuration.getApplicationName(),
         configuration.getVersion());
 
-    // #136994539: GOAL: Deserialize enums without resorting to hacks.
-    // environment.getObjectMapper().enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
-    // environment.getObjectMapper().enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
-
+    // Inject system code cache.
     SimpleModule module =
         new SimpleModule("SystemCodeModule", new Version(0, 1, 0, "a", "alpha", ""));
-
-    // TODO: #137548119: Inject system code cache.
     module.addSerializer(Short.class,
-        new CmsSystemCodeSerializer(new CmsSystemCodeCacheService(new SystemCodeDaoFileImpl())));
+        new CmsSystemCodeSerializer(Guice.createInjector().getInstance(ISystemCodeCache.class)));
     environment.getObjectMapper().registerModule(module);
-
-    // Guice.createInjector(modules)
-
-    // Binding doesn't work because Short is a final class; cannot extend it.
-    // final Injector injector = Guice.createInjector(environment.getObjectMapper(), new Module() {
-    // @Override
-    // public void configure(Binder binder) {
-    // binder.bind(Short.class).annotatedWith(SystemCodeSerializer.class).toInstance(3);
-    // }
-    // });
 
     migrateDatabase(configuration);
 
