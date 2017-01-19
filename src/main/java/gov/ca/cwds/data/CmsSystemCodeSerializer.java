@@ -5,6 +5,8 @@ import java.util.BitSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,6 +78,15 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
     this.showMetaCategory = showMetaCategory;
   }
 
+  /**
+   * Build a {@link BitSet} from variable array of boolean flags (as arguments as
+   * CmsSystemCodeSerializer constructor). BitSet is used by our serializer factory to produce
+   * unique settings combinations per serializer as needed.
+   * 
+   * @param flags variable array of boolean flags (as arguments as CmsSystemCodeSerializer
+   *        constructor)
+   * @return a BitSet that uniquely identifies serializer settings
+   */
   protected BitSet buildBits(boolean... flags) {
     BitSet bs = new BitSet();
 
@@ -152,6 +163,16 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
 
       jgen.writeEndObject();
     }
+  }
+
+  @Override
+  public final int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public final boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

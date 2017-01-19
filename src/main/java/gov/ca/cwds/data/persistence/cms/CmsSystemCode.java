@@ -187,7 +187,6 @@ public final class CmsSystemCode implements Serializable {
     return longDsc;
   }
 
-
   @Override
   public final int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);
