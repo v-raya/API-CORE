@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import java.io.StringWriter;
@@ -18,6 +19,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import gov.ca.cwds.data.persistence.cms.CmsSystemCodeCacheService;
+import gov.ca.cwds.data.persistence.cms.CmsTestEntity;
 import gov.ca.cwds.data.persistence.cms.ISystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
 
@@ -48,6 +50,51 @@ public class CmsSystemCodeSerializerTest {
     ISystemCodeCache cache = null;
     CmsSystemCodeSerializer target = new CmsSystemCodeSerializer(cache);
     assertThat(target, notNullValue());
+  }
+
+  @Test
+  public void testSerializeObj() throws Exception {
+    CmsSystemCodeSerializer target = new CmsSystemCodeSerializer(CACHE);
+    init(target);
+    final CmsTestEntity obj = new CmsTestEntity(1L, "first", "last", (short) 1828);
+    objectMapper.writeValue(stringWriter, obj);
+    final String actual = stringWriter.toString();
+    System.out.println(actual);
+    assertTrue(actual
+        .contains("{\"sys_id\":1828,\"short_description\":\"California\",\"logical_id\":\"CA\"}"));
+  }
+
+  @Test
+  public void testSerializeObj_unknown_sys_id() throws Exception {
+    CmsSystemCodeSerializer target = new CmsSystemCodeSerializer(CACHE);
+    init(target);
+    final CmsTestEntity obj = new CmsTestEntity(1L, "first", "last", (short) 30135);
+    objectMapper.writeValue(stringWriter, obj);
+    final String actual = stringWriter.toString();
+    System.out.println(actual);
+    assertTrue(actual.contains("NOT TRANSLATED"));
+  }
+
+  @Test
+  public void testSerializeObj_unknown_sys_id_2() throws Exception {
+    CmsSystemCodeSerializer target = new CmsSystemCodeSerializer(CACHE);
+    init(target);
+    final CmsTestEntity obj = new CmsTestEntity(1L, "first", "last", (short) -31543);
+    objectMapper.writeValue(stringWriter, obj);
+    final String actual = stringWriter.toString();
+    System.out.println(actual);
+    assertTrue(actual.contains("NOT TRANSLATED"));
+  }
+
+  @Test
+  public void testSerializeObj_null_sys_id() throws Exception {
+    CmsSystemCodeSerializer target = new CmsSystemCodeSerializer(CACHE);
+    init(target);
+    final CmsTestEntity obj = new CmsTestEntity(1L, "first", "last", null);
+    objectMapper.writeValue(stringWriter, obj);
+    final String actual = stringWriter.toString();
+    System.out.println(actual);
+    assertTrue(actual.contains("\"stateId\":null"));
   }
 
   @Test
@@ -85,6 +132,7 @@ public class CmsSystemCodeSerializerTest {
     CmsSystemCodeSerializer target = new CmsSystemCodeSerializer(cache);
     // given
     Short s = null;
+
     JsonGenerator jgen = mock(JsonGenerator.class);
     SerializerProvider sp = mock(SerializerProvider.class);
     // e.g. : given(mocked.called()).willReturn(1);

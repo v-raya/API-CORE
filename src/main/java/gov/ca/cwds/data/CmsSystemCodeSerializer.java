@@ -87,7 +87,7 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
    *        constructor)
    * @return a BitSet that uniquely identifies serializer settings
    */
-  protected BitSet buildBits(boolean... flags) {
+  protected static BitSet buildBits(boolean... flags) {
     BitSet bs = new BitSet();
 
     int counter = 0;
@@ -100,10 +100,8 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
     return bs;
   }
 
-  protected CmsSystemCodeSerializer buildSerializer(ISystemCodeCache cache,
+  protected static CmsSystemCodeSerializer buildSerializer(ISystemCodeCache cache,
       boolean showShortDescription, boolean showLogicalId, boolean showMetaCategory) {
-    LOGGER.debug("thread id={}", Thread.currentThread().getId());
-
     final BitSet bs =
         buildBits(cache != null, showShortDescription, showLogicalId, showMetaCategory);
     if (!serializerStyles.containsKey(bs)) {
@@ -157,7 +155,7 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
           jgen.writeStringField("logical_id", code.getLgcId());
         }
       } else {
-        LOGGER.error("lookup sys_id: {} NOT TRANSLATED!", s.intValue());
+        LOGGER.error("UNKNOWN SYS_ID: {}! NOT TRANSLATED!", s.intValue());
         jgen.writeStringField("short_description", "NOT TRANSLATED");
       }
 
