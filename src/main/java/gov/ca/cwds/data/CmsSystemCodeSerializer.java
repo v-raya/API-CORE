@@ -19,7 +19,6 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.persistence.cms.CmsSystemCode;
 import gov.ca.cwds.data.persistence.cms.ISystemCodeCache;
-import gov.ca.cwds.data.persistence.cms.VarargTuple;
 
 /**
  * Jackson JSON serializer automatically translates CMS system codes on the fly.
@@ -45,8 +44,8 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
   protected final boolean showLogicalId;
   protected final boolean showMetaCategory;
 
-  // OPTION: write a factory for contextual serializer. Thread safe?
-  protected static Map<VarargTuple<Boolean>, CmsSystemCodeSerializer> serializerStyle =
+  // Factory for contextual serializer.
+  protected static Map<BitSet, CmsSystemCodeSerializer> serializerStyles =
       new ConcurrentHashMap<>();
 
   @Inject
@@ -79,9 +78,31 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
 
   protected BitSet buildBits(boolean... flags) {
     BitSet bs = new BitSet();
-    // bs.
+
+    int counter = 0;
+    for (boolean b : flags) {
+      if (b) {
+        bs.set(counter++);
+      }
+    }
 
     return bs;
+  }
+
+  protected CmsSystemCodeSerializer buildSerializer(ISystemCodeCache cache,
+      boolean showShortDescription, boolean showLogicalId, boolean showMetaCategory) {
+    LOGGER.debug("thread id={}", Thread.currentThread().getId());
+
+    final BitSet bs =
+        buildBits(cache != null, showShortDescription, showLogicalId, showMetaCategory);
+    if (!serializerStyles.containsKey(bs)) {
+      LOGGER.debug("new CmsSystemCodeSerializer: {}, {}, {}, {}", cache != null,
+          showShortDescription, showLogicalId, showMetaCategory);
+      serializerStyles.put(bs, new CmsSystemCodeSerializer(cache, showShortDescription,
+          showLogicalId, showMetaCategory));
+    }
+
+    return serializerStyles.get(bs);
   }
 
   @Override
@@ -96,19 +117,17 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
 
     if (ann == null) {
       // Default Short. No translation.
-      return new CmsSystemCodeSerializer(this.cache, false, false, false);
+      return buildSerializer(this.cache, false, false, false);
     }
 
-    return new CmsSystemCodeSerializer(this.cache, ann.description(), ann.logical(), false);
+    return buildSerializer(this.cache, ann.description(), ann.logical(), ann.meta());
   }
 
   @Override
   public void serialize(Short s, JsonGenerator jgen, SerializerProvider sp)
       throws IOException, JsonGenerationException {
-    LOGGER.debug("thread id={}", Thread.currentThread().getId());
-
-    // Zero means no translatable value.
-    if (s == null || s.intValue() != 0) {
+    if (s == null || s.intValue() == 0) {
+      // Zero means no translatable value.
       jgen.writeNull();
     } else if (cache == null || !(showLogicalId && showShortDescription)) {
       // Cache disabled or no syscode fields to show. Write ordinary short.
@@ -119,12 +138,18 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
       jgen.writeNumberField("sys_id", s);
 
       final CmsSystemCode code = cache.lookup(s.intValue());
-      if (this.showShortDescription) {
-        jgen.writeStringField("description", code.getShortDsc());
+      if (code != null) {
+        if (this.showShortDescription) {
+          jgen.writeStringField("short_description", code.getShortDsc());
+        }
+        if (this.showLogicalId) {
+          jgen.writeStringField("logical_id", code.getLgcId());
+        }
+      } else {
+        LOGGER.error("lookup sys_id: {} NOT TRANSLATED!", s.intValue());
+        jgen.writeStringField("short_description", "NOT TRANSLATED");
       }
-      if (this.showLogicalId) {
-        jgen.writeStringField("logical_id", code.getLgcId());
-      }
+
       jgen.writeEndObject();
     }
   }
