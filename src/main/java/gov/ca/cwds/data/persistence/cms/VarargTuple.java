@@ -1,7 +1,6 @@
 package gov.ca.cwds.data.persistence.cms;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -13,7 +12,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @author CWDS API Team
  * @param <T> tuple type
  */
-public class VarargTuple<T> implements Serializable {
+public class VarargTuple<T extends Serializable> implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -30,15 +29,12 @@ public class VarargTuple<T> implements Serializable {
   // }
 
   /**
+   * Construct from varargs of type T.
+   * 
    * @param values any number of T keys
    */
   public VarargTuple(T... values) {
-    ArrayUtils.toArray(values);
-    this.columns = (T[]) Arrays.asList(values).toArray();
-    int cntr = -1;
-    for (T v : values) {
-      this.columns[++cntr] = v;
-    }
+    this.columns = ArrayUtils.toArray(values);
   }
 
   /**
@@ -48,7 +44,7 @@ public class VarargTuple<T> implements Serializable {
    */
   @Override
   public String toString() {
-    return "varKey_" + ArrayUtils.toString(this.columns, "<null>").replace(',', '_');
+    return "tuple_" + ArrayUtils.toString(this.columns, "<null>").replace(',', '_');
   }
 
   /**

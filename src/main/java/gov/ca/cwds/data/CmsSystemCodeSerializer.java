@@ -1,6 +1,8 @@
 package gov.ca.cwds.data;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,20 +18,34 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.persistence.cms.CmsSystemCode;
 import gov.ca.cwds.data.persistence.cms.ISystemCodeCache;
+import gov.ca.cwds.data.persistence.cms.VarargTuple;
 
+/**
+ * Jackson JSON serializer automatically translates CMS system codes on the fly.
+ * 
+ * <pre>
+ * SimpleModule module =
+ *     new SimpleModule("SystemCodeModule", new Version(0, 1, 0, "cms_sys_code", "alpha", ""));
+ * module.addSerializer(Short.class,
+ *     new CmsSystemCodeSerializer(injector.getInstance(ISystemCodeCache.class)));
+ * environment.getObjectMapper().registerModule(module);
+ * Guice.createInjector().getInstance(ObjectMapper.class).registerModule(module);
+ * 
+ * </pre>
+ * 
+ * @author CWDS API Team
+ */
 public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements ContextualSerializer {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsSystemCodeSerializer.class);
 
-  private final ISystemCodeCache cache;
+  protected final ISystemCodeCache cache;
   protected final boolean useShortDescription;
   protected final boolean useOtherCd;
 
-  public enum SystemCodeField {
-
-  }
-
-  // protected static Map<K, V> serializerStyle = new ConcurrentHashMap<K, V>();
+  // OPTION: write a factory for contextual serializer. Thread safe?
+  protected static Map<VarargTuple<Boolean>, CmsSystemCodeSerializer> serializerStyle =
+      new ConcurrentHashMap<>();
 
   @Inject
   public CmsSystemCodeSerializer(ISystemCodeCache cache) {
@@ -44,8 +60,6 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
     this.useShortDescription = useShortDescription;
     this.useOtherCd = useOtherCd;
   }
-
-  // OPTION: write a factory for contextual serializer.
 
   @Override
   public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property)
@@ -82,6 +96,8 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
       jgen.writeStartObject();
       if (s != null) {
         jgen.writeNumberField("sys_id", s);
+
+        // Zero means no translatable value.
         if (cache != null && s.intValue() != 0) {
           final CmsSystemCode code = cache.lookup(s.intValue());
           if (this.useShortDescription) {

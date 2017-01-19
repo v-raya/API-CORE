@@ -24,7 +24,6 @@ import com.hubspot.dropwizard.guice.GuiceBundle;
 
 import gov.ca.cwds.data.CmsSystemCodeSerializer;
 import gov.ca.cwds.data.persistence.cms.ISystemCodeCache;
-import gov.ca.cwds.rest.filters.DiscardErrors;
 import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
 import gov.ca.cwds.rest.resources.SwaggerResource;
 import io.dropwizard.Application;
@@ -121,8 +120,8 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
     LOGGER.info("Registering Filters");
 
     // TESTING: #129093035.
-    // registerFilters(environment);
-    environment.jersey().register(new DiscardErrors("search_person"));
+    registerFilters(environment);
+    // environment.jersey().register(new DiscardErrors("search_person"));
 
     runInternal(configuration, environment);
   }
@@ -130,14 +129,9 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
   private final void registerFilters(final Environment environment) {
     Injector injector = guiceBundle.getInjector();
 
-    // Drop to Jackson 2.7.8. Runtime incompatibility with 2.8.6.
-    // Register the ObjectMapper with Guice.
-    // ObjectMapperModule omm =
-    // new ObjectMapperModule().withObjectMapper(environment.getObjectMapper());
-
-    // Inject system code cache.
+    // Inject system code cache into Jackson serializers.
     SimpleModule module =
-        new SimpleModule("SystemCodeModule", new Version(0, 1, 0, "a", "alpha", ""));
+        new SimpleModule("SystemCodeModule", new Version(0, 1, 0, "cms_sys_code", "alpha", ""));
     module.addSerializer(Short.class,
         new CmsSystemCodeSerializer(injector.getInstance(ISystemCodeCache.class)));
     environment.getObjectMapper().registerModule(module);
