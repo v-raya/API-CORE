@@ -10,35 +10,35 @@ package gov.ca.cwds.data;
 public interface IAddressAware {
 
   /**
-   * Getter for (first) street address
+   * Getter for (first) street address.
    * 
    * @return street address
    */
   String getStreetAddress();
 
   /**
-   * Getter for city
+   * Getter for city.
    * 
    * @return city
    */
   String getCity();
 
   /**
-   * Getter for state, 2-char code
+   * Getter for state, 2-char code.
    * 
    * @return state
    */
   String getState();
 
   /**
-   * Getter for 5-digit zip
+   * Getter for 5-digit zip.
    * 
    * @return zip
    */
   String getZip();
 
   /**
-   * Getter for county
+   * Getter for county.
    * 
    * @return county
    */

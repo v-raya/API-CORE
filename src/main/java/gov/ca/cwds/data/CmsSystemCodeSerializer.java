@@ -1,6 +1,7 @@
 package gov.ca.cwds.data;
 
 import java.io.IOException;
+import java.util.BitSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -40,8 +41,9 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsSystemCodeSerializer.class);
 
   protected final ISystemCodeCache cache;
-  protected final boolean useShortDescription;
-  protected final boolean useOtherCd;
+  protected final boolean showShortDescription;
+  protected final boolean showLogicalId;
+  protected final boolean showMetaCategory;
 
   // OPTION: write a factory for contextual serializer. Thread safe?
   protected static Map<VarargTuple<Boolean>, CmsSystemCodeSerializer> serializerStyle =
@@ -50,15 +52,36 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
   @Inject
   public CmsSystemCodeSerializer(ISystemCodeCache cache) {
     this.cache = cache;
-    this.useShortDescription = true;
-    this.useOtherCd = false;
+    this.showShortDescription = true;
+    this.showLogicalId = false;
+    this.showMetaCategory = false;
   }
 
-  public CmsSystemCodeSerializer(ISystemCodeCache cache, boolean useShortDescription,
-      boolean useOtherCd) {
+  /**
+   * Construct from all final fields.
+   * 
+   * <p>
+   * See the field list in class {@link CmsSystemCode}.
+   * </p>
+   * 
+   * @param cache system code cache
+   * @param showShortDescription short description
+   * @param showLogicalId show logical id, such as "CA" for California
+   * @param showMetaCategory show the "meta", the system code category
+   */
+  public CmsSystemCodeSerializer(ISystemCodeCache cache, boolean showShortDescription,
+      boolean showLogicalId, boolean showMetaCategory) {
     this.cache = cache;
-    this.useShortDescription = useShortDescription;
-    this.useOtherCd = useOtherCd;
+    this.showShortDescription = showShortDescription;
+    this.showLogicalId = showLogicalId;
+    this.showMetaCategory = showMetaCategory;
+  }
+
+  protected BitSet buildBits(boolean... flags) {
+    BitSet bs = new BitSet();
+    // bs.
+
+    return bs;
   }
 
   @Override
@@ -73,10 +96,10 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
 
     if (ann == null) {
       // Default Short. No translation.
-      return new CmsSystemCodeSerializer(this.cache, false, false);
+      return new CmsSystemCodeSerializer(this.cache, false, false, false);
     }
 
-    return new CmsSystemCodeSerializer(this.cache, ann.description(), ann.other());
+    return new CmsSystemCodeSerializer(this.cache, ann.description(), ann.logical(), false);
   }
 
   @Override
@@ -84,37 +107,24 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
       throws IOException, JsonGenerationException {
     LOGGER.debug("thread id={}", Thread.currentThread().getId());
 
-    if (!useOtherCd && !useShortDescription) {
-      // Write ordinary Short.
-      if (s != null) {
-        jgen.writeNumber(s);
-      } else {
-        jgen.writeNull();
-      }
+    // Zero means no translatable value.
+    if (s == null || s.intValue() != 0) {
+      jgen.writeNull();
+    } else if (cache == null || !(showLogicalId && showShortDescription)) {
+      // Cache disabled or no syscode fields to show. Write ordinary short.
+      jgen.writeNumber(s);
     } else {
-      // Write translated system code.
+      // Translate system code.
       jgen.writeStartObject();
-      if (s != null) {
-        jgen.writeNumberField("sys_id", s);
+      jgen.writeNumberField("sys_id", s);
 
-        // Zero means no translatable value.
-        if (cache != null && s.intValue() != 0) {
-          final CmsSystemCode code = cache.lookup(s.intValue());
-          if (this.useShortDescription) {
-            jgen.writeStringField("description", code.getShortDsc());
-          }
-          if (this.useOtherCd) {
-            jgen.writeStringField("logical_id", code.getLgcId());
-          }
-        } else {
-          // Default.
-          jgen.writeStringField("description", "");
-          jgen.writeStringField("logical_id", "");
-        }
-      } else {
-        jgen.writeNull();
+      final CmsSystemCode code = cache.lookup(s.intValue());
+      if (this.showShortDescription) {
+        jgen.writeStringField("description", code.getShortDsc());
       }
-
+      if (this.showLogicalId) {
+        jgen.writeStringField("logical_id", code.getLgcId());
+      }
       jgen.writeEndObject();
     }
   }

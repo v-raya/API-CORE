@@ -26,12 +26,12 @@ public class DiscardErrors implements ContainerResponseFilter {
 
   /*
    * TODO User story #129093035 fix the Entity response status.
-   * 
    */
   @Override
   public void filter(ContainerRequestContext containerRequestContext,
       ContainerResponseContext containerResponseContext) throws IOException {
     LOGGER.debug("*Comi***n**g**** **************** ");
+
     if (containerResponseContext.getStatus() != 200) {
       LOGGER.error("response status={}", containerResponseContext.getStatus());
       containerResponseContext.setStatus(500); // Force 200 status code

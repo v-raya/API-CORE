@@ -119,6 +119,15 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
 
     LOGGER.info("Registering Filters");
 
+    // Inject system code cache into CmsSystemCodeSerializer.
+    Injector injector = guiceBundle.getInjector();
+    SimpleModule module =
+        new SimpleModule("SystemCodeModule", new Version(0, 1, 0, "cms_sys_code", "alpha", ""));
+    module.addSerializer(Short.class,
+        new CmsSystemCodeSerializer(injector.getInstance(ISystemCodeCache.class)));
+    environment.getObjectMapper().registerModule(module);
+    Guice.createInjector().getInstance(ObjectMapper.class).registerModule(module);
+
     // TESTING: #129093035.
     registerFilters(environment);
     // environment.jersey().register(new DiscardErrors("search_person"));
@@ -128,15 +137,6 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
 
   private final void registerFilters(final Environment environment) {
     Injector injector = guiceBundle.getInjector();
-
-    // Inject system code cache into Jackson serializers.
-    SimpleModule module =
-        new SimpleModule("SystemCodeModule", new Version(0, 1, 0, "cms_sys_code", "alpha", ""));
-    module.addSerializer(Short.class,
-        new CmsSystemCodeSerializer(injector.getInstance(ISystemCodeCache.class)));
-    environment.getObjectMapper().registerModule(module);
-    Guice.createInjector().getInstance(ObjectMapper.class).registerModule(module);
-
     environment.servlets()
         .addFilter("AuditAndLoggingFilter",
             injector.getInstance(RequestResponseLoggingFilter.class))

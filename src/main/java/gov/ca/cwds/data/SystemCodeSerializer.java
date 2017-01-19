@@ -35,9 +35,16 @@ public @interface SystemCodeSerializer {
   boolean description() default true;
 
   /**
-   * Print the "other code" field, as "CA" for California.
+   * Print the "logical id" field, such as "CA" for California.
    * 
-   * @return whether to print other code
+   * @return whether to print logical id
    */
-  boolean other() default false;
+  boolean logical() default false;
+
+  /**
+   * Print the "meta" field (the code category), such as "state" or "placement type".
+   * 
+   * @return whether to print "meta" field (the system code category)
+   */
+  boolean meta() default false;
 }

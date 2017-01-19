@@ -12,49 +12,49 @@ import java.util.Date;
 public interface IPersonAware {
 
   /**
-   * Getter for first name
+   * Getter for first name.
    * 
    * @return first name
    */
   String getFirstName();
 
   /**
-   * Getter for middle name
+   * Getter for middle name.
    * 
    * @return middle name
    */
   String getMiddleName();
 
   /**
-   * Getter for last name
+   * Getter for last name.
    * 
    * @return last name
    */
   String getLastName();
 
   /**
-   * Getter for gender
+   * Getter for gender.
    * 
    * @return gender
    */
   String getGender();
 
   /**
-   * Getter for birth date
+   * Getter for birth date.
    * 
    * @return birth date
    */
   Date getBirthDate();
 
   /**
-   * Getter for ssn
+   * Getter for ssn.
    * 
    * @return ssn
    */
   String getSsn();
 
   /**
-   * Getter for name suffix
+   * Getter for name suffix.
    * 
    * @return name suffix
    */
