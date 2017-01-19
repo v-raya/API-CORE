@@ -1,10 +1,15 @@
 package gov.ca.cwds.data.persistence.cms;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import gov.ca.cwds.rest.api.ApiException;
 
 /**
  * Generic class represents a tuple of any number of columns of the same serializable type.
@@ -19,21 +24,14 @@ public class VarargTuple<T extends Serializable> implements Serializable {
   private final T[] columns;
 
   /**
-   * Hide the default constructor.
-   */
-  // @SuppressWarnings("unused")
-  // private VarargTuple() {
-  // T t;
-  // this.columns = (T[]) Array.newInstance(new T.getClass(), 0);
-  // // this.columns = new T[0];
-  // }
-
-  /**
-   * Construct from varargs of type T.
+   * Construct from variable arguments of type T.
    * 
    * @param values any number of T keys
    */
   public VarargTuple(T... values) {
+    if (values == null || values.length == 0) {
+      throw new ApiException("Column list cannot be null");
+    }
     this.columns = ArrayUtils.toArray(values);
   }
 
@@ -48,11 +46,12 @@ public class VarargTuple<T extends Serializable> implements Serializable {
   }
 
   /**
+   * Get an unmodifiable list of columns.
    * 
-   * @return T array of key columns
+   * @return T List of tuple columns
    */
-  public T[] getColumns() {
-    return columns;
+  public List<T> getColumns() {
+    return Collections.unmodifiableList(Arrays.asList(this.columns));
   }
 
   @Override
