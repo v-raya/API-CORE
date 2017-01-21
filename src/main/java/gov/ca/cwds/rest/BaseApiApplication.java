@@ -9,6 +9,9 @@ import javax.servlet.FilterRegistration;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.flywaydb.core.Flyway;
+import org.secnod.dropwizard.shiro.ShiroBundle;
+import org.secnod.dropwizard.shiro.ShiroConfiguration;
+import org.secnod.shiro.jaxrs.ShiroExceptionMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,6 +66,16 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
     }
   };
 
+  private final ShiroBundle<T> shiroBundle = new ShiroBundle<T>() {
+
+    @Override
+    protected ShiroConfiguration narrow(T configuration) {
+      return configuration.getShiroConfiguration();
+    }
+  };
+
+
+
   /**
    * Extending classes must provide the Guice module for their application.
    * 
@@ -99,11 +112,13 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
 
     bootstrap.addBundle(guiceBundle);
     bootstrap.addBundle(flywayBundle);
+    bootstrap.addBundle(shiroBundle);
     initializeInternal(bootstrap);
   }
 
   @Override
   public final void run(final T configuration, final Environment environment) throws Exception {
+    environment.jersey().register(new ShiroExceptionMapper());
     environment.servlets().setSessionHandler(new SessionHandler());
 
     LOGGER.info("Application name: {}, Version: {}", configuration.getApplicationName(),
@@ -128,9 +143,7 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
     environment.getObjectMapper().registerModule(module);
     Guice.createInjector().getInstance(ObjectMapper.class).registerModule(module);
 
-    // TESTING: #129093035.
     registerFilters(environment);
-    // environment.jersey().register(new DiscardErrors("search_person"));
 
     runInternal(configuration, environment);
   }

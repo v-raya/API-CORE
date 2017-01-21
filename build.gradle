@@ -45,6 +45,7 @@ dependencies {
 		compile group: 'org.apache.commons', name: 'commons-compress', version: '1.12'
 		compile group: 'org.slf4j', name: 'slf4j-ext', version: '1.7.22'
 		compile 'com.fasterxml.jackson.module:jackson-module-guice:2.7.8'
+		compile group: 'org.secnod.dropwizard', name: 'dropwizard-shiro', version: '0.2.0'
 
 		// TEST:
         testCompile group: "io.dropwizard", name: "dropwizard-testing", version: dropwizardVersion

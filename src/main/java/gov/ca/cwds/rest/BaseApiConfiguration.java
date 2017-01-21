@@ -3,6 +3,7 @@ package gov.ca.cwds.rest;
 import javax.annotation.Nullable;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.secnod.dropwizard.shiro.ShiroConfiguration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -39,6 +40,9 @@ public class BaseApiConfiguration extends Configuration {
 
   @Nullable
   private SmartyStreetsConfiguration smartyStreetsConfiguration;
+
+  @Nullable
+  private ShiroConfiguration shiroConfiguration;
 
   @JsonProperty
   public String getApplicationName() {
@@ -127,4 +131,13 @@ public class BaseApiConfiguration extends Configuration {
     this.smartyStreetsConfiguration = smartyStreetsConfiguration;
   }
 
+  @JsonProperty(value = "shiro")
+  public ShiroConfiguration getShiroConfiguration() {
+    return shiroConfiguration;
+  }
+
+  @JsonProperty
+  public void setShiroConfiguration(ShiroConfiguration shiroConfiguration) {
+    this.shiroConfiguration = shiroConfiguration;
+  }
 }
