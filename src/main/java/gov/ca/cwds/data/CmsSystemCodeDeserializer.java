@@ -61,12 +61,16 @@ public class CmsSystemCodeDeserializer extends StdDeserializer<Short> {
   @Override
   public Short deserialize(final JsonParser jp, final DeserializationContext ctxt)
       throws IOException, JsonProcessingException {
-    final JsonNode node = jp.getCodec().readTree(jp);
-    final IntNode sn = (IntNode) node.get("sys_id");
     Short sysId = null;
+    final JsonNode node = jp.getCodec().readTree(jp);
+
+    // Full style (sys_id, logical_id, description):
+    final IntNode sn = (IntNode) node.get("sys_id");
 
     if (sn != null) {
       sysId = sn.numberValue().shortValue();
+    } else if (node instanceof IntNode) {
+      sysId = node.numberValue().shortValue();
     }
 
     return sysId;
