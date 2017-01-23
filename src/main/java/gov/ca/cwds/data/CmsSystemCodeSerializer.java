@@ -12,10 +12,13 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.ContextualSerializer;
 import com.google.inject.Inject;
 
@@ -45,6 +48,19 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
   private final boolean showShortDescription;
   private final boolean showLogicalId;
   private final boolean showMetaCategory;
+
+  /**
+   * Initial constructor, called by Guice, which provides all dependencies.
+   * 
+   * @param cache syscode cache implementation.
+   */
+  @Inject
+  public CmsSystemCodeSerializer(ISystemCodeCache cache) {
+    this.cache = cache;
+    this.showShortDescription = true;
+    this.showLogicalId = false;
+    this.showMetaCategory = false;
+  }
 
   /**
    * Factory map for this contextual serializer. Saves thread-safe serializer instances by
@@ -104,16 +120,19 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
   }
 
   /**
-   * Initial constructor, called by Guice, which provides all dependencies.
+   * <p>
+   * Guice finds and injects the dependencies for us. Register this Jackson serializer with the
+   * ObjectMapper.
+   * </p>
    * 
-   * @param cache syscode cache implementation.
+   * @param om the common ObjectMapper registered with this application
    */
   @Inject
-  public CmsSystemCodeSerializer(ISystemCodeCache cache) {
-    this.cache = cache;
-    this.showShortDescription = true;
-    this.showLogicalId = false;
-    this.showMetaCategory = false;
+  public void init(final ObjectMapper om) {
+    SimpleModule module =
+        new SimpleModule("SystemCodeModule", new Version(0, 1, 0, "cms_sys_code", "alpha", ""));
+    module.addSerializer(Short.class, this);
+    om.registerModule(module);
   }
 
   /**
