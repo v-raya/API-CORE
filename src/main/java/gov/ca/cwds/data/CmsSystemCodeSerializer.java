@@ -41,15 +41,73 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsSystemCodeSerializer.class);
 
-  protected final ISystemCodeCache cache;
-  protected final boolean showShortDescription;
-  protected final boolean showLogicalId;
-  protected final boolean showMetaCategory;
+  private final ISystemCodeCache cache;
+  private final boolean showShortDescription;
+  private final boolean showLogicalId;
+  private final boolean showMetaCategory;
 
-  // Factory for contextual serializer.
+  /**
+   * Factory map for this contextual serializer. Saves thread-safe serializer instances by
+   * combination of settings.
+   * 
+   * @see #buildSerializer(ISystemCodeCache, boolean, boolean, boolean)
+   */
   protected static Map<BitSet, CmsSystemCodeSerializer> serializerStyles =
       new ConcurrentHashMap<>();
 
+  /**
+   * Build a {@link BitSet} from variable array of boolean flags (as arguments as
+   * CmsSystemCodeSerializer constructor). BitSet is used by our serializer factory to produce
+   * unique settings combinations per serializer as needed.
+   * 
+   * @param flags variable array of boolean flags (as arguments as CmsSystemCodeSerializer
+   *        constructor)
+   * @return a BitSet that uniquely identifies serializer settings
+   * 
+   * @see #buildSerializer(ISystemCodeCache, boolean, boolean, boolean)
+   */
+  protected static BitSet buildBits(boolean... flags) {
+    BitSet bs = new BitSet();
+
+    int counter = 0;
+    for (boolean b : flags) {
+      if (b) {
+        bs.set(counter++);
+      }
+    }
+
+    return bs;
+  }
+
+  /**
+   * Reduce object churn by recording serializer instances by settings. Thread-safe by means of
+   * {@link ConcurrentHashMap}.
+   * 
+   * @param cache syscode cache
+   * @param showShortDescription show short description flag
+   * @param showLogicalId show logical id flag
+   * @param showMetaCategory show meta/category flag
+   * @return syscode serializer with the given settings
+   */
+  protected static CmsSystemCodeSerializer buildSerializer(ISystemCodeCache cache,
+      boolean showShortDescription, boolean showLogicalId, boolean showMetaCategory) {
+    final BitSet bs =
+        buildBits(cache != null, showShortDescription, showLogicalId, showMetaCategory);
+    if (!serializerStyles.containsKey(bs)) {
+      LOGGER.debug("new CmsSystemCodeSerializer: {}, {}, {}, {}", cache != null,
+          showShortDescription, showLogicalId, showMetaCategory);
+      serializerStyles.put(bs, new CmsSystemCodeSerializer(cache, showShortDescription,
+          showLogicalId, showMetaCategory));
+    }
+
+    return serializerStyles.get(bs);
+  }
+
+  /**
+   * Initial constructor, called by Guice, which provides all dependencies.
+   * 
+   * @param cache syscode cache implementation.
+   */
   @Inject
   public CmsSystemCodeSerializer(ISystemCodeCache cache) {
     this.cache = cache;
@@ -59,7 +117,8 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
   }
 
   /**
-   * Construct from all final fields.
+   * Construct from all fields. Subsequent constructor, called to create to instances of the
+   * serializer per settings.
    * 
    * <p>
    * See the field list in class {@link CmsSystemCode}.
@@ -78,47 +137,11 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
     this.showMetaCategory = showMetaCategory;
   }
 
-  /**
-   * Build a {@link BitSet} from variable array of boolean flags (as arguments as
-   * CmsSystemCodeSerializer constructor). BitSet is used by our serializer factory to produce
-   * unique settings combinations per serializer as needed.
-   * 
-   * @param flags variable array of boolean flags (as arguments as CmsSystemCodeSerializer
-   *        constructor)
-   * @return a BitSet that uniquely identifies serializer settings
-   */
-  protected static BitSet buildBits(boolean... flags) {
-    BitSet bs = new BitSet();
-
-    int counter = 0;
-    for (boolean b : flags) {
-      if (b) {
-        bs.set(counter++);
-      }
-    }
-
-    return bs;
-  }
-
-  protected static CmsSystemCodeSerializer buildSerializer(ISystemCodeCache cache,
-      boolean showShortDescription, boolean showLogicalId, boolean showMetaCategory) {
-    final BitSet bs =
-        buildBits(cache != null, showShortDescription, showLogicalId, showMetaCategory);
-    if (!serializerStyles.containsKey(bs)) {
-      LOGGER.debug("new CmsSystemCodeSerializer: {}, {}, {}, {}", cache != null,
-          showShortDescription, showLogicalId, showMetaCategory);
-      serializerStyles.put(bs, new CmsSystemCodeSerializer(cache, showShortDescription,
-          showLogicalId, showMetaCategory));
-    }
-
-    return serializerStyles.get(bs);
-  }
-
   @Override
   public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property)
       throws JsonMappingException {
 
-    // Find the marker annotation. It can hide in a couple places.
+    // Find the marker annotation. It can hide.
     SystemCodeSerializer ann = property.getAnnotation(SystemCodeSerializer.class);
     if (ann == null) {
       ann = property.getContextAnnotation(SystemCodeSerializer.class);
@@ -171,6 +194,33 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
   @Override
   public final boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
+  /**
+   * Getter for show short description.
+   * 
+   * @return whether to show field, "short description"
+   */
+  public boolean isShowShortDescription() {
+    return showShortDescription;
+  }
+
+  /**
+   * Getter for show logical id.
+   * 
+   * @return whether to show field, "logical id"
+   */
+  public boolean isShowLogicalId() {
+    return showLogicalId;
+  }
+
+  /**
+   * Getter for show meta/category.
+   * 
+   * @return whether to show field, "meta/category"
+   */
+  public boolean isShowMetaCategory() {
+    return showMetaCategory;
   }
 
 }

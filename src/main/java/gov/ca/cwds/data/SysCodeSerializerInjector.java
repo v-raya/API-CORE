@@ -11,7 +11,7 @@ import com.google.inject.Inject;
  * @author CWDS API Team
  * @see CmsSystemCodeSerializer
  */
-public class GuiceSerializerInjector {
+public class SysCodeSerializerInjector {
 
   /**
    * Constructor.
@@ -24,7 +24,7 @@ public class GuiceSerializerInjector {
    * @param om the common ObjectMapper registered with this application
    */
   @Inject
-  public GuiceSerializerInjector(final CmsSystemCodeSerializer sysCodeSerializer,
+  public SysCodeSerializerInjector(final CmsSystemCodeSerializer sysCodeSerializer,
       final ObjectMapper om) {
     SimpleModule module =
         new SimpleModule("SystemCodeModule", new Version(0, 1, 0, "cms_sys_code", "alpha", ""));
