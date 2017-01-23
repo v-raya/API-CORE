@@ -14,17 +14,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.hubspot.dropwizard.guice.GuiceBundle;
 
-import gov.ca.cwds.data.CmsSystemCodeSerializer;
-import gov.ca.cwds.data.persistence.cms.ISystemCodeCache;
 import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
 import gov.ca.cwds.rest.filters.UnhandledExceptionMapperImpl;
 import gov.ca.cwds.rest.resources.SwaggerResource;
@@ -129,16 +123,6 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
     configureSwagger(configuration, environment);
 
     LOGGER.info("Registering Filters");
-
-    // TODO: #137548119: move to appropriate bundle; inject environment.
-    // Inject system code cache into CmsSystemCodeSerializer.
-    Injector injector = guiceBundle.getInjector();
-    SimpleModule module =
-        new SimpleModule("SystemCodeModule", new Version(0, 1, 0, "cms_sys_code", "alpha", ""));
-    module.addSerializer(Short.class,
-        new CmsSystemCodeSerializer(injector.getInstance(ISystemCodeCache.class)));
-    Guice.createInjector().getInstance(ObjectMapper.class).registerModule(module);
-
     registerFilters(environment);
 
     runInternal(configuration, environment);

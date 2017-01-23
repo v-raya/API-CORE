@@ -18,7 +18,6 @@ public class AuditLoggerImpl implements gov.ca.cwds.logging.AuditLogger {
   public static final String REQUEST_ID = "requestid";
   public static final String UNIQUE_ID = "uniqueId";
 
-
   /**
    * Constructor
    * 
@@ -30,17 +29,15 @@ public class AuditLoggerImpl implements gov.ca.cwds.logging.AuditLogger {
     LOGGER = logger;
   }
 
-
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
-   * @see gov.ca.cwds.logging.AuditLogger#audit(java.lang.String, java.lang.String)
+   * @see gov.ca.cwds.logging.AuditLogger#audit(java.lang.String)
    */
   @Override
   public void audit(String data) {
     LOGGER.info(data);
   }
-
 
   /*
    * (non-Javadoc)
@@ -69,8 +66,6 @@ public class AuditLoggerImpl implements gov.ca.cwds.logging.AuditLogger {
   public void teardownMDC() {
     MDC.clear();
   }
-
-
 
 }
 
