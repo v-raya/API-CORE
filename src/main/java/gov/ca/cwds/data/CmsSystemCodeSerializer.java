@@ -135,10 +135,10 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
   @Override
   public void serialize(Short s, JsonGenerator jgen, SerializerProvider sp)
       throws IOException, JsonGenerationException {
-    if (s == null || s.intValue() == 0) {
-      // Zero means no translatable value.
+    if (s == null) {
       jgen.writeNull();
-    } else if (cache == null || !(showLogicalId && showShortDescription)) {
+    } else if (s.intValue() == 0 || (cache == null || !(showLogicalId && showShortDescription))) {
+      // Zero means no translatable value but store zero for consistency.
       // Cache disabled or no syscode fields to show. Write ordinary short.
       jgen.writeNumber(s);
     } else {

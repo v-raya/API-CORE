@@ -64,12 +64,21 @@ public class CmsSystemCodeDeserializer extends StdDeserializer<Short> {
     Short sysId = null;
     final JsonNode node = jp.getCodec().readTree(jp);
 
-    // Full style (sys_id, logical_id, description):
-    final IntNode sn = (IntNode) node.get("sys_id");
+    // Full style (sys_id, logical_id, description).
+    // EXAMPLE:
+    // "primaryLanguageType": {
+    // "sys_id": 1274,
+    // "short_description": "Spanish",
+    // "logical_id": "01"
+    // },
 
+    final IntNode sn = (IntNode) node.get("sys_id");
     if (sn != null) {
       sysId = sn.numberValue().shortValue();
     } else if (node instanceof IntNode) {
+      // Try original style.
+      // EXAMPLE:
+      // "primaryLanguageType": 1274,
       sysId = node.numberValue().shortValue();
     }
 
