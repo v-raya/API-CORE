@@ -7,35 +7,24 @@ import javax.ws.rs.ext.Provider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.logging.AuditLogger;
+import gov.ca.cwds.logging.AuditLoggerImpl;
 
 @Provider
-public class ExceptionMapperImpl implements ExceptionMapper<Exception> {
+public class UnhandledExceptionMapperImpl implements ExceptionMapper<Exception> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionMapperImpl.class);
-
-  private AuditLogger auditLogger;
-
-  // @Context
-  // private HttpServletRequest request;
+  private static final Logger LOGGER = LoggerFactory.getLogger(UnhandledExceptionMapperImpl.class);
 
   @Inject
-  public ExceptionMapperImpl(AuditLogger auditLogger) {
-    this.auditLogger = auditLogger;
-  }
+  public UnhandledExceptionMapperImpl() {}
 
   @Override
   public Response toResponse(Exception ex) {
-
-    // ContainerRequestContext
-
     LOGGER.error("EXCEPTION MAPPER: {}", ex.getMessage(), ex);
-    final String uniqueId =
-        auditLogger.buildMDC("Host", "STUBBED_USER", "sessionId", Thread.currentThread().getName());
-    auditLogger.audit(uniqueId);
+    final String uniqueId = MDC.get(AuditLoggerImpl.UNIQUE_ID);
     final Result result = new Result(uniqueId, "500");
     return Response.status(500).entity(result).type(MediaType.APPLICATION_JSON).build();
   }

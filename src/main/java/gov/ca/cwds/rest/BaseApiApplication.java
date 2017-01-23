@@ -26,6 +26,7 @@ import com.hubspot.dropwizard.guice.GuiceBundle;
 import gov.ca.cwds.data.CmsSystemCodeSerializer;
 import gov.ca.cwds.data.persistence.cms.ISystemCodeCache;
 import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
+import gov.ca.cwds.rest.filters.UnhandledExceptionMapperImpl;
 import gov.ca.cwds.rest.resources.SwaggerResource;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -129,13 +130,13 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
 
     LOGGER.info("Registering Filters");
 
+    // TODO: #137548119: move to appropriate bundle; inject environment.
     // Inject system code cache into CmsSystemCodeSerializer.
     Injector injector = guiceBundle.getInjector();
     SimpleModule module =
         new SimpleModule("SystemCodeModule", new Version(0, 1, 0, "cms_sys_code", "alpha", ""));
     module.addSerializer(Short.class,
         new CmsSystemCodeSerializer(injector.getInstance(ISystemCodeCache.class)));
-    environment.getObjectMapper().registerModule(module);
     Guice.createInjector().getInstance(ObjectMapper.class).registerModule(module);
 
     registerFilters(environment);
@@ -144,6 +145,9 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
   }
 
   private final void registerFilters(final Environment environment) {
+    // Story #129093035: Catch/handle 500 errors.
+    environment.jersey().register(UnhandledExceptionMapperImpl.class);
+
     Injector injector = guiceBundle.getInjector();
     environment.servlets()
         .addFilter("AuditAndLoggingFilter",
