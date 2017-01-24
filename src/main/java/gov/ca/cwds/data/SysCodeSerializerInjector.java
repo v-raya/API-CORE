@@ -8,6 +8,10 @@ import com.google.inject.Inject;
 /**
  * Registers custom Jackson serializer, {@link CmsSystemCodeSerializer}, with Jackson.
  * 
+ * <p>
+ * Add post-injection initialization to this class.
+ * </p>
+ * 
  * @author CWDS API Team
  * @see CmsSystemCodeSerializer
  */
