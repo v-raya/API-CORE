@@ -13,6 +13,11 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.logging.AuditLoggerImpl;
 
+/**
+ * Exception Mapper class for CWDS API and PERRY
+ * 
+ * @author CWDS API Team
+ */
 @Provider
 public class UnhandledExceptionMapperImpl implements ExceptionMapper<Exception> {
 
@@ -29,7 +34,8 @@ public class UnhandledExceptionMapperImpl implements ExceptionMapper<Exception> 
     return Response.status(500).entity(result).type(MediaType.APPLICATION_JSON).build();
   }
 
-  private class Result {
+  @SuppressWarnings("javadoc")
+  public class Result {
     private String uniqueId;
     private String code;
     private String message =
@@ -41,17 +47,14 @@ public class UnhandledExceptionMapperImpl implements ExceptionMapper<Exception> 
       this.code = code;
     }
 
-    @SuppressWarnings("unused")
     public String getUniqueId() {
       return uniqueId;
     }
 
-    @SuppressWarnings("unused")
     public String getCode() {
       return code;
     }
 
-    @SuppressWarnings("unused")
     public String getMessage() {
       return message;
     }
