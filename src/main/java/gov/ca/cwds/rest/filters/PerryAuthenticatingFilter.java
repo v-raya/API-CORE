@@ -65,7 +65,7 @@ public class PerryAuthenticatingFilter extends AuthenticatingFilter {
 
     if (token == null) {
       LOGGER.debug("No token - Denying Access");
-      WebUtils.toHttp(response).sendError(HttpServletResponse.SC_UNAUTHORIZED);
+      WebUtils.toHttp(response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "No token provided");
     }
 
     LOGGER.debug("Attempting a login.");
@@ -81,7 +81,7 @@ public class PerryAuthenticatingFilter extends AuthenticatingFilter {
       ServletRequest request, ServletResponse response) {
     LOGGER.debug("Invalid Token - Denying Access");
     try {
-      WebUtils.toHttp(response).sendError(HttpServletResponse.SC_UNAUTHORIZED);
+      WebUtils.toHttp(response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token not valid");
       return false;
     } catch (IOException e1) {
       LOGGER.error("Unable to send 401 for token: {}", ((PerryShiroToken) token).getToken());
