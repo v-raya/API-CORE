@@ -29,14 +29,12 @@ public class PerryAuthenticatingFilter extends AuthenticatingFilter {
    * Creates a token based on the request/response pair. For Perry authentication, the token is
    * pulled from the query string, with the parameter name `token`.
    *
-   * @param request
-   * @param response
+   * @param request The servlet request
+   * @param response The servlet response
    * @return the authentication token
-   * @throws Exception
    */
   @Override
-  protected AuthenticationToken createToken(ServletRequest request, ServletResponse response)
-      throws Exception {
+  protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
     String tokenFromRequest = getToken(request);
     checkArgument(!Strings.isNullOrEmpty(tokenFromRequest),
         "Token  (`" + PARAM_TOKEN + "`) must be present as a request parameter.");
@@ -50,14 +48,15 @@ public class PerryAuthenticatingFilter extends AuthenticatingFilter {
   /**
    * If a user is not authenticated, this method will be called, and decide if we should attempt to
    * authenticate them.
-   * <p/>
+   * <p>
    * If they have a `token`, confirm the token is valid. If they don't, respond with a 401.
-   * <p/>
+   * </p>
    *
-   * @param request
-   * @param response
-   * @return
-   * @throws Exception
+   * @param request The servlet request
+   * @param response The servlet response
+   * @return <code>true</code> if the request should continue to be processed; false if the subclass
+   *         will handle/render the response directly.
+   * @throws Exception if there is an error processing the request.
    */
   @Override
   protected boolean onAccessDenied(ServletRequest request, ServletResponse response)
