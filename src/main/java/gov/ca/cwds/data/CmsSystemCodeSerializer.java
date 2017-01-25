@@ -63,6 +63,27 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
   }
 
   /**
+   * Construct from all fields. Subsequent constructor, called to create to instances of the
+   * serializer per settings.
+   * 
+   * <p>
+   * See the field list in class {@link CmsSystemCode}.
+   * </p>
+   * 
+   * @param cache system code cache
+   * @param showShortDescription short description
+   * @param showLogicalId show logical id, such as "CA" for California
+   * @param showMetaCategory show the "meta", the system code category
+   */
+  public CmsSystemCodeSerializer(ISystemCodeCache cache, boolean showShortDescription,
+      boolean showLogicalId, boolean showMetaCategory) {
+    this.cache = cache;
+    this.showShortDescription = showShortDescription;
+    this.showLogicalId = showLogicalId;
+    this.showMetaCategory = showMetaCategory;
+  }
+
+  /**
    * Factory map for this contextual serializer. Saves thread-safe serializer instances by
    * combination of settings.
    * 
@@ -133,27 +154,6 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
         new SimpleModule("SystemCodeModule", new Version(0, 1, 0, "cms_sys_code", "alpha", ""));
     module.addSerializer(Short.class, this);
     om.registerModule(module);
-  }
-
-  /**
-   * Construct from all fields. Subsequent constructor, called to create to instances of the
-   * serializer per settings.
-   * 
-   * <p>
-   * See the field list in class {@link CmsSystemCode}.
-   * </p>
-   * 
-   * @param cache system code cache
-   * @param showShortDescription short description
-   * @param showLogicalId show logical id, such as "CA" for California
-   * @param showMetaCategory show the "meta", the system code category
-   */
-  public CmsSystemCodeSerializer(ISystemCodeCache cache, boolean showShortDescription,
-      boolean showLogicalId, boolean showMetaCategory) {
-    this.cache = cache;
-    this.showShortDescription = showShortDescription;
-    this.showLogicalId = showLogicalId;
-    this.showMetaCategory = showMetaCategory;
   }
 
   @Override
