@@ -80,7 +80,9 @@ task integrationTest(type: Test, dependsOn: testClasses) {
 cobertura {
 	coverageFormats = ['xml', 'html']
 	coverageIgnoreTrivial = true
-	coverageIgnores = ['org.slf4j.Logger.*', 'gov.ca.cwds.rest.resources.*']
+	
+	coverageExcludes = ['org.slf4j.Logger.*', '.*gov\\.ca\\.cwds\\.data\\.persistence\\.cms\\..*SystemCodeCache.*']
+	coverageIgnores = ['org.slf4j.Logger.*', '.*gov\\.ca\\.cwds\\.data\\.persistence\\.cms\\..*SystemCodeCache.*', 'gov.ca.cwds.rest.resources.*']
 	coverageReportDir = new File("$buildDir/reports/cobertura")
 	coverageIgnoreMethodAnnotations = ['gov.ca.cwds.rest.resources.CoverageIgnore']
 }

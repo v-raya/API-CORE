@@ -33,4 +33,7 @@ public interface ISystemCodeCache {
    */
   List<CmsSystemCode> getCategory(final String meta);
 
+  default String sayHello() {
+    return "hello world";
+  }
 }

@@ -3,9 +3,12 @@ package gov.ca.cwds.data.persistence.cms;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Spliterator;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -21,10 +24,8 @@ import gov.ca.cwds.rest.api.ApiException;
  * 
  * @author CWDS API Team
  */
-public class CmsSystemCodeCacheService implements Serializable, ISystemCodeCache
-// #137202471: Tech debt: Cobertura can't deal with Java 8 features.
-// , Iterable<CmsSystemCode>
-{
+public class CmsSystemCodeCacheService
+    implements Serializable, ISystemCodeCache, Iterable<CmsSystemCode> {
 
   /**
    * Base serialization version. Increment per class change.
@@ -97,20 +98,20 @@ public class CmsSystemCodeCacheService implements Serializable, ISystemCodeCache
   }
 
   // #137202471: Tech debt: Cobertura can't deal with Java 8 features.
-  // @Override
-  // public Iterator<CmsSystemCode> iterator() {
-  // return this.idxSysId.values().iterator();
-  // }
-  //
-  // @Override
-  // public void forEach(Consumer<? super CmsSystemCode> action) {
-  // Iterable.super.forEach(action);
-  // }
-  //
-  // @Override
-  // public Spliterator<CmsSystemCode> spliterator() {
-  // return this.idxSysId.values().spliterator();
-  // }
+  @Override
+  public Iterator<CmsSystemCode> iterator() {
+    return this.idxSysId.values().iterator();
+  }
+
+  @Override
+  public void forEach(Consumer<? super CmsSystemCode> action) {
+    Iterable.super.forEach(action);
+  }
+
+  @Override
+  public Spliterator<CmsSystemCode> spliterator() {
+    return this.idxSysId.values().spliterator();
+  }
 
   @Override
   public final int hashCode() {
