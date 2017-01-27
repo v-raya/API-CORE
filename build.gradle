@@ -29,38 +29,51 @@ repositories {
 }
 
 dependencies {
-		// MAIN:
-        compile group: "io.dropwizard", name: "dropwizard-hibernate", version: dropwizardVersion
-        compile group: "io.dropwizard", name: "dropwizard-views-mustache", version: dropwizardVersion
-        compile group: 'io.dropwizard', name: 'dropwizard-assets', version: dropwizardVersion
-        
-        compile group: "io.dropwizard.modules", name: "dropwizard-flyway", version: dropwizardFlywayVersion
-        compile group: "org.glassfish.jersey.ext", name: "jersey-declarative-linking", version: "2.23.2"
-        compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.8.3'
-        compile group: 'org.elasticsearch', name: 'elasticsearch', version:  '2.3.5'
-        compile group: 'com.hubspot.dropwizard', name: 'dropwizard-guice', version: '1.0.0.2'
-        compile fileTree(dir: 'lib', include: ['*.jar'])
-        compile group: 'io.swagger', name: 'swagger-jersey2-jaxrs', version: '1.5.9'
-        compile group: 'io.swagger', name: 'swagger-annotations', version: '1.5.9'
-        compile group: "org.postgresql", name: "postgresql", version: "9.4.1208.jre7"
-		compile group: 'org.apache.commons', name: 'commons-compress', version: '1.12'
-		compile group: 'org.slf4j', name: 'slf4j-ext', version: '1.7.22'
-		compile 'com.fasterxml.jackson.module:jackson-module-guice:2.7.8'
-		compile group: 'org.secnod.dropwizard', name: 'dropwizard-shiro', version: '0.2.0'
-		compile group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '2.25'
-		
+	// MAIN:
+    compile group: "io.dropwizard", name: "dropwizard-hibernate", version: dropwizardVersion
+    compile group: "io.dropwizard", name: "dropwizard-views-mustache", version: dropwizardVersion
+    compile group: 'io.dropwizard', name: 'dropwizard-assets', version: dropwizardVersion
+    
+    compile group: "io.dropwizard.modules", name: "dropwizard-flyway", version: dropwizardFlywayVersion
+    compile group: "org.glassfish.jersey.ext", name: "jersey-declarative-linking", version: "2.23.2"
+    compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.8.3'
+    compile group: 'org.elasticsearch', name: 'elasticsearch', version:  '2.3.5'
+    compile group: 'com.hubspot.dropwizard', name: 'dropwizard-guice', version: '1.0.0.2'
+    
+    compile fileTree(dir: 'lib', include: ['*.jar'])
+    
+    compile group: 'io.swagger', name: 'swagger-jersey2-jaxrs', version: '1.5.9'
+    compile group: 'io.swagger', name: 'swagger-annotations', version: '1.5.9'
+    compile group: "org.postgresql", name: "postgresql", version: "9.4.1208.jre7"
+	compile group: 'org.apache.commons', name: 'commons-compress', version: '1.12'
+	compile group: 'org.slf4j', name: 'slf4j-ext', version: '1.7.22'
+	compile 'com.fasterxml.jackson.module:jackson-module-guice:2.7.8'
+	compile group: 'org.secnod.dropwizard', name: 'dropwizard-shiro', version: '0.2.0'
 
-		// TEST:
-        testCompile group: "io.dropwizard", name: "dropwizard-testing", version: dropwizardVersion
-        testCompile 'org.mockito:mockito-core:2.0.54-beta'
-        testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version: '2.0.0.0'
-        testCompile('org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:2.23.2') {
-                exclude group: 'javax.servlet', module: 'javax.servlet-api'
-                exclude group: 'junit', module: 'junit'
-        }
-        // https://mvnrepository.com/artifact/nl.jqno.equalsverifier/equalsverifier
-        testCompile group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '2.1.6'
-        testCompile 'org.ow2.asm:asm-all:5.1'
+	// Dropwizard-guice 1.0.0.2 conflicts with jersey-client 2.25.
+	// Exclude transitive dependencies.
+	compile ('gov.ca.cwds.api:api-core:0.13.55') {
+	        exclude group: 'org.glassfish.jersey.core'
+	}
+    
+	compile group: 'com.hubspot.dropwizard', name: 'dropwizard-guice', version: '1.0.0.2'
+	compile group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '2.25'
+	
+    // This works too but relies on a beta jar. Safer to exclude transitive dependencies.
+	// compile 'org.glassfish.jersey.core:jersey-client:2.26-b01'
+
+
+	// TEST:
+    testCompile group: "io.dropwizard", name: "dropwizard-testing", version: dropwizardVersion
+    testCompile 'org.mockito:mockito-core:2.0.54-beta'
+    testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version: '2.0.0.0'
+    testCompile('org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:2.23.2') {
+            exclude group: 'javax.servlet', module: 'javax.servlet-api'
+            exclude group: 'junit', module: 'junit'
+    }
+    // https://mvnrepository.com/artifact/nl.jqno.equalsverifier/equalsverifier
+    testCompile group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '2.1.6'
+    testCompile 'org.ow2.asm:asm-all:5.1'
 }
 
 tasks.withType(Test) {
