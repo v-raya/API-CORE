@@ -25,11 +25,11 @@ public abstract class NsPersistentObject implements PersistentObject {
   protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
 
   @Column(name = "create_user_id")
-  private String createId;
+  private String createUserId;
 
   @Type(type = "timestamp")
   @Column(name = "create_datetime")
-  private Date createTime;
+  private Date createDateTime;
 
 
   @Column(name = "update_user_id")
@@ -54,12 +54,13 @@ public abstract class NsPersistentObject implements PersistentObject {
    * Constructor
    * 
    * @param lastUpdatedId the id of the last person to update this object
+   * @param createUserId the id of the person created the record
    */
-  protected NsPersistentObject(String lastUpdatedId, String createId) {
+  protected NsPersistentObject(String lastUpdatedId, String createUserId) {
     this.lastUpdatedId = lastUpdatedId;
     this.lastUpdatedTime = new Date();
-    this.createId = createId;
-    this.createTime = new Date();
+    this.createUserId = createUserId;
+    this.createDateTime = new Date();
   }
 
 
@@ -71,17 +72,17 @@ public abstract class NsPersistentObject implements PersistentObject {
   }
 
   /**
-   * @return the createId
+   * @return the createUserId
    */
-  public String getCreateId() {
-    return createId;
+  public String getCreateUserId() {
+    return createUserId;
   }
 
   /**
-   * @return the createTime
+   * @return the createDateTime
    */
-  public Date getCreateTime() {
-    return createTime;
+  public Date getCreateDateTime() {
+    return createDateTime;
   }
 
   /**
