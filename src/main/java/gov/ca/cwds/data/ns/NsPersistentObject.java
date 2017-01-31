@@ -24,12 +24,21 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 public abstract class NsPersistentObject implements PersistentObject {
   protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
 
+  @Column(name = "create_user_id")
+  private String createId;
+
+  @Type(type = "timestamp")
+  @Column(name = "create_datetime")
+  private Date createTime;
+
+
   @Column(name = "update_user_id")
-  private Long lastUpdatedId;
+  private String lastUpdatedId;
 
   @Type(type = "timestamp")
   @Column(name = "update_datetime")
   private Date lastUpdatedTime;
+
 
 
   /**
@@ -46,15 +55,39 @@ public abstract class NsPersistentObject implements PersistentObject {
    * 
    * @param lastUpdatedId the id of the last person to update this object
    */
-  protected NsPersistentObject(Long lastUpdatedId) {
+  protected NsPersistentObject(String lastUpdatedId, String createId) {
     this.lastUpdatedId = lastUpdatedId;
     this.lastUpdatedTime = new Date();
+    this.createId = createId;
+    this.createTime = new Date();
+  }
+
+
+  /**
+   * @return the timestampFormat
+   */
+  public static String getTimestampFormat() {
+    return TIMESTAMP_FORMAT;
+  }
+
+  /**
+   * @return the createId
+   */
+  public String getCreateId() {
+    return createId;
+  }
+
+  /**
+   * @return the createTime
+   */
+  public Date getCreateTime() {
+    return createTime;
   }
 
   /**
    * @return the lastUpdatedId
    */
-  public Long getLastUpdatedId() {
+  public String getLastUpdatedId() {
     return lastUpdatedId;
   }
 
