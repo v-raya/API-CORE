@@ -9,7 +9,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 
 import gov.ca.cwds.rest.api.Request;
 
@@ -40,8 +39,7 @@ public final class ResourceParamValidator {
    * @throws ConstraintViolationException if the key fails validation
    */
   public static final <T> void validate(T obj) throws ConstraintViolationException {
-    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-    Validator validator = factory.getValidator();
+    final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     final Set<ConstraintViolation<T>> violations = validator.validate(obj);
     if (!violations.isEmpty()) {
       throw new ConstraintViolationException(violations);
