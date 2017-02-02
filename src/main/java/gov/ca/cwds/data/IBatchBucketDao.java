@@ -24,6 +24,8 @@ public interface IBatchBucketDao<T extends PersistentObject> {
    */
   SessionFactory getSessionFactory();
 
+  Class<T> getEntityClass();
+
   /**
    * Retrieve all records for batch processing for a single bucket. PostgreSQL queries would likely
    * rely on the <a href="https://www.postgresql.org/docs/9.6/static/functions-window.html">NTILE
@@ -64,7 +66,7 @@ public interface IBatchBucketDao<T extends PersistentObject> {
   default List<T> bucketList(long bucketNum, long totalBuckets) {
     this.getSessionFactory().getCurrentSession().beginTransaction();
     return this.getSessionFactory().getCurrentSession()
-        .getNamedQuery(this.getClass().getName() + ".findAllByBucket")
+        .getNamedQuery(getEntityClass().getName() + ".findAllByBucket")
         .setLong("bucket_num", bucketNum).setLong("total_buckets", totalBuckets).list();
   }
 
