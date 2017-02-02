@@ -9,6 +9,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * Interface with some common DAO functions
  * 
  * @author CWDS API Team
+ * @param <T> persistence class
  */
 public interface BaseDao<T extends PersistentObject> extends Dao {
 
