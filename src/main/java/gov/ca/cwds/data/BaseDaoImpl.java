@@ -20,7 +20,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * @param <T> type of {@link PersistentObject}
  */
 public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoImpl<T>
-    implements BaseDao<T> {
+    implements BaseDao<T>, IBatchBucketDao<T> {
 
   /**
    * Constructor

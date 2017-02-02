@@ -2,6 +2,8 @@ package gov.ca.cwds.data;
 
 import java.util.Date;
 
+import gov.ca.cwds.data.persistence.PersistentObject;
+
 /**
  * Interface defines naming standard methods for persistence classes that represent persons. Allows
  * DAO and service classes to operate on person-aware objects efficiently, without possessing
@@ -9,7 +11,7 @@ import java.util.Date;
  * 
  * @author CWDS API Team
  */
-public interface IPersonAware {
+public interface IPersonAware extends PersistentObject {
 
   /**
    * Getter for first name.
@@ -47,9 +49,9 @@ public interface IPersonAware {
   Date getBirthDate();
 
   /**
-   * Getter for ssn.
+   * Getter for SSN.
    * 
-   * @return ssn
+   * @return SSN
    */
   String getSsn();
 
