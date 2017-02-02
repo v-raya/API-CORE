@@ -85,7 +85,6 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
     }
   }
 
-
   /**
    * Retrieve all records for batch processing for a single bucket. PostgreSQL queries would likely
    * rely on the <a href="https://www.postgresql.org/docs/9.6/static/functions-window.html">NTILE
