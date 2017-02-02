@@ -61,7 +61,7 @@ public interface IBatchBucketDao<T extends PersistentObject> {
    * @return ordered list of referral/client document records
    */
   @SuppressWarnings("unchecked")
-  default List<T> pre(long bucketNum, long totalBuckets) {
+  default List<T> bucketList(long bucketNum, long totalBuckets) {
     this.getSessionFactory().getCurrentSession().beginTransaction();
     return this.getSessionFactory().getCurrentSession()
         .getNamedQuery(this.getClass().getName() + ".findAllByBucket")
