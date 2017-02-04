@@ -56,8 +56,8 @@ public class ElasticsearchDao implements Closeable {
   /**
    * Create an ElasticSearch document with the given index and document type.
    * 
-   * @index index to write store
-   * @documenType document type to index as
+   * @param index to write store
+   * @param documentType type to index as
    * @param document JSON of document
    * @param id the unique identifier
    * @return true if document is indexed false if updated
@@ -139,8 +139,6 @@ public class ElasticsearchDao implements Closeable {
 
   /**
    * Stop the ES client, if started.
-   * 
-   * @throws Exception on disconnect
    */
   public void stop() {
     if (client != null) {
