@@ -18,7 +18,27 @@ public interface IPhoneAware {
    */
   @JsonFormat(shape = JsonFormat.Shape.OBJECT)
   public enum PhoneType {
-    Cell, Work, Home, Other
+
+    /**
+     * Cell phone.
+     */
+    Cell,
+
+    /**
+     * Work phone.
+     */
+    Work,
+
+    /**
+     * Home phone, as in "E.T. home phone". Land line.
+     */
+    Home,
+
+    /**
+     * Unknown phone type. Maybe one of those "no contract" deals from Walmart. Voice over IP. Who
+     * knows.
+     */
+    Other
   }
 
   /**
