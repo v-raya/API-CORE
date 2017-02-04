@@ -33,14 +33,6 @@ public class ElasticsearchConfiguration {
   @JsonProperty("elasticsearch.port")
   private String elasticsearchPort;
 
-  @NotNull
-  @JsonProperty("peopleIndexName")
-  private String peopleIndexName;
-
-  @NotNull
-  @JsonProperty("peopleIndexType")
-  private String peopleIndexType;
-
   /**
    * @return the elasticsearchHost
    */
@@ -75,19 +67,4 @@ public class ElasticsearchConfiguration {
   public String getElasticsearchPort() {
     return elasticsearchPort;
   }
-
-  /**
-   * @return the peopleIndexName
-   */
-  public String getPeopleIndexName() {
-    return peopleIndexName;
-  }
-
-  /**
-   * @return the peopleIndexType
-   */
-  public String getPeopleIndexType() {
-    return peopleIndexType;
-  }
-
 }
