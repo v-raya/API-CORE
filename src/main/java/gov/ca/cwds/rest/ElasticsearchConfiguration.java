@@ -22,14 +22,6 @@ public class ElasticsearchConfiguration {
   private String elasticsearchCluster;
 
   @NotNull
-  @JsonProperty("elasticsearch.clientnode")
-  private String elasticsearchClientNodeName;
-
-  @NotNull
-  @JsonProperty("elasticsearch.clientport")
-  private String elasticsearchClientPort;
-
-  @NotNull
   @JsonProperty("elasticsearch.port")
   private String elasticsearchPort;
 
@@ -45,20 +37,6 @@ public class ElasticsearchConfiguration {
    */
   public String getElasticsearchCluster() {
     return elasticsearchCluster;
-  }
-
-  /**
-   * @return the elasticsearchClientNodeName
-   */
-  public String getElasticsearchClientNodeName() {
-    return elasticsearchClientNodeName;
-  }
-
-  /**
-   * @return the elasticsearchClientPort
-   */
-  public String getElasticsearchClientPort() {
-    return elasticsearchClientPort;
   }
 
   /**
