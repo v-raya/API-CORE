@@ -1,9 +1,15 @@
 package gov.ca.cwds.data.es;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.transport.InetSocketTransportAddress;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -37,22 +43,18 @@ public class ElasticSearchLiveTestRunner implements Runnable {
   private static final class AutoCloseElasticsearchDao extends ElasticsearchDao
       implements AutoCloseable {
 
-    public AutoCloseElasticsearchDao(String host, String port, String clusterName) {
-      super(host, port, clusterName);
-    }
-
     /**
      * Constructor. Construct from YAML configuration.
      * 
      * @param config The ES configuration
      */
     @Inject
-    public AutoCloseElasticsearchDao(ElasticsearchConfiguration config) {
-      super(config);
+    public AutoCloseElasticsearchDao(Client client) {
+      super(client);
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws IOException {
       stop();
     }
 
@@ -96,7 +98,8 @@ public class ElasticSearchLiveTestRunner implements Runnable {
       config = YAML_MAPPER.readValue(iss, ElasticsearchConfiguration.class);
     }
 
-    try (AutoCloseElasticsearchDao autoCloseDao = new AutoCloseElasticsearchDao(config)) {
+    try (AutoCloseElasticsearchDao autoCloseDao =
+        new AutoCloseElasticsearchDao(elasticsearchClient(config))) {
       ElasticSearchLiveTestRunner job = new ElasticSearchLiveTestRunner(autoCloseDao, searchFor);
       job.run();
     }
@@ -118,6 +121,14 @@ public class ElasticSearchLiveTestRunner implements Runnable {
       LOGGER.error("Well, this is awkward.\n******* ERROR ******* " + e.getMessage(), e);
       throw new ApiException(e);
     }
+  }
+
+  private static Client elasticsearchClient(ElasticsearchConfiguration config) throws Exception {
+    Settings settings =
+        Settings.settingsBuilder().put("cluster.name", config.getElasticsearchCluster()).build();
+    return TransportClient.builder().settings(settings).build().addTransportAddress(
+        new InetSocketTransportAddress(InetAddress.getByName(config.getElasticsearchHost()),
+            Integer.parseInt(config.getElasticsearchPort())));
   }
 
 }
