@@ -321,7 +321,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
    * Nested document Object, constructed by unmarshalling {@link #sourceJson} into an instance of
    * Class type {@link #sourceType}.
    */
-  private Object sourceObj;
+  private transient Object sourceObj;
 
   /**
    * Overload constructor, used to accommodate nested document members {@link #sourceType} and

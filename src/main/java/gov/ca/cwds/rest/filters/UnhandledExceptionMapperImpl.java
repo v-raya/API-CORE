@@ -14,7 +14,8 @@ import com.google.inject.Inject;
 import gov.ca.cwds.logging.AuditLoggerImpl;
 
 /**
- * Exception Mapper class for CWDS API and PERRY
+ * This is the main class to catch exceptions in CWDS API and PERRY with a valid uniqueId to track
+ * the errors
  * 
  * @author CWDS API Team
  */
@@ -23,9 +24,16 @@ public class UnhandledExceptionMapperImpl implements ExceptionMapper<Exception> 
 
   private static final Logger LOGGER = LoggerFactory.getLogger(UnhandledExceptionMapperImpl.class);
 
+  /**
+   * Default constructor
+   */
   @Inject
   public UnhandledExceptionMapperImpl() {}
 
+  /**
+   * Get the uniqueId from the auditLoggerImpl for the exception thrown and log the error. This
+   * method will create a Json with message, error code and uniqueId
+   */
   @Override
   public Response toResponse(Exception ex) {
     LOGGER.error("EXCEPTION MAPPER: {}", ex.getMessage(), ex);
