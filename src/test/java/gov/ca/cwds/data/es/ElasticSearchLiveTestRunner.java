@@ -110,7 +110,7 @@ public class ElasticSearchLiveTestRunner implements Runnable {
   public void run() {
     try {
 
-      final ElasticSearchPerson[] hits = dao.autoCompletePerson(this.searchTerm);
+      final ElasticSearchPerson[] hits = dao.searchPerson(this.searchTerm);
       if (hits != null && hits.length > 0) {
         for (ElasticSearchPerson hit : hits) {
           LOGGER.info(hit);

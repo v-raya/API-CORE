@@ -150,7 +150,7 @@ public final class ElasticsearchDaoTest {
 
     ElasticsearchDao target = new ElasticsearchDao(client);
     String searchTerm = null;
-    target.autoCompletePerson(searchTerm);
+    target.searchPerson(searchTerm);
     fail("Expected exception was not thrown!");
   }
 
@@ -169,7 +169,7 @@ public final class ElasticsearchDaoTest {
     // target.setClient(client);
 
     String searchTerm = "junk";
-    final ElasticSearchPerson[] actual = target.autoCompletePerson(searchTerm);
+    final ElasticSearchPerson[] actual = target.searchPerson(searchTerm);
     assertThat("nothing returned", actual != null);
   }
 }

@@ -107,7 +107,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
    *    select mod(y.rn,10) + 1 as bucket, y.rn, y.identifier 
    *    from (
    *       select row_number() over (order by 1) as rn, x.identifier 
-   *       from ( select c.identifier from cwsint.client_t c ) x 
+   *       from ( select c.identifier from client_t c ) x 
    *    ) y 
    * ) z 
    * where z.bucket = 3 for read only;

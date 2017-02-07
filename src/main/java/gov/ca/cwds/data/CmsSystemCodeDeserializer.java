@@ -17,7 +17,7 @@ import com.fasterxml.jackson.databind.node.IntNode;
  * <h4>Class declaration:</h4>
  * 
  * <pre>
- * &#64;Entity &#64;Table(schema = "CWSINT", name = "ATTRNY_T") &#64;JsonPropertyOrder(alphabetic =
+ * &#64;Entity &#64;Table(name = "ATTRNY_T") &#64;JsonPropertyOrder(alphabetic =
  * true) &#64;JsonIgnoreProperties(ignoreUnknown = true) public class Attorney extends
  * CmsPersistentObject implements IPersonAware, IMultiplePhonesAware {
  * </pre>

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * Base domain class for all API domain objects.
- *
+ * 
  * @author CWDS API Team
  */
 public abstract class DomainObject implements Serializable {
@@ -17,8 +17,8 @@ public abstract class DomainObject implements Serializable {
   public static final String TIME_FORMAT = DomainChef.TIME_FORMAT;
 
   /**
-  *
-  */
+   * 
+   */
   public DomainObject() {}
 
   @Override

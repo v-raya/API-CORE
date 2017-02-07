@@ -38,6 +38,9 @@ public class ElasticsearchDao implements Closeable {
 
   private static final int DEFAULT_MAX_RESULTS = 60;
 
+  public static final String DEFAULT_PERSON_IDX_NM = "people";
+  public static final String DEFAULT_PERSON_DOC_TYPE = "person";
+
   /**
    * Client is thread safe.
    */
@@ -112,14 +115,14 @@ public class ElasticsearchDao implements Closeable {
    * @throws ApiElasticSearchException unable to connect, disconnect, bad hair day, etc.
    */
   // TODO : #139105623
-  public ElasticSearchPerson[] autoCompletePerson(final String searchTerm)
+  public ElasticSearchPerson[] searchPerson(final String searchTerm)
       throws ApiElasticSearchException {
     checkArgument(!Strings.isNullOrEmpty(searchTerm), "searchTerm cannot be Null or empty");
     final String s = searchTerm.trim().toLowerCase();
 
-    final SearchHit[] hits = client.prepareSearch("people").setTypes("person")
-        .setQuery(QueryBuilders.queryStringQuery(s)).setFrom(0).setSize(DEFAULT_MAX_RESULTS)
-        .setExplain(true).execute().actionGet().getHits().getHits();
+    final SearchHit[] hits = client.prepareSearch(DEFAULT_PERSON_IDX_NM)
+        .setTypes(DEFAULT_PERSON_DOC_TYPE).setQuery(QueryBuilders.queryStringQuery(s)).setFrom(0)
+        .setSize(DEFAULT_MAX_RESULTS).setExplain(true).execute().actionGet().getHits().getHits();
 
     final ElasticSearchPerson[] ret = new ElasticSearchPerson[hits.length];
     int counter = -1;
@@ -132,9 +135,8 @@ public class ElasticsearchDao implements Closeable {
 
   // TODO : #139105623
   public IndexRequest prepareIndexRequest(String document, String id) {
-    return client.prepareIndex("person", "people", id)
+    return client.prepareIndex(DEFAULT_PERSON_IDX_NM, DEFAULT_PERSON_DOC_TYPE, id)
         .setConsistencyLevel(WriteConsistencyLevel.DEFAULT).setSource(document).request();
-
   }
 
   /**
@@ -145,7 +147,6 @@ public class ElasticsearchDao implements Closeable {
       this.client.close();
     }
   }
-
 
   @Override
   public void close() throws IOException {
@@ -164,6 +165,5 @@ public class ElasticsearchDao implements Closeable {
   public Client getClient() {
     return client;
   }
-
 
 }
