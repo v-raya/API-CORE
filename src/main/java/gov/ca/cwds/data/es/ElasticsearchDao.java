@@ -13,6 +13,8 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
 
@@ -92,6 +94,21 @@ public class ElasticsearchDao implements Closeable {
     }
 
     return created;
+  }
+
+  /**
+   * Prepare an index request for bulk operations.
+   * 
+   * @param mapper Jackson ObjectMapper
+   * @param id ES document id
+   * @param obj document object
+   * @return prepared IndexRequest
+   * @throws JsonProcessingException if unable to serialize JSON
+   */
+  public IndexRequest bulkAdd(final ObjectMapper mapper, final String id, final Object obj)
+      throws JsonProcessingException {
+    return new IndexRequest(ElasticsearchDao.DEFAULT_PERSON_IDX_NM,
+        ElasticsearchDao.DEFAULT_PERSON_DOC_TYPE, id).source(mapper.writeValueAsString(obj));
   }
 
   /**
