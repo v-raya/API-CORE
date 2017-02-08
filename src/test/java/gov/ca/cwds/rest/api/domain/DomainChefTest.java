@@ -18,6 +18,11 @@ import org.junit.rules.ExpectedException;
 
 import gov.ca.cwds.rest.api.ApiException;
 
+/**
+ * @author CWDS API Team
+ *
+ */
+@SuppressWarnings("javadoc")
 public class DomainChefTest {
   protected static final String DATE_FORMAT = "yyyy-MM-dd";
   protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
@@ -64,20 +69,28 @@ public class DomainChefTest {
   }
 
   @Test
-  public void uncookBooleanstringReturnsNullOnNull() throws Exception {
-    assertThat(DomainChef.uncookBooleanString(null), is(nullValue()));
+  public void uncookBooleanStringReturnsNullOnNull() throws Exception {
+    thrown.expectCause(Is.isA(ParseException.class));
+    DomainChef.uncookBooleanString(null);
   }
 
   @Test
-  public void uncookBooleanstringReturnsNullOnEmpty() throws Exception {
+  public void uncookBooleanStringThrowsExceptionOnEmpty() throws Exception {
+    thrown.expectCause(Is.isA(ParseException.class));
     assertThat(DomainChef.uncookBooleanString("  "), is(nullValue()));
   }
 
   @Test
-  public void uncookBooleanStringThrowsDomainExceptionOnNonYOrN() throws Exception {
+  public void uncookBooleanStringThrowsExceptionOnNonYOrN() throws Exception {
     thrown.expect(ApiException.class);
     thrown.expectCause(Is.isA(ParseException.class));
     DomainChef.uncookBooleanString("T");
+  }
+
+  @Test
+  public void uncookBooleanStringThrowsExceptionOnBlank() throws Exception {
+    thrown.expectCause(Is.isA(ParseException.class));
+    assertThat(DomainChef.uncookBooleanString(""), is(nullValue()));
   }
 
   // cookDate tests
@@ -135,8 +148,18 @@ public class DomainChefTest {
   }
 
   @Test
-  public void uncookDateStringReturnsNullOnNullString() throws Exception {
+  public void uncookDateStringReturnsNullOnNull() throws Exception {
     assertThat(DomainChef.uncookDateString(null), is(nullValue()));
+  }
+
+  @Test
+  public void uncookDateStringReturnsNullOnBlank() throws Exception {
+    assertThat(DomainChef.uncookDateString(""), is(nullValue()));
+  }
+
+  @Test
+  public void uncookDateStringReturnsNullOnEmpty() throws Exception {
+    assertThat(DomainChef.uncookDateString(" "), is(nullValue()));
   }
 
   @Test
@@ -145,6 +168,7 @@ public class DomainChefTest {
     thrown.expectCause(Is.isA(ParseException.class));
     DomainChef.uncookDateString("dlfjkdfjdkfjkd");
   }
+
 
   // uncookTimestampString tests
   @Test
@@ -168,6 +192,16 @@ public class DomainChefTest {
     DomainChef.uncookTimestampString("dlfjkdfjdkfjkd");
   }
 
+  @Test
+  public void uncookTimestampStringReturnsNullOnEmpty() throws Exception {
+    assertThat(DomainChef.uncookTimestampString(" "), is(nullValue()));
+  }
+
+  @Test
+  public void uncookTimestampStringReturnsNullOnBlank() throws Exception {
+    assertThat(DomainChef.uncookTimestampString(""), is(nullValue()));
+  }
+
   // uncookTimeString tests
   @Test
   public void uncookTimeStringReturnsCorrectDate() throws Exception {
@@ -185,6 +219,16 @@ public class DomainChefTest {
     thrown.expect(ApiException.class);
     thrown.expectCause(Is.isA(ParseException.class));
     DomainChef.uncookTimeString("dlfjkdfjdkfjkd");
+  }
+
+  @Test
+  public void uncookTimeStringReturnsNullOnEmpty() throws Exception {
+    assertThat(DomainChef.uncookTimeString(" "), is(nullValue()));
+  }
+
+  @Test
+  public void uncookTimestampReturnsNullOnBlank() throws Exception {
+    assertThat(DomainChef.uncookTimeString(""), is(nullValue()));
   }
 
   // cookZipcodeNumber tests

@@ -58,6 +58,10 @@ public class DomainChef {
    */
   private DomainChef() {}
 
+  /**
+   * @param uncookedBoolean true or false
+   * @return String "Y" or "N"
+   */
   public static String cookBoolean(Boolean uncookedBoolean) {
     if (uncookedBoolean != null) {
       return Boolean.TRUE.equals(uncookedBoolean) ? "Y" : "N";
@@ -65,17 +69,25 @@ public class DomainChef {
     return null;
   }
 
+  /**
+   * @param cookedBoolean "Y" or "N"
+   * @return Boolean true, false, or null
+   */
   public static Boolean uncookBooleanString(String cookedBoolean) {
     if ("N".equalsIgnoreCase(cookedBoolean)) {
       return Boolean.FALSE;
     } else if ("Y".equalsIgnoreCase(cookedBoolean)) {
       return Boolean.TRUE;
     } else if (StringUtils.trimToNull(cookedBoolean) == null) {
-      return null;
+      throw new ApiException(new ParseException("Unable to generate boolean", 0));
     }
     throw new ApiException(new ParseException("Unable to generate boolean", 0));
   }
 
+  /**
+   * @param date
+   * @return String in DATE_FORMAT
+   */
   public static String cookDate(Date date) {
     if (date != null) {
       DateFormat df = new SimpleDateFormat(DATE_FORMAT);
@@ -84,6 +96,10 @@ public class DomainChef {
     return null;
   }
 
+  /**
+   * @param date
+   * @return String in TIMESTAMP_FORMAT
+   */
   public static String cookTimestamp(Date date) {
     if (date != null) {
       DateFormat df = new SimpleDateFormat(TIMESTAMP_FORMAT);
@@ -92,6 +108,10 @@ public class DomainChef {
     return null;
   }
 
+  /**
+   * @param date
+   * @return String in TIME_FORMAT
+   */
   public static String cookTime(Date date) {
     if (date != null) {
       DateFormat df = new SimpleDateFormat(TIME_FORMAT);
@@ -100,11 +120,16 @@ public class DomainChef {
     return null;
   }
 
+  /**
+   * @param date
+   * @return Date
+   */
   public static Date uncookDateString(String date) {
-    if (date != null) {
+    String trimDate = StringUtils.trim(date);
+    if (StringUtils.isNotEmpty(trimDate)) {
       try {
         DateFormat df = new SimpleDateFormat(DATE_FORMAT);
-        return df.parse(date);
+        return df.parse(trimDate);
       } catch (Exception e) {
         throw new ApiException(e);
       }
@@ -112,11 +137,16 @@ public class DomainChef {
     return null;
   }
 
+  /**
+   * @param timestamp
+   * @return Date
+   */
   public static Date uncookTimestampString(String timestamp) {
-    if (timestamp != null) {
+    String trimTimestamp = StringUtils.trim(timestamp);
+    if (StringUtils.isNotEmpty(trimTimestamp)) {
       try {
         DateFormat df = new SimpleDateFormat(TIMESTAMP_FORMAT);
-        return df.parse(timestamp);
+        return df.parse(trimTimestamp);
       } catch (Exception e) {
         throw new ApiException(e);
       }
@@ -124,11 +154,16 @@ public class DomainChef {
     return null;
   }
 
+  /**
+   * @param timestamp
+   * @return Date
+   */
   public static Date uncookTimeString(String timestamp) {
-    if (timestamp != null) {
+    String trimTimestamp = StringUtils.trim(timestamp);
+    if (StringUtils.isNotEmpty(trimTimestamp)) {
       try {
         DateFormat df = new SimpleDateFormat(TIME_FORMAT);
-        return df.parse(timestamp);
+        return df.parse(trimTimestamp);
       } catch (Exception e) {
         throw new ApiException(e);
       }
@@ -136,6 +171,10 @@ public class DomainChef {
     return null;
   }
 
+  /**
+   * @param zipcodeNumber
+   * @return String
+   */
   public static String cookZipcodeNumber(Integer zipcodeNumber) {
     String zipcode = "";
     if (zipcodeNumber != null && zipcodeNumber > 0) {
@@ -145,9 +184,13 @@ public class DomainChef {
     return zipcode;
   }
 
+  /**
+   * @param zipcode
+   * @return Integer
+   */
   public static Integer uncookZipcodeString(String zipcode) {
     if (StringUtils.isBlank(zipcode)) {
-      return new Integer(0);
+      return 0;
     }
     Matcher matcher = ZIPCODE_PATTERN.matcher(zipcode);
     if (matcher.matches()) {
