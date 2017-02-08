@@ -6,9 +6,13 @@ import java.io.Closeable;
 import java.io.IOException;
 
 import org.elasticsearch.action.WriteConsistencyLevel;
+import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.client.Requests;
+import org.elasticsearch.cluster.metadata.IndexMetaData;
+import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.LoggerFactory;
@@ -40,7 +44,14 @@ public class ElasticsearchDao implements Closeable {
 
   private static final int DEFAULT_MAX_RESULTS = 60;
 
+  /**
+   * Standard "people" index name.
+   */
   public static final String DEFAULT_PERSON_IDX_NM = "people";
+
+  /**
+   * Standard "person" document name.
+   */
   public static final String DEFAULT_PERSON_DOC_TYPE = "person";
 
   /**
@@ -51,11 +62,58 @@ public class ElasticsearchDao implements Closeable {
   /**
    * Constructor.
    * 
-   * @param client The elasticsearch client
+   * @param client The ElasticSearch client
    */
   @Inject
   public ElasticsearchDao(Client client) {
     this.client = client;
+  }
+
+  /**
+   * Check whether Elasticsearch already has the chosen index.
+   * 
+   * @param index index name or alias
+   * @return whether the index exists
+   */
+  public boolean doesIndexExist(final String index) {
+    final IndexMetaData indexMetaData = getClient().admin().cluster()
+        .state(Requests.clusterStateRequest()).actionGet().getState().getMetaData().index(index);
+    return indexMetaData != null;
+  }
+
+  /**
+   * Create an index before blasting documents into it.
+   * 
+   * @param index index name or alias
+   * @param numShards number of shards
+   * @param numReplicas number of replicas
+   */
+  public void createIndex(final String index, int numShards, int numReplicas) {
+    LOGGER.warn("CREATE ES INDEX {} with {} shards and {} replicas", index, numShards, numReplicas);
+    final Settings indexSettings = Settings.settingsBuilder().put("number_of_shards", numShards)
+        .put("number_of_replicas", numReplicas).build();
+    CreateIndexRequest indexRequest = new CreateIndexRequest(index, indexSettings);
+    getClient().admin().indices().create(indexRequest).actionGet();
+  }
+
+  /**
+   * Create an index, if needed, before blasting documents into it.
+   * 
+   * <p>
+   * Defaults to 5 shards and 1 replica.
+   * </p>
+   * 
+   * @param index index name or alias
+   * @throws InterruptedException if thread is interrupted
+   */
+  public void createIndexIfNeeded(final String index) throws InterruptedException {
+    if (!doesIndexExist(index)) {
+      LOGGER.warn("ES INDEX {} DOES NOT EXIST!!", index);
+      createIndex(index, 5, 1);
+
+      // Give Elasticsearch a moment to catch its breath.
+      Thread.sleep(1000L);
+    }
   }
 
   /**
@@ -74,8 +132,7 @@ public class ElasticsearchDao implements Closeable {
     checkArgument(!Strings.isNullOrEmpty(documentType), "documentType cannot be Null or empty");
 
     LOGGER.info("ElasticSearchDao.createDocument(): " + document);
-
-    IndexResponse response = client.prepareIndex(index, documentType, id)
+    final IndexResponse response = client.prepareIndex(index, documentType, id)
         .setConsistencyLevel(WriteConsistencyLevel.DEFAULT).setSource(document).execute()
         .actionGet();
 
@@ -131,7 +188,6 @@ public class ElasticsearchDao implements Closeable {
    * @return array of AutoCompletePerson
    * @throws ApiElasticSearchException unable to connect, disconnect, bad hair day, etc.
    */
-  // TODO : #139105623
   public ElasticSearchPerson[] searchPerson(final String searchTerm)
       throws ApiElasticSearchException {
     checkArgument(!Strings.isNullOrEmpty(searchTerm), "searchTerm cannot be Null or empty");
