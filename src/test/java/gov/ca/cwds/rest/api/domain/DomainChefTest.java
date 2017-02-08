@@ -70,14 +70,12 @@ public class DomainChefTest {
 
   @Test
   public void uncookBooleanStringReturnsNullOnNull() throws Exception {
-    thrown.expectCause(Is.isA(ParseException.class));
-    DomainChef.uncookBooleanString(null);
+    assertThat(DomainChef.uncookBooleanString(null), is(nullValue()));
   }
 
   @Test
-  public void uncookBooleanStringThrowsExceptionOnEmpty() throws Exception {
-    thrown.expectCause(Is.isA(ParseException.class));
-    assertThat(DomainChef.uncookBooleanString("  "), is(nullValue()));
+  public void uncookBooleanStringReturnsNullOnEmpty() throws Exception {
+    assertThat(DomainChef.uncookBooleanString(" "), is(nullValue()));
   }
 
   @Test
@@ -89,7 +87,6 @@ public class DomainChefTest {
 
   @Test
   public void uncookBooleanStringThrowsExceptionOnBlank() throws Exception {
-    thrown.expectCause(Is.isA(ParseException.class));
     assertThat(DomainChef.uncookBooleanString(""), is(nullValue()));
   }
 
