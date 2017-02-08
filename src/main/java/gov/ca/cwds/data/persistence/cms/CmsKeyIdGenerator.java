@@ -58,36 +58,39 @@ public class CmsKeyIdGenerator {
   /**
    * Utility struct class stores details of CWDS key decomposition.
    */
+  @SuppressWarnings("javadoc")
   public static final class KeyDetail {
-    public String key;
-    public String staffId;
-    public String UITimestamp;
-    public String PTimestamp;
+    public String key; // NOSONAR
+    public String staffId; // NOSONAR
+    public String UITimestamp; // NOSONAR
+    public String PTimestamp; // NOSONAR
   }
 
-  private static final int nSZ_POWVEC = 19;
+  private static final int nSZ_POWVEC = 19; // NOSONAR
 
-  private static final int nMAX_BASE = 62;
+  private static final int nMAX_BASE = 62; // NOSONAR
 
-  private static final int nDEFAULT_BASE = 62;
+  private static final int nDEFAULT_BASE = 62; // NOSONAR
 
-  private static final int nSZ_UIIDSTAFFID = 6; // for converting a key to a UI identifier
+  private static final int nSZ_UIIDSTAFFID = 6; // NOSONAR for converting a key to a UI identifier
 
-  private static final int nSZ_UIIDTIMESTAMP = 13;
+  private static final int nSZ_UIIDTIMESTAMP = 13; // NOSONAR
 
-  private static final float nSHIFT_HSECOND = 1.71798692E10f; // 34 bit shift (2 to the 34th power)
+  private static final float nSHIFT_HSECOND = 1.71798692E10f; // NOSONAR 34 bit shift (2 to the 34th
+                                                              // power)
 
-  private static final float nSHIFT_SECOND = 2.68435456E8f; // 28 bit shift (2 to the 28th power)
+  private static final float nSHIFT_SECOND = 2.68435456E8f; // NOSONAR 28 bit shift (2 to the 28th
+                                                            // power)
 
-  private static final float nSHIFT_MINUTE = 4194304; // 22 bit shift (2 to the 22nd power)
+  private static final float nSHIFT_MINUTE = 4194304; // NOSONAR 22 bit shift (2 to the 22nd power)
 
-  private static final float nSHIFT_HOUR = 131072; // 17 bit shift (2 to the 17th power)
+  private static final float nSHIFT_HOUR = 131072; // NOSONAR 17 bit shift (2 to the 17th power)
 
-  private static final float nSHIFT_DAY = 4096; // 12 bit shift (2 to the 12th power)
+  private static final float nSHIFT_DAY = 4096; // NOSONAR 12 bit shift (2 to the 12th power)
 
-  private static final float nSHIFT_MONTH = 256; // 8 bit shift (2 to the 8th power)
+  private static final float nSHIFT_MONTH = 256; // NOSONAR 8 bit shift (2 to the 8th power)
 
-  private static final float nSHIFT_YEAR = 1; // 0 bit shift (2 to the 0th power)
+  private static final float nSHIFT_YEAR = 1; // NOSONAR 0 bit shift (2 to the 0th power)
 
   private static final double anPowVec10[] = {1.000000000000000e+000f, 1.000000000000000e+001f,
       1.000000000000000e+002f, 1.000000000000000e+003f, 1.000000000000000e+004f,

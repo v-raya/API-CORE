@@ -34,7 +34,7 @@ public class CmsSystemCodeCacheService
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsSystemCodeCacheService.class);
 
-  private final ISystemCodeDao dao;
+  private final transient ISystemCodeDao dao;
   private final Map<Integer, CmsSystemCode> idxSysId;
   private final Map<String, List<CmsSystemCode>> idxMeta;
 

@@ -183,6 +183,7 @@ public final class ESSearchRequest extends DomainObject implements Request {
    * @author CWDS API Team
    */
   @JsonSnakeCase
+  @FunctionalInterface
   public static interface ESSearchElement {
     ElementType getElementType();
   }
