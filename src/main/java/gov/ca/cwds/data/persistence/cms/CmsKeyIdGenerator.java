@@ -92,7 +92,7 @@ public class CmsKeyIdGenerator {
 
   private static final float nSHIFT_YEAR = 1; // NOSONAR 0 bit shift (2 to the 0th power)
 
-  private static final double anPowVec10[] = {1.000000000000000e+000f, 1.000000000000000e+001f,
+  private static final double[] anPowVec10 = {1.000000000000000e+000f, 1.000000000000000e+001f,
       1.000000000000000e+002f, 1.000000000000000e+003f, 1.000000000000000e+004f,
       1.000000000000000e+005f, 1.000000000000000e+006f, 1.000000000000000e+007f,
       1.000000000000000e+008f, 1.000000000000000e+009f, 1.000000000000000e+010f,
@@ -100,7 +100,7 @@ public class CmsKeyIdGenerator {
       1.000000000000000e+014f, 1.000000000000000e+015f, 1.000000000000000e+016f,
       1.000000000000000e+017f, 1.000000000000000e+018f};
 
-  private static final double anPowVec62[] = {1.000000000000000e+000, 6.200000000000000e+001,
+  private static final double[] anPowVec62 = {1.000000000000000e+000, 6.200000000000000e+001,
       3.844000000000000e+003, 2.383280000000000e+005, 1.477633600000000e+007,
       9.161328320000000e+008, 5.680023558400000e+010, 3.521614606208000e+012,
       2.183401055848960e+014, 1.353708654626355e+016, 8.392993658683402e+017,
@@ -108,7 +108,7 @@ public class CmsKeyIdGenerator {
       1.240176943465753e+025, 7.689097049487666e+026, 4.767240170682353e+028,
       2.955688905823059e+030, 1.832527121610297e+032};
 
-  private static final char acConvTbl[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
+  private static final char[] acConvTbl = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
       'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
       'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
       'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
@@ -175,9 +175,9 @@ public class CmsKeyIdGenerator {
     char[] szDstStr = new char[8];
 
     // Determine the largest power of the number.
-    for (i = 0; nSrcVal >= pnPowVec[i]; i++, nPower++);
+    for (i = 0; nSrcVal >= pnPowVec[i]; i++, nPower++)
 
-    LOGGER.debug("nPower::" + nPower);
+      LOGGER.debug("nPower::" + nPower);
     // Use the destination string width to left-pad the string.
     final int nPad = nDstStrWidth - nPower;
     LOGGER.debug("nPad::" + nPad);

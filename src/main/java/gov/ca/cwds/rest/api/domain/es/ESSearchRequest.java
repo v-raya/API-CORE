@@ -287,7 +287,10 @@ public final class ESSearchRequest extends DomainObject implements Request {
     @JsonProperty("query_type")
     private QueryType queryType = QueryType.ALL;
 
-    public ESFieldSearchEntry() {}
+    @SuppressWarnings("javadoc")
+    public ESFieldSearchEntry() {
+      // Default no-op
+    }
 
     public ESFieldSearchEntry(String field, String value, QueryType queryType) {
       super();
@@ -382,7 +385,10 @@ public final class ESSearchRequest extends DomainObject implements Request {
   // CTORS:
   // ================
 
-  public ESSearchRequest() {}
+  @SuppressWarnings("javadoc")
+  public ESSearchRequest() {
+    // Defalut no-op
+  }
 
   // ================
   // ACCESSORS:
