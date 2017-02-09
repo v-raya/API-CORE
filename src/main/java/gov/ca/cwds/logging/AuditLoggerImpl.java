@@ -3,14 +3,13 @@ package gov.ca.cwds.logging;
 import java.util.UUID;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.inject.AuditLogger;
-
 public class AuditLoggerImpl implements gov.ca.cwds.logging.AuditLogger {
-  private final Logger LOGGER;
+  private final Logger LOGGER = LoggerFactory.getLogger("AUDIT");
 
   public static final String REMOTE_ADDRESS = "remoteAddress";
   public static final String USER_ID = "userid";
@@ -21,12 +20,10 @@ public class AuditLoggerImpl implements gov.ca.cwds.logging.AuditLogger {
   /**
    * Constructor
    * 
-   * @param logger The logger
    */
   @Inject
-  public AuditLoggerImpl(@AuditLogger Logger logger) {
+  public AuditLoggerImpl() {
     super();
-    LOGGER = logger;
   }
 
   /**
@@ -42,29 +39,64 @@ public class AuditLoggerImpl implements gov.ca.cwds.logging.AuditLogger {
   /*
    * (non-Javadoc)
    * 
-   * @see gov.ca.cwds.logging.AuditLogger#buildMDC(java.lang.String, java.lang.String,
-   * java.lang.String, java.lang.String)
+   * @see gov.ca.cwds.logging.AuditLogger#teardownMDC()
    */
   @Override
-  public String buildMDC(String remoteAddress, String userid, String sessionId, String requestId) {
-    MDC.put(REMOTE_ADDRESS, remoteAddress);
-    MDC.put(USER_ID, userid);
-    MDC.put(SESSION_ID, sessionId);
-    MDC.put(REQUEST_ID, requestId);
+  public void teardownMDC() {
+    MDC.clear();
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see gov.ca.cwds.logging.AuditLogger#uniqueId()
+   */
+  @Override
+  public String uniqueId() {
     String uniqueId = UUID.randomUUID().toString();
     MDC.put(UNIQUE_ID, uniqueId);
-
     return uniqueId;
   }
 
   /*
    * (non-Javadoc)
    * 
-   * @see gov.ca.cwds.logging.AuditLogger#teardownMDC()
+   * @see gov.ca.cwds.logging.AuditLogger#storeRemoteAddress(java.lang.String)
    */
   @Override
-  public void teardownMDC() {
-    MDC.clear();
+  public void storeRemoteAddress(String remoteAddress) {
+    MDC.put(REMOTE_ADDRESS, remoteAddress);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see gov.ca.cwds.logging.AuditLogger#storeUserId(java.lang.String)
+   */
+  @Override
+  public void storeUserId(String userid) {
+    MDC.put(USER_ID, userid);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see gov.ca.cwds.logging.AuditLogger#storeRequestId(java.lang.String)
+   */
+  @Override
+  public void storeRequestId(String requestId) {
+    MDC.put(REQUEST_ID, requestId);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see gov.ca.cwds.logging.AuditLogger#storeSessionId(java.lang.String)
+   */
+  @Override
+  public void storeSessionId(String sessionId) {
+    MDC.put(SESSION_ID, sessionId);
+
   }
 
 }

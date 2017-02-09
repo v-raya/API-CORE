@@ -7,10 +7,13 @@ import java.text.MessageFormat;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
@@ -20,10 +23,20 @@ import com.google.common.base.Strings;
 
 import gov.ca.cwds.auth.ApiAuthenticationException;
 import gov.ca.cwds.auth.PerryShiroToken;
+import gov.ca.cwds.logging.AuditLogger;
 
 public class PerryAuthenticatingFilter extends AuthenticatingFilter {
   private static final Logger LOGGER = LoggerFactory.getLogger(PerryAuthenticatingFilter.class);
   private static final String PARAM_TOKEN = "token";
+  private static final String HEADER_AUTHORIZATION = "Authorization";
+
+  private AuditLogger auditLogger;
+
+  /**
+   * Constructor
+   * 
+   */
+  public PerryAuthenticatingFilter() {}
 
   /**
    * Creates a token based on the request/response pair. For Perry authentication, the token is
@@ -37,7 +50,8 @@ public class PerryAuthenticatingFilter extends AuthenticatingFilter {
   protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
     String tokenFromRequest = getToken(request);
     checkArgument(!Strings.isNullOrEmpty(tokenFromRequest),
-        "Token  (`" + PARAM_TOKEN + "`) must be present as a request parameter.");
+        "Authorization Token must be passed as request parameter (`" + PARAM_TOKEN
+            + "`) or in the (`" + HEADER_AUTHORIZATION + "`) header");
 
     PerryShiroToken token = new PerryShiroToken(tokenFromRequest);
 
@@ -73,7 +87,12 @@ public class PerryAuthenticatingFilter extends AuthenticatingFilter {
   }
 
   private String getToken(ServletRequest request) {
-    return request.getParameter(PARAM_TOKEN);
+    HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+    String token = httpServletRequest.getParameter(PARAM_TOKEN);
+    if (Strings.isNullOrEmpty(token)) {
+      token = httpServletRequest.getHeader(HEADER_AUTHORIZATION);
+    }
+    return token;
   }
 
   @Override
@@ -88,5 +107,28 @@ public class PerryAuthenticatingFilter extends AuthenticatingFilter {
       throw new ApiAuthenticationException(MessageFormat.format("Unable to send 401 for token: {0}",
           ((PerryShiroToken) token).getToken()), e1);
     }
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * org.apache.shiro.web.filter.authc.AuthenticatingFilter#onLoginSuccess(org.apache.shiro.authc.
+   * AuthenticationToken, org.apache.shiro.subject.Subject, javax.servlet.ServletRequest,
+   * javax.servlet.ServletResponse)
+   */
+  @Override
+  protected boolean onLoginSuccess(AuthenticationToken token, Subject subject,
+      ServletRequest request, ServletResponse response) throws Exception {
+    Subject currentUser = SecurityUtils.getSubject();
+    auditLogger.storeUserId(currentUser.getPrincipal().toString());
+    return super.onLoginSuccess(token, subject, request, response);
+  }
+
+  /**
+   * @param auditLogger the auditLogger to set
+   */
+  public void setAuditLogger(AuditLogger auditLogger) {
+    this.auditLogger = auditLogger;
   }
 }

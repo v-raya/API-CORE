@@ -71,11 +71,10 @@ public class RequestResponseLoggingFilterTest {
   }
 
   @Test
-  public void testDoFilterSetsUpMDC() throws Exception {
+  public void testDoFilterStoreRemoteAddress() throws Exception {
     filter.doFilter(mockHttpServletRequest, mockHttpServletResponse, mockFilterChain);
 
-    verify(auditLogger, times(1)).buildMDC("remoteAddress", "STUBBED_USER", "sessionid",
-        Thread.currentThread().getName());
+    verify(auditLogger, times(1)).storeRemoteAddress("remoteAddress");
   }
 
   @Test

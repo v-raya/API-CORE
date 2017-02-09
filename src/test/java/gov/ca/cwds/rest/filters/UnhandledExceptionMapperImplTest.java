@@ -2,14 +2,12 @@ package gov.ca.cwds.rest.filters;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.mock;
 
 import javax.ws.rs.core.Response;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
 
 import gov.ca.cwds.logging.AuditLoggerImpl;
 import gov.ca.cwds.rest.api.ApiException;
@@ -22,14 +20,14 @@ import gov.ca.cwds.rest.filters.UnhandledExceptionMapperImpl.Result;
  */
 public class UnhandledExceptionMapperImplTest {
 
-  private Logger logger = mock(Logger.class);
-  private AuditLoggerImpl auditLogger = new AuditLoggerImpl(logger);
+  private AuditLoggerImpl auditLogger = new AuditLoggerImpl();
 
   private UnhandledExceptionMapperImpl unhandledExceptionMapper;
 
   @Before
   public void setup() {
-    auditLogger.buildMDC("Host", "STUBBED_USER", "sessionId", Thread.currentThread().getName());
+    auditLogger.uniqueId();
+    auditLogger.storeRemoteAddress("Host");
     unhandledExceptionMapper = new UnhandledExceptionMapperImpl();
   }
 

@@ -65,8 +65,9 @@ public class RequestResponseLoggingFilter implements Filter {
 
       HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 
-      uniqueId = auditLogger.buildMDC(httpServletRequest.getRemoteAddr(), "STUBBED_USER",
-          httpServletRequest.getSession().getId(), Thread.currentThread().getName());
+      uniqueId = auditLogger.uniqueId();
+      auditLogger.storeRemoteAddress(httpServletRequest.getRemoteAddr());
+      auditLogger.storeRequestId(Thread.currentThread().getName());
 
       RequestResponseLoggingHttpServletRequest wrappedRequest =
           new RequestResponseLoggingHttpServletRequest(httpServletRequest);

@@ -16,16 +16,40 @@ public interface AuditLogger {
   public void audit(String data);
 
   /**
-   * Setup the Mapped Diagnostic Context
-   * 
-   * @param remoteAddress The remote address
-   * @param userid The user id
-   * @param sessionId The session id
-   * @param requestId The request id
+   * Generate a unique Id
    * 
    * @return A unique id for this request
    */
-  public String buildMDC(String remoteAddress, String userid, String sessionId, String requestId);
+  public String uniqueId();
+
+  /**
+   * Store the remote address
+   * 
+   * @param remoteAddress The remote address
+   * 
+   */
+  public void storeRemoteAddress(String remoteAddress);
+
+  /**
+   * Store the userid
+   * 
+   * @param userid The user id
+   */
+  public void storeUserId(String userid);
+
+  /**
+   * Store the request id
+   * 
+   * @param requestId The request id
+   */
+  public void storeRequestId(String requestId);
+
+  /**
+   * Store the session id
+   * 
+   * @param sessionId The session id
+   */
+  public void storeSessionId(String sessionId);
 
   public void teardownMDC();
 
