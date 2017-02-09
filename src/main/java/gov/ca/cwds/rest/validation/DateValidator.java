@@ -41,7 +41,7 @@ public class DateValidator implements ConstraintValidator<Date, String> {
         LOGGER.info("Unable to validate date string {} with format {}", value, format);
         return false;
       } catch (NullPointerException npe) {
-        LOGGER.info("Unable to validate null date string with format {}", format);
+        LOGGER.info("Unable to validate null date string with format {}", format, npe);
         return false;
       }
     }

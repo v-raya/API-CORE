@@ -37,21 +37,21 @@ public class IfThenValidator extends AbstractBeanValidator
   @Override
   public boolean isValid(final Object bean, ConstraintValidatorContext context) {
     boolean valid = true;
-    ImmutableList.Builder<String> messages = new ImmutableList.Builder<String>();
+    ImmutableList.Builder<String> messages = new ImmutableList.Builder<>();
 
     String ifValue = readBeanValue(bean, ifProperty);
     boolean ifValueNotBlank = StringUtils.isNotBlank(ifValue);
-    if (required) {
-      if (!ifValueNotBlank) {
-        valid = false;
-        context.disableDefaultConstraintViolation();
-        context.buildConstraintViolationWithTemplate("is required but not set")
-            .addPropertyNode(ifProperty).addConstraintViolation();
-        messages.add();
-      }
+    if (required && !ifValueNotBlank) {
+      valid = false;
+      context.disableDefaultConstraintViolation();
+      context.buildConstraintViolationWithTemplate("is required but not set")
+          .addPropertyNode(ifProperty).addConstraintViolation();
+      messages.add();
     }
 
-    if (ifValueNotBlank) {
+    if (ifValueNotBlank)
+
+    {
       String thenValue = readBeanValue(bean, thenProperty);
       if (StringUtils.isBlank(thenValue)) {
         valid = false;

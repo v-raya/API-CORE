@@ -9,6 +9,7 @@ import gov.ca.cwds.data.Dao;
  * 
  * @author CWDS API Team
  */
+@FunctionalInterface
 public interface ISystemCodeDao extends Dao {
 
   /**

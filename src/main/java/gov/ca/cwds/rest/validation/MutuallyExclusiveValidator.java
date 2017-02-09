@@ -61,7 +61,7 @@ public class MutuallyExclusiveValidator extends AbstractBeanValidator
 
   private boolean handleBooleanType(final Object bean, ConstraintValidatorContext context) {
     boolean valid = true;
-    ImmutableList.Builder<String> messages = new ImmutableList.Builder<String>();
+    ImmutableList.Builder<String> messages = new ImmutableList.Builder<>();
     int countTrue = 0;
     int countSet = 0;
     for (String property : properties) {
@@ -105,7 +105,7 @@ public class MutuallyExclusiveValidator extends AbstractBeanValidator
 
   private boolean handleStringType(final Object bean, ConstraintValidatorContext context) {
     boolean valid = true;
-    ImmutableList.Builder<String> messages = new ImmutableList.Builder<String>();
+    ImmutableList.Builder<String> messages = new ImmutableList.Builder<>();
     int countNotEmpty = 0;
     for (String property : properties) {
       String value = readBeanValue(bean, property);

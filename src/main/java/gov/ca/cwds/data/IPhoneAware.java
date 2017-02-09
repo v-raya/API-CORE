@@ -22,23 +22,23 @@ public interface IPhoneAware {
     /**
      * Cell phone.
      */
-    Cell,
+    Cell, // NOSONAR
 
     /**
      * Work phone.
      */
-    Work,
+    Work, // NOSONAR
 
     /**
      * Home phone, as in "E.T. home phone". Land line.
      */
-    Home,
+    Home, // NOSONAR
 
     /**
      * Unknown phone type. Maybe one of those "no contract" deals from Walmart. Voice over IP. Who
      * knows.
      */
-    Other
+    Other // NOSONAR
   }
 
   /**
