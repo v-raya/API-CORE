@@ -121,6 +121,10 @@ public class PerryAuthenticatingFilter extends AuthenticatingFilter {
   protected boolean onLoginSuccess(AuthenticationToken token, Subject subject,
       ServletRequest request, ServletResponse response) throws Exception {
     Subject currentUser = SecurityUtils.getSubject();
+    // we should never get here. we don't have sessions on APIs
+    LOGGER.warn("Existing session when no sessions should be allowed, {}",
+        currentUser.getPrincipal().toString());
+
     auditLogger.storeUserId(currentUser.getPrincipal().toString());
     return super.onLoginSuccess(token, subject, request, response);
   }
