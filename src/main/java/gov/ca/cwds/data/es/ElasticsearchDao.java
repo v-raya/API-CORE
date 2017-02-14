@@ -103,10 +103,15 @@ public class ElasticsearchDao implements Closeable {
    * Defaults to 5 shards and 1 replica.
    * </p>
    * 
+   * <p>
+   * Method is intentionally synchronized to prevent race conditions and multiple attempts to create
+   * the same index.
+   * </p>
+   * 
    * @param index index name or alias
    * @throws InterruptedException if thread is interrupted
    */
-  public void createIndexIfNeeded(final String index) throws InterruptedException {
+  public synchronized void createIndexIfNeeded(final String index) throws InterruptedException {
     if (!doesIndexExist(index)) {
       LOGGER.warn("ES INDEX {} DOES NOT EXIST!!", index);
       createIndex(index, 5, 1);

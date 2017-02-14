@@ -104,13 +104,13 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
    * <pre>
    * select z.identifier, z.bucket, z.rn, row_number() over (partition by z.bucket order by 1) as bucket_rn 
    * from ( 
-   *    select mod(y.rn,10) + 1 as bucket, y.rn, y.identifier 
+   *    select mod(y.rn, :total_buckets) + 1 as bucket, y.rn, y.identifier 
    *    from (
    *       select row_number() over (order by 1) as rn, x.identifier 
    *       from ( select c.identifier from client_t c ) x 
    *    ) y 
    * ) z 
-   * where z.bucket = 3 for read only;
+   * where z.bucket = :bucket_num for read only;
    * </pre>
    * 
    * <p>
@@ -123,10 +123,24 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
    */
   @SuppressWarnings("unchecked")
   public List<T> bucketList(long bucketNum, long totalBuckets) {
-    this.getSessionFactory().getCurrentSession().beginTransaction();
-    return this.getSessionFactory().getCurrentSession()
-        .getNamedQuery(constructNamedQueryName("findAllByBucket")).setLong("bucket_num", bucketNum)
-        .setLong("total_buckets", totalBuckets).list();
+    final String namedQueryName = constructNamedQueryName("findAllByBucket");
+    Session session = getSessionFactory().getCurrentSession();
+
+    Transaction txn = null;
+    try {
+      txn = session.beginTransaction();
+      Query query = session.getNamedQuery(namedQueryName).setInteger("bucket_num", (int) bucketNum)
+          .setInteger("total_buckets", (int) totalBuckets);
+      ImmutableList.Builder<T> results = new ImmutableList.Builder<>();
+      results.addAll(query.list());
+      txn.commit();
+      return results.build();
+    } catch (HibernateException h) {
+      if (txn != null) {
+        txn.rollback();
+      }
+      throw new DaoException(h);
+    }
   }
 
   /**
