@@ -208,12 +208,6 @@ public class ElasticsearchDao implements Closeable {
       ret[++counter] = ElasticSearchPerson.makeESPerson(hit);
     }
 
-    // try {
-    // close();
-    // } catch (IOException e) {
-    // throw new ApiElasticSearchException("Unable to close connection", e);
-    // }
-
     return ret;
   }
 
