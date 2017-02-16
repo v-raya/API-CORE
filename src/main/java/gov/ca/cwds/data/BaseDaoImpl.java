@@ -20,7 +20,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * @param <T> type of {@link PersistentObject}
  */
 public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoImpl<T>
-    implements BaseDao<T> {
+    implements BaseDao<T>, IBatchBucketDao<T> {
 
   /**
    * Constructor
@@ -114,13 +114,20 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
    * </pre>
    * 
    * <p>
-   * Most batch bucket queries are defined Hibernate named queries in the persistence class itself.
+   * Batch bucket queries are defined Hibernate named queries in the persistence class itself.
+   * </p>
+   * 
+   * <p>
+   * Since the large CMS DB2 tables are usually partitioned by primary key (column IDENTIFIER)
+   * across 16 partitions, this method takes a minimum and maximum key to enhance performance via
+   * partition pruning.
    * </p>
    * 
    * @param bucketNum current bucket for this batch
    * @param totalBuckets total buckets in batch run
    * @return ordered list of referral/client document records
    */
+  @Override
   @SuppressWarnings("unchecked")
   public List<T> bucketList(long bucketNum, long totalBuckets) {
     final String namedQueryName = constructNamedQueryName("findAllByBucket");

@@ -85,7 +85,7 @@ public class DomainChef {
   }
 
   /**
-   * @param date
+   * @param date date to cook
    * @return String in DATE_FORMAT
    */
   public static String cookDate(Date date) {
@@ -97,7 +97,7 @@ public class DomainChef {
   }
 
   /**
-   * @param date
+   * @param date date to cook
    * @return String in TIMESTAMP_FORMAT
    */
   public static String cookTimestamp(Date date) {
@@ -109,7 +109,7 @@ public class DomainChef {
   }
 
   /**
-   * @param date
+   * @param date date to cook
    * @return String in TIME_FORMAT
    */
   public static String cookTime(Date date) {
@@ -121,7 +121,7 @@ public class DomainChef {
   }
 
   /**
-   * @param date
+   * @param date date to uncook
    * @return Date
    */
   public static Date uncookDateString(String date) {
@@ -138,7 +138,7 @@ public class DomainChef {
   }
 
   /**
-   * @param timestamp
+   * @param timestamp timestamp to uncook
    * @return Date
    */
   public static Date uncookTimestampString(String timestamp) {
@@ -155,7 +155,7 @@ public class DomainChef {
   }
 
   /**
-   * @param timestamp
+   * @param timestamp time to uncook
    * @return Date
    */
   public static Date uncookTimeString(String timestamp) {
@@ -172,7 +172,7 @@ public class DomainChef {
   }
 
   /**
-   * @param zipcodeNumber
+   * @param zipcodeNumber zip to cook
    * @return String
    */
   public static String cookZipcodeNumber(Integer zipcodeNumber) {
@@ -185,7 +185,7 @@ public class DomainChef {
   }
 
   /**
-   * @param zipcode
+   * @param zipcode zip to uncook
    * @return Integer
    */
   public static Integer uncookZipcodeString(String zipcode) {
