@@ -34,11 +34,11 @@ public abstract class CmsPersistentObject implements PersistentObject {
    */
   protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
 
-  @Column(name = "\"LST_UPD_ID\"")
+  @Column(name = "LST_UPD_ID")
   private String lastUpdatedId;
 
   @Type(type = "timestamp")
-  @Column(name = "\"LST_UPD_TS\"")
+  @Column(name = "LST_UPD_TS")
   private Date lastUpdatedTime;
 
   /**
