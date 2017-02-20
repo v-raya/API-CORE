@@ -88,7 +88,7 @@ cobertura {
 	coverageFormats = ['xml', 'html']
 	coverageIgnoreTrivial = true
 	
-	coverageExcludes = ['org.slf4j.Logger.*', '.*gov\\.ca\\.cwds\\.data\\.persistence\\.cms\\..*SystemCodeCache.*', '.*gov\\.ca\\.cwds\\.data\\..*IBatchBucket.*']
+	coverageExcludes = ['org.slf4j.Logger.*', '.*gov\\.ca\\.cwds\\.data\\.persistence\\.cms\\..*SystemCodeCache.*', '.*gov\\.ca\\.cwds\\.data\\..*BatchBucket.*']
 	coverageIgnores  = ['org.slf4j.Logger.*', '.*gov\\.ca\\.cwds\\.data\\.persistence\\.cms\\..*SystemCodeCache.*']
 	coverageReportDir = new File("$buildDir/reports/cobertura")
 	coverageIgnoreMethodAnnotations = ['gov.ca.cwds.rest.resources.CoverageIgnore']
