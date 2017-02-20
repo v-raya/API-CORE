@@ -1,4 +1,4 @@
-package gov.ca.cwds.data;
+package gov.ca.cwds.data.std;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  * 
  * @author CWDS API Team
  */
-public interface IPhoneAware {
+public interface ApiPhoneAware {
 
   /**
    * Common phone types.

@@ -1,4 +1,4 @@
-package gov.ca.cwds.data;
+package gov.ca.cwds.data.std;
 
 /**
  * Interface defines naming standard methods for persistence classes that reference language. Allows
@@ -7,7 +7,7 @@ package gov.ca.cwds.data;
  * 
  * @author CWDS API Team
  */
-public interface ILanguageAware {
+public interface ApiLanguageAware {
 
   /**
    * Getter for language SYS ID code.

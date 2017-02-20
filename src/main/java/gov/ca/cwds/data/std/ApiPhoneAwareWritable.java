@@ -1,4 +1,4 @@
-package gov.ca.cwds.data;
+package gov.ca.cwds.data.std;
 
 /**
  * Interface defines naming standard methods for persistence classes that represent phone numbers.
@@ -11,7 +11,7 @@ package gov.ca.cwds.data;
  * 
  * @author CWDS API Team
  */
-public interface IPhoneAwareWritable extends IPhoneAware {
+public interface ApiPhoneAwareWritable extends ApiPhoneAware {
 
   /**
    * Setter for concatenated phone number.

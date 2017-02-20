@@ -12,6 +12,7 @@ import org.hibernate.Transaction;
 import com.google.common.collect.ImmutableList;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.data.std.BatchBucketDao;
 
 /**
  * Base class for DAO with some common methods.
@@ -20,7 +21,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * @param <T> type of {@link PersistentObject}
  */
 public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoImpl<T>
-    implements BaseDao<T>, IBatchBucketDao<T> {
+    implements BaseDao<T>, BatchBucketDao<T> {
 
   /**
    * Constructor

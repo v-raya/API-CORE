@@ -1,4 +1,4 @@
-package gov.ca.cwds.data;
+package gov.ca.cwds.data.std;
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ import org.hibernate.Transaction;
 
 import com.google.common.collect.ImmutableList;
 
+import gov.ca.cwds.data.DaoException;
 import gov.ca.cwds.data.persistence.PersistentObject;
 
 
@@ -21,7 +22,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * 
  * @author CWDS API Team
  */
-public interface IBatchBucketDao<T extends PersistentObject> {
+public interface BatchBucketDao<T extends PersistentObject> {
 
   /**
    * Getter for Hibernate session factory.

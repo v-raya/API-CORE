@@ -1,4 +1,4 @@
-package gov.ca.cwds.data;
+package gov.ca.cwds.data.std;
 
 /**
  * Interface defines naming standard methods for persistence classes that represent Address. Allows
@@ -11,7 +11,7 @@ package gov.ca.cwds.data;
  * 
  * @author CWDS API Team
  */
-public interface IAddressAwareWritable extends IAddressAware {
+public interface ApiAddressAwareWritable extends ApiAddressAware {
 
   /**
    * Setter for (first) street address

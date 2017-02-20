@@ -1,4 +1,4 @@
-package gov.ca.cwds.data;
+package gov.ca.cwds.data.std;
 
 import java.util.Date;
 
@@ -11,7 +11,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * 
  * @author CWDS API Team
  */
-public interface IPersonAware extends PersistentObject {
+public interface ApiPersonAware extends PersistentObject {
 
   /**
    * Getter for first name.

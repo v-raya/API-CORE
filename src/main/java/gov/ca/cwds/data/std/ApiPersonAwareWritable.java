@@ -1,4 +1,4 @@
-package gov.ca.cwds.data;
+package gov.ca.cwds.data.std;
 
 import java.util.Date;
 
@@ -13,7 +13,7 @@ import java.util.Date;
  * 
  * @author CWDS API Team
  */
-public interface IPersonAwareWritable extends IPersonAware {
+public interface ApiPersonAwareWritable extends ApiPersonAware {
 
   /**
    * Setter for first name
