@@ -1,7 +1,11 @@
 package gov.ca.cwds.data.es;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -57,7 +61,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
     /**
      * birth date
      */
-    BIRTH_DATE("date_of_birth", String.class, null),
+    BIRTH_DATE("date_of_birth", Date.class, null),
 
     /**
      * Social Security Number
@@ -154,11 +158,23 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
   /**
    * Relax strict constraints regarding unknown JSON properties, since API classes may change over
    * time, and not all classes emit version information in JSON.
+   * 
+   * <p>
+   * Bug #140710983: Bug: Person Search converts dates to GMT. Set default time zone to JVM default,
+   * which must match the database and Elasticsearch server.
+   * </p>
    */
   static {
     ObjectMapper mapper = new ObjectMapper();
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     mapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
+    final TimeZone tz = TimeZone.getTimeZone("PST");
+    final DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+    fmt.setTimeZone(tz);
+    mapper.setDateFormat(fmt);
+    mapper.getSerializationConfig().with(fmt);
+    mapper.setTimeZone(tz);
+    mapper.getSerializationConfig().with(tz);
     MAPPER = mapper;
   }
 
