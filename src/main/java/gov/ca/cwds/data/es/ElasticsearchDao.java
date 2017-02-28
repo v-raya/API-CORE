@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import java.io.Closeable;
 import java.io.IOException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.WriteConsistencyLevel;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.index.IndexRequest;
@@ -13,6 +14,7 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.client.Requests;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.LoggerFactory;
@@ -39,6 +41,7 @@ import com.google.inject.Inject;
  * @author CWDS API Team
  */
 public class ElasticsearchDao implements Closeable {
+
 
   private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ElasticsearchDao.class);
 
@@ -76,8 +79,9 @@ public class ElasticsearchDao implements Closeable {
    * @return whether the index exists
    */
   public boolean doesIndexExist(final String index) {
-    final IndexMetaData indexMetaData = getClient().admin().cluster()
-        .state(Requests.clusterStateRequest()).actionGet().getState().getMetaData().index(index);
+    final IndexMetaData indexMetaData =
+        getClient().admin().cluster().state(Requests.clusterStateRequest()).actionGet().getState()
+            .getMetaData().index(index);
     return indexMetaData != null;
   }
 
@@ -90,8 +94,9 @@ public class ElasticsearchDao implements Closeable {
    */
   public void createIndex(final String index, int numShards, int numReplicas) {
     LOGGER.warn("CREATE ES INDEX {} with {} shards and {} replicas", index, numShards, numReplicas);
-    final Settings indexSettings = Settings.settingsBuilder().put("number_of_shards", numShards)
-        .put("number_of_replicas", numReplicas).build();
+    final Settings indexSettings =
+        Settings.settingsBuilder().put("number_of_shards", numShards)
+            .put("number_of_replicas", numReplicas).build();
     CreateIndexRequest indexRequest = new CreateIndexRequest(index, indexSettings);
     getClient().admin().indices().create(indexRequest).actionGet();
   }
@@ -137,15 +142,16 @@ public class ElasticsearchDao implements Closeable {
     checkArgument(!Strings.isNullOrEmpty(documentType), "documentType cannot be Null or empty");
 
     LOGGER.info("ElasticSearchDao.createDocument(): " + document);
-    final IndexResponse response = client.prepareIndex(index, documentType, id)
-        .setConsistencyLevel(WriteConsistencyLevel.DEFAULT).setSource(document).execute()
-        .actionGet();
+    final IndexResponse response =
+        client.prepareIndex(index, documentType, id)
+            .setConsistencyLevel(WriteConsistencyLevel.DEFAULT).setSource(document).execute()
+            .actionGet();
 
     boolean created = response.isCreated();
     if (created) {
       LOGGER.info("Created document:\nindex: " + response.getIndex() + "\ndoc type: "
-          + response.getType() + "\nid: " + response.getId() + "\nversion: " + response.getVersion()
-          + "\ncreated: " + response.isCreated());
+          + response.getType() + "\nid: " + response.getId() + "\nversion: "
+          + response.getVersion() + "\ncreated: " + response.isCreated());
       LOGGER.info("Created document --- index:{}, doc type:{},id:{},version:{},created:{}",
           response.getIndex(), response.getType(), response.getId(), response.getVersion(),
           response.isCreated());
@@ -175,7 +181,7 @@ public class ElasticsearchDao implements Closeable {
 
   /**
    * The Intake Auto-complete for Person takes a single search term, used to query Elasticsearch
-   * Person documents on ALL relevant fields.
+   * Person documents on specific fields.
    * 
    * <p>
    * For example, search strings consisting of only digits could be phone numbers, social security
@@ -185,8 +191,8 @@ public class ElasticsearchDao implements Closeable {
    * 
    * <p>
    * This method calls Elasticsearch's <a href=
-   * "https://www.elastic.co/guide/en/elasticsearch/guide/current/_best_fields.html#dis-max-query">"dis
-   * max"</a> query feature.
+   * "https://www.elastic.co/guide/en/elasticsearch/guide/current/_best_fields.html#dis-max-query"
+   * >"dis max"</a> query feature.
    * </p>
    * 
    * @param searchTerm ES search String
@@ -197,10 +203,21 @@ public class ElasticsearchDao implements Closeable {
       throws ApiElasticSearchException {
     checkArgument(!Strings.isNullOrEmpty(searchTerm), "searchTerm cannot be Null or empty");
     final String s = searchTerm.trim().toLowerCase();
-
-    final SearchHit[] hits = client.prepareSearch(DEFAULT_PERSON_IDX_NM)
-        .setTypes(DEFAULT_PERSON_DOC_TYPE).setQuery(QueryBuilders.queryStringQuery(s)).setFrom(0)
-        .setSize(DEFAULT_MAX_RESULTS).setExplain(true).execute().actionGet().getHits().getHits();
+    String[] searchTerms = s.split("\\s+");
+    BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+    for (String term : searchTerms) {
+      term = term.trim();
+      if (StringUtils.isNotBlank(term)) {
+        queryBuilder = ElasticSearchQuery.getQueryFromTerm(term).buildQuery(queryBuilder, term);
+      }
+    }
+    if (!queryBuilder.hasClauses()) {
+      return new ElasticSearchPerson[0];
+    }
+    final SearchHit[] hits =
+        client.prepareSearch(DEFAULT_PERSON_IDX_NM).setTypes(DEFAULT_PERSON_DOC_TYPE)
+            .setQuery(queryBuilder).setFrom(0).setSize(DEFAULT_MAX_RESULTS).setExplain(true)
+            .execute().actionGet().getHits().getHits();
 
     final ElasticSearchPerson[] ret = new ElasticSearchPerson[hits.length];
     int counter = -1;
@@ -210,6 +227,7 @@ public class ElasticsearchDao implements Closeable {
 
     return ret;
   }
+
 
   // TODO : #139105623
   public IndexRequest prepareIndexRequest(String document, String id) {
