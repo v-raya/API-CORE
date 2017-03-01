@@ -8,6 +8,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.transform.DistinctRootEntityResultTransformer;
 
 import com.google.common.collect.ImmutableList;
 
@@ -74,8 +75,9 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
     try {
       txn = session.beginTransaction();
       // Compatible with both DB2 z/OS and Linux.
-      Query query = session.getNamedQuery(namedQueryName).setTimestamp("after",
-          new java.sql.Timestamp(datetime.getTime()));
+      Query query = session.getNamedQuery(namedQueryName)
+          .setResultTransformer(DistinctRootEntityResultTransformer.INSTANCE)
+          .setTimestamp("after", new java.sql.Timestamp(datetime.getTime()));
       ImmutableList.Builder<T> results = new ImmutableList.Builder<>();
       results.addAll(query.list());
       txn.commit();
