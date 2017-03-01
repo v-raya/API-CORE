@@ -40,8 +40,9 @@ public class ElasticSearchPersonTest {
     String ssn = null;
     String sourceType = null;
     String sourceJson = null;
+    String highlight = null;
     ElasticSearchPerson target = new ElasticSearchPerson(id, firstName, lastName, gender, birthDate,
-        ssn, sourceType, sourceJson);
+        ssn, sourceType, sourceJson, highlight);
     assertThat(target, notNullValue());
   }
 
@@ -102,7 +103,8 @@ public class ElasticSearchPersonTest {
     when(hit.getSource()).thenReturn(m);
 
     ElasticSearchPerson actual = ElasticSearchPerson.makeESPerson(hit);
-    ElasticSearchPerson expected = new ElasticSearchPerson("", "john", "", "", "", "", null, null);
+    ElasticSearchPerson expected =
+        new ElasticSearchPerson("", "john", "", "", "", "", null, null, "");
     assertThat(actual, is(equalTo(expected)));
   }
 

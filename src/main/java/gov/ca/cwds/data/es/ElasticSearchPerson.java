@@ -3,7 +3,7 @@ package gov.ca.cwds.data.es;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -12,12 +12,15 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.elasticsearch.common.text.Text;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.highlight.HighlightField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -46,12 +49,12 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
     /**
      * first name
      */
-    FIRST_NAME("first_name", String.class, ""),
+    FIRST_NAME("firstName", String.class, ""),
 
     /**
      * last name
      */
-    LAST_NAME("last_name", String.class, ""),
+    LAST_NAME("lastName", String.class, ""),
 
     /**
      * gender code (M,F,U)
@@ -61,7 +64,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
     /**
      * birth date
      */
-    BIRTH_DATE("date_of_birth", Date.class, null),
+    BIRTH_DATE("dateOfBirth", String.class, null),
 
     /**
      * Social Security Number
@@ -240,7 +243,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
             ElasticSearchPerson.<String>pullCol(m, ESColumn.BIRTH_DATE),
             ElasticSearchPerson.<String>pullCol(m, ESColumn.SSN),
             ElasticSearchPerson.<String>pullCol(m, ESColumn.TYPE),
-            ElasticSearchPerson.<String>pullCol(m, ESColumn.SOURCE));
+            ElasticSearchPerson.<String>pullCol(m, ESColumn.SOURCE), "");
 
     if (!StringUtils.isBlank(ret.getSourceType()) && !StringUtils.isBlank(ret.getSourceJson())) {
       try {
@@ -278,6 +281,38 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
             "ElasticSearch Person error: " + e.getMessage() + ", ES person id=" + ret.getId(), e);
       }
     }
+
+    // ElasticSearch Java API returns map of highlighted fields
+    final Map<String, HighlightField> h = hit.getHighlightFields();
+    Map<String, String> highlightValues = new HashMap<String, String>();
+    /*
+     * go through the HighlightFields returned from ES deal with fragments and create map
+     */
+    for (final Map.Entry<String, HighlightField> entry : h.entrySet()) {
+      String highlightValue = new String();
+      final HighlightField highlightField = entry.getValue();
+      final Text[] fragments = highlightField.fragments();
+      if (fragments != null && fragments.length != 0) {
+        final String[] texts = new String[fragments.length];
+        for (int i = 0; i < fragments.length; i++) {
+          texts[i] = fragments[i].string();
+        }
+        highlightValue = StringUtils.join(texts, "...");
+        highlightValues.put(highlightField.getName(), highlightValue);
+      }
+    }
+    /*
+     * update this ElasticSearchPerson property with the highlighted text from the map
+     */
+    String json = null;
+    try {
+      json = MAPPER.writeValueAsString(highlightValues);
+    } catch (JsonProcessingException e) {
+      throw new ServiceException("ElasticSearch Person error: Failed serialize map to JSON "
+          + ret.getSourceType() + ", ES person id=" + ret.getId(), e);
+    }
+    System.out.println("highlight JSON = " + json);
+    ret.setHighlightFields(json);
 
     return ret;
   }
@@ -334,6 +369,12 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
   private String sourceJson;
 
   /**
+   * highlight JSON returned from Elasticsearch with fragments flattened out
+   */
+  @JsonProperty("highlight")
+  private String highlightFields;
+
+  /**
    * Nested document Object, constructed by unmarshalling {@link #sourceJson} into an instance of
    * Class type {@link #sourceType}.
    */
@@ -351,9 +392,10 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
    * @param ssn SSN without dashes
    * @param sourceType fully-qualified, persistence-level source class
    * @param sourceJson raw, nested child document as JSON
+   * @param highlight highlightFields from Elasticsearch
    */
   public ElasticSearchPerson(String id, String firstName, String lastName, String gender,
-      String birthDate, String ssn, String sourceType, String sourceJson) {
+      String birthDate, String ssn, String sourceType, String sourceJson, String highlight) {
 
     // CMS/legacy String id:
     this.id = id;
@@ -367,7 +409,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
 
     // Nested document:
     this.sourceType = sourceType;
-    this.sourceJson = sourceJson;
+    this.highlightFields = highlight;
   }
 
   /**
@@ -566,6 +608,26 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
    */
   public void setSourceObj(Object sourceObj) {
     this.sourceObj = sourceObj;
+  }
+
+  /**
+   * Getter for highlighFields
+   * 
+   * @return JSON for highlightFields returned from Elasticsearch
+   */
+  public String getHighlightFields() {
+    return highlightFields;
+
+  }
+
+  /**
+   * Setter for highlightFields
+   * 
+   * @param highlightFields JSON of Elasticsearch highlightFields with flattened fragments
+   * 
+   */
+  public void setHighlightFields(String highlightFields) {
+    this.highlightFields = highlightFields;
   }
 
   @Override

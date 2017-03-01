@@ -79,9 +79,8 @@ public class ElasticsearchDao implements Closeable {
    * @return whether the index exists
    */
   public boolean doesIndexExist(final String index) {
-    final IndexMetaData indexMetaData =
-        getClient().admin().cluster().state(Requests.clusterStateRequest()).actionGet().getState()
-            .getMetaData().index(index);
+    final IndexMetaData indexMetaData = getClient().admin().cluster()
+        .state(Requests.clusterStateRequest()).actionGet().getState().getMetaData().index(index);
     return indexMetaData != null;
   }
 
@@ -94,9 +93,8 @@ public class ElasticsearchDao implements Closeable {
    */
   public void createIndex(final String index, int numShards, int numReplicas) {
     LOGGER.warn("CREATE ES INDEX {} with {} shards and {} replicas", index, numShards, numReplicas);
-    final Settings indexSettings =
-        Settings.settingsBuilder().put("number_of_shards", numShards)
-            .put("number_of_replicas", numReplicas).build();
+    final Settings indexSettings = Settings.settingsBuilder().put("number_of_shards", numShards)
+        .put("number_of_replicas", numReplicas).build();
     CreateIndexRequest indexRequest = new CreateIndexRequest(index, indexSettings);
     getClient().admin().indices().create(indexRequest).actionGet();
   }
@@ -142,16 +140,15 @@ public class ElasticsearchDao implements Closeable {
     checkArgument(!Strings.isNullOrEmpty(documentType), "documentType cannot be Null or empty");
 
     LOGGER.info("ElasticSearchDao.createDocument(): " + document);
-    final IndexResponse response =
-        client.prepareIndex(index, documentType, id)
-            .setConsistencyLevel(WriteConsistencyLevel.DEFAULT).setSource(document).execute()
-            .actionGet();
+    final IndexResponse response = client.prepareIndex(index, documentType, id)
+        .setConsistencyLevel(WriteConsistencyLevel.DEFAULT).setSource(document).execute()
+        .actionGet();
 
     boolean created = response.isCreated();
     if (created) {
       LOGGER.info("Created document:\nindex: " + response.getIndex() + "\ndoc type: "
-          + response.getType() + "\nid: " + response.getId() + "\nversion: "
-          + response.getVersion() + "\ncreated: " + response.isCreated());
+          + response.getType() + "\nid: " + response.getId() + "\nversion: " + response.getVersion()
+          + "\ncreated: " + response.isCreated());
       LOGGER.info("Created document --- index:{}, doc type:{},id:{},version:{},created:{}",
           response.getIndex(), response.getType(), response.getId(), response.getVersion(),
           response.isCreated());
@@ -206,10 +203,18 @@ public class ElasticsearchDao implements Closeable {
     if (!queryBuilder.hasClauses()) {
       return new ElasticSearchPerson[0];
     }
-    final SearchHit[] hits =
-        client.prepareSearch(DEFAULT_PERSON_IDX_NM).setTypes(DEFAULT_PERSON_DOC_TYPE)
-            .setQuery(queryBuilder).setFrom(0).setSize(DEFAULT_MAX_RESULTS).setExplain(true)
-            .execute().actionGet().getHits().getHits();
+    // final SearchHit[] hits =
+    // client.prepareSearch(DEFAULT_PERSON_IDX_NM).setTypes(DEFAULT_PERSON_DOC_TYPE)
+    // .setQuery(queryBuilder).setFrom(0).setSize(DEFAULT_MAX_RESULTS).setExplain(true)
+    // .execute().actionGet().getHits().getHits();
+
+    final SearchHit[] hits = client.prepareSearch(DEFAULT_PERSON_IDX_NM)
+        .setTypes(DEFAULT_PERSON_DOC_TYPE).setQuery(queryBuilder).setFrom(0)
+        .setSize(DEFAULT_MAX_RESULTS).addHighlightedField("firstName")
+        .addHighlightedField("lastName").addHighlightedField("gender")
+        .addHighlightedField("dateOfBirth").addHighlightedField("ssn")
+        .setHighlighterNumOfFragments(3).setHighlighterRequireFieldMatch(false)
+        .setHighlighterOrder("score").setExplain(true).execute().actionGet().getHits().getHits();
 
     final ElasticSearchPerson[] ret = new ElasticSearchPerson[hits.length];
     int counter = -1;
