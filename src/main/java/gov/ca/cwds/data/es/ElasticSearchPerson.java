@@ -235,6 +235,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
 
     // ElasticSearch Java API returns an overly broad type of Map<String,Object>.
     final Map<String, Object> m = hit.getSource();
+
     ElasticSearchPerson ret =
         new ElasticSearchPerson(ElasticSearchPerson.<String>pullCol(m, ESColumn.ID),
             ElasticSearchPerson.<String>pullCol(m, ESColumn.FIRST_NAME),
@@ -244,6 +245,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
             ElasticSearchPerson.<String>pullCol(m, ESColumn.SSN),
             ElasticSearchPerson.<String>pullCol(m, ESColumn.TYPE),
             ElasticSearchPerson.<String>pullCol(m, ESColumn.SOURCE), "");
+
 
     if (!StringUtils.isBlank(ret.getSourceType()) && !StringUtils.isBlank(ret.getSourceJson())) {
       try {

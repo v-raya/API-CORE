@@ -107,6 +107,7 @@ public final class ElasticsearchDaoTest {
     when(srb.setQuery(any(QueryBuilder.class))).thenReturn(srb);
     when(srb.addHighlightedField(any(String.class))).thenReturn(srb);
     when(srb.setHighlighterNumOfFragments(any(Integer.class))).thenReturn(srb);
+    when(srb.setHighlighterRequireFieldMatch(any(Boolean.class))).thenReturn(srb);
     when(listenSearch.actionGet()).thenReturn(respSearch);
     when(respSearch.getHits()).thenReturn(hits);
     when(hits.getHits()).thenReturn(new SearchHit[] {hit});

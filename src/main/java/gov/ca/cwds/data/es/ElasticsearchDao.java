@@ -203,11 +203,6 @@ public class ElasticsearchDao implements Closeable {
     if (!queryBuilder.hasClauses()) {
       return new ElasticSearchPerson[0];
     }
-    // final SearchHit[] hits =
-    // client.prepareSearch(DEFAULT_PERSON_IDX_NM).setTypes(DEFAULT_PERSON_DOC_TYPE)
-    // .setQuery(queryBuilder).setFrom(0).setSize(DEFAULT_MAX_RESULTS).setExplain(true)
-    // .execute().actionGet().getHits().getHits();
-
     final SearchHit[] hits = client.prepareSearch(DEFAULT_PERSON_IDX_NM)
         .setTypes(DEFAULT_PERSON_DOC_TYPE).setQuery(queryBuilder).setFrom(0)
         .setSize(DEFAULT_MAX_RESULTS).addHighlightedField("firstName")
@@ -245,6 +240,8 @@ public class ElasticsearchDao implements Closeable {
     return queryBuilder;
   }
 
+  // TODO : #139105623
+  @SuppressWarnings("javadoc")
   public IndexRequest prepareIndexRequest(String document, String id) {
     return client.prepareIndex(DEFAULT_PERSON_IDX_NM, DEFAULT_PERSON_DOC_TYPE, id)
         .setConsistencyLevel(WriteConsistencyLevel.DEFAULT).setSource(document).request();

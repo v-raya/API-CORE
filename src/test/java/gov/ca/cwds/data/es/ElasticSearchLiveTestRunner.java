@@ -48,6 +48,7 @@ public class ElasticSearchLiveTestRunner implements Runnable {
      * 
      * @param config The ES configuration
      */
+    @SuppressWarnings("javadoc")
     @Inject
     public AutoCloseElasticsearchDao(Client client) {
       super(client);

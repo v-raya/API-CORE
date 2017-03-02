@@ -8,6 +8,11 @@ import org.hamcrest.junit.ExpectedException;
 import org.junit.Rule;
 import org.junit.Test;
 
+/**
+ * @author CWDS API Team
+ *
+ */
+@SuppressWarnings("javadoc")
 public class AbstractBeanValidatorTest {
 
   @Rule
