@@ -202,15 +202,7 @@ public class ElasticsearchDao implements Closeable {
   public ElasticSearchPerson[] searchPerson(final String searchTerm)
       throws ApiElasticSearchException {
     checkArgument(!Strings.isNullOrEmpty(searchTerm), "searchTerm cannot be Null or empty");
-    final String s = searchTerm.trim().toLowerCase();
-    String[] searchTerms = s.split("\\s+");
-    BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
-    for (String term : searchTerms) {
-      term = term.trim();
-      if (StringUtils.isNotBlank(term)) {
-        queryBuilder = ElasticSearchQuery.getQueryFromTerm(term).buildQuery(queryBuilder, term);
-      }
-    }
+    BoolQueryBuilder queryBuilder = buildBoolQueryFromSearchTerms(searchTerm);
     if (!queryBuilder.hasClauses()) {
       return new ElasticSearchPerson[0];
     }
@@ -228,8 +220,26 @@ public class ElasticsearchDao implements Closeable {
     return ret;
   }
 
+  /**
+   * Builds an Elasticsearch compound query by combining multiple <b>should</b> clauses in a Bool
+   * Query
+   * 
+   * @param searchTerm the user entered values to search for separated by space
+   * @return the Elasticsearch compound query
+   */
+  public BoolQueryBuilder buildBoolQueryFromSearchTerms(String searchTerm) {
+    final String s = searchTerm.trim().toLowerCase();
+    String[] searchTerms = s.split("\\s+");
+    BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+    for (String term : searchTerms) {
+      term = term.trim();
+      if (StringUtils.isNotBlank(term)) {
+        queryBuilder = ElasticSearchQuery.getQueryFromTerm(term).buildQuery(queryBuilder, term);
+      }
+    }
+    return queryBuilder;
+  }
 
-  // TODO : #139105623
   public IndexRequest prepareIndexRequest(String document, String id) {
     return client.prepareIndex(DEFAULT_PERSON_IDX_NM, DEFAULT_PERSON_DOC_TYPE, id)
         .setConsistencyLevel(WriteConsistencyLevel.DEFAULT).setSource(document).request();
