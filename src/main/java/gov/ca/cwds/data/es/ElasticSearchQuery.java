@@ -35,7 +35,7 @@ public enum ElasticSearchQuery {
 
     @Override
     boolean match(String term) {
-      return term.matches("\\d+") || term.matches("\\d\\d\\d-\\d\\d-\\d\\d\\d\\d");
+      return term.matches("\\d{0,9}") || term.matches("\\d{3}-\\d{2}-\\d{4}");
     }
 
     @Override
@@ -53,7 +53,8 @@ public enum ElasticSearchQuery {
 
     @Override
     boolean match(String term) {
-      return term.matches("[0-9-/]+") && !term.matches("\\d\\d\\d-\\d\\d-\\d\\d\\d\\d");
+      return term.matches("[0-9-/]+") && !term.matches("\\d{3}-\\d{2}-\\d{4}")
+          && !term.matches("\\d{5,}");
     }
 
     @Override

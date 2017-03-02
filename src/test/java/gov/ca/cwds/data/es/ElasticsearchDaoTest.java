@@ -10,6 +10,8 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
+
 import org.elasticsearch.action.ListenableActionFuture;
 import org.elasticsearch.action.WriteConsistencyLevel;
 import org.elasticsearch.action.index.IndexRequestBuilder;
@@ -24,6 +26,7 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -45,6 +48,8 @@ public final class ElasticsearchDaoTest {
 
   @Mock
   private Client client;
+
+  private ElasticsearchDao target;
 
   @InjectMocks
   @Spy
@@ -86,6 +91,7 @@ public final class ElasticsearchDaoTest {
     mock(TransportClient.class);
     mock(SearchRequestBuilder.class);
     MockitoAnnotations.initMocks(this);
+    target = new ElasticsearchDao(client);
 
     // To run queries against a fake transport and client, use this:
     // cut.setTransportAddress(DummyTransportAddress.INSTANCE);
@@ -111,6 +117,11 @@ public final class ElasticsearchDaoTest {
     when(irb.execute()).thenReturn(listenIndex);
     when(listenIndex.actionGet()).thenReturn(respIndex);
     when(respIndex.isCreated()).thenReturn(true);
+  }
+
+  @After
+  public void teardown() throws IOException {
+    target.close();
   }
 
   @Test
@@ -139,20 +150,16 @@ public final class ElasticsearchDaoTest {
 
   @Test
   public void instantiation() throws Exception {
-    ElasticsearchDao target = new ElasticsearchDao(client);
     assertThat(target, notNullValue());
   }
 
   @Test
   public void stop_Args$() throws Exception {
-    ElasticsearchDao target = new ElasticsearchDao(client);
     target.stop();
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void autoCompletePerson_Args$String_Throws$ApiElasticSearchException() throws Exception {
-
-    ElasticsearchDao target = new ElasticsearchDao(client);
     String searchTerm = null;
     target.searchPerson(searchTerm);
     fail("Expected exception was not thrown!");
@@ -161,17 +168,6 @@ public final class ElasticsearchDaoTest {
 
   @Test
   public void autoCompletePerson_Args$String_mock_client() throws Exception {
-    ElasticsearchDao target = new ElasticsearchDao(client);
-
-    // Search EVERY field!
-    // final SearchHit[] hits = client.prepareSearch(indexName).setTypes(documentType)
-    // .setQuery(QueryBuilders.queryStringQuery(s)).setFrom(0).setSize(DEFAULT_MAX_RESULTS)
-    // .setExplain(true).execute().actionGet().getHits().getHits();
-
-    // when(client.prepareSearch(any())).thenReturn(srb);
-    // when(srb.setTypes(any())).thenReturn(srb);
-    // target.setClient(client);
-
     String searchTerm = "junk";
     final ElasticSearchPerson[] actual = target.searchPerson(searchTerm);
     assertThat("nothing returned", actual != null);
@@ -179,12 +175,8 @@ public final class ElasticsearchDaoTest {
 
   @Test
   public void buildBoolQueryFromSearchTermsBuildsExpectedQuery() {
-    ElasticsearchDao target = new ElasticsearchDao(client);
     BoolQueryBuilder createdQuery =
-
-    target.buildBoolQueryFromSearchTerms("john smith 9/1/1990 123456789   ");
-
-
+        target.buildBoolQueryFromSearchTerms("john smith 9/1/1990 123456789   ");
     QueryBuilder expectedQuery =
         QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("firstName", "john"))
             .should(QueryBuilders.matchQuery("lastName", "john"))
@@ -193,16 +185,11 @@ public final class ElasticsearchDaoTest {
             .should(QueryBuilders.matchQuery("dateOfBirth", "1990-09-01"))
             .should(QueryBuilders.matchQuery("ssn", "123456789"));
     org.junit.Assert.assertThat(createdQuery.toString(), is(equalTo(expectedQuery.toString())));
-
-
   }
 
   @Test
   public void buildBoolQueryFromMalformedSearchTermsBuildsQueryWithNoClauses() {
-    ElasticsearchDao target = new ElasticsearchDao(client);
-    BoolQueryBuilder createdQuery =
-
-    target.buildBoolQueryFromSearchTerms("a-#4 df$ jk-/+ ");
+    BoolQueryBuilder createdQuery = target.buildBoolQueryFromSearchTerms("a-#4 df$ jk-/+ ");
     org.junit.Assert.assertThat(createdQuery.hasClauses(), is(equalTo(false)));
 
 
@@ -210,11 +197,7 @@ public final class ElasticsearchDaoTest {
 
   @Test
   public void buildBoolQueryFromMalformedDateBuildsQueryWithNoClauses() {
-    ElasticsearchDao target = new ElasticsearchDao(client);
-    BoolQueryBuilder createdQuery =
-
-    target.buildBoolQueryFromSearchTerms("9/8-9000");
-
+    BoolQueryBuilder createdQuery = target.buildBoolQueryFromSearchTerms("9/8-9000");
     org.junit.Assert.assertThat(createdQuery.hasClauses(), is(equalTo(false)));
 
 
@@ -222,44 +205,32 @@ public final class ElasticsearchDaoTest {
 
   @Test
   public void buildBoolQueryFromMalformedSsnBuildsQueryWithNoClauses() {
-    ElasticsearchDao target = new ElasticsearchDao(client);
-    BoolQueryBuilder createdQuery =
-
-    target.buildBoolQueryFromSearchTerms("111-1090/0905 ");
-
+    BoolQueryBuilder createdQuery = target.buildBoolQueryFromSearchTerms("111-1090/0905 ");
     org.junit.Assert.assertThat(createdQuery.hasClauses(), is(equalTo(false)));
-    org.junit.Assert.assertThat(createdQuery.hasClauses(), is(equalTo(false)));
+  }
 
+  @Test
+  public void buildBoolQueryFromMoreThanNineDigitSsnBuildsQueryWithNoClauses() {
+    BoolQueryBuilder createdQuery = target.buildBoolQueryFromSearchTerms("111223333111 ");
+    org.junit.Assert.assertThat(createdQuery.hasClauses(), is(equalTo(false)));
   }
 
   @Test
   public void buildBoolQueryFromTwoDateBuildsQueryWithTwoDateClauses() {
-    ElasticsearchDao target = new ElasticsearchDao(client);
-    BoolQueryBuilder createdQuery =
-
-    target.buildBoolQueryFromSearchTerms("1989-01-01 9/1/1990   ");
-
-
+    BoolQueryBuilder createdQuery = target.buildBoolQueryFromSearchTerms("1989-01-01 9/1/1990   ");
     QueryBuilder expectedQuery =
         QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("dateOfBirth", "1989-01-01"))
             .should(QueryBuilders.matchQuery("dateOfBirth", "1990-09-01"));
-
     org.junit.Assert.assertThat(createdQuery.toString(), is(equalTo(expectedQuery.toString())));
 
   }
 
   @Test
   public void buildBoolQueryFromTwoSsnBuildsQueryWithTwoSsnClauses() {
-    ElasticsearchDao target = new ElasticsearchDao(client);
-    BoolQueryBuilder createdQuery =
-
-    target.buildBoolQueryFromSearchTerms("123456789   111223333 ");
-
-
+    BoolQueryBuilder createdQuery = target.buildBoolQueryFromSearchTerms("123456789   111223333 ");
     QueryBuilder expectedQuery =
         QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("ssn", "123456789"))
             .should(QueryBuilders.matchQuery("ssn", "111223333"));
-
     org.junit.Assert.assertThat(createdQuery.toString(), is(equalTo(expectedQuery.toString())));
 
   }
