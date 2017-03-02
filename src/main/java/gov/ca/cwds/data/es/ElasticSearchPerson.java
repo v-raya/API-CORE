@@ -306,7 +306,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
     /*
      * update this ElasticSearchPerson property with the highlighted text
      */
-    String highLights = null;
+    String highLights = new String();
     try {
       highLights = MAPPER.writeValueAsString(highlightValues);
     } catch (JsonProcessingException e) {

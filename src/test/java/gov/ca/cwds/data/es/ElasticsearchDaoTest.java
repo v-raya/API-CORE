@@ -108,13 +108,14 @@ public final class ElasticsearchDaoTest {
     when(srb.addHighlightedField(any(String.class))).thenReturn(srb);
     when(srb.setHighlighterNumOfFragments(any(Integer.class))).thenReturn(srb);
     when(srb.setHighlighterRequireFieldMatch(any(Boolean.class))).thenReturn(srb);
+    when(srb.setHighlighterOrder(any(String.class))).thenReturn(srb);
     when(listenSearch.actionGet()).thenReturn(respSearch);
     when(respSearch.getHits()).thenReturn(hits);
     when(hits.getHits()).thenReturn(new SearchHit[] {hit});
 
     // Mock up document creation:
-    when(client.prepareIndex(any(String.class), any(String.class), any(String.class))).thenReturn(
-        irb);
+    when(client.prepareIndex(any(String.class), any(String.class), any(String.class)))
+        .thenReturn(irb);
     when(irb.setConsistencyLevel(WriteConsistencyLevel.DEFAULT)).thenReturn(irb);
     when(irb.setSource(any(String.class))).thenReturn(irb);
     when(irb.execute()).thenReturn(listenIndex);
