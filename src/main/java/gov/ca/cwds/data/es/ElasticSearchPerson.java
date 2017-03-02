@@ -304,17 +304,16 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
       }
     }
     /*
-     * update this ElasticSearchPerson property with the highlighted text from the map
+     * update this ElasticSearchPerson property with the highlighted text
      */
-    String json = null;
+    String highLights = null;
     try {
-      json = MAPPER.writeValueAsString(highlightValues);
+      highLights = MAPPER.writeValueAsString(highlightValues);
     } catch (JsonProcessingException e) {
       throw new ServiceException("ElasticSearch Person error: Failed serialize map to JSON "
           + ret.getSourceType() + ", ES person id=" + ret.getId(), e);
     }
-    System.out.println("highlight JSON = " + json);
-    ret.setHighlightFields(json);
+    ret.setHighlightFields(highLights);
 
     return ret;
   }
@@ -332,9 +331,16 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
   @JsonProperty("date_of_birth")
   private String dateOfBirth;
 
+  @JsonProperty("gender")
   private String gender;
+
+  @JsonProperty("ssn")
   private String ssn;
+
+  @JsonProperty("type")
   private String type;
+
+  @JsonProperty("source")
   private String source;
 
   /**
@@ -405,12 +411,16 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
     // Incorporate Person fields:
     this.firstName = trim(firstName);
     this.lastName = trim(lastName);
-    trim(gender);
-    trim(birthDate);
-    trim(ssn);
+    this.gender = trim(gender);
+    this.dateOfBirth = trim(birthDate);
+    this.ssn = trim(ssn);
+
+    this.sourceJson = trim(sourceJson);
 
     // Nested document:
     this.sourceType = sourceType;
+
+    // Elasticsearch HighlightFields
     this.highlightFields = highlight;
   }
 
@@ -459,6 +469,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
    * 
    * @return first name
    */
+  @JsonProperty("first_name")
   public String getFirstName() {
     return firstName;
   }
@@ -477,6 +488,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
    * 
    * @return last name
    */
+  @JsonProperty("last_name")
   public String getLastName() {
     return lastName;
   }
@@ -495,6 +507,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
    * 
    * @return gender
    */
+  @JsonProperty("gender")
   public String getGender() {
     return gender;
   }
@@ -513,6 +526,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
    * 
    * @return date of birth
    */
+  @JsonProperty("date_of_birth")
   public String getDateOfBirth() {
     return dateOfBirth;
   }
@@ -531,6 +545,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
    * 
    * @return SSN
    */
+  @JsonProperty("ssn")
   public String getSsn() {
     return ssn;
   }
@@ -549,6 +564,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
    * 
    * @return nested document type as an API class
    */
+  @JsonProperty("type")
   public String getType() {
     return type;
   }
@@ -567,6 +583,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
    * 
    * @return source object JSON
    */
+  @JsonProperty("source")
   public String getSource() {
     return source;
   }
@@ -617,6 +634,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
    * 
    * @return JSON for highlightFields returned from Elasticsearch
    */
+  @JsonProperty("highlightFields")
   public String getHighlightFields() {
     return highlightFields;
 
