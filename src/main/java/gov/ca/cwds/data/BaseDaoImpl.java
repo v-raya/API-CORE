@@ -8,7 +8,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.transform.DistinctRootEntityResultTransformer;
 
 import com.google.common.collect.ImmutableList;
 
@@ -76,7 +75,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
       txn = session.beginTransaction();
       // Compatible with both DB2 z/OS and Linux.
       Query query = session.getNamedQuery(namedQueryName)
-          .setResultTransformer(DistinctRootEntityResultTransformer.INSTANCE)
+          // .setResultTransformer(DistinctRootEntityResultTransformer.INSTANCE)
           .setTimestamp("after", new java.sql.Timestamp(datetime.getTime()));
       ImmutableList.Builder<T> results = new ImmutableList.Builder<>();
       results.addAll(query.list());
@@ -143,7 +142,11 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
       txn = session.beginTransaction();
       Query query = session.getNamedQuery(namedQueryName).setInteger("bucket_num", (int) bucketNum)
           .setInteger("total_buckets", (int) totalBuckets).setString("min_id", minId)
-          .setString("max_id", maxId);
+          .setString("max_id", maxId)
+      // .setResultTransformer(RootEntityResultTransformer.INSTANCE)
+      // .setResultTransformer(new AliasToBeanResultTransformer(getEntityClass()))
+      // .setResultTransformer(Transformers.TO_LIST)
+      ;
       ImmutableList.Builder<T> results = new ImmutableList.Builder<>();
       results.addAll(query.list());
       txn.commit();
