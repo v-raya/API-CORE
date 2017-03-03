@@ -1,0 +1,11 @@
+{
+	"first_name" : "Mike",
+	"last_name" : "Smith",
+	"date_of_birth" : "2000-10-31",
+	"gender" : "M",
+	"ssn" : "111122333",
+	"type" : "gov.ca.cwds.data.persistence.cms.rep.ReplicatedClient",
+	"source": null,
+	"id" : "1234567ABC",
+	"highlight" : "{\"firstName\":\"<em>mik</em>\",\"lastName\":\"<em>ith</em>\"}"
+	}

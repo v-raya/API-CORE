@@ -15,6 +15,11 @@ import gov.ca.cwds.rest.resources.ResourceParamValidator;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
+/**
+ * @author CWDS API Team
+ *
+ */
+@SuppressWarnings("javadoc")
 public class ElasticSearchAddressTest {
 
   @Rule

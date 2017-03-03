@@ -17,6 +17,11 @@ import gov.ca.cwds.rest.api.domain.es.ESSearchRequest.QueryType;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
+/**
+ * @author CWDS API Team
+ *
+ */
+@SuppressWarnings("javadoc")
 public class ESRequestTest {
 
   private ESSearchRequest cut; // "class under test"

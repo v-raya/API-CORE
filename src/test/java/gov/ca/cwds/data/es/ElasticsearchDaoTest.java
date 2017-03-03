@@ -41,6 +41,7 @@ import org.mockito.Spy;
  * 
  * @author CWDS API Team
  */
+@SuppressWarnings("javadoc")
 public final class ElasticsearchDaoTest {
 
   private static final String TEST_INDEXNAME = "people";

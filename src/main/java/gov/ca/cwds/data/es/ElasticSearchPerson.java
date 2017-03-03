@@ -360,7 +360,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
    * Original, fully-qualified, persistence-level source class, such
    * "gov.ca.cwds.rest.api.persistence.cms.OtherClientName".
    */
-  @JsonProperty("source_type")
+  @JsonIgnore
   private String sourceType;
 
   /**
@@ -372,7 +372,6 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
    * create a child Object and not the Object itself.
    * </p>
    */
-  @JsonProperty("source")
   @JsonIgnore
   private String sourceJson;
 
@@ -387,6 +386,13 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
    * Class type {@link #sourceType}.
    */
   private transient Object sourceObj;
+
+  /**
+   * default constructor for Jackson
+   */
+  public ElasticSearchPerson() {
+
+  }
 
   /**
    * Overload constructor, used to accommodate nested document members {@link #sourceType} and
@@ -415,13 +421,16 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
     this.dateOfBirth = trim(birthDate);
     this.ssn = trim(ssn);
 
-    this.sourceJson = trim(sourceJson);
+    // Nested document
+    // this.sourceJson = trim(sourceJson);
+    this.source = trim(sourceJson);
 
-    // Nested document:
-    this.sourceType = sourceType;
+    // class name
+    // this.sourceType = trim(sourceType);
+    this.type = trim(sourceType);
 
     // Elasticsearch HighlightFields
-    this.highlightFields = highlight;
+    this.highlightFields = trim(highlight);
   }
 
   /**
@@ -430,6 +439,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
    * @return the id
    */
   @Override
+  @JsonProperty
   public String getId() {
     return id;
   }
@@ -439,6 +449,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
    * 
    * @return the fully-qualified source persistence class
    */
+  @JsonIgnore
   public String getSourceType() {
     return sourceType;
   }
@@ -634,7 +645,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
    * 
    * @return JSON for highlightFields returned from Elasticsearch
    */
-  @JsonProperty("highlightFields")
+  @JsonProperty("highlight")
   public String getHighlightFields() {
     return highlightFields;
 
