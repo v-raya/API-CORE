@@ -21,15 +21,15 @@ public enum ElasticSearchQuery {
 
     @Override
     BoolQueryBuilder buildQuery(BoolQueryBuilder queryBuilder, String term) {
-      queryBuilder.should(QueryBuilders.matchQuery("firstName", term));
-      queryBuilder.should(QueryBuilders.matchQuery("lastName", term));
+      queryBuilder.should(QueryBuilders.prefixQuery("firstName", term));
+      queryBuilder.should(QueryBuilders.prefixQuery("lastName", term));
       return queryBuilder;
     }
 
   },
 
   /**
-   * Social Security Number
+   * Social Security Number and Birth Year
    */
   SSN {
 
@@ -40,11 +40,17 @@ public enum ElasticSearchQuery {
 
     @Override
     BoolQueryBuilder buildQuery(BoolQueryBuilder queryBuilder, String term) {
-      queryBuilder.should(QueryBuilders.matchQuery("ssn", term.replace("-", "")));
+      queryBuilder.should(QueryBuilders.prefixQuery("ssn", term.replace("-", "")));
+      if (term.length() == 4) {
+        String startDate = term + "-01-01";
+        String endDate = term + "-12-31";
+        queryBuilder.should(QueryBuilders.rangeQuery(DATE_OF_BIRTH).gte(startDate).lte(endDate));
+      }
       return queryBuilder;
     }
 
   },
+
 
   /**
    * Date Of Birth
@@ -54,7 +60,7 @@ public enum ElasticSearchQuery {
     @Override
     boolean match(String term) {
       return term.matches("[0-9-/]+") && !term.matches("\\d{3}-\\d{2}-\\d{4}")
-          && !term.matches("\\d{5,}");
+          && !term.matches("\\d{5,}") || term.matches("\\{1998}");
     }
 
     @Override
@@ -65,14 +71,14 @@ public enum ElasticSearchQuery {
           Date dob = df.parse(term);
           if (dob != null) {
             DateFormat esdf = new SimpleDateFormat("yyyy-mm-dd");
-            queryBuilder.should(QueryBuilders.matchQuery("dateOfBirth", esdf.format(dob)));
+            queryBuilder.should(QueryBuilders.matchQuery(DATE_OF_BIRTH, esdf.format(dob)));
             return queryBuilder;
           }
         } catch (Exception e) {
           return queryBuilder;
         }
       }
-      queryBuilder.should(QueryBuilders.matchQuery("dateOfBirth", term));
+      queryBuilder.should(QueryBuilders.matchQuery(DATE_OF_BIRTH, term));
       return queryBuilder;
     }
 
@@ -94,6 +100,8 @@ public enum ElasticSearchQuery {
     }
 
   };
+
+  private static final String DATE_OF_BIRTH = "dateOfBirth";
 
   public static ElasticSearchQuery getQueryFromTerm(String term) {
     for (ElasticSearchQuery query : values()) {

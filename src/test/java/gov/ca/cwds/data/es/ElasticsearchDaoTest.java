@@ -181,12 +181,12 @@ public final class ElasticsearchDaoTest {
     BoolQueryBuilder createdQuery =
         target.buildBoolQueryFromSearchTerms("john smith 9/1/1990 123456789   ");
     QueryBuilder expectedQuery =
-        QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("firstName", "john"))
-            .should(QueryBuilders.matchQuery("lastName", "john"))
-            .should(QueryBuilders.matchQuery("firstName", "smith"))
-            .should(QueryBuilders.matchQuery("lastName", "smith"))
+        QueryBuilders.boolQuery().should(QueryBuilders.prefixQuery("firstName", "john"))
+            .should(QueryBuilders.prefixQuery("lastName", "john"))
+            .should(QueryBuilders.prefixQuery("firstName", "smith"))
+            .should(QueryBuilders.prefixQuery("lastName", "smith"))
             .should(QueryBuilders.matchQuery("dateOfBirth", "1990-09-01"))
-            .should(QueryBuilders.matchQuery("ssn", "123456789"));
+            .should(QueryBuilders.prefixQuery("ssn", "123456789"));
     org.junit.Assert.assertThat(createdQuery.toString(), is(equalTo(expectedQuery.toString())));
   }
 
@@ -232,8 +232,19 @@ public final class ElasticsearchDaoTest {
   public void buildBoolQueryFromTwoSsnBuildsQueryWithTwoSsnClauses() {
     BoolQueryBuilder createdQuery = target.buildBoolQueryFromSearchTerms("123456789   111223333 ");
     QueryBuilder expectedQuery =
-        QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("ssn", "123456789"))
-            .should(QueryBuilders.matchQuery("ssn", "111223333"));
+        QueryBuilders.boolQuery().should(QueryBuilders.prefixQuery("ssn", "123456789"))
+            .should(QueryBuilders.prefixQuery("ssn", "111223333"));
+    org.junit.Assert.assertThat(createdQuery.toString(), is(equalTo(expectedQuery.toString())));
+
+  }
+
+  @Test
+  public void buildBoolQueryWithSsnAndBirthYear() {
+    BoolQueryBuilder createdQuery = target.buildBoolQueryFromSearchTerms("123456789   1998 ");
+    QueryBuilder expectedQuery =
+        QueryBuilders.boolQuery().should(QueryBuilders.prefixQuery("ssn", "123456789"))
+            .should(QueryBuilders.prefixQuery("ssn", "1998"))
+            .should(QueryBuilders.rangeQuery("dateOfBirth").gte("1998-01-01").lte("1998-12-31"));
     org.junit.Assert.assertThat(createdQuery.toString(), is(equalTo(expectedQuery.toString())));
 
   }
