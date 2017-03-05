@@ -18,6 +18,11 @@ import io.dropwizard.jackson.JsonSnakeCase;
 @JsonSnakeCase
 public final class ESSearchRequest extends DomainObject implements Request {
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   // ================
   // ENUMS:
   // ================
