@@ -2,6 +2,9 @@ package gov.ca.cwds.data.es;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
 import java.util.Date;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -65,21 +68,30 @@ public enum ElasticSearchQuery {
 
     @Override
     BoolQueryBuilder buildQuery(BoolQueryBuilder queryBuilder, String term) {
-      if (term.contains("/")) {
+      String formattedDate = term;
+      if (formattedDate.contains("/")) {
         try {
           DateFormat df = new SimpleDateFormat("mm/dd/yyyy");
-          Date dob = df.parse(term);
+          Date dob = df.parse(formattedDate);
           if (dob != null) {
             DateFormat esdf = new SimpleDateFormat("yyyy-mm-dd");
-            queryBuilder.should(QueryBuilders.matchQuery(DATE_OF_BIRTH, esdf.format(dob)));
-            return queryBuilder;
+            esdf.setLenient(false);
+            formattedDate = esdf.format(dob);
           }
         } catch (Exception e) {
           return queryBuilder;
         }
       }
-      queryBuilder.should(QueryBuilders.matchQuery(DATE_OF_BIRTH, term));
-      return queryBuilder;
+      try {
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
+        formatter = formatter.withResolverStyle(ResolverStyle.STRICT);
+        LocalDate dateOfBirth = LocalDate.parse(formattedDate, formatter);
+        formattedDate = dateOfBirth.format(formatter);
+        queryBuilder.should(QueryBuilders.matchQuery(DATE_OF_BIRTH, formattedDate));
+        return queryBuilder;
+      } catch (Exception e) {
+        return queryBuilder;
+      }
     }
 
   },
