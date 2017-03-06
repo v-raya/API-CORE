@@ -422,12 +422,12 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
     this.ssn = trim(ssn);
 
     // Nested document
-    // this.sourceJson = trim(sourceJson);
     this.source = trim(sourceJson);
 
     // class name
     // this.sourceType = trim(sourceType);
     this.type = trim(sourceType);
+    this.setSourceObj(this.getType());
 
     // Elasticsearch HighlightFields
     this.highlightFields = trim(highlight);
