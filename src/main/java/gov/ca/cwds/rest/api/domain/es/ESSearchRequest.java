@@ -13,6 +13,11 @@ import io.dropwizard.jackson.JsonSnakeCase;
 /**
  * Domain API {@link Request} class for ElasticSearch.
  * 
+ * <p>
+ * This class was originally designed to generate nested boolean queries in ElasticSearch 1.x, but
+ * ElasticSearch 2.x prefers MUST/MUST_NOT/SHOULD over AND/OR/NOT and even deprecated the latter.
+ * </p>
+ * 
  * @author CWDS API Team
  */
 @JsonSnakeCase
@@ -28,8 +33,6 @@ public final class ESSearchRequest extends DomainObject implements Request {
   // ================
 
   /**
-   * ElasticSearch 2.x prefers MUST/MUST_NOT/SHOULD over AND/OR/NOT. In fact, ElasticSearch has
-   * deprecated the latter operation classes.
    * 
    * <p>
    * ORIGINAL IDEA: nest logical operations like a traditional database WHERE clause, but ES now
@@ -39,6 +42,7 @@ public final class ESSearchRequest extends DomainObject implements Request {
    * @author CWDS API Team
    */
   public enum LogicalOperation {
+
     /**
      * Legacy ElasticSearch operation, boolean AND.
      */
@@ -268,7 +272,6 @@ public final class ESSearchRequest extends DomainObject implements Request {
         return false;
       return true;
     }
-
   }
 
   /**
