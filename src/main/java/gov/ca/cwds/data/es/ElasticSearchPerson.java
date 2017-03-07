@@ -465,6 +465,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
     return sourceJson;
   }
 
+  @JsonIgnore
   /**
    * See comments on {@link #sourceObj}.
    * 
@@ -675,5 +676,6 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
   public final boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
+
 
 }

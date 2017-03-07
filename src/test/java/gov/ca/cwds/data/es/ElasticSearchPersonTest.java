@@ -2,9 +2,9 @@ package gov.ca.cwds.data.es;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -209,12 +209,29 @@ public class ElasticSearchPersonTest {
   }
 
   @Test
-  public void testSerializeSuccess() throws Exception {
+  public void testSerializeToJSON() throws Exception {
 
     ElasticSearchPerson expected = validElasticSearchPerson();
 
     ElasticSearchPerson actual = new ElasticSearchPerson(id, firstName, lastName, gender, birthDate,
         ssn, sourceType, sourceJson, highlight);
+
+    assertThat(actual, is(equalTo(expected)));
+
+  }
+
+  @Test
+  public void testDeSerializationFromJSON() throws IOException, JsonMappingException, IOException {
+
+    ElasticSearchPerson esp = new ElasticSearchPerson(id, firstName, lastName, gender, birthDate,
+        ssn, sourceType, sourceJson, highlight);
+
+    final String actual = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(esp);
+
+    ElasticSearchPerson expectedEsp = MAPPER.readValue(
+        fixture("fixtures/data/es/validElasticSearchPerson.json"), ElasticSearchPerson.class);
+
+    final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(expectedEsp);
 
     assertThat(actual, is(equalTo(expected)));
 

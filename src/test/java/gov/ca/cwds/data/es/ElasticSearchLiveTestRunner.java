@@ -21,6 +21,7 @@ import io.dropwizard.configuration.ConfigurationSourceProvider;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.FileConfigurationSourceProvider;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
+import io.dropwizard.jackson.Jackson;
 
 /**
  * Runs live tests of ElasticSearch modules.
@@ -39,6 +40,8 @@ public class ElasticSearchLiveTestRunner implements Runnable {
   private static final Logger LOGGER = LogManager.getLogger(ElasticSearchLiveTestRunner.class);
 
   private static final ObjectMapper YAML_MAPPER = new ObjectMapper(new YAMLFactory());
+
+  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   private static final class AutoCloseElasticsearchDao extends ElasticsearchDao
       implements AutoCloseable {
@@ -114,6 +117,8 @@ public class ElasticSearchLiveTestRunner implements Runnable {
       final ElasticSearchPerson[] hits = dao.searchPerson(this.searchTerm);
       if (hits != null && hits.length > 0) {
         for (ElasticSearchPerson hit : hits) {
+          String esp = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(hit);
+
           LOGGER.info(hit);
         }
       }
