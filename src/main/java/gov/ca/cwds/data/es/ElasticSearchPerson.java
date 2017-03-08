@@ -136,12 +136,16 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
   // PRIVATE STATIC:
   // =========================
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchPerson.class);
+
+  // =========================
+  // PRIVATE STATIC:
+  // =========================
+
   /**
    * Base serialization version. Increment by class version.
    */
   private static final long serialVersionUID = 1L;
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchPerson.class);
 
   /**
    * {@link ObjectMapper}, used to unmarshall JSON Strings from member {@link #sourceJson} into
@@ -425,9 +429,11 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
     this.source = trim(sourceJson);
 
     // class name
-    // this.sourceType = trim(sourceType);
     this.type = trim(sourceType);
-    this.setSourceObj(this.getType());
+
+    // Nested document:
+    this.sourceType = sourceType;
+    this.sourceJson = sourceJson;
 
     // Elasticsearch HighlightFields
     this.highlightFields = trim(highlight);

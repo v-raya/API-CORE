@@ -211,10 +211,13 @@ public class ElasticSearchPersonTest {
   @Test
   public void testSerializeToJSON() throws Exception {
 
-    ElasticSearchPerson expected = validElasticSearchPerson();
+    ElasticSearchPerson ex = validElasticSearchPerson();
+    final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(ex);
 
-    ElasticSearchPerson actual = new ElasticSearchPerson(id, firstName, lastName, gender, birthDate,
+    ElasticSearchPerson esp = new ElasticSearchPerson(id, firstName, lastName, gender, birthDate,
         ssn, sourceType, sourceJson, highlight);
+
+    final String actual = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(esp);
 
     assertThat(actual, is(equalTo(expected)));
 
@@ -236,6 +239,26 @@ public class ElasticSearchPersonTest {
     assertThat(actual, is(equalTo(expected)));
 
   }
+
+  // @Test
+  // public void testIsApiPersonAware() throws Exception, JsonMappingException, IOException {
+  //
+  // ElasticSearchPerson esp = new ElasticSearchPerson(id, firstName, lastName, gender, birthDate,
+  // ssn, sourceType, sourceJson, highlight);
+  //
+  //
+  // Object obj = esp.getSourceObj();
+  //
+  // System.out.println(obj.toString());
+  // Object sourceObj = esp.getSourceObj();
+  //
+  // if (esp.getSourceObj() instanceof ApiPersonAware) {
+  // System.out.println("is person aware " + sourceObj.getClass().getName());
+  // } else {
+  // System.out.println("is NOT person aware " + sourceObj.getClass().getName());
+  // }
+  //
+  // }
 
   private ElasticSearchPerson validElasticSearchPerson()
       throws JsonParseException, JsonMappingException, IOException {
