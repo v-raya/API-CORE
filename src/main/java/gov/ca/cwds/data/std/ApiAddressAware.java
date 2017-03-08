@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.std;
 
+import java.io.Serializable;
+
 /**
  * Interface defines naming standard methods for persistence classes that represent an Address.
  * Allows DAO and service classes to operate on Address-aware objects without knowledge of their
@@ -7,7 +9,7 @@ package gov.ca.cwds.data.std;
  * 
  * @author CWDS API Team
  */
-public interface ApiAddressAware {
+public interface ApiAddressAware extends Serializable {
 
   /**
    * Getter for (first) street address.
