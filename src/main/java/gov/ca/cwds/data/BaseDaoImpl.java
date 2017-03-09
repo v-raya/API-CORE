@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -156,68 +155,12 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
     }
   }
 
-  public List<T> partitionedBucketResultSet(ApiResultSetHandler<T> handler, long bucketNum,
-      long totalBuckets, String minId, String maxId) {
-    final String namedQueryName = getEntityClass().getName() + ".findPartitionedBuckets";
-    Session session = getSessionFactory().getCurrentSession();
-
-    Transaction txn = null;
-    try {
-      txn = session.beginTransaction();
-      Query query = session.getNamedQuery(namedQueryName).setInteger("bucket_num", (int) bucketNum)
-          .setInteger("total_buckets", (int) totalBuckets).setString("min_id", minId)
-          .setString("max_id", maxId);
-      ImmutableList.Builder<T> results = new ImmutableList.Builder<>();
-      results.addAll(handler.handleResultSet(query.list()));
-      txn.commit();
-      return results.build();
-    } catch (HibernateException h) {
-      if (txn != null) {
-        txn.rollback();
-      }
-      throw new DaoException(h);
-    }
-  }
-
-  public List<T> partitionedBucketEntities(List<Class<?>> entities, long bucketNum,
-      long totalBuckets, String minId, String maxId) {
-    final String namedQueryName = getEntityClass().getName() + ".findPartitionedBuckets";
-    Session session = getSessionFactory().getCurrentSession();
-
-    Transaction txn = null;
-    try {
-      txn = session.beginTransaction();
-      SQLQuery query =
-          session.createSQLQuery(session.getNamedQuery(namedQueryName).getQueryString());
-      query.setInteger("bucket_num", (int) bucketNum)
-          .setInteger("total_buckets", (int) totalBuckets).setString("min_id", minId)
-          .setString("max_id", maxId);
-
-      for (Class<?> klazz : entities) {
-        query.addEntity(klazz);
-      }
-
-      // query.setResultTransformer(RootEntityResultTransformer.INSTANCE);
-      // .setResultTransformer(new AliasToBeanResultTransformer(getEntityClass()))
-      // .setResultTransformer(Transformers.TO_LIST)
-
-      ImmutableList.Builder<T> results = new ImmutableList.Builder<>();
-      results.addAll(query.list());
-      txn.commit();
-      return results.build();
-    } catch (HibernateException h) {
-      if (txn != null) {
-        txn.rollback();
-      }
-      throw new DaoException(h);
-    }
-  }
-
   /**
-   * Retrieve all records for batch processing for a single bucket. PostgreSQL queries would likely
-   * rely on the <a href="https://www.postgresql.org/docs/9.6/static/functions-window.html">NTILE
-   * analytic function</a>, whereas DB2 10.5, lacking modern analytics, would likely rely on nested
-   * or correlated queries. Note that DB2 doesn't even provide common pseudo-columns, like ROWNUM,
+   * Retrieve all records for batch processing for a single "bucket" (an arbitrary number of
+   * records). PostgreSQL queries would likely rely on the
+   * <a href="https://www.postgresql.org/docs/9.6/static/functions-window.html">NTILE analytic
+   * function</a>, whereas DB2 10.5, lacking modern analytics, would likely rely on nested or
+   * correlated queries. Note that DB2 doesn't even provide common pseudo-columns, like ROWNUM,
    * without enabling <a href=
    * "http://www.ibm.com/support/knowledgecenter/SSEPGG_10.5.0/com.ibm.db2.luw.apdv.porting.doc/doc/r0052867.html">"compatibility
    * vectors"</a> or writing a

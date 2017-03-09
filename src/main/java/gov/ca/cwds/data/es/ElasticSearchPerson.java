@@ -683,5 +683,4 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
-
 }
