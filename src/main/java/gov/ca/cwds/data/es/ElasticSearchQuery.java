@@ -10,6 +10,10 @@ import java.util.Date;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
+/**
+ * 
+ * @author CWDS API Team
+ */
 public enum ElasticSearchQuery {
 
   /**

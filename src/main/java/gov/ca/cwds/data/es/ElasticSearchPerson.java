@@ -3,7 +3,7 @@ package gov.ca.cwds.data.es;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -250,7 +250,6 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
             ElasticSearchPerson.<String>pullCol(m, ESColumn.TYPE),
             ElasticSearchPerson.<String>pullCol(m, ESColumn.SOURCE), "");
 
-
     if (!StringUtils.isBlank(ret.getSourceType()) && !StringUtils.isBlank(ret.getSourceJson())) {
       try {
         // TODO: STORY #137216799:
@@ -269,12 +268,10 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
           // Note: When running in an application server, the app server's root classloader may not
           // know of our domain/persistence class, but the current thread's classloader should.
 
-          // TODO: STORY #137216799: again.
-          final Object obj = MAPPER.readValue(json,
-              Class.forName(
-                  ret.getSourceType().replaceAll("gov\\.ca\\.cwds\\.rest\\.api\\.",
-                      "gov\\.ca\\.cwds\\.data\\."),
-                  false, Thread.currentThread().getContextClassLoader()));
+          // DELIVERED: STORY #137216799: again.
+          final Object obj = MAPPER.readValue(json, Class.forName(ret.getSourceType()
+          // .replaceAll("gov\\.ca\\.cwds\\.rest\\.api\\.", "gov\\.ca\\.cwds\\.data\\.")
+              , false, Thread.currentThread().getContextClassLoader()));
 
           ret.sourceObj = obj;
         }
@@ -290,27 +287,27 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
 
     // ElasticSearch Java API returns map of highlighted fields
     final Map<String, HighlightField> h = hit.getHighlightFields();
-    Map<String, String> highlightValues = new HashMap<String, String>();
-    /*
-     * go through the HighlightFields returned from ES deal with fragments and create map
-     */
+    final Map<String, String> highlightValues = new LinkedHashMap<>();
+
+    // Go through the HighlightFields returned from ES deal with fragments and create map.
     for (final Map.Entry<String, HighlightField> entry : h.entrySet()) {
-      String highlightValue = new String();
+      String highlightValue = "";
       final HighlightField highlightField = entry.getValue();
       final Text[] fragments = highlightField.fragments();
       if (fragments != null && fragments.length != 0) {
         final String[] texts = new String[fragments.length];
         for (int i = 0; i < fragments.length; i++) {
-          texts[i] = fragments[i].string();
+          texts[i] = fragments[i].string().trim();
         }
         highlightValue = StringUtils.join(texts, "...");
         highlightValues.put(highlightField.getName(), highlightValue);
       }
     }
-    /*
-     * update this ElasticSearchPerson property with the highlighted text
-     */
-    String highLights = new String();
+
+    LOGGER.info("highlightValues={}", highlightValues);
+
+    // Update this ElasticSearchPerson property with the highlighted text.
+    String highLights = "";
     try {
       highLights = MAPPER.writeValueAsString(highlightValues);
     } catch (JsonProcessingException e) {
@@ -318,6 +315,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
           + ret.getSourceType() + ", ES person id=" + ret.getId(), e);
     }
     ret.setHighlightFields(highLights);
+    ret.setHighlights(highlightValues);
 
     return ret;
   }
@@ -346,6 +344,8 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
 
   @JsonProperty("source")
   private String source;
+
+  private Map<String, String> highlights = new LinkedHashMap<>();
 
   /**
    * The identifier is String in legacy (CMS, mainframe DB2) but Long in new style (NS, PostGreSQL).
@@ -395,7 +395,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
    * default constructor for Jackson
    */
   public ElasticSearchPerson() {
-
+    // Default, no-op.
   }
 
   /**
@@ -471,13 +471,13 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
     return sourceJson;
   }
 
-  @JsonIgnore
   /**
    * See comments on {@link #sourceObj}.
    * 
    * @return an instance of the Object represented by {@link #sourceType} and {@link #sourceJson}.
    * @see #sourceType
    */
+  @JsonIgnore
   public Object getSourceObj() {
     return sourceObj;
   }
@@ -606,6 +606,11 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
     return source;
   }
 
+  /**
+   * Setter for source.
+   * 
+   * @param source JSON source
+   */
   public void setSource(String source) {
     this.source = source;
   }
@@ -655,7 +660,6 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
   @JsonProperty("highlight")
   public String getHighlightFields() {
     return highlightFields;
-
   }
 
   /**
@@ -681,6 +685,14 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
   @Override
   public final boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
+  public Map<String, String> getHighlights() {
+    return highlights;
+  }
+
+  public void setHighlights(Map<String, String> highlights) {
+    this.highlights = highlights;
   }
 
 }

@@ -10,6 +10,7 @@ import org.elasticsearch.action.WriteConsistencyLevel;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.Requests;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
@@ -41,7 +42,6 @@ import com.google.inject.Inject;
  * @author CWDS API Team
  */
 public class ElasticsearchDao implements Closeable {
-
 
   private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ElasticsearchDao.class);
 
@@ -203,13 +203,17 @@ public class ElasticsearchDao implements Closeable {
     if (!queryBuilder.hasClauses()) {
       return new ElasticSearchPerson[0];
     }
-    final SearchHit[] hits = client.prepareSearch(DEFAULT_PERSON_IDX_NM)
-        .setTypes(DEFAULT_PERSON_DOC_TYPE).setQuery(queryBuilder).setFrom(0)
-        .setSize(DEFAULT_MAX_RESULTS).addHighlightedField("firstName")
-        .addHighlightedField("lastName").addHighlightedField("gender")
-        .addHighlightedField("dateOfBirth").addHighlightedField("ssn")
-        .setHighlighterNumOfFragments(3).setHighlighterRequireFieldMatch(false)
-        .setHighlighterOrder("score").setExplain(true).execute().actionGet().getHits().getHits();
+
+    SearchRequestBuilder builder =
+        client.prepareSearch(DEFAULT_PERSON_IDX_NM).setTypes(DEFAULT_PERSON_DOC_TYPE)
+            .setQuery(queryBuilder).setFrom(0).setSize(DEFAULT_MAX_RESULTS)
+            .addHighlightedField("firstName").addHighlightedField("lastName")
+            .addHighlightedField("gender").addHighlightedField("dateOfBirth")
+            .addHighlightedField("ssn").setHighlighterNumOfFragments(3)
+            .setHighlighterRequireFieldMatch(false).setHighlighterOrder("score").setExplain(true);
+
+    LOGGER.warn("ES QUERY: {}", builder);
+    final SearchHit[] hits = builder.execute().actionGet().getHits().getHits();
 
     final ElasticSearchPerson[] ret = new ElasticSearchPerson[hits.length];
     int counter = -1;
