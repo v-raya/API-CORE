@@ -7,6 +7,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
+import javax.persistence.Transient;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -25,6 +27,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.data.ITypedIdentifier;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
@@ -300,7 +303,8 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
           texts[i] = fragments[i].string().trim();
         }
         highlightValue = StringUtils.join(texts, "...");
-        highlightValues.put(highlightField.getName(), highlightValue);
+        highlightValues.put(DomainChef.camelCaseToLowerUnderscore(highlightField.getName()),
+            highlightValue);
       }
     }
 
@@ -345,6 +349,7 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
   @JsonProperty("source")
   private String source;
 
+  @Transient
   private Map<String, String> highlights = new LinkedHashMap<>();
 
   /**

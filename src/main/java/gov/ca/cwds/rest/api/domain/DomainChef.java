@@ -70,6 +70,16 @@ public class DomainChef {
   }
 
   /**
+   * Transform camel case String to JSON suitable key.
+   * 
+   * @param in incoming String to standardize
+   * @return purified, JSON suitable key name
+   */
+  public static String camelCaseToLowerUnderscore(String in) {
+    return in.replaceAll("([A-Z][a-z]+)", "$1_").toLowerCase().replaceAll("_$", "");
+  }
+
+  /**
    * @param cookedBoolean "Y" or "N"
    * @return Boolean true, false, or null
    */
