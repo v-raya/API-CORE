@@ -70,13 +70,15 @@ public class DomainChef {
   }
 
   /**
-   * Transform camel case String to JSON suitable key.
+   * Transform camel case key/name to JSON suitable key.
    * 
    * @param in incoming String to standardize
    * @return purified, JSON suitable key name
    */
   public static String camelCaseToLowerUnderscore(String in) {
-    return in.replaceAll("([A-Z][a-z]+)", "$1_").toLowerCase().replaceAll("_$", "");
+    final String regex = "([A-Z])";
+    final String replacement = "_$1";
+    return in.replaceAll(regex, replacement).toLowerCase().replaceAll("_$", "");
   }
 
   /**
