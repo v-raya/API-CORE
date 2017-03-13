@@ -12,6 +12,13 @@ import java.io.Serializable;
 public interface ApiAddressAware extends Serializable {
 
   /**
+   * Getter address identifier (primary key), if any.
+   * 
+   * @return address identifier (primary key), if any
+   */
+  String getAddressId();
+
+  /**
    * Getter for (first) street address.
    * 
    * @return street address

@@ -35,8 +35,8 @@ public interface ApiPhoneAware {
     Home, // NOSONAR
 
     /**
-     * Unknown phone type. Maybe one of those "no contract" deals from Walmart. Voice over IP. Who
-     * knows.
+     * Unknown phone type. Maybe one of those "no contract" deals from Walmart. Voice over IP. Home
+     * line listed as emergency contact. Can be anything.
      */
     Other // NOSONAR
   }
@@ -61,5 +61,12 @@ public interface ApiPhoneAware {
    * @return phone number type
    */
   PhoneType getPhoneType();
+
+  /**
+   * Getter for phone identifier (primary key).
+   * 
+   * @return phone identifier (primary key), if any
+   */
+  String getPhoneId();
 
 }

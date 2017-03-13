@@ -178,6 +178,8 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
     ObjectMapper mapper = new ObjectMapper();
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     mapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
+
+    // The mainframe DB2 database runs in PST, and so we must too.
     final TimeZone tz = TimeZone.getTimeZone("PST");
     final DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
     fmt.setTimeZone(tz);
@@ -308,8 +310,6 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
       }
     }
 
-    LOGGER.info("highlightValues={}", highlightValues);
-
     // Update this ElasticSearchPerson property with the highlighted text.
     String highLights = "";
     try {
@@ -320,7 +320,6 @@ public class ElasticSearchPerson implements Serializable, ITypedIdentifier<Strin
     }
     ret.setHighlightFields(highLights);
     ret.setHighlights(highlightValues);
-
     return ret;
   }
 
