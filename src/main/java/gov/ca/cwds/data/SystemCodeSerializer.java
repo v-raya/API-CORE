@@ -17,7 +17,7 @@ import gov.ca.cwds.data.persistence.cms.ISystemCodeCache;
  * {@link ISystemCodeCache}.
  * 
  * @author CWDS API Team
- * @see ISysCodeAware
+ * @see ApiSysCodeAware
  * @see CmsSystemCodeSerializer
  */
 @Documented

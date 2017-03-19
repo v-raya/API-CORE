@@ -5,7 +5,7 @@ package gov.ca.cwds.data;
  * 
  * @author CWDS API Team
  */
-public interface ISysCodeAware {
+public interface ApiSysCodeAware {
 
   /**
    * Getter for the unique SYS_ID code.
@@ -25,8 +25,8 @@ public interface ISysCodeAware {
    * A system code aware bean can look up related types by system id.
    * 
    * @param sysId the system id code
-   * @return another or same {@link ISysCodeAware}
+   * @return another or same {@link ApiSysCodeAware}
    */
-  ISysCodeAware lookupBySysId(int sysId);
+  ApiSysCodeAware lookupBySysId(int sysId);
 
 }
