@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.data.persistence.cms.CmsSystemCodeCacheService;
 import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
-import gov.ca.cwds.data.persistence.cms.ISystemCodeCache;
-import gov.ca.cwds.data.persistence.cms.ISystemCodeDao;
+import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
+import gov.ca.cwds.data.persistence.cms.ApiSystemCodeDao;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
@@ -20,13 +20,13 @@ public class CmsSystemCodeCacheLoader {
 
   public static void main(String[] args) {
     try {
-      ISystemCodeDao dao = new SystemCodeDaoFileImpl();
+      ApiSystemCodeDao dao = new SystemCodeDaoFileImpl();
 
       if (args.length > 1) {
         // dao = new FileSystemCodeDao(new File(args[0]));
       }
 
-      ISystemCodeCache cache = new CmsSystemCodeCacheService(dao);
+      ApiSystemCodeCache cache = new CmsSystemCodeCacheService(dao);
 
     } catch (ServiceException e) {
       LOGGER.error("FATAL ERROR", e);

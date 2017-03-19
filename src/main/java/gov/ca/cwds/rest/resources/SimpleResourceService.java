@@ -17,7 +17,7 @@ import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
- * Standard implementation of interface {@link ISimpleResourceService} for non-CRUD services.
+ * Standard implementation of interface {@link ApiSimpleResourceService} for non-CRUD services.
  * Incoming API requests delegate work to the service layer. All Non-CRUD {@link Resource} classes
  * should extend this class or nest delegate members.
  * 
@@ -26,10 +26,10 @@ import gov.ca.cwds.rest.services.ServiceException;
  * @param <P> resPonse type
  * 
  * @author CWDS API Team
- * @see ISimpleResourceService
+ * @see ApiSimpleResourceService
  */
 public abstract class SimpleResourceService<K extends Serializable, Q extends Request, P extends gov.ca.cwds.rest.api.Response>
-    implements ISimpleResourceService<K, Q, P> {
+    implements ApiSimpleResourceService<K, Q, P> {
 
   /**
    * Logger for this class.

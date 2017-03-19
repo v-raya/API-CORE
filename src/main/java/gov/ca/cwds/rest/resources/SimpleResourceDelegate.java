@@ -21,7 +21,7 @@ import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
- * Standard implementation of interface {@link ISimpleResourceDelegate}. Incoming API requests
+ * Standard implementation of interface {@link ApiSimpleResourceDelegate}. Incoming API requests
  * delegate work to the service layer. All Non-CRUD {@link Resource} classes should extend this
  * class or nest delegate members.
  * 
@@ -42,15 +42,15 @@ import gov.ca.cwds.rest.services.ServiceException;
  * @param <S> Service type
  * 
  * @author CWDS API Team
- * @see ISimpleResourceService
+ * @see ApiSimpleResourceService
  */
-public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P extends gov.ca.cwds.rest.api.Response, S extends ISimpleResourceService<K, Q, P>>
-    implements ISimpleResourceDelegate<K, Q, P, S> {
+public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P extends gov.ca.cwds.rest.api.Response, S extends ApiSimpleResourceService<K, Q, P>>
+    implements ApiSimpleResourceDelegate<K, Q, P, S> {
 
   /**
    * Logger for this class.
    */
-  private static final Logger LOGGER = LoggerFactory.getLogger(ISimpleResourceDelegate.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ApiSimpleResourceDelegate.class);
 
   /**
    * The wrapped CRUD service.
@@ -60,7 +60,7 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
   /**
    * Constructor
    * 
-   * @param service The {@link ISimpleResourceService} for this resource.
+   * @param service The {@link ApiSimpleResourceService} for this resource.
    */
   @Inject
   public SimpleResourceDelegate(S service) {
@@ -70,7 +70,7 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
   /**
    * <p>
    * Handle API request by delegating to service method,
-   * {@link ISimpleResourceService#handle(Request)} and wrapping resulting API
+   * {@link ApiSimpleResourceService#handle(Request)} and wrapping resulting API
    * {@link gov.ca.cwds.rest.api.Response} with a Java standard web service response.
    * </p>
    * 
@@ -81,7 +81,7 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
    * @param req input CWDS API {@link Request}
    * @return web service {@link Response}
    * @throws ApiException if service call fails, catch and throw an ApiException
-   * @see ISimpleResourceService#handle(Request)
+   * @see ApiSimpleResourceService#handle(Request)
    */
   @Override
   public final Response handle(@Valid @NotNull Q req) throws ApiException {
@@ -99,7 +99,7 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
 
   /**
    * Find object by its key by delegating to wrapped service method,
-   * {@link ISimpleResourceService#find(Serializable)}.
+   * {@link ApiSimpleResourceService#find(Serializable)}.
    * 
    * <p>
    * See method {@link #handleException(Exception)} for the list of possible HTTP Response Codes.
@@ -124,13 +124,13 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
   }
 
   /**
-   * Exposes the wrapped {@link ISimpleResourceService}.
+   * Exposes the wrapped {@link ApiSimpleResourceService}.
    * 
    * <p>
    * Usually not needed, but the interface is exposed for convenience.
    * </p>
    * 
-   * @return the underlying, wrapped {@link ISimpleResourceService}
+   * @return the underlying, wrapped {@link ApiSimpleResourceService}
    */
   @Override
   public final S getService() {
@@ -179,7 +179,7 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
   /**
    * <p>
    * Handle API request by delegating to service method,
-   * {@link ISimpleResourceService#handle(Request)} and wrapping resulting API
+   * {@link ApiSimpleResourceService#handle(Request)} and wrapping resulting API
    * {@link gov.ca.cwds.rest.api.Response} with a Java standard web service response.
    * </p>
    * 
@@ -204,8 +204,8 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
    * 
    * @param e {@link ServiceException} to inspect
    * @return web service {@link Response}
-   * @see ISimpleResourceService#handle(Request)
-   * @see ISimpleResourceService#find(Serializable)
+   * @see ApiSimpleResourceService#handle(Request)
+   * @see ApiSimpleResourceService#find(Serializable)
    */
   protected Response handleException(Exception e) throws ServiceException {
     Response ret;

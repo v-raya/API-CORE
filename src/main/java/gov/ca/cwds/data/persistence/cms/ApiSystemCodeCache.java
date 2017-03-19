@@ -15,7 +15,7 @@ import java.util.List;
  * @author CWDS API Team
  * @see CmsSystemCodeCacheService
  */
-public interface ISystemCodeCache {
+public interface ApiSystemCodeCache {
 
   /**
    * Core method. Look up (translate) an incoming system id.

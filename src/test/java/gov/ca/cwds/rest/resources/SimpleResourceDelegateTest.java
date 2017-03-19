@@ -74,12 +74,12 @@ public class SimpleResourceDelegateTest {
   }
 
   private static class TestSimpleResourceDelegateImpl extends
-      SimpleResourceDelegate<String, TestApiRequest, TestApiResponse, ISimpleResourceService<String, TestApiRequest, TestApiResponse>>
+      SimpleResourceDelegate<String, TestApiRequest, TestApiResponse, ApiSimpleResourceService<String, TestApiRequest, TestApiResponse>>
       implements
-      ISimpleResourceDelegate<String, TestApiRequest, TestApiResponse, ISimpleResourceService<String, TestApiRequest, TestApiResponse>> {
+      ApiSimpleResourceDelegate<String, TestApiRequest, TestApiResponse, ApiSimpleResourceService<String, TestApiRequest, TestApiResponse>> {
 
     public TestSimpleResourceDelegateImpl(
-        ISimpleResourceService<String, TestApiRequest, TestApiResponse> service) {
+        ApiSimpleResourceService<String, TestApiRequest, TestApiResponse> service) {
       super(service);
     }
 
@@ -96,7 +96,7 @@ public class SimpleResourceDelegateTest {
   }
 
   @Mock
-  private ISimpleResourceService<String, TestApiRequest, TestApiResponse> svc;
+  private ApiSimpleResourceService<String, TestApiRequest, TestApiResponse> svc;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -142,7 +142,7 @@ public class SimpleResourceDelegateTest {
 
   @Test
   public void getService_A$() throws Exception {
-    assertTrue((target.getService() instanceof ISimpleResourceService<?, ?, ?>));
+    assertTrue((target.getService() instanceof ApiSimpleResourceService<?, ?, ?>));
   }
 
   @Test

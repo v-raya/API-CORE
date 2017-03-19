@@ -23,13 +23,13 @@ import gov.ca.cwds.rest.api.Request;
  * @param <S> Service type
  * 
  * @author CWDS API Team
- * @see ISimpleResourceService
+ * @see ApiSimpleResourceService
  */
-public interface ISimpleResourceDelegate<K extends Serializable, Q extends Request, P extends gov.ca.cwds.rest.api.Response, S extends ISimpleResourceService<K, Q, P>> {
+public interface ApiSimpleResourceDelegate<K extends Serializable, Q extends Request, P extends gov.ca.cwds.rest.api.Response, S extends ApiSimpleResourceService<K, Q, P>> {
 
   /**
    * Find object by its key by delegating to wrapped service method,
-   * {@link ISimpleResourceService#find(Serializable)}.
+   * {@link ApiSimpleResourceService#find(Serializable)}.
    * 
    * @param key key to search for
    * @return The API {@link Response}
@@ -38,20 +38,20 @@ public interface ISimpleResourceDelegate<K extends Serializable, Q extends Reque
   Response find(@NotNull K key) throws ApiException;
 
   /**
-   * Exposes the wrapped {@link ISimpleResourceService}.
+   * Exposes the wrapped {@link ApiSimpleResourceService}.
    * 
    * <p>
    * Usually you don't need to call this, but the interface is exposed for convenience.
    * </p>
    * 
-   * @return the underlying, wrapped {@link ISimpleResourceService}
+   * @return the underlying, wrapped {@link ApiSimpleResourceService}
    */
   S getService();
 
   /**
    * <p>
    * Handle API request by delegating to service method,
-   * {@link ISimpleResourceService#handle(Request)} and wrapping resulting API
+   * {@link ApiSimpleResourceService#handle(Request)} and wrapping resulting API
    * {@link gov.ca.cwds.rest.api.Response} with a Java standard web service response.
    * </p>
    * 
@@ -73,7 +73,7 @@ public interface ISimpleResourceDelegate<K extends Serializable, Q extends Reque
    * @param req input CWDS API {@link Request}
    * @return web service {@link Response}
    * @throws ApiException if service call fails, catch and throw an ApiException
-   * @see ISimpleResourceService#handle(Request)
+   * @see ApiSimpleResourceService#handle(Request)
    */
   Response handle(@NotNull Q req) throws ApiException;
 }

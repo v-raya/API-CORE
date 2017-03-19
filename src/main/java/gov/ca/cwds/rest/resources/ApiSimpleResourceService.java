@@ -16,7 +16,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * 
  * @author CWDS API Team
  */
-public interface ISimpleResourceService<K extends Serializable, Q extends Request, P extends Response> {
+public interface ApiSimpleResourceService<K extends Serializable, Q extends Request, P extends Response> {
 
   /**
    * Handle the incoming API{@link Request} and return an API {@link Response}.

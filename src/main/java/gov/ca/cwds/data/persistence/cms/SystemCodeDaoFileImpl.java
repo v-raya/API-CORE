@@ -13,11 +13,11 @@ import org.slf4j.LoggerFactory;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
- * DAO retrieves all codes for {@link ISystemCodeCache} from a tab-delimited file.
+ * DAO retrieves all codes for {@link ApiSystemCodeCache} from a tab-delimited file.
  * 
  * @author CWDS API Team
  */
-public class SystemCodeDaoFileImpl implements ISystemCodeDao {
+public class SystemCodeDaoFileImpl implements ApiSystemCodeDao {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SystemCodeDaoFileImpl.class);
 

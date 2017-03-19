@@ -137,7 +137,7 @@ public class SimpleResourceServiceTest {
   }
 
   @Mock
-  private ISimpleResourceService<String, TestApiRequest, TestApiResponse> svc;
+  private ApiSimpleResourceService<String, TestApiRequest, TestApiResponse> svc;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();

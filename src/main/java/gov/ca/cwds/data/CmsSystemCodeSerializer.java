@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.ser.ContextualSerializer;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.persistence.cms.CmsSystemCode;
-import gov.ca.cwds.data.persistence.cms.ISystemCodeCache;
+import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
 
 /**
  * Jackson JSON serializer automatically translates CMS system codes on the fly.
@@ -44,7 +44,7 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsSystemCodeSerializer.class);
 
-  private final ISystemCodeCache cache;
+  private final ApiSystemCodeCache cache;
   private final boolean showShortDescription;
   private final boolean showLogicalId;
   private final boolean showMetaCategory;
@@ -55,7 +55,7 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
    * @param cache syscode cache implementation.
    */
   @Inject
-  public CmsSystemCodeSerializer(ISystemCodeCache cache) {
+  public CmsSystemCodeSerializer(ApiSystemCodeCache cache) {
     this.cache = cache;
     this.showShortDescription = true;
     this.showLogicalId = false;
@@ -75,7 +75,7 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
    * @param showLogicalId show logical id, such as "CA" for California
    * @param showMetaCategory show the "meta", the system code category
    */
-  public CmsSystemCodeSerializer(ISystemCodeCache cache, boolean showShortDescription,
+  public CmsSystemCodeSerializer(ApiSystemCodeCache cache, boolean showShortDescription,
       boolean showLogicalId, boolean showMetaCategory) {
     this.cache = cache;
     this.showShortDescription = showShortDescription;
@@ -87,7 +87,7 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
    * Factory map for this contextual serializer. Saves thread-safe serializer instances by
    * combination of settings.
    * 
-   * @see #buildSerializer(ISystemCodeCache, boolean, boolean, boolean)
+   * @see #buildSerializer(ApiSystemCodeCache, boolean, boolean, boolean)
    */
   protected static Map<BitSet, CmsSystemCodeSerializer> serializerStyles =
       new ConcurrentHashMap<>();
@@ -101,7 +101,7 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
    *        constructor)
    * @return a BitSet that uniquely identifies serializer settings
    * 
-   * @see #buildSerializer(ISystemCodeCache, boolean, boolean, boolean)
+   * @see #buildSerializer(ApiSystemCodeCache, boolean, boolean, boolean)
    */
   protected static BitSet buildBits(boolean... flags) {
     BitSet bs = new BitSet();
@@ -126,7 +126,7 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
    * @param showMetaCategory show meta/category flag
    * @return syscode serializer with the given settings
    */
-  protected static CmsSystemCodeSerializer buildSerializer(ISystemCodeCache cache,
+  protected static CmsSystemCodeSerializer buildSerializer(ApiSystemCodeCache cache,
       boolean showShortDescription, boolean showLogicalId, boolean showMetaCategory) {
     final BitSet bs =
         buildBits(cache != null, showShortDescription, showLogicalId, showMetaCategory);

@@ -10,10 +10,10 @@ import java.lang.annotation.Target;
 
 import com.google.inject.BindingAnnotation;
 
-import gov.ca.cwds.data.persistence.cms.ISystemCodeCache;
+import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
 
 /**
- * Annotation for binding to the {@link ISystemCodeCache}.
+ * Annotation for binding to the {@link ApiSystemCodeCache}.
  * 
  * @author CWDS API Team
  */

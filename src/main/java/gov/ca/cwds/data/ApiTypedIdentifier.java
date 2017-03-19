@@ -16,7 +16,7 @@ import java.io.Serializable;
  * @author CWDS API Team
  * @param <T> the unique key type
  */
-public interface ITypedIdentifier<T extends Serializable> {
+public interface ApiTypedIdentifier<T extends Serializable> {
 
   /**
    * @return the unique key

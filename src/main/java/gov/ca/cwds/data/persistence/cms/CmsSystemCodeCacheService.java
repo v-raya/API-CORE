@@ -25,7 +25,7 @@ import gov.ca.cwds.rest.api.ApiException;
  * @author CWDS API Team
  */
 public class CmsSystemCodeCacheService
-    implements Serializable, ISystemCodeCache, Iterable<CmsSystemCode> {
+    implements Serializable, ApiSystemCodeCache, Iterable<CmsSystemCode> {
 
   /**
    * Base serialization version. Increment per class change.
@@ -34,7 +34,7 @@ public class CmsSystemCodeCacheService
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsSystemCodeCacheService.class);
 
-  private final transient ISystemCodeDao dao;
+  private final transient ApiSystemCodeDao dao;
   private final Map<Integer, CmsSystemCode> idxSysId;
   private final Map<String, List<CmsSystemCode>> idxMeta;
 
@@ -54,7 +54,7 @@ public class CmsSystemCodeCacheService
    * @param dao DAO to pull system codes.
    */
   @Inject
-  public CmsSystemCodeCacheService(ISystemCodeDao dao) {
+  public CmsSystemCodeCacheService(ApiSystemCodeDao dao) {
     this.dao = dao;
     final List<CmsSystemCode> codes = this.dao.getAllSystemCodes();
     Map<Integer, CmsSystemCode> anIdxSysId = new ConcurrentHashMap<>(codes.size());
@@ -80,7 +80,7 @@ public class CmsSystemCodeCacheService
   /**
    * {@inheritDoc}
    * 
-   * @see gov.ca.cwds.data.persistence.cms.ISystemCodeCache#lookup(int)
+   * @see gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache#lookup(int)
    */
   @Override
   public CmsSystemCode lookup(int sysId) {
@@ -90,7 +90,7 @@ public class CmsSystemCodeCacheService
   /**
    * {@inheritDoc}
    * 
-   * @see gov.ca.cwds.data.persistence.cms.ISystemCodeCache#getCategory(java.lang.String)
+   * @see gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache#getCategory(java.lang.String)
    */
   @Override
   public List<CmsSystemCode> getCategory(final String meta) {

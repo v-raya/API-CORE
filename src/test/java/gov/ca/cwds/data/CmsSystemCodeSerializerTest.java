@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import gov.ca.cwds.data.persistence.cms.CmsSystemCodeCacheService;
 import gov.ca.cwds.data.persistence.cms.CmsTestEntity;
-import gov.ca.cwds.data.persistence.cms.ISystemCodeCache;
+import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
 
 public class CmsSystemCodeSerializerTest {
@@ -47,7 +47,7 @@ public class CmsSystemCodeSerializerTest {
 
   @Test
   public void instantiation() throws Exception {
-    ISystemCodeCache cache = null;
+    ApiSystemCodeCache cache = null;
     CmsSystemCodeSerializer target = new CmsSystemCodeSerializer(cache);
     assertThat(target, notNullValue());
   }
@@ -99,7 +99,7 @@ public class CmsSystemCodeSerializerTest {
 
   @Test
   public void buildBits_Args$booleanArray() throws Exception {
-    ISystemCodeCache cache = null;
+    ApiSystemCodeCache cache = null;
     CmsSystemCodeSerializer target = new CmsSystemCodeSerializer(cache);
     // given
     boolean[] flags = new boolean[] {};
@@ -114,7 +114,7 @@ public class CmsSystemCodeSerializerTest {
 
   @Test
   public void buildSerializer_Args$ISystemCodeCache$boolean$boolean$boolean() throws Exception {
-    ISystemCodeCache cache = null;
+    ApiSystemCodeCache cache = null;
     CmsSystemCodeSerializer target = new CmsSystemCodeSerializer(cache);
     boolean showShortDescription = false;
     boolean showLogicalId = false;
@@ -128,7 +128,7 @@ public class CmsSystemCodeSerializerTest {
 
   @Test
   public void serialize_Args$Short$JsonGenerator$SerializerProvider() throws Exception {
-    ISystemCodeCache cache = null;
+    ApiSystemCodeCache cache = null;
     CmsSystemCodeSerializer target = new CmsSystemCodeSerializer(cache);
     // given
     Short s = null;

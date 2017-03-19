@@ -41,7 +41,7 @@ public class CmsSystemCodeCacheServiceTest {
 
   @Test
   public void lookup_Args$int() throws Exception {
-    ISystemCodeCache target = makeCache();
+    ApiSystemCodeCache target = makeCache();
     // given
     int sysId = 297;
     // e.g. : given(mocked.called()).willReturn(1);
@@ -54,7 +54,7 @@ public class CmsSystemCodeCacheServiceTest {
 
   @Test
   public void getCategory_Args$String() throws Exception {
-    ISystemCodeCache target = makeCache();
+    ApiSystemCodeCache target = makeCache();
     // given
     final String meta = "CLT_CONC";
     // e.g. : given(mocked.called()).willReturn(1);
@@ -70,7 +70,7 @@ public class CmsSystemCodeCacheServiceTest {
     // given
     // e.g. : given(mocked.called()).willReturn(1);
     // when
-    final ISystemCodeCache actual = makeCache();
+    final ApiSystemCodeCache actual = makeCache();
     final CmsSystemCode code = actual.lookup(280);
     // then
     // e.g. : verify(mocked).called();

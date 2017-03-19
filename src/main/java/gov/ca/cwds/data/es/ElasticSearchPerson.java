@@ -26,7 +26,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.data.ITypedIdentifier;
+import gov.ca.cwds.data.ApiTypedIdentifier;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.services.ServiceException;
 
@@ -36,7 +36,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * 
  * @author CWDS API Team
  */
-public class ElasticSearchPerson implements Serializable, ITypedIdentifier<String> {
+public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<String> {
 
   /**
    * ElasticSearch field names for document type people.person.
