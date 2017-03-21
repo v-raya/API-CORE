@@ -109,7 +109,7 @@ public class SimpleResourceServiceTest {
 
   }
 
-  private static interface ITestDao {
+  private static interface SimpleResourceServiceTestDao {
     TestApiResponse find(String key);
 
     TestApiResponse handle(TestApiRequest req);
@@ -118,9 +118,9 @@ public class SimpleResourceServiceTest {
   private static class TestSimpleResourceServiceImpl
       extends SimpleResourceService<String, TestApiRequest, TestApiResponse> {
 
-    private ITestDao dao;
+    private SimpleResourceServiceTestDao dao;
 
-    public TestSimpleResourceServiceImpl(ITestDao dao) {
+    public TestSimpleResourceServiceImpl(SimpleResourceServiceTestDao dao) {
       this.dao = dao;
     }
 
@@ -146,7 +146,7 @@ public class SimpleResourceServiceTest {
   private SessionFactory sf;
 
   @Mock
-  private ITestDao dao;
+  private SimpleResourceServiceTestDao dao;
 
   @InjectMocks
   @Spy

@@ -58,27 +58,37 @@ public class CmsSystemCodeDeserializer extends StdDeserializer<Short> {
     super(vc);
   }
 
+  /**
+   * Deserializes either "full" or "short" style JSON.
+   * 
+   * <h3>Full style:</h3> (sys_id, logical_id, description):
+   * 
+   * <pre>
+   "primaryLanguageType": {
+   "sys_id": 1274,
+   "short_description": "Spanish",
+   "logical_id": "01"
+   },
+   * </pre>
+   * 
+   * <h3>Short style:</h3>
+   * 
+   * <pre>
+   * "primaryLanguageType": 1274,
+   * </pre>
+   * 
+   */
   @Override
   public Short deserialize(final JsonParser jp, final DeserializationContext ctxt)
       throws IOException, JsonProcessingException {
     Short sysId = null;
     final JsonNode node = jp.getCodec().readTree(jp);
 
-    // Full style (sys_id, logical_id, description).
-    // EXAMPLE:
-    // "primaryLanguageType": {
-    // "sys_id": 1274,
-    // "short_description": "Spanish",
-    // "logical_id": "01"
-    // },
-
     final IntNode sn = (IntNode) node.get("sys_id");
     if (sn != null) {
       sysId = sn.numberValue().shortValue();
     } else if (node instanceof IntNode) {
-      // Try original style.
-      // EXAMPLE:
-      // "primaryLanguageType": 1274,
+      // Try short style.
       sysId = node.numberValue().shortValue();
     }
 
