@@ -39,7 +39,9 @@ public class ElasticSearchPersonTest {
 
   String id = "1234567ABC";
   String firstName = "Mike";
+  String middleName = "Lavell";
   String lastName = "Smith";
+  String nameSuffix = "jr";
   String gender = "M";
   String birthDate = "2000-10-31";
   String ssn = "111122333";
@@ -62,8 +64,8 @@ public class ElasticSearchPersonTest {
 
   @Test
   public void testConstuctorSuccess() throws Exception {
-    ElasticSearchPerson target = new ElasticSearchPerson(id, firstName, lastName, gender, birthDate,
-        ssn, sourceType, sourceJson, highlight);
+    ElasticSearchPerson target = new ElasticSearchPerson(id, firstName, lastName, middleName,
+        nameSuffix, gender, birthDate, ssn, sourceType, sourceJson, highlight, null, null, null);
     assertThat(target, notNullValue());
   }
 
@@ -193,8 +195,8 @@ public class ElasticSearchPersonTest {
 
     ElasticSearchPerson actual = ElasticSearchPerson.makeESPerson(hit);
     actual.setHighlightFields("{}");
-    ElasticSearchPerson expected =
-        new ElasticSearchPerson("", "john", "", "U", null, null, null, null, "{}");
+    ElasticSearchPerson expected = new ElasticSearchPerson("", "john", "", null, null, "U", null,
+        null, null, null, "{}", null, null, null);
     assertThat(actual, is(equalTo(expected)));
   }
 
@@ -202,22 +204,36 @@ public class ElasticSearchPersonTest {
   public void testSerializeToJSON() throws Exception {
     ElasticSearchPerson ex = validElasticSearchPerson();
     final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(ex);
-    ElasticSearchPerson esp = new ElasticSearchPerson(id, firstName, lastName, gender, birthDate,
-        ssn, sourceType, sourceJson, highlight);
+    ElasticSearchPerson esp = new ElasticSearchPerson(id, firstName, lastName, middleName,
+        nameSuffix, gender, birthDate, ssn, sourceType, sourceJson, highlight, null, null, null);
     final String actual = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(esp);
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void testDeSerializationFromJSON() throws IOException, JsonMappingException, IOException {
-    ElasticSearchPerson esp = new ElasticSearchPerson(id, firstName, lastName, gender, birthDate,
-        ssn, sourceType, sourceJson, highlight);
+    ElasticSearchPerson esp = new ElasticSearchPerson(id, firstName, lastName, middleName,
+        nameSuffix, gender, birthDate, ssn, sourceType, sourceJson, highlight, null, null, null);
 
     final String actual = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(esp);
     ElasticSearchPerson expectedEsp = MAPPER.readValue(
         fixture("fixtures/data/es/validElasticSearchPerson.json"), ElasticSearchPerson.class);
     final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(expectedEsp);
     assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void testDeSerializationFromJSONAddressPhone()
+      throws IOException, JsonMappingException, IOException {
+    ElasticSearchPerson esp = new ElasticSearchPerson(id, firstName, lastName, null, null, gender,
+        birthDate, ssn, sourceType, sourceJson, highlight, null, null, null);
+
+    final String actual = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(esp);
+    ElasticSearchPerson expectedEsp =
+        MAPPER.readValue(fixture("fixtures/data/es/expected.json"), ElasticSearchPerson.class);
+    final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(expectedEsp);
+    // assertThat(actual, is(equalTo(expected)));
+    System.out.println("hello world");
   }
 
   // @Test

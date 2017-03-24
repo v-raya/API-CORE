@@ -465,12 +465,12 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     ElasticSearchPerson ret =
         new ElasticSearchPerson(ElasticSearchPerson.<String>pullCol(m, ESColumn.ID),
             ElasticSearchPerson.<String>pullCol(m, ESColumn.FIRST_NAME),
-            ElasticSearchPerson.<String>pullCol(m, ESColumn.LAST_NAME),
+            ElasticSearchPerson.<String>pullCol(m, ESColumn.LAST_NAME), null, null,
             ElasticSearchPerson.<String>pullCol(m, ESColumn.GENDER),
             ElasticSearchPerson.<String>pullCol(m, ESColumn.BIRTH_DATE),
             ElasticSearchPerson.<String>pullCol(m, ESColumn.SSN),
             ElasticSearchPerson.<String>pullCol(m, ESColumn.TYPE),
-            ElasticSearchPerson.<String>pullCol(m, ESColumn.SOURCE), "");
+            ElasticSearchPerson.<String>pullCol(m, ESColumn.SOURCE), "", null, null, null);
 
     if (!StringUtils.isBlank(ret.getSourceType()) && !StringUtils.isBlank(ret.getSourceJson())) {
       try {
@@ -639,15 +639,22 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    * @param id identifier
    * @param firstName first name
    * @param lastName last name
+   * @param middleName TODO
+   * @param nameSuffix TODO
    * @param gender gender code
    * @param birthDate birth date
    * @param ssn SSN without dashes
    * @param sourceType fully-qualified, persistence-level source class
    * @param sourceJson raw, nested child document as JSON
    * @param highlight highlightFields from Elasticsearch
+   * @param addresses TODO
+   * @param phones TODO
+   * @param languages TODO
    */
-  public ElasticSearchPerson(String id, String firstName, String lastName, String gender,
-      String birthDate, String ssn, String sourceType, String sourceJson, String highlight) {
+  public ElasticSearchPerson(String id, String firstName, String lastName, String middleName,
+      String nameSuffix, String gender, String birthDate, String ssn, String sourceType,
+      String sourceJson, String highlight, List<ElasticSearchPersonAddress> addresses,
+      List<ElasticSearchPersonPhone> phones, List<String> languages) {
 
     // CMS/legacy String id:
     this.id = id;
@@ -655,9 +662,23 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     // Incorporate Person fields:
     this.firstName = trim(firstName);
     this.lastName = trim(lastName);
+    this.middleName = trim(middleName);
+    this.nameSuffix = trim(nameSuffix);
     this.gender = trim(gender);
     this.dateOfBirth = trim(birthDate);
     this.ssn = trim(ssn);
+
+    if (addresses != null && !addresses.isEmpty()) {
+      this.addresses = addresses;
+    }
+
+    if (phones != null && !phones.isEmpty()) {
+      this.phones = phones;
+    }
+
+    if (languages != null && !languages.isEmpty()) {
+      this.languages = languages;
+    }
 
     // Nested document
     this.source = trim(sourceJson);
