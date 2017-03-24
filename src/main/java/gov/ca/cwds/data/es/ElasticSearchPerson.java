@@ -22,6 +22,7 @@ import org.elasticsearch.search.highlight.HighlightField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -31,6 +32,9 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.data.ApiTypedIdentifier;
+import gov.ca.cwds.data.std.ApiAddressAwareWritable;
+import gov.ca.cwds.data.std.ApiPhoneAware;
+import gov.ca.cwds.data.std.ApiPhoneAwareWritable;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.services.ServiceException;
 
@@ -141,13 +145,13 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
   }
 
   /**
-   * Simplistic String fields representing ES person.address.
+   * Simplistic, all String representation of ES person.address.
    * 
    * @author CWDS API Team
    */
   @SuppressWarnings("serial")
   public static final class ElasticSearchPersonAddress
-      implements Serializable, ApiTypedIdentifier<String> {
+      implements Serializable, ApiTypedIdentifier<String>, ApiAddressAwareWritable {
 
     private String id;
 
@@ -180,6 +184,170 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @Override
     public void setId(String id) {
       this.id = id;
+    }
+
+    @Override
+    public String getStreetAddress() {
+      return streetAddress;
+    }
+
+    @Override
+    public void setStreetAddress(String streetAddress) {
+      this.streetAddress = streetAddress;
+    }
+
+    @Override
+    public String getCity() {
+      return city;
+    }
+
+    @Override
+    public void setCity(String city) {
+      this.city = city;
+    }
+
+    @Override
+    public String getState() {
+      return state;
+    }
+
+    @Override
+    public void setState(String state) {
+      this.state = state;
+    }
+
+    @Override
+    public String getCounty() {
+      return county;
+    }
+
+    @Override
+    public void setCounty(String county) {
+      this.county = county;
+    }
+
+    @Override
+    public String getZip() {
+      return zip;
+    }
+
+    @Override
+    public void setZip(String zip) {
+      this.zip = zip;
+    }
+
+    public String getType() {
+      return type;
+    }
+
+    public void setType(String type) {
+      this.type = type;
+    }
+
+    @Override
+    public String getAddressId() {
+      return this.id;
+    }
+
+  }
+
+  /**
+   * Simplistic, all String representation of ES person.phone_numbers.
+   * 
+   * @author CWDS API Team
+   */
+  public static final class ElasticSearchPersonPhone
+      implements Serializable, ApiTypedIdentifier<String>, ApiPhoneAwareWritable {
+
+    /**
+     * Default
+     */
+    private static final long serialVersionUID = 1L;
+
+    private String id;
+
+    @JsonProperty("number")
+    @JsonInclude(JsonInclude.Include.ALWAYS)
+    private String phoneNumber;
+
+    /**
+     * Not specified by Intake Person Auto-complete YAML.
+     */
+    @JsonIgnore
+    private String phoneNumberExtension;
+
+    @JsonProperty("type")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private ApiPhoneAware.PhoneType phoneType;
+
+    /**
+     * Default constructor.
+     */
+    public ElasticSearchPersonPhone() {
+      // Default, no-op.
+    }
+
+    /**
+     * Construct a phone from a phone-aware object.
+     * 
+     * @param other another phone object
+     */
+    public ElasticSearchPersonPhone(ApiPhoneAware other) {
+      if (other != null) {
+        setPhoneNumber(other.getPhoneNumber());
+        setPhoneType(other.getPhoneType());
+      }
+    }
+
+    @JsonIgnore
+    @Override
+    public String getId() {
+      return id;
+    }
+
+    @Override
+    public void setId(String id) {
+      this.id = id;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getPhoneNumber() {
+      return this.phoneNumber;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getPhoneNumberExtension() {
+      return this.phoneNumberExtension;
+    }
+
+    @Override
+    @JsonIgnore
+    public PhoneType getPhoneType() {
+      return this.phoneType;
+    }
+
+    @Override
+    public void setPhoneNumber(String phoneNumber) {
+      this.phoneNumber = phoneNumber;
+    }
+
+    @JsonIgnore
+    @Override
+    public void getPhoneNumberExtension(String phoneNumberExtension) {
+      this.phoneNumberExtension = phoneNumberExtension;
+    }
+
+    @Override
+    public void setPhoneType(PhoneType phoneType) {
+      this.phoneType = phoneType;
+    }
+
+    @JsonIgnore
+    @Override
+    public String getPhoneId() {
+      return this.id;
     }
 
   }
@@ -379,8 +547,14 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
   @JsonProperty("first_name")
   private String firstName;
 
+  @JsonProperty("middle_name")
+  private String middleName;
+
   @JsonProperty("last_name")
   private String lastName;
+
+  @JsonProperty("name_suffix")
+  private String nameSuffix;
 
   @JsonProperty("date_of_birth")
   private String dateOfBirth;
@@ -398,6 +572,10 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
   private String source;
 
   private List<ElasticSearchPersonAddress> addresses = new ArrayList<>();
+
+  @JsonProperty("phone_numbers")
+  private List<ElasticSearchPersonPhone> phones = new ArrayList<>();
+
   private List<String> languages = new ArrayList<>();
 
   @Transient
@@ -749,6 +927,46 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
 
   public void setHighlights(Map<String, String> highlights) {
     this.highlights = highlights;
+  }
+
+  public List<ElasticSearchPersonAddress> getAddresses() {
+    return addresses;
+  }
+
+  public void setAddresses(List<ElasticSearchPersonAddress> addresses) {
+    this.addresses = addresses;
+  }
+
+  public List<ElasticSearchPersonPhone> getPhones() {
+    return phones;
+  }
+
+  public void setPhones(List<ElasticSearchPersonPhone> phones) {
+    this.phones = phones;
+  }
+
+  public List<String> getLanguages() {
+    return languages;
+  }
+
+  public void setLanguages(List<String> languages) {
+    this.languages = languages;
+  }
+
+  public String getMiddleName() {
+    return middleName;
+  }
+
+  public void setMiddleName(String middleName) {
+    this.middleName = middleName;
+  }
+
+  public String getNameSuffix() {
+    return nameSuffix;
+  }
+
+  public void setNameSuffix(String nameSuffix) {
+    this.nameSuffix = nameSuffix;
   }
 
 }
