@@ -118,8 +118,7 @@ public class ElasticSearchLiveTestRunner implements Runnable {
       if (hits != null && hits.length > 0) {
         for (ElasticSearchPerson hit : hits) {
           String esp = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(hit);
-
-          LOGGER.info(hit);
+          LOGGER.info(esp);
         }
       }
 

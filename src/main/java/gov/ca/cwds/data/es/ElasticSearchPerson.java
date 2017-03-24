@@ -3,7 +3,9 @@ package gov.ca.cwds.data.es;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -159,7 +161,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    * it, such as ignoring unknown JSON properties, applies to ALL target class types.
    * </p>
    */
-  private static final ObjectMapper MAPPER;
+  public static final ObjectMapper MAPPER;
 
   // =========================
   // STATIC INITIALIZATION:
@@ -347,6 +349,8 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
 
   @JsonProperty("source")
   private String source;
+
+  private List<String> languages = new ArrayList<>();
 
   @Transient
   private Map<String, String> highlights = new LinkedHashMap<>();
