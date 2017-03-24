@@ -25,7 +25,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.data.es.ElasticSearchPerson.ESColumn;
-import io.dropwizard.jackson.Jackson;
 
 /**
  * NOTE: cannot define all test cases for CMS persistence classes found in CWDS API because they are
@@ -36,7 +35,7 @@ import io.dropwizard.jackson.Jackson;
 @SuppressWarnings("javadoc")
 public class ElasticSearchPersonTest {
 
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
+  private static final ObjectMapper MAPPER = ElasticSearchPerson.MAPPER;
 
   String id = "1234567ABC";
   String firstName = "Mike";
@@ -53,9 +52,7 @@ public class ElasticSearchPersonTest {
 
   @Before
   public void setUp() throws Exception {
-
     Map<String, HighlightField> highlights = new HashMap();
-
   }
 
   @Test
@@ -67,7 +64,6 @@ public class ElasticSearchPersonTest {
   public void testConstuctorSuccess() throws Exception {
     ElasticSearchPerson target = new ElasticSearchPerson(id, firstName, lastName, gender, birthDate,
         ssn, sourceType, sourceJson, highlight);
-
     assertThat(target, notNullValue());
   }
 
@@ -92,7 +88,6 @@ public class ElasticSearchPersonTest {
     Object actual = ElasticSearchPerson.<String>pullCol(m, ESColumn.LAST_NAME);
     Object expected = value;
     assertThat(actual, is(equalTo(expected)));
-
   }
 
   @Test
@@ -104,7 +99,6 @@ public class ElasticSearchPersonTest {
     Object actual = ElasticSearchPerson.<String>pullCol(m, ESColumn.GENDER);
     Object expected = value;
     assertThat(actual, is(equalTo(expected)));
-
   }
 
   @Test
@@ -116,7 +110,6 @@ public class ElasticSearchPersonTest {
     Object actual = ElasticSearchPerson.<String>pullCol(m, ESColumn.BIRTH_DATE);
     Object expected = value;
     assertThat(actual, is(equalTo(expected)));
-
   }
 
   @Test
@@ -128,7 +121,6 @@ public class ElasticSearchPersonTest {
     Object actual = ElasticSearchPerson.<String>pullCol(m, ESColumn.SSN);
     Object expected = value;
     assertThat(actual, is(equalTo(expected)));
-
   }
 
   @Test
@@ -140,7 +132,6 @@ public class ElasticSearchPersonTest {
     Object actual = ElasticSearchPerson.<String>pullCol(m, ESColumn.TYPE);
     Object expected = value;
     assertThat(actual, is(equalTo(expected)));
-
   }
 
   @Test
@@ -153,7 +144,6 @@ public class ElasticSearchPersonTest {
     Object actual = ElasticSearchPerson.<String>pullCol(m, ESColumn.SOURCE);
     Object expected = value;
     assertThat(actual, is(equalTo(expected)));
-
   }
 
   @Test
@@ -210,34 +200,24 @@ public class ElasticSearchPersonTest {
 
   @Test
   public void testSerializeToJSON() throws Exception {
-
     ElasticSearchPerson ex = validElasticSearchPerson();
     final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(ex);
-
     ElasticSearchPerson esp = new ElasticSearchPerson(id, firstName, lastName, gender, birthDate,
         ssn, sourceType, sourceJson, highlight);
-
     final String actual = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(esp);
-
     assertThat(actual, is(equalTo(expected)));
-
   }
 
   @Test
   public void testDeSerializationFromJSON() throws IOException, JsonMappingException, IOException {
-
     ElasticSearchPerson esp = new ElasticSearchPerson(id, firstName, lastName, gender, birthDate,
         ssn, sourceType, sourceJson, highlight);
 
     final String actual = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(esp);
-
     ElasticSearchPerson expectedEsp = MAPPER.readValue(
         fixture("fixtures/data/es/validElasticSearchPerson.json"), ElasticSearchPerson.class);
-
     final String expected = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(expectedEsp);
-
     assertThat(actual, is(equalTo(expected)));
-
   }
 
   // @Test
@@ -262,9 +242,7 @@ public class ElasticSearchPersonTest {
 
   private ElasticSearchPerson validElasticSearchPerson()
       throws JsonParseException, JsonMappingException, IOException {
-
     return MAPPER.readValue(fixture("fixtures/data/es/validElasticSearchPerson.json"),
         ElasticSearchPerson.class);
-
   }
 }

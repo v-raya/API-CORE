@@ -23,6 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -38,6 +40,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * 
  * @author CWDS API Team
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<String> {
 
   /**
@@ -135,6 +138,50 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     public final Object getDefaultVal() {
       return defaultVal;
     }
+  }
+
+  /**
+   * Simplistic String fields representing ES person.address.
+   * 
+   * @author CWDS API Team
+   */
+  @SuppressWarnings("serial")
+  public static final class ElasticSearchPersonAddress
+      implements Serializable, ApiTypedIdentifier<String> {
+
+    private String id;
+
+    @JsonProperty("street_address")
+    @JsonInclude(JsonInclude.Include.ALWAYS)
+    private String streetAddress;
+
+    @JsonInclude(JsonInclude.Include.ALWAYS)
+    private String city;
+
+    @JsonProperty("state")
+    private String state;
+
+    // Bug #141508231: county not in Intake API swagger.yml. Intake JSON parsing error.
+    @JsonIgnore
+    private String county;
+
+    // Getter displays JSON.
+    @JsonIgnore
+    private String zip;
+
+    @JsonProperty("type")
+    private String type;
+
+    @Override
+    public String getId() {
+      return id;
+    }
+
+    @Override
+    public void setId(String id) {
+      this.id = id;
+    }
+
   }
 
   // =========================
@@ -350,6 +397,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
   @JsonProperty("source")
   private String source;
 
+  private List<ElasticSearchPersonAddress> addresses = new ArrayList<>();
   private List<String> languages = new ArrayList<>();
 
   @Transient
