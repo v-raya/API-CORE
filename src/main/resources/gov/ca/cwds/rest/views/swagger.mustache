@@ -34,6 +34,11 @@
   <script type="text/javascript">
     $(function () {
       var url = "{{jsonUrl}}";
+	  
+	  var token = window.location.search.match(/token=([^&]+)/);
+	  if (token && token.length > 1) {
+        token = decodeURIComponent(token[1]);
+      }
 
       hljs.configure({
         highlightSizeThreshold: 5000
@@ -74,6 +79,7 @@
       });
 
       window.swaggerUi.load();
+      window.swaggerUi.api.clientAuthorizations.add("key", new SwaggerClient.ApiKeyAuthorization("token", token, "query"));
 
       function log() {
         if ('console' in window) {
@@ -81,6 +87,7 @@
         }
       }
   });
+  
   </script>
 </head>
 
@@ -90,6 +97,15 @@
     <img class="logo__img" alt="swagger" height="80px" src="{{assetsPath}}/{{logo}}" />
     <div id=apiDescription>{{description}}</div>
 <div id="message-bar" class="swagger-ui-wrap" data-sw-translate>&nbsp;</div>
+  <div align="right">
+  <form action="{{loginUrl}}">
+    <input type="hidden" name="callback" value="{{callbackUrl}}"/>
+    <input type="submit" value="LOGIN" />
+  </form>
+  <form action="#">
+ 
+  </form>
+  </div>
   </div>
 </div>
 

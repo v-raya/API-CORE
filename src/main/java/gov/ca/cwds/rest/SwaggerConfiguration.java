@@ -39,6 +39,9 @@ public class SwaggerConfiguration {
   @NotEmpty
   private String logo;
 
+  @JsonProperty
+  private String loginUrl;
+
   /**
    * @return the templateName
    */
@@ -86,5 +89,12 @@ public class SwaggerConfiguration {
    */
   public String getLogo() {
     return logo;
+  }
+
+  /**
+   * @return the loginUrl
+   */
+  public String getLoginUrl() {
+    return loginUrl;
   }
 }
