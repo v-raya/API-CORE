@@ -32,6 +32,7 @@ public class SwaggerResourceTest {
 
   @Test
   public void getReturnsSwaggerViewWithCorrectUri() throws Exception {
+    when(swaggerConfiguration.isShowSwagger()).thenReturn(true);
     SwaggerResource swaggerResource = new SwaggerResource(swaggerConfiguration);
     SwaggerView view = swaggerResource.get(uriInfo);
     assertThat(view.getJsonUrl(), is("some_uri"));
@@ -39,6 +40,7 @@ public class SwaggerResourceTest {
 
   @Test
   public void getReturnsSwaggerViewWithCorrectTemplateName() throws Exception {
+    when(swaggerConfiguration.isShowSwagger()).thenReturn(true);
     SwaggerResource swaggerResource = new SwaggerResource(swaggerConfiguration);
     SwaggerView view = swaggerResource.get(uriInfo);
     assertThat(view.getTemplateName(), is("/gov/ca/cwds/rest/views/SwaggerResourceTest.template"));
