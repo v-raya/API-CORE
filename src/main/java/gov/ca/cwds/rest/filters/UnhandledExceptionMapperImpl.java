@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.filters;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -36,10 +37,15 @@ public class UnhandledExceptionMapperImpl implements ExceptionMapper<Exception> 
    */
   @Override
   public Response toResponse(Exception ex) {
-    LOGGER.error("EXCEPTION MAPPER: {}", ex.getMessage(), ex);
-    final String uniqueId = MDC.get(AuditLoggerImpl.UNIQUE_ID);
-    final Result result = new Result(uniqueId, "500");
-    return Response.status(500).entity(result).type(MediaType.APPLICATION_JSON).build();
+    if (!(ex instanceof WebApplicationException)) {
+      LOGGER.error("EXCEPTION MAPPER: {}", ex.getMessage(), ex);
+      final String uniqueId = MDC.get(AuditLoggerImpl.UNIQUE_ID);
+      final Result result = new Result(uniqueId, "500");
+      return Response.status(500).entity(result).type(MediaType.APPLICATION_JSON).build();
+    } else {
+      WebApplicationException webApplicationException = (WebApplicationException) ex;
+      return webApplicationException.getResponse();
+    }
   }
 
   @SuppressWarnings("javadoc")

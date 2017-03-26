@@ -3,6 +3,7 @@ package gov.ca.cwds.rest.filters;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import org.junit.Assert;
@@ -65,5 +66,13 @@ public class UnhandledExceptionMapperImplTest {
             + result.getUniqueId()));
     Assert.assertNotNull(result.getUniqueId());
   }
+
+  @Test
+  public void testWebApplicationExceptionResponseUnaltered() {
+    WebApplicationException webApplicationException = new WebApplicationException(404);
+    Response response = unhandledExceptionMapper.toResponse(webApplicationException);
+    assertThat(response, is(webApplicationException.getResponse()));
+  }
+
 
 }
