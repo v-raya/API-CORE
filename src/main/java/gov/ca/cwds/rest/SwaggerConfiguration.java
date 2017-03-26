@@ -42,6 +42,9 @@ public class SwaggerConfiguration {
   @JsonProperty
   private String loginUrl;
 
+  @JsonProperty
+  private boolean showSwagger = false;
+
   /**
    * @return the templateName
    */
@@ -96,5 +99,12 @@ public class SwaggerConfiguration {
    */
   public String getLoginUrl() {
     return loginUrl;
+  }
+
+  /**
+   * @return the showSwagger
+   */
+  public boolean isShowSwagger() {
+    return showSwagger;
   }
 }

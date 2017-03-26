@@ -3,6 +3,7 @@ package gov.ca.cwds.rest.resources;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
@@ -38,7 +39,10 @@ public class SwaggerResource implements Resource {
     String swaggerjsonUrl = ub.path("swagger.json").build().toASCIIString();
     UriBuilder ub2 = uriInfo.getBaseUriBuilder();
     String callbackUrl = ub2.path("swagger").build().toASCIIString();
-    return new SwaggerView(swaggerConfiguration, swaggerjsonUrl, callbackUrl);
+    if (swaggerConfiguration.isShowSwagger()) {
+      return new SwaggerView(swaggerConfiguration, swaggerjsonUrl, callbackUrl);
+    } else {
+      throw new WebApplicationException(404);
+    }
   }
-
 }
