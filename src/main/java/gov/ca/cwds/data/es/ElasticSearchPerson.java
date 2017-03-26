@@ -176,6 +176,19 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @JsonProperty("type")
     private String type;
 
+    public ElasticSearchPersonAddress() {
+      // Default
+    }
+
+    public ElasticSearchPersonAddress(String id, String streetAddress, String state, String zip,
+        String type) {
+      this.id = id;
+      this.streetAddress = streetAddress;
+      this.state = state;
+      this.zip = zip;
+      this.type = type;
+    }
+
     @Override
     public String getId() {
       return id;
@@ -294,6 +307,9 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
      */
     public ElasticSearchPersonPhone(ApiPhoneAware other) {
       if (other != null) {
+        if (StringUtils.isNotBlank(other.getPhoneId())) {
+          setId(other.getPhoneId());
+        }
         setPhoneNumber(other.getPhoneNumber());
         setPhoneType(other.getPhoneType());
       }
@@ -357,10 +373,6 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
   // =========================
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchPerson.class);
-
-  // =========================
-  // PRIVATE STATIC:
-  // =========================
 
   /**
    * Base serialization version. Increment by class version.
@@ -639,17 +651,17 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    * @param id identifier
    * @param firstName first name
    * @param lastName last name
-   * @param middleName TODO
-   * @param nameSuffix TODO
+   * @param middleName middle name
+   * @param nameSuffix name suffix, such as jr or sr
    * @param gender gender code
    * @param birthDate birth date
    * @param ssn SSN without dashes
    * @param sourceType fully-qualified, persistence-level source class
    * @param sourceJson raw, nested child document as JSON
    * @param highlight highlightFields from Elasticsearch
-   * @param addresses TODO
-   * @param phones TODO
-   * @param languages TODO
+   * @param addresses addresses
+   * @param phones phones
+   * @param languages languages
    */
   public ElasticSearchPerson(String id, String firstName, String lastName, String middleName,
       String nameSuffix, String gender, String birthDate, String ssn, String sourceType,
