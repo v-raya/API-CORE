@@ -896,7 +896,8 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
   /**
    * highlight JSON returned from Elasticsearch with fragments flattened out
    */
-  @JsonProperty("highlight")
+  // @JsonProperty("highlight")
+  @JsonIgnore
   private String highlightFields;
 
   /**
@@ -950,7 +951,15 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.nameSuffix = maybe != null ? maybe.intake : null;
     }
 
-    this.gender = trim(gender);
+    if (StringUtils.isNotBlank(gender)) {
+      final String comp = gender.trim().toLowerCase();
+      if ("m".equals(comp)) {
+        this.gender = "male";
+      } else if ("f".equals(comp)) {
+        this.gender = "female";
+      }
+    }
+
     this.dateOfBirth = trim(birthDate);
     this.ssn = trim(ssn);
 
