@@ -175,7 +175,6 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     private String county;
 
     // Getter displays JSON.
-    @JsonIgnore
     private String zip;
 
     @JsonProperty("type")
@@ -286,6 +285,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.type = type;
     }
 
+    @JsonIgnore
     @Override
     public String getAddressId() {
       return this.id;
@@ -1102,6 +1102,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
+  @JsonIgnore
   public Map<String, String> getHighlights() {
     return highlights;
   }
