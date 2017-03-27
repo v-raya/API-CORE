@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,14 +28,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.Inject;
 
 import gov.ca.cwds.data.ApiTypedIdentifier;
+import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
 import gov.ca.cwds.data.std.ApiAddressAwareWritable;
 import gov.ca.cwds.data.std.ApiPhoneAware;
 import gov.ca.cwds.data.std.ApiPhoneAwareWritable;
+import gov.ca.cwds.inject.SystemCodeCache;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.services.ServiceException;
 
@@ -176,14 +181,28 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @JsonProperty("type")
     private String type;
 
+    /**
+     * Default ctor.
+     */
     public ElasticSearchPersonAddress() {
       // Default
     }
 
-    public ElasticSearchPersonAddress(String id, String streetAddress, String state, String zip,
-        String type) {
+    /**
+     * Construct from all fields.
+     * 
+     * @param id pk/identifier
+     * @param streetAddress concatenated street address
+     * @param city city
+     * @param state two-letter state code
+     * @param zip 5-digit zip
+     * @param type address type, if any
+     */
+    public ElasticSearchPersonAddress(String id, String streetAddress, String city, String state,
+        String zip, String type) {
       this.id = id;
       this.streetAddress = streetAddress;
+      this.city = city;
       this.state = state;
       this.zip = zip;
       this.type = type;
@@ -249,10 +268,20 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.zip = zip;
     }
 
+    /**
+     * Getter for optional address type.
+     * 
+     * @return address type, per Intake contract, if provided
+     */
     public String getType() {
       return type;
     }
 
+    /**
+     * Setter for optional address type
+     * 
+     * @param type address type, per Intake contract
+     */
     public void setType(String type) {
       this.type = type;
     }
@@ -372,7 +401,102 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
   // PRIVATE STATIC:
   // =========================
 
+  /**
+   * Name suffix contract for Intake API and Elasticsearch person documents. Translates related
+   * legacy values to appropriate Intake values.
+   * 
+   * @author CWDS API Team
+   */
+  @SuppressWarnings("javadoc")
+  public enum ElasticSearchPersonNameSuffix {
+
+    ESQUIRE("esq", new String[] {"esq", "eq", "esqu"}),
+
+    SECOND("ii", new String[] {"ii", "2", "2nd", "second", "02"}),
+
+    THIRD("iii", new String[] {"iii", "3", "3rd", "third", "03"}),
+
+    FOURTH("iv", new String[] {"iv", "iiii", "4", "4th", "fourth", "04"}),
+
+    JR("jr", new String[] {"jr", "junior", "jnr"}),
+
+    SR("sr", new String[] {"sr", "senior", "snr"}),
+
+    MD("md", new String[] {"md", "dr", "doc", "doctor"}),
+
+    PHD("phd", new String[] {"phd", "professor", "prof"}),
+
+    JD("jd", new String[] {"jd"});
+
+    /**
+     * Acceptable/contacted value for Intake.
+     */
+    public final String intake;
+
+    /**
+     * Potential matching source values from legacy.
+     */
+    @JsonIgnore
+    private final String[] legacy;
+
+    // Key = legacy free-form value.
+    @JsonIgnore
+    private static final Map<String, ElasticSearchPersonNameSuffix> mapLegacy = new HashMap<>();
+
+    // Key = Intake value.
+    @JsonIgnore
+    private static final Map<String, ElasticSearchPersonNameSuffix> mapIntake = new HashMap<>();
+
+    private ElasticSearchPersonNameSuffix(String intake, String[] legacy) {
+      this.intake = intake;
+      this.legacy = legacy;
+    }
+
+    @JsonValue
+    public String getIntake() {
+      return intake;
+    }
+
+    @JsonIgnore
+    public String[] getLegacy() {
+      return legacy;
+    }
+
+    public ElasticSearchPersonNameSuffix lookupLegacy(String val) {
+      return ElasticSearchPersonNameSuffix.findByLegacy(val);
+    }
+
+    public static ElasticSearchPersonNameSuffix findByLegacy(String legacy) {
+      return mapLegacy.get(legacy);
+    }
+
+    public ElasticSearchPersonNameSuffix lookupIntake(String val) {
+      return ElasticSearchPersonNameSuffix.findByIntake(val);
+    }
+
+    public static ElasticSearchPersonNameSuffix findByIntake(String legacy) {
+      return mapIntake.get(legacy);
+    }
+
+    public static ElasticSearchPersonNameSuffix translateNameSuffix(String nameSuffix) {
+      return ElasticSearchPerson.ElasticSearchPersonNameSuffix
+          .findByLegacy(nameSuffix.trim().toLowerCase().replaceAll("[^a-zA-Z0-9]", ""));
+    }
+
+    static {
+      for (ElasticSearchPersonNameSuffix e : ElasticSearchPersonNameSuffix.values()) {
+        mapIntake.put(e.intake, e);
+        for (String leg : e.getLegacy()) {
+          mapLegacy.put(leg, e);
+        }
+      }
+    }
+
+  }
+
   private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchPerson.class);
+
+  private static ApiSystemCodeCache systemCodes;
 
   /**
    * Base serialization version. Increment by class version.
@@ -453,8 +577,28 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
   // =========================
 
   /**
+   * Getter for CMS system code cache.
+   * 
+   * @return reference to CMS system code cache
+   */
+  public static ApiSystemCodeCache getSystemCodes() {
+    return ElasticSearchPerson.systemCodes;
+  }
+
+  /**
+   * Store a reference to the singleton CMS system code cache for quick convenient access.
+   * 
+   * @param systemCodes CMS system code cache
+   */
+  @Inject
+  public static void setSystemCodes(@SystemCodeCache ApiSystemCodeCache systemCodes) {
+    ElasticSearchPerson.systemCodes = systemCodes;
+  }
+
+  /**
    * Produce an ESPerson domain from native ElasticSearch {@link SearchHit}. Parse JSON results and
-   * populate associated fields.
+   * populate associated fields. ElasticSearch Java API returns an overly broad type of
+   * {@code Map<String,Object>}. The enum "knows" how to extract columns of a given type.
    * 
    * <p>
    * <strong>Classloader Note:</strong> When running in an application server, the root classloader
@@ -470,8 +614,6 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    * @see #pullCol(Map, ESColumn)
    */
   public static ElasticSearchPerson makeESPerson(final SearchHit hit) {
-
-    // ElasticSearch Java API returns an overly broad type of Map<String,Object>.
     final Map<String, Object> m = hit.getSource();
 
     ElasticSearchPerson ret =
@@ -675,7 +817,13 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     this.firstName = trim(firstName);
     this.lastName = trim(lastName);
     this.middleName = trim(middleName);
-    this.nameSuffix = trim(nameSuffix);
+
+    if (StringUtils.isNotBlank(nameSuffix)) {
+      final ElasticSearchPersonNameSuffix maybe =
+          ElasticSearchPersonNameSuffix.translateNameSuffix(nameSuffix);
+      this.nameSuffix = maybe != null ? maybe.intake : null;
+    }
+
     this.gender = trim(gender);
     this.dateOfBirth = trim(birthDate);
     this.ssn = trim(ssn);

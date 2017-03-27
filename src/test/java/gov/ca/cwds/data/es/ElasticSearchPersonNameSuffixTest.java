@@ -33,7 +33,7 @@ import gov.ca.cwds.data.es.ElasticSearchPerson.ESColumn;
  * @author CWDS API Team
  */
 @SuppressWarnings("javadoc")
-public class ElasticSearchPersonTest {
+public class ElasticSearchPersonNameSuffixTest {
 
   private static final ObjectMapper MAPPER = ElasticSearchPerson.MAPPER;
 
