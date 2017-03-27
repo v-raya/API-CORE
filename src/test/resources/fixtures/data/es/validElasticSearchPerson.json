@@ -4,7 +4,7 @@
 	"last_name" : "Smith",
 	"date_of_birth" : "2000-10-31",
 	"name_suffix" : "jr",
-	"gender" : "M",
+	"gender" : "male",
 	"ssn" : "111122333",
 	"type" : "gov.ca.cwds.data.persistence.cms.rep.ReplicatedClient",
 	"source": null,

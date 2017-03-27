@@ -896,8 +896,8 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
   /**
    * highlight JSON returned from Elasticsearch with fragments flattened out
    */
-  // @JsonProperty("highlight")
-  @JsonIgnore
+  @JsonProperty("highlight")
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private String highlightFields;
 
   /**
