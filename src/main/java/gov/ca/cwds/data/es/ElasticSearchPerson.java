@@ -67,12 +67,12 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     /**
      * first name
      */
-    FIRST_NAME("firstName", String.class, ""),
+    FIRST_NAME("first_name", String.class, ""),
 
     /**
      * last name
      */
-    LAST_NAME("lastName", String.class, ""),
+    LAST_NAME("last_name", String.class, ""),
 
     /**
      * gender code (M,F,U)
@@ -82,7 +82,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     /**
      * birth date
      */
-    BIRTH_DATE("dateOfBirth", String.class, null),
+    BIRTH_DATE("date_of_birth", String.class, null),
 
     /**
      * Social Security Number

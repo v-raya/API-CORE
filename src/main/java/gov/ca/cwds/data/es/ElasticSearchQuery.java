@@ -28,8 +28,10 @@ public enum ElasticSearchQuery {
 
     @Override
     BoolQueryBuilder buildQuery(BoolQueryBuilder queryBuilder, String term) {
-      queryBuilder.should(QueryBuilders.prefixQuery("firstName", term));
-      queryBuilder.should(QueryBuilders.prefixQuery("lastName", term));
+      queryBuilder.should(
+          QueryBuilders.prefixQuery(ElasticSearchPerson.ESColumn.FIRST_NAME.getCol(), term));
+      queryBuilder
+          .should(QueryBuilders.prefixQuery(ElasticSearchPerson.ESColumn.LAST_NAME.getCol(), term));
       return queryBuilder;
     }
 
@@ -57,7 +59,6 @@ public enum ElasticSearchQuery {
     }
 
   },
-
 
   /**
    * Date Of Birth
@@ -117,7 +118,7 @@ public enum ElasticSearchQuery {
 
   };
 
-  private static final String DATE_OF_BIRTH = "dateOfBirth";
+  private static final String DATE_OF_BIRTH = ElasticSearchPerson.ESColumn.BIRTH_DATE.getCol();
 
   public static ElasticSearchQuery getQueryFromTerm(String term) {
     for (ElasticSearchQuery query : values()) {
@@ -132,6 +133,5 @@ public enum ElasticSearchQuery {
   abstract boolean match(String term);
 
   abstract BoolQueryBuilder buildQuery(BoolQueryBuilder queryBuilder, String term);
-
 
 }

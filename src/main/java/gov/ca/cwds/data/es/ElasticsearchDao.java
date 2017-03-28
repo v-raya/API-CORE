@@ -207,10 +207,13 @@ public class ElasticsearchDao implements Closeable {
     SearchRequestBuilder builder =
         client.prepareSearch(DEFAULT_PERSON_IDX_NM).setTypes(DEFAULT_PERSON_DOC_TYPE)
             .setQuery(queryBuilder).setFrom(0).setSize(DEFAULT_MAX_RESULTS)
-            .addHighlightedField("firstName").addHighlightedField("lastName")
-            .addHighlightedField("gender").addHighlightedField("dateOfBirth")
-            .addHighlightedField("ssn").setHighlighterNumOfFragments(3)
-            .setHighlighterRequireFieldMatch(false).setHighlighterOrder("score").setExplain(true);
+            .addHighlightedField(ElasticSearchPerson.ESColumn.FIRST_NAME.getCol())
+            .addHighlightedField(ElasticSearchPerson.ESColumn.LAST_NAME.getCol())
+            .addHighlightedField(ElasticSearchPerson.ESColumn.GENDER.getCol())
+            .addHighlightedField(ElasticSearchPerson.ESColumn.BIRTH_DATE.getCol())
+            .addHighlightedField(ElasticSearchPerson.ESColumn.SSN.getCol())
+            .setHighlighterNumOfFragments(3).setHighlighterRequireFieldMatch(true)
+            .setHighlighterOrder("score").setExplain(true);
 
     LOGGER.warn("ES QUERY: {}", builder);
     final SearchHit[] hits = builder.execute().actionGet().getHits().getHits();
@@ -244,7 +247,6 @@ public class ElasticsearchDao implements Closeable {
     return queryBuilder;
   }
 
-  // TODO : #139105623
   @SuppressWarnings("javadoc")
   public IndexRequest prepareIndexRequest(String document, String id) {
     return client.prepareIndex(DEFAULT_PERSON_IDX_NM, DEFAULT_PERSON_DOC_TYPE, id)
