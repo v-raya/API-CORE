@@ -84,6 +84,7 @@ public enum ElasticSearchQuery {
             formattedDate = esdf.format(dob);
           }
         } catch (Exception e) {
+          // TODO: handle exception.
           return queryBuilder;
         }
       }
@@ -95,6 +96,7 @@ public enum ElasticSearchQuery {
         queryBuilder.should(QueryBuilders.matchQuery(DATE_OF_BIRTH, formattedDate));
         return queryBuilder;
       } catch (Exception e) {
+        // TODO: handle exception.
         return queryBuilder;
       }
     }

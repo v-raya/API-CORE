@@ -36,6 +36,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
+import gov.ca.cwds.data.es.ElasticSearchPerson.ESColumn;
+
 /**
  * Class under test: {@link ElasticsearchDao}.
  * 
@@ -58,7 +60,6 @@ public final class ElasticsearchDaoTest {
 
   @Mock
   private TransportClient.Builder clientBuilder;
-
 
   @Mock
   private SearchRequestBuilder srb;
@@ -179,74 +180,67 @@ public final class ElasticsearchDaoTest {
 
   @Test
   public void buildBoolQueryFromSearchTermsBuildsExpectedQuery() {
-    BoolQueryBuilder createdQuery =
+    BoolQueryBuilder actualQuery =
         target.buildBoolQueryFromSearchTerms("john smith 9/1/1990 123456789   ");
-    QueryBuilder expectedQuery =
-        QueryBuilders.boolQuery().should(QueryBuilders.prefixQuery("firstName", "john"))
-            .should(QueryBuilders.prefixQuery("lastName", "john"))
-            .should(QueryBuilders.prefixQuery("firstName", "smith"))
-            .should(QueryBuilders.prefixQuery("lastName", "smith"))
-            .should(QueryBuilders.matchQuery("dateOfBirth", "1990-09-01"))
-            .should(QueryBuilders.prefixQuery("ssn", "123456789"));
-    org.junit.Assert.assertThat(createdQuery.toString(), is(equalTo(expectedQuery.toString())));
+    QueryBuilder expectedQuery = QueryBuilders.boolQuery()
+        .should(QueryBuilders.prefixQuery(ESColumn.FIRST_NAME.getCol(), "john"))
+        .should(QueryBuilders.prefixQuery(ESColumn.LAST_NAME.getCol(), "john"))
+        .should(QueryBuilders.prefixQuery(ESColumn.FIRST_NAME.getCol(), "smith"))
+        .should(QueryBuilders.prefixQuery(ESColumn.LAST_NAME.getCol(), "smith"))
+        .should(QueryBuilders.matchQuery(ESColumn.BIRTH_DATE.getCol(), "1990-09-01"))
+        .should(QueryBuilders.prefixQuery(ESColumn.SSN.getCol(), "123456789"));
+    assertThat(actualQuery.toString(), is(equalTo(expectedQuery.toString())));
   }
 
   @Test
   public void buildBoolQueryFromMalformedSearchTermsBuildsQueryWithNoClauses() {
-    BoolQueryBuilder createdQuery = target.buildBoolQueryFromSearchTerms("a-#4 df$ jk-/+ ");
-    org.junit.Assert.assertThat(createdQuery.hasClauses(), is(equalTo(false)));
-
-
+    BoolQueryBuilder actualQuery = target.buildBoolQueryFromSearchTerms("a-#4 df$ jk-/+ ");
+    assertThat(actualQuery.hasClauses(), is(equalTo(false)));
   }
 
   @Test
   public void buildBoolQueryFromMalformedDateBuildsQueryWithNoClauses() {
-    BoolQueryBuilder createdQuery = target.buildBoolQueryFromSearchTerms("9/8-9000");
-    org.junit.Assert.assertThat(createdQuery.hasClauses(), is(equalTo(false)));
-
-
+    BoolQueryBuilder actualQuery = target.buildBoolQueryFromSearchTerms("9/8-9000");
+    assertThat(actualQuery.hasClauses(), is(equalTo(false)));
   }
 
   @Test
   public void buildBoolQueryFromMalformedSsnBuildsQueryWithNoClauses() {
-    BoolQueryBuilder createdQuery = target.buildBoolQueryFromSearchTerms("111-1090/0905 ");
-    org.junit.Assert.assertThat(createdQuery.hasClauses(), is(equalTo(false)));
+    BoolQueryBuilder actualQuery = target.buildBoolQueryFromSearchTerms("111-1090/0905 ");
+    assertThat(actualQuery.hasClauses(), is(equalTo(false)));
   }
 
   @Test
   public void buildBoolQueryFromMoreThanNineDigitSsnBuildsQueryWithNoClauses() {
-    BoolQueryBuilder createdQuery = target.buildBoolQueryFromSearchTerms("111223333111 ");
-    org.junit.Assert.assertThat(createdQuery.hasClauses(), is(equalTo(false)));
+    BoolQueryBuilder actualQuery = target.buildBoolQueryFromSearchTerms("111223333111 ");
+    assertThat(actualQuery.hasClauses(), is(equalTo(false)));
   }
 
   @Test
   public void buildBoolQueryFromTwoDateBuildsQueryWithTwoDateClauses() {
-    BoolQueryBuilder createdQuery = target.buildBoolQueryFromSearchTerms("1989-01-01 9/1/1990   ");
-    QueryBuilder expectedQuery =
-        QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("dateOfBirth", "1989-01-01"))
-            .should(QueryBuilders.matchQuery("dateOfBirth", "1990-09-01"));
-    org.junit.Assert.assertThat(createdQuery.toString(), is(equalTo(expectedQuery.toString())));
-
+    BoolQueryBuilder actualQuery = target.buildBoolQueryFromSearchTerms("1989-01-01 9/1/1990   ");
+    QueryBuilder expectedQuery = QueryBuilders.boolQuery()
+        .should(QueryBuilders.matchQuery(ESColumn.BIRTH_DATE.getCol(), "1989-01-01"))
+        .should(QueryBuilders.matchQuery(ESColumn.BIRTH_DATE.getCol(), "1990-09-01"));
+    assertThat(actualQuery.toString(), is(equalTo(expectedQuery.toString())));
   }
 
   @Test
   public void buildBoolQueryFromTwoSsnBuildsQueryWithTwoSsnClauses() {
-    BoolQueryBuilder createdQuery = target.buildBoolQueryFromSearchTerms("123456789   111223333 ");
-    QueryBuilder expectedQuery =
-        QueryBuilders.boolQuery().should(QueryBuilders.prefixQuery("ssn", "123456789"))
-            .should(QueryBuilders.prefixQuery("ssn", "111223333"));
-    org.junit.Assert.assertThat(createdQuery.toString(), is(equalTo(expectedQuery.toString())));
-
+    BoolQueryBuilder actualQuery = target.buildBoolQueryFromSearchTerms("123456789   111223333 ");
+    QueryBuilder expectedQuery = QueryBuilders.boolQuery()
+        .should(QueryBuilders.prefixQuery(ESColumn.SSN.getCol(), "123456789"))
+        .should(QueryBuilders.prefixQuery(ESColumn.SSN.getCol(), "111223333"));
+    assertThat(actualQuery.toString(), is(equalTo(expectedQuery.toString())));
   }
 
   @Test
   public void buildBoolQueryWithSsnAndBirthYear() {
-    BoolQueryBuilder createdQuery = target.buildBoolQueryFromSearchTerms("123456789   1998 ");
-    QueryBuilder expectedQuery =
-        QueryBuilders.boolQuery().should(QueryBuilders.prefixQuery("ssn", "123456789"))
-            .should(QueryBuilders.prefixQuery("ssn", "1998"))
-            .should(QueryBuilders.rangeQuery("dateOfBirth").gte("1998-01-01").lte("1998-12-31"));
-    org.junit.Assert.assertThat(createdQuery.toString(), is(equalTo(expectedQuery.toString())));
-
+    BoolQueryBuilder actualQuery = target.buildBoolQueryFromSearchTerms("123456789   1998 ");
+    QueryBuilder expectedQuery = QueryBuilders.boolQuery()
+        .should(QueryBuilders.prefixQuery(ESColumn.SSN.getCol(), "123456789"))
+        .should(QueryBuilders.prefixQuery(ESColumn.SSN.getCol(), "1998")).should(QueryBuilders
+            .rangeQuery(ESColumn.BIRTH_DATE.getCol()).gte("1998-01-01").lte("1998-12-31"));
+    assertThat(actualQuery.toString(), is(equalTo(expectedQuery.toString())));
   }
 }
