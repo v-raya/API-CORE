@@ -29,14 +29,18 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
   private SessionFactory sessionFactory;
 
   /**
+   * Default constructor.
    * 
-   * @param sessionFactory the session factory
+   * @param sessionFactory Hibernate session factory
    */
   public CrudsDaoImpl(SessionFactory sessionFactory) {
     super(sessionFactory);
     this.sessionFactory = sessionFactory;
   }
 
+  /**
+   * Provided for <strong>convenience</strong>. Don't abuse this.
+   */
   @Override
   public SessionFactory getSessionFactory() {
     return sessionFactory;
@@ -100,4 +104,5 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
     currentSession().evict(databaseObject);
     return persist(object);
   }
+
 }
