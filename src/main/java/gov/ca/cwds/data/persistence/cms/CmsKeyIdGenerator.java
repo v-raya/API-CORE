@@ -142,7 +142,7 @@ public class CmsKeyIdGenerator {
       // If the timestamp value is the same as before, stay in the loop.
       // otherwise, break out since it is unique.
       if (nTimestamp == nPreviousTimestamp) {
-        // Thread.yield();
+        Thread.yield();
         continue;
       } else {
         break;
