@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
- * Capable of reducing itself from a denormalized result set to a normalized consolidated Set of
+ * Object can reduce a denormalized result set of its own type to a normalized, consolidated Map of
  * type R.
  * 
  * <p>
@@ -15,6 +15,13 @@ import java.util.Map;
  * @param <R> type to reduce to
  */
 public interface ApiReduce<R> extends Serializable {
+
+  /**
+   * Convenience method returns class type of R.
+   * 
+   * @return class R
+   */
+  Class<R> getReductionClass();
 
   /**
    * Reduce and consolidate to target reduction type, R.
