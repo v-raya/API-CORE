@@ -3,6 +3,8 @@ package gov.ca.cwds.data.std;
 import java.io.Serializable;
 import java.util.Map;
 
+import gov.ca.cwds.data.persistence.PersistentObject;
+
 /**
  * Object can reduce a denormalized result set of its own type to a normalized, consolidated Map of
  * type R.
@@ -14,7 +16,7 @@ import java.util.Map;
  * @author CWDS API Team
  * @param <R> type to reduce to
  */
-public interface ApiReduce<R> extends Serializable {
+public interface ApiReduce<R extends PersistentObject> extends Serializable {
 
   /**
    * Convenience method returns class type of R.
