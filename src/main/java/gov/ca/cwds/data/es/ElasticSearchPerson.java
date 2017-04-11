@@ -722,9 +722,10 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
   }
 
   /**
-   * Produce an ESPerson domain from native ElasticSearch {@link SearchHit}. Parse JSON results and
-   * populate associated fields. ElasticSearch Java API returns an overly broad type of
-   * {@code Map<String,Object>}. The enum "knows" how to extract columns of a given type.
+   * Produce an ElasticSearchPerson domain instance from native ElasticSearch {@link SearchHit}.
+   * Parse JSON results and populate associated fields. ElasticSearch Java API returns an overly
+   * broad type of {@code Map<String,Object>}. The enum "knows" how to extract columns of a given
+   * type.
    * 
    * <p>
    * <strong>Classloader Note:</strong> When running in an application server, the root classloader
