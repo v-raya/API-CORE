@@ -16,7 +16,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * @author CWDS API Team
  * @param <R> type to reduce to
  */
-public interface ApiReduce<R extends PersistentObject> extends Serializable {
+public interface ApiGroupNormalizer<R extends PersistentObject> extends Serializable {
 
   /**
    * Convenience method returns class type of R.
@@ -31,5 +31,16 @@ public interface ApiReduce<R extends PersistentObject> extends Serializable {
    * @param map consolidated Map of reduced results on R's key.
    */
   void reduce(Map<Object, R> map);
+
+  /**
+   * Gets the group's identifier, such as CLIENT_T.IDENTIFIER.
+   * 
+   * <p>
+   * On a normalized parent class, this is typically the primary key.
+   * </p>
+   * 
+   * @return grouping key or identifier
+   */
+  Object getGroupKey();
 
 }
