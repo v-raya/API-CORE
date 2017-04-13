@@ -11,10 +11,14 @@ import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.Requests;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.xcontent.ToXContent;
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
@@ -225,6 +229,32 @@ public class ElasticsearchDao implements Closeable {
     }
 
     return ret;
+  }
+
+  public String searchPersonQuery(final String query) {
+    checkArgument(!Strings.isNullOrEmpty(query), "query cannot be Null or empty");
+    SearchRequestBuilder builder =
+        client.prepareSearch(DEFAULT_PERSON_IDX_NM).setTypes(DEFAULT_PERSON_DOC_TYPE)
+            .setQuery(QueryBuilders.wrapperQuery(query)).setFrom(0).setSize(DEFAULT_MAX_RESULTS);
+    SearchResponse searchResponse = builder.execute().actionGet();
+    String esResponse = "";
+
+    try {
+      XContentBuilder jsonBuilder = XContentFactory.jsonBuilder();
+
+      jsonBuilder.startObject();
+      searchResponse.toXContent(jsonBuilder, ToXContent.EMPTY_PARAMS);
+      jsonBuilder.endObject();
+      esResponse = jsonBuilder.string();
+      jsonBuilder.close();
+    } catch (IOException e) {
+      final String msg = "Error in ElasticSearch json query builder: " + e.getMessage();
+      LOGGER.error(msg, e);
+      throw new ApiElasticSearchException(msg, e);
+    }
+
+    return esResponse;
+
   }
 
   /**
