@@ -1,8 +1,10 @@
 package gov.ca.cwds.data.persistence.cms;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -132,7 +134,7 @@ public class CmsKeyIdGenerator {
     }
   }
 
-  protected String createTimestampStr() {
+  protected String createTimestampStr() throws ParseException {
     double nTimestamp = 0;
     double nPreviousTimestamp = 0; // previous value - used for UNIQUENESS!
 
@@ -155,7 +157,6 @@ public class CmsKeyIdGenerator {
   }
 
   public double timestampToDouble(final Calendar localDateTime) {
-
     double nTimestamp = 0;
     nTimestamp += (double) localDateTime.get(Calendar.MILLISECOND) / 10 * nSHIFT_HSECOND;
     nTimestamp += (double) localDateTime.get(Calendar.SECOND) * nSHIFT_SECOND;
@@ -175,9 +176,11 @@ public class CmsKeyIdGenerator {
     char[] szDstStr = new char[8];
 
     // Determine the largest power of the number.
-    for (i = 0; nSrcVal >= pnPowVec[i]; i++, nPower++)
+    for (i = 0; nSrcVal >= pnPowVec[i]; i++, nPower++) {
+      // Just increment power.
+    }
 
-      LOGGER.debug("nPower::" + nPower);
+    LOGGER.debug("nPower::" + nPower);
     // Use the destination string width to left-pad the string.
     final int nPad = nDstStrWidth - nPower;
     LOGGER.debug("nPad::" + nPad);
@@ -200,20 +203,22 @@ public class CmsKeyIdGenerator {
     return String.valueOf(szDstStr);
   }
 
-  protected final Calendar getCurrentDate() {
-    DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss.SSS");
+  protected final Calendar getCurrentDate() throws ParseException {
+    DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS");
+    final Date fixedDate = fmt.parse("2017-04-13-11.10.46.860"); // TEST ONLY.
     Calendar cal = Calendar.getInstance();
-    LOGGER.debug(dateFormat.format(cal.getTime())); // 2014/08/06 16:00:22
+    cal.setTimeInMillis(fixedDate.getTime());
+    LOGGER.debug(fmt.format(cal.getTime())); // 2014/08/06 16:00:22
     return cal;
   }
 
   public static void main(String[] args) throws InterruptedException {
     CmsKeyIdGenerator rend = new CmsKeyIdGenerator();
-    StringBuilder staffid = new StringBuilder("AB1");
-    for (int i = 0; i <= 400000; i++) {
-      LOGGER.debug("staffId" + staffid.toString());
+    StringBuilder staffid = new StringBuilder("0JG");
+    for (int i = 0; i < 1; i++) {
+      LOGGER.debug("staffId: " + staffid.toString());
       String key = rend.generateKeyFromStaff(staffid.toString());
-      LOGGER.debug("generated key::" + key);
+      LOGGER.debug("generated key: " + key);
     }
 
     Thread.sleep(10);
