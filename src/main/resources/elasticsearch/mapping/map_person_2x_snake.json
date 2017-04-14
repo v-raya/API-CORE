@@ -62,6 +62,14 @@
 			    	"type": "string",
 			    	"store": true
 			    },
+			    "unit_type": {
+			    	"type": "string",
+			    	"store": true
+			    },
+			    "unit_number": {
+			    	"type": "string",
+			    	"store": true
+			    },
 			    "state_code": {
 			    	"type": "string",
 			    	"store": true
