@@ -2,10 +2,11 @@ package gov.ca.cwds.data.es;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
-import java.nio.charset.Charset;
 
+import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.WriteConsistencyLevel;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
@@ -28,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
-import com.google.common.io.Resources;
 import com.google.inject.Inject;
 
 /**
@@ -105,9 +105,11 @@ public class ElasticsearchDao implements Closeable {
     CreateIndexRequest indexRequest = new CreateIndexRequest(index, indexSettings);
     getClient().admin().indices().create(indexRequest).actionGet();
 
-    final String mapping =
-        Resources.toString(Resources.getResource("/elasticsearch/mapping/map_person_2x.json"),
-            Charset.defaultCharset());
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    IOUtils.copy(this.getClass().getResourceAsStream("/elasticsearch/mapping/map_person_2x.json"),
+        out);
+    out.flush();
+    final String mapping = out.toString();
     getClient().admin().indices().preparePutMapping(index).setType(DEFAULT_PERSON_DOC_TYPE)
         .setSource(mapping).get();
   }
