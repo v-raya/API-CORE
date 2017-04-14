@@ -162,8 +162,8 @@ public class CmsKeyIdGenerator {
     nTimestamp += (double) localDateTime.get(Calendar.SECOND) * nSHIFT_SECOND;
     nTimestamp += (double) localDateTime.get(Calendar.MINUTE) * nSHIFT_MINUTE;
     nTimestamp += (double) localDateTime.get(Calendar.HOUR) * nSHIFT_HOUR;
-    nTimestamp += (double) localDateTime.get(Calendar.DAY_OF_WEEK) * nSHIFT_DAY;
-    nTimestamp += (double) (localDateTime.get(Calendar.MONTH) - 1) * nSHIFT_MONTH;
+    nTimestamp += (double) localDateTime.get(Calendar.DATE) * nSHIFT_DAY;
+    nTimestamp += (double) (localDateTime.get(Calendar.MONTH)) * nSHIFT_MONTH;
     nTimestamp += (double) (localDateTime.get(Calendar.YEAR) - 1900) * nSHIFT_YEAR;
 
     return nTimestamp;
@@ -223,4 +223,18 @@ public class CmsKeyIdGenerator {
 
     Thread.sleep(10);
   }
+
+  @SuppressWarnings("javadoc")
+  public static String cmskeyIdGenertor(String staffId) {
+    CmsKeyIdGenerator rend = new CmsKeyIdGenerator();
+    if (staffId == null || staffId.length() <= 0) {
+      staffId = "0JG";
+    }
+    StringBuilder staffid = new StringBuilder(staffId);
+    String key = rend.generateKeyFromStaff(staffid.toString());
+    // Thread.sleep(10);
+    return key;
+
+  }
+
 }
