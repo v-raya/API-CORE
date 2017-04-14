@@ -50,7 +50,11 @@
 			    	"type": "string",
 			    	"store": true
 			    }, 
-			    "street_address": {
+			    "street_number": {
+			    	"type": "string",
+			    	"store": true
+			    }, 
+			    "street_name": {
 			    	"type": "string",
 			    	"store": true
 			    }, 
@@ -58,11 +62,19 @@
 			    	"type": "string",
 			    	"store": true
 			    },
-			    "state": {
+			    "state_code": {
+			    	"type": "string",
+			    	"store": true
+			    }, 
+			    "state_name": {
 			    	"type": "string",
 			    	"store": true
 			    }, 
 			    "zip": {
+			    	"type": "string",
+			    	"store": true
+			    }, 
+			    "zip_4": {
 			    	"type": "string",
 			    	"store": true
 			    }, 
