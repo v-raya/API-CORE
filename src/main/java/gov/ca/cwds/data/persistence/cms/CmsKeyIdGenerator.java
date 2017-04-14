@@ -220,7 +220,9 @@ public class CmsKeyIdGenerator {
 
   protected final Calendar getCurrentDate() throws ParseException {
     DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS");
+    // final Date fixedDate = fmt.parse("2017-04-14-10.22.50.930"); // To verify the fixed timestamp
     Calendar cal = Calendar.getInstance();
+    // cal.setTimeInMillis(fixedDate.getTime());
     LOGGER.debug(fmt.format(cal.getTime())); // 2014/08/06 16:00:22
     return cal;
   }
