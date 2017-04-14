@@ -67,12 +67,12 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     /**
      * first name
      */
-    FIRST_NAME("first_name", String.class, ""),
+    FIRST_NAME("firstName", String.class, ""),
 
     /**
      * last name
      */
-    LAST_NAME("last_name", String.class, ""),
+    LAST_NAME("lastName", String.class, ""),
 
     /**
      * gender code (M,F,U)
@@ -82,7 +82,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     /**
      * birth date
      */
-    BIRTH_DATE("date_of_birth", String.class, null),
+    BIRTH_DATE("dateOfBirth", String.class, null),
 
     /**
      * Social Security Number
@@ -161,7 +161,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
 
     private String id;
 
-    @JsonProperty("street_address")
+    @JsonProperty("streetAddress")
     @JsonInclude(JsonInclude.Include.ALWAYS)
     private String streetAddress;
 
@@ -755,7 +755,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
 
     if (!StringUtils.isBlank(ret.getSourceType()) && !StringUtils.isBlank(ret.getSourceJson())) {
       try {
-        // TODO: STORY #137216799:
+        // DELIVERED: STORY #137216799:
         // Tech debt: reverse compatibility with existing ElasticSearch documents.
         if (ret.getSourceType().startsWith("gov.ca.cwds.rest.api.")) {
           LOGGER.warn("LEGACY CLASS IN ELASTICSEARCH! class={}, id={}", ret.getSourceType(),
@@ -825,19 +825,19 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
   // MEMBERS:
   // ================
 
-  @JsonProperty("first_name")
+  @JsonProperty("firstName")
   private String firstName;
 
-  @JsonProperty("middle_name")
+  @JsonProperty("middleName")
   private String middleName;
 
-  @JsonProperty("last_name")
+  @JsonProperty("lastName")
   private String lastName;
 
-  @JsonProperty("name_suffix")
+  @JsonProperty("nameSuffix")
   private String nameSuffix;
 
-  @JsonProperty("date_of_birth")
+  @JsonProperty("dateOfBirth")
   private String dateOfBirth;
 
   @JsonProperty("gender")
@@ -854,7 +854,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
 
   private List<ElasticSearchPersonAddress> addresses = new ArrayList<>();
 
-  @JsonProperty("phone_numbers")
+  @JsonProperty("phoneNumbers")
   private List<ElasticSearchPersonPhone> phones = new ArrayList<>();
 
   private List<String> languages = new ArrayList<>();
@@ -1038,7 +1038,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    * 
    * @return first name
    */
-  @JsonProperty("first_name")
+  @JsonProperty("firstName")
   public String getFirstName() {
     return firstName;
   }
@@ -1057,7 +1057,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    * 
    * @return last name
    */
-  @JsonProperty("last_name")
+  @JsonProperty("lastName")
   public String getLastName() {
     return lastName;
   }
@@ -1095,7 +1095,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    * 
    * @return date of birth
    */
-  @JsonProperty("date_of_birth")
+  @JsonProperty("dateOfBirth")
   public String getDateOfBirth() {
     return dateOfBirth;
   }
@@ -1120,9 +1120,9 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
   }
 
   /**
-   * Setter for ssn
+   * Setter for SSN
    * 
-   * @param ssn the ssn
+   * @param ssn the SSN
    */
   public void setSsn(String ssn) {
     this.ssn = ssn;
