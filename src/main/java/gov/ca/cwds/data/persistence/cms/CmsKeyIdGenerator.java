@@ -47,10 +47,12 @@ public class CmsKeyIdGenerator {
       this.value = value;
     }
 
+    @SuppressWarnings("javadoc")
     public String getValue() {
       return value;
     }
 
+    @SuppressWarnings("javadoc")
     public void setValue(String value) {
       this.value = value;
     }
@@ -124,6 +126,10 @@ public class CmsKeyIdGenerator {
     return generateKeyFromStaff(new StringKey(staffId));
   }
 
+  /**
+   * @param wrap the wrap
+   * @return the key from staffID
+   */
   public String generateKeyFromStaff(final StringKey wrap) {
     try {
       ResourceParamValidator.<StringKey>validate(wrap);
@@ -155,6 +161,10 @@ public class CmsKeyIdGenerator {
     return doubleToStrN(7, nTimestamp, anPowVec62);
   }
 
+  /**
+   * @param localDateTime the current time stamp
+   * @return the timestamp in double
+   */
   public double timestampToDouble(final Calendar localDateTime) {
     double nTimestamp = 0;
     nTimestamp += (double) localDateTime.get(Calendar.MILLISECOND) / 10 * nSHIFT_HSECOND;
@@ -168,6 +178,12 @@ public class CmsKeyIdGenerator {
     return nTimestamp;
   }
 
+  /**
+   * @param nDstStrWidth the string width
+   * @param nSrcVal source value
+   * @param pnPowVec the power vector for the destination base
+   * @return the double to string
+   */
   public String doubleToStrN(int nDstStrWidth, Double nSrcVal, final double[] pnPowVec) {
     int i = 0;
     int nPower = 0;
@@ -204,17 +220,19 @@ public class CmsKeyIdGenerator {
 
   protected final Calendar getCurrentDate() throws ParseException {
     DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS");
-    // final Date fixedDate = fmt.parse("2017-04-13-11.10.46.860"); // TEST ONLY.
     Calendar cal = Calendar.getInstance();
-    // cal.setTimeInMillis(fixedDate.getTime());
     LOGGER.debug(fmt.format(cal.getTime())); // 2014/08/06 16:00:22
     return cal;
   }
 
+  /**
+   * @param args the args
+   * @throws InterruptedException checks the exception
+   */
   public static void main(String[] args) throws InterruptedException {
     CmsKeyIdGenerator rend = new CmsKeyIdGenerator();
     StringBuilder staffid = new StringBuilder("0JG");
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < 40000; i++) {
       LOGGER.debug("staffId: " + staffid.toString());
       String key = rend.generateKeyFromStaff(staffid.toString());
       LOGGER.debug("generated key: " + key);
@@ -223,17 +241,20 @@ public class CmsKeyIdGenerator {
     Thread.sleep(10);
   }
 
-  @SuppressWarnings("javadoc")
-  public static String cmskeyIdGenertor(String staffId) {
+  /**
+   * This Java class generates a identifier using the current timstamp and staffId
+   * 
+   * @param staffId the staffId
+   * @return the unique key from staffId
+   */
+  public static String cmsIdGenertor(String staffId) {
     CmsKeyIdGenerator rend = new CmsKeyIdGenerator();
     if (staffId == null || staffId.length() <= 0) {
       staffId = "0JG";
     }
     StringBuilder staffid = new StringBuilder(staffId);
     String key = rend.generateKeyFromStaff(staffid.toString());
-    // Thread.sleep(10);
     return key;
-
   }
 
 }
