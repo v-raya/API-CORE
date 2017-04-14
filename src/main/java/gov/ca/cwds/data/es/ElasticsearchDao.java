@@ -137,7 +137,8 @@ public class ElasticsearchDao implements Closeable {
       createIndex(index, 5, 1);
 
       // Give Elasticsearch a moment to catch its breath.
-      Thread.currentThread().wait(1000L);
+      // Thread.currentThread().wait(2000L); // thread monitor error
+      Thread.sleep(2000);
     }
   }
 
