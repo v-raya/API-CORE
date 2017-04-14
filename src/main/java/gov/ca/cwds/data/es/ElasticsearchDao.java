@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.WriteConsistencyLevel;
@@ -27,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
+import com.google.common.io.Resources;
 import com.google.inject.Inject;
 
 /**
@@ -94,13 +96,20 @@ public class ElasticsearchDao implements Closeable {
    * @param index index name or alias
    * @param numShards number of shards
    * @param numReplicas number of replicas
+   * @throws IOException on disconnect, hang, etc.
    */
-  public void createIndex(final String index, int numShards, int numReplicas) {
+  public void createIndex(final String index, int numShards, int numReplicas) throws IOException {
     LOGGER.warn("CREATE ES INDEX {} with {} shards and {} replicas", index, numShards, numReplicas);
     final Settings indexSettings = Settings.settingsBuilder().put("number_of_shards", numShards)
         .put("number_of_replicas", numReplicas).build();
     CreateIndexRequest indexRequest = new CreateIndexRequest(index, indexSettings);
     getClient().admin().indices().create(indexRequest).actionGet();
+
+    final String mapping =
+        Resources.toString(Resources.getResource("/elasticsearch/mapping/map_person_2x.json"),
+            Charset.defaultCharset());
+    getClient().admin().indices().preparePutMapping(index).setType(DEFAULT_PERSON_DOC_TYPE)
+        .setSource(mapping).get();
   }
 
   /**
@@ -117,14 +126,16 @@ public class ElasticsearchDao implements Closeable {
    * 
    * @param index index name or alias
    * @throws InterruptedException if thread is interrupted
+   * @throws IOException on disconnect, hang, etc.
    */
-  public synchronized void createIndexIfNeeded(final String index) throws InterruptedException {
+  public synchronized void createIndexIfNeeded(final String index)
+      throws InterruptedException, IOException {
     if (!doesIndexExist(index)) {
       LOGGER.warn("ES INDEX {} DOES NOT EXIST!!", index);
       createIndex(index, 5, 1);
 
       // Give Elasticsearch a moment to catch its breath.
-      Thread.sleep(1000L);
+      Thread.currentThread().wait(1000L);
     }
   }
 
