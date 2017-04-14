@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -205,9 +204,9 @@ public class CmsKeyIdGenerator {
 
   protected final Calendar getCurrentDate() throws ParseException {
     DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS");
-    final Date fixedDate = fmt.parse("2017-04-13-11.10.46.860"); // TEST ONLY.
+    // final Date fixedDate = fmt.parse("2017-04-13-11.10.46.860"); // TEST ONLY.
     Calendar cal = Calendar.getInstance();
-    cal.setTimeInMillis(fixedDate.getTime());
+    // cal.setTimeInMillis(fixedDate.getTime());
     LOGGER.debug(fmt.format(cal.getTime())); // 2014/08/06 16:00:22
     return cal;
   }
