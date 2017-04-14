@@ -67,12 +67,12 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     /**
      * first name
      */
-    FIRST_NAME("firstName", String.class, ""),
+    FIRST_NAME("first_name", String.class, ""),
 
     /**
      * last name
      */
-    LAST_NAME("lastName", String.class, ""),
+    LAST_NAME("last_name", String.class, ""),
 
     /**
      * gender code (M,F,U)
@@ -82,7 +82,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     /**
      * birth date
      */
-    BIRTH_DATE("dateOfBirth", String.class, null),
+    BIRTH_DATE("date_of_birth", String.class, null),
 
     /**
      * Social Security Number
@@ -161,7 +161,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
 
     private String id;
 
-    @JsonProperty("streetAddress")
+    @JsonProperty("street_address")
     @JsonInclude(JsonInclude.Include.ALWAYS)
     private String streetAddress;
 
@@ -182,7 +182,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     private String type;
 
     /**
-     * Default ctor.
+     * Default constructor.
      */
     public ElasticSearchPersonAddress() {
       // Default
@@ -825,19 +825,19 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
   // MEMBERS:
   // ================
 
-  @JsonProperty("firstName")
+  @JsonProperty("first_name")
   private String firstName;
 
-  @JsonProperty("middleName")
+  @JsonProperty("middle_name")
   private String middleName;
 
-  @JsonProperty("lastName")
+  @JsonProperty("last_name")
   private String lastName;
 
-  @JsonProperty("nameSuffix")
+  @JsonProperty("name_suffix")
   private String nameSuffix;
 
-  @JsonProperty("dateOfBirth")
+  @JsonProperty("date_of_birth")
   private String dateOfBirth;
 
   @JsonProperty("gender")
@@ -854,7 +854,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
 
   private List<ElasticSearchPersonAddress> addresses = new ArrayList<>();
 
-  @JsonProperty("phoneNumbers")
+  @JsonProperty("phone_number")
   private List<ElasticSearchPersonPhone> phones = new ArrayList<>();
 
   private List<String> languages = new ArrayList<>();
@@ -1038,7 +1038,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    * 
    * @return first name
    */
-  @JsonProperty("firstName")
+  @JsonProperty("first_name")
   public String getFirstName() {
     return firstName;
   }
@@ -1057,7 +1057,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    * 
    * @return last name
    */
-  @JsonProperty("lastName")
+  @JsonProperty("last_name")
   public String getLastName() {
     return lastName;
   }
@@ -1095,7 +1095,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    * 
    * @return date of birth
    */
-  @JsonProperty("dateOfBirth")
+  @JsonProperty("date_of_birth")
   public String getDateOfBirth() {
     return dateOfBirth;
   }

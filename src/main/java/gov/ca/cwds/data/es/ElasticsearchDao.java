@@ -106,7 +106,8 @@ public class ElasticsearchDao implements Closeable {
     getClient().admin().indices().create(indexRequest).actionGet();
 
     ByteArrayOutputStream out = new ByteArrayOutputStream();
-    IOUtils.copy(this.getClass().getResourceAsStream("/elasticsearch/mapping/map_person_2x.json"),
+    IOUtils.copy(
+        this.getClass().getResourceAsStream("/elasticsearch/mapping/map_person_2x_snake.json"),
         out);
     out.flush();
     final String mapping = out.toString();
