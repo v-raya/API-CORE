@@ -297,6 +297,11 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       return this.id;
     }
 
+    @Override
+    public Short getStateCd() {
+      return null;
+    }
+
   }
 
   /**

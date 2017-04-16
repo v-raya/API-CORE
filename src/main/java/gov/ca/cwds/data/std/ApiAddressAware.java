@@ -2,6 +2,8 @@ package gov.ca.cwds.data.std;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Interface defines naming standard methods for persistence classes that represent an Address.
  * Allows DAO and service classes to operate on Address-aware objects without knowledge of their
@@ -10,6 +12,28 @@ import java.io.Serializable;
  * @author CWDS API Team
  */
 public interface ApiAddressAware extends Serializable {
+
+  /**
+   * Format zip4 as a zero-padded String.
+   * 
+   * @param zip4 zip4 to format
+   * @return zip4 formatted as String
+   */
+  static String formatZip4(Short zip4) {
+    return zip4 != null && zip4 != 0 ? StringUtils.leftPad(String.valueOf(zip4.intValue()), 4, '0')
+        : null;
+  }
+
+  /**
+   * Format zip5 as a zero-padded String.
+   * 
+   * @param zip5 zip5 to format
+   * @return zip5 formatted as String
+   */
+  static String formatZip5(Short zip5) {
+    return zip5 != null && zip5 != 0 ? StringUtils.leftPad(String.valueOf(zip5.intValue()), 5, '0')
+        : null;
+  }
 
   /**
    * Getter address identifier (primary key), if any.
@@ -70,6 +94,13 @@ public interface ApiAddressAware extends Serializable {
    * @return county
    */
   String getCounty();
+
+  /**
+   * Getter for underlying state system code.
+   * 
+   * @return legacy CMS code for this state or null
+   */
+  Short getStateCd();
 
   /**
    * Getter for optional zip 4.
