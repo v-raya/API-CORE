@@ -86,7 +86,7 @@ public interface ApiAddressAware extends Serializable {
    * 
    * @return optional address type
    */
-  default String getAddressType() {
+  default String getOptionalAddressType() {
     return null;
   }
 
