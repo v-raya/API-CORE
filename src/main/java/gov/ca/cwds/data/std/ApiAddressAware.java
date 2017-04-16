@@ -19,7 +19,25 @@ public interface ApiAddressAware extends Serializable {
   String getAddressId();
 
   /**
-   * Getter for (first) street address.
+   * Getter street name.
+   * 
+   * @return street name
+   */
+  default String getStreetName() {
+    return null;
+  }
+
+  /**
+   * Getter for street number.
+   * 
+   * @return street number
+   */
+  default String getStreetNumber() {
+    return null;
+  }
+
+  /**
+   * Getter for (first) street address. Convenient, composite street address.
    * 
    * @return street address
    */
@@ -58,7 +76,7 @@ public interface ApiAddressAware extends Serializable {
    * 
    * @return zip4
    */
-  default String getOptionalZip4() {
+  default String getApiAdrZip4() {
     return null;
   }
 
@@ -67,7 +85,7 @@ public interface ApiAddressAware extends Serializable {
    * 
    * @return optional unit type
    */
-  default String getUnitType() {
+  default String getApiAdrUnitType() {
     return null;
   }
 
@@ -76,7 +94,7 @@ public interface ApiAddressAware extends Serializable {
    * 
    * @return optional unit number
    */
-  default String getUnitNumber() {
+  default String getApiAdrUnitNumber() {
     return null;
   }
 
@@ -86,25 +104,7 @@ public interface ApiAddressAware extends Serializable {
    * 
    * @return optional address type
    */
-  default String getOptionalAddressType() {
-    return null;
-  }
-
-  /**
-   * Getter street name.
-   * 
-   * @return street name
-   */
-  default String getStreetName() {
-    return null;
-  }
-
-  /**
-   * Getter for street number.
-   * 
-   * @return street number
-   */
-  default String getStreetNumber() {
+  default String getApiAdrAddressType() {
     return null;
   }
 
