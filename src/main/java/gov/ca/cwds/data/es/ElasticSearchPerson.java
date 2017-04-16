@@ -70,6 +70,11 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     FIRST_NAME("first_name", String.class, ""),
 
     /**
+     * middle name
+     */
+    MIDDLE_NAME("middle_name", String.class, ""),
+
+    /**
      * last name
      */
     LAST_NAME("last_name", String.class, ""),
@@ -303,7 +308,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       implements Serializable, ApiTypedIdentifier<String>, ApiPhoneAwareWritable {
 
     /**
-     * Default
+     * Default serialization version.
      */
     private static final long serialVersionUID = 1L;
 
