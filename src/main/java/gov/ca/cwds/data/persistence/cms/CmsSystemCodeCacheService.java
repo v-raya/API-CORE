@@ -97,7 +97,7 @@ public class CmsSystemCodeCacheService
     return this.idxMeta.get(meta);
   }
 
-  // #137202471: Tech debt: Cobertura can't deal with Java 8 features.
+  // #137202471: Tech debt: Cobertura doesn't recongize Java 8 features.
   @Override
   public Iterator<CmsSystemCode> iterator() {
     return this.idxSysId.values().iterator();

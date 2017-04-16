@@ -81,15 +81,6 @@ public interface ApiAddressAware extends Serializable {
   }
 
   /**
-   * Getter for optional unit type, like "apt" or "suite".
-   * 
-   * @return optional unit type
-   */
-  default String getApiAdrUnitType() {
-    return null;
-  }
-
-  /**
    * Getter for optional unit number, like apartment number of suite number.
    * 
    * @return optional unit number
@@ -104,7 +95,16 @@ public interface ApiAddressAware extends Serializable {
    * 
    * @return optional address type
    */
-  default String getApiAdrAddressType() {
+  default Short getApiAdrAddressType() {
+    return null;
+  }
+
+  /**
+   * Getter for optional unit type, like "apt" or "suite".
+   * 
+   * @return optional unit type
+   */
+  default Short getApiAdrUnitType() {
     return null;
   }
 

@@ -40,7 +40,7 @@ public final class CmsSystemCode implements Serializable {
    * @param sysId unique system code id
    * @param fksMetaT system code category
    * @param shortDsc short description (e.g., "California")
-   * @param lgcId logical id. Usually zero-padded sort order (e.g., "0002")
+   * @param lgcId logical id. Often zero-padded sort order (e.g., "0002") or standard code ("CA")
    * @param inactvInd inactive flag (N or Y)
    * @param categoryId sub-category
    * @param otherCd optional, 2 character code, such as "CA" for the State of California.
@@ -118,7 +118,7 @@ public final class CmsSystemCode implements Serializable {
   /**
    * Getter for system code id.
    * 
-   * @return sys id
+   * @return system code id
    */
   public int getSysId() {
     return sysId;
