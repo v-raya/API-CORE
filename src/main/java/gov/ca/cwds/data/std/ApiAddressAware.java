@@ -58,7 +58,7 @@ public interface ApiAddressAware extends Serializable {
    * 
    * @return zip4
    */
-  default String getZip4() {
+  default String getOptionalZip4() {
     return null;
   }
 
