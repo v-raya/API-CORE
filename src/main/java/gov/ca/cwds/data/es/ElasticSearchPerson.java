@@ -37,6 +37,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.data.ApiSysCodeAware;
 import gov.ca.cwds.data.ApiTypedIdentifier;
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
+import gov.ca.cwds.data.persistence.cms.CmsSystemCode;
 import gov.ca.cwds.data.std.ApiAddressAware;
 import gov.ca.cwds.data.std.ApiAddressAwareWritable;
 import gov.ca.cwds.data.std.ApiPhoneAware;
@@ -174,9 +175,12 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @JsonInclude(JsonInclude.Include.ALWAYS)
     private String city;
 
+    @JsonIgnore
+    private String state;
+
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("state_code")
-    private String state;
+    private String stateCode;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("state_name")
@@ -258,7 +262,9 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
 
       if (systemCodes != null) {
         if (address.getStateCd() != null && address.getStateCd().intValue() != 0) {
-          this.stateName = systemCodes.lookup(address.getStateCd().intValue()).getLongDsc();
+          final CmsSystemCode sysCode = systemCodes.lookup(address.getStateCd().intValue());
+          this.stateName = sysCode.getLongDsc();
+          this.stateCode = sysCode.getLgcId();
         }
 
         if (address.getApiAdrAddressType() != null
@@ -269,6 +275,8 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
         if (address.getApiAdrUnitType() != null && address.getApiAdrUnitType().intValue() != 0) {
           this.unitType = systemCodes.lookup(address.getApiAdrUnitType().intValue()).getLongDsc();
         }
+      } else {
+        LOGGER.warn("SYSCODE TRANSLATOR NOT SET!!!");
       }
     }
 
