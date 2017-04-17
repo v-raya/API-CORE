@@ -293,6 +293,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.id = id;
     }
 
+    @JsonIgnore
     @Override
     public String getStreetAddress() {
       return streetAddress;
