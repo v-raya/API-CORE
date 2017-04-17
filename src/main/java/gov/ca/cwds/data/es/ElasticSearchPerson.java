@@ -178,19 +178,20 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @JsonIgnore
     private String state;
 
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonInclude(JsonInclude.Include.ALWAYS)
     @JsonProperty("state_code")
     private String stateCode;
 
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonInclude(JsonInclude.Include.ALWAYS)
     @JsonProperty("state_name")
     private String stateName;
 
     // Bug #141508231: county not in Intake API swagger.yml. Intake JSON parsing error.
-    @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String county;
 
-    // Getter displays JSON.
+    @JsonInclude(JsonInclude.Include.ALWAYS)
+    @JsonProperty("zip")
     private String zip;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -276,7 +277,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
           this.unitType = systemCodes.lookup(address.getApiAdrUnitType().intValue()).getLongDsc();
         }
       } else {
-        LOGGER.warn("SYSCODE TRANSLATOR NOT SET!!!");
+        LOGGER.error("SYSCODE TRANSLATOR NOT SET!!!");
       }
     }
 
