@@ -173,8 +173,11 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @JsonInclude(JsonInclude.Include.ALWAYS)
     private String city;
 
-    @JsonProperty("state")
+    @JsonProperty("state_code")
     private String state;
+
+    @JsonProperty("state_name")
+    private String stateName;
 
     // Bug #141508231: county not in Intake API swagger.yml. Intake JSON parsing error.
     @JsonIgnore
@@ -183,8 +186,23 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     // Getter displays JSON.
     private String zip;
 
+    @JsonProperty("zip_4")
+    private String zip4;
+
     @JsonProperty("type")
     private String type;
+
+    @JsonProperty("unit_type")
+    private String unitType;
+
+    @JsonProperty("unit_number")
+    private String unitNumber;
+
+    @JsonProperty("street_number")
+    private String streetNumber;
+
+    @JsonProperty("street_name")
+    private String streetName;
 
     /**
      * Default constructor.
@@ -300,6 +318,66 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @Override
     public Short getStateCd() {
       return null;
+    }
+
+    @Override
+    public String getStreetName() {
+      return this.streetName;
+    }
+
+    @Override
+    public String getStreetNumber() {
+      return this.streetNumber;
+    }
+
+    @Override
+    public String getApiAdrZip4() {
+      return this.zip4;
+    }
+
+    @Override
+    public String getApiAdrUnitNumber() {
+      return this.unitNumber;
+    }
+
+    public String getStateName() {
+      return stateName;
+    }
+
+    public void setStateName(String stateName) {
+      this.stateName = stateName;
+    }
+
+    public String getZip4() {
+      return zip4;
+    }
+
+    public void setZip4(String zip4) {
+      this.zip4 = zip4;
+    }
+
+    public String getUnitType() {
+      return unitType;
+    }
+
+    public void setUnitType(String unitType) {
+      this.unitType = unitType;
+    }
+
+    public String getUnitNumber() {
+      return unitNumber;
+    }
+
+    public void setUnitNumber(String unitNumber) {
+      this.unitNumber = unitNumber;
+    }
+
+    public void setStreetNumber(String streetNumber) {
+      this.streetNumber = streetNumber;
+    }
+
+    public void setStreetName(String streetName) {
+      this.streetName = streetName;
     }
 
   }
