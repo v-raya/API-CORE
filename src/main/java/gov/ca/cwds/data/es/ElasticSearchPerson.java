@@ -168,10 +168,12 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
 
     private String id;
 
-    @JsonProperty("street_address")
-    @JsonInclude(JsonInclude.Include.ALWAYS)
+    @JsonIgnore
+    // @JsonProperty("street_address")
+    // @JsonInclude(JsonInclude.Include.ALWAYS)
     private String streetAddress;
 
+    @JsonProperty("city")
     @JsonInclude(JsonInclude.Include.ALWAYS)
     private String city;
 
