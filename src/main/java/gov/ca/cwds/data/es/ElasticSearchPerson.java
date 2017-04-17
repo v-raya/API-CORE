@@ -37,6 +37,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.data.ApiSysCodeAware;
 import gov.ca.cwds.data.ApiTypedIdentifier;
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
+import gov.ca.cwds.data.std.ApiAddressAware;
 import gov.ca.cwds.data.std.ApiAddressAwareWritable;
 import gov.ca.cwds.data.std.ApiPhoneAware;
 import gov.ca.cwds.data.std.ApiPhoneAwareWritable;
@@ -173,9 +174,11 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @JsonInclude(JsonInclude.Include.ALWAYS)
     private String city;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("state_code")
     private String state;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("state_name")
     private String stateName;
 
@@ -186,21 +189,26 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     // Getter displays JSON.
     private String zip;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("zip_4")
     private String zip4;
 
     @JsonProperty("type")
     private String type;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("unit_type")
     private String unitType;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("unit_number")
     private String unitNumber;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("street_number")
     private String streetNumber;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("street_name")
     private String streetName;
 
@@ -231,6 +239,39 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.type = type;
     }
 
+    /**
+     * Construct from persistence address.
+     * 
+     * @param address address persistence bean
+     */
+    public ElasticSearchPersonAddress(ApiAddressAware address) {
+      this.id = address.getAddressId();
+      this.city = address.getCity();
+      this.county = address.getCounty();
+      this.state = address.getState();
+
+      this.zip = address.getZip();
+      this.zip4 = address.getApiAdrZip4();
+      this.streetName = address.getStreetName();
+      this.streetNumber = address.getStreetNumber();
+      this.unitNumber = address.getApiAdrUnitNumber();
+
+      if (systemCodes != null) {
+        if (address.getStateCd() != null && address.getStateCd().intValue() != 0) {
+          this.stateName = systemCodes.lookup(address.getStateCd().intValue()).getShortDsc();
+        }
+
+        if (address.getApiAdrAddressType() != null
+            && address.getApiAdrAddressType().intValue() != 0) {
+          this.type = systemCodes.lookup(address.getApiAdrAddressType().intValue()).getShortDsc();
+        }
+
+        if (address.getApiAdrUnitType() != null && address.getApiAdrUnitType().intValue() != 0) {
+          this.unitType = systemCodes.lookup(address.getApiAdrUnitType().intValue()).getShortDsc();
+        }
+      }
+    }
+
     @Override
     public String getId() {
       return id;
@@ -251,6 +292,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.streetAddress = streetAddress;
     }
 
+    @JsonIgnore
     @Override
     public String getCity() {
       return city;
@@ -261,6 +303,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.city = city;
     }
 
+    @JsonIgnore
     @Override
     public String getState() {
       return state;
@@ -271,6 +314,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.state = state;
     }
 
+    @JsonIgnore
     @Override
     public String getCounty() {
       return county;
@@ -281,6 +325,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.county = county;
     }
 
+    @JsonIgnore
     @Override
     public String getZip() {
       return zip;
@@ -296,6 +341,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
      * 
      * @return address type, per Intake contract, if provided
      */
+    @JsonIgnore
     public String getType() {
       return type;
     }
@@ -315,31 +361,37 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       return this.id;
     }
 
+    @JsonIgnore
     @Override
     public Short getStateCd() {
       return null;
     }
 
+    @JsonIgnore
     @Override
     public String getStreetName() {
       return this.streetName;
     }
 
+    @JsonIgnore
     @Override
     public String getStreetNumber() {
       return this.streetNumber;
     }
 
+    @JsonIgnore
     @Override
     public String getApiAdrZip4() {
       return this.zip4;
     }
 
+    @JsonIgnore
     @Override
     public String getApiAdrUnitNumber() {
       return this.unitNumber;
     }
 
+    @JsonIgnore
     public String getStateName() {
       return stateName;
     }
@@ -348,6 +400,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.stateName = stateName;
     }
 
+    @JsonIgnore
     public String getZip4() {
       return zip4;
     }
@@ -356,6 +409,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.zip4 = zip4;
     }
 
+    @JsonIgnore
     public String getUnitType() {
       return unitType;
     }
@@ -364,6 +418,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.unitType = unitType;
     }
 
+    @JsonIgnore
     public String getUnitNumber() {
       return unitNumber;
     }
