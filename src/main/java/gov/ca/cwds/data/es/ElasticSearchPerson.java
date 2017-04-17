@@ -258,16 +258,16 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
 
       if (systemCodes != null) {
         if (address.getStateCd() != null && address.getStateCd().intValue() != 0) {
-          this.stateName = systemCodes.lookup(address.getStateCd().intValue()).getShortDsc();
+          this.stateName = systemCodes.lookup(address.getStateCd().intValue()).getLongDsc();
         }
 
         if (address.getApiAdrAddressType() != null
             && address.getApiAdrAddressType().intValue() != 0) {
-          this.type = systemCodes.lookup(address.getApiAdrAddressType().intValue()).getShortDsc();
+          this.type = systemCodes.lookup(address.getApiAdrAddressType().intValue()).getLongDsc();
         }
 
         if (address.getApiAdrUnitType() != null && address.getApiAdrUnitType().intValue() != 0) {
-          this.unitType = systemCodes.lookup(address.getApiAdrUnitType().intValue()).getShortDsc();
+          this.unitType = systemCodes.lookup(address.getApiAdrUnitType().intValue()).getLongDsc();
         }
       }
     }
@@ -433,6 +433,18 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
 
     public void setStreetName(String streetName) {
       this.streetName = streetName;
+    }
+
+    @JsonIgnore
+    @Override
+    public Short getApiAdrAddressType() {
+      return null;
+    }
+
+    @JsonIgnore
+    @Override
+    public Short getApiAdrUnitType() {
+      return null;
     }
 
   }
