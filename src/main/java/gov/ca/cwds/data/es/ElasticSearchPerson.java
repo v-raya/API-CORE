@@ -304,7 +304,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.streetAddress = streetAddress;
     }
 
-    @JsonIgnore
+    // @JsonIgnore
     @Override
     public String getCity() {
       return city;
@@ -1019,11 +1019,13 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
   @JsonProperty("source")
   private String source;
 
+  @JsonProperty("addresses")
   private List<ElasticSearchPersonAddress> addresses = new ArrayList<>();
 
-  @JsonProperty("phone_number")
+  @JsonProperty("phone_numbers")
   private List<ElasticSearchPersonPhone> phones = new ArrayList<>();
 
+  @JsonProperty("languages")
   private List<String> languages = new ArrayList<>();
 
   @Transient
