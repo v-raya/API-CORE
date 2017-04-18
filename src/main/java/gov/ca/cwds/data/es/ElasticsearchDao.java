@@ -135,7 +135,7 @@ public class ElasticsearchDao implements Closeable {
       throws InterruptedException, IOException {
     if (!doesIndexExist(index)) {
       LOGGER.warn("ES INDEX {} DOES NOT EXIST!!", index);
-      createIndex(index, 5, 1);
+      createIndex(index, 3, 1);
 
       // Give Elasticsearch a moment to catch its breath.
       // Thread.currentThread().wait(2000L); // thread monitor error
