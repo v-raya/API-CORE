@@ -56,7 +56,7 @@ public class ElasticsearchDao implements Closeable {
   /**
    * Standard "people" index name.
    */
-  public static final String DEFAULT_PERSON_IDX_NM = "people1";
+  public static final String DEFAULT_PERSON_IDX_NM = "people";
 
   /**
    * Standard "person" document name.
