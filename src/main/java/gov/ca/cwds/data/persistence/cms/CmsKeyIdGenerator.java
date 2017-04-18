@@ -143,12 +143,12 @@ public class CmsKeyIdGenerator {
     double nTimestamp = 0;
     double nPreviousTimestamp = 0; // previous value - used for UNIQUENESS!
 
-    while (true) {
+    while (true) { // NOSONAR
       nTimestamp = timestampToDouble(getCurrentDate());
 
       // If the timestamp value is the same as before, stay in the loop.
       // otherwise, break out since it is unique.
-      if (nTimestamp == nPreviousTimestamp) {
+      if (nTimestamp == nPreviousTimestamp) { // NOSONAR
         Thread.yield();
         continue;
       } else {
@@ -211,7 +211,7 @@ public class CmsKeyIdGenerator {
         nInteger = nSrcVal / pnPowVec[nPower - i - 1];
         float finalValue = (float) Math.floor(nInteger);
         szDstStr[i + nPad] = acConvTbl[(int) Math.abs(finalValue)];
-        nSrcVal -= (finalValue * pnPowVec[nPower - i - 1]);
+        nSrcVal -= (finalValue * pnPowVec[nPower - i - 1]); // NOSONAR
       }
     }
 
@@ -252,7 +252,7 @@ public class CmsKeyIdGenerator {
   public static String cmsIdGenertor(String staffId) {
     CmsKeyIdGenerator rend = new CmsKeyIdGenerator();
     if (staffId == null || staffId.length() <= 0) {
-      staffId = "0JG";
+      staffId = "0JG"; // NOSONAR
     }
     StringBuilder staffid = new StringBuilder(staffId);
     return rend.generateKeyFromStaff(staffid.toString());
