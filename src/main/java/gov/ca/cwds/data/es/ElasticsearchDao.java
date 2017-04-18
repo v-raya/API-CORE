@@ -51,12 +51,12 @@ public class ElasticsearchDao implements Closeable {
 
   private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ElasticsearchDao.class);
 
-  private static final int DEFAULT_MAX_RESULTS = 60;
+  private static final int DEFAULT_MAX_RESULTS = 100;
 
   /**
    * Standard "people" index name.
    */
-  public static final String DEFAULT_PERSON_IDX_NM = "people";
+  public static final String DEFAULT_PERSON_IDX_NM = "people1";
 
   /**
    * Standard "person" document name.
@@ -85,8 +85,9 @@ public class ElasticsearchDao implements Closeable {
    * @return whether the index exists
    */
   public boolean doesIndexExist(final String index) {
-    final IndexMetaData indexMetaData = getClient().admin().cluster()
-        .state(Requests.clusterStateRequest()).actionGet().getState().getMetaData().index(index);
+    final IndexMetaData indexMetaData =
+        getClient().admin().cluster().state(Requests.clusterStateRequest()).actionGet().getState()
+            .getMetaData().index(index);
     return indexMetaData != null;
   }
 
@@ -100,15 +101,16 @@ public class ElasticsearchDao implements Closeable {
    */
   public void createIndex(final String index, int numShards, int numReplicas) throws IOException {
     LOGGER.warn("CREATE ES INDEX {} with {} shards and {} replicas", index, numShards, numReplicas);
-    final Settings indexSettings = Settings.settingsBuilder().put("number_of_shards", numShards)
-        .put("number_of_replicas", numReplicas).build();
+    final Settings indexSettings =
+        Settings.settingsBuilder().put("number_of_shards", numShards)
+            .put("number_of_replicas", numReplicas).build();
     CreateIndexRequest indexRequest = new CreateIndexRequest(index, indexSettings);
     getClient().admin().indices().create(indexRequest).actionGet();
 
     ByteArrayOutputStream out = new ByteArrayOutputStream();
-    IOUtils.copy(
-        this.getClass().getResourceAsStream("/elasticsearch/mapping/map_person_2x_snake.json"),
-        out);
+    IOUtils
+        .copy(this.getClass()
+            .getResourceAsStream("/elasticsearch/mapping/map_person_2x_snake.json"), out);
     out.flush();
     final String mapping = out.toString();
     getClient().admin().indices().preparePutMapping(index).setType(DEFAULT_PERSON_DOC_TYPE)
@@ -131,8 +133,8 @@ public class ElasticsearchDao implements Closeable {
    * @throws InterruptedException if thread is interrupted
    * @throws IOException on disconnect, hang, etc.
    */
-  public synchronized void createIndexIfNeeded(final String index)
-      throws InterruptedException, IOException {
+  public synchronized void createIndexIfNeeded(final String index) throws InterruptedException,
+      IOException {
     if (!doesIndexExist(index)) {
       LOGGER.warn("ES INDEX {} DOES NOT EXIST!!", index);
       createIndex(index, 5, 1);
@@ -159,15 +161,16 @@ public class ElasticsearchDao implements Closeable {
     checkArgument(!Strings.isNullOrEmpty(documentType), "documentType cannot be Null or empty");
 
     LOGGER.info("ElasticSearchDao.createDocument(): " + document);
-    final IndexResponse response = client.prepareIndex(index, documentType, id)
-        .setConsistencyLevel(WriteConsistencyLevel.DEFAULT).setSource(document).execute()
-        .actionGet();
+    final IndexResponse response =
+        client.prepareIndex(index, documentType, id)
+            .setConsistencyLevel(WriteConsistencyLevel.DEFAULT).setSource(document).execute()
+            .actionGet();
 
     boolean created = response.isCreated();
     if (created) {
       LOGGER.info("Created document:\nindex: " + response.getIndex() + "\ndoc type: "
-          + response.getType() + "\nid: " + response.getId() + "\nversion: " + response.getVersion()
-          + "\ncreated: " + response.isCreated());
+          + response.getType() + "\nid: " + response.getId() + "\nversion: "
+          + response.getVersion() + "\ncreated: " + response.isCreated());
       LOGGER.info("Created document --- index:{}, doc type:{},id:{},version:{},created:{}",
           response.getIndex(), response.getType(), response.getId(), response.getVersion(),
           response.isCreated());
@@ -246,10 +249,14 @@ public class ElasticsearchDao implements Closeable {
     return ret;
   }
 
-  public String searchPersonQuery(final String query) {
+  public String searchIndexByQuery(final String index, final String query) {
+
+    LOGGER.warn(" index: {}", index);
+    LOGGER.warn(" QUERY: {}", query);
     checkArgument(!Strings.isNullOrEmpty(query), "query cannot be Null or empty");
+    checkArgument(!Strings.isNullOrEmpty(index), "index name cannot be Null or empty");
     SearchRequestBuilder builder =
-        client.prepareSearch(DEFAULT_PERSON_IDX_NM).setTypes(DEFAULT_PERSON_DOC_TYPE)
+        client.prepareSearch(index).setTypes(DEFAULT_PERSON_DOC_TYPE)
             .setQuery(QueryBuilders.wrapperQuery(query)).setFrom(0).setSize(DEFAULT_MAX_RESULTS);
     SearchResponse searchResponse = builder.execute().actionGet();
     String esResponse = "";
