@@ -22,8 +22,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.ContextualSerializer;
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.persistence.cms.CmsSystemCode;
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
+import gov.ca.cwds.data.persistence.cms.CmsSystemCode;
 
 /**
  * Jackson JSON serializer automatically translates CMS system codes on the fly.

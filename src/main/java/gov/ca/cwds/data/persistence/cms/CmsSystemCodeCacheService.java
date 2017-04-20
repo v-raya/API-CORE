@@ -35,8 +35,21 @@ public class CmsSystemCodeCacheService
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsSystemCodeCacheService.class);
 
   private final transient ApiSystemCodeDao dao;
+
+  /**
+   * Key = system code id, value = CMS system code record
+   */
   private final Map<Integer, CmsSystemCode> idxSysId;
+
+  /**
+   * Key = meta (aka, "category"), value = list of CMS system code records
+   */
   private final Map<String, List<CmsSystemCode>> idxMeta;
+
+  /**
+   * Key = meta + "_" + short description, value = CMS system code record
+   */
+  private final Map<String, CmsSystemCode> idxCategoryShortDesc;
 
   /**
    * Default constructor is off limits.
@@ -59,9 +72,12 @@ public class CmsSystemCodeCacheService
     final List<CmsSystemCode> codes = this.dao.getAllSystemCodes();
     Map<Integer, CmsSystemCode> anIdxSysId = new ConcurrentHashMap<>(codes.size());
     Map<String, List<CmsSystemCode>> anIdxMeta = new ConcurrentHashMap<>(codes.size());
+    Map<String, CmsSystemCode> anIdxCategoryShortDesc = new ConcurrentHashMap<>(codes.size());
 
     for (CmsSystemCode code : codes) {
       anIdxSysId.put(code.getSysId(), code);
+      anIdxCategoryShortDesc
+          .put(code.getFksMetaT().toUpperCase() + "_" + code.getShortDsc().toUpperCase(), code);
 
       if (anIdxMeta.get(code.getFksMetaT()) == null) {
         anIdxMeta.put(code.getFksMetaT(), new ArrayList<>());
@@ -74,6 +90,7 @@ public class CmsSystemCodeCacheService
 
     this.idxSysId = Collections.unmodifiableMap(anIdxSysId);
     this.idxMeta = Collections.unmodifiableMap(anIdxMeta);
+    this.idxCategoryShortDesc = Collections.unmodifiableMap(anIdxCategoryShortDesc);
     LOGGER.debug("total records in system code cache: {}", idxSysId.size());
   }
 
@@ -87,6 +104,12 @@ public class CmsSystemCodeCacheService
     return this.idxSysId.get(sysId);
   }
 
+  @Override
+  public CmsSystemCode lookupByCategoryAndShortDesc(String meta, String shortDesc) {
+    final String key = meta.toUpperCase() + "_" + shortDesc.toUpperCase();
+    return idxCategoryShortDesc.get(key);
+  }
+
   /**
    * {@inheritDoc}
    * 
@@ -97,7 +120,7 @@ public class CmsSystemCodeCacheService
     return this.idxMeta.get(meta);
   }
 
-  // #137202471: Tech debt: Cobertura doesn't recongize Java 8 features.
+  // #137202471: Tech debt: Cobertura doesn't recognize Java 8 features.
   @Override
   public Iterator<CmsSystemCode> iterator() {
     return this.idxSysId.values().iterator();

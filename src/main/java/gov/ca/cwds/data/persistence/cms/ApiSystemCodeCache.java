@@ -33,7 +33,13 @@ public interface ApiSystemCodeCache {
    */
   List<CmsSystemCode> getCategory(final String meta);
 
-  default String sayHello() {
-    return "hello world";
-  }
+  /**
+   * Look up CMS system code record by its category and short description.
+   * 
+   * @param meta lookup category
+   * @param shortDesc short description
+   * @return system code record
+   */
+  CmsSystemCode lookupByCategoryAndShortDesc(final String meta, final String shortDesc);
+
 }
