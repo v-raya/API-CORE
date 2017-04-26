@@ -32,6 +32,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
 
+import gov.ca.cwds.rest.ElasticsearchConfiguration;
+
 /**
  * A DAO for Elasticsearch.
  * 
@@ -72,14 +74,17 @@ public class ElasticsearchDao implements Closeable {
    */
   private Client client;
 
+  private ElasticsearchConfiguration config;
+
   /**
    * Constructor.
    * 
    * @param client The ElasticSearch client
    */
   @Inject
-  public ElasticsearchDao(Client client) {
+  public ElasticsearchDao(Client client, ElasticsearchConfiguration config) {
     this.client = client;
+    this.config = config;
   }
 
   /**
@@ -393,6 +398,14 @@ public class ElasticsearchDao implements Closeable {
    */
   public Client getClient() {
     return client;
+  }
+
+  public ElasticsearchConfiguration getConfig() {
+    return config;
+  }
+
+  public void setConfig(ElasticsearchConfiguration config) {
+    this.config = config;
   }
 
 }

@@ -25,6 +25,27 @@ public class ElasticsearchConfiguration {
   @JsonProperty("elasticsearch.port")
   private String elasticsearchPort;
 
+  @NotNull
+  @JsonProperty("elasticsearch.alias")
+  private String elasticsearchAlias;
+
+  @NotNull
+  @JsonProperty("elasticsearch.doctype")
+  private String elasticsearchDocType;
+
+  public ElasticsearchConfiguration() {
+    // Default.
+  }
+
+  public ElasticsearchConfiguration(final String host, final String cluster, final String port,
+      final String alias, final String docType) {
+    this.elasticsearchHost = host;
+    this.elasticsearchCluster = cluster;
+    this.elasticsearchPort = port;
+    this.elasticsearchAlias = alias;
+    this.elasticsearchDocType = docType;
+  }
+
   /**
    * @return the elasticsearchHost
    */
@@ -44,5 +65,19 @@ public class ElasticsearchConfiguration {
    */
   public String getElasticsearchPort() {
     return elasticsearchPort;
+  }
+
+  /**
+   * @return the elasticsearchAlias
+   */
+  public String getElasticsearchAlias() {
+    return elasticsearchAlias;
+  }
+
+  /**
+   * @return the elasticsearchDocType
+   */
+  public String getElasticsearchDocType() {
+    return elasticsearchDocType;
   }
 }

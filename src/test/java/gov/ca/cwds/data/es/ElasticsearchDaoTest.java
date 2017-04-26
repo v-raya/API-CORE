@@ -37,6 +37,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
 import gov.ca.cwds.data.es.ElasticSearchPerson.ESColumn;
+import gov.ca.cwds.rest.ElasticsearchConfiguration;
 
 /**
  * Class under test: {@link ElasticsearchDao}.
@@ -56,7 +57,7 @@ public final class ElasticsearchDaoTest {
 
   @InjectMocks
   @Spy
-  private ElasticsearchDao cut = new ElasticsearchDao(client);
+  private ElasticsearchDao cut = new ElasticsearchDao(client, new ElasticsearchConfiguration());
 
   @Mock
   private TransportClient.Builder clientBuilder;
@@ -93,7 +94,7 @@ public final class ElasticsearchDaoTest {
     mock(TransportClient.class);
     mock(SearchRequestBuilder.class);
     MockitoAnnotations.initMocks(this);
-    target = new ElasticsearchDao(client);
+    target = new ElasticsearchDao(client, new ElasticsearchConfiguration());
 
     // To run queries against a fake transport and client, use this:
     // cut.setTransportAddress(DummyTransportAddress.INSTANCE);
