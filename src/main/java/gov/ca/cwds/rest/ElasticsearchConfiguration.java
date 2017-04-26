@@ -37,15 +37,6 @@ public class ElasticsearchConfiguration {
     // Default.
   }
 
-  public ElasticsearchConfiguration(final String host, final String cluster, final String port,
-      final String alias, final String docType) {
-    this.elasticsearchHost = host;
-    this.elasticsearchCluster = cluster;
-    this.elasticsearchPort = port;
-    this.elasticsearchAlias = alias;
-    this.elasticsearchDocType = docType;
-  }
-
   /**
    * @return the elasticsearchHost
    */

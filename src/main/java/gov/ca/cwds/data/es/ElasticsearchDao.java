@@ -70,6 +70,26 @@ public class ElasticsearchDao implements Closeable {
   public static final String DEFAULT_PERSON_DOC_TYPE = "person";
 
   /**
+   * Get the default alias, either from the configuration or the default constant.
+   * 
+   * @return default alias
+   */
+  protected String getDefaultAlias() {
+    return this.config != null && StringUtils.isNotBlank(config.getElasticsearchAlias())
+        ? config.getElasticsearchAlias() : DEFAULT_PERSON_IDX_NM;
+  }
+
+  /**
+   * Get the default document type, either from the configuration or the default constant.
+   * 
+   * @return default document type
+   */
+  protected String getDefaultDocType() {
+    return this.config != null && StringUtils.isNotBlank(config.getElasticsearchDocType())
+        ? config.getElasticsearchDocType() : DEFAULT_PERSON_DOC_TYPE;
+  }
+
+  /**
    * Client is thread safe.
    */
   private Client client;
@@ -80,6 +100,7 @@ public class ElasticsearchDao implements Closeable {
    * Constructor.
    * 
    * @param client The ElasticSearch client
+   * @param config ES configuration, includes default index alias and document type
    */
   @Inject
   public ElasticsearchDao(Client client, ElasticsearchConfiguration config) {
@@ -100,7 +121,7 @@ public class ElasticsearchDao implements Closeable {
   }
 
   /**
-   * Create an index before blasting documents into it.
+   * Create an index and apply a mapping before blasting documents into it.
    * 
    * @param index index name or alias
    * @param numShards number of shards
@@ -178,7 +199,7 @@ public class ElasticsearchDao implements Closeable {
    * 
    * <p>
    * This method indexes a single document and is inefficient for bulk operations. See
-   * {@link #bulkAdd(ObjectMapper, String, Object, Optional, Optional)}.
+   * {@link #bulkAdd(ObjectMapper, String, Object, String, String)}.
    * </p>
    * 
    * @param index to write store
@@ -221,16 +242,13 @@ public class ElasticsearchDao implements Closeable {
    * @param mapper Jackson ObjectMapper
    * @param id ES document id
    * @param obj document object
-   * @param optAlias optional index alias
-   * @param optDocType optional document type
+   * @param alias index alias
+   * @param docType document type
    * @return prepared IndexRequest
    * @throws JsonProcessingException if unable to serialize JSON
    */
   public IndexRequest bulkAdd(final ObjectMapper mapper, final String id, final Object obj,
-      final Optional<String> optAlias, final Optional<String> optDocType)
-      throws JsonProcessingException {
-    final String alias = optAlias.orElse(DEFAULT_PERSON_IDX_NM);
-    final String docType = optDocType.orElse(DEFAULT_PERSON_DOC_TYPE);
+      final String alias, final String docType) throws JsonProcessingException {
     return new IndexRequest(alias, docType, id).source(mapper.writeValueAsString(obj));
   }
 
@@ -246,7 +264,7 @@ public class ElasticsearchDao implements Closeable {
    */
   public IndexRequest bulkAdd(final ObjectMapper mapper, final String id, final Object obj)
       throws JsonProcessingException {
-    return bulkAdd(mapper, id, obj, Optional.<String>empty(), Optional.<String>empty());
+    return bulkAdd(mapper, id, obj, getDefaultAlias(), getDefaultDocType());
   }
 
   /**
@@ -266,18 +284,14 @@ public class ElasticsearchDao implements Closeable {
    * </p>
    * 
    * @param searchTerm ES search String
-   * @param optAlias optional index alias
-   * @param optDocType optional document type
+   * @param alias index alias
+   * @param docType document type
    * @return array of AutoCompletePerson
    * @throws ApiElasticSearchException unable to connect, disconnect, bad hair day, etc.
    */
-  public ElasticSearchPerson[] searchPerson(final String searchTerm,
-      final Optional<String> optAlias, final Optional<String> optDocType)
-      throws ApiElasticSearchException {
+  public ElasticSearchPerson[] searchPerson(final String searchTerm, final String alias,
+      final String docType) throws ApiElasticSearchException {
     checkArgument(!Strings.isNullOrEmpty(searchTerm), "searchTerm cannot be Null or empty");
-
-    final String alias = optAlias.orElse(DEFAULT_PERSON_IDX_NM);
-    final String docType = optDocType.orElse(DEFAULT_PERSON_DOC_TYPE);
 
     BoolQueryBuilder queryBuilder = buildBoolQueryFromSearchTerms(searchTerm);
     if (!queryBuilder.hasClauses()) {
@@ -310,11 +324,10 @@ public class ElasticsearchDao implements Closeable {
    * @param searchTerm ES search String
    * @return array of AutoCompletePerson
    * @throws ApiElasticSearchException unable to connect, disconnect, bad hair day, etc.
-   * @see #searchPerson(String, Optional, Optional)
    */
   public ElasticSearchPerson[] searchPerson(final String searchTerm)
       throws ApiElasticSearchException {
-    return searchPerson(searchTerm, Optional.<String>empty(), Optional.<String>empty());
+    return searchPerson(searchTerm, getDefaultAlias(), getDefaultDocType());
   }
 
   /**
