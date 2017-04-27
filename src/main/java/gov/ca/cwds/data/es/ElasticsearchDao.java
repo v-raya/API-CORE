@@ -9,12 +9,14 @@ import java.util.Optional;
 
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.action.IndicesRequest;
 import org.elasticsearch.action.WriteConsistencyLevel;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.Requests;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
@@ -151,8 +153,8 @@ public class ElasticsearchDao implements Closeable {
    * </p>
    * 
    * <p>
-   * Method is intentionally synchronized to prevent race conditions and multiple attempts to create
-   * the same index.
+   * This method intentionally synchronizes against race conditions by multiple, simultaneous
+   * attempts to create the same index.
    * </p>
    * 
    * @param index index name or alias
@@ -199,7 +201,7 @@ public class ElasticsearchDao implements Closeable {
    * 
    * <p>
    * This method indexes a single document and is inefficient for bulk operations. See
-   * {@link #bulkAdd(ObjectMapper, String, Object, String, String)}.
+   * {@link #bulkAdd(ObjectMapper, String, Object, String, String, boolean)}.
    * </p>
    * 
    * @param index to write store
@@ -239,17 +241,24 @@ public class ElasticsearchDao implements Closeable {
   /**
    * Prepare an index request for bulk operations.
    * 
+   * <p>
+   * Upsert: update or insert.
+   * </p>
+   * 
    * @param mapper Jackson ObjectMapper
    * @param id ES document id
    * @param obj document object
    * @param alias index alias
    * @param docType document type
+   * @param upsert update if document exists, else insert new
    * @return prepared IndexRequest
    * @throws JsonProcessingException if unable to serialize JSON
    */
-  public IndexRequest bulkAdd(final ObjectMapper mapper, final String id, final Object obj,
-      final String alias, final String docType) throws JsonProcessingException {
-    return new IndexRequest(alias, docType, id).source(mapper.writeValueAsString(obj));
+  public IndicesRequest bulkAdd(final ObjectMapper mapper, final String id, final Object obj,
+      final String alias, final String docType, boolean upsert) throws JsonProcessingException {
+    final String json = mapper.writeValueAsString(obj);
+    final IndexRequest idxReq = new IndexRequest(alias, docType, id).source(json);
+    return upsert ? new UpdateRequest(alias, docType, id).doc(json).upsert(idxReq) : idxReq;
   }
 
   /**
@@ -259,12 +268,13 @@ public class ElasticsearchDao implements Closeable {
    * @param mapper Jackson ObjectMapper configured for bulk operations
    * @param id ES document id
    * @param obj document object
+   * @param upsert update if document exists, else insert new
    * @return prepared IndexRequest
    * @throws JsonProcessingException if unable to serialize JSON
    */
-  public IndexRequest bulkAdd(final ObjectMapper mapper, final String id, final Object obj)
-      throws JsonProcessingException {
-    return bulkAdd(mapper, id, obj, getDefaultAlias(), getDefaultDocType());
+  public IndicesRequest bulkAdd(final ObjectMapper mapper, final String id, final Object obj,
+      boolean upsert) throws JsonProcessingException {
+    return bulkAdd(mapper, id, obj, getDefaultAlias(), getDefaultDocType(), upsert);
   }
 
   /**
@@ -413,10 +423,21 @@ public class ElasticsearchDao implements Closeable {
     return client;
   }
 
+  /**
+   * Expose underlying Elasticsearch configuration.
+   * 
+   * @return ES configuration
+   */
   public ElasticsearchConfiguration getConfig() {
     return config;
   }
 
+  /**
+   * Set Elasticsearch configuration. Does not automatically reconnect to host and port without
+   * calling {@link #stop}, but alias and document type changes take effect immediately.
+   * 
+   * @param config ES configuration
+   */
   public void setConfig(ElasticsearchConfiguration config) {
     this.config = config;
   }
