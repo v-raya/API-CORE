@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.elasticsearch.action.IndicesRequest;
+import org.elasticsearch.action.ActionRequest;
 import org.elasticsearch.action.WriteConsistencyLevel;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.index.IndexRequest;
@@ -254,7 +254,8 @@ public class ElasticsearchDao implements Closeable {
    * @return prepared IndexRequest
    * @throws JsonProcessingException if unable to serialize JSON
    */
-  public IndicesRequest bulkAdd(final ObjectMapper mapper, final String id, final Object obj,
+  @SuppressWarnings("rawtypes")
+  public ActionRequest bulkAdd(final ObjectMapper mapper, final String id, final Object obj,
       final String alias, final String docType, boolean upsert) throws JsonProcessingException {
     final String json = mapper.writeValueAsString(obj);
     final IndexRequest idxReq = new IndexRequest(alias, docType, id).source(json);
@@ -272,7 +273,8 @@ public class ElasticsearchDao implements Closeable {
    * @return prepared IndexRequest
    * @throws JsonProcessingException if unable to serialize JSON
    */
-  public IndicesRequest bulkAdd(final ObjectMapper mapper, final String id, final Object obj,
+  @SuppressWarnings("rawtypes")
+  public ActionRequest bulkAdd(final ObjectMapper mapper, final String id, final Object obj,
       boolean upsert) throws JsonProcessingException {
     return bulkAdd(mapper, id, obj, getDefaultAlias(), getDefaultDocType(), upsert);
   }
