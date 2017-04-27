@@ -70,6 +70,25 @@ public class ElasticsearchDao implements Closeable {
   public static final String DEFAULT_PERSON_DOC_TYPE = "person";
 
   /**
+   * Client is thread safe.
+   */
+  private Client client;
+
+  private ElasticsearchConfiguration config;
+
+  /**
+   * Constructor.
+   * 
+   * @param client The ElasticSearch client
+   * @param config ES configuration, includes default index alias and document type
+   */
+  @Inject
+  public ElasticsearchDao(Client client, ElasticsearchConfiguration config) {
+    this.client = client;
+    this.config = config;
+  }
+
+  /**
    * Get the default alias, either from the configuration or the default constant.
    * 
    * @return default alias
@@ -87,25 +106,6 @@ public class ElasticsearchDao implements Closeable {
   protected String getDefaultDocType() {
     return this.config != null && StringUtils.isNotBlank(config.getElasticsearchDocType())
         ? config.getElasticsearchDocType() : DEFAULT_PERSON_DOC_TYPE;
-  }
-
-  /**
-   * Client is thread safe.
-   */
-  private Client client;
-
-  private ElasticsearchConfiguration config;
-
-  /**
-   * Constructor.
-   * 
-   * @param client The ElasticSearch client
-   * @param config ES configuration, includes default index alias and document type
-   */
-  @Inject
-  public ElasticsearchDao(Client client, ElasticsearchConfiguration config) {
-    this.client = client;
-    this.config = config;
   }
 
   /**
@@ -139,7 +139,7 @@ public class ElasticsearchDao implements Closeable {
     IOUtils.copy(this.getClass().getResourceAsStream(DEFAULT_PERSON_MAPPING), out);
     out.flush();
     final String mapping = out.toString();
-    getClient().admin().indices().preparePutMapping(index).setType(DEFAULT_PERSON_DOC_TYPE)
+    getClient().admin().indices().preparePutMapping(index).setType(getDefaultDocType())
         .setSource(mapping).get();
   }
 
