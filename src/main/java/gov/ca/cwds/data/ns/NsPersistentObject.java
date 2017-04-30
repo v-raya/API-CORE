@@ -22,6 +22,10 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 @SuppressWarnings("serial")
 @MappedSuperclass
 public abstract class NsPersistentObject implements PersistentObject {
+
+  /**
+   * Standard timestamp format for PostgreSQL persistence classes.
+   */
   protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
 
   @Column(name = "create_user_id")
@@ -31,7 +35,6 @@ public abstract class NsPersistentObject implements PersistentObject {
   @Column(name = "create_datetime")
   private Date createDateTime;
 
-
   @Column(name = "update_user_id")
   private String lastUpdatedId;
 
@@ -39,15 +42,13 @@ public abstract class NsPersistentObject implements PersistentObject {
   @Column(name = "update_datetime")
   private Date lastUpdatedTime;
 
-
-
   /**
    * Default constructor
    * 
    * Required for Hibernate
    */
   protected NsPersistentObject() {
-
+    // No-op.
   }
 
   /**
@@ -62,7 +63,6 @@ public abstract class NsPersistentObject implements PersistentObject {
     this.createUserId = createUserId;
     this.createDateTime = new Date();
   }
-
 
   /**
    * @return the timestampFormat

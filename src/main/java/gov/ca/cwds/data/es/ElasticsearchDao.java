@@ -1,7 +1,6 @@
 package gov.ca.cwds.data.es;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import gov.ca.cwds.rest.ElasticsearchConfiguration;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -35,6 +34,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
+
+import gov.ca.cwds.rest.ElasticsearchConfiguration;
 
 /**
  * A DAO for Elasticsearch.
@@ -96,8 +97,8 @@ public class ElasticsearchDao implements Closeable {
    * @return default alias
    */
   public String getDefaultAlias() {
-    return this.config != null && StringUtils.isNotBlank(config.getElasticsearchAlias()) ? config
-        .getElasticsearchAlias() : DEFAULT_PERSON_IDX_NM;
+    return this.config != null && StringUtils.isNotBlank(config.getElasticsearchAlias())
+        ? config.getElasticsearchAlias() : DEFAULT_PERSON_IDX_NM;
   }
 
   /**
@@ -106,8 +107,8 @@ public class ElasticsearchDao implements Closeable {
    * @return default document type
    */
   public String getDefaultDocType() {
-    return this.config != null && StringUtils.isNotBlank(config.getElasticsearchDocType()) ? config
-        .getElasticsearchDocType() : DEFAULT_PERSON_DOC_TYPE;
+    return this.config != null && StringUtils.isNotBlank(config.getElasticsearchDocType())
+        ? config.getElasticsearchDocType() : DEFAULT_PERSON_DOC_TYPE;
   }
 
   /**
@@ -117,9 +118,8 @@ public class ElasticsearchDao implements Closeable {
    * @return whether the index exists
    */
   public boolean doesIndexExist(final String index) {
-    final IndexMetaData indexMetaData =
-        getClient().admin().cluster().state(Requests.clusterStateRequest()).actionGet().getState()
-            .getMetaData().index(index);
+    final IndexMetaData indexMetaData = getClient().admin().cluster()
+        .state(Requests.clusterStateRequest()).actionGet().getState().getMetaData().index(index);
     return indexMetaData != null;
   }
 
@@ -133,9 +133,8 @@ public class ElasticsearchDao implements Closeable {
    */
   public void createIndex(final String index, int numShards, int numReplicas) throws IOException {
     LOGGER.warn("CREATE ES INDEX {} with {} shards and {} replicas", index, numShards, numReplicas);
-    final Settings indexSettings =
-        Settings.settingsBuilder().put("number_of_shards", numShards)
-            .put("number_of_replicas", numReplicas).build();
+    final Settings indexSettings = Settings.settingsBuilder().put("number_of_shards", numShards)
+        .put("number_of_replicas", numReplicas).build();
     CreateIndexRequest indexRequest = new CreateIndexRequest(index, indexSettings);
     getClient().admin().indices().create(indexRequest).actionGet();
 
@@ -193,8 +192,8 @@ public class ElasticsearchDao implements Closeable {
    * @throws IOException on disconnect, hang, etc.
    * @see #createIndexIfNeeded(String, Optional, Optional)
    */
-  public synchronized void createIndexIfNeeded(final String index) throws InterruptedException,
-      IOException {
+  public synchronized void createIndexIfNeeded(final String index)
+      throws InterruptedException, IOException {
     createIndexIfNeeded(index, Optional.<Integer>empty(), Optional.<Integer>empty());
   }
 
@@ -219,16 +218,15 @@ public class ElasticsearchDao implements Closeable {
     checkArgument(!Strings.isNullOrEmpty(documentType), "documentType cannot be Null or empty");
 
     LOGGER.info("ElasticSearchDao.createDocument(): " + document);
-    final IndexResponse response =
-        client.prepareIndex(index, documentType, id)
-            .setConsistencyLevel(WriteConsistencyLevel.DEFAULT).setSource(document).execute()
-            .actionGet();
+    final IndexResponse response = client.prepareIndex(index, documentType, id)
+        .setConsistencyLevel(WriteConsistencyLevel.DEFAULT).setSource(document).execute()
+        .actionGet();
 
     boolean created = response.isCreated();
     if (created) {
       LOGGER.info("Created document:\nindex: " + response.getIndex() + "\ndoc type: "
-          + response.getType() + "\nid: " + response.getId() + "\nversion: "
-          + response.getVersion() + "\ncreated: " + response.isCreated());
+          + response.getType() + "\nid: " + response.getId() + "\nversion: " + response.getVersion()
+          + "\ncreated: " + response.isCreated());
       LOGGER.info("Created document --- index:{}, doc type:{},id:{},version:{},created:{}",
           response.getIndex(), response.getType(), response.getId(), response.getVersion(),
           response.isCreated());
@@ -313,16 +311,15 @@ public class ElasticsearchDao implements Closeable {
       return new ElasticSearchPerson[0];
     }
 
-    SearchRequestBuilder builder =
-        client.prepareSearch(alias).setTypes(docType).setQuery(queryBuilder).setFrom(0)
-            .setSize(DEFAULT_MAX_RESULTS)
-            .addHighlightedField(ElasticSearchPerson.ESColumn.FIRST_NAME.getCol())
-            .addHighlightedField(ElasticSearchPerson.ESColumn.LAST_NAME.getCol())
-            .addHighlightedField(ElasticSearchPerson.ESColumn.GENDER.getCol())
-            .addHighlightedField(ElasticSearchPerson.ESColumn.BIRTH_DATE.getCol())
-            .addHighlightedField(ElasticSearchPerson.ESColumn.SSN.getCol())
-            .setHighlighterNumOfFragments(3).setHighlighterRequireFieldMatch(true)
-            .setHighlighterOrder("score").setExplain(true);
+    SearchRequestBuilder builder = client.prepareSearch(alias).setTypes(docType)
+        .setQuery(queryBuilder).setFrom(0).setSize(DEFAULT_MAX_RESULTS)
+        .addHighlightedField(ElasticSearchPerson.ESColumn.FIRST_NAME.getCol())
+        .addHighlightedField(ElasticSearchPerson.ESColumn.LAST_NAME.getCol())
+        .addHighlightedField(ElasticSearchPerson.ESColumn.GENDER.getCol())
+        .addHighlightedField(ElasticSearchPerson.ESColumn.BIRTH_DATE.getCol())
+        .addHighlightedField(ElasticSearchPerson.ESColumn.SSN.getCol())
+        .setHighlighterNumOfFragments(3).setHighlighterRequireFieldMatch(true)
+        .setHighlighterOrder("score").setExplain(true);
 
     LOGGER.warn("ES QUERY: {}", builder);
     final SearchHit[] hits = builder.execute().actionGet().getHits().getHits();
@@ -351,18 +348,37 @@ public class ElasticsearchDao implements Closeable {
    * 
    * @param index index to search
    * @param query user-provided query
+   * @param protocol presumably "http://" or https://"
+   * @param port usually 9200
+   * @param docType "person" or otherwise
    * @return JSON ES results
    */
-  public String searchIndexByQuery(final String index, final String query) {
+  public String searchIndexByQuery(final String index, final String query, final String protocol,
+      final int port, final String docType) {
     LOGGER.warn(" index: {}", index);
     LOGGER.warn(" QUERY: {}", query);
     checkArgument(!Strings.isNullOrEmpty(query), "query cannot be Null or empty");
     checkArgument(!Strings.isNullOrEmpty(index), "index name cannot be Null or empty");
-    String targetURL =
-        "http://" + config.getElasticsearchHost().trim() + ":9200/" + index + "/person/_search";
 
+    StringBuilder buf = new StringBuilder();
+    buf.append(protocol.trim()).append(config.getElasticsearchHost().trim()).append(':')
+        .append(port).append('/').append(index).append('/').append(docType.trim())
+        .append("/_search");
+    final String targetURL = buf.toString();
+    LOGGER.warn("ES SEARCH URL: {}", targetURL);
     return executionResult(targetURL, query);
+  }
 
+  /**
+   * Convenience overload. Search given index by pass-through query.
+   * 
+   * @param index index to search
+   * @param query user-provided query
+   * @return JSON ES results
+   * @see #searchIndexByQuery(String, String, String, int, String)
+   */
+  public String searchIndexByQuery(final String index, final String query) {
+    return searchIndexByQuery(index, query, "http://", 9200, "person");
   }
 
   /**
@@ -446,6 +462,7 @@ public class ElasticsearchDao implements Closeable {
     BufferedReader reader = null;
     OutputStreamWriter writer = null;
     HttpURLConnection connection = null;
+
     try {
       URL url = new URL(targetURL);
       connection = (HttpURLConnection) url.openConnection();
@@ -482,6 +499,5 @@ public class ElasticsearchDao implements Closeable {
     }
     return jsonString.toString();
   }
-
 
 }
