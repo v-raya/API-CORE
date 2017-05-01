@@ -136,6 +136,34 @@
 			    }
 		    }
 	    },
+		"relationships": {
+			"properties": {
+        		"related_person_first_name": {
+        			"type": "string", 
+        			"store" : true
+        		},
+        		"related_person_last_name": {
+        			"type": "string", 
+        			"store" : true
+        		},
+        		"relationship": {
+        			"type": "string", 
+        			"store" : true
+        		},
+		        "related_person_id": {
+		            "type": "string", 
+		            "store" : true
+		        },
+        		"repated_person_legacy_source_table": {
+        			"type": "string", 
+        			"store" : true
+        		},
+        		"repated_person_legacy_id": {
+        			"type": "string", 
+        			"store" : true
+        		}
+			}
+		},
     	"referrals": {
     		"properties": {
         		"id": {
@@ -228,7 +256,7 @@
                 		}
     				}
     			}
-    		}
+       		}
     	},
     	"screenings": {
     		"properties": {
