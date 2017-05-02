@@ -83,7 +83,14 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
   public Response create(Request request) {
     Response response = null;
     try {
-      response = Response.status(Response.Status.CREATED).entity(service.create(request)).build();
+      gov.ca.cwds.rest.api.Response serviceResponse = service.create(request);
+      Object entity;
+      if(serviceResponse.hasMessages()){
+        entity = serviceResponse.getMessages();
+      }else{
+        entity = serviceResponse;
+      }
+      response = Response.status(Response.Status.CREATED).entity(entity).build();
     } catch (ServiceException e) {
       if (e.getCause() instanceof EntityExistsException) {
         response = Response.status(Response.Status.CONFLICT).entity(null).build();

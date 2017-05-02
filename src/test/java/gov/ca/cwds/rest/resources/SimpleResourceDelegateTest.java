@@ -11,6 +11,7 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.TypeVariable;
+import java.util.Set;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
@@ -71,6 +72,15 @@ public class SimpleResourceDelegateTest {
       this.output = output;
     }
 
+    @Override
+    public boolean hasMessages() {
+      return false;
+    }
+
+    @Override
+    public Set getMessages() {
+      return null;
+    }
   }
 
   private static class TestSimpleResourceDelegateImpl extends

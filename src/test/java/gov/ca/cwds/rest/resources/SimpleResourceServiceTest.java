@@ -9,6 +9,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
+import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.constraints.Pattern;
@@ -107,6 +108,15 @@ public class SimpleResourceServiceTest {
       return true;
     }
 
+    @Override
+    public boolean hasMessages() {
+      return false;
+    }
+
+    @Override
+    public Set getMessages() {
+      return null;
+    }
   }
 
   private static interface SimpleResourceServiceTestDao {
