@@ -7,6 +7,10 @@
             "type": "string", 
             "store" : true
         },
+        "legacy_client_id": {
+            "type": "string", 
+            "store" : true
+        },
         "first_name": {
             "type": "string", 
             "store" : true
@@ -47,6 +51,10 @@
 		"addresses":{
 			"properties": {
 			    "id": {
+			    	"type": "string",
+			    	"store": true
+			    }, 
+			    "legacy_address_id": {
 			    	"type": "string",
 			    	"store": true
 			    }, 
@@ -95,6 +103,10 @@
 	    "phone_numbers":{
 	        "properties": {
 	            "id": {
+			    	"type": "string",
+			    	"store": true
+			    }, 
+	            "legacy_client_id": {
 			    	"type": "string",
 			    	"store": true
 			    }, 
@@ -154,11 +166,11 @@
 		            "type": "string", 
 		            "store" : true
 		        },
-        		"repated_person_legacy_source_table": {
+        		"related_person_legacy_source_table": {
         			"type": "string", 
         			"store" : true
         		},
-        		"repated_person_legacy_id": {
+        		"related_person_legacy_id": {
         			"type": "string", 
         			"store" : true
         		}
@@ -167,6 +179,10 @@
     	"referrals": {
     		"properties": {
         		"id": {
+        			"type": "string", 
+        			"store" : true
+        		},
+        		"legacy_referral_id": {
         			"type": "string", 
         			"store" : true
         		},
@@ -201,6 +217,10 @@
 				        "id": {
 				            "type": "string", 
 				            "store" : true
+				        },
+				        "legacy_reporter_id": {
+				            "type": "string", 
+				            "store" : true
 				        }
     				}
         		},
@@ -215,6 +235,10 @@
                 			"store" : true
                 		},
 				        "id": {
+				            "type": "string", 
+				            "store" : true
+				        },
+				        "legacy_assigned_social_worker_id": {
 				            "type": "string", 
 				            "store" : true
 				        }
@@ -234,6 +258,10 @@
 				            "type": "string", 
 				            "store" : true
 				        },
+				        "victim_legacy_client_id": {
+				            "type": "string", 
+				            "store" : true
+				        },
                 		"perpetrator_first_name": {
                 			"type": "string", 
                 			"store" : true
@@ -243,6 +271,10 @@
                 			"store" : true
                 		},
 				        "perpetrator_id": {
+				            "type": "string", 
+				            "store" : true
+				        },
+				        "perpetrator_legacy_client_id": {
 				            "type": "string", 
 				            "store" : true
 				        },
@@ -291,6 +323,10 @@
 				        "id": {
 				            "type": "string", 
 				            "store" : true
+				        },
+				        "legacy_reporter_id": {
+				            "type": "string", 
+				            "store" : true
 				        }
     				}
         		},
@@ -305,6 +341,10 @@
                 			"store" : true
                 		},
 				        "id": {
+				            "type": "string", 
+				            "store" : true
+				        },
+				        "legacy_assigned_social_worker_id": {
 				            "type": "string", 
 				            "store" : true
 				        }
@@ -324,6 +364,10 @@
 				            "type": "string", 
 				            "store" : true
 				        },
+				        "victim_legacy_client_id": {
+				            "type": "string", 
+				            "store" : true
+				        },
                 		"perpetrator_first_name": {
                 			"type": "string", 
                 			"store" : true
@@ -333,6 +377,10 @@
                 			"store" : true
                 		},
 				        "perpetrator_id": {
+				            "type": "string", 
+				            "store" : true
+				        },
+				        "perpetrator_legacy_client_id": {
 				            "type": "string", 
 				            "store" : true
 				        },
@@ -367,6 +415,10 @@
 				        "id": {
 				            "type": "string", 
 				            "store" : true
+				        },
+				        "legacy_staff_id": {
+				            "type": "string", 
+				            "store" : true
 				        }
     				}
         		},
@@ -383,6 +435,10 @@
     	"cases": {
     		"properties": {
         		"id": {
+        			"type": "string", 
+        			"store" : true
+        		},
+        		"legacy_case_id": {
         			"type": "string", 
         			"store" : true
         		},
@@ -417,6 +473,10 @@
 				        "id": {
 				            "type": "string", 
 				            "store" : true
+				        },
+				        "legacy_client_id": {
+				            "type": "string", 
+				            "store" : true
 				        }
     				}
         		},
@@ -437,6 +497,10 @@
 				        "id": {
 				            "type": "string", 
 				            "store" : true
+				        },
+				        "legacy_client_id": {
+				            "type": "string", 
+				            "store" : true
 				        }
     				}
         		},
@@ -451,6 +515,10 @@
                 			"store" : true
                 		},
 				        "id": {
+				            "type": "string", 
+				            "store" : true
+				        },
+				        "legacy_social_worker_id": {
 				            "type": "string", 
 				            "store" : true
 				        }
