@@ -1081,6 +1081,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
   @JsonProperty("languages")
   private List<String> languages = new ArrayList<>();
 
+  @JsonProperty("screenings")
   private List<ElasticSearchPersonScreening> screenings = new ArrayList<>();
 
   @Transient
@@ -1213,7 +1214,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
             ElasticSearchPerson.<String>pullCol(m, ESColumn.BIRTH_DATE),
             ElasticSearchPerson.<String>pullCol(m, ESColumn.SSN),
             ElasticSearchPerson.<String>pullCol(m, ESColumn.TYPE),
-            ElasticSearchPerson.<String>pullCol(m, ESColumn.SOURCE), "", null, null, null);
+            ElasticSearchPerson.<String>pullCol(m, ESColumn.SOURCE), "", null, null, null, null);
 
     if (!StringUtils.isBlank(ret.getSourceType()) && !StringUtils.isBlank(ret.getSourceJson())) {
       try {
@@ -1313,7 +1314,8 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
   public ElasticSearchPerson(String id, String firstName, String lastName, String middleName,
       String nameSuffix, String gender, String birthDate, String ssn, String sourceType,
       String sourceJson, String highlight, List<ElasticSearchPersonAddress> addresses,
-      List<ElasticSearchPersonPhone> phones, List<String> languages) {
+      List<ElasticSearchPersonPhone> phones, List<String> languages,
+      List<ElasticSearchPersonScreening> screenings) {
 
     // CMS/legacy String id:
     this.id = id;
@@ -1351,6 +1353,10 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
 
     if (languages != null && !languages.isEmpty()) {
       this.languages = languages;
+    }
+
+    if (screenings != null && !screenings.isEmpty()) {
+      this.screenings = screenings;
     }
 
     // Nested document
@@ -1662,6 +1668,14 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
 
   public void setNameSuffix(String nameSuffix) {
     this.nameSuffix = nameSuffix;
+  }
+
+  public List<ElasticSearchPersonScreening> getScreenings() {
+    return screenings;
+  }
+
+  public void setScreenings(List<ElasticSearchPersonScreening> screenings) {
+    this.screenings = screenings;
   }
 
 }

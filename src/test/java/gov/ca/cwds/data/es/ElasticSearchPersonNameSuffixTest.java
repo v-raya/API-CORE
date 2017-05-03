@@ -64,8 +64,9 @@ public class ElasticSearchPersonNameSuffixTest {
 
   @Test
   public void testConstuctorSuccess() throws Exception {
-    ElasticSearchPerson target = new ElasticSearchPerson(id, firstName, lastName, middleName,
-        nameSuffix, gender, birthDate, ssn, sourceType, sourceJson, highlight, null, null, null);
+    ElasticSearchPerson target =
+        new ElasticSearchPerson(id, firstName, lastName, middleName, nameSuffix, gender, birthDate,
+            ssn, sourceType, sourceJson, highlight, null, null, null, null);
     assertThat(target, notNullValue());
   }
 
@@ -196,7 +197,7 @@ public class ElasticSearchPersonNameSuffixTest {
     ElasticSearchPerson actual = ElasticSearchPerson.makeESPerson(hit);
     actual.setHighlightFields("{}");
     ElasticSearchPerson expected = new ElasticSearchPerson("", "john", "", null, null, "U", null,
-        null, null, null, "{}", null, null, null);
+        null, null, null, "{}", null, null, null, null);
     assertThat(actual, is(equalTo(expected)));
   }
 
@@ -228,7 +229,7 @@ public class ElasticSearchPersonNameSuffixTest {
   public void testDeSerializationFromJSONAddressPhone()
       throws IOException, JsonMappingException, IOException {
     ElasticSearchPerson esp = new ElasticSearchPerson(id, firstName, lastName, null, null, gender,
-        birthDate, ssn, sourceType, sourceJson, highlight, null, null, null);
+        birthDate, ssn, sourceType, sourceJson, highlight, null, null, null, null);
 
     final String actual = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(esp);
     ElasticSearchPerson expectedEsp =
