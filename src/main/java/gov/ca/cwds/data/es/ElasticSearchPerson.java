@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -457,6 +458,210 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @Override
     public Short getApiAdrUnitType() {
       return null;
+    }
+
+  }
+
+  /**
+   * Screening allegation.
+   * 
+   * @author CWDS API Team
+   */
+  public static final class ElasticSearchPersonAllegation
+      implements Serializable, ApiTypedIdentifier<String> {
+
+    /**
+     * Default serialization version.
+     */
+    private static final long serialVersionUID = 1L;
+
+    public String id;
+
+    @JsonProperty("allegation_description")
+    public String allegationDescription;
+
+    @JsonProperty("disposition_description")
+    public String dispositionDescription;
+
+    @JsonProperty("perpetrator_id")
+    public String perpetratorId;
+
+    @JsonProperty("perpetrator_first_name")
+    public String perpetratorFirstName;
+
+    @JsonProperty("perpetrator_last_name")
+    public String perpetratorLastName;
+
+    @JsonProperty("perpetrator_legacy_client_id")
+    public String perpetratorLegacyClientId;
+
+    @JsonProperty("victim_id")
+    public String victimId;
+
+    @JsonProperty("victim_first_name")
+    public String victimFirstName;
+
+    @JsonProperty("victim_last_name")
+    public String victimLastName;
+
+    @JsonProperty("victim_legacy_client_id")
+    public String victimLegacyClientId;
+
+    @Override
+    public String getId() {
+      return id;
+    }
+
+    @Override
+    public void setId(String id) {
+      this.id = id;
+    }
+
+  }
+
+
+  /**
+   * Screening nested person, such as reporter or assigned social worker.
+   * 
+   * @author CWDS API Team
+   */
+  public abstract static class ElasticSearchPersonNestedPerson
+      implements Serializable, ApiTypedIdentifier<String> {
+
+    /**
+     * Default serialization version.
+     */
+    private static final long serialVersionUID = 1L;
+
+    public String id;
+
+    @JsonProperty("first_name")
+    public String firstName;
+
+    @JsonProperty("last_name")
+    public String lastName;
+
+    @JsonIgnore
+    public String legacyClientId;
+
+    public abstract String getLegacyClientId();
+
+    @Override
+    public String getId() {
+      return id;
+    }
+
+    @Override
+    public void setId(String id) {
+      this.id = id;
+    }
+
+  }
+
+  /**
+   * Screening reporter.
+   * 
+   * @author CWDS API Team
+   */
+  @SuppressWarnings("serial")
+  public static class ElasticSearchPersonReporter extends ElasticSearchPersonNestedPerson {
+
+    @Override
+    @JsonProperty("legacy_reporter_id")
+    public String getLegacyClientId() {
+      return null;
+    }
+
+  }
+
+  /**
+   * Screening assigned social worker.
+   * 
+   * @author CWDS API Team
+   */
+  @SuppressWarnings("serial")
+  public static class ElasticSearchPersonSocialWorker extends ElasticSearchPersonNestedPerson {
+
+    @Override
+    @JsonProperty("legacy_assigned_social_worker_id")
+    public String getLegacyClientId() {
+      return null;
+    }
+
+  }
+
+  /**
+   * Screening staff.
+   * 
+   * @author CWDS API Team
+   */
+  @SuppressWarnings("serial")
+  public static class ElasticSearchPersonStaff extends ElasticSearchPersonNestedPerson {
+
+    @Override
+    @JsonProperty("legacy_staff_id")
+    public String getLegacyClientId() {
+      return null;
+    }
+
+  }
+
+  /**
+   * Screening.
+   * 
+   * @author CWDS API Team
+   */
+  public static final class ElasticSearchPersonScreening
+      implements Serializable, ApiTypedIdentifier<String> {
+
+    /**
+     * Default serialization version.
+     */
+    private static final long serialVersionUID = 1L;
+
+    public String id;
+
+    @JsonProperty("start_date")
+    public Date startDate;
+
+    @JsonProperty("end_date")
+    public Date endDate;
+
+    @JsonProperty("county_name")
+    public String countyName;
+
+    @JsonProperty("decision")
+    public String decision;
+
+    @JsonProperty("response_time")
+    public String responseTime;
+
+    @JsonProperty("service_name")
+    public String serviceName;
+
+    @JsonProperty("category")
+    public String category;
+
+    @JsonProperty("reporter")
+    public ElasticSearchPersonReporter reporter = new ElasticSearchPersonReporter();
+
+    @JsonProperty("assigned_social_worker")
+    public ElasticSearchPersonSocialWorker assignedSocialWorker =
+        new ElasticSearchPersonSocialWorker();
+
+    @JsonProperty("staff_name")
+    public ElasticSearchPersonStaff staffName = new ElasticSearchPersonStaff();
+
+    public List<ElasticSearchPersonAllegation> allegations = new ArrayList<>();
+
+    @Override
+    public String getId() {
+      return id;
+    }
+
+    @Override
+    public void setId(String id) {
+      this.id = id;
     }
 
   }
@@ -1027,6 +1232,8 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
 
   @JsonProperty("languages")
   private List<String> languages = new ArrayList<>();
+
+  private List<ElasticSearchPersonScreening> screenings = new ArrayList<>();
 
   @Transient
   private Map<String, String> highlights = new LinkedHashMap<>();
