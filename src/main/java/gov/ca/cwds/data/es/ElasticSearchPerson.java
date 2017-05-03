@@ -1041,6 +1041,96 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     MAPPER = mapper;
   }
 
+  // ================
+  // MEMBERS:
+  // ================
+
+  @JsonProperty("first_name")
+  private String firstName;
+
+  @JsonProperty("middle_name")
+  private String middleName;
+
+  @JsonProperty("last_name")
+  private String lastName;
+
+  @JsonProperty("name_suffix")
+  private String nameSuffix;
+
+  @JsonProperty("date_of_birth")
+  private String dateOfBirth;
+
+  @JsonProperty("gender")
+  private String gender;
+
+  @JsonProperty("ssn")
+  private String ssn;
+
+  @JsonProperty("type")
+  private String type;
+
+  @JsonProperty("source")
+  private String source;
+
+  @JsonProperty("addresses")
+  private List<ElasticSearchPersonAddress> addresses = new ArrayList<>();
+
+  @JsonProperty("phone_numbers")
+  private List<ElasticSearchPersonPhone> phones = new ArrayList<>();
+
+  @JsonProperty("languages")
+  private List<String> languages = new ArrayList<>();
+
+  private List<ElasticSearchPersonScreening> screenings = new ArrayList<>();
+
+  @Transient
+  private Map<String, String> highlights = new LinkedHashMap<>();
+
+  /**
+   * The identifier is String in legacy (CMS, mainframe DB2) but Long in new style (NS, PostGreSQL).
+   * Therefore, the generic id here is String to accomodate all possibilities without resorting to
+   * generics, untyped Object, or collections with heterogenous types. For now,
+   * 
+   * <p>
+   * Java lacks a "union" construct (mutually exclusive child structures), polymorphic return types
+   * (though, technically, the JVM can...), and true typed templates.
+   * </p>
+   */
+  @JsonProperty("id")
+  private String id;
+
+  /**
+   * Original, fully-qualified, persistence-level source class, such
+   * "gov.ca.cwds.rest.api.persistence.cms.OtherClientName".
+   */
+  @JsonIgnore
+  private String sourceType;
+
+  /**
+   * Raw, nested, child document JSON of an API class that implements the CWDS API interface,
+   * IPersonAware.
+   * 
+   * <p>
+   * Note that JSON marshalling intentionally ignores this member, since it represents the JSON to
+   * create a child Object and not the Object itself.
+   * </p>
+   */
+  @JsonIgnore
+  private String sourceJson;
+
+  /**
+   * highlight JSON returned from Elasticsearch with fragments flattened out
+   */
+  @JsonProperty("highlight")
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  private String highlightFields;
+
+  /**
+   * Nested document Object, constructed by unmarshalling {@link #sourceJson} into an instance of
+   * Class type {@link #sourceType}.
+   */
+  private transient Object sourceObj;
+
   // =========================
   // PROTECTED STATIC:
   // =========================
@@ -1193,95 +1283,6 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     return ret;
   }
 
-  // ================
-  // MEMBERS:
-  // ================
-
-  @JsonProperty("first_name")
-  private String firstName;
-
-  @JsonProperty("middle_name")
-  private String middleName;
-
-  @JsonProperty("last_name")
-  private String lastName;
-
-  @JsonProperty("name_suffix")
-  private String nameSuffix;
-
-  @JsonProperty("date_of_birth")
-  private String dateOfBirth;
-
-  @JsonProperty("gender")
-  private String gender;
-
-  @JsonProperty("ssn")
-  private String ssn;
-
-  @JsonProperty("type")
-  private String type;
-
-  @JsonProperty("source")
-  private String source;
-
-  @JsonProperty("addresses")
-  private List<ElasticSearchPersonAddress> addresses = new ArrayList<>();
-
-  @JsonProperty("phone_numbers")
-  private List<ElasticSearchPersonPhone> phones = new ArrayList<>();
-
-  @JsonProperty("languages")
-  private List<String> languages = new ArrayList<>();
-
-  private List<ElasticSearchPersonScreening> screenings = new ArrayList<>();
-
-  @Transient
-  private Map<String, String> highlights = new LinkedHashMap<>();
-
-  /**
-   * The identifier is String in legacy (CMS, mainframe DB2) but Long in new style (NS, PostGreSQL).
-   * Therefore, the generic id here is String to accomodate all possibilities without resorting to
-   * generics, untyped Object, or collections with heterogenous types. For now,
-   * 
-   * <p>
-   * Java lacks a "union" construct (mutually exclusive child structures), polymorphic return types
-   * (though, technically, the JVM can...), and true typed templates.
-   * </p>
-   */
-  @JsonProperty("id")
-  private String id;
-
-  /**
-   * Original, fully-qualified, persistence-level source class, such
-   * "gov.ca.cwds.rest.api.persistence.cms.OtherClientName".
-   */
-  @JsonIgnore
-  private String sourceType;
-
-  /**
-   * Raw, nested, child document JSON of an API class that implements the CWDS API interface,
-   * IPersonAware.
-   * 
-   * <p>
-   * Note that JSON marshalling intentionally ignores this member, since it represents the JSON to
-   * create a child Object and not the Object itself.
-   * </p>
-   */
-  @JsonIgnore
-  private String sourceJson;
-
-  /**
-   * highlight JSON returned from Elasticsearch with fragments flattened out
-   */
-  @JsonProperty("highlight")
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  private String highlightFields;
-
-  /**
-   * Nested document Object, constructed by unmarshalling {@link #sourceJson} into an instance of
-   * Class type {@link #sourceType}.
-   */
-  private transient Object sourceObj;
 
   /**
    * default constructor for Jackson
