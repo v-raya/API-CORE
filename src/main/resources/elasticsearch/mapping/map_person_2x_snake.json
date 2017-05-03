@@ -7,7 +7,11 @@
             "type": "string", 
             "store" : true
         },
-        "legacy_client_id": {
+        "legacy_source_table": {
+            "type": "string", 
+            "store" : true
+        },
+        "legacy_id": {
             "type": "string", 
             "store" : true
         },
@@ -106,7 +110,11 @@
 			    	"type": "string",
 			    	"store": true
 			    }, 
-	            "legacy_client_id": {
+	            "legacy_source_table": {
+			    	"type": "string",
+			    	"store": true
+			    }, 
+	            "legacy_id": {
 			    	"type": "string",
 			    	"store": true
 			    }, 
@@ -258,7 +266,11 @@
 				            "type": "string", 
 				            "store" : true
 				        },
-				        "victim_legacy_client_id": {
+				        "victim_legacy_source_table": {
+				            "type": "string", 
+				            "store" : true
+				        },
+				        "victim_legacy_id": {
 				            "type": "string", 
 				            "store" : true
 				        },
@@ -274,7 +286,11 @@
 				            "type": "string", 
 				            "store" : true
 				        },
-				        "perpetrator_legacy_client_id": {
+				        "perpetrator_legacy_source_table": {
+				            "type": "string", 
+				            "store" : true
+				        },
+				        "perpetrator_legacy_id": {
 				            "type": "string", 
 				            "store" : true
 				        },
@@ -364,7 +380,11 @@
 				            "type": "string", 
 				            "store" : true
 				        },
-				        "victim_legacy_client_id": {
+				        "victim_legacy_source_table": {
+				            "type": "string", 
+				            "store" : true
+				        },
+				        "victim_legacy_id": {
 				            "type": "string", 
 				            "store" : true
 				        },
@@ -380,7 +400,11 @@
 				            "type": "string", 
 				            "store" : true
 				        },
-				        "perpetrator_legacy_client_id": {
+				        "perpetrator_legacy_source_table": {
+				            "type": "string", 
+				            "store" : true
+				        },
+				        "perpetrator_legacy_id": {
 				            "type": "string", 
 				            "store" : true
 				        },
@@ -498,7 +522,11 @@
 				            "type": "string", 
 				            "store" : true
 				        },
-				        "legacy_client_id": {
+				        "legacy_source_table": {
+				            "type": "string", 
+				            "store" : true
+				        },
+				        "legacy_id": {
 				            "type": "string", 
 				            "store" : true
 				        }
