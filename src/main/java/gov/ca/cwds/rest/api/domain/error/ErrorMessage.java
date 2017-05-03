@@ -1,5 +1,9 @@
 package gov.ca.cwds.rest.api.domain.error;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import gov.ca.cwds.rest.serializer.ErrorMessageSerializer;
+
+@JsonSerialize(using = ErrorMessageSerializer.class)
 public class ErrorMessage {
     private final ErrorType type;
     private final String message;
