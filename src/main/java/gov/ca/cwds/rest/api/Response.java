@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.api;
 
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
+
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 
@@ -12,7 +14,7 @@ public interface Response {
 
   /**
    * Tells whether Jersey response contains additional messages,
-   * 
+   *
    * @return whether Jersey response contains additional messages
    */
   default boolean hasMessages() {
@@ -21,12 +23,12 @@ public interface Response {
 
   /**
    * Returns Set of additional messages from Jersey response.
-   * 
+   *
    * @return Set of messages or empty set if none
    * @see #hasMessages()
    */
-  default Set<String> getMessages() {
+  default Set<ErrorMessage> getMessages() {
+
     return new ConcurrentSkipListSet<>();
   }
-
 }

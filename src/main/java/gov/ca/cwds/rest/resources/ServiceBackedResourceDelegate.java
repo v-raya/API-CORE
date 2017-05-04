@@ -2,11 +2,13 @@ package gov.ca.cwds.rest.resources;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.util.Set;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.ws.rs.core.Response;
 
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,12 +87,15 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
     try {
       gov.ca.cwds.rest.api.Response serviceResponse = service.create(request);
       Object entity;
+      Response.Status responseStatus;
       if(serviceResponse.hasMessages()){
         entity = serviceResponse.getMessages();
+        responseStatus = Response.Status.BAD_REQUEST;
       }else{
         entity = serviceResponse;
+        responseStatus = Response.Status.CREATED;
       }
-      response = Response.status(Response.Status.CREATED).entity(entity).build();
+      response = Response.status(responseStatus).entity(entity).build();
     } catch (ServiceException e) {
       if (e.getCause() instanceof EntityExistsException) {
         response = Response.status(Response.Status.CONFLICT).entity(null).build();

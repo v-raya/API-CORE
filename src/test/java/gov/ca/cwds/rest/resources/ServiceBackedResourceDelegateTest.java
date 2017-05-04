@@ -36,6 +36,9 @@ import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.services.ServiceException;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class ServiceBackedResourceDelegateTest {
   private static final Long ID_NOT_FOUND = new Long(-1);
   private static final Long ID_FOUND = new Long(1);
@@ -50,6 +53,7 @@ public class ServiceBackedResourceDelegateTest {
   private static ResourceDelegateTestDomainObject nonUniqueDomainObject;
   private static ResourceDelegateTestDomainObject uniqueDomainObject;
   private static ResourceDelegateTestDomainObject unexpectedExceptionDomainObject;
+  private static ResourceDelegateTestDomainObject validationErrorMessageDomainObject;
 
   @ClassRule
   public static final ResourceTestRule inMemoryResource = ResourceTestRule.builder()
@@ -65,6 +69,9 @@ public class ServiceBackedResourceDelegateTest {
     nonUniqueDomainObject = new ResourceDelegateTestDomainObject(ID_FOUND);
     uniqueDomainObject = new ResourceDelegateTestDomainObject(ID_NOT_FOUND);
     unexpectedExceptionDomainObject = new ResourceDelegateTestDomainObject(new Long(13));
+    validationErrorMessageDomainObject = new ResourceDelegateTestDomainObject(new Long(15));
+    Set messages = new HashSet();
+    validationErrorMessageDomainObject.setMessages(messages);
 
     when(crudsService.find(ID_NOT_FOUND)).thenReturn(null);
     when(crudsService.find(ID_FOUND)).thenReturn(nonUniqueDomainObject);
@@ -76,6 +83,7 @@ public class ServiceBackedResourceDelegateTest {
         .thenThrow(new ServiceException(new EntityExistsException()));
     when(crudsService.create(eq(unexpectedExceptionDomainObject)))
         .thenThrow(new ServiceException(new RuntimeException()));
+    when(crudsService.create(eq(validationErrorMessageDomainObject))).thenReturn(validationErrorMessageDomainObject);
     when(crudsService.update(eq(1L), eq(unexpectedExceptionDomainObject)))
         .thenThrow(new ServiceException(new RuntimeException()));
     when(crudsService.update(eq(-1L), eq(uniqueDomainObject)))
