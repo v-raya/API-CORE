@@ -1045,6 +1045,9 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
   // MEMBERS:
   // ================
 
+  @JsonIgnore
+  private transient boolean upsert = false;
+
   @JsonProperty("first_name")
   private String firstName;
 
@@ -1675,6 +1678,14 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
 
   public void setScreenings(List<ElasticSearchPersonScreening> screenings) {
     this.screenings = screenings;
+  }
+
+  public boolean isUpsert() {
+    return upsert;
+  }
+
+  public void setUpsert(boolean upsert) {
+    this.upsert = upsert;
   }
 
 }
