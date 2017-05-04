@@ -1600,7 +1600,6 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    * Setter for highlightFields
    * 
    * @param highlightFields JSON of Elasticsearch highlightFields with flattened fragments
-   * 
    */
   public void setHighlightFields(String highlightFields) {
     this.highlightFields = highlightFields;

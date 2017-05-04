@@ -264,6 +264,23 @@ public class ElasticsearchDao implements Closeable {
   }
 
   /**
+   * Prepare an update request for bulk operations.
+   * 
+   * @param id ES document id
+   * @param alias index alias
+   * @param docType document type
+   * @param json fields to update
+   * @return prepared IndexRequest
+   * @throws JsonProcessingException if unable to serialize JSON
+   */
+  @SuppressWarnings("rawtypes")
+  public ActionRequest bulkAddUpdate(final String id, final String alias, final String docType,
+      final String json) throws JsonProcessingException {
+    return new UpdateRequest(alias, docType, id).doc(json)
+        .upsert(new IndexRequest(alias, docType, id).source(json));
+  }
+
+  /**
    * Prepare an index request for bulk operations, using the default index name and person document
    * type.
    * 
