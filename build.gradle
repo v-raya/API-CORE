@@ -9,7 +9,7 @@ apply plugin: 'net.saliman.cobertura'
 sourceCompatibility = 1.8
 
 project.ext {
-    apiVersion = "0.20"
+    apiVersion = "0.21"
     configPath = "$rootProject.projectDir/config/"
     dropwizardVersion = "1.1.0"
     dropwizardFlywayVersion = "1.0.0-1"
