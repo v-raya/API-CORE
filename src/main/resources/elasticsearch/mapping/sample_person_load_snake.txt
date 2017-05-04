@@ -1,4 +1,4 @@
-PUT /people/person/123456789
+PUT /people-05-04-2017_15-30/person/123456789
 {
     "first_name": "Gregg",
     "last_name": "Hill",
@@ -142,44 +142,41 @@ PUT /people/person/123456789
 			},
 			"allegations": [
 				{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "1234567",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567890",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Abby-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "9834758",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Furniture",
 		    		"disposition_description": ""
 				},
 				{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "1234568",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567890",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Harriet-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "983475831",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Sofa",
 		    		"disposition_description": ""
 				},
 				{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Maria",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "1234566",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567833",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Cordelia-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "123456780",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Finger",
 		    		"disposition_description": ""
 				}
@@ -205,43 +202,40 @@ PUT /people/person/123456789
 			},
 			"allegations": [
 				{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Colette-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "983475800",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Face",
 		    		"disposition_description": ""
 				},
 				{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Harriet-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "983475831",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Finger",
 		    		"disposition_description": ""
 				},
 				{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "123456780",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Leg",
 		    		"disposition_description": ""
 				}
@@ -267,16 +261,15 @@ PUT /people/person/123456789
 			},
 			"allegations": [
 				{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Abby-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "983475839",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Furniture",
 		    		"disposition_description": ""
 				},
@@ -284,13 +277,11 @@ PUT /people/person/123456789
 		    		"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Harriet-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "983475831",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Sofa",
 		    		"disposition_description": ""
 				},
@@ -298,16 +289,34 @@ PUT /people/person/123456789
 		    		"victim_first_name": "Maria",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567000",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Cordelia-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "123456780",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Finger",
 		    		"disposition_description": ""
 				}
+			],
+			"other_people": [
+				{
+	        		"first_name": "Bernie-the-Cat",
+	        		"last_name": "Hill",
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Kermit-the-Cat",
+	        		"last_name": "Hill",
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "12334342344"
+			    },
+				{
+	        		"first_name": "Colette-the-Cat",
+	        		"last_name": "Hill",
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434355"
+			    }
 			],
     		"response_time": "Immediate",
     		"decision": "Referral",
@@ -339,16 +348,15 @@ PUT /people/person/123456789
 			},
 			"allegations": [
 				{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567700",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Colette-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "983475800",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Face",
 		    		"disposition_description": ""
 				},
@@ -356,13 +364,11 @@ PUT /people/person/123456789
 		    		"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Harriet-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "983475831",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Finger",
 		    		"disposition_description": ""
 				},
@@ -370,13 +376,11 @@ PUT /people/person/123456789
 		    		"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Cordelia-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "123456780",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Leg",
 		    		"disposition_description": ""
 				}
@@ -426,7 +430,7 @@ PUT /people/person/123456789
 }
 
 
-PUT /people/person/123456780
+PUT /people-05-04-2017_15-30/person/123456780
 {
     "first_name": "Maria",
     "last_name": "Hill",
@@ -551,16 +555,15 @@ PUT /people/person/123456780
 			},
 			"allegations": [
 				{
+			        "legacy_allegation_id": "1234567890",
 					"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Abby-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "983475839",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Furniture",
 		    		"disposition_description": ""
 		    	},
@@ -568,13 +571,11 @@ PUT /people/person/123456780
 		     		"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Harriet-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "983475831",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Sofa",
 		    		"disposition_description": ""
 		    	},
@@ -582,13 +583,11 @@ PUT /people/person/123456780
 		    		"victim_first_name": "Maria",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456780",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Cordelia-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "123456780",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Finger",
 		    		"disposition_description": ""
 		    	}
@@ -614,44 +613,41 @@ PUT /people/person/123456780
 			},
 			"allegations": [
 				{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Maria",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456780",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Colette-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "983475800",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Elbow",
 		    		"disposition_description": ""
 	    		},
 	    		{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Maria",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456780",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Harriet-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "983475831",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Foot",
 		    		"disposition_description": ""
 	    		},
 	    		{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Maria",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456780",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Cordelia-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "123456780",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Thumb",
 		    		"disposition_description": ""
 		    	}
@@ -677,47 +673,64 @@ PUT /people/person/123456780
 			},
 			"allegations": [
 				{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Abby-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "983475839",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Furniture",
 		    		"disposition_description": ""
 				},
 				{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Harriet-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "983475831",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Sofa",
 		    		"disposition_description": ""
 				},
 				{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Maria",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Cordelia-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "123456780",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Finger",
 		    		"disposition_description": ""
 				}
+			],
+			"other_people": [
+				{
+	        		"first_name": "Bob-the-Cat",
+	        		"last_name": "Hill",
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Evel-the-Cat",
+	        		"last_name": "Hill",
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "12334342344"
+			    },
+				{
+	        		"first_name": "Harriet-the-Cat",
+	        		"last_name": "Hill",
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434355"
+			    }
 			],
     		"response_time": "Immediate",
     		"decision": "Referral",
@@ -749,44 +762,41 @@ PUT /people/person/123456780
 			},
 			"allegations": [
 				{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Colette-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "983475800",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Face",
 		    		"disposition_description": ""
 				},
 				{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Harriet-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "983475831",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Finger",
 		    		"disposition_description": ""
 				},
 				{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Cordelia-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "123456780",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Leg",
 		    		"disposition_description": ""
 				}
@@ -834,7 +844,7 @@ PUT /people/person/123456780
 		}
 	]}
 
-PUT /people/person/123456783
+PUT /people-05-04-2017_15-30/person/123456783
 {
     "first_name": "Phil",
     "last_name": "Hill",
@@ -957,16 +967,15 @@ PUT /people/person/123456783
 			},
 			"allegations": [
 				{
+			        "legacy_allegation_id": "1234567890",
 					"victim_first_name": "Phil",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456788",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Sammy-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "983475866",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Wrist",
 		    		"disposition_description": ""
 		    	}
@@ -992,16 +1001,15 @@ PUT /people/person/123456783
 			},
 			"allegations": [
 				{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Phil",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456788",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Cassie-the-Dog",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "983475866",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Chest",
 		    		"disposition_description": ""
 	    		}
@@ -1027,16 +1035,15 @@ PUT /people/person/123456783
 			},
 			"allegations": [
 				{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Abby-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "983475839",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Furniture",
 		    		"disposition_description": ""
 				},
@@ -1044,13 +1051,11 @@ PUT /people/person/123456783
 		    		"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Harriet-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "983475831",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Sofa",
 		    		"disposition_description": ""
 				},
@@ -1058,16 +1063,34 @@ PUT /people/person/123456783
 		    		"victim_first_name": "Maria",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Cordelia-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "123456780",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Finger",
 		    		"disposition_description": ""
 				}
+			],
+			"other_people": [
+				{
+	        		"first_name": "Bernie-the-Cat",
+	        		"last_name": "Hill",
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Kermit-the-Cat",
+	        		"last_name": "Hill",
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "12334342344"
+			    },
+				{
+	        		"first_name": "Colette-the-Cat",
+	        		"last_name": "Hill",
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434355"
+			    }
 			],
     		"response_time": "Immediate",
     		"decision": "Referral",
@@ -1099,44 +1122,41 @@ PUT /people/person/123456783
 			},
 			"allegations": [
 				{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Colette-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "983475800",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Face",
 		    		"disposition_description": ""
 				},
 				{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Harriet-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "983475831",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Finger",
 		    		"disposition_description": ""
 				},
 				{
+			        "legacy_allegation_id": "1234567890",
 		    		"victim_first_name": "Gregg",
 		    		"victim_last_name": "Hill",
 			        "victim_id": "123456789",
-			        "victim_legacy_source_table": "CLIENT_T",
-			        "victim_legacy_id": "1234567443",
+			        "victim_legacy_client_id": "1234567890",
 		    		"perpetrator_first_name": "Cordelia-the-Cat",
 		    		"perpetrator_last_name": "Hill",
 			        "perpetrator_id": "123456780",
-			        "perpetrator_legacy_source_table": "CLIENT_T",
-			        "perpetrator_legacy_id": "1234567443",
+			        "perpetrator_legacy_client_id": "1234567443",
 		    		"allegation_description": "Scratched Leg",
 		    		"disposition_description": ""
 				}
@@ -1184,4 +1204,3 @@ PUT /people/person/123456783
 		}
 	]
 }
-
