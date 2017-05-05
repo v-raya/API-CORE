@@ -246,6 +246,7 @@ PUT /people/person/123456789
    		{
 			"id": "1234567890123453333",
 			"start_date": "2016-09-10",
+			"end_date": "2016-09-11",
 			"county_name": "Placer",
 			"reporter": {
 	    		"first_name": "Benny",
@@ -836,6 +837,7 @@ PUT /people/person/123456780
    		{
 			"id": "9934567890123456700",
 			"start_date": "2016-11-11",
+			"end_date": "2016-11-13",
 			"county_name": "Placer",
 			"response_time": "Immediate",
 			"reporter": {
