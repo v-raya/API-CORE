@@ -201,6 +201,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @JsonProperty("zip_4")
     private String zip4;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("type")
     private String type;
 
@@ -1162,6 +1163,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    * @param addresses addresses
    * @param phones phones
    * @param languages languages
+   * @param screenings screenings
    */
   public ElasticSearchPerson(String id, String firstName, String lastName, String middleName,
       String nameSuffix, String gender, String birthDate, String ssn, String sourceType,

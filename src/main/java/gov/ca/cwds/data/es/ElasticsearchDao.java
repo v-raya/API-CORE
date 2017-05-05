@@ -264,29 +264,6 @@ public class ElasticsearchDao implements Closeable {
   }
 
   /**
-   * Prepare an update request for bulk operations as an "upsert".
-   * 
-   * <p>
-   * If the document exists, then only update it with the update JSON. Otherwise, create a new
-   * document with the insert JSON.
-   * </p>
-   * 
-   * @param id ES document id
-   * @param alias index alias
-   * @param docType document type
-   * @param insertJson fields to insert, if document does not exist
-   * @param updateJson fields to update
-   * @return prepared IndexRequest
-   * @throws JsonProcessingException if unable to serialize JSON
-   */
-  @SuppressWarnings("rawtypes")
-  public ActionRequest bulkUpsert(final String id, final String alias, final String docType,
-      final String insertJson, final String updateJson) throws JsonProcessingException {
-    return new UpdateRequest(alias, docType, id).doc(updateJson)
-        .upsert(new IndexRequest(alias, docType, id).source(insertJson));
-  }
-
-  /**
    * Prepare an index request for bulk operations, using the default index name and person document
    * type.
    * 
@@ -301,6 +278,29 @@ public class ElasticsearchDao implements Closeable {
   public ActionRequest bulkAdd(final ObjectMapper mapper, final String id, final Object obj,
       boolean upsert) throws JsonProcessingException {
     return bulkAdd(mapper, id, obj, getDefaultAlias(), getDefaultDocType(), upsert);
+  }
+
+  /**
+   * Prepare an update request for bulk operations as an "upsert".
+   * 
+   * <p>
+   * If the document exists, then only update it with the update JSON. Otherwise, create a new
+   * document with the insert JSON.
+   * </p>
+   * 
+   * @param id ES document id
+   * @param alias index alias
+   * @param docType document type
+   * @param insertJson JSON to create a new document, if document does not exist
+   * @param updateJson JSON to update existing document
+   * @return prepared IndexRequest
+   * @throws JsonProcessingException if unable to serialize JSON
+   */
+  @SuppressWarnings("rawtypes")
+  public ActionRequest bulkUpsert(final String id, final String alias, final String docType,
+      final String insertJson, final String updateJson) throws JsonProcessingException {
+    return new UpdateRequest(alias, docType, id).doc(updateJson)
+        .upsert(new IndexRequest(alias, docType, id).source(insertJson));
   }
 
   /**
