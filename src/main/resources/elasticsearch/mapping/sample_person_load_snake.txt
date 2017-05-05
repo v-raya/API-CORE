@@ -1,4 +1,4 @@
-PUT /people-05-04-2017_15-30/person/123456789
+PUT /people/person/123456789
 {
     "first_name": "Gregg",
     "last_name": "Hill",
@@ -298,22 +298,67 @@ PUT /people-05-04-2017_15-30/person/123456789
 		    		"disposition_description": ""
 				}
 			],
-			"other_people": [
+			"all_people": [
 				{
-	        		"first_name": "Bernie-the-Cat",
+	        		"first_name": "Benny",
 	        		"last_name": "Hill",
+	        		"roles": ["Reporter"],
+			        "legacy_source_table": "REPRTR",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Harriet",
+	        		"last_name": "Hill",
+	        		"roles": ["Assigned Social Worker"],
+			        "legacy_source_table": "REPRTR",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Maria",
+	        		"last_name": "Hill",
+	        		"roles": ["Victim"],
+			        "legacy_source_table": "CLIENT_T",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Gregg",
+	        		"last_name": "Hill",
+	        		"roles": ["Victim"],
+			        "legacy_source_table": "CLIENT_T",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Abby-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Perpetrator"],
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Harriet-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Perpetrator"],
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Cordelia-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Perpetrator"],
 			        "legacy_source_table": "CAT_NMS",
 			        "legacy_id": "1233434354"
 			    },
 				{
 	        		"first_name": "Kermit-the-Cat",
 	        		"last_name": "Hill",
+	        		"roles": ["Cat","Kitten","Pet"],
 			        "legacy_source_table": "CAT_NMS",
 			        "legacy_id": "12334342344"
 			    },
 				{
 	        		"first_name": "Colette-the-Cat",
 	        		"last_name": "Hill",
+	        		"roles": ["Cat"],
 			        "legacy_source_table": "CAT_NMS",
 			        "legacy_id": "1233434355"
 			    }
@@ -430,7 +475,7 @@ PUT /people-05-04-2017_15-30/person/123456789
 }
 
 
-PUT /people-05-04-2017_15-30/person/123456780
+PUT /people/person/123456780
 {
     "first_name": "Maria",
     "last_name": "Hill",
@@ -712,22 +757,67 @@ PUT /people-05-04-2017_15-30/person/123456780
 		    		"disposition_description": ""
 				}
 			],
-			"other_people": [
+			"all_people": [
 				{
-	        		"first_name": "Bob-the-Cat",
+	        		"first_name": "Benny",
 	        		"last_name": "Hill",
+	        		"roles": ["Reporter"],
+			        "legacy_source_table": "REPRTR",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Harriet",
+	        		"last_name": "Hill",
+	        		"roles": ["Assigned Social Worker"],
+			        "legacy_source_table": "REPRTR",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Maria",
+	        		"last_name": "Hill",
+	        		"roles": ["Victim"],
+			        "legacy_source_table": "CLIENT_T",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Gregg",
+	        		"last_name": "Hill",
+	        		"roles": ["Victim"],
+			        "legacy_source_table": "CLIENT_T",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Abby-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Perpetrator"],
 			        "legacy_source_table": "CAT_NMS",
 			        "legacy_id": "1233434354"
 			    },
 				{
-	        		"first_name": "Evel-the-Cat",
+	        		"first_name": "Harriet-the-Cat",
 	        		"last_name": "Hill",
+	        		"roles": ["Perpetrator"],
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Cordelia-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Perpetrator"],
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Kermit-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Cat","Kitten","Pet"],
 			        "legacy_source_table": "CAT_NMS",
 			        "legacy_id": "12334342344"
 			    },
 				{
-	        		"first_name": "Harriet-the-Cat",
+	        		"first_name": "Colette-the-Cat",
 	        		"last_name": "Hill",
+	        		"roles": ["Cat"],
 			        "legacy_source_table": "CAT_NMS",
 			        "legacy_id": "1233434355"
 			    }
@@ -844,7 +934,7 @@ PUT /people-05-04-2017_15-30/person/123456780
 		}
 	]}
 
-PUT /people-05-04-2017_15-30/person/123456783
+PUT /people/person/123456783
 {
     "first_name": "Phil",
     "last_name": "Hill",
@@ -1072,22 +1162,67 @@ PUT /people-05-04-2017_15-30/person/123456783
 		    		"disposition_description": ""
 				}
 			],
-			"other_people": [
+			"all_people": [
 				{
-	        		"first_name": "Bernie-the-Cat",
+	        		"first_name": "Benny",
 	        		"last_name": "Hill",
+	        		"roles": ["Reporter"],
+			        "legacy_source_table": "REPRTR",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Harriet",
+	        		"last_name": "Hill",
+	        		"roles": ["Assigned Social Worker"],
+			        "legacy_source_table": "REPRTR",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Maria",
+	        		"last_name": "Hill",
+	        		"roles": ["Victim"],
+			        "legacy_source_table": "CLIENT_T",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Gregg",
+	        		"last_name": "Hill",
+	        		"roles": ["Victim"],
+			        "legacy_source_table": "CLIENT_T",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Abby-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Perpetrator"],
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Harriet-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Perpetrator"],
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Cordelia-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Perpetrator"],
 			        "legacy_source_table": "CAT_NMS",
 			        "legacy_id": "1233434354"
 			    },
 				{
 	        		"first_name": "Kermit-the-Cat",
 	        		"last_name": "Hill",
+	        		"roles": ["Cat","Kitten","Pet"],
 			        "legacy_source_table": "CAT_NMS",
 			        "legacy_id": "12334342344"
 			    },
 				{
 	        		"first_name": "Colette-the-Cat",
 	        		"last_name": "Hill",
+	        		"roles": ["Cat"],
 			        "legacy_source_table": "CAT_NMS",
 			        "legacy_id": "1233434355"
 			    }
@@ -1204,3 +1339,4 @@ PUT /people-05-04-2017_15-30/person/123456783
 		}
 	]
 }
+

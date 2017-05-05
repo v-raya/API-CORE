@@ -410,12 +410,16 @@
                 		}
     				}
     			},
-    			"other_people": {
+    			"all_people": {
             		"first_name": {
             			"type": "string", 
             			"store" : true
             		},
             		"last_name": {
+            			"type": "string", 
+            			"store" : true
+            		},
+            		"roles": {
             			"type": "string", 
             			"store" : true
             		},
