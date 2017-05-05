@@ -164,7 +164,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    * @author CWDS API Team
    */
   @SuppressWarnings("serial")
-  public static final class ElasticSearchPersonAddress
+  public static class ElasticSearchPersonAddress
       implements Serializable, ApiTypedIdentifier<String>, ApiAddressAwareWritable {
 
     private String id;
@@ -467,7 +467,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    * 
    * @author CWDS API Team
    */
-  public static final class ElasticSearchPersonAllegation
+  public static class ElasticSearchPersonAllegation
       implements Serializable, ApiTypedIdentifier<String> {
 
     /**
@@ -611,7 +611,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    * 
    * @author CWDS API Team
    */
-  public static final class ElasticSearchPersonScreening
+  public static class ElasticSearchPersonScreening
       implements Serializable, ApiTypedIdentifier<String> {
 
     /**
@@ -671,7 +671,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    * 
    * @author CWDS API Team
    */
-  public static final class ElasticSearchPersonPhone
+  public static class ElasticSearchPersonPhone
       implements Serializable, ApiTypedIdentifier<String>, ApiPhoneAwareWritable {
 
     /**
@@ -1032,6 +1032,8 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
 
     // The mainframe DB2 database runs in PST, and so we must too.
     final TimeZone tz = TimeZone.getTimeZone("PST");
+
+    // DRS: VERIFY THREAD SAFETY HERE.
     final DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
     fmt.setTimeZone(tz);
     mapper.setDateFormat(fmt);
@@ -1135,6 +1137,94 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    */
   private transient Object sourceObj;
 
+  /**
+   * default constructor for Jackson
+   */
+  public ElasticSearchPerson() {
+    // Default, no-op.
+  }
+
+  /**
+   * Overload constructor, used to accommodate nested document members {@link #sourceType} and
+   * {@link #sourceJson}.
+   * 
+   * @param id identifier
+   * @param firstName first name
+   * @param lastName last name
+   * @param middleName middle name
+   * @param nameSuffix name suffix, such as jr or sr
+   * @param gender gender code
+   * @param birthDate birth date
+   * @param ssn SSN without dashes
+   * @param sourceType fully-qualified, persistence-level source class
+   * @param sourceJson raw, nested child document as JSON
+   * @param highlight highlightFields from Elasticsearch
+   * @param addresses addresses
+   * @param phones phones
+   * @param languages languages
+   */
+  public ElasticSearchPerson(String id, String firstName, String lastName, String middleName,
+      String nameSuffix, String gender, String birthDate, String ssn, String sourceType,
+      String sourceJson, String highlight, List<ElasticSearchPersonAddress> addresses,
+      List<ElasticSearchPersonPhone> phones, List<String> languages,
+      List<ElasticSearchPersonScreening> screenings) {
+
+    // CMS/legacy String id:
+    this.id = id;
+
+    // Incorporate Person fields:
+    this.firstName = trim(firstName);
+    this.lastName = trim(lastName);
+    this.middleName = trim(middleName);
+
+    if (StringUtils.isNotBlank(nameSuffix)) {
+      final ElasticSearchPersonNameSuffix maybe =
+          ElasticSearchPersonNameSuffix.translateNameSuffix(nameSuffix);
+      this.nameSuffix = maybe != null ? maybe.intake : null;
+    }
+
+    if (StringUtils.isNotBlank(gender)) {
+      final String comp = gender.trim().toLowerCase();
+      if ("m".equals(comp)) {
+        this.gender = "male";
+      } else if ("f".equals(comp)) {
+        this.gender = "female";
+      }
+    }
+
+    this.dateOfBirth = trim(birthDate);
+    this.ssn = trim(ssn);
+
+    if (addresses != null && !addresses.isEmpty()) {
+      this.addresses = addresses;
+    }
+
+    if (phones != null && !phones.isEmpty()) {
+      this.phones = phones;
+    }
+
+    if (languages != null && !languages.isEmpty()) {
+      this.languages = languages;
+    }
+
+    if (screenings != null && !screenings.isEmpty()) {
+      this.screenings = screenings;
+    }
+
+    // Nested document
+    this.source = trim(sourceJson);
+
+    // class name
+    this.type = trim(sourceType);
+
+    // Nested document:
+    this.sourceType = sourceType;
+    this.sourceJson = sourceJson;
+
+    // Elasticsearch HighlightFields
+    this.highlightFields = trim(highlight);
+  }
+
   // =========================
   // PROTECTED STATIC:
   // =========================
@@ -1236,11 +1326,8 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
           // Dynamically instantiate the domain class specified by "type" and load from JSON.
           // Note: When running in an application server, the app server's root classloader may not
           // know of our domain/persistence class, but the current thread's classloader should.
-
-          // DELIVERED: STORY #137216799: again.
-          final Object obj = MAPPER.readValue(json, Class.forName(ret.getSourceType()
-          // .replaceAll("gov\\.ca\\.cwds\\.rest\\.api\\.", "gov\\.ca\\.cwds\\.data\\.")
-              , false, Thread.currentThread().getContextClassLoader()));
+          final Object obj = MAPPER.readValue(json, Class.forName(ret.getSourceType(), false,
+              Thread.currentThread().getContextClassLoader()));
 
           ret.sourceObj = obj;
         }
@@ -1260,7 +1347,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
 
     // Go through the HighlightFields returned from ES deal with fragments and create map.
     for (final Map.Entry<String, HighlightField> entry : h.entrySet()) {
-      String highlightValue = "";
+      String highlightValue;
       final HighlightField highlightField = entry.getValue();
       final Text[] fragments = highlightField.fragments();
       if (fragments != null && fragments.length != 0) {
@@ -1287,94 +1374,9 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     return ret;
   }
 
-
-  /**
-   * default constructor for Jackson
-   */
-  public ElasticSearchPerson() {
-    // Default, no-op.
-  }
-
-  /**
-   * Overload constructor, used to accommodate nested document members {@link #sourceType} and
-   * {@link #sourceJson}.
-   * 
-   * @param id identifier
-   * @param firstName first name
-   * @param lastName last name
-   * @param middleName middle name
-   * @param nameSuffix name suffix, such as jr or sr
-   * @param gender gender code
-   * @param birthDate birth date
-   * @param ssn SSN without dashes
-   * @param sourceType fully-qualified, persistence-level source class
-   * @param sourceJson raw, nested child document as JSON
-   * @param highlight highlightFields from Elasticsearch
-   * @param addresses addresses
-   * @param phones phones
-   * @param languages languages
-   */
-  public ElasticSearchPerson(String id, String firstName, String lastName, String middleName,
-      String nameSuffix, String gender, String birthDate, String ssn, String sourceType,
-      String sourceJson, String highlight, List<ElasticSearchPersonAddress> addresses,
-      List<ElasticSearchPersonPhone> phones, List<String> languages,
-      List<ElasticSearchPersonScreening> screenings) {
-
-    // CMS/legacy String id:
-    this.id = id;
-
-    // Incorporate Person fields:
-    this.firstName = trim(firstName);
-    this.lastName = trim(lastName);
-    this.middleName = trim(middleName);
-
-    if (StringUtils.isNotBlank(nameSuffix)) {
-      final ElasticSearchPersonNameSuffix maybe =
-          ElasticSearchPersonNameSuffix.translateNameSuffix(nameSuffix);
-      this.nameSuffix = maybe != null ? maybe.intake : null;
-    }
-
-    if (StringUtils.isNotBlank(gender)) {
-      final String comp = gender.trim().toLowerCase();
-      if ("m".equals(comp)) {
-        this.gender = "male";
-      } else if ("f".equals(comp)) {
-        this.gender = "female";
-      }
-    }
-
-    this.dateOfBirth = trim(birthDate);
-    this.ssn = trim(ssn);
-
-    if (addresses != null && !addresses.isEmpty()) {
-      this.addresses = addresses;
-    }
-
-    if (phones != null && !phones.isEmpty()) {
-      this.phones = phones;
-    }
-
-    if (languages != null && !languages.isEmpty()) {
-      this.languages = languages;
-    }
-
-    if (screenings != null && !screenings.isEmpty()) {
-      this.screenings = screenings;
-    }
-
-    // Nested document
-    this.source = trim(sourceJson);
-
-    // class name
-    this.type = trim(sourceType);
-
-    // Nested document:
-    this.sourceType = sourceType;
-    this.sourceJson = sourceJson;
-
-    // Elasticsearch HighlightFields
-    this.highlightFields = trim(highlight);
-  }
+  // =========================
+  // ACCESSORS:
+  // =========================
 
   /**
    * See comments on {@link #id}.

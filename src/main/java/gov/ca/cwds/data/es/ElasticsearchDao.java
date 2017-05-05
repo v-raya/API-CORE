@@ -264,7 +264,12 @@ public class ElasticsearchDao implements Closeable {
   }
 
   /**
-   * Prepare an update request for bulk operations.
+   * Prepare an update request for bulk operations as an "upsert".
+   * 
+   * <p>
+   * If the document exists, then only update it with the update JSON. Otherwise, create a new
+   * document with the insert JSON.
+   * </p>
    * 
    * @param id ES document id
    * @param alias index alias
@@ -390,13 +395,36 @@ public class ElasticsearchDao implements Closeable {
   /**
    * Convenience overload. Search given index by pass-through query.
    * 
+   * <p>
+   * Parameter Defaults
+   * </p>
+   * 
+   * <table summary="Parameter Defaults">
+   * <tr>
+   * <th align="justify">Param</th>
+   * <th align="justify">Default</th>
+   * </tr>
+   * <tr>
+   * <td align="justify">Protocol</td>
+   * <td align="justify">https</td>
+   * </tr>
+   * <tr>
+   * <td>port</td>
+   * <td>9200</td>
+   * </tr>
+   * <tr>
+   * <td>document type</td>
+   * <td>{@link #getDefaultDocType()}</td>
+   * </tr>
+   * </table>
+   * 
    * @param index index to search
    * @param query user-provided query
    * @return JSON ES results
    * @see #searchIndexByQuery(String, String, String, int, String)
    */
   public String searchIndexByQuery(final String index, final String query) {
-    return searchIndexByQuery(index, query, "http://", 9200, "person");
+    return searchIndexByQuery(index, query, "http://", 9200, this.getDefaultDocType());
   }
 
   /**
@@ -474,7 +502,7 @@ public class ElasticsearchDao implements Closeable {
    * @param payload the payload specified by user
    * @return the JSON payload returned by the external web service
    */
-  private String executionResult(String targetURL, String payload) {
+  protected String executionResult(String targetURL, String payload) {
     String line;
     StringBuilder jsonString = new StringBuilder();
     BufferedReader reader = null;
