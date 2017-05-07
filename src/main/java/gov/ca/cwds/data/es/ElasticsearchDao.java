@@ -304,6 +304,21 @@ public class ElasticsearchDao implements Closeable {
   }
 
   /**
+   * Convenience overload for {@link #bulkUpsert(String, String, String, String, String)}.
+   * 
+   * @param id ES document id
+   * @param insertJson JSON to create a new document, if document does not exist
+   * @param updateJson JSON to update existing document
+   * @return prepared IndexRequest
+   * @throws JsonProcessingException if unable to serialize JSON
+   */
+  @SuppressWarnings("rawtypes")
+  public ActionRequest bulkUpsert(final String id, final String insertJson, final String updateJson)
+      throws JsonProcessingException {
+    return bulkUpsert(id, getDefaultAlias(), getDefaultDocType(), insertJson, updateJson);
+  }
+
+  /**
    * The Intake Auto-complete for Person takes a single search term, used to query Elasticsearch
    * Person documents on specific fields.
    * 
