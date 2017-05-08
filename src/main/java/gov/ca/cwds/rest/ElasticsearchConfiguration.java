@@ -33,6 +33,9 @@ public class ElasticsearchConfiguration {
   @JsonProperty("elasticsearch.doctype")
   private String elasticsearchDocType;
 
+  /**
+   * Default constructor.
+   */
   public ElasticsearchConfiguration() {
     // Default.
   }

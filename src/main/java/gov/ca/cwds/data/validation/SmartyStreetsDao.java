@@ -1,8 +1,8 @@
 package gov.ca.cwds.data.validation;
 
-import gov.ca.cwds.rest.SmartyStreetsConfiguration;
-
 import com.google.inject.Inject;
+
+import gov.ca.cwds.rest.SmartyStreetsConfiguration;
 
 /**
  * A DAO for SmartyStreets.
@@ -29,7 +29,6 @@ public class SmartyStreetsDao {
     this.maxCandidates = maxCandidates;
   }
 
-
   /**
    * Constructor. Construct from YAML configuration.
    * 
@@ -42,14 +41,12 @@ public class SmartyStreetsDao {
     this.maxCandidates = config.getMaxCandidates();
   }
 
-
   /**
    * @return the clientId
    */
   public String getClientId() {
     return clientId;
   }
-
 
   /**
    * @return the token
@@ -58,13 +55,11 @@ public class SmartyStreetsDao {
     return token;
   }
 
-
   /**
    * @return the maxCandidates
    */
   public Integer getMaxCandidates() {
     return maxCandidates;
   }
-
 
 }
