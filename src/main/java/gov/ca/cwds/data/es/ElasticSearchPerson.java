@@ -560,6 +560,42 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
   }
 
   /**
+   * Screening person for "all_people" element.
+   * 
+   * @author CWDS API Team
+   */
+  @SuppressWarnings("serial")
+  public static class ElasticSearchPersonAny extends ElasticSearchPersonNestedPerson {
+
+    private String legacySourceTable;
+
+    private List<String> roles = new ArrayList<>();
+
+    @Override
+    @JsonProperty("legacy_id")
+    public String getLegacyClientId() {
+      return legacyClientId;
+    }
+
+    public String getLegacySourceTable() {
+      return legacySourceTable;
+    }
+
+    public void setLegacySourceTable(String legacySourceTable) {
+      this.legacySourceTable = legacySourceTable;
+    }
+
+    public List<String> getRoles() {
+      return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+      this.roles = roles;
+    }
+
+  }
+
+  /**
    * Screening reporter.
    * 
    * @author CWDS API Team
@@ -570,7 +606,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @Override
     @JsonProperty("legacy_reporter_id")
     public String getLegacyClientId() {
-      return null;
+      return legacyClientId;
     }
 
   }
@@ -586,7 +622,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @Override
     @JsonProperty("legacy_assigned_social_worker_id")
     public String getLegacyClientId() {
-      return null;
+      return legacyClientId;
     }
 
   }
@@ -602,7 +638,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @Override
     @JsonProperty("legacy_staff_id")
     public String getLegacyClientId() {
-      return null;
+      return legacyClientId;
     }
 
   }
