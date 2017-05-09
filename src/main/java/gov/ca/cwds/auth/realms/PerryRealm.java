@@ -40,12 +40,9 @@ public class PerryRealm extends AuthenticatingRealm {
     PerryShiroToken perryShiroToken = (PerryShiroToken) token;
     try {
       LOGGER.debug("Reaching out to Perry for authentication...");
-      String racfid = client.validateToken(perryShiroToken);
+      String identity = client.validateToken(perryShiroToken);
 
-      List<Object> principals = Lists.<Object>newArrayList(racfid);
-      PrincipalCollection principalCollection =
-          new SimplePrincipalCollection(principals, getName());
-      return new SimpleAuthenticationInfo(principalCollection, token);
+      return mapIdentity(identity, token);
     } catch (InvalidTokenException e) {
       LOGGER.warn("Invalid Token {}", perryShiroToken.getPrincipal(), e);
       return null;
@@ -53,6 +50,13 @@ public class PerryRealm extends AuthenticatingRealm {
       LOGGER.error("Error authenticating user.", e);
       throw new ApiAuthenticationException("Error authenticating user.", e);
     }
+  }
+
+  protected AuthenticationInfo mapIdentity(String identity, AuthenticationToken token) {
+    List<Object> principals = Lists.newArrayList(identity);
+    PrincipalCollection principalCollection =
+        new SimplePrincipalCollection(principals, getName());
+    return new SimpleAuthenticationInfo(principalCollection, token);
   }
 
   /**
