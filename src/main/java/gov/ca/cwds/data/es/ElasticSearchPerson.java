@@ -520,7 +520,6 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
 
   }
 
-
   /**
    * Screening nested person, such as reporter or assigned social worker.
    * 
@@ -690,6 +689,9 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     public ElasticSearchPersonStaff staffName = new ElasticSearchPersonStaff();
 
     public List<ElasticSearchPersonAllegation> allegations = new ArrayList<>();
+
+    @JsonProperty("all_people")
+    public List<ElasticSearchPersonAny> allPeople = new ArrayList<>();
 
     @Override
     public String getId() {
