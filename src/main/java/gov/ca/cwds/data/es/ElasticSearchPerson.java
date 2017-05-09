@@ -476,37 +476,37 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
      */
     private static final long serialVersionUID = 1L;
 
-    public String id;
+    private String id;
 
     @JsonProperty("allegation_description")
-    public String allegationDescription;
+    private String allegationDescription;
 
     @JsonProperty("disposition_description")
-    public String dispositionDescription;
+    private String dispositionDescription;
 
     @JsonProperty("perpetrator_id")
-    public String perpetratorId;
+    private String perpetratorId;
 
     @JsonProperty("perpetrator_first_name")
-    public String perpetratorFirstName;
+    private String perpetratorFirstName;
 
     @JsonProperty("perpetrator_last_name")
-    public String perpetratorLastName;
+    private String perpetratorLastName;
 
     @JsonProperty("perpetrator_legacy_client_id")
-    public String perpetratorLegacyClientId;
+    private String perpetratorLegacyClientId;
 
     @JsonProperty("victim_id")
-    public String victimId;
+    private String victimId;
 
     @JsonProperty("victim_first_name")
-    public String victimFirstName;
+    private String victimFirstName;
 
     @JsonProperty("victim_last_name")
-    public String victimLastName;
+    private String victimLastName;
 
     @JsonProperty("victim_legacy_client_id")
-    public String victimLegacyClientId;
+    private String victimLegacyClientId;
 
     @Override
     public String getId() {
@@ -516,6 +516,86 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @Override
     public void setId(String id) {
       this.id = id;
+    }
+
+    public String getAllegationDescription() {
+      return allegationDescription;
+    }
+
+    public void setAllegationDescription(String allegationDescription) {
+      this.allegationDescription = allegationDescription;
+    }
+
+    public String getDispositionDescription() {
+      return dispositionDescription;
+    }
+
+    public void setDispositionDescription(String dispositionDescription) {
+      this.dispositionDescription = dispositionDescription;
+    }
+
+    public String getPerpetratorId() {
+      return perpetratorId;
+    }
+
+    public void setPerpetratorId(String perpetratorId) {
+      this.perpetratorId = perpetratorId;
+    }
+
+    public String getPerpetratorFirstName() {
+      return perpetratorFirstName;
+    }
+
+    public void setPerpetratorFirstName(String perpetratorFirstName) {
+      this.perpetratorFirstName = perpetratorFirstName;
+    }
+
+    public String getPerpetratorLastName() {
+      return perpetratorLastName;
+    }
+
+    public void setPerpetratorLastName(String perpetratorLastName) {
+      this.perpetratorLastName = perpetratorLastName;
+    }
+
+    public String getPerpetratorLegacyClientId() {
+      return perpetratorLegacyClientId;
+    }
+
+    public void setPerpetratorLegacyClientId(String perpetratorLegacyClientId) {
+      this.perpetratorLegacyClientId = perpetratorLegacyClientId;
+    }
+
+    public String getVictimId() {
+      return victimId;
+    }
+
+    public void setVictimId(String victimId) {
+      this.victimId = victimId;
+    }
+
+    public String getVictimFirstName() {
+      return victimFirstName;
+    }
+
+    public void setVictimFirstName(String victimFirstName) {
+      this.victimFirstName = victimFirstName;
+    }
+
+    public String getVictimLastName() {
+      return victimLastName;
+    }
+
+    public void setVictimLastName(String victimLastName) {
+      this.victimLastName = victimLastName;
+    }
+
+    public String getVictimLegacyClientId() {
+      return victimLegacyClientId;
+    }
+
+    public void setVictimLegacyClientId(String victimLegacyClientId) {
+      this.victimLegacyClientId = victimLegacyClientId;
     }
 
   }
@@ -533,16 +613,16 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
      */
     private static final long serialVersionUID = 1L;
 
-    public String id;
+    private String id;
 
     @JsonProperty("first_name")
-    public String firstName;
+    private String firstName;
 
     @JsonProperty("last_name")
-    public String lastName;
+    private String lastName;
 
     @JsonIgnore
-    public String legacyClientId;
+    private String legacyClientId;
 
     public abstract String getLegacyClientId();
 
@@ -554,6 +634,26 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @Override
     public void setId(String id) {
       this.id = id;
+    }
+
+    public String getFirstName() {
+      return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+      this.firstName = firstName;
+    }
+
+    public String getLastName() {
+      return lastName;
+    }
+
+    public void setLastName(String lastName) {
+      this.lastName = lastName;
+    }
+
+    public void setLegacyClientId(String legacyClientId) {
+      this.legacyClientId = legacyClientId;
     }
 
   }
@@ -573,7 +673,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @Override
     @JsonProperty("legacy_id")
     public String getLegacyClientId() {
-      return legacyClientId;
+      return getLegacyClientId();
     }
 
     public String getLegacySourceTable() {
@@ -605,7 +705,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @Override
     @JsonProperty("legacy_reporter_id")
     public String getLegacyClientId() {
-      return legacyClientId;
+      return getLegacyClientId();
     }
 
   }
@@ -621,7 +721,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @Override
     @JsonProperty("legacy_assigned_social_worker_id")
     public String getLegacyClientId() {
-      return legacyClientId;
+      return getLegacyClientId();
     }
 
   }
@@ -637,7 +737,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @Override
     @JsonProperty("legacy_staff_id")
     public String getLegacyClientId() {
-      return legacyClientId;
+      return getLegacyClientId();
     }
 
   }
@@ -655,43 +755,43 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
      */
     private static final long serialVersionUID = 1L;
 
-    public String id;
+    private String id;
 
     @JsonProperty("start_date")
-    public Date startDate;
+    private Date startDate;
 
     @JsonProperty("end_date")
-    public Date endDate;
+    private Date endDate;
 
     @JsonProperty("county_name")
-    public String countyName;
+    private String countyName;
 
     @JsonProperty("decision")
-    public String decision;
+    private String decision;
 
     @JsonProperty("response_time")
-    public String responseTime;
+    private String responseTime;
 
     @JsonProperty("service_name")
-    public String serviceName;
+    private String serviceName;
 
     @JsonProperty("category")
-    public String category;
+    private String category;
 
     @JsonProperty("reporter")
-    public ElasticSearchPersonReporter reporter = new ElasticSearchPersonReporter();
+    private ElasticSearchPersonReporter reporter = new ElasticSearchPersonReporter();
 
     @JsonProperty("assigned_social_worker")
-    public ElasticSearchPersonSocialWorker assignedSocialWorker =
+    private ElasticSearchPersonSocialWorker assignedSocialWorker =
         new ElasticSearchPersonSocialWorker();
 
     @JsonProperty("staff_name")
-    public ElasticSearchPersonStaff staffName = new ElasticSearchPersonStaff();
+    private ElasticSearchPersonStaff staffName = new ElasticSearchPersonStaff();
 
-    public List<ElasticSearchPersonAllegation> allegations = new ArrayList<>();
+    private List<ElasticSearchPersonAllegation> allegations = new ArrayList<>();
 
     @JsonProperty("all_people")
-    public List<ElasticSearchPersonAny> allPeople = new ArrayList<>();
+    private List<ElasticSearchPersonAny> allPeople = new ArrayList<>();
 
     @Override
     public String getId() {
@@ -701,6 +801,102 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @Override
     public void setId(String id) {
       this.id = id;
+    }
+
+    public Date getStartDate() {
+      return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+      this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+      return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+      this.endDate = endDate;
+    }
+
+    public String getCountyName() {
+      return countyName;
+    }
+
+    public void setCountyName(String countyName) {
+      this.countyName = countyName;
+    }
+
+    public String getDecision() {
+      return decision;
+    }
+
+    public void setDecision(String decision) {
+      this.decision = decision;
+    }
+
+    public String getResponseTime() {
+      return responseTime;
+    }
+
+    public void setResponseTime(String responseTime) {
+      this.responseTime = responseTime;
+    }
+
+    public String getServiceName() {
+      return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+      this.serviceName = serviceName;
+    }
+
+    public String getCategory() {
+      return category;
+    }
+
+    public void setCategory(String category) {
+      this.category = category;
+    }
+
+    public ElasticSearchPersonReporter getReporter() {
+      return reporter;
+    }
+
+    public void setReporter(ElasticSearchPersonReporter reporter) {
+      this.reporter = reporter;
+    }
+
+    public ElasticSearchPersonSocialWorker getAssignedSocialWorker() {
+      return assignedSocialWorker;
+    }
+
+    public void setAssignedSocialWorker(ElasticSearchPersonSocialWorker assignedSocialWorker) {
+      this.assignedSocialWorker = assignedSocialWorker;
+    }
+
+    public ElasticSearchPersonStaff getStaffName() {
+      return staffName;
+    }
+
+    public void setStaffName(ElasticSearchPersonStaff staffName) {
+      this.staffName = staffName;
+    }
+
+    public List<ElasticSearchPersonAllegation> getAllegations() {
+      return allegations;
+    }
+
+    public void setAllegations(List<ElasticSearchPersonAllegation> allegations) {
+      this.allegations = allegations;
+    }
+
+    public List<ElasticSearchPersonAny> getAllPeople() {
+      return allPeople;
+    }
+
+    public void setAllPeople(List<ElasticSearchPersonAny> allPeople) {
+      this.allPeople = allPeople;
     }
 
   }
