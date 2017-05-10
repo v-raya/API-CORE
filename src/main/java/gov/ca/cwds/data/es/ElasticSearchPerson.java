@@ -2,6 +2,7 @@ package gov.ca.cwds.data.es;
 
 import java.io.Serializable;
 import java.text.DateFormat;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,8 +17,6 @@ import javax.persistence.Transient;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.highlight.HighlightField;
@@ -765,10 +764,10 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     private String id;
 
     @JsonProperty("start_date")
-    private Date startDate;
+    private String startDate;
 
     @JsonProperty("end_date")
-    private Date endDate;
+    private String endDate;
 
     @JsonProperty("county_name")
     private String countyName;
@@ -810,21 +809,22 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.id = id;
     }
 
+    @JsonIgnore
     public Date getStartDate() {
-      return startDate;
+      return DomainChef.uncookDateString(startDate);
     }
 
     public void setStartDate(Date startDate) {
-      this.startDate = startDate;
+      this.startDate = DomainChef.cookDate(startDate);
     }
 
     @JsonIgnore
     public Date getEndDate() {
-      return endDate;
+      return DomainChef.uncookDateString(endDate);
     }
 
     public void setEndDate(Date endDate) {
-      this.endDate = endDate;
+      this.endDate = DomainChef.cookDate(endDate);
     }
 
     @JsonIgnore
@@ -1864,9 +1864,26 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     this.highlightFields = highlightFields;
   }
 
+  // @Override
+  // public String toString() {
+  // return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+  // }
+
   @Override
   public String toString() {
-    return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+    String ret = "";
+
+    try {
+      ret = ElasticSearchPerson.MAPPER
+          // .writerWithDefaultPrettyPrinter()
+          .writeValueAsString(this);
+    } catch (JsonProcessingException e) {
+      final String msg = MessageFormat.format("UNABLE TO SERIALIZE JSON!! {}", e.getMessage());
+      LOGGER.error(msg, e);
+      throw new ApiElasticSearchException(msg, e);
+    }
+
+    return ret;
   }
 
   @Override
@@ -1888,6 +1905,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     this.highlights = highlights;
   }
 
+  @JsonIgnore
   public List<ElasticSearchPersonAddress> getAddresses() {
     return addresses;
   }
@@ -1896,6 +1914,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     this.addresses = addresses;
   }
 
+  @JsonIgnore
   public List<ElasticSearchPersonPhone> getPhones() {
     return phones;
   }
@@ -1904,6 +1923,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     this.phones = phones;
   }
 
+  @JsonIgnore
   public List<String> getLanguages() {
     return languages;
   }
@@ -1912,6 +1932,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     this.languages = languages;
   }
 
+  @JsonIgnore
   public String getMiddleName() {
     return middleName;
   }
@@ -1920,6 +1941,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     this.middleName = middleName;
   }
 
+  @JsonIgnore
   public String getNameSuffix() {
     return nameSuffix;
   }
@@ -1928,6 +1950,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     this.nameSuffix = nameSuffix;
   }
 
+  @JsonIgnore
   public List<ElasticSearchPersonScreening> getScreenings() {
     return screenings;
   }
@@ -1936,6 +1959,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     this.screenings = screenings;
   }
 
+  @JsonIgnore
   public boolean isUpsert() {
     return upsert;
   }
