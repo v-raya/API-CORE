@@ -622,8 +622,14 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     private String lastName;
 
     @JsonIgnore
-    protected String legacyClientId;
+    protected String legacyPersonId;
 
+    /**
+     * Getter for legacy person id. Child classes override the JSON field name, per the document
+     * mapping.
+     * 
+     * @return legacy person id
+     */
     public abstract String getLegacyClientId();
 
     @Override
@@ -653,7 +659,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     }
 
     public void setLegacyClientId(String legacyClientId) {
-      this.legacyClientId = legacyClientId;
+      this.legacyPersonId = legacyClientId;
     }
 
   }
@@ -674,7 +680,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @Override
     @JsonProperty("legacy_id")
     public String getLegacyClientId() {
-      return legacyClientId;
+      return legacyPersonId;
     }
 
     public String getLegacySourceTable() {
@@ -706,7 +712,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @Override
     @JsonProperty("legacy_reporter_id")
     public String getLegacyClientId() {
-      return legacyClientId;
+      return legacyPersonId;
     }
 
   }
@@ -722,7 +728,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @Override
     @JsonProperty("legacy_assigned_social_worker_id")
     public String getLegacyClientId() {
-      return legacyClientId;
+      return legacyPersonId;
     }
 
   }
@@ -738,7 +744,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @Override
     @JsonProperty("legacy_staff_id")
     public String getLegacyClientId() {
-      return legacyClientId;
+      return legacyPersonId;
     }
 
   }
@@ -812,6 +818,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.startDate = startDate;
     }
 
+    @JsonIgnore
     public Date getEndDate() {
       return endDate;
     }
@@ -820,6 +827,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.endDate = endDate;
     }
 
+    @JsonIgnore
     public String getCountyName() {
       return countyName;
     }
@@ -828,6 +836,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.countyName = countyName;
     }
 
+    @JsonIgnore
     public String getDecision() {
       return decision;
     }
@@ -836,6 +845,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.decision = decision;
     }
 
+    @JsonIgnore
     public String getResponseTime() {
       return responseTime;
     }
@@ -844,6 +854,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.responseTime = responseTime;
     }
 
+    @JsonIgnore
     public String getServiceName() {
       return serviceName;
     }
@@ -852,6 +863,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.serviceName = serviceName;
     }
 
+    @JsonIgnore
     public String getCategory() {
       return category;
     }
@@ -860,6 +872,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.category = category;
     }
 
+    @JsonIgnore
     public ElasticSearchPersonReporter getReporter() {
       return reporter;
     }
@@ -868,6 +881,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.reporter = reporter;
     }
 
+    @JsonIgnore
     public ElasticSearchPersonSocialWorker getAssignedSocialWorker() {
       return assignedSocialWorker;
     }
@@ -876,6 +890,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.assignedSocialWorker = assignedSocialWorker;
     }
 
+    @JsonIgnore
     public ElasticSearchPersonStaff getStaffName() {
       return staffName;
     }
@@ -884,6 +899,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.staffName = staffName;
     }
 
+    @JsonIgnore
     public List<ElasticSearchPersonAllegation> getAllegations() {
       return allegations;
     }
@@ -892,6 +908,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
       this.allegations = allegations;
     }
 
+    @JsonIgnore
     public List<ElasticSearchPersonAny> getAllPeople() {
       return allPeople;
     }
