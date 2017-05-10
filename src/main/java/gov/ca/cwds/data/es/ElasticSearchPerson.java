@@ -666,6 +666,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
   @SuppressWarnings("serial")
   public static class ElasticSearchPersonAny extends ElasticSearchPersonNestedPerson {
 
+    @JsonProperty("legacy_source_table")
     private String legacySourceTable;
 
     private List<String> roles = new ArrayList<>();
