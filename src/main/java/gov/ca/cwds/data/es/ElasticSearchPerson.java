@@ -622,7 +622,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     private String lastName;
 
     @JsonIgnore
-    private String legacyClientId;
+    protected String legacyClientId;
 
     public abstract String getLegacyClientId();
 
@@ -706,7 +706,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @Override
     @JsonProperty("legacy_reporter_id")
     public String getLegacyClientId() {
-      return getLegacyClientId();
+      return legacyClientId;
     }
 
   }
@@ -722,7 +722,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @Override
     @JsonProperty("legacy_assigned_social_worker_id")
     public String getLegacyClientId() {
-      return getLegacyClientId();
+      return legacyClientId;
     }
 
   }
@@ -738,7 +738,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @Override
     @JsonProperty("legacy_staff_id")
     public String getLegacyClientId() {
-      return getLegacyClientId();
+      return legacyClientId;
     }
 
   }
