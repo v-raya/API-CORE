@@ -674,7 +674,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
     @Override
     @JsonProperty("legacy_id")
     public String getLegacyClientId() {
-      return getLegacyClientId();
+      return legacyClientId;
     }
 
     public String getLegacySourceTable() {
