@@ -83,7 +83,9 @@ PUT /people/person/123456789
 		{
 			"related_person_first_name": "Maria",
 			"related_person_last_name": "Hill",
-	   		"relationship": "Wife",
+	   		"related_person_relationship": "Spouse",
+	   		"indexed_person_relationship": "Spouse",
+	   		"relationship_context": "Loving",
 	        "related_person_id": "12333",
 	   		"related_person_legacy_source_table": "CHLD_CLT",
 	   		"related_person_legacy_id": "1234567844"
@@ -91,7 +93,9 @@ PUT /people/person/123456789
 		{
 			"related_person_first_name": "Phil",
 			"related_person_last_name": "Hill",
-	   		"relationship": "Brother",
+	   		"related_person_relationship": "Brother",
+	   		"indexed_person_relationship": "Brother",
+	   		"relationship_context": "Full",
 	        "related_person_id": "12344",
 	   		"related_person_legacy_source_table": "CHLD_CLT",
 	   		"related_person_legacy_id": "1234567899"
@@ -99,7 +103,9 @@ PUT /people/person/123456789
 		{
 			"related_person_first_name": "Harriet-the-Cat",
 			"related_person_last_name": "Hill",
-	   		"relationship": "Cat",
+	   		"relationship": "Owner/Cat",
+	   		"related_person_relationship": "Cat",
+	   		"indexed_person_relationship": "Owner",
 	        "related_person_id": "12344",
 	   		"related_person_legacy_source_table": "CAT_NAMS",
 	   		"related_person_legacy_id": "1234567811"
@@ -107,7 +113,8 @@ PUT /people/person/123456789
 		{
 			"related_person_first_name": "Cordelia-the-Cat",
 			"related_person_last_name": "Hill",
-	   		"relationship": "Cat",
+	   		"related_person_relationship": "Cat",
+	   		"indexed_person_relationship": "Owner",
 	        "related_person_id": "12345",
 	   		"related_person_legacy_source_table": "CAT_NAMS",
 	   		"related_person_legacy_id": "1234567812"
@@ -115,11 +122,45 @@ PUT /people/person/123456789
 		{
 			"related_person_first_name": "Abigail-the-Cat",
 			"related_person_last_name": "Hill",
-	   		"relationship": "Cat",
+	   		"related_person_relationship": "Cat",
+	   		"indexed_person_relationship": "Owner",
 	        "related_person_id": "12324",
 	   		"related_person_legacy_source_table": "CAT_NAMS",
 	   		"related_person_legacy_id": "1234567711"
+   		},
+		{
+			"related_person_first_name": "Flipper",
+			"related_person_last_name": "Porpoise",
+	   		"related_person_relationship": "No relation",
+	   		"indexed_person_relationship": "No relation",
+	        "related_person_id": "12324",
+	   		"related_person_legacy_source_table": "FISH_NAMS",
+	   		"related_person_legacy_id": "1234567711"
    		}
+   	],
+	"safety_alerts": [
+		{
+			"safety_alert": "Dangerous Kitten on premises",
+			"legacy_client_id": "1234567890",
+			"activated_county": "Placer",
+			"activated_date": "2012-04-01",
+			"deactivated_county": "Placer",
+			"deactivated_date": "2012-07-01"
+		},
+		{
+			"safety_alert": "Dangerous Puppy on premises",
+			"legacy_client_id": "1234567890",
+			"activated_county": "Placer",
+			"activated_date": "2014-12-01",
+			"deactivated_county": "Placer",
+			"deactivated_date": "2015-07-01"
+		},
+		{
+			"safety_alert": "Carries loaded squirtgun",
+			"legacy_client_id": "1234567890",
+			"activated_county": "Placer",
+			"activated_date": "2011-04-01"
+		}
 	],
    	"referrals": [
    		{
@@ -542,7 +583,9 @@ PUT /people/person/123456780
 		{
 			"related_person_first_name": "Gregg",
 			"related_person_last_name": "Hill",
-	   		"relationship": "Husband",
+	   		"related_person_relationship": "Spouse",
+	   		"indexed_person_relationship": "Spouse",
+	   		"relationship_context": "Devoted",
 	        "related_person_id": "12345",
 	   		"related_person_legacy_source_table": "CHLD_CLT",
 	   		"related_person_legacy_id": "1234567890"
@@ -550,7 +593,9 @@ PUT /people/person/123456780
 		{
 			"related_person_first_name": "Phil",
 			"related_person_last_name": "Hill",
-	   		"relationship": "Brother In Law",
+	   		"related_person_relationship": "Brother",
+	   		"indexed_person_relationship": "Sister",
+	   		"relationship_context": "Half",
 	        "related_person_id": "12344",
 	   		"related_person_legacy_source_table": "CHLD_CLT",
 	   		"related_person_legacy_id": "1234567899"
@@ -558,7 +603,8 @@ PUT /people/person/123456780
 		{
 			"related_person_first_name": "Harriet-the-Cat",
 			"related_person_last_name": "Hill",
-	   		"relationship": "Cat",
+	   		"related_person_relationship": "Cat",
+	   		"indexed_person_relationship": "Owner",
 	        "related_person_id": "12344",
 	   		"related_person_legacy_source_table": "CAT_NAMS",
 	   		"related_person_legacy_id": "1234567811"
@@ -566,7 +612,8 @@ PUT /people/person/123456780
 		{
 			"related_person_first_name": "Cordelia-the-Cat",
 			"related_person_last_name": "Hill",
-	   		"relationship": "Cat",
+	   		"related_person_relationship": "Cat",
+	   		"indexed_person_relationship": "Owner",
 	        "related_person_id": "12345",
 	   		"related_person_legacy_source_table": "CAT_NAMS",
 	   		"related_person_legacy_id": "1234567812"
@@ -574,11 +621,45 @@ PUT /people/person/123456780
 		{
 			"related_person_first_name": "Abigail-the-Cat",
 			"related_person_last_name": "Hill",
-	   		"relationship": "Cat",
+	   		"related_person_relationship": "Cat",
+	   		"indexed_person_relationship": "Owner",
 	        "related_person_id": "12324",
 	   		"related_person_legacy_source_table": "CAT_NAMS",
 	   		"related_person_legacy_id": "1234567711"
+   		},
+		{
+			"related_person_first_name": "Flipper",
+			"related_person_last_name": "Porpoise",
+	   		"related_person_relationship": "No relation",
+	   		"indexed_person_relationship": "No relation",
+	        "related_person_id": "12324",
+	   		"related_person_legacy_source_table": "FISH_NAMS",
+	   		"related_person_legacy_id": "1234567711"
    		}
+	],
+	"safety_alerts": [
+		{
+			"safety_alert": "High Fructose Syrup drinks on premises",
+			"legacy_client_id": "1234567891",
+			"activated_county": "Placer",
+			"activated_date": "2012-03-01",
+			"deactivated_county": "Placer",
+			"deactivated_date": "2012-06-01"
+		},
+		{
+			"safety_alert": "Dangerous Hamster on premises",
+			"legacy_client_id": "1234567890",
+			"activated_county": "Placer",
+			"activated_date": "2014-12-01",
+			"deactivated_county": "Placer",
+			"deactivated_date": "2015-07-01"
+		},
+		{
+			"safety_alert": "Carries water balloons",
+			"legacy_client_id": "1234567890",
+			"activated_county": "Placer",
+			"activated_date": "2011-04-01"
+		}
 	],
 	"referrals": [
 		{
@@ -1008,7 +1089,8 @@ PUT /people/person/123456783
 		{
 			"related_person_first_name": "Gregg",
 			"related_person_last_name": "Hill",
-	   		"relationship": "Brother",
+	   		"related_person_relationship": "Brother",
+	   		"indexed_person_relationship": "Brother",
 	        "related_person_id": "12345",
 	   		"related_person_legacy_source_table": "CHLD_CLT",
 	   		"related_person_legacy_id": "1234567890"
@@ -1016,7 +1098,9 @@ PUT /people/person/123456783
 		{
 			"related_person_first_name": "Maria",
 			"related_person_last_name": "Hill",
-	   		"relationship": "Sister In Law",
+	   		"related_person_relationship": "Sister",
+	   		"indexed_person_relationship": "Brother",
+	   		"relationship_context": "In Law",
 	        "related_person_id": "12344",
 	   		"related_person_legacy_source_table": "CHLD_CLT",
 	   		"related_person_legacy_id": "1234567899"
@@ -1024,7 +1108,8 @@ PUT /people/person/123456783
 		{
 			"related_person_first_name": "Sammy-the-Cat",
 			"related_person_last_name": "Hill",
-	   		"relationship": "Cat",
+	   		"related_person_relationship": "Cat",
+	   		"indexed_person_relationship": "Owner",
 	        "related_person_id": "12341",
 	   		"related_person_legacy_source_table": "CAT_NAMS",
 	   		"related_person_legacy_id": "1234567890"
@@ -1032,11 +1117,45 @@ PUT /people/person/123456783
 		{
 			"related_person_first_name": "Cassie-the-Dog",
 			"related_person_last_name": "Hill",
-	   		"relationship": "Dog",
+	   		"related_person_relationship": "Dog",
+	   		"indexed_person_relationship": "Owner",
 	        "related_person_id": "12141",
 	   		"related_person_legacy_source_table": "DOG_NAMS",
 	   		"related_person_legacy_id": "1237767890"
+   		},
+		{
+			"related_person_first_name": "Flipper",
+			"related_person_last_name": "Porpoise",
+	   		"related_person_relationship": "No Relation",
+	   		"indexed_person_relationship": "No Relation",
+	        "related_person_id": "12324",
+	   		"related_person_legacy_source_table": "FISH_NAMS",
+	   		"related_person_legacy_id": "1234567711"
    		}
+	],
+	"safety_alerts": [
+		{
+			"safety_alert": "Dangerous Goldfish on premises",
+			"legacy_client_id": "1234567890",
+			"activated_county": "Yuba",
+			"activated_date": "2012-04-01",
+			"deactivated_county": "Yuba",
+			"deactivated_date": "2012-07-01"
+		},
+		{
+			"safety_alert": "Dangerous chicks on premises",
+			"legacy_client_id": "1234567890",
+			"activated_county": "Yolo",
+			"activated_date": "2014-12-01",
+			"deactivated_county": "Yolo",
+			"deactivated_date": "2015-07-01"
+		},
+		{
+			"safety_alert": "Carries loaded sawed off squirtgun",
+			"legacy_client_id": "1234567890",
+			"activated_county": "Sacramento",
+			"activated_date": "2011-04-01"
+		}
 	],
 	"referrals": [
 		{
