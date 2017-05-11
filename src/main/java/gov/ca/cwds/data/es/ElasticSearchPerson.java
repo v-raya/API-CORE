@@ -53,7 +53,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * @author CWDS API Team
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<String> {
+public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
   /**
    * ElasticSearch field names for document type people.person.
@@ -164,7 +164,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    */
   @SuppressWarnings("serial")
   public static class ElasticSearchPersonAddress
-      implements Serializable, ApiTypedIdentifier<String>, ApiAddressAwareWritable {
+      implements ApiTypedIdentifier<String>, ApiAddressAwareWritable {
 
     private String id;
 
@@ -467,8 +467,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    * 
    * @author CWDS API Team
    */
-  public static class ElasticSearchPersonAllegation
-      implements Serializable, ApiTypedIdentifier<String> {
+  public static class ElasticSearchPersonAllegation implements ApiTypedIdentifier<String> {
 
     /**
      * Default serialization version.
@@ -605,7 +604,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    * @author CWDS API Team
    */
   public abstract static class ElasticSearchPersonNestedPerson
-      implements Serializable, ApiTypedIdentifier<String> {
+      implements ApiTypedIdentifier<String> {
 
     /**
      * Default serialization version.
@@ -753,8 +752,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    * 
    * @author CWDS API Team
    */
-  public static class ElasticSearchPersonScreening
-      implements Serializable, ApiTypedIdentifier<String> {
+  public static class ElasticSearchPersonScreening implements ApiTypedIdentifier<String> {
 
     /**
      * Default serialization version.
@@ -925,7 +923,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
    * @author CWDS API Team
    */
   public static class ElasticSearchPersonPhone
-      implements Serializable, ApiTypedIdentifier<String>, ApiPhoneAwareWritable {
+      implements ApiTypedIdentifier<String>, ApiPhoneAwareWritable {
 
     /**
      * Default serialization version.
@@ -1255,7 +1253,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
   private static final long serialVersionUID = 1L;
 
   /**
-   * {@link ObjectMapper}, used to unmarshall JSON Strings from member {@link #sourceJson} into
+   * {@link ObjectMapper}, used to deserialize JSON Strings from member {@link #sourceJson} into
    * instances of {@link #sourceType}.
    * 
    * <p>
@@ -1385,7 +1383,7 @@ public class ElasticSearchPerson implements Serializable, ApiTypedIdentifier<Str
   private String highlightFields;
 
   /**
-   * Nested document Object, constructed by unmarshalling {@link #sourceJson} into an instance of
+   * Nested document Object, constructed by deserializing {@link #sourceJson} into an instance of
    * Class type {@link #sourceType}.
    */
   private transient Object sourceObj;

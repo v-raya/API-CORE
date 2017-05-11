@@ -49,6 +49,8 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
 
   protected GuiceBundle<T> guiceBundle;
 
+  private static Injector injector;
+
   private final FlywayBundle<T> flywayBundle = new FlywayBundle<T>() {
     @Override
     public DataSourceFactory getDataSourceFactory(T configuration) {
@@ -134,7 +136,7 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
     // Story #129093035: Catch/handle 500 errors.
     environment.jersey().register(UnhandledExceptionMapperImpl.class);
 
-    Injector injector = guiceBundle.getInjector();
+    injector = guiceBundle.getInjector();
     environment.servlets()
         .addFilter("AuditAndLoggingFilter",
             injector.getInstance(RequestResponseLoggingFilter.class))
@@ -193,4 +195,9 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
       LOGGER.info("No Flyway Factory found - not migrating New System Database");
     }
   }
+
+  public static Injector getInjector() {
+    return injector;
+  }
+
 }
