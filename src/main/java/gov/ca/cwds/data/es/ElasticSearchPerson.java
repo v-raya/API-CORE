@@ -169,8 +169,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     private String id;
 
     @JsonIgnore
-    // @JsonProperty("street_address")
-    // @JsonInclude(JsonInclude.Include.ALWAYS)
     private String streetAddress;
 
     @JsonProperty("city")
@@ -1338,6 +1336,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   private List<String> languages = new ArrayList<>();
 
   @JsonProperty("screenings")
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   private List<ElasticSearchPersonScreening> screenings = new ArrayList<>();
 
   @Transient
