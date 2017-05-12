@@ -1476,6 +1476,14 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     this.highlightFields = trim(highlight);
   }
 
+  /**
+   * Clear out optional collections so that they are not overwritten by "last run" jobs.
+   */
+  public void clearOptionalCollections() {
+    this.screenings = null;
+    this.highlights = null;
+  }
+
   // =========================
   // PROTECTED STATIC:
   // =========================

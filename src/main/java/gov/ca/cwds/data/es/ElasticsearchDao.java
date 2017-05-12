@@ -23,10 +23,11 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.Requests;
-import org.elasticsearch.cluster.metadata.IndexMetaData;
+import org.elasticsearch.cluster.metadata.MetaData;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.indices.InvalidIndexNameException;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.LoggerFactory;
 
@@ -112,15 +113,15 @@ public class ElasticsearchDao implements Closeable {
   }
 
   /**
-   * Check whether Elasticsearch already has the chosen index.
+   * Check whether Elasticsearch cluster already contains the given index or alias.
    * 
-   * @param index index name or alias
-   * @return whether the index exists
+   * @param indexOrAlias index name or alias
+   * @return whether the index or alias exists
    */
-  public boolean doesIndexExist(final String index) {
-    final IndexMetaData indexMetaData = getClient().admin().cluster()
-        .state(Requests.clusterStateRequest()).actionGet().getState().getMetaData().index(index);
-    return indexMetaData != null;
+  public boolean doesIndexExist(final String indexOrAlias) {
+    final MetaData clusterMeta = getClient().admin().cluster().state(Requests.clusterStateRequest())
+        .actionGet().getState().getMetaData();
+    return clusterMeta.hasIndex(indexOrAlias) || clusterMeta.hasAlias(indexOrAlias);
   }
 
   /**
@@ -133,17 +134,27 @@ public class ElasticsearchDao implements Closeable {
    */
   public void createIndex(final String index, int numShards, int numReplicas) throws IOException {
     LOGGER.warn("CREATE ES INDEX {} with {} shards and {} replicas", index, numShards, numReplicas);
-    final Settings indexSettings = Settings.settingsBuilder().put("number_of_shards", numShards)
-        .put("number_of_replicas", numReplicas).build();
-    CreateIndexRequest indexRequest = new CreateIndexRequest(index, indexSettings);
-    getClient().admin().indices().create(indexRequest).actionGet();
 
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    IOUtils.copy(this.getClass().getResourceAsStream(DEFAULT_PERSON_MAPPING), out);
-    out.flush();
-    final String mapping = out.toString();
-    getClient().admin().indices().preparePutMapping(index).setType(getDefaultDocType())
-        .setSource(mapping).get();
+    try {
+      final Settings indexSettings = Settings.settingsBuilder().put("number_of_shards", numShards)
+          .put("number_of_replicas", numReplicas).build();
+
+      CreateIndexRequest indexRequest = new CreateIndexRequest(index, indexSettings);
+      getClient().admin().indices().create(indexRequest).actionGet();
+
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      IOUtils.copy(this.getClass().getResourceAsStream(DEFAULT_PERSON_MAPPING), out);
+      out.flush();
+      final String mapping = out.toString();
+
+      getClient().admin().indices().preparePutMapping(index).setType(getDefaultDocType())
+          .setSource(mapping).get();
+    } catch (InvalidIndexNameException e) { // NOSONAR
+      LOGGER.warn("INDEX OR ALIAS ALREADY EXISTS! index/alias name={}, msg: {}", index,
+          e.getDetailedMessage());
+      // It's ok. Do not rethrow. This means that the "index" name is really an alias to
+      // an existing index.
+    }
   }
 
   /**
@@ -161,12 +172,10 @@ public class ElasticsearchDao implements Closeable {
    * @param index index name or alias
    * @param optShards optional number of shards. Defaults to 5.
    * @param optReplicas optional number of replicas. Defaults to 1.
-   * @throws InterruptedException if thread is interrupted
    * @throws IOException on disconnect, hang, etc.
    */
   public synchronized void createIndexIfNeeded(final String index,
-      final Optional<Integer> optShards, final Optional<Integer> optReplicas)
-      throws InterruptedException, IOException {
+      final Optional<Integer> optShards, final Optional<Integer> optReplicas) throws IOException {
 
     final int shards = optShards.orElse(5);
     final int replicas = optReplicas.orElse(1);
@@ -177,7 +186,12 @@ public class ElasticsearchDao implements Closeable {
       createIndex(index, shards, replicas);
 
       // Let Elasticsearch catch its breath.
-      Thread.sleep(2000);
+      try {
+        Thread.sleep(2000); // NOSONAR
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+        LOGGER.warn("Interrupted!");
+      }
       // Thread.currentThread().wait(2000L); // oops, thread monitor error. thanks SonarCube.
     } else {
       LOGGER.warn("INDEX {} already exists!", index);
@@ -188,12 +202,10 @@ public class ElasticsearchDao implements Closeable {
    * Create an index, if missing.
    * 
    * @param index index name or alias
-   * @throws InterruptedException if thread is interrupted
    * @throws IOException on disconnect, hang, etc.
    * @see #createIndexIfNeeded(String, Optional, Optional)
    */
-  public synchronized void createIndexIfNeeded(final String index)
-      throws InterruptedException, IOException {
+  public synchronized void createIndexIfNeeded(final String index) throws IOException {
     createIndexIfNeeded(index, Optional.<Integer>empty(), Optional.<Integer>empty());
   }
 
