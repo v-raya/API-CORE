@@ -59,7 +59,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * ElasticSearch field names for document type people.person.
    * 
    * @author CWDS API Team
+   * @deprecated retrieves ES document objects for the obsolete Person Search.
    */
+  @Deprecated
   public enum ESColumn {
     /**
      * ElasticSearch identifier
@@ -597,6 +599,108 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   }
 
   /**
+   * Relationship.
+   * 
+   * @author CWDS API Team
+   */
+  public static class ElasticSearchPersonRelationship implements Serializable {
+
+    /**
+     * Default serialization version.
+     */
+    private static final long serialVersionUID = 1L;
+
+    @JsonProperty("related_person_id")
+    private String relatedPersonId;
+
+    @JsonProperty("related_person_first_name")
+    private String relatedPersonFirstName;
+
+    @JsonProperty("related_person_last_name")
+    private String relatedPersonLastName;
+
+    @JsonProperty("indexedPersonRelationship")
+    private String indexedPersonRelationship;
+
+    @JsonProperty("related_person_legacy_id")
+    private String relatedPersonLegacyId;
+
+    @JsonProperty("related_person_legacy_source_table")
+    private String relatedPersonLegacySourceTable;
+
+    @JsonProperty("related_person_relationship")
+    private String relatedPersonRelationship;
+
+    @JsonProperty("relationship_context")
+    private String relationshipContext;
+
+    public String getRelatedPersonId() {
+      return relatedPersonId;
+    }
+
+    public void setRelatedPersonId(String relatedPersonId) {
+      this.relatedPersonId = relatedPersonId;
+    }
+
+    public String getRelatedPersonFirstName() {
+      return relatedPersonFirstName;
+    }
+
+    public void setRelatedPersonFirstName(String relatedPersonFirstName) {
+      this.relatedPersonFirstName = relatedPersonFirstName;
+    }
+
+    public String getRelatedPersonLastName() {
+      return relatedPersonLastName;
+    }
+
+    public void setRelatedPersonLastName(String relatedPersonLastName) {
+      this.relatedPersonLastName = relatedPersonLastName;
+    }
+
+    public String getIndexedPersonRelationship() {
+      return indexedPersonRelationship;
+    }
+
+    public void setIndexedPersonRelationship(String indexedPersonRelationship) {
+      this.indexedPersonRelationship = indexedPersonRelationship;
+    }
+
+    public String getRelatedPersonLegacyId() {
+      return relatedPersonLegacyId;
+    }
+
+    public void setRelatedPersonLegacyId(String relatedPersonLegacyId) {
+      this.relatedPersonLegacyId = relatedPersonLegacyId;
+    }
+
+    public String getRelatedPersonLegacySourceTable() {
+      return relatedPersonLegacySourceTable;
+    }
+
+    public void setRelatedPersonLegacySourceTable(String relatedPersonLegacySourceTable) {
+      this.relatedPersonLegacySourceTable = relatedPersonLegacySourceTable;
+    }
+
+    public String getRelatedPersonRelationship() {
+      return relatedPersonRelationship;
+    }
+
+    public void setRelatedPersonRelationship(String relatedPersonRelationship) {
+      this.relatedPersonRelationship = relatedPersonRelationship;
+    }
+
+    public String getRelationshipContext() {
+      return relationshipContext;
+    }
+
+    public void setRelationshipContext(String relationshipContext) {
+      this.relationshipContext = relationshipContext;
+    }
+
+  }
+
+  /**
    * Screening nested person, such as reporter or assigned social worker.
    * 
    * @author CWDS API Team
@@ -911,6 +1015,116 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
     public void setAllPeople(List<ElasticSearchPersonAny> allPeople) {
       this.allPeople = allPeople;
+    }
+
+  }
+
+  /**
+   * Referral.
+   * 
+   * @author CWDS API Team
+   */
+  public static class ElasticSearchPersonReferral implements ApiTypedIdentifier<String> {
+
+    /**
+     * Default serialization version.
+     */
+    private static final long serialVersionUID = 1L;
+
+    private String id;
+
+    @JsonProperty("start_date")
+    private String startDate;
+
+    @JsonProperty("end_date")
+    private String endDate;
+
+    @JsonProperty("county_name")
+    private String countyName;
+
+    @JsonProperty("response_time")
+    private String responseTime;
+
+    @JsonProperty("reporter")
+    private ElasticSearchPersonReporter reporter = new ElasticSearchPersonReporter();
+
+    @JsonProperty("assigned_social_worker")
+    private ElasticSearchPersonSocialWorker assignedSocialWorker =
+        new ElasticSearchPersonSocialWorker();
+
+    private List<ElasticSearchPersonAllegation> allegations = new ArrayList<>();
+
+    @Override
+    public String getId() {
+      return id;
+    }
+
+    @Override
+    public void setId(String id) {
+      this.id = id;
+    }
+
+    @JsonIgnore
+    public Date getStartDate() {
+      return DomainChef.uncookDateString(startDate);
+    }
+
+    public void setStartDate(Date startDate) {
+      this.startDate = DomainChef.cookDate(startDate);
+    }
+
+    @JsonIgnore
+    public Date getEndDate() {
+      return DomainChef.uncookDateString(endDate);
+    }
+
+    public void setEndDate(Date endDate) {
+      this.endDate = DomainChef.cookDate(endDate);
+    }
+
+    @JsonIgnore
+    public String getCountyName() {
+      return countyName;
+    }
+
+    public void setCountyName(String countyName) {
+      this.countyName = countyName;
+    }
+
+    @JsonIgnore
+    public String getResponseTime() {
+      return responseTime;
+    }
+
+    public void setResponseTime(String responseTime) {
+      this.responseTime = responseTime;
+    }
+
+    @JsonIgnore
+    public ElasticSearchPersonReporter getReporter() {
+      return reporter;
+    }
+
+    public void setReporter(ElasticSearchPersonReporter reporter) {
+      this.reporter = reporter;
+    }
+
+    @JsonIgnore
+    public ElasticSearchPersonSocialWorker getAssignedSocialWorker() {
+      return assignedSocialWorker;
+    }
+
+    public void setAssignedSocialWorker(ElasticSearchPersonSocialWorker assignedSocialWorker) {
+      this.assignedSocialWorker = assignedSocialWorker;
+    }
+
+    @JsonIgnore
+    public List<ElasticSearchPersonAllegation> getAllegations() {
+      return allegations;
+    }
+
+    public void setAllegations(List<ElasticSearchPersonAllegation> allegations) {
+      this.allegations = allegations;
     }
 
   }
@@ -1339,6 +1553,14 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private List<ElasticSearchPersonScreening> screenings = new ArrayList<>();
 
+  @JsonProperty("referrals")
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private List<ElasticSearchPersonReferral> referrals = new ArrayList<>();
+
+  @JsonProperty("relationships")
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private List<ElasticSearchPersonReferral> relationships = new ArrayList<>();
+
   @Transient
   private Map<String, String> highlights = new LinkedHashMap<>();
 
@@ -1480,8 +1702,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * Clear out optional collections so that they are not overwritten by "last run" jobs.
    */
   public void clearOptionalCollections() {
-    this.screenings = null;
     this.highlights = null;
+    this.screenings = null;
+    this.referrals = null;
+    this.relationships = null;
   }
 
   // =========================
@@ -1553,8 +1777,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @param hit search result
    * @return populated domain-level ES object
+   * @deprecated retrieves ES document objects for the obsolete Person Search.
    * @see #pullCol(Map, ESColumn)
    */
+  @Deprecated
   public static ElasticSearchPerson makeESPerson(final SearchHit hit) {
     final Map<String, Object> m = hit.getSource();
 
@@ -1971,6 +2197,22 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
   public void setUpsert(boolean upsert) {
     this.upsert = upsert;
+  }
+
+  public List<ElasticSearchPersonReferral> getReferrals() {
+    return referrals;
+  }
+
+  public void setReferrals(List<ElasticSearchPersonReferral> referrals) {
+    this.referrals = referrals;
+  }
+
+  public List<ElasticSearchPersonReferral> getRelationships() {
+    return relationships;
+  }
+
+  public void setRelationships(List<ElasticSearchPersonReferral> relationships) {
+    this.relationships = relationships;
   }
 
 }
