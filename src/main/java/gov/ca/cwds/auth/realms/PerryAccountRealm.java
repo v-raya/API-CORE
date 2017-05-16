@@ -6,7 +6,9 @@ import com.google.common.collect.Lists;
 import gov.ca.cwds.rest.api.ApiException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAccount;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 
@@ -24,12 +26,23 @@ public class PerryAccountRealm extends PerryRealm {
         objectMapper = new ObjectMapper();
     }
 
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        List principalsList = principals.asList();
+        if(principalsList.size() == 2) {
+            PerryAccount perryAccount = (PerryAccount) principalsList.get(1);
+            return new SimpleAuthorizationInfo(perryAccount.getRoles());
+        }
+        return null;
+    }
+
     protected AuthenticationInfo mapIdentity(String identity, AuthenticationToken token) {
         PerryAccount perryAccount = toPerryAccount(identity);
         List<Object> principals = Lists.newArrayList(perryAccount.getUser());
+        principals.add(perryAccount);
         PrincipalCollection principalCollection =
                 new SimplePrincipalCollection(principals, getName());
-        return new SimpleAccount(principalCollection, token, perryAccount.getRoles());
+        return new SimpleAuthenticationInfo(principalCollection, token);
     }
 
     private PerryAccount toPerryAccount(String identity)  {
