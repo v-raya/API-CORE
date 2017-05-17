@@ -252,7 +252,7 @@ public class CmsKeyIdGenerator {
   public static String cmsIdGenertor(String staffId) {
     CmsKeyIdGenerator rend = new CmsKeyIdGenerator();
     if (staffId == null || staffId.length() <= 0) {
-      staffId = "0JG"; // NOSONAR
+      staffId = "0X5"; // NOSONAR
     }
     StringBuilder staffid = new StringBuilder(staffId);
     return rend.generateKeyFromStaff(staffid.toString());
