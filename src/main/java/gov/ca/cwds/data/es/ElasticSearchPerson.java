@@ -619,7 +619,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonProperty("related_person_last_name")
     private String relatedPersonLastName;
 
-    @JsonProperty("indexedPersonRelationship")
+    @JsonProperty("indexed_person_relationship")
     private String indexedPersonRelationship;
 
     @JsonProperty("related_person_legacy_id")
@@ -634,6 +634,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonProperty("relationship_context")
     private String relationshipContext;
 
+    @JsonIgnore
     public String getRelatedPersonId() {
       return relatedPersonId;
     }
@@ -642,6 +643,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.relatedPersonId = relatedPersonId;
     }
 
+    @JsonIgnore
     public String getRelatedPersonFirstName() {
       return relatedPersonFirstName;
     }
@@ -650,6 +652,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.relatedPersonFirstName = relatedPersonFirstName;
     }
 
+    @JsonIgnore
     public String getRelatedPersonLastName() {
       return relatedPersonLastName;
     }
@@ -658,6 +661,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.relatedPersonLastName = relatedPersonLastName;
     }
 
+    @JsonIgnore
     public String getIndexedPersonRelationship() {
       return indexedPersonRelationship;
     }
@@ -1496,7 +1500,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     // The mainframe DB2 database runs in PST, and so we must too.
     final TimeZone tz = TimeZone.getTimeZone("PST");
 
-    // DRS: VERIFY THREAD SAFETY HERE.
     final DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
     fmt.setTimeZone(tz);
     mapper.setDateFormat(fmt);
