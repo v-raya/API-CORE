@@ -69,7 +69,7 @@ public class PerryAccountRealm extends PerryRealm {
     }
 
     /**
-     * Created by dmitry.rudenko on 5/9/2017.
+     * User token from Perry
      */
     public static class PerryAccount {
         @JsonProperty
