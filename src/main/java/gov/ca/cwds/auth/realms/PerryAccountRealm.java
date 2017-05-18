@@ -17,9 +17,24 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by dmitry.rudenko on 5/9/2017.
+ * Simple implementation of perry authorization realm. This realm sends
+ * access token to perry and expects simple user token. Token format example:
+ * {"user" : "username"
+ *  "roles" ["role1", "role2"]
+ * }
+ *
+ * During authentication process this realm puts user name as primary credential
+ * and user token as secondary. So authorization process will expect 2 principals.
+ * In case if we will not have user token as secondary principal - authorization will not
+ * take place. In other words subject will not contain roles.
+ *
  */
 public class PerryAccountRealm extends PerryRealm {
+    /**
+     * primary principal equals to username
+     * secondary principal equals to user token
+     */
+    private static final int PRINCIPALS_COUNT = 2;
     private ObjectMapper objectMapper;
 
     public PerryAccountRealm() {
@@ -29,7 +44,7 @@ public class PerryAccountRealm extends PerryRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         List principalsList = principals.asList();
-        if(principalsList.size() == 2) {
+        if(principalsList.size() == PRINCIPALS_COUNT) {
             PerryAccount perryAccount = (PerryAccount) principalsList.get(1);
             return new SimpleAuthorizationInfo(perryAccount.getRoles());
         }
