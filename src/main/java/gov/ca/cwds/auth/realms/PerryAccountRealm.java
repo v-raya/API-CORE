@@ -20,7 +20,7 @@ import java.util.Set;
  * Simple implementation of perry authorization realm. This realm sends
  * access token to perry and expects simple user token. Token format example:
  * {"user" : "username"
- *  "roles" ["role1", "role2"]
+ *  "roles" : ["role1", "role2"]
  * }
  *
  * During authentication process this realm puts user name as primary credential
