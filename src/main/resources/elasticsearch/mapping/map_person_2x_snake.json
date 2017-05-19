@@ -15,6 +15,11 @@
 			"type": "string",
 			"store": true
 		},
+		"legacy_last_updated": {
+			"format": "basic_ordinal_date_time",
+			"type": "date",
+			"store": true
+		},
 		"first_name": {
 			"type": "string",
 			"store": true
@@ -60,6 +65,11 @@
 				},
 				"legacy_address_id": {
 					"type": "string",
+					"store": true
+				},
+				"legacy_last_updated": {
+					"format": "basic_ordinal_date_time",
+					"type": "date",
 					"store": true
 				},
 				"street_number": {
@@ -120,6 +130,11 @@
 				},
 				"legacy_id": {
 					"type": "string",
+					"store": true
+				},
+				"legacy_last_updated": {
+					"format": "basic_ordinal_date_time",
+					"type": "date",
 					"store": true
 				},
 				"number": {
@@ -193,6 +208,11 @@
 				"related_person_legacy_id": {
 					"type": "string",
 					"store": true
+				},
+				"related_person_legacy_last_updated": {
+					"format": "basic_ordinal_date_time",
+					"type": "date",
+					"store": true
 				}
 			}
 		},
@@ -204,6 +224,11 @@
 				},
 				"legacy_client_id": {
 					"type": "string",
+					"store": true
+				},
+				"legacy_last_updated": {
+					"format": "basic_ordinal_date_time",
+					"type": "date",
 					"store": true
 				},
 				"activated_county": {
@@ -234,6 +259,11 @@
 				},
 				"legacy_referral_id": {
 					"type": "string",
+					"store": true
+				},
+				"legacy_last_updated": {
+					"format": "basic_ordinal_date_time",
+					"type": "date",
 					"store": true
 				},
 				"start_date": {
@@ -271,6 +301,11 @@
 						"legacy_reporter_id": {
 							"type": "string",
 							"store": true
+						},
+						"legacy_reporter_last_updated": {
+							"format": "basic_ordinal_date_time",
+							"type": "date",
+							"store": true
 						}
 					}
 				},
@@ -291,6 +326,11 @@
 						"legacy_assigned_social_worker_id": {
 							"type": "string",
 							"store": true
+						},
+						"legacy_assigned_social_worker_last_updated": {
+							"format": "basic_ordinal_date_time",
+							"type": "date",
+							"store": true
 						}
 					}
 				},
@@ -298,6 +338,11 @@
 					"properties": {
 						"legacy_allegation_id": {
 							"type": "string",
+							"store": true
+						},
+						"legacy_allegation_last_updated": {
+							"format": "basic_ordinal_date_time",
+							"type": "date",
 							"store": true
 						},
 						"victim_first_name": {
@@ -316,6 +361,11 @@
 							"type": "string",
 							"store": true
 						},
+						"victim_legacy_client_last_updated": {
+							"format": "basic_ordinal_date_time",
+							"type": "date",
+							"store": true
+						},
 						"perpetrator_first_name": {
 							"type": "string",
 							"store": true
@@ -330,6 +380,11 @@
 						},
 						"perpetrator_legacy_client_id": {
 							"type": "string",
+							"store": true
+						},
+						"perpetrator_legacy_client_last_updated": {
+							"format": "basic_ordinal_date_time",
+							"type": "date",
 							"store": true
 						},
 						"allegation_description": {
@@ -381,6 +436,11 @@
 						"legacy_reporter_id": {
 							"type": "string",
 							"store": true
+						},
+						"legacy_reporter_last_updated": {
+							"format": "basic_ordinal_date_time",
+							"type": "date",
+							"store": true
 						}
 					}
 				},
@@ -401,6 +461,11 @@
 						"legacy_assigned_social_worker_id": {
 							"type": "string",
 							"store": true
+						},
+						"legacy_assigned_social_worker_last_updated": {
+							"format": "basic_ordinal_date_time",
+							"type": "date",
+							"store": true
 						}
 					}
 				},
@@ -408,6 +473,11 @@
 					"properties": {
 						"legacy_allegation_id": {
 							"type": "string",
+							"store": true
+						},
+						"legacy_allegation_last_updated": {
+							"format": "basic_ordinal_date_time",
+							"type": "date",
 							"store": true
 						},
 						"victim_first_name": {
@@ -420,6 +490,11 @@
 						},
 						"victim_legacy_client_id": {
 							"type": "string",
+							"store": true
+						},
+						"victim_legacy_client_last_updated": {
+							"format": "basic_ordinal_date_time",
+							"type": "date",
 							"store": true
 						},
 						"perpetrator_first_name": {
@@ -436,6 +511,11 @@
 						},
 						"perpetrator_legacy_client_id": {
 							"type": "string",
+							"store": true
+						},
+						"perpetrator_legacy_client_last_updated": {
+							"format": "basic_ordinal_date_time",
+							"type": "date",
 							"store": true
 						},
 						"allegation_description": {
@@ -469,6 +549,11 @@
 						"legacy_id": {
 							"type": "string",
 							"store": true
+						},
+						"legacy_last_updated": {
+							"format": "basic_ordinal_date_time",
+							"type": "date",
+							"store": true
 						}
 					}
 				},
@@ -497,6 +582,11 @@
 						"legacy_staff_id": {
 							"type": "string",
 							"store": true
+						},
+						"legacy_last_updated": {
+							"format": "basic_ordinal_date_time",
+							"type": "date",
+							"store": true
 						}
 					}
 				},
@@ -518,6 +608,11 @@
 				},
 				"legacy_case_id": {
 					"type": "string",
+					"store": true
+				},
+				"legacy_last_updated": {
+					"format": "basic_ordinal_date_time",
+					"type": "date",
 					"store": true
 				},
 				"start_date": {
@@ -555,6 +650,11 @@
 						"legacy_client_id": {
 							"type": "string",
 							"store": true
+						},
+						"legacy_last_updated": {
+							"format": "basic_ordinal_date_time",
+							"type": "date",
+							"store": true
 						}
 					}
 				},
@@ -583,6 +683,11 @@
 						"legacy_id": {
 							"type": "string",
 							"store": true
+						},
+						"legacy_last_updated": {
+							"format": "basic_ordinal_date_time",
+							"type": "date",
+							"store": true
 						}
 					}
 				},
@@ -602,6 +707,11 @@
 						},
 						"legacy_social_worker_id": {
 							"type": "string",
+							"store": true
+						},
+						"legacy_social_worker_last_updated": {
+							"format": "basic_ordinal_date_time",
+							"type": "date",
 							"store": true
 						}
 					}
