@@ -1544,6 +1544,12 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonProperty("source")
   private String source;
 
+  @JsonProperty("legacy_source_table")
+  private String legacySourceTable;
+
+  @JsonProperty("legacy_id")
+  private String legacyId;
+
   @JsonProperty("addresses")
   private List<ElasticSearchPersonAddress> addresses = new ArrayList<>();
 
@@ -2217,6 +2223,22 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
   public void setRelationships(List<ElasticSearchPersonRelationship> relationships) {
     this.relationships = relationships;
+  }
+
+  public String getLegacySourceTable() {
+    return legacySourceTable;
+  }
+
+  public void setLegacySourceTable(String legacySourceTable) {
+    this.legacySourceTable = legacySourceTable;
+  }
+
+  public String getLegacyId() {
+    return legacyId;
+  }
+
+  public void setLegacyId(String legacyId) {
+    this.legacyId = legacyId;
   }
 
 }
