@@ -898,6 +898,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonProperty("staff_name")
     private ElasticSearchPersonStaff staffName = new ElasticSearchPersonStaff();
 
+    @JsonProperty("allegations")
     private List<ElasticSearchPersonAllegation> allegations = new ArrayList<>();
 
     @JsonProperty("all_people")
@@ -1562,7 +1563,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
   @JsonProperty("relationships")
   @JsonInclude(JsonInclude.Include.NON_NULL)
-  private List<ElasticSearchPersonReferral> relationships = new ArrayList<>();
+  private List<ElasticSearchPersonRelationship> relationships = new ArrayList<>();
 
   @Transient
   private Map<String, String> highlights = new LinkedHashMap<>();
@@ -1592,7 +1593,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * IPersonAware.
    * 
    * <p>
-   * Note that JSON marshalling intentionally ignores this member, since it represents the JSON to
+   * Note that JSON serialization intentionally ignores this member, since it represents the JSON to
    * create a child Object and not the Object itself.
    * </p>
    */
@@ -2210,11 +2211,11 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     this.referrals = referrals;
   }
 
-  public List<ElasticSearchPersonReferral> getRelationships() {
+  public List<ElasticSearchPersonRelationship> getRelationships() {
     return relationships;
   }
 
-  public void setRelationships(List<ElasticSearchPersonReferral> relationships) {
+  public void setRelationships(List<ElasticSearchPersonRelationship> relationships) {
     this.relationships = relationships;
   }
 
