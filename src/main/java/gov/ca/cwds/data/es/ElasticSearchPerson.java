@@ -1036,6 +1036,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
      */
     private static final long serialVersionUID = 1L;
 
+    @JsonProperty("id")
     private String id;
 
     @JsonProperty("start_date")
@@ -1057,6 +1058,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     private ElasticSearchPersonSocialWorker assignedSocialWorker =
         new ElasticSearchPersonSocialWorker();
 
+    @JsonProperty("allegations")
     private List<ElasticSearchPersonAllegation> allegations = new ArrayList<>();
 
     @Override
