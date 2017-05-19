@@ -474,6 +474,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
      */
     private static final long serialVersionUID = 1L;
 
+    @JsonProperty("id")
     private String id;
 
     @JsonProperty("allegation_description")
@@ -717,6 +718,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
      */
     private static final long serialVersionUID = 1L;
 
+    @JsonProperty("id")
     private String id;
 
     @JsonProperty("first_name")
@@ -1058,6 +1060,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     private ElasticSearchPersonSocialWorker assignedSocialWorker =
         new ElasticSearchPersonSocialWorker();
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("allegations")
     private List<ElasticSearchPersonAllegation> allegations = new ArrayList<>();
 
@@ -1785,7 +1788,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * </p>
    * 
    * <blockquote>
-   * {@code Class.forName("some.nested.class", false, Thread.currentThread().getContextClassLoader())}</blockquote>
+   * {@code Class.forName("some.nested.class", false, Thread.currentThread().getContextClassLoader())}
+   * </blockquote>
    * 
    * @param hit search result
    * @return populated domain-level ES object
