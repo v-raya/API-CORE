@@ -28,6 +28,7 @@ public class VarargTuple<T extends Serializable> implements Serializable {
    * 
    * @param values any number of T keys
    */
+  @SafeVarargs
   public VarargTuple(T... values) {
     if (values == null || values.length == 0) {
       throw new ApiException("Column list cannot be null");

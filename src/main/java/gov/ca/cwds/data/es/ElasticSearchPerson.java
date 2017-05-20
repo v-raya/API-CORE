@@ -5,12 +5,16 @@ import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 import javax.persistence.Transient;
 
@@ -157,6 +161,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     public final Object getDefaultVal() {
       return defaultVal;
     }
+  }
+
+  public enum ESOptionalCollection {
+    REFERAL, SCREENING, CASE, RELATIONSHIP
   }
 
   /**
@@ -1714,13 +1722,49 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   }
 
   /**
-   * Clear out optional collections so that they are not overwritten by "last run" jobs.
+   * Convenience method streams variable argument enum entries into a EnumSet.
+   * 
+   * @param enumClass any enum class
+   * @param elem vararg enum entries
+   * @return Set of enums
+   * @param <V> enum class class
+   */
+  @SafeVarargs
+  public static <V extends Enum<V>> Set<V> setOf(Class<V> enumClass, V... elem) {
+    return Arrays.stream(elem).collect(Collectors.toCollection(() -> EnumSet.noneOf(enumClass)));
+  }
+
+  /**
+   * Clear out optional collections (set to null) so that they are not overwritten by "last run"
+   * jobs.
+   * 
+   * @param keep collections to keep
+   */
+  public void clearOptionalCollections(ESOptionalCollection... keep) {
+    final Set<ESOptionalCollection> keepers = setOf(ESOptionalCollection.class, keep);
+
+    if (!keepers.contains(ESOptionalCollection.REFERAL)) {
+      LOGGER.debug("clear REFERAL");
+      this.referrals = null;
+    }
+    if (!keepers.contains(ESOptionalCollection.SCREENING)) {
+      LOGGER.debug("clear SCREENING");
+      this.screenings = null;
+    }
+    if (!keepers.contains(ESOptionalCollection.RELATIONSHIP)) {
+      LOGGER.debug("clear SCREENING");
+      this.relationships = null;
+    }
+
+    this.highlights = null;
+  }
+
+  /**
+   * Clear out optional collections so that they are not overwritten by "last run" jobs. This
+   * overload clears <strong>all</strong> optional collections.
    */
   public void clearOptionalCollections() {
-    this.highlights = null;
-    this.screenings = null;
-    this.referrals = null;
-    this.relationships = null;
+    clearOptionalCollections();
   }
 
   // =========================
