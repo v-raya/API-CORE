@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -475,6 +476,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
+  @JsonPropertyOrder({"id", "allegation_description", "disposition_description", "perpetrator_id",
+      "perpetrator_legacy_client_id", "perpetrator_first_name", "perpetrator_last_name",
+      "victim_id", "victim_legacy_client_id", "victim_first_name", "victim_last_name"})
   public static class ElasticSearchPersonAllegation implements ApiTypedIdentifier<String> {
 
     /**
@@ -718,6 +722,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
+  @JsonPropertyOrder({"id", "first_name", "last_name"})
   public abstract static class ElasticSearchPersonNestedPerson
       implements ApiTypedIdentifier<String> {
 
@@ -1039,6 +1044,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
+  @JsonPropertyOrder({"id", "start_date", "end_date", "county_name", "response_time", "reporter",
+      "assigned_social_worker", "allegations"})
   public static class ElasticSearchPersonReferral implements ApiTypedIdentifier<String> {
 
     /**
