@@ -1764,15 +1764,15 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     final Set<ESOptionalCollection> keepers = setOf(ESOptionalCollection.class, keep);
 
     if (!keepers.contains(ESOptionalCollection.REFERAL)) {
-      LOGGER.debug("clear REFERAL");
+      LOGGER.trace("clear REFERAL");
       this.referrals = null;
     }
     if (!keepers.contains(ESOptionalCollection.SCREENING)) {
-      LOGGER.debug("clear SCREENING");
+      LOGGER.trace("clear SCREENING");
       this.screenings = null;
     }
     if (!keepers.contains(ESOptionalCollection.RELATIONSHIP)) {
-      LOGGER.debug("clear SCREENING");
+      LOGGER.trace("clear SCREENING");
       this.relationships = null;
     }
 
