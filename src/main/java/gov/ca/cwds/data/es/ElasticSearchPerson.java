@@ -165,7 +165,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   }
 
   public enum ESOptionalCollection {
-    REFERAL, SCREENING, CASE, RELATIONSHIP
+    NONE, REFERAL, SCREENING, CASE, RELATIONSHIP
   }
 
   /**
@@ -1771,7 +1771,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * overload clears <strong>all</strong> optional collections.
    */
   public void clearOptionalCollections() {
-    clearOptionalCollections();
+    clearOptionalCollections(ESOptionalCollection.NONE);
   }
 
   // =========================
