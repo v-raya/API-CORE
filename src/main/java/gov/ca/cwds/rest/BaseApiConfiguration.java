@@ -42,6 +42,9 @@ public class BaseApiConfiguration extends Configuration {
   private SmartyStreetsConfiguration smartyStreetsConfiguration;
 
   @Nullable
+  private TriggerTablesConfiguration triggerTablesConfiguration;
+
+  @Nullable
   private ShiroConfiguration shiroConfiguration;
 
   @JsonProperty
@@ -124,6 +127,11 @@ public class BaseApiConfiguration extends Configuration {
   @JsonProperty(value = "smartystreets")
   public SmartyStreetsConfiguration getSmartyStreetsConfiguration() {
     return smartyStreetsConfiguration;
+  }
+
+  @JsonProperty(value = "triggertables")
+  public TriggerTablesConfiguration getTriggerTablesConfiguration() {
+    return triggerTablesConfiguration;
   }
 
   @JsonProperty
