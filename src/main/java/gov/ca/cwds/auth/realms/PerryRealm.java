@@ -10,7 +10,9 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthenticatingRealm;
+import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.slf4j.Logger;
@@ -23,12 +25,17 @@ import gov.ca.cwds.auth.InvalidTokenException;
 import gov.ca.cwds.auth.PerryShiroToken;
 import gov.ca.cwds.auth.clients.PerryClient;
 
-public class PerryRealm extends AuthenticatingRealm {
+public class PerryRealm extends AuthorizingRealm {
   private static final Logger LOGGER = LoggerFactory.getLogger(PerryRealm.class);
   private PerryClient client = null;
 
   public PerryRealm() {
     setAuthenticationTokenClass(PerryShiroToken.class);
+  }
+
+  @Override
+  protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+    return null;
   }
 
   @Override
@@ -40,12 +47,9 @@ public class PerryRealm extends AuthenticatingRealm {
     PerryShiroToken perryShiroToken = (PerryShiroToken) token;
     try {
       LOGGER.debug("Reaching out to Perry for authentication...");
-      String racfid = client.validateToken(perryShiroToken);
+      String identity = client.validateToken(perryShiroToken);
 
-      List<Object> principals = Lists.<Object>newArrayList(racfid);
-      PrincipalCollection principalCollection =
-          new SimplePrincipalCollection(principals, getName());
-      return new SimpleAuthenticationInfo(principalCollection, token);
+      return mapIdentity(identity, token);
     } catch (InvalidTokenException e) {
       LOGGER.warn("Invalid Token {}", perryShiroToken.getPrincipal(), e);
       return null;
@@ -53,6 +57,13 @@ public class PerryRealm extends AuthenticatingRealm {
       LOGGER.error("Error authenticating user.", e);
       throw new ApiAuthenticationException("Error authenticating user.", e);
     }
+  }
+
+  protected AuthenticationInfo mapIdentity(String identity, AuthenticationToken token) {
+    List<Object> principals = Lists.newArrayList(identity);
+    PrincipalCollection principalCollection =
+        new SimplePrincipalCollection(principals, getName());
+    return new SimpleAuthenticationInfo(principalCollection, token);
   }
 
   /**

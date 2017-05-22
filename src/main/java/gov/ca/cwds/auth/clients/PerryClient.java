@@ -26,6 +26,7 @@ public class PerryClient {
   private static final Logger LOGGER = LoggerFactory.getLogger(PerryClient.class);
   private volatile Client client;
   private String perryUrl;
+  private String serviceProviderId;
 
   private synchronized void buildClient() {
     // double null check to ensure that the client only gets built once
@@ -42,6 +43,14 @@ public class PerryClient {
     return client;
   }
 
+  public String getServiceProviderId() {
+    return serviceProviderId;
+  }
+
+  public void setServiceProviderId(String serviceProviderId) {
+    this.serviceProviderId = serviceProviderId;
+  }
+
   public String validateToken(PerryShiroToken token) {
     checkNotNull(token, "Token cannot be null.");
     checkState(!Strings.isNullOrEmpty(perryUrl), "PerryUrl must be set.");
@@ -50,6 +59,9 @@ public class PerryClient {
     Response response = null;
     try {
       WebTarget webTarget = getClient().target(perryUrl).queryParam("token", token.getToken());
+      if(serviceProviderId != null) {
+        webTarget = webTarget.queryParam("sp_id", serviceProviderId);
+      }
       Invocation.Builder invocationBuilder = webTarget.request(MediaType.TEXT_PLAIN_TYPE);
       response = invocationBuilder.get();
     } catch (Exception e) {
@@ -59,10 +71,10 @@ public class PerryClient {
     }
     if (response != null) {
       if (response.getStatus() == 200) {
-        String racfid = response.readEntity(String.class);
-        LOGGER.debug("Successfully received validation of token: '{}', for racfid: '{}'.",
-            token.getToken(), racfid);
-        return racfid;
+        String subject = response.readEntity(String.class);
+        LOGGER.debug("Successfully received validation of token: '{}', for subject: '{}'.",
+            token.getToken(), subject);
+        return subject;
       } else {
         LOGGER.error("Connection to Perry failed with HTTP code: {}.", response.getStatus());
         throw new InvalidTokenException(
