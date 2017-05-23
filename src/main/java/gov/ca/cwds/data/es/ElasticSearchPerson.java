@@ -476,9 +476,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
-  @JsonPropertyOrder({"id", "allegation_description", "disposition_description", "perpetrator_id",
-      "perpetrator_legacy_client_id", "perpetrator_first_name", "perpetrator_last_name",
-      "victim_id", "victim_legacy_client_id", "victim_first_name", "victim_last_name"})
+  @JsonPropertyOrder({"legacy_allegation_id", "allegation_description", "disposition_description",
+      "perpetrator_id", "perpetrator_legacy_client_id", "perpetrator_first_name",
+      "perpetrator_last_name", "victim_id", "victim_legacy_client_id", "victim_first_name",
+      "victim_last_name"})
   public static class ElasticSearchPersonAllegation implements ApiTypedIdentifier<String> {
 
     /**
@@ -486,7 +487,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
      */
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("id")
+    @JsonProperty("legacy_allegation_id")
     private String id;
 
     @JsonProperty("allegation_description")
@@ -520,6 +521,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     private String victimLegacyClientId;
 
     @Override
+    @JsonIgnore
     public String getId() {
       return id;
     }
@@ -1056,6 +1058,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonProperty("id")
     private String id;
 
+    @JsonProperty("legacy_referral_id")
+    private String legacyId;
+
     @JsonProperty("start_date")
     private String startDate;
 
@@ -1087,6 +1092,14 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @Override
     public void setId(String id) {
       this.id = id;
+    }
+
+    public String getLegacyId() {
+      return legacyId;
+    }
+
+    public void setLegacyId(String legacyId) {
+      this.legacyId = legacyId;
     }
 
     @JsonIgnore
