@@ -6,8 +6,8 @@ import java.text.MessageFormat;
 import org.apache.commons.beanutils.BeanUtils;
 
 /**
+ * 
  * @author CWDS API Team
- *
  */
 public abstract class AbstractBeanValidator {
   protected String readBeanValue(Object bean, String property) {

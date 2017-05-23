@@ -31,6 +31,7 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
  */
 public final class TypedServiceBackedResourceDelegate<P extends Serializable, Q extends Request, S extends gov.ca.cwds.rest.api.Response>
     implements TypedResourceDelegate<P, Q> {
+
   private static final Logger LOGGER =
       LoggerFactory.getLogger(TypedServiceBackedResourceDelegate.class);
 

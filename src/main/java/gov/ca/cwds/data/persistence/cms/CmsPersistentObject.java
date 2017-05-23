@@ -27,7 +27,7 @@ public abstract class CmsPersistentObject implements PersistentObject {
   /**
    * All legacy "identifier" fields and their foreign key are CHAR(10).
    */
-  protected static final int CMS_ID_LEN = 10;
+  public static final int CMS_ID_LEN = 10;
 
   /**
    * Standard timestamp format for legacy DB2 tables.
