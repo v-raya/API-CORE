@@ -1046,8 +1046,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
-  @JsonPropertyOrder({"id", "start_date", "end_date", "county_name", "response_time", "reporter",
-      "assigned_social_worker", "allegations"})
+  @JsonPropertyOrder({"id", "legacy_referral_id", "start_date", "end_date", "county_name",
+      "response_time", "reporter", "assigned_social_worker", "allegations"})
   public static class ElasticSearchPersonReferral implements ApiTypedIdentifier<String> {
 
     /**
@@ -1094,6 +1094,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.id = id;
     }
 
+    @JsonIgnore
     public String getLegacyId() {
       return legacyId;
     }
