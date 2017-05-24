@@ -61,7 +61,7 @@ public class ElasticsearchDao implements Closeable {
   private static final int DEFAULT_MAX_RESULTS = 100;
 
   private static final String DEFAULT_PERSON_MAPPING =
-      "/elasticsearch/mapping/map_person_2x_snake.json";
+      "/elasticsearch/mapping/map_person_5x_snake.json";
 
   /**
    * Standard "people" index name.
