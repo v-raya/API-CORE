@@ -35,28 +35,24 @@ public class AuditLoggerImplTest {
   @Test
   public void testBuildMDCSetsRemoteAddress() throws Exception {
     auditLoggerImpl.storeRemoteAddress("remoteAddress");
-
     assertThat(MDC.get(AuditLoggerImpl.REMOTE_ADDRESS), is("remoteAddress"));
   }
 
   @Test
   public void testBuildMDCSetsUserId() throws Exception {
     auditLoggerImpl.storeUserId("userid");
-
     assertThat(MDC.get(AuditLoggerImpl.USER_ID), is("userid"));
   }
 
   @Test
   public void testBuildMDCSetsSessionId() throws Exception {
     auditLoggerImpl.storeSessionId("sessionid");
-
     assertThat(MDC.get(AuditLoggerImpl.SESSION_ID), is("sessionid"));
   }
 
   @Test
   public void testBuildMDCSetsRequestId() throws Exception {
     auditLoggerImpl.storeRequestId("requestid");
-
     assertThat(MDC.get(AuditLoggerImpl.REQUEST_ID), is("requestid"));
   }
 
@@ -93,4 +89,5 @@ public class AuditLoggerImplTest {
     String id = auditLoggerImpl.uniqueId();
     assertThat(MDC.get(AuditLoggerImpl.UNIQUE_ID), is(id));
   }
+
 }
