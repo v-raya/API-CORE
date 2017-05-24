@@ -29,7 +29,7 @@ public abstract class CmsTypedPersistentObject<P extends Serializable>
   /**
    * All legacy "identifier" fields and their foreign key are CHAR(10).
    */
-  protected static final int CMS_ID_LEN = 10;
+  protected static final int CMS_ID_LEN = CmsPersistentObject.CMS_ID_LEN;
 
   /**
    * Standard timestamp format for legacy DB2 tables.

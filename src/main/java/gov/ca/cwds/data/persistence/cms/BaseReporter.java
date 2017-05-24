@@ -29,13 +29,13 @@ import gov.ca.cwds.data.std.ApiPhoneAware;
 
 /**
  * @author CWDS API Team
- *
  */
 @MappedSuperclass
 public abstract class BaseReporter extends CmsPersistentObject
     implements ApiPersonAware, ApiAddressAware, ApiMultiplePhonesAware {
+
   /**
-   * serialization version
+   * Default serialization version
    */
   private static final long serialVersionUID = 1L;
 
@@ -129,7 +129,7 @@ public abstract class BaseReporter extends CmsPersistentObject
   @Column(name = "RPTR_ZIPNO")
   protected Integer zipNumber;
 
-  @Column(name = "FKLAW_ENFT", length = 10)
+  @Column(name = "FKLAW_ENFT", length = CMS_ID_LEN)
   protected String lawEnforcementId;
 
   @Type(type = "short")
