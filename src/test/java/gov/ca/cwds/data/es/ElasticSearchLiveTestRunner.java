@@ -10,6 +10,7 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -129,11 +130,18 @@ public class ElasticSearchLiveTestRunner implements Runnable {
   }
 
   private static Client elasticsearchClient(ElasticsearchConfiguration config) throws Exception {
-    Settings settings =
-        Settings.settingsBuilder().put("cluster.name", config.getElasticsearchCluster()).build();
-    return TransportClient.builder().settings(settings).build().addTransportAddress(
+    // Settings settings =
+    // Settings.builder().put("cluster.name", config.getElasticsearchCluster()).build();
+    // return TransportClient.builder().settings(settings).build().addTransportAddress(
+    // new InetSocketTransportAddress(InetAddress.getByName(config.getElasticsearchHost()),
+    // Integer.parseInt(config.getElasticsearchPort())));
+
+    TransportClient ret = new PreBuiltTransportClient(
+        Settings.builder().put("cluster.name", config.getElasticsearchCluster()).build());
+    ret.addTransportAddress(
         new InetSocketTransportAddress(InetAddress.getByName(config.getElasticsearchHost()),
             Integer.parseInt(config.getElasticsearchPort())));
+    return ret;
   }
 
 }

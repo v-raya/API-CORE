@@ -14,7 +14,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.highlight.HighlightField;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

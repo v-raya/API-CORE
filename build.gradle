@@ -15,6 +15,7 @@ project.ext {
     dropwizardFlywayVersion = "1.0.0-1"
     metricsVersion = "3.1.0"
     dropwizardSwaggerVersion = "1.0.0-1"
+    elasticsearchVersion = "5.3.2"
 }
 
 version = apiVersion
@@ -37,7 +38,13 @@ dependencies {
     compile group: "io.dropwizard.modules", name: "dropwizard-flyway", version: dropwizardFlywayVersion
     compile group: "org.glassfish.jersey.ext", name: "jersey-declarative-linking", version: "2.23.2"
     compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.8.3'
-    compile group: 'org.elasticsearch', name: 'elasticsearch', version: '2.4.4'
+
+    // ES 5.x:
+    compile group: 'org.elasticsearch', name: 'elasticsearch', version: elasticsearchVersion
+    compile group: 'org.elasticsearch.client', name: 'transport', version: elasticsearchVersion
+
+    // compile group: 'org.elasticsearch', name: 'elasticsearch', version: '2.4.4'
+
 	compile group: 'com.hubspot.dropwizard', name: 'dropwizard-guice', version: '1.0.6.0'
     
     compile fileTree(dir: 'lib', include: ['*.jar'])

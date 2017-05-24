@@ -15,10 +15,8 @@ import java.util.Optional;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.ActionRequest;
-import org.elasticsearch.action.WriteConsistencyLevel;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.Client;
@@ -136,7 +134,7 @@ public class ElasticsearchDao implements Closeable {
     LOGGER.warn("CREATE ES INDEX {} with {} shards and {} replicas", index, numShards, numReplicas);
 
     try {
-      final Settings indexSettings = Settings.settingsBuilder().put("number_of_shards", numShards)
+      final Settings indexSettings = Settings.builder().put("number_of_shards", numShards)
           .put("number_of_replicas", numReplicas).build();
 
       CreateIndexRequest indexRequest = new CreateIndexRequest(index, indexSettings);
@@ -224,32 +222,32 @@ public class ElasticsearchDao implements Closeable {
    * @return true if document is indexed false if updated
    * @throws ApiElasticSearchException exception on create document
    */
-  public boolean index(final String index, final String documentType, final String document,
-      final String id) throws ApiElasticSearchException {
-    checkArgument(!Strings.isNullOrEmpty(index), "index cannot be Null or empty");
-    checkArgument(!Strings.isNullOrEmpty(documentType), "documentType cannot be Null or empty");
-
-    LOGGER.info("ElasticSearchDao.createDocument(): " + document);
-    final IndexResponse response = client.prepareIndex(index, documentType, id)
-        .setConsistencyLevel(WriteConsistencyLevel.DEFAULT).setSource(document).execute()
-        .actionGet();
-
-    boolean created = response.isCreated();
-    if (created) {
-      LOGGER.info("Created document:\nindex: " + response.getIndex() + "\ndoc type: "
-          + response.getType() + "\nid: " + response.getId() + "\nversion: " + response.getVersion()
-          + "\ncreated: " + response.isCreated());
-      LOGGER.info("Created document --- index:{}, doc type:{},id:{},version:{},created:{}",
-          response.getIndex(), response.getType(), response.getId(), response.getVersion(),
-          response.isCreated());
-    } else {
-      LOGGER.warn("Document not created --- index:{}, doc type:{},id:{},version:{},created:{}",
-          response.getIndex(), response.getType(), response.getId(), response.getVersion(),
-          response.isCreated());
-    }
-
-    return created;
-  }
+  // public boolean index(final String index, final String documentType, final String document,
+  // final String id) throws ApiElasticSearchException {
+  // checkArgument(!Strings.isNullOrEmpty(index), "index cannot be Null or empty");
+  // checkArgument(!Strings.isNullOrEmpty(documentType), "documentType cannot be Null or empty");
+  //
+  // LOGGER.info("ElasticSearchDao.createDocument(): " + document);
+  // final IndexResponse response = client.prepareIndex(index, documentType, id)
+  // // .setConsistencyLevel(WriteConsistencyLevel.DEFAULT)
+  // .setSource(document).execute().actionGet();
+  //
+  // boolean created = response.isCreated();
+  // if (created) {
+  // LOGGER.info("Created document:\nindex: " + response.getIndex() + "\ndoc type: "
+  // + response.getType() + "\nid: " + response.getId() + "\nversion: " + response.getVersion()
+  // + "\ncreated: " + response.isCreated());
+  // LOGGER.info("Created document --- index:{}, doc type:{},id:{},version:{},created:{}",
+  // response.getIndex(), response.getType(), response.getId(), response.getVersion(),
+  // response.isCreated());
+  // } else {
+  // LOGGER.warn("Document not created --- index:{}, doc type:{},id:{},version:{},created:{}",
+  // response.getIndex(), response.getType(), response.getId(), response.getVersion(),
+  // response.isCreated());
+  // }
+  //
+  // return created;
+  // }
 
   /**
    * Prepare an index request for bulk operations.
@@ -363,13 +361,14 @@ public class ElasticsearchDao implements Closeable {
 
     SearchRequestBuilder builder = client.prepareSearch(alias).setTypes(docType)
         .setQuery(queryBuilder).setFrom(0).setSize(DEFAULT_MAX_RESULTS)
-        .addHighlightedField(ElasticSearchPerson.ESColumn.FIRST_NAME.getCol())
-        .addHighlightedField(ElasticSearchPerson.ESColumn.LAST_NAME.getCol())
-        .addHighlightedField(ElasticSearchPerson.ESColumn.GENDER.getCol())
-        .addHighlightedField(ElasticSearchPerson.ESColumn.BIRTH_DATE.getCol())
-        .addHighlightedField(ElasticSearchPerson.ESColumn.SSN.getCol())
-        .setHighlighterNumOfFragments(3).setHighlighterRequireFieldMatch(true)
-        .setHighlighterOrder("score").setExplain(true);
+        // .addHighlightedField(ElasticSearchPerson.ESColumn.FIRST_NAME.getCol())
+        // .addHighlightedField(ElasticSearchPerson.ESColumn.LAST_NAME.getCol())
+        // .addHighlightedField(ElasticSearchPerson.ESColumn.GENDER.getCol())
+        // .addHighlightedField(ElasticSearchPerson.ESColumn.BIRTH_DATE.getCol())
+        // .addHighlightedField(ElasticSearchPerson.ESColumn.SSN.getCol())
+        // .setHighlighterNumOfFragments(3).setHighlighterRequireFieldMatch(true)
+        // .setHighlighterOrder("score")
+        .setExplain(true);
 
     LOGGER.warn("ES QUERY: {}", builder);
     final SearchHit[] hits = builder.execute().actionGet().getHits().getHits();
