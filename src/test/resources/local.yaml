@@ -3,5 +3,5 @@ elasticsearch.port: ${ES_PORT:-9300}
 elasticsearch.cluster: ${ES_CLUSTER:-elasticsearch}
 elasticsearch.clientnode: ${ES_CLIENTNODE:-javaclient}
 elasticsearch.clientport: ${ES_CLIENTPORT:-10080}
-peopleIndexName: people
+peopleIndexName: people_v1
 peopleIndexType: person
