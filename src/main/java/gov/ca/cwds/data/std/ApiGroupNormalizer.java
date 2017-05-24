@@ -33,10 +33,10 @@ public interface ApiGroupNormalizer<R extends PersistentObject> extends Serializ
   void reduce(Map<Object, R> map);
 
   /**
-   * Gets the group's identifier, such as CLIENT_T.IDENTIFIER.
+   * Gets the group's unique identifier (aka., "key"), such as CLIENT_T.IDENTIFIER.
    * 
    * <p>
-   * On a normalized parent class, this is typically the primary key.
+   * On a normalized parent class, this is typically the parent primary key.
    * </p>
    * 
    * @return grouping key or identifier
