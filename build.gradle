@@ -1,11 +1,10 @@
 plugins {
     id "java"
-	id 'net.saliman.cobertura' version '2.4.0'
     id "org.sonarqube" version "2.2.1"
 }
 
 apply plugin: 'maven-publish'
-apply plugin: 'net.saliman.cobertura'
+apply plugin: 'jacoco'
 sourceCompatibility = 1.8
 
 project.ext {
@@ -93,14 +92,19 @@ task integrationTest(type: Test, dependsOn: testClasses) {
     //exclude '**/*'
 }
 
-cobertura {
-	coverageFormats = ['xml', 'html']
-	coverageIgnoreTrivial = true
-	
-	coverageExcludes = ['org.slf4j.Logger.*', '.*gov\\.ca\\.cwds\\.data\\.persistence\\.cms\\..*SystemCodeCache.*', '.*gov\\.ca\\.cwds\\.data\\..*BatchBucket.*', '.*gov\\.ca\\.cwds\\.data\\..*ApiAddressAware.*', '.*gov\\.ca\\.cwds\\.rest\\.api\\..*Response.*']
-	coverageIgnores  = ['org.slf4j.Logger.*', '.*gov\\.ca\\.cwds\\.data\\.persistence\\.cms\\..*SystemCodeCache.*']
-	coverageReportDir = new File("$buildDir/reports/cobertura")
-	coverageIgnoreMethodAnnotations = ['gov.ca.cwds.rest.resources.CoverageIgnore']
+jacocoTestReport {
+  reports {
+      xml.enabled false
+      csv.enabled false
+      html.destination "${buildDir}/jacocoHtml"
+  }
+}
+
+sonarqube {
+  properties {
+      property "sonar.jacoco.reportPath", "${buildDir}/jacoco/test.exec"
+      property "sonar.jacoco.itReportPath", "${buildDir}/jacoco/integrationTest.exec"
+  }
 }
 
 publishing {
