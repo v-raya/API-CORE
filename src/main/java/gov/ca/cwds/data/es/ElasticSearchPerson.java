@@ -1061,6 +1061,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonProperty("legacy_referral_id")
     private String legacyId;
 
+    @JsonProperty("legacy_last_updated")
+    private String legacyLastUpdated;
+
     @JsonProperty("start_date")
     private String startDate;
 
@@ -1101,6 +1104,15 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
     public void setLegacyId(String legacyId) {
       this.legacyId = legacyId;
+    }
+
+    @JsonIgnore
+    public Date getLegacyLastUpdated() {
+      return DomainChef.uncookDateString(legacyLastUpdated);
+    }
+
+    public void setLegacyLastUpdated(Date legacyLastUpdated) {
+      this.legacyLastUpdated = DomainChef.cookDate(legacyLastUpdated);
     }
 
     @JsonIgnore
@@ -1165,7 +1177,212 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     public void setAllegations(List<ElasticSearchPersonAllegation> allegations) {
       this.allegations = allegations;
     }
+  }
 
+  /**
+   * Case.
+   * 
+   * @author CWDS API Team
+   */
+  @JsonPropertyOrder({"id", "legacy_case_id", "legacy_last_updated", "start_date", "end_date",
+      "county_name", "focus_child", "assigned_social_worker", "parents"})
+  public static class ElasticSearchPersonCase implements ApiTypedIdentifier<String> {
+
+    /**
+     * Default serialization version.
+     */
+    private static final long serialVersionUID = 1L;
+
+    @JsonProperty("id")
+    private String id;
+
+    @JsonProperty("legacy_case_id")
+    private String legacyId;
+
+    @JsonProperty("legacy_last_updated")
+    private String legacyLastUpdated;
+
+    @JsonProperty("start_date")
+    private String startDate;
+
+    @JsonProperty("end_date")
+    private String endDate;
+
+    @JsonProperty("county_name")
+    private String countyName;
+
+    @JsonProperty("focus_child")
+    private ElasticSearchPersonChild focusChild;
+
+    @JsonProperty("assigned_social_worker")
+    private ElasticSearchPersonSocialWorker assignedSocialWorker =
+        new ElasticSearchPersonSocialWorker();
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("parents")
+    private List<ElasticSearchPersonParent> parents = new ArrayList<>();
+
+    @Override
+    public String getId() {
+      return id;
+    }
+
+    @Override
+    public void setId(String id) {
+      this.id = id;
+    }
+
+    public String getLegacyId() {
+      return legacyId;
+    }
+
+    public void setLegacyId(String legacyId) {
+      this.legacyId = legacyId;
+    }
+
+    @JsonIgnore
+    public Date getLegacyLastUpdated() {
+      return DomainChef.uncookDateString(legacyLastUpdated);
+    }
+
+    public void setLegacyLastUpdated(Date legacyLastUpdated) {
+      this.legacyLastUpdated = DomainChef.cookDate(legacyLastUpdated);
+    }
+
+    @JsonIgnore
+    public Date getStartDate() {
+      return DomainChef.uncookDateString(startDate);
+    }
+
+    public void setStartDate(Date startDate) {
+      this.startDate = DomainChef.cookDate(startDate);
+    }
+
+    @JsonIgnore
+    public Date getEndDate() {
+      return DomainChef.uncookDateString(endDate);
+    }
+
+    public void setEndDate(Date endDate) {
+      this.endDate = DomainChef.cookDate(endDate);
+    }
+
+    public String getCountyName() {
+      return countyName;
+    }
+
+    public void setCountyName(String countyName) {
+      this.countyName = countyName;
+    }
+
+    public ElasticSearchPersonChild getFocusChild() {
+      return focusChild;
+    }
+
+    public void setFocusChild(ElasticSearchPersonChild focusChild) {
+      this.focusChild = focusChild;
+    }
+
+    public ElasticSearchPersonSocialWorker getAssignedSocialWorker() {
+      return assignedSocialWorker;
+    }
+
+    public void setAssignedSocialWorker(ElasticSearchPersonSocialWorker assignedSocialWorker) {
+      this.assignedSocialWorker = assignedSocialWorker;
+    }
+
+    public List<ElasticSearchPersonParent> getParents() {
+      return parents;
+    }
+
+    public void setParents(List<ElasticSearchPersonParent> parents) {
+      this.parents = parents;
+    }
+  }
+
+  /**
+   * Child.
+   * 
+   * @author CWDS API Team
+   */
+  @SuppressWarnings("serial")
+  public static class ElasticSearchPersonChild extends ElasticSearchPersonNestedPerson {
+
+    @JsonProperty("legacy_last_updated")
+    private String legacyLastUpdated;
+
+    @JsonProperty("service_component")
+    private String serviceComponent;
+
+    @Override
+    @JsonProperty("legacy_client_id")
+    public String getLegacyClientId() {
+      return legacyPersonId;
+    }
+
+    public Date getLegacyLastUpdated() {
+      return DomainChef.uncookDateString(legacyLastUpdated);
+    }
+
+    public void setLegacyLastUpdated(Date legacyLastUpdated) {
+      this.legacyLastUpdated = DomainChef.cookDate(legacyLastUpdated);
+    }
+
+    public String getServiceComponent() {
+      return serviceComponent;
+    }
+
+    public void setServiceComponent(String serviceComponent) {
+      this.serviceComponent = serviceComponent;
+    }
+  }
+
+  /**
+   * Parent.
+   * 
+   * @author CWDS API Team
+   */
+  @SuppressWarnings("serial")
+  public static class ElasticSearchPersonParent extends ElasticSearchPersonNestedPerson {
+
+    @JsonProperty("legacy_last_updated")
+    private String legacyLastUpdated;
+
+    @JsonProperty("legacy_source_table")
+    private String legacySourceTable;
+
+    @JsonProperty("relationship")
+    private String relationship;
+
+    @Override
+    @JsonProperty("legacy_id")
+    public String getLegacyClientId() {
+      return legacyPersonId;
+    }
+
+    public Date getLegacyLastUpdated() {
+      return DomainChef.uncookDateString(legacyLastUpdated);
+    }
+
+    public void setLegacyLastUpdated(Date legacyLastUpdated) {
+      this.legacyLastUpdated = DomainChef.cookDate(legacyLastUpdated);
+    }
+
+    public String getLegacySourceTable() {
+      return legacySourceTable;
+    }
+
+    public void setLegacySourceTable(String legacySourceTable) {
+      this.legacySourceTable = legacySourceTable;
+    }
+
+    public String getRelationship() {
+      return relationship;
+    }
+
+    public void setRelationship(String relationship) {
+      this.relationship = relationship;
+    }
   }
 
   /**
