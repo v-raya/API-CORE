@@ -1831,6 +1831,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private List<ElasticSearchPersonRelationship> relationships = new ArrayList<>();
 
+  @JsonProperty("cases")
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private List<ElasticSearchPersonCase> cases = new ArrayList<>();
+
   @Transient
   private Map<String, String> highlights = new LinkedHashMap<>();
 
@@ -2520,6 +2524,14 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
   public void setRelationships(List<ElasticSearchPersonRelationship> relationships) {
     this.relationships = relationships;
+  }
+
+  public List<ElasticSearchPersonCase> getCases() {
+    return cases;
+  }
+
+  public void setCases(List<ElasticSearchPersonCase> cases) {
+    this.cases = cases;
   }
 
   public String getLegacySourceTable() {
