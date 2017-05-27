@@ -745,6 +745,12 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonIgnore
     protected String legacyPersonId;
 
+    @JsonIgnore
+    protected String legacyLastUpdated;
+
+    @JsonIgnore
+    private String legacySourceTable;
+
     /**
      * Getter for legacy person id. Child classes override the JSON field name, per the document
      * mapping.
@@ -783,6 +789,21 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.legacyPersonId = legacyClientId;
     }
 
+    public String getLegacyLastUpdated() {
+      return legacyLastUpdated;
+    }
+
+    public void setLegacyLastUpdated(String legacyLastUpdated) {
+      this.legacyLastUpdated = legacyLastUpdated;
+    }
+
+    public String getLegacySourceTable() {
+      return legacySourceTable;
+    }
+
+    public void setLegacySourceTable(String legacySourceTable) {
+      this.legacySourceTable = legacySourceTable;
+    }
   }
 
   /**
@@ -804,10 +825,12 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       return legacyPersonId;
     }
 
+    @Override
     public String getLegacySourceTable() {
       return legacySourceTable;
     }
 
+    @Override
     public void setLegacySourceTable(String legacySourceTable) {
       this.legacySourceTable = legacySourceTable;
     }
@@ -852,6 +875,11 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       return legacyPersonId;
     }
 
+    @Override
+    @JsonProperty("legacy_social_worker_last_updated")
+    public String getLegacyLastUpdated() {
+      return legacyLastUpdated;
+    }
   }
 
   /**
@@ -867,7 +895,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     public String getLegacyClientId() {
       return legacyPersonId;
     }
-
   }
 
   /**
@@ -1240,31 +1267,28 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.legacyId = legacyId;
     }
 
-    @JsonIgnore
-    public Date getLegacyLastUpdated() {
-      return DomainChef.uncookDateString(legacyLastUpdated);
+    public String getLegacyLastUpdated() {
+      return legacyLastUpdated;
     }
 
-    public void setLegacyLastUpdated(Date legacyLastUpdated) {
-      this.legacyLastUpdated = DomainChef.cookDate(legacyLastUpdated);
+    public void setLegacyLastUpdated(String legacyLastUpdated) {
+      this.legacyLastUpdated = legacyLastUpdated;
     }
 
-    @JsonIgnore
-    public Date getStartDate() {
-      return DomainChef.uncookDateString(startDate);
+    public String getStartDate() {
+      return startDate;
     }
 
-    public void setStartDate(Date startDate) {
-      this.startDate = DomainChef.cookDate(startDate);
+    public void setStartDate(String startDate) {
+      this.startDate = startDate;
     }
 
-    @JsonIgnore
-    public Date getEndDate() {
-      return DomainChef.uncookDateString(endDate);
+    public String getEndDate() {
+      return endDate;
     }
 
-    public void setEndDate(Date endDate) {
-      this.endDate = DomainChef.cookDate(endDate);
+    public void setEndDate(String endDate) {
+      this.endDate = endDate;
     }
 
     public String getCountyName() {
@@ -1308,9 +1332,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @SuppressWarnings("serial")
   public static class ElasticSearchPersonChild extends ElasticSearchPersonNestedPerson {
 
-    @JsonProperty("legacy_last_updated")
-    private String legacyLastUpdated;
-
     @JsonProperty("service_component")
     private String serviceComponent;
 
@@ -1320,12 +1341,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       return legacyPersonId;
     }
 
-    public Date getLegacyLastUpdated() {
-      return DomainChef.uncookDateString(legacyLastUpdated);
-    }
-
-    public void setLegacyLastUpdated(Date legacyLastUpdated) {
-      this.legacyLastUpdated = DomainChef.cookDate(legacyLastUpdated);
+    @Override
+    @JsonProperty("legacy_last_updated")
+    public String getLegacyLastUpdated() {
+      return legacyLastUpdated;
     }
 
     public String getServiceComponent() {
@@ -1345,35 +1364,25 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @SuppressWarnings("serial")
   public static class ElasticSearchPersonParent extends ElasticSearchPersonNestedPerson {
 
-    @JsonProperty("legacy_last_updated")
-    private String legacyLastUpdated;
-
-    @JsonProperty("legacy_source_table")
-    private String legacySourceTable;
-
     @JsonProperty("relationship")
     private String relationship;
 
     @Override
     @JsonProperty("legacy_id")
     public String getLegacyClientId() {
-      return legacyPersonId;
+      return super.legacyPersonId;
     }
 
-    public Date getLegacyLastUpdated() {
-      return DomainChef.uncookDateString(legacyLastUpdated);
+    @Override
+    @JsonProperty("legacy_last_updated")
+    public String getLegacyLastUpdated() {
+      return super.legacyLastUpdated;
     }
 
-    public void setLegacyLastUpdated(Date legacyLastUpdated) {
-      this.legacyLastUpdated = DomainChef.cookDate(legacyLastUpdated);
-    }
-
+    @Override
+    @JsonProperty("legacy_source_table")
     public String getLegacySourceTable() {
-      return legacySourceTable;
-    }
-
-    public void setLegacySourceTable(String legacySourceTable) {
-      this.legacySourceTable = legacySourceTable;
+      return super.legacySourceTable;
     }
 
     public String getRelationship() {
