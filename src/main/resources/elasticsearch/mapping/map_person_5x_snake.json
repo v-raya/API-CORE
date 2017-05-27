@@ -16,7 +16,7 @@
 			"store": true
 		},
 		"legacy_last_updated": {
-			"format": "basic_date_time",
+			"format": "strict_date_time",
 			"type": "date",
 			"store": true
 		},
@@ -68,7 +68,7 @@
 					"store": true
 				},
 				"legacy_last_updated": {
-					"format": "basic_date_time",
+					"format": "strict_date_time",
 					"type": "date",
 					"store": true
 				},
@@ -133,7 +133,7 @@
 					"store": true
 				},
 				"legacy_last_updated": {
-					"format": "basic_date_time",
+					"format": "strict_date_time",
 					"type": "date",
 					"store": true
 				},
@@ -210,7 +210,7 @@
 					"store": true
 				},
 				"related_person_legacy_last_updated": {
-					"format": "basic_date_time",
+					"format": "strict_date_time",
 					"type": "date",
 					"store": true
 				}
@@ -227,7 +227,7 @@
 					"store": true
 				},
 				"legacy_last_updated": {
-					"format": "basic_date_time",
+					"format": "strict_date_time",
 					"type": "date",
 					"store": true
 				},
@@ -262,7 +262,7 @@
 					"store": true
 				},
 				"legacy_last_updated": {
-					"format": "basic_date_time",
+					"format": "strict_date_time",
 					"type": "date",
 					"store": true
 				},
@@ -303,7 +303,7 @@
 							"store": true
 						},
 						"legacy_reporter_last_updated": {
-							"format": "basic_date_time",
+							"format": "strict_date_time",
 							"type": "date",
 							"store": true
 						}
@@ -328,7 +328,7 @@
 							"store": true
 						},
 						"legacy_assigned_social_worker_last_updated": {
-							"format": "basic_date_time",
+							"format": "strict_date_time",
 							"type": "date",
 							"store": true
 						}
@@ -341,7 +341,7 @@
 							"store": true
 						},
 						"legacy_allegation_last_updated": {
-							"format": "basic_date_time",
+							"format": "strict_date_time",
 							"type": "date",
 							"store": true
 						},
@@ -362,7 +362,7 @@
 							"store": true
 						},
 						"victim_legacy_client_last_updated": {
-							"format": "basic_date_time",
+							"format": "strict_date_time",
 							"type": "date",
 							"store": true
 						},
@@ -383,7 +383,7 @@
 							"store": true
 						},
 						"perpetrator_legacy_client_last_updated": {
-							"format": "basic_date_time",
+							"format": "strict_date_time",
 							"type": "date",
 							"store": true
 						},
@@ -438,7 +438,7 @@
 							"store": true
 						},
 						"legacy_reporter_last_updated": {
-							"format": "basic_date_time",
+							"format": "strict_date_time",
 							"type": "date",
 							"store": true
 						}
@@ -463,7 +463,7 @@
 							"store": true
 						},
 						"legacy_assigned_social_worker_last_updated": {
-							"format": "basic_date_time",
+							"format": "strict_date_time",
 							"type": "date",
 							"store": true
 						}
@@ -476,7 +476,7 @@
 							"store": true
 						},
 						"legacy_allegation_last_updated": {
-							"format": "basic_date_time",
+							"format": "strict_date_time",
 							"type": "date",
 							"store": true
 						},
@@ -493,7 +493,7 @@
 							"store": true
 						},
 						"victim_legacy_client_last_updated": {
-							"format": "basic_date_time",
+							"format": "strict_date_time",
 							"type": "date",
 							"store": true
 						},
@@ -514,7 +514,7 @@
 							"store": true
 						},
 						"perpetrator_legacy_client_last_updated": {
-							"format": "basic_date_time",
+							"format": "strict_date_time",
 							"type": "date",
 							"store": true
 						},
@@ -551,7 +551,7 @@
 							"store": true
 						},
 						"legacy_last_updated": {
-							"format": "basic_date_time",
+							"format": "strict_date_time",
 							"type": "date",
 							"store": true
 						}
@@ -584,7 +584,7 @@
 							"store": true
 						},
 						"legacy_last_updated": {
-							"format": "basic_date_time",
+							"format": "strict_date_time",
 							"type": "date",
 							"store": true
 						}
@@ -611,7 +611,7 @@
 					"store": true
 				},
 				"legacy_last_updated": {
-					"format": "basic_date_time",
+					"format": "strict_date_time",
 					"type": "date",
 					"store": true
 				},
@@ -652,7 +652,7 @@
 							"store": true
 						},
 						"legacy_last_updated": {
-							"format": "basic_date_time",
+							"format": "strict_date_time",
 							"type": "date",
 							"store": true
 						}
@@ -685,7 +685,7 @@
 							"store": true
 						},
 						"legacy_last_updated": {
-							"format": "basic_date_time",
+							"format": "strict_date_time",
 							"type": "date",
 							"store": true
 						}
@@ -710,7 +710,7 @@
 							"store": true
 						},
 						"legacy_assigned_social_worker_last_updated": {
-							"format": "basic_date_time",
+							"format": "strict_date_time",
 							"type": "date",
 							"store": true
 						}
