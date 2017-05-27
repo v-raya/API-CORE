@@ -120,6 +120,23 @@ public class CmsSystemCodeCacheService
     return this.idxMeta.get(meta);
   }
 
+  /**
+   * {@inheritDoc}
+   * 
+   * @see gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache#getCodeShortDescription(Integer)
+   */
+  @Override
+  public String getCodeShortDescription(Integer codeId) {
+    String codeDesc = null;
+    if (codeId != null) {
+      final CmsSystemCode sysCode = lookup(codeId);
+      if (sysCode != null) {
+        codeDesc = sysCode.getShortDsc();
+      }
+    }
+    return codeDesc;
+  }
+
   // #137202471: Tech debt: Cobertura doesn't recognize Java 8 features.
   @Override
   public Iterator<CmsSystemCode> iterator() {

@@ -42,4 +42,11 @@ public interface ApiSystemCodeCache {
    */
   CmsSystemCode lookupByCategoryAndShortDesc(final String meta, final String shortDesc);
 
+  /**
+   * Get system code short description for given system code id.
+   * 
+   * @param codeId Unique system code id.
+   * @return System code short description if available, otherwise returns null.
+   */
+  String getCodeShortDescription(Integer codeId);
 }
