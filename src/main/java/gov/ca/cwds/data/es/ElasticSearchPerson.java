@@ -876,7 +876,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     }
 
     @Override
-    @JsonProperty("legacy_social_worker_last_updated")
+    @JsonProperty("legacy_assigned_social_worker_last_updated")
     public String getLegacyLastUpdated() {
       return legacyLastUpdated;
     }
