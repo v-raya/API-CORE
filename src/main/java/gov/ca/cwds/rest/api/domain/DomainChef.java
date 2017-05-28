@@ -44,6 +44,11 @@ public class DomainChef {
   public static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
 
   /**
+   * Strict timestamp format (yyyy-MM-dd'T'HH:mm:ss.SSSZZ).
+   */
+  public static final String TIMESTAMP_STRICT_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZZ";
+
+  /**
    * Common time format for domain classes.
    */
   public static final String TIME_FORMAT = "HH:mm:ss";
@@ -121,6 +126,20 @@ public class DomainChef {
   }
 
   /**
+   * 
+   * @param timestamp Timestamp to convert into String.
+   * @return Timestamp converted into strict format String
+   *         {@link DomainChef#TIMESTAMP_STRICT_FORMAT}
+   */
+  public static String cookStrictTimestamp(Date timestamp) {
+    if (timestamp != null) {
+      DateFormat df = new SimpleDateFormat(TIMESTAMP_STRICT_FORMAT);
+      return df.format(timestamp);
+    }
+    return null;
+  }
+
+  /**
    * @param date date to cook
    * @return String in TIME_FORMAT
    */
@@ -158,6 +177,24 @@ public class DomainChef {
     if (StringUtils.isNotEmpty(trimTimestamp)) {
       try {
         DateFormat df = new SimpleDateFormat(TIMESTAMP_FORMAT);
+        return df.parse(trimTimestamp);
+      } catch (Exception e) {
+        throw new ApiException(e);
+      }
+    }
+    return null;
+  }
+
+  /**
+   * @param timestamp timestamp to convert into Date
+   * @return Date A Date object based on strict timestamot format
+   *         {@link DomainChef#TIMESTAMP_STRICT_FORMAT}
+   */
+  public static Date uncookStrictTimestampString(String timestamp) {
+    String trimTimestamp = StringUtils.trim(timestamp);
+    if (StringUtils.isNotEmpty(trimTimestamp)) {
+      try {
+        DateFormat df = new SimpleDateFormat(TIMESTAMP_STRICT_FORMAT);
         return df.parse(trimTimestamp);
       } catch (Exception e) {
         throw new ApiException(e);
