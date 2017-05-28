@@ -1133,34 +1133,30 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.legacyId = legacyId;
     }
 
-    @JsonIgnore
-    public Date getLegacyLastUpdated() {
-      return DomainChef.uncookDateString(legacyLastUpdated);
+    public String getLegacyLastUpdated() {
+      return legacyLastUpdated;
     }
 
-    public void setLegacyLastUpdated(Date legacyLastUpdated) {
-      this.legacyLastUpdated = DomainChef.cookDate(legacyLastUpdated);
+    public void setLegacyLastUpdated(String legacyLastUpdated) {
+      this.legacyLastUpdated = legacyLastUpdated;
     }
 
-    @JsonIgnore
-    public Date getStartDate() {
-      return DomainChef.uncookDateString(startDate);
+    public String getStartDate() {
+      return startDate;
     }
 
-    public void setStartDate(Date startDate) {
-      this.startDate = DomainChef.cookDate(startDate);
+    public void setStartDate(String startDate) {
+      this.startDate = startDate;
     }
 
-    @JsonIgnore
-    public Date getEndDate() {
-      return DomainChef.uncookDateString(endDate);
+    public String getEndDate() {
+      return endDate;
     }
 
-    public void setEndDate(Date endDate) {
-      this.endDate = DomainChef.cookDate(endDate);
+    public void setEndDate(String endDate) {
+      this.endDate = endDate;
     }
 
-    @JsonIgnore
     public String getCountyName() {
       return countyName;
     }
@@ -1169,7 +1165,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.countyName = countyName;
     }
 
-    @JsonIgnore
     public String getResponseTime() {
       return responseTime;
     }
@@ -1178,7 +1173,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.responseTime = responseTime;
     }
 
-    @JsonIgnore
     public ElasticSearchPersonReporter getReporter() {
       return reporter;
     }
@@ -1187,7 +1181,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.reporter = reporter;
     }
 
-    @JsonIgnore
     public ElasticSearchPersonSocialWorker getAssignedSocialWorker() {
       return assignedSocialWorker;
     }
@@ -1196,7 +1189,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.assignedSocialWorker = assignedSocialWorker;
     }
 
-    @JsonIgnore
     public List<ElasticSearchPersonAllegation> getAllegations() {
       return allegations;
     }
