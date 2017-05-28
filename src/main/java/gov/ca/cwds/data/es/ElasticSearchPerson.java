@@ -2006,6 +2006,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       LOGGER.trace("clear SCREENING");
       this.relationships = null;
     }
+    if (!keepers.contains(ESOptionalCollection.CASE)) {
+      LOGGER.trace("clear CASE");
+      this.cases = null;
+    }
 
     this.highlights = null;
   }
