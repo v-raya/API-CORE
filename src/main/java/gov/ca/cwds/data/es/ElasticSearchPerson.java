@@ -724,7 +724,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
-  @JsonPropertyOrder({"id", "first_name", "last_name"})
   public abstract static class ElasticSearchPersonNestedPerson
       implements ApiTypedIdentifier<String> {
 
@@ -851,6 +850,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * @author CWDS API Team
    */
   @SuppressWarnings("serial")
+  @JsonPropertyOrder({"id", "first_name", "last_name", "legacy_reporter_id"})
   public static class ElasticSearchPersonReporter extends ElasticSearchPersonNestedPerson {
 
     @Override
@@ -858,7 +858,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     public String getLegacyClientId() {
       return legacyPersonId;
     }
-
   }
 
   /**
@@ -867,6 +866,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * @author CWDS API Team
    */
   @SuppressWarnings("serial")
+  @JsonPropertyOrder({"id", "first_name", "last_name", "legacy_assigned_social_worker_id",
+      "legacy_assigned_social_worker_last_updated"})
   public static class ElasticSearchPersonSocialWorker extends ElasticSearchPersonNestedPerson {
 
     @Override
@@ -888,6 +889,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * @author CWDS API Team
    */
   @SuppressWarnings("serial")
+  @JsonPropertyOrder({"id", "first_name", "last_name", "legacy_staff_id"})
   public static class ElasticSearchPersonStaff extends ElasticSearchPersonNestedPerson {
 
     @Override
@@ -1073,8 +1075,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
-  @JsonPropertyOrder({"id", "legacy_referral_id", "start_date", "end_date", "county_name",
-      "response_time", "reporter", "assigned_social_worker", "allegations"})
+  @JsonPropertyOrder({"id", "start_date", "end_date", "county_name", "response_time",
+      "legacy_referral_id", "legacy_last_updated", "reporter", "assigned_social_worker",
+      "allegations"})
   public static class ElasticSearchPersonReferral implements ApiTypedIdentifier<String> {
 
     /**
@@ -1203,8 +1206,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
-  @JsonPropertyOrder({"id", "legacy_case_id", "legacy_last_updated", "start_date", "end_date",
-      "county_name", "focus_child", "assigned_social_worker", "parents"})
+  @JsonPropertyOrder({"id", "start_date", "end_date", "county_name", "legacy_case_id",
+      "legacy_last_updated", "focus_child", "assigned_social_worker", "parents"})
   public static class ElasticSearchPersonCase implements ApiTypedIdentifier<String> {
 
     /**
@@ -1322,6 +1325,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * @author CWDS API Team
    */
   @SuppressWarnings("serial")
+  @JsonPropertyOrder({"id", "first_name", "last_name", "service_component", "legacy_client_id",
+      "legacy_last_updated"})
   public static class ElasticSearchPersonChild extends ElasticSearchPersonNestedPerson {
 
     @JsonProperty("service_component")
@@ -1354,6 +1359,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * @author CWDS API Team
    */
   @SuppressWarnings("serial")
+  @JsonPropertyOrder({"id", "first_name", "last_name", "relationship", "legacy_id",
+      "legacy_last_updated"})
   public static class ElasticSearchPersonParent extends ElasticSearchPersonNestedPerson {
 
     @JsonProperty("relationship")
