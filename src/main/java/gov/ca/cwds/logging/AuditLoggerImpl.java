@@ -9,7 +9,8 @@ import org.slf4j.MDC;
 import com.google.inject.Inject;
 
 public class AuditLoggerImpl implements gov.ca.cwds.logging.AuditLogger {
-  private final Logger LOGGER = LoggerFactory.getLogger("AUDIT");
+
+  private static final Logger LOGGER = LoggerFactory.getLogger("AUDIT");
 
   public static final String REMOTE_ADDRESS = "remoteAddress";
   public static final String USER_ID = "userid";
@@ -96,7 +97,6 @@ public class AuditLoggerImpl implements gov.ca.cwds.logging.AuditLogger {
   @Override
   public void storeSessionId(String sessionId) {
     MDC.put(SESSION_ID, sessionId);
-
   }
 
 }
