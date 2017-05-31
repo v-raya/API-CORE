@@ -7,30 +7,31 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 
 /**
  * Object can reduce a denormalized result set of its own type to a normalized, consolidated Map of
- * type R.
+ * type N.
  * 
  * <p>
  * An example result set is a DB2 materialized query table.
  * </p>
  * 
  * @author CWDS API Team
- * @param <R> type to reduce to
+ * @param <N> type to reduce to
  */
-public interface ApiGroupNormalizer<R extends PersistentObject> extends Serializable {
+public interface ApiGroupNormalizer<N extends PersistentObject> extends Serializable {
 
   /**
-   * Convenience method returns class type of R.
+   * Convenience method returns class type of N.
    * 
-   * @return class R
+   * @return class N
    */
-  Class<R> getReductionClass();
+  Class<N> getNormalizationClass();
 
   /**
-   * Reduce and consolidate to target reduction type, R.
+   * Reduce and consolidate to target reduction type, N.
    * 
-   * @param map consolidated Map of reduced results on R's key.
+   * @param map consolidated Map of reduced results on N's key.
+   * @return the normalized object
    */
-  void reduce(Map<Object, R> map);
+  N normalize(Map<Object, N> map);
 
   /**
    * Gets the group's unique identifier (aka., "key"), such as CLIENT_T.IDENTIFIER.
@@ -41,6 +42,6 @@ public interface ApiGroupNormalizer<R extends PersistentObject> extends Serializ
    * 
    * @return grouping key or identifier
    */
-  Object getGroupKey();
+  Object getNormalizationGroupKey();
 
 }
