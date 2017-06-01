@@ -92,6 +92,10 @@ task integrationTest(type: Test, dependsOn: testClasses) {
     //exclude '**/*'
 }
 
+javadoc {
+    options.addStringOption("charset", "UTF-8")
+}
+
 jacocoTestReport {
   reports {
       xml.enabled false

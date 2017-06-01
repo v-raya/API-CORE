@@ -16,7 +16,106 @@ import gov.ca.cwds.rest.resources.ResourceParamValidator;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
- * Java port of gov.ca.cwds.rest.util.jni.KeyJNI and underlying shared library.
+ * <p>
+ * Java port of gov.ca.cwds.rest.util.jni.KeyJNI and underlying shared library, cws_randgen.cpp.
+ * </p>
+ * 
+ * <p>
+ * To generate an identifier, the current date/timestamp is rearranged as shown below, placing
+ * less-significant time units into more-significant fields. This convolution provides better
+ * "hashing" into cache and the database.
+ * </p>
+ *
+ * <p>
+ * <blockquote>
+ * 
+ * <pre>
+ *   ¦   ~8 bits     ¦   6 bits  ¦   6 bits  ¦ 5 bits  ¦ 5 bits  ¦4 bits ¦    8 bits     ¦
+ *   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ *   ¦  hundredths   ¦  seconds  ¦  minutes  ¦  hours  ¦   day   ¦month-1¦  year - 1900  ¦
+ *   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ * bytes ¦       :       ¦       :       ¦       :       ¦       :       ¦       :       ¦
+ * </pre>
+ * 
+ * </blockquote>
+ * </p>
+ *
+ * As shown above, some bit values would produce unrealistic dates/times. For example, month values
+ * of 0000-1011 represent January-December, but the field has room for unrealistic months 1100-1111.
+ * Similarly unrealistic values could be placed into other fields. The first and last fields are of
+ * special interest.
+ *
+ * <p>
+ * <blockquote>
+ * 
+ * <pre>
+ *   hundredths:  Although shown as an 8-bit field here, not all unrealistic values are usable,
+ *                since the overall number must fit into seven base-62 characters. That limits
+ *                the hundredths field to values from 0 to 204.
+ *
+ *   year:        This algorithm supports years from 1900 to 2155.
+ * </pre>
+ * 
+ * </blockquote>
+ * </p>
+ *
+ * <p>
+ * Note that CWS/CMS has made use of <strong>unrealistic</strong> values on some occasions. For
+ * example, the project may need to generate many identifiers during a minimum outage window. In
+ * order to make all of those generated identifiers correspond to the date/hour range of the outage,
+ * project-generated identifiers may coerce unrealistic values for minutes, seconds, and hundredths.
+ * This explains why some identifiers may translate to timestamps with 7 digits (rather than the
+ * usual 6) after the final decimal point -- It may be showing more than 99 "hundredths"! This also
+ * means that the longest formatted date/timestamp output is 27 characters (including punctuation),
+ * although it will usually fit in 26.
+ * </p>
+ *
+ * <p>
+ * Once packed into the bit arrangement shown above, the number is converted to seven base-62
+ * characters, using first the digits 0-9, then uppercase letters, then lowercase letters.
+ * </p>
+ *
+ * <p>
+ * The final 3 characters of the identifier indicate the staffperson (or project process) which
+ * created the row.
+ * </p>
+ *
+ * <p>
+ * For the User Interface, the identifier can also be converted into a formatted 19-digit decimal
+ * number. In the 19-digit format, the first 13 decimal digits are a conversion of the first seven
+ * base-62 characters, while the last 6 decimal digits are an independent conversion of the last 3
+ * base-62 characters (ie, staffperson ID) from the identifier. The 19 digits are formatted into
+ * three groups of four digits, followed by a final group of seven digits, so the full string length
+ * is 22 characters with punctuation.
+ * </p>
+ *
+ * <p>
+ * In this source file, the 3 formats are referred to as:
+ * </p>
+ * 
+ * <p>
+ * <blockquote>
+ * 
+ * <pre>
+ *   Key:            10 base-62 characters (0-9, A-Z, a-z):               tttttttppp
+ *   UI Identifier:  19 decimal digits (22 characters with punctuation):  tttt-tttt-tttt-tpppppp
+ *   Timestamp:      26 characters in DB2 format:                         YYYY-MM-DD-hh.mm.ss.xx0000
+ *         or rarely 27 (as explained above):                             YYYY-MM-DD-hh.mm.ss.xxx0000
+ * where:
+ *   All timestamp fields include leading zeros.
+ *   t... represents convolved time
+ *   p... represents the staffperson
+ *   YYYY represents the year
+ *   MM   represents the month
+ *   DD   represents the day of the month
+ *   hh   represents the hour (00 to 23)
+ *   mm   represents minutes
+ *   ss   represents seconds
+ *   x... represents hundredths of seconds
+ * </pre>
+ * 
+ * </blockquote>
+ * </p>
  * 
  * @author CWDS API Team
  */
