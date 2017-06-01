@@ -26,26 +26,23 @@ import gov.ca.cwds.rest.services.ServiceException;
  * "hashing" into cache and the database.
  * </p>
  *
- * <p>
  * <blockquote>
  * 
  * <pre>
- *   ¦   ~8 bits     ¦   6 bits  ¦   6 bits  ¦ 5 bits  ¦ 5 bits  ¦4 bits ¦    8 bits     ¦
+ *   !   ~8 bits     !   6 bits  !   6 bits  ! 5 bits  ! 5 bits  !4 bits !    8 bits     !
  *   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
- *   ¦  hundredths   ¦  seconds  ¦  minutes  ¦  hours  ¦   day   ¦month-1¦  year - 1900  ¦
+ *   !  hundredths   !  seconds  !  minutes  !  hours  !   day   !month-1!  year - 1900  !
  *   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
- * bytes ¦       :       ¦       :       ¦       :       ¦       :       ¦       :       ¦
+ * bytes !       :       !       :       !       :       !       :       !       :       !
  * </pre>
  * 
  * </blockquote>
- * </p>
  *
  * As shown above, some bit values would produce unrealistic dates/times. For example, month values
  * of 0000-1011 represent January-December, but the field has room for unrealistic months 1100-1111.
  * Similarly unrealistic values could be placed into other fields. The first and last fields are of
  * special interest.
  *
- * <p>
  * <blockquote>
  * 
  * <pre>
@@ -57,7 +54,6 @@ import gov.ca.cwds.rest.services.ServiceException;
  * </pre>
  * 
  * </blockquote>
- * </p>
  *
  * <p>
  * Note that CWS/CMS has made use of <strong>unrealistic</strong> values on some occasions. For
@@ -93,7 +89,6 @@ import gov.ca.cwds.rest.services.ServiceException;
  * In this source file, the 3 formats are referred to as:
  * </p>
  * 
- * <p>
  * <blockquote>
  * 
  * <pre>
@@ -115,7 +110,6 @@ import gov.ca.cwds.rest.services.ServiceException;
  * </pre>
  * 
  * </blockquote>
- * </p>
  * 
  * @author CWDS API Team
  */
