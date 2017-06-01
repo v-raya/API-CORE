@@ -228,6 +228,23 @@ public class CmsKeyIdGenerator {
   }
 
   /**
+   * This Java class generates a identifier using the current timstamp and staffId
+   * 
+   * @param staffId the staffId
+   * @return the unique key from staffId
+   */
+  public static String cmsIdGenertor(String staffId) {
+    CmsKeyIdGenerator rend = new CmsKeyIdGenerator();
+    if (staffId == null || staffId.length() <= 0) {
+      staffId = "0X5"; // NOSONAR
+    }
+    StringBuilder staffid = new StringBuilder(staffId);
+    return rend.generateKeyFromStaff(staffid.toString());
+  }
+
+  /**
+   * TODO: move to a test class.
+   * 
    * @param args the args
    * @throws InterruptedException checks the exception
    */
@@ -241,21 +258,6 @@ public class CmsKeyIdGenerator {
     }
 
     Thread.sleep(10);
-  }
-
-  /**
-   * This Java class generates a identifier using the current timstamp and staffId
-   * 
-   * @param staffId the staffId
-   * @return the unique key from staffId
-   */
-  public static String cmsIdGenertor(String staffId) {
-    CmsKeyIdGenerator rend = new CmsKeyIdGenerator();
-    if (staffId == null || staffId.length() <= 0) {
-      staffId = "0X5"; // NOSONAR
-    }
-    StringBuilder staffid = new StringBuilder(staffId);
-    return rend.generateKeyFromStaff(staffid.toString());
   }
 
 }
