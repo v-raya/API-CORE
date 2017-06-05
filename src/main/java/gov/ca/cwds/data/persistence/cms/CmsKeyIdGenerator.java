@@ -1,14 +1,14 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +21,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * </p>
  * 
  * <p>
- * To generate an identifier, the current date/timestamp is rearranged as shown below, placing
+ * To generateXYZ an identifier, the current date/timestamp is rearranged as shown below, placing
  * less-significant time units into more-significant fields. This convolution provides better
  * "hashing" into cache and the database.
  * </p>
@@ -57,7 +57,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  *
  * <p>
  * Note that CWS/CMS has made use of <strong>unrealistic</strong> values on some occasions. For
- * example, the project may need to generate many identifiers during a minimum outage window. In
+ * example, the project may need to generateXYZ many identifiers during a minimum outage window. In
  * order to make all of those generated identifiers correspond to the date/hour range of the outage,
  * project-generated identifiers may coerce unrealistic values for minutes, seconds, and hundredths.
  * This explains why some identifiers may translate to timestamps with 7 digits (rather than the
@@ -113,7 +113,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * 
  * @author CWDS API Team
  */
-public class CmsKeyIdGenerator {
+public final class CmsKeyIdGenerator {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsKeyIdGenerator.class);
 
@@ -162,15 +162,15 @@ public class CmsKeyIdGenerator {
     public String PTimestamp; // NOSONAR
   }
 
-  private static final int nSZ_POWVEC = 19; // NOSONAR
+  // private static final int nSZ_POWVEC = 19; // NOSONAR
 
-  private static final int nMAX_BASE = 62; // NOSONAR
+  // private static final int nMAX_BASE = 62; // NOSONAR
 
-  private static final int nDEFAULT_BASE = 62; // NOSONAR
+  // private static final int nDEFAULT_BASE = 62; // NOSONAR
 
-  private static final int nSZ_UIIDSTAFFID = 6; // NOSONAR for converting a key to a UI identifier
+  // private static final int nSZ_UIIDSTAFFID = 6; // NOSONAR
 
-  private static final int nSZ_UIIDTIMESTAMP = 13; // NOSONAR
+  // private static final int nSZ_UIIDTIMESTAMP = 13; // NOSONAR
 
   private static final float nSHIFT_HSECOND = 1.71798692E10f; // NOSONAR 34 bit shift (2 to the 34th
                                                               // power)
@@ -209,38 +209,41 @@ public class CmsKeyIdGenerator {
       'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
       'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 
+  private CmsKeyIdGenerator() {
+    // Static class only, do not instantiate.
+  }
+
   /**
-   * Core method.
+   * Format CMS timestamp String, the last 7 characters of the key.
    * 
-   * @param staffId 3-char, base-62 staff id
-   * @return generated 10 char, base-62 key
+   * @param ts seed timestamp
+   * @return CMS formatted timestamp
+   * @throws ParseException on parsing error
    */
-  public String generateKeyFromStaff(final String staffId) {
-    return generateKeyFromStaff(new StringKey(staffId));
+  protected String createTimestampStr(final Date ts) throws ParseException {
+    return ts == null ? createTimestampStr(null)
+        : doubleToStrN(7, timestampToDouble(getTimestampSeed(ts)), anPowVec62);
   }
 
   /**
-   * @param wrap the wrap
-   * @return the key from staffID
+   * Format CMS timestamp String, the last 7 characters of the key.
+   * 
+   * <p>
+   * Code taken from the original C++ algorithm.
+   * </p>
+   * 
+   * @return CMS formatted timestamp
+   * @throws ParseException on parsing error
    */
-  public String generateKeyFromStaff(final StringKey wrap) {
-    try {
-      ResourceParamValidator.<StringKey>validate(wrap);
-      return createTimestampStr().trim() + wrap.getValue();
-    } catch (Exception e) {
-      throw new ServiceException(e);
-    }
-  }
-
   protected String createTimestampStr() throws ParseException {
     double nTimestamp = 0;
     double nPreviousTimestamp = 0; // previous value - used for UNIQUENESS!
 
     while (true) { // NOSONAR
-      nTimestamp = timestampToDouble(getCurrentDate());
+      nTimestamp = timestampToDouble(getTimestampSeed(null));
 
       // If the timestamp value is the same as before, stay in the loop.
-      // otherwise, break out since it is unique.
+      // Otherwise, break out since it is unique.
       if (nTimestamp == nPreviousTimestamp) { // NOSONAR
         Thread.yield();
         continue;
@@ -248,7 +251,6 @@ public class CmsKeyIdGenerator {
         break;
       }
     }
-    nPreviousTimestamp = nTimestamp; // save the current timestamp
 
     // Convert the timestamp number to a base-62 string.
     return doubleToStrN(7, nTimestamp, anPowVec62);
@@ -278,7 +280,7 @@ public class CmsKeyIdGenerator {
    * @return the double to string
    */
   public String doubleToStrN(int nDstStrWidth, Double nSrcVal, final double[] pnPowVec) {
-    int i = 0;
+    int i;
     int nPower = 0;
     double nInteger;
     char[] szDstStr = new char[8];
@@ -311,46 +313,96 @@ public class CmsKeyIdGenerator {
     return String.valueOf(szDstStr);
   }
 
-  protected final Calendar getCurrentDate() throws ParseException {
-    DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS");
-    // final Date fixedDate = fmt.parse("2017-04-13-11.10.46.860"); // To verify the fixed timestamp
+  /**
+   * Get preferred timestamp seed, either provided or current date/time if null.
+   * 
+   * @param ts timestamp to use or null for current date/time
+   * @return Calendar set to preferred timestamp
+   * @throws ParseException on date/time parsing error
+   */
+  protected final Calendar getTimestampSeed(final Date ts) throws ParseException {
     Calendar cal = Calendar.getInstance();
-    // cal.setTimeInMillis(fixedDate.getTime());
-    LOGGER.debug(fmt.format(cal.getTime())); // 2014/08/06 16:00:22
+
+    if (ts != null) {
+      cal.setTimeInMillis(ts.getTime());
+    }
+
     return cal;
   }
 
   /**
-   * This Java class generates a identifier using the current timstamp and staffId
+   * Overload. Generate ten character, base62 key from given staff id and timestamp.
+   * 
+   * @param staffId 3-char, base-62 staff id
+   * @param ts timestamp to use or null for current date/time
+   * @return generated ten character, base-62 key
+   */
+  protected String makeKey(final String staffId, final Date ts) {
+    return makeKey(new StringKey(staffId), ts);
+  }
+
+  /**
+   * Generate ten character, base62 key from given staff id and timestamp.
+   * 
+   * @param wrap the wrap
+   * @param ts timestamp to use or null for current date/time
+   * @return the key from staffID
+   */
+  protected String makeKey(final StringKey wrap, final Date ts) {
+    try {
+      ResourceParamValidator.<StringKey>validate(wrap);
+      return createTimestampStr(ts).trim() + wrap.getValue();
+    } catch (Exception e) {
+      throw new ServiceException(e);
+    }
+  }
+
+  /**
+   * Simplified overload. Generate an identifier with the given staff id and current timestamp.
    * 
    * @param staffId the staffId
    * @return the unique key from staffId
    */
-  public static String cmsIdGenertor(String staffId) {
-    CmsKeyIdGenerator rend = new CmsKeyIdGenerator();
-    if (staffId == null || staffId.length() <= 0) {
+  public static String generate(String staffId) {
+    return generate(staffId, new Date());
+  }
+
+  /**
+   * Generate an identifier with the given staff id and current timestamp.
+   * 
+   * @param staffId three char staff id
+   * @param ts timestamp to use
+   * @return unique key from staff id and timestamp
+   */
+  public static String generate(String staffId, final Date ts) {
+    final CmsKeyIdGenerator rend = new CmsKeyIdGenerator();
+    if (StringUtils.isBlank(staffId)) {
       staffId = "0X5"; // NOSONAR
     }
-    StringBuilder staffid = new StringBuilder(staffId);
-    return rend.generateKeyFromStaff(staffid.toString());
+    return rend.makeKey(staffId, ts);
+  }
+
+  public static String getUITimestampFromKey(String key) {
+    final String strTs = key.substring(3);
+
+    return "";
   }
 
   /**
    * TODO: move to a test class.
    * 
-   * @param args the args
+   * @param args command line
    * @throws InterruptedException checks the exception
    */
   public static void main(String[] args) throws InterruptedException {
     CmsKeyIdGenerator rend = new CmsKeyIdGenerator();
     StringBuilder staffid = new StringBuilder("0JG");
+    Date ts = new Date();
     for (int i = 0; i < 40000; i++) {
       LOGGER.debug("staffId: " + staffid.toString());
-      String key = rend.generateKeyFromStaff(staffid.toString());
+      final String key = rend.makeKey(staffid.toString(), ts);
       LOGGER.debug("generated key: " + key);
     }
-
-    Thread.sleep(10);
   }
 
 }
