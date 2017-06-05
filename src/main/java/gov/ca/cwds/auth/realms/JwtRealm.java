@@ -48,14 +48,9 @@ public class JwtRealm extends AuthorizingRealm {
     private String tokenIssuer;
     private Key validationKey;
 
-
-    public JwtRealm() {
+    protected void onInit() {
         objectMapper = new ObjectMapper();
-        try {
-            validationKey = getPublicKey();
-        } catch (Exception e) {
-            throw new ApiException("Unable to load keystore!", e);
-        }
+        validationKey = getPublicKey();
     }
 
     public String getKeyStorePath() {
@@ -96,6 +91,10 @@ public class JwtRealm extends AuthorizingRealm {
 
     public void setTokenIssuer(String tokenIssuer) {
         this.tokenIssuer = tokenIssuer;
+    }
+
+    public JwtRealm() {
+        setAuthenticationTokenClass(PerryShiroToken.class);
     }
 
     @Override
@@ -163,7 +162,10 @@ public class JwtRealm extends AuthorizingRealm {
         try {
             return objectMapper.readValue(json, PerryAccount.class);
         } catch (IOException e) {
-            throw new ApiException(e);
+            //Mapping doesn't apply
+            return new PerryAccount(){{
+                setUser(json);
+            }};
         }
     }
 }
