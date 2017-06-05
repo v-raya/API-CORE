@@ -99,7 +99,8 @@ public final class CmsKeyIdGeneratorTest {
     // assertTrue("key generated", key == null || key.length() == 0);
   }
 
-  @Test(expected = ServiceException.class)
+  // TODO: #145948067: default staff id until Perry is ready.
+  // @Test(expected = ServiceException.class)
   public void testGenKeyBadStaffNull() {
     // Null staff id.
     final String key = CmsKeyIdGenerator.generate(null);
@@ -129,7 +130,7 @@ public final class CmsKeyIdGeneratorTest {
   }
 
   @Test(expected = ServiceException.class)
-  public void testGenKeyBadStaffBadChars() {
+  public void testGenKeyBadStaffBadChars1() {
     // Invalid chars in staff id.
     final String key = CmsKeyIdGenerator.generate("ab&");
     // assertTrue("key generated", key == null || key.length() == 0);
