@@ -405,6 +405,10 @@
 					"type": "text",
 					"store": true
 				},
+				"referral_id": {
+					"type": "text",
+					"store": true
+				},
 				"start_date": {
 					"format": "strict_date_optional_time||epoch_millis",
 					"type": "date",

@@ -396,12 +396,12 @@ public final class CmsKeyIdGenerator {
    */
   public static void main(String[] args) throws InterruptedException {
     CmsKeyIdGenerator rend = new CmsKeyIdGenerator();
-    StringBuilder staffid = new StringBuilder("0JG");
+    String staffid = "0JG";
     Date ts = new Date();
     for (int i = 0; i < 40000; i++) {
-      LOGGER.debug("staffId: " + staffid.toString());
-      final String key = rend.makeKey(staffid.toString(), ts);
-      LOGGER.debug("generated key: " + key);
+      LOGGER.debug("staffId: " + staffid);
+      final String key = rend.makeKey(staffid, ts);
+      LOGGER.debug("generated key: {}", key);
     }
   }
 
