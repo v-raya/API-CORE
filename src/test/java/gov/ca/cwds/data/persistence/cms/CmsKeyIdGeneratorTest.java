@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.api.persistence.cms;
+package gov.ca.cwds.data.persistence.cms;
 
 import static org.junit.Assert.assertTrue;
 

@@ -413,7 +413,6 @@ public final class CmsKeyIdGenerator {
   // }
   // }
 
-
   public static String getUITimestampFromKey(String key) {
     final String strTs = key.substring(3);
 
