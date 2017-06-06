@@ -117,6 +117,8 @@ public final class CmsKeyIdGenerator {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsKeyIdGenerator.class);
 
+  private static final String DEFAULT_USER_ID = "0X5";
+
   /**
    * javax.validation only works on real "bean" classes, not Java native classes like String or
    * Long. Therefore, we must wrap the incoming staff id in a small class, which follows the Java
@@ -209,6 +211,9 @@ public final class CmsKeyIdGenerator {
       'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
       'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 
+  /**
+   * Static class only, do not instantiate.
+   */
   private CmsKeyIdGenerator() {
     // Static class only, do not instantiate.
   }
@@ -226,7 +231,7 @@ public final class CmsKeyIdGenerator {
   }
 
   /**
-   * Format CMS timestamp String, the last 7 characters of the key.
+   * Format the CMS timestamp String, the last 7 characters of the key.
    * 
    * <p>
    * Code taken from the original C++ algorithm.
@@ -257,20 +262,19 @@ public final class CmsKeyIdGenerator {
   }
 
   /**
-   * @param localDateTime the current time stamp
+   * @param cal preferred timestamp
    * @return the timestamp in double
    */
-  public double timestampToDouble(final Calendar localDateTime) {
-    double nTimestamp = 0;
-    nTimestamp += (double) localDateTime.get(Calendar.MILLISECOND) / 10 * nSHIFT_HSECOND;
-    nTimestamp += (double) localDateTime.get(Calendar.SECOND) * nSHIFT_SECOND;
-    nTimestamp += (double) localDateTime.get(Calendar.MINUTE) * nSHIFT_MINUTE;
-    nTimestamp += (double) localDateTime.get(Calendar.HOUR) * nSHIFT_HOUR;
-    nTimestamp += (double) localDateTime.get(Calendar.DATE) * nSHIFT_DAY;
-    nTimestamp += (double) (localDateTime.get(Calendar.MONTH)) * nSHIFT_MONTH;
-    nTimestamp += (double) (localDateTime.get(Calendar.YEAR) - 1900) * nSHIFT_YEAR;
-
-    return nTimestamp;
+  public double timestampToDouble(final Calendar cal) {
+    double ret = 0;
+    ret += (double) cal.get(Calendar.MILLISECOND) / 10 * nSHIFT_HSECOND;
+    ret += (double) cal.get(Calendar.SECOND) * nSHIFT_SECOND;
+    ret += (double) cal.get(Calendar.MINUTE) * nSHIFT_MINUTE;
+    ret += (double) cal.get(Calendar.HOUR) * nSHIFT_HOUR;
+    ret += (double) cal.get(Calendar.DATE) * nSHIFT_DAY;
+    ret += (double) (cal.get(Calendar.MONTH)) * nSHIFT_MONTH;
+    ret += (double) (cal.get(Calendar.YEAR) - 1900) * nSHIFT_YEAR;
+    return ret;
   }
 
   /**
@@ -376,11 +380,39 @@ public final class CmsKeyIdGenerator {
    */
   public static String generate(String staffId, final Date ts) {
     final CmsKeyIdGenerator rend = new CmsKeyIdGenerator();
-    if (StringUtils.isBlank(staffId)) {
-      staffId = "0X5"; // NOSONAR
-    }
-    return rend.makeKey(staffId, ts);
+    return rend.makeKey(!StringUtils.isBlank(staffId) ? staffId : DEFAULT_USER_ID, ts);
   }
+
+  // void WINAPI _export GetUITimestampFromKey(const char *szKey, char *szUITimestamp) {
+  // using namespace std;
+  //
+  // char szTimestampStr[nSZ_KEYTIMESTAMP + 1];
+  // double nTsVal;
+  // struct tm hNow;
+  // int nHSec;
+  //
+  // try {
+  // AssertTrace(strlen(szKey) == nSZ_KEY, "'%s' has an invalid key string length.", szKey);
+  // AssertTrace(AfxIsValidAddress(szUITimestamp, nSZ_UITIMESTAMP + 1), "Invalid address specified
+  // for szUITimestamp.");
+  //
+  // // Convert the key's timestamp segment to a number and then to date/time.
+  // StrCpyN(szTimestampStr, szKey, nSZ_KEYTIMESTAMP);
+  //
+  // // DRS: A C++ array decays to a pointer of the array's type. Love the syntax. :-)
+  // nTsVal = StrToDouble(szTimestampStr, BASE_62_SIZE, std::decay_t<double *>(&anPowVec62[0]));
+  // DoubleToTimestamp(nTsVal, &hNow, &nHSec);
+  //
+  // // Format the date/time in the default format of a DB2 timestamp.
+  // sprintf_s(szUITimestamp, nSZ_UITIMESTAMP + 2, "%04d-%02d-%02d-%02d.%02d.%02d.%06ld",
+  // hNow.tm_year + 1900, hNow.tm_mon + 1, hNow.tm_mday,
+  // hNow.tm_hour, hNow.tm_min, hNow.tm_sec, (long)((long)nHSec * 10000L));
+  // } catch (std::exception e) {
+  // cerr << "***** CAUGHT EXCEPTION! ***** : " << e.what() << endl;
+  // szUITimestamp[0] = '\0';
+  // }
+  // }
+
 
   public static String getUITimestampFromKey(String key) {
     final String strTs = key.substring(3);
