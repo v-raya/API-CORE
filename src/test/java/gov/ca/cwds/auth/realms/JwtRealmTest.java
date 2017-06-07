@@ -13,6 +13,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -23,6 +24,7 @@ import java.security.Key;
 import java.security.KeyStore;
 import java.util.*;
 
+@Ignore
 public class JwtRealmTest {
 
     private static final String IDENTITY_CLAIM = "identity";
