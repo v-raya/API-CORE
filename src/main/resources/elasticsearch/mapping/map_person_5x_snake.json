@@ -633,6 +633,10 @@
 					"type": "text",
 					"store": true
 				},
+				"service_component": {
+					"type": "text",
+					"store": true
+				},
 				"focus_child": {
 					"properties": {
 						"first_name": {
@@ -642,11 +646,7 @@
 						"last_name": {
 							"type": "text",
 							"store": true
-						},
-						"service_component": {
-							"type": "text",
-							"store": true
-						},
+						},						
 						"id": {
 							"type": "text",
 							"store": true

@@ -1217,8 +1217,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
-  @JsonPropertyOrder({"id", "start_date", "end_date", "county_name", "legacy_case_id",
-      "legacy_last_updated", "focus_child", "assigned_social_worker", "parents"})
+  @JsonPropertyOrder({"id", "start_date", "end_date", "county_name", "service_component",
+      "legacy_case_id", "legacy_last_updated", "focus_child", "assigned_social_worker", "parents"})
   public static class ElasticSearchPersonCase implements ApiTypedIdentifier<String> {
 
     /**
@@ -1243,6 +1243,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
     @JsonProperty("county_name")
     private String countyName;
+
+    @JsonProperty("service_component")
+    private String serviceComponent;
 
     @JsonProperty("focus_child")
     private ElasticSearchPersonChild focusChild;
@@ -1305,6 +1308,14 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.countyName = countyName;
     }
 
+    public String getServiceComponent() {
+      return serviceComponent;
+    }
+
+    public void setServiceComponent(String serviceComponent) {
+      this.serviceComponent = serviceComponent;
+    }
+
     public ElasticSearchPersonChild getFocusChild() {
       return focusChild;
     }
@@ -1336,12 +1347,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * @author CWDS API Team
    */
   @SuppressWarnings("serial")
-  @JsonPropertyOrder({"id", "first_name", "last_name", "service_component", "legacy_client_id",
-      "legacy_last_updated"})
+  @JsonPropertyOrder({"id", "first_name", "last_name", "legacy_client_id", "legacy_last_updated"})
   public static class ElasticSearchPersonChild extends ElasticSearchPersonNestedPerson {
-
-    @JsonProperty("service_component")
-    private String serviceComponent;
 
     @Override
     @JsonProperty("legacy_client_id")
@@ -1353,14 +1360,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonProperty("legacy_last_updated")
     public String getLegacyLastUpdated() {
       return legacyLastUpdated;
-    }
-
-    public String getServiceComponent() {
-      return serviceComponent;
-    }
-
-    public void setServiceComponent(String serviceComponent) {
-      this.serviceComponent = serviceComponent;
     }
   }
 
