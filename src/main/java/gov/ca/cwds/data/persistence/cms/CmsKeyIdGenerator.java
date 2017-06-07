@@ -383,37 +383,151 @@ public final class CmsKeyIdGenerator {
     return rend.makeKey(!StringUtils.isBlank(staffId) ? staffId : DEFAULT_USER_ID, ts);
   }
 
-  // void WINAPI _export GetUITimestampFromKey(const char *szKey, char *szUITimestamp) {
-  // using namespace std;
+  // inline static char * StrCpyN (char *szDst, const char *szSrc, int nLen) {
+  // memcpy (szDst, szSrc, nLen); // copy
+  // szDst[nLen] = '\0'; // terminate
+  // return szDst;
+  // }
+
+  //// -----------------------------------------------------------------------------
+  //// Function: DoubleToStrN
+  ////
+  //// Description: Converts a double to a string (of given width) of base specified
+  //// by the power table.
+  ////
+  //// Inputs: szDstStr - the destination string
+  //// nDstStrWidth - number of digits in szDstStr (not including null)
+  //// nSrcVal - the value of the key
+  //// pnPowVec - the power vector for the destination base
+  ////
+  //// Outputs: szDstStr - the destination string, null terminated
+  //// RETURNS - a pointer to szDstStr
+  //// -----------------------------------------------------------------------------
+  // static char * DoubleToStrN(char *szDstStr, int nDstStrWidth, double nSrcVal, double *pnPowVec)
+  //// {
+  // int i, nPower, nPad;
+  // double nFraction, nInteger;
   //
-  // char szTimestampStr[nSZ_KEYTIMESTAMP + 1];
-  // double nTsVal;
-  // struct tm hNow;
-  // int nHSec;
+  // // Determine the number's largest power.
+  // nPower = 0;
+  // for (i = 0; nSrcVal >= pnPowVec[i]; i++, nPower++);
   //
-  // try {
-  // AssertTrace(strlen(szKey) == nSZ_KEY, "'%s' has an invalid key string length.", szKey);
-  // AssertTrace(AfxIsValidAddress(szUITimestamp, nSZ_UITIMESTAMP + 1), "Invalid address specified
-  // for szUITimestamp.");
+  // // use the destination string width to left-pad the string.
+  // nPad = nDstStrWidth - nPower;
   //
-  // // Convert the key's timestamp segment to a number and then to date/time.
-  // StrCpyN(szTimestampStr, szKey, nSZ_KEYTIMESTAMP);
+  // if (nPad < 0) {
+  // // Input number is too big to be stored in a string of width nDestStrWidth.
+  // // Do not want to throw an exception here since the input number could have
+  // // been passed in from VB by a user entering a 19 character external key
+  // // that he thought was valid into a dialog box. So, return a null string
+  // // back to the caller that can be returned to the VB caller (of, say,
+  // // GetKeyFromUIIdentifier for example) so the VB code can display an error.
   //
-  // // DRS: A C++ array decays to a pointer of the array's type. Love the syntax. :-)
-  // nTsVal = StrToDouble(szTimestampStr, BASE_62_SIZE, std::decay_t<double *>(&anPowVec62[0]));
-  // DoubleToTimestamp(nTsVal, &hNow, &nHSec);
+  // szDstStr[0] = '\0'; // null terminate
+  // } else {
   //
-  // // Format the date/time in the default format of a DB2 timestamp.
-  // sprintf_s(szUITimestamp, nSZ_UITIMESTAMP + 2, "%04d-%02d-%02d-%02d.%02d.%02d.%06ld",
-  // hNow.tm_year + 1900, hNow.tm_mon + 1, hNow.tm_mday,
-  // hNow.tm_hour, hNow.tm_min, hNow.tm_sec, (long)((long)nHSec * 10000L));
-  // } catch (std::exception e) {
-  // cerr << "***** CAUGHT EXCEPTION! ***** : " << e.what() << endl;
-  // szUITimestamp[0] = '\0';
+  // for (i = 0; i < nPad; i++) {
+  // szDstStr[i] = acConvTbl[0];
+  // }
+  //
+  // for (i = 0; i < nPower; i++) {
+  // // Break down the number and convert the integer portion to a character.
+  // nFraction = modf(nSrcVal / pnPowVec[nPower - i - 1], &nInteger);
+  // szDstStr[i + nPad] = acConvTbl[(int)nInteger];
+  // nSrcVal -= (nInteger * pnPowVec[nPower - i - 1]);
+  // }
+  //
+  // szDstStr[nDstStrWidth] = '\0'; // null terminate
+  // }
+  //
+  // return szDstStr;
+  // }
+
+  //// -----------------------------------------------------------------------------
+  //// Function: BaseConvert
+  ////
+  //// Description: Converts a string of base 'a' to a string of base 'b'.
+  //// However, 'a' and 'b' can only be base 10 or 62.
+  ////
+  //// Inputs: nDstBase - the base of the destination string
+  //// szSrcStr - the source string
+  //// nSrcBase - the base of the source string
+  ////
+  //// Outputs: szDstStr - the destination string
+  //// RETURNS - <none>
+  //// -----------------------------------------------------------------------------
+  // static void BaseConvert(char *szDstStr, int nDstBase, int nDstWidth, const char *szSrcStr, int
+  //// nSrcBase) {
+  // double nSrcVal = 0;
+  //
+  // // Error check the base values.
+  // AssertTrace(nSrcBase == 10 || nSrcBase == BASE_62_SIZE, "A source base of '%d' is invalid.",
+  //// nSrcBase);
+  // AssertTrace(nDstBase == 10 || nDstBase == BASE_62_SIZE, "A destination base of '%d' is
+  //// invalid.", nDstBase);
+  //
+  // // Convert the source string to a number.
+  // switch (nSrcBase) {
+  // case 10:
+  // nSrcVal = atof(szSrcStr);
+  // break;
+  // case BASE_62_SIZE:
+  // nSrcVal = StrToDouble(szSrcStr, nSrcBase, const_cast<double*>(anPowVec62));
+  // break;
+  // }
+  //
+  // // Convert the number to a string of specified base.
+  // switch (nDstBase) {
+  // case 10:
+  // DoubleToStrN(szDstStr, nDstWidth, nSrcVal, const_cast<double*>(anPowVec10));
+  // break;
+  // case BASE_62_SIZE:
+  // DoubleToStrN(szDstStr, nDstWidth, nSrcVal, const_cast<double*>(anPowVec62));
+  // break;
   // }
   // }
 
-  public static String getUITimestampFromKey(String key) {
+  //// -----------------------------------------------------------------------------
+  //// Function: GetUIIdentifierFromKey
+  ////
+  //// Description: Obtains UI displayable identifier from the generated key.
+  ////
+  //// Inputs: szKey - the previously generated key.
+  ////
+  //// Outputs: szUIIdentifier - the identifier (in base 10)
+  //// An empty string on an error.
+  //// RETURNS - <none>
+  //// -----------------------------------------------------------------------------
+  // void WINAPI _export GetUIIdentifierFromKey(const char *szKey, char *szUIIdentifier) {
+  // using namespace std;
+  // char szTimestamp[nSZ_KEYTIMESTAMP + 1];
+  // char szStaffId[nSZ_KEYSTAFFID + 1];
+  // string sConvertKeyToUI;
+  //
+  // try {
+  // AssertTrace(strlen(szKey) == nSZ_KEY, "'%s' has an invalid key string length.", szKey);
+  // AssertTrace(AfxIsValidAddress(szUIIdentifier, nSZ_UIIDENTIFIER + 1), "Invalid address specified
+  //// for szUIIdentifier.");
+  //
+  // StrCpyN(szTimestamp, szKey, nSZ_KEYTIMESTAMP);
+  // StrCpyN(szStaffId, szKey + nSZ_KEYTIMESTAMP, nSZ_KEYSTAFFID);
+  //
+  // // Convert the entire key to a displayable string (base 10).
+  // BaseConvert(szUIIdentifier, 10, nSZ_UIIDTIMESTAMP, szTimestamp, nDEFAULT_BASE);
+  // BaseConvert(szUIIdentifier + nSZ_UIIDTIMESTAMP, 10, nSZ_UIIDSTAFFID, szStaffId, nDEFAULT_BASE);
+  //
+  // sConvertKeyToUI = szUIIdentifier; // convert to std::string
+  // sConvertKeyToUI = sConvertKeyToUI.substr(0,4) + "-" + sConvertKeyToUI.substr(4, 4) + "-"
+  // + sConvertKeyToUI.substr(8, 4) + "-" + sConvertKeyToUI.substr(12); // insert 3 dashes every 4th
+  //// character
+  // StrCpyN(szUIIdentifier, sConvertKeyToUI.c_str(), nSZ_UIIDENTIFIER);
+  // } catch (std::exception e) {
+  // cerr << "***** CAUGHT EXCEPTION! ***** : " << e.what() << endl;
+  // szUIIdentifier[0] = '\0';
+  // }
+  // }
+
+  public static String getUIIdentifierFromKey(String key) {
     final int intTs = Base62.toBase10(key.substring(3));
 
     return "";
