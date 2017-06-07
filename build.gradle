@@ -52,7 +52,9 @@ dependencies {
     compile group: 'io.swagger', name: 'swagger-annotations', version: '1.5.9'
     compile group: "org.postgresql", name: "postgresql", version: "9.4.1208.jre7"
 
-    compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.7.0'
+    compile('io.jsonwebtoken:jjwt:0.7.0') {
+        exclude group: 'org.bouncycastle'
+    }
 
 	// LOGGING:	
 	compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4jVersion
