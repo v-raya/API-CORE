@@ -8,6 +8,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
@@ -70,7 +71,7 @@ public class ServiceBackedResourceDelegateTest {
     uniqueDomainObject = new ResourceDelegateTestDomainObject(ID_NOT_FOUND);
     unexpectedExceptionDomainObject = new ResourceDelegateTestDomainObject(new Long(13));
     validationErrorMessageDomainObject = new ResourceDelegateTestDomainObject(new Long(15));
-    Set messages = new HashSet();
+    ArrayList messages = new ArrayList();
     validationErrorMessageDomainObject.setMessages(messages);
 
     when(crudsService.find(ID_NOT_FOUND)).thenReturn(null);

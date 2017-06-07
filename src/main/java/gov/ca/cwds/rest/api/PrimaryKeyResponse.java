@@ -1,7 +1,7 @@
 package gov.ca.cwds.rest.api;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.ArrayList;
 
 /**
  * {@link Response} wrapping a primary key.
@@ -28,5 +28,5 @@ public class PrimaryKeyResponse implements Response {
   public boolean hasMessages() { return false; }
 
   @Override
-  public Set getMessages() { return null; }
+  public ArrayList getMessages() { return null; }
 }

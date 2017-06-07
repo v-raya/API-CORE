@@ -7,12 +7,13 @@ import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 public class ResourceDelegateTestDomainObject extends DomainObject implements Request, Response {
   @JsonProperty("id")
   private Long id;
-  private Set messages;
+  private ArrayList messages;
 
   public ResourceDelegateTestDomainObject() {
     super();
@@ -67,12 +68,12 @@ public class ResourceDelegateTestDomainObject extends DomainObject implements Re
   public boolean hasMessages() {
     return messages != null && !messages.isEmpty();
   }
-  public void setMessages(Set messages){
+  public void setMessages(ArrayList messages){
     this.messages = messages;
   }
 
   @Override
-  public Set getMessages() {
+  public ArrayList getMessages() {
     return messages;
   }
 }

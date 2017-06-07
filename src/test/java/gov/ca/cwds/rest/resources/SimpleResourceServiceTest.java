@@ -9,6 +9,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 
@@ -114,7 +115,7 @@ public class SimpleResourceServiceTest {
     }
 
     @Override
-    public Set getMessages() {
+    public ArrayList getMessages() {
       return null;
     }
   }

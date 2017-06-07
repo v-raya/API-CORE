@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.api;
 
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 
@@ -27,8 +28,8 @@ public interface Response {
    * @return Set of messages or empty set if none
    * @see #hasMessages()
    */
-  default Set<ErrorMessage> getMessages() {
+  default ArrayList<ErrorMessage> getMessages() {
 
-    return new ConcurrentSkipListSet<>();
+    return new ArrayList<>();
   }
 }
