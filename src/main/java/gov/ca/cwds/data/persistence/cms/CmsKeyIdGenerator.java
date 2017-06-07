@@ -414,7 +414,7 @@ public final class CmsKeyIdGenerator {
   // }
 
   public static String getUITimestampFromKey(String key) {
-    final String strTs = key.substring(3);
+    final int intTs = Base62.toBase10(key.substring(3));
 
     return "";
   }

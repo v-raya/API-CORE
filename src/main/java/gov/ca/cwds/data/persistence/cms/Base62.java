@@ -3,7 +3,7 @@ package gov.ca.cwds.data.persistence.cms;
 public class Base62 {
 
   public static final String ALPHABET =
-      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
   public static final int BASE = ALPHABET.length();
 

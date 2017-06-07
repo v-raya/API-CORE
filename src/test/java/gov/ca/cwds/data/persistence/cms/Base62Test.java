@@ -9,14 +9,14 @@ public class Base62Test {
   @Test
   public void testCharList() throws Exception {
     StringBuilder sb = new StringBuilder();
-    for (char c = 'a'; c <= 'z'; c++) {
-      sb.append(c);
+    for (int i = 0; i <= 9; i++) {
+      sb.append(i);
     }
     for (char c = 'A'; c <= 'Z'; c++) {
       sb.append(c);
     }
-    for (int i = 0; i <= 9; i++) {
-      sb.append(i);
+    for (char c = 'a'; c <= 'z'; c++) {
+      sb.append(c);
     }
     assertEquals(sb.toString(), Base62.ALPHABET);
   }
@@ -36,13 +36,15 @@ public class Base62Test {
 
   @Test
   public void testIntegerFromString() throws Exception {
-    assertEquals(125, Base62.toBase10("cb"));
+    assertEquals(2393, Base62.toBase10("cb"));
   }
 
   @Test
   public void testFromZero() {
     assertEquals("a", Base62.fromBase10(0));
-    assertEquals("b", Base62.fromBase10(1));
+    assertEquals("1", Base62.fromBase10(1));
+    assertEquals("2", Base62.fromBase10(2));
+    assertEquals("3", Base62.fromBase10(3));
   }
 }
 
