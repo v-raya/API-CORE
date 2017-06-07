@@ -913,6 +913,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
     private String id;
 
+    @JsonProperty("referral_id")
+    private String referralId;
+
     @JsonProperty("start_date")
     private String startDate;
 
@@ -1066,6 +1069,14 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
     public void setAllPeople(List<ElasticSearchPersonAny> allPeople) {
       this.allPeople = allPeople;
+    }
+
+    public String getReferralId() {
+      return referralId;
+    }
+
+    public void setReferralId(String referralId) {
+      this.referralId = referralId;
     }
 
   }

@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.api.persistence.cms;
+package gov.ca.cwds.data.persistence.cms;
 
 import static org.junit.Assert.assertTrue;
 
@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator.KeyDetail;
-import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator.StringKey;
+import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
@@ -66,13 +66,13 @@ import gov.ca.cwds.rest.services.ServiceException;
  */
 public final class CmsKeyIdGeneratorTest {
 
-  private static final int GOOD_KEY_LEN = 10;
+  private static final int GOOD_KEY_LEN = CmsPersistentObject.CMS_ID_LEN;
 
-  private CmsKeyIdGenerator inst;
+  // private CmsKeyIdGenerator inst;
 
   @Before
   public void setUpBeforeTest() throws Exception {
-    this.inst = new CmsKeyIdGenerator();
+    // this.inst = new CmsKeyIdGenerator();
   }
 
   // ===================
@@ -81,57 +81,58 @@ public final class CmsKeyIdGeneratorTest {
 
   @Test
   public void testGenKeyGood() {
-    final String key = inst.generateKeyFromStaff("0X5");
+    final String key = CmsKeyIdGenerator.generate("0X5");
     assertTrue("key not generated", key != null && key.length() == GOOD_KEY_LEN);
   }
 
   @Test
   public void testGenKeyGoodStaff2() {
     // Good staff id.
-    final String key = inst.generateKeyFromStaff("0yz");
+    final String key = CmsKeyIdGenerator.generate("0yz");
     assertTrue("key not generated", key != null && key.length() == GOOD_KEY_LEN);
   }
 
-  @Test(expected = ServiceException.class)
+  @Test
   public void testGenKeyBadStaffEmpty() {
     // Empty staff id.
-    final String key = inst.generateKeyFromStaff("");
+    final String key = CmsKeyIdGenerator.generate("");
     // assertTrue("key generated", key == null || key.length() == 0);
   }
 
-  @Test(expected = ServiceException.class)
+  // TODO: #145948067: default staff id until Perry is ready.
+  // @Test(expected = ServiceException.class)
   public void testGenKeyBadStaffNull() {
     // Null staff id.
-    final String key = inst.generateKeyFromStaff(new StringKey(null));
+    final String key = CmsKeyIdGenerator.generate(null);
     // assertTrue("key generated", key == null || key.length() == 0);
   }
 
   @Test(expected = ServiceException.class)
   public void testGenKeyBadStaffWrongLength() {
     // Wrong staff id length.
-    final String key = inst.generateKeyFromStaff("abcdefg");
+    final String key = CmsKeyIdGenerator.generate("abcdefg");
     // assertTrue("key generated", key == null || key.length() == 0);
   }
 
   @Test(expected = ServiceException.class)
   public void testGenKeyBadStaffTooShort() {
     // Wrong staff id length.
-    final String key = inst.generateKeyFromStaff("a");
+    final String key = CmsKeyIdGenerator.generate("a");
     // assertTrue("key generated", key == null || key.length() == 0);
   }
 
   @Test(expected = ServiceException.class)
   public void testGenKeyBadStaffTooLong() {
     // Wrong staff id length.
-    final String key = inst.generateKeyFromStaff(
-        "ab7777d7d7d7s8283jh4jskksjajfkdjbjdjjjasdfkljcxmzxcvjdhshfjjdkksahf");
+    final String key = CmsKeyIdGenerator
+        .generate("ab7777d7d7d7s8283jh4jskksjajfkdjbjdjjjasdfkljcxmzxcvjdhshfjjdkksahf");
     // assertTrue("key generated", key == null || key.length() == 0);
   }
 
   @Test(expected = ServiceException.class)
-  public void testGenKeyBadStaffBadChars() {
+  public void testGenKeyBadStaffBadChars1() {
     // Invalid chars in staff id.
-    final String key = inst.generateKeyFromStaff("ab&");
+    final String key = CmsKeyIdGenerator.generate("ab&");
     // assertTrue("key generated", key == null || key.length() == 0);
   }
 
@@ -143,7 +144,7 @@ public final class CmsKeyIdGeneratorTest {
   public void testDecomposeGoodKey() {
     // Good key, decomposes correctly.
     KeyDetail kd = new KeyDetail();
-    // inst.decomposeKey("1qxx0OC0X5", kd);
+    // CmsKeyIdGenerator.decomposeKey("1qxx0OC0X5", kd);
     // assertTrue("Staff ID empty", kd.staffId != null && "0X5".equals(kd.staffId));
   }
 
@@ -151,7 +152,7 @@ public final class CmsKeyIdGeneratorTest {
   public void testDecomposeKeyLong() {
     // Wrong staff id size: too long.
     KeyDetail kd = new KeyDetail();
-    // inst.decomposeKey("wro000000000000ng", kd);
+    // CmsKeyIdGenerator.decomposeKey("wro000000000000ng", kd);
     // assertTrue("Staff ID not empty", kd.staffId == null || "".equals(kd.staffId));
   }
 
@@ -159,7 +160,7 @@ public final class CmsKeyIdGeneratorTest {
   public void testDecomposeKeyShort() {
     // Wrong staff id size: too short.
     KeyDetail kd = new KeyDetail();
-    // inst.decomposeKey("w", kd);
+    // CmsKeyIdGenerator.decomposeKey("w", kd);
     // assertTrue("Staff ID not empty", kd.staffId == null || "".equals(kd.staffId));
   }
 
@@ -167,7 +168,7 @@ public final class CmsKeyIdGeneratorTest {
   public void testDecomposeKeyEmpty() {
     // Empty staff id.
     KeyDetail kd = new KeyDetail();
-    // inst.decomposeKey("", kd);
+    // CmsKeyIdGenerator.decomposeKey("", kd);
     // assertTrue("Staff ID not empty", kd.staffId == null || "".equals(kd.staffId));
   }
 
@@ -175,7 +176,7 @@ public final class CmsKeyIdGeneratorTest {
   public void testDecomposeKeyNull() {
     // Null staff id.
     KeyDetail kd = new KeyDetail();
-    // inst.decomposeKey(null, kd);
+    // CmsKeyIdGenerator.decomposeKey(null, kd);
     // assertTrue("Staff ID not empty", kd.staffId == null || "".equals(kd.staffId));
   }
 
