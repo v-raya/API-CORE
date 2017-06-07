@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.validation.ValidationException;
@@ -99,8 +100,9 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
       if (e.getCause() instanceof EntityExistsException) {
         response = Response.status(Response.Status.CONFLICT).entity(null).build();
       } else if (e.getCause() instanceof ValidationException) {
-        response =
-            Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(e.getMessage()).build();
+        ErrorMessage message =
+            new ErrorMessage(ErrorMessage.ErrorType.VALIDATION, e.getMessage(), "");
+        response = Response.status(Response.Status.BAD_REQUEST).entity(message).build();
       } else {
         LOGGER.error("Unable to handle request", e);
         response = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
