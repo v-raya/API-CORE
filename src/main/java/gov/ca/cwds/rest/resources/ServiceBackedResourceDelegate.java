@@ -2,13 +2,11 @@ package gov.ca.cwds.rest.resources;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
-import java.util.Set;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.ws.rs.core.Response;
 
-import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +17,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.services.ServiceException;
+import gov.ca.cwds.rest.validation.ValidationException;
 
 /**
  * Implements the {@link ResourceDelegate} and passes work to the service layer. All
@@ -88,10 +87,10 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
       gov.ca.cwds.rest.api.Response serviceResponse = service.create(request);
       Object entity;
       Response.Status responseStatus;
-      if(serviceResponse.hasMessages()){
+      if (serviceResponse.hasMessages()) {
         entity = serviceResponse.getMessages();
         responseStatus = Response.Status.BAD_REQUEST;
-      }else{
+      } else {
         entity = serviceResponse;
         responseStatus = Response.Status.CREATED;
       }
@@ -99,6 +98,9 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
     } catch (ServiceException e) {
       if (e.getCause() instanceof EntityExistsException) {
         response = Response.status(Response.Status.CONFLICT).entity(null).build();
+      } else if (e.getCause() instanceof ValidationException) {
+        response =
+            Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(e.getMessage()).build();
       } else {
         LOGGER.error("Unable to handle request", e);
         response = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
