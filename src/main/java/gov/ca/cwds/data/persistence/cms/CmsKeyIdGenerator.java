@@ -164,18 +164,25 @@ public final class CmsKeyIdGenerator {
     public String PTimestamp; // NOSONAR
   }
 
-  // private static final int nSZ_POWVEC = 19; // NOSONAR
+  private static final int BASE_62_SIZE = 62;
 
-  // private static final int nMAX_BASE = 62; // NOSONAR
+  private static final int LEN_KEY = 10;
+  private static final int LEN_KEYSTAFFID = 3;
+  private static final int LEN_KEYTIMESTAMP = 7;
+  private static final int nSZ_UISTAFFID = 6;
+  private static final int nSZ_UITIMESTAMP = 26;
+  private static final int nSZ_UIIDENTIFIER = 22;
+  private static final int nSZ_PTIMESTAMP = 11;
 
-  // private static final int nDEFAULT_BASE = 62; // NOSONAR
+  private static final int nSZ_USERID = 8;
 
-  // private static final int nSZ_UIIDSTAFFID = 6; // NOSONAR
+  private static final int nSZ_POWVEC = 19;
 
-  // private static final int nSZ_UIIDTIMESTAMP = 13; // NOSONAR
+  private static final int nSZ_UIIDSTAFFID = 6; // for converting a key to a UI identifier
+  private static final int nSZ_UIIDTIMESTAMP = 13;
 
   private static final float nSHIFT_HSECOND = 1.71798692E10f; // NOSONAR 34 bit shift (2 to the 34th
-                                                              // power)
+  // power)
 
   private static final float nSHIFT_SECOND = 2.68435456E8f; // NOSONAR 28 bit shift (2 to the 28th
                                                             // power)
@@ -190,7 +197,7 @@ public final class CmsKeyIdGenerator {
 
   private static final float nSHIFT_YEAR = 1; // NOSONAR 0 bit shift (2 to the 0th power)
 
-  private static final double[] anPowVec10 = {1.000000000000000e+000f, 1.000000000000000e+001f,
+  private static final double[] POWER_BASE10 = {1.000000000000000e+000f, 1.000000000000000e+001f,
       1.000000000000000e+002f, 1.000000000000000e+003f, 1.000000000000000e+004f,
       1.000000000000000e+005f, 1.000000000000000e+006f, 1.000000000000000e+007f,
       1.000000000000000e+008f, 1.000000000000000e+009f, 1.000000000000000e+010f,
@@ -198,7 +205,7 @@ public final class CmsKeyIdGenerator {
       1.000000000000000e+014f, 1.000000000000000e+015f, 1.000000000000000e+016f,
       1.000000000000000e+017f, 1.000000000000000e+018f};
 
-  private static final double[] anPowVec62 = {1.000000000000000e+000, 6.200000000000000e+001,
+  private static final double[] POWER_BASE62 = {1.000000000000000e+000, 6.200000000000000e+001,
       3.844000000000000e+003, 2.383280000000000e+005, 1.477633600000000e+007,
       9.161328320000000e+008, 5.680023558400000e+010, 3.521614606208000e+012,
       2.183401055848960e+014, 1.353708654626355e+016, 8.392993658683402e+017,
@@ -206,7 +213,7 @@ public final class CmsKeyIdGenerator {
       1.240176943465753e+025, 7.689097049487666e+026, 4.767240170682353e+028,
       2.955688905823059e+030, 1.832527121610297e+032};
 
-  private static final char[] acConvTbl = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
+  private static final char[] BASE64_CHARS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
       'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
       'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
       'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
@@ -227,7 +234,7 @@ public final class CmsKeyIdGenerator {
    */
   protected String createTimestampStr(final Date ts) throws ParseException {
     return ts == null ? createTimestampStr(null)
-        : doubleToStrN(7, timestampToDouble(getTimestampSeed(ts)), anPowVec62);
+        : doubleToStrN(7, timestampToDouble(getTimestampSeed(ts)), POWER_BASE62);
   }
 
   /**
@@ -258,7 +265,7 @@ public final class CmsKeyIdGenerator {
     }
 
     // Convert the timestamp number to a base-62 string.
-    return doubleToStrN(7, nTimestamp, anPowVec62);
+    return doubleToStrN(7, nTimestamp, POWER_BASE62);
   }
 
   /**
@@ -278,68 +285,69 @@ public final class CmsKeyIdGenerator {
   }
 
   /**
-   * @param nDstStrWidth the string width
-   * @param nSrcVal source value
-   * @param pnPowVec the power vector for the destination base
+   * @param dstLen the string width
+   * @param src source value
+   * @param powers the power vector for the destination base
    * @return the double to string
    */
-  public String doubleToStrN(int nDstStrWidth, Double nSrcVal, final double[] pnPowVec) {
+  public String doubleToStrN(int dstLen, double src, final double[] powers) {
     int i;
-    int nPower = 0;
+    int power = 0;
     double nInteger;
-    char[] szDstStr = new char[8];
+    char[] dest = new char[20];
 
     // Determine the largest power of the number.
-    for (i = 0; nSrcVal >= pnPowVec[i]; i++, nPower++) {
+    for (i = 0; src >= powers[i]; i++, power++) {
       // Just increment power.
     }
 
-    LOGGER.debug("nPower::" + nPower);
+    // LOGGER.debug("power={}, i={}", power, i);
     // Use the destination string width to left-pad the string.
-    final int nPad = nDstStrWidth - nPower;
-    LOGGER.debug("nPad::" + nPad);
+    final int pad = dstLen - power;
+    // LOGGER.debug("pad={}", pad);
 
-    if (nPad < 0) {
-      throw new ServiceException("received invalid nPad value......");
+    if (pad < 0) {
+      throw new ServiceException("invalid nPad value");
     } else {
-      for (i = 0; i < nPad; i++) {
-        szDstStr[i] = acConvTbl[0];
+      for (i = 0; i < pad; i++) {
+        dest[i] = BASE64_CHARS[0];
       }
 
-      for (i = 0; i < nPower; i++) {
-        nInteger = nSrcVal / pnPowVec[nPower - i - 1];
-        float finalValue = (float) Math.floor(nInteger);
-        szDstStr[i + nPad] = acConvTbl[(int) Math.abs(finalValue)];
-        nSrcVal -= (finalValue * pnPowVec[nPower - i - 1]); // NOSONAR
+      for (i = 0; i < power; i++) {
+        nInteger = src / powers[power - i - 1];
+        double finalValue = Math.floor(nInteger);
+        dest[i + pad] = BASE64_CHARS[(int) Math.abs(finalValue)];
+        src -= (finalValue * powers[power - i - 1]); // NOSONAR
       }
     }
 
-    return String.valueOf(szDstStr);
+    return String.valueOf(dest);
   }
 
   /**
-   * @param srcStr source string
-   * @param srcBase base 10 or 62
+   * @param src source string
+   * @param base base 10 or 62
    * @param powers powers values of this base
    * @return double representation of the string
    */
-  protected double strToDouble(String srcStr, int srcBase, final double[] powers) {
+  protected double strToDouble(String src, int base, final double[] powers) {
     double ret = 0;
-    final int nLen = srcStr.length();
-    int nPower;
+    final int nLen = src.length();
+    int power;
 
-    // Process all characters in the string.
     for (int i = 0; i < nLen; i++) {
-      for (nPower = 0; nPower < srcBase; nPower++) {
+      final char c = src.charAt(i);
+      for (power = 0; power < base; power++) {
+
         // Find the character in the conversion table and add to the value.
-        if (acConvTbl[nPower] == srcStr.indexOf(i)) {
-          ret += (nPower * powers[nLen - i - 1]);
+        if (BASE64_CHARS[power] == c) {
+          ret += (power * powers[nLen - i - 1]);
           break;
         }
       }
 
-      if (nPower == srcBase) {
-        // Character too big for the base! Bomb out!
+      if (power == base) {
+        LOGGER.warn("Character too big base? {}");
         return -1;
       }
     }
@@ -413,146 +421,6 @@ public final class CmsKeyIdGenerator {
     return rend.makeKey(!StringUtils.isBlank(staffId) ? staffId : DEFAULT_USER_ID, ts);
   }
 
-  // inline static char * StrCpyN (char *szDst, const char *szSrc, int nLen) {
-  // memcpy (szDst, szSrc, nLen); // copy
-  // szDst[nLen] = '\0'; // terminate
-  // return szDst;
-  // }
-
-  //// -----------------------------------------------------------------------------
-  //// Function: StrToDouble
-  ////
-  //// Description: Converts a string (in specified base) to a double.
-  ////
-  //// Inputs: szSrcStr - the key string (in base nSrcBase)
-  //// nSrcBase - the base of the key
-  //// pnPowVec - the power vector for the source base
-  ////
-  //// Outputs:
-  //// RETURNS - the key value; -1 indicates an error.
-  //// -----------------------------------------------------------------------------
-  // static double StrToDouble(const char *szSrcStr, int nSrcBase, double *pnPowVec) {
-  // double nSrcVal = 0;
-  // int nLen = strlen(szSrcStr);
-  // int nPower;
-  //
-  // // Process all characters in the string.
-  // for (int i = 0; i < nLen; i++) {
-  // for (nPower = 0; nPower < nSrcBase; nPower++) {
-  // // Find the character in the conversion table and add to the value.
-  // if (acConvTbl[nPower] == szSrcStr[i]) {
-  // nSrcVal += (nPower * pnPowVec[nLen - i - 1]);
-  // break;
-  // }
-  // }
-  //
-  // if (nPower == nSrcBase) {
-  // // Character too big for the base! Bomb out!
-  // return -1;
-  // }
-  // }
-  //
-  // return nSrcVal;
-  // }
-
-  //// -----------------------------------------------------------------------------
-  //// Function: DoubleToStrN
-  ////
-  //// Description: Converts a double to a string (of given width) of base specified
-  //// by the power table.
-  ////
-  //// Inputs: szDstStr - the destination string
-  //// nDstStrWidth - number of digits in szDstStr (not including null)
-  //// nSrcVal - the value of the key
-  //// pnPowVec - the power vector for the destination base
-  ////
-  //// Outputs: szDstStr - the destination string, null terminated
-  //// RETURNS - a pointer to szDstStr
-  //// -----------------------------------------------------------------------------
-  // static char * DoubleToStrN(char *szDstStr, int nDstStrWidth, double nSrcVal, double *pnPowVec)
-  //// {
-  // int i, nPower, nPad;
-  // double nFraction, nInteger;
-  //
-  // // Determine the number's largest power.
-  // nPower = 0;
-  // for (i = 0; nSrcVal >= pnPowVec[i]; i++, nPower++);
-  //
-  // // use the destination string width to left-pad the string.
-  // nPad = nDstStrWidth - nPower;
-  //
-  // if (nPad < 0) {
-  // // Input number is too big to be stored in a string of width nDestStrWidth.
-  // // Do not want to throw an exception here since the input number could have
-  // // been passed in from VB by a user entering a 19 character external key
-  // // that he thought was valid into a dialog box. So, return a null string
-  // // back to the caller that can be returned to the VB caller (of, say,
-  // // GetKeyFromUIIdentifier for example) so the VB code can display an error.
-  //
-  // szDstStr[0] = '\0'; // null terminate
-  // } else {
-  //
-  // for (i = 0; i < nPad; i++) {
-  // szDstStr[i] = acConvTbl[0];
-  // }
-  //
-  // for (i = 0; i < nPower; i++) {
-  // // Break down the number and convert the integer portion to a character.
-  // nFraction = modf(nSrcVal / pnPowVec[nPower - i - 1], &nInteger);
-  // szDstStr[i + nPad] = acConvTbl[(int)nInteger];
-  // nSrcVal -= (nInteger * pnPowVec[nPower - i - 1]);
-  // }
-  //
-  // szDstStr[nDstStrWidth] = '\0'; // null terminate
-  // }
-  //
-  // return szDstStr;
-  // }
-
-  //// -----------------------------------------------------------------------------
-  //// Function: BaseConvert
-  ////
-  //// Description: Converts a string of base 'a' to a string of base 'b'.
-  //// However, 'a' and 'b' can only be base 10 or 62.
-  ////
-  //// Inputs: nDstBase - the base of the destination string
-  //// szSrcStr - the source string
-  //// nSrcBase - the base of the source string
-  ////
-  //// Outputs: szDstStr - the destination string
-  //// RETURNS - <none>
-  //// -----------------------------------------------------------------------------
-  // static void BaseConvert(char *szDstStr, int nDstBase, int nDstWidth, const char *szSrcStr, int
-  //// nSrcBase) {
-  // double nSrcVal = 0;
-  //
-  // // Error check the base values.
-  // AssertTrace(nSrcBase == 10 || nSrcBase == BASE_62_SIZE, "A source base of '%d' is invalid.",
-  //// nSrcBase);
-  // AssertTrace(nDstBase == 10 || nDstBase == BASE_62_SIZE, "A destination base of '%d' is
-  //// invalid.", nDstBase);
-  //
-  // // Convert the source string to a number.
-  // switch (nSrcBase) {
-  // case 10:
-  // nSrcVal = atof(szSrcStr);
-  // break;
-  // case BASE_62_SIZE:
-  // nSrcVal = StrToDouble(szSrcStr, nSrcBase, const_cast<double*>(anPowVec62));
-  // break;
-  // }
-  //
-  // // Convert the number to a string of specified base.
-  // switch (nDstBase) {
-  // case 10:
-  // DoubleToStrN(szDstStr, nDstWidth, nSrcVal, const_cast<double*>(anPowVec10));
-  // break;
-  // case BASE_62_SIZE:
-  // DoubleToStrN(szDstStr, nDstWidth, nSrcVal, const_cast<double*>(anPowVec62));
-  // break;
-  // }
-  // }
-
   //// -----------------------------------------------------------------------------
   //// Function: GetUIIdentifierFromKey
   ////
@@ -593,13 +461,32 @@ public final class CmsKeyIdGenerator {
   // }
   // }
 
-  public static String getUIIdentifierFromKey(String key) {
-    final int intTs = Base62.toBase10(key.substring(3));
-    
-    double strToDouble(key, int srcBase, final double[] powers);
-    nSrcVal = StrToDouble(szSrcStr, nSrcBase, const_cast<double*>(anPowVec62));
+  protected String baseConvert(int dstBase, int dstLen, String src, int srcBase) {
+    double d = 0;
 
-    return "";
+    // Source string => double.
+    if (srcBase == BASE_62_SIZE) {
+      d = strToDouble(src, srcBase, POWER_BASE62);
+    }
+
+    // double => string of specified base.
+    return doubleToStrN(dstLen, d, dstBase == 10 ? POWER_BASE10 : POWER_BASE62);
+  }
+
+  public String getUIIdentifierFromKey(String key) {
+    String strTimestamp = key.substring(0, LEN_KEYTIMESTAMP);
+    String strStaffId = key.substring(LEN_KEYTIMESTAMP, LEN_KEYTIMESTAMP + LEN_KEYSTAFFID);
+
+    String first = baseConvert(10, nSZ_UIIDTIMESTAMP, strTimestamp, BASE_62_SIZE);
+    String second = baseConvert(10, nSZ_UIIDSTAFFID, strStaffId, BASE_62_SIZE);
+
+    String whole = first + second;
+    LOGGER.debug("whole={}", whole);
+
+    StringBuilder buf = new StringBuilder();
+    buf.append(whole.substring(0, 4));
+
+    return buf.toString();
   }
 
   /**
@@ -610,13 +497,7 @@ public final class CmsKeyIdGenerator {
    */
   public static void main(String[] args) throws InterruptedException {
     CmsKeyIdGenerator rend = new CmsKeyIdGenerator();
-    String staffid = "0JG";
-    Date ts = new Date();
-    for (int i = 0; i < 40000; i++) {
-      LOGGER.debug("staffId: " + staffid);
-      final String key = rend.makeKey(staffid, ts);
-      LOGGER.debug("generated key: {}", key);
-    }
+    rend.getUIIdentifierFromKey("5Y3vKVs0X5");
   }
 
 }

@@ -26,7 +26,7 @@ public class Base62 {
     return i / BASE;
   }
 
-  public static int toBase10(String str) {
+  public static long toBase10(String str) {
     return toBase10(new StringBuilder(str).reverse().toString().toCharArray());
   }
 
