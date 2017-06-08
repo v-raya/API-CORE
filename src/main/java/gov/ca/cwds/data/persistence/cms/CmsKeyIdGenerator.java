@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
@@ -178,8 +179,8 @@ public final class CmsKeyIdGenerator {
 
   private static final int nSZ_POWVEC = 19;
 
-  private static final int nSZ_UIIDSTAFFID = 6; // for converting a key to a UI identifier
-  private static final int nSZ_UIIDTIMESTAMP = 13;
+  private static final int LEN_UIIDSTAFFID = 6; // for converting a key to a UI identifier
+  private static final int LEN_UIIDTIMESTAMP = 13;
 
   private static final float nSHIFT_HSECOND = 1.71798692E10f; // NOSONAR 34 bit shift (2 to the 34th
   // power)
@@ -197,21 +198,27 @@ public final class CmsKeyIdGenerator {
 
   private static final float nSHIFT_YEAR = 1; // NOSONAR 0 bit shift (2 to the 0th power)
 
-  private static final double[] POWER_BASE10 = {1.000000000000000e+000f, 1.000000000000000e+001f,
-      1.000000000000000e+002f, 1.000000000000000e+003f, 1.000000000000000e+004f,
-      1.000000000000000e+005f, 1.000000000000000e+006f, 1.000000000000000e+007f,
-      1.000000000000000e+008f, 1.000000000000000e+009f, 1.000000000000000e+010f,
-      1.000000000000000e+011f, 1.000000000000000e+012f, 1.000000000000000e+013f,
-      1.000000000000000e+014f, 1.000000000000000e+015f, 1.000000000000000e+016f,
-      1.000000000000000e+017f, 1.000000000000000e+018f};
+  private static final BigDecimal[] POWER_BASE10 = {BigDecimal.valueOf(1.000000000000000e+000f),
+      BigDecimal.valueOf(1.000000000000000e+001f), BigDecimal.valueOf(1.000000000000000e+002f),
+      BigDecimal.valueOf(1.000000000000000e+003f), BigDecimal.valueOf(1.000000000000000e+004f),
+      BigDecimal.valueOf(1.000000000000000e+005f), BigDecimal.valueOf(1.000000000000000e+006f),
+      BigDecimal.valueOf(1.000000000000000e+007f), BigDecimal.valueOf(1.000000000000000e+008f),
+      BigDecimal.valueOf(1.000000000000000e+009f), BigDecimal.valueOf(1.000000000000000e+010f),
+      BigDecimal.valueOf(1.000000000000000e+011f), BigDecimal.valueOf(1.000000000000000e+012f),
+      BigDecimal.valueOf(1.000000000000000e+013f), BigDecimal.valueOf(1.000000000000000e+014f),
+      BigDecimal.valueOf(1.000000000000000e+015f), BigDecimal.valueOf(1.000000000000000e+016f),
+      BigDecimal.valueOf(1.000000000000000e+017f), BigDecimal.valueOf(1.000000000000000e+018f)};
 
-  private static final double[] POWER_BASE62 = {1.000000000000000e+000, 6.200000000000000e+001,
-      3.844000000000000e+003, 2.383280000000000e+005, 1.477633600000000e+007,
-      9.161328320000000e+008, 5.680023558400000e+010, 3.521614606208000e+012,
-      2.183401055848960e+014, 1.353708654626355e+016, 8.392993658683402e+017,
-      5.203656068383710e+019, 3.226266762397900e+021, 2.000285392686698e+023,
-      1.240176943465753e+025, 7.689097049487666e+026, 4.767240170682353e+028,
-      2.955688905823059e+030, 1.832527121610297e+032};
+  private static final BigDecimal[] POWER_BASE62 = {BigDecimal.valueOf(1.000000000000000e+000),
+      BigDecimal.valueOf(6.200000000000000e+001), BigDecimal.valueOf(3.844000000000000e+003),
+      BigDecimal.valueOf(2.383280000000000e+005), BigDecimal.valueOf(1.477633600000000e+007),
+      BigDecimal.valueOf(9.161328320000000e+008), BigDecimal.valueOf(5.680023558400000e+010),
+      BigDecimal.valueOf(3.521614606208000e+012), BigDecimal.valueOf(2.183401055848960e+014),
+      BigDecimal.valueOf(1.353708654626355e+016), BigDecimal.valueOf(8.392993658683402e+017),
+      BigDecimal.valueOf(5.203656068383710e+019), BigDecimal.valueOf(3.226266762397900e+021),
+      BigDecimal.valueOf(2.000285392686698e+023), BigDecimal.valueOf(1.240176943465753e+025),
+      BigDecimal.valueOf(7.689097049487666e+026), BigDecimal.valueOf(4.767240170682353e+028),
+      BigDecimal.valueOf(2.955688905823059e+030), BigDecimal.valueOf(1.832527121610297e+032)};
 
   private static final char[] ALPHABET = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
       'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
@@ -290,14 +297,14 @@ public final class CmsKeyIdGenerator {
    * @param powers the power vector for the destination base
    * @return the double to string
    */
-  public String doubleToStrN(int dstLen, double src, final double[] powers) {
+  public String doubleToStrN(int dstLen, double src, final BigDecimal[] powers) {
     int i;
     int power = 0;
-    double nInteger;
-    char[] dest = new char[20];
+    double integral, fractional, raw;
+    final char[] dest = new char[20];
 
     // Determine the largest power of the number.
-    for (i = 0; src >= powers[i]; i++, power++) {
+    for (i = 0; src >= powers[i].doubleValue(); i++, power++) {
       // Just increment power.
     }
 
@@ -312,10 +319,19 @@ public final class CmsKeyIdGenerator {
       }
 
       for (i = 0; i < power; i++) {
-        nInteger = src / powers[power - i - 1];
-        final double d = Math.floor(nInteger);
+        raw = src / powers[power - i - 1].doubleValue();
+
+        // Break down the number and convert the integer portion to a character.
+        // nFraction = modf(nSrcVal / pnPowVec[nPower - i - 1], &nInteger);
+
+        integral = Math.floor(raw);
+        fractional = raw - integral;
+
+        // final double d = Math.floor(integral); // wrong??
+        final double d = (int) raw;
+
         dest[i + pad] = ALPHABET[(int) Math.abs(d)];
-        src -= (d * powers[power - i - 1]); // NOSONAR
+        src -= (d * powers[power - i - 1].doubleValue()); // NOSONAR
       }
     }
 
@@ -335,7 +351,7 @@ public final class CmsKeyIdGenerator {
    * @param powers powers values of this base
    * @return double representation of the string
    */
-  protected double strToDouble(String src, int base, final double[] powers) {
+  protected double strToDouble(String src, int base, final BigDecimal[] powers) {
     double ret = 0;
     final int nLen = src.length();
     int power;
@@ -346,7 +362,7 @@ public final class CmsKeyIdGenerator {
 
         // Find the character in the conversion table and add to the value.
         if (ALPHABET[power] == c) {
-          ret += (power * powers[nLen - i - 1]);
+          ret += (power * powers[nLen - i - 1].doubleValue());
           break;
         }
       }
@@ -426,64 +442,24 @@ public final class CmsKeyIdGenerator {
     return rend.makeKey(!StringUtils.isBlank(staffId) ? staffId : DEFAULT_USER_ID, ts);
   }
 
-  //// -----------------------------------------------------------------------------
-  //// Function: GetUIIdentifierFromKey
-  ////
-  //// Description: Obtains UI displayable identifier from the generated key.
-  ////
-  //// Inputs: szKey - the previously generated key.
-  ////
-  //// Outputs: szUIIdentifier - the identifier (in base 10)
-  //// An empty string on an error.
-  //// RETURNS - <none>
-  //// -----------------------------------------------------------------------------
-  // void WINAPI _export GetUIIdentifierFromKey(const char *szKey, char *szUIIdentifier) {
-  // using namespace std;
-  // char szTimestamp[nSZ_KEYTIMESTAMP + 1];
-  // char szStaffId[nSZ_KEYSTAFFID + 1];
-  // string sConvertKeyToUI;
-  //
-  // try {
-  // AssertTrace(strlen(szKey) == nSZ_KEY, "'%s' has an invalid key string length.", szKey);
-  // AssertTrace(AfxIsValidAddress(szUIIdentifier, nSZ_UIIDENTIFIER + 1), "Invalid address specified
-  //// for szUIIdentifier.");
-  //
-  // StrCpyN(szTimestamp, szKey, nSZ_KEYTIMESTAMP);
-  // StrCpyN(szStaffId, szKey + nSZ_KEYTIMESTAMP, nSZ_KEYSTAFFID);
-  //
-  // // Convert the entire key to a displayable string (base 10).
-  // BaseConvert(szUIIdentifier, 10, nSZ_UIIDTIMESTAMP, szTimestamp, nDEFAULT_BASE);
-  // BaseConvert(szUIIdentifier + nSZ_UIIDTIMESTAMP, 10, nSZ_UIIDSTAFFID, szStaffId, nDEFAULT_BASE);
-  //
-  // sConvertKeyToUI = szUIIdentifier; // convert to std::string
-  // sConvertKeyToUI = sConvertKeyToUI.substr(0,4) + "-" + sConvertKeyToUI.substr(4, 4) + "-"
-  // + sConvertKeyToUI.substr(8, 4) + "-" + sConvertKeyToUI.substr(12); // insert 3 dashes every 4th
-  //// character
-  // StrCpyN(szUIIdentifier, sConvertKeyToUI.c_str(), nSZ_UIIDENTIFIER);
-  // } catch (std::exception e) {
-  // cerr << "***** CAUGHT EXCEPTION! ***** : " << e.what() << endl;
-  // szUIIdentifier[0] = '\0';
-  // }
-  // }
-
-  protected String baseConvert(int dstBase, int dstLen, String src, int srcBase) {
-    double d = 0;
-
-    // Source string => double.
-    if (srcBase == BASE_62_SIZE) {
-      d = strToDouble(src, srcBase, POWER_BASE62);
-    }
-
-    // double => string of specified base.
-    return doubleToStrN(dstLen, d, dstBase == 10 ? POWER_BASE10 : POWER_BASE62);
+  protected String base62ToBase10(int dstLen, String src) {
+    final double d = strToDouble(src, BASE_62_SIZE, POWER_BASE62);
+    LOGGER.debug("d={}", d);
+    return doubleToStrN(dstLen, d, POWER_BASE10);
   }
 
   public String getUIIdentifierFromKey(String key) {
-    String strTimestamp = key.substring(0, LEN_KEYTIMESTAMP);
-    String strStaffId = key.substring(LEN_KEYTIMESTAMP, LEN_KEYTIMESTAMP + LEN_KEYSTAFFID);
+    final String strTimestamp = key.substring(0, LEN_KEYTIMESTAMP);
+    final String strStaffId = key.substring(LEN_KEYTIMESTAMP);
+    LOGGER.debug("strTimestamp={}, strStaffId={}", strTimestamp, strStaffId);
 
-    String fmtTs = baseConvert(10, nSZ_UIIDTIMESTAMP, strTimestamp, BASE_62_SIZE);
-    String fmtStaff = baseConvert(10, nSZ_UIIDSTAFFID, strStaffId, BASE_62_SIZE);
+    // final String strHalfTs = strTimestamp.substring(0, 3);
+    // final String fmtHalfTs = base62ToBase10(5, strHalfTs);
+    // LOGGER.debug("strHalfTs={}, fmtHalfTs={}", strHalfTs, fmtHalfTs);
+
+    final String fmtTs = base62ToBase10(LEN_UIIDTIMESTAMP, strTimestamp);
+    final String fmtStaff = base62ToBase10(LEN_UIIDSTAFFID, strStaffId);
+    LOGGER.debug("fmtTs={}, fmtStaff={}", fmtTs, fmtStaff);
 
     StringBuilder buf1 = new StringBuilder();
     buf1.append(fmtTs).append(fmtStaff);
@@ -506,7 +482,7 @@ public final class CmsKeyIdGenerator {
   public static void main(String[] args) throws InterruptedException {
     CmsKeyIdGenerator rend = new CmsKeyIdGenerator();
     final String uiId = rend.getUIIdentifierFromKey("5Y3vKVs0X5");
-    LOGGER.debug("uiId={}", uiId);
+    LOGGER.debug("UI Id: {}", uiId);
   }
 
 }
