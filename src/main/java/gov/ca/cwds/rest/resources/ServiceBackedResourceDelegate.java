@@ -2,6 +2,8 @@ package gov.ca.cwds.rest.resources;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -100,9 +102,20 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
       if (e.getCause() instanceof EntityExistsException) {
         response = Response.status(Response.Status.CONFLICT).entity(null).build();
       } else if (e.getCause() instanceof ValidationException) {
-        ErrorMessage message =
-            new ErrorMessage(ErrorMessage.ErrorType.VALIDATION, e.getMessage(), "");
-        response = Response.status(Response.Status.BAD_REQUEST).entity(message).build();
+        Set<ErrorMessage> errorMessages = new HashSet<>();
+        String[] messages = e.getMessage().split("&&");
+        if (messages.length > 1) {
+          for (int i = 0; i < messages.length; i++) {
+            ErrorMessage message =
+                new ErrorMessage(ErrorMessage.ErrorType.VALIDATION, messages[i], "");
+            errorMessages.add(message);
+          }
+        } else {
+          ErrorMessage message =
+              new ErrorMessage(ErrorMessage.ErrorType.VALIDATION, messages[0], "");
+          errorMessages.add(message);
+        }
+        response = Response.status(Response.Status.BAD_REQUEST).entity(errorMessages).build();
       } else {
         LOGGER.error("Unable to handle request", e);
         response = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
