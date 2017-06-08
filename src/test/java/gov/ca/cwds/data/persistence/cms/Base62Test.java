@@ -41,7 +41,7 @@ public class Base62Test {
 
   @Test
   public void testIntegerFromString2() throws Exception {
-    assertEquals(2051, Base62.toBase10("0X5"));
+    assertEquals(315207686768L, Base62.toBase10("5Y3vKVs"));
   }
 
   @Test

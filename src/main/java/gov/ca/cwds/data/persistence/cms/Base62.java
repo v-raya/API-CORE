@@ -9,7 +9,7 @@ public class Base62 {
 
   private Base62() {}
 
-  public static String fromBase10(int i) {
+  public static String fromBase10(long i) {
     StringBuilder sb = new StringBuilder("");
     if (i == 0) {
       return "a";
@@ -20,9 +20,9 @@ public class Base62 {
     return sb.reverse().toString();
   }
 
-  private static int fromBase10(int i, final StringBuilder sb) {
-    int rem = i % BASE;
-    sb.append(ALPHABET.charAt(rem));
+  private static long fromBase10(long i, final StringBuilder sb) {
+    long rem = i % BASE;
+    sb.append(ALPHABET.charAt((int) rem));
     return i / BASE;
   }
 
@@ -30,16 +30,16 @@ public class Base62 {
     return toBase10(new StringBuilder(str).reverse().toString().toCharArray());
   }
 
-  private static int toBase10(char[] chars) {
-    int n = 0;
+  private static long toBase10(char[] chars) {
+    long n = 0;
     for (int i = chars.length - 1; i >= 0; i--) {
       n += toBase10(ALPHABET.indexOf(chars[i]), i);
     }
     return n;
   }
 
-  private static int toBase10(int n, int pow) {
-    return n * (int) Math.pow(BASE, pow);
+  private static long toBase10(long n, int pow) {
+    return n * (long) Math.pow(BASE, pow);
   }
 }
 

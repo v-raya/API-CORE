@@ -299,17 +299,20 @@ public final class CmsKeyIdGenerator {
    */
   public String doubleToStrN(int dstLen, double src, final BigDecimal[] powers) {
     int i;
-    int power = 0;
+    int p = 0;
     double integral, fractional, raw;
     final char[] dest = new char[20];
 
+    final BigDecimal bdSrc = BigDecimal.valueOf(src);
+    BigDecimal bdRaw;
+
     // Determine the largest power of the number.
-    for (i = 0; src >= powers[i].doubleValue(); i++, power++) {
+    for (i = 0; bdSrc.doubleValue() >= powers[i].doubleValue(); i++, p++) { // NOSONAR
       // Just increment power.
     }
 
     // Left-pad the string with the destination string width.
-    final int pad = dstLen - power;
+    final int pad = dstLen - p;
 
     if (pad < 0) {
       throw new ServiceException("invalid pad value");
@@ -318,20 +321,24 @@ public final class CmsKeyIdGenerator {
         dest[i] = ALPHABET[0];
       }
 
-      for (i = 0; i < power; i++) {
-        raw = src / powers[power - i - 1].doubleValue();
+      for (i = 0; i < p; i++) {
+        raw = src / powers[p - i - 1].doubleValue();
+
+        // bdRaw = bdSrc.divide(powers[p - i - 1], RoundingMode.DOWN);
 
         // Break down the number and convert the integer portion to a character.
-        // nFraction = modf(nSrcVal / pnPowVec[nPower - i - 1], &nInteger);
+        integral = (int) raw;
 
-        integral = Math.floor(raw);
-        fractional = raw - integral;
+        LOGGER.debug("raw={}, integral={}", raw, integral);
 
+        // integral = (int) bdRaw.doubleValue();
+        // fractional = raw - integral;
+
+        // integral = bdRaw.toBigInteger().intValue();
         // final double d = Math.floor(integral); // wrong??
-        final double d = (int) raw;
 
-        dest[i + pad] = ALPHABET[(int) Math.abs(d)];
-        src -= (d * powers[power - i - 1].doubleValue()); // NOSONAR
+        dest[i + pad] = ALPHABET[(int) Math.abs(integral)];
+        src -= (integral * powers[p - i - 1].doubleValue()); // NOSONAR
       }
     }
 
