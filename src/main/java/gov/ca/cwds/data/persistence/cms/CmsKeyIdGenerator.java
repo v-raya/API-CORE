@@ -213,7 +213,7 @@ public final class CmsKeyIdGenerator {
       1.240176943465753e+025, 7.689097049487666e+026, 4.767240170682353e+028,
       2.955688905823059e+030, 1.832527121610297e+032};
 
-  private static final char[] BASE64_CHARS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
+  private static final char[] ALPHABET = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
       'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
       'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
       'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
@@ -301,27 +301,32 @@ public final class CmsKeyIdGenerator {
       // Just increment power.
     }
 
-    // LOGGER.debug("power={}, i={}", power, i);
-    // Use the destination string width to left-pad the string.
+    // Left-pad the string with the destination string width.
     final int pad = dstLen - power;
-    // LOGGER.debug("pad={}", pad);
 
     if (pad < 0) {
-      throw new ServiceException("invalid nPad value");
+      throw new ServiceException("invalid pad value");
     } else {
       for (i = 0; i < pad; i++) {
-        dest[i] = BASE64_CHARS[0];
+        dest[i] = ALPHABET[0];
       }
 
       for (i = 0; i < power; i++) {
         nInteger = src / powers[power - i - 1];
-        double finalValue = Math.floor(nInteger);
-        dest[i + pad] = BASE64_CHARS[(int) Math.abs(finalValue)];
-        src -= (finalValue * powers[power - i - 1]); // NOSONAR
+        final double d = Math.floor(nInteger);
+        dest[i + pad] = ALPHABET[(int) Math.abs(d)];
+        src -= (d * powers[power - i - 1]); // NOSONAR
       }
     }
 
-    return String.valueOf(dest);
+    StringBuilder buf = new StringBuilder();
+    for (final char c : dest) {
+      if (c > 0) {
+        buf.append(c);
+      }
+    }
+
+    return buf.toString();
   }
 
   /**
@@ -340,7 +345,7 @@ public final class CmsKeyIdGenerator {
       for (power = 0; power < base; power++) {
 
         // Find the character in the conversion table and add to the value.
-        if (BASE64_CHARS[power] == c) {
+        if (ALPHABET[power] == c) {
           ret += (power * powers[nLen - i - 1]);
           break;
         }
@@ -477,10 +482,12 @@ public final class CmsKeyIdGenerator {
     String strTimestamp = key.substring(0, LEN_KEYTIMESTAMP);
     String strStaffId = key.substring(LEN_KEYTIMESTAMP, LEN_KEYTIMESTAMP + LEN_KEYSTAFFID);
 
-    String first = baseConvert(10, nSZ_UIIDTIMESTAMP, strTimestamp, BASE_62_SIZE);
-    String second = baseConvert(10, nSZ_UIIDSTAFFID, strStaffId, BASE_62_SIZE);
+    String fmtTs = baseConvert(10, nSZ_UIIDTIMESTAMP, strTimestamp, BASE_62_SIZE);
+    String fmtStaff = baseConvert(10, nSZ_UIIDSTAFFID, strStaffId, BASE_62_SIZE);
 
-    String whole = first + second;
+    StringBuilder buf1 = new StringBuilder();
+    buf1.append(fmtTs).append(fmtStaff);
+    final String whole = buf1.toString();
     LOGGER.debug("whole={}", whole);
 
     StringBuilder buf = new StringBuilder();
