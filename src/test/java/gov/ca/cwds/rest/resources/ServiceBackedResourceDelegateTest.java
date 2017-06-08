@@ -9,6 +9,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
@@ -37,9 +38,11 @@ import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.services.ServiceException;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
-import java.util.HashSet;
-import java.util.Set;
-
+/**
+ * @author CWDS API Team
+ *
+ */
+@SuppressWarnings("javadoc")
 public class ServiceBackedResourceDelegateTest {
   private static final Long ID_NOT_FOUND = new Long(-1);
   private static final Long ID_FOUND = new Long(1);
@@ -56,6 +59,7 @@ public class ServiceBackedResourceDelegateTest {
   private static ResourceDelegateTestDomainObject unexpectedExceptionDomainObject;
   private static ResourceDelegateTestDomainObject validationErrorMessageDomainObject;
 
+
   @ClassRule
   public static final ResourceTestRule inMemoryResource = ResourceTestRule.builder()
       .addResource(new WrapperResource(new ServiceBackedResourceDelegate(crudsService))).build();
@@ -71,7 +75,7 @@ public class ServiceBackedResourceDelegateTest {
     uniqueDomainObject = new ResourceDelegateTestDomainObject(ID_NOT_FOUND);
     unexpectedExceptionDomainObject = new ResourceDelegateTestDomainObject(new Long(13));
     validationErrorMessageDomainObject = new ResourceDelegateTestDomainObject(new Long(15));
-    ArrayList messages = new ArrayList();
+    ArrayList messages = new ArrayList<>();
     validationErrorMessageDomainObject.setMessages(messages);
 
     when(crudsService.find(ID_NOT_FOUND)).thenReturn(null);
@@ -84,7 +88,8 @@ public class ServiceBackedResourceDelegateTest {
         .thenThrow(new ServiceException(new EntityExistsException()));
     when(crudsService.create(eq(unexpectedExceptionDomainObject)))
         .thenThrow(new ServiceException(new RuntimeException()));
-    when(crudsService.create(eq(validationErrorMessageDomainObject))).thenReturn(validationErrorMessageDomainObject);
+    when(crudsService.create(eq(validationErrorMessageDomainObject)))
+        .thenReturn(validationErrorMessageDomainObject);
     when(crudsService.update(eq(1L), eq(unexpectedExceptionDomainObject)))
         .thenThrow(new ServiceException(new RuntimeException()));
     when(crudsService.update(eq(-1L), eq(uniqueDomainObject)))
