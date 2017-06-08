@@ -318,6 +318,36 @@ public final class CmsKeyIdGenerator {
   }
 
   /**
+   * @param srcStr source string
+   * @param srcBase base 10 or 62
+   * @param powers powers values of this base
+   * @return double representation of the string
+   */
+  protected double strToDouble(String srcStr, int srcBase, final double[] powers) {
+    double ret = 0;
+    final int nLen = srcStr.length();
+    int nPower;
+
+    // Process all characters in the string.
+    for (int i = 0; i < nLen; i++) {
+      for (nPower = 0; nPower < srcBase; nPower++) {
+        // Find the character in the conversion table and add to the value.
+        if (acConvTbl[nPower] == srcStr.indexOf(i)) {
+          ret += (nPower * powers[nLen - i - 1]);
+          break;
+        }
+      }
+
+      if (nPower == srcBase) {
+        // Character too big for the base! Bomb out!
+        return -1;
+      }
+    }
+
+    return ret;
+  }
+
+  /**
    * Get preferred timestamp seed, either provided or current date/time if null.
    * 
    * @param ts timestamp to use or null for current date/time
@@ -387,6 +417,42 @@ public final class CmsKeyIdGenerator {
   // memcpy (szDst, szSrc, nLen); // copy
   // szDst[nLen] = '\0'; // terminate
   // return szDst;
+  // }
+
+  //// -----------------------------------------------------------------------------
+  //// Function: StrToDouble
+  ////
+  //// Description: Converts a string (in specified base) to a double.
+  ////
+  //// Inputs: szSrcStr - the key string (in base nSrcBase)
+  //// nSrcBase - the base of the key
+  //// pnPowVec - the power vector for the source base
+  ////
+  //// Outputs:
+  //// RETURNS - the key value; -1 indicates an error.
+  //// -----------------------------------------------------------------------------
+  // static double StrToDouble(const char *szSrcStr, int nSrcBase, double *pnPowVec) {
+  // double nSrcVal = 0;
+  // int nLen = strlen(szSrcStr);
+  // int nPower;
+  //
+  // // Process all characters in the string.
+  // for (int i = 0; i < nLen; i++) {
+  // for (nPower = 0; nPower < nSrcBase; nPower++) {
+  // // Find the character in the conversion table and add to the value.
+  // if (acConvTbl[nPower] == szSrcStr[i]) {
+  // nSrcVal += (nPower * pnPowVec[nLen - i - 1]);
+  // break;
+  // }
+  // }
+  //
+  // if (nPower == nSrcBase) {
+  // // Character too big for the base! Bomb out!
+  // return -1;
+  // }
+  // }
+  //
+  // return nSrcVal;
   // }
 
   //// -----------------------------------------------------------------------------
@@ -529,6 +595,9 @@ public final class CmsKeyIdGenerator {
 
   public static String getUIIdentifierFromKey(String key) {
     final int intTs = Base62.toBase10(key.substring(3));
+    
+    double strToDouble(key, int srcBase, final double[] powers);
+    nSrcVal = StrToDouble(szSrcStr, nSrcBase, const_cast<double*>(anPowVec62));
 
     return "";
   }
