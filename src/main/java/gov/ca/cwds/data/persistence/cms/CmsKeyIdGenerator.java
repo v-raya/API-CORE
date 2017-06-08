@@ -487,11 +487,12 @@ public final class CmsKeyIdGenerator {
 
     StringBuilder buf1 = new StringBuilder();
     buf1.append(fmtTs).append(fmtStaff);
-    final String whole = buf1.toString();
-    LOGGER.debug("whole={}", whole);
+    final String w = buf1.toString();
+    LOGGER.debug("w={}", w);
 
     StringBuilder buf = new StringBuilder();
-    buf.append(whole.substring(0, 4));
+    buf.append(w.substring(0, 4)).append('-').append(w.substring(4, 8)).append('-')
+        .append(w.substring(8, 12)).append('-').append(w.substring(12));
 
     return buf.toString();
   }
@@ -504,7 +505,8 @@ public final class CmsKeyIdGenerator {
    */
   public static void main(String[] args) throws InterruptedException {
     CmsKeyIdGenerator rend = new CmsKeyIdGenerator();
-    rend.getUIIdentifierFromKey("5Y3vKVs0X5");
+    final String uiId = rend.getUIIdentifierFromKey("5Y3vKVs0X5");
+    LOGGER.debug("uiId={}", uiId);
   }
 
 }
