@@ -31,7 +31,7 @@ public class Base62Test {
     n += Base62.ALPHABET.indexOf(chars[2]) * (int) Math.pow(62, 2);
     n += Base62.ALPHABET.indexOf(chars[3]) * (int) Math.pow(62, 1);
     n += Base62.ALPHABET.indexOf(chars[4]) * (int) Math.pow(62, 0);
-    assertEquals(str, Base62.fromBase10(n));
+    assertEquals(str, Base62.toBase62(n));
   }
 
   @Test
@@ -51,10 +51,10 @@ public class Base62Test {
 
   @Test
   public void testFromZero() {
-    assertEquals("a", Base62.fromBase10(0));
-    assertEquals("1", Base62.fromBase10(1));
-    assertEquals("2", Base62.fromBase10(2));
-    assertEquals("3", Base62.fromBase10(3));
+    assertEquals("a", Base62.toBase62(0));
+    assertEquals("1", Base62.toBase62(1));
+    assertEquals("2", Base62.toBase62(2));
+    assertEquals("3", Base62.toBase62(3));
   }
 }
 

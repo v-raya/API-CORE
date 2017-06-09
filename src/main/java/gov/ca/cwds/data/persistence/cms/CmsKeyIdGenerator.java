@@ -300,16 +300,14 @@ public final class CmsKeyIdGenerator {
   public String doubleToStrN(int dstLen, double src, final BigDecimal[] powers) {
     int i;
     int p = 0;
-    double integral, fractional, raw;
+    double integral, raw;
     final char[] dest = new char[20];
 
     final BigDecimal bdSrc = BigDecimal.valueOf(src);
     // BigDecimal bdRaw;
 
     // Determine the largest power of the number.
-    for (i = 0; bdSrc.doubleValue() >= powers[i].doubleValue(); i++, p++) { // NOSONAR
-      // Just increment power.
-    }
+    for (i = 0; bdSrc.doubleValue() >= powers[i].doubleValue(); i++, p++); // NOSONAR
 
     // Left-pad the string with the destination string width.
     final int pad = dstLen - p;
@@ -399,18 +397,18 @@ public final class CmsKeyIdGenerator {
   }
 
   /**
-   * Overload. Generate ten character, base62 key from given staff id and timestamp.
+   * Overload. Generate 10 character, base-62 key from given staff id and timestamp.
    * 
    * @param staffId 3-char, base-62 staff id
    * @param ts timestamp to use or null for current date/time
-   * @return generated ten character, base-62 key
+   * @return generated 10 character, base-62 key
    */
   protected String makeKey(final String staffId, final Date ts) {
     return makeKey(new StringKey(staffId), ts);
   }
 
   /**
-   * Generate ten character, base62 key from given staff id and timestamp.
+   * Generate 10 character, base-62 key from given staff id and timestamp.
    * 
    * @param wrap the wrap
    * @param ts timestamp to use or null for current date/time
@@ -447,11 +445,6 @@ public final class CmsKeyIdGenerator {
     return rend.makeKey(!StringUtils.isBlank(staffId) ? staffId : DEFAULT_USER_ID, ts);
   }
 
-  protected String base62ToBase10(int dstLen, String src) {
-    final double d = strToDouble(src, BASE_62_SIZE, POWER_BASE62);
-    return doubleToStrN(dstLen, d, POWER_BASE10);
-  }
-
   /**
    * Convert a 10 character, base 62 legacy key to base 10 in format 0000-0000-0000-0000000. Legacy
    * code refers to this as a UI identifier.
@@ -477,21 +470,6 @@ public final class CmsKeyIdGenerator {
         .append(staffB10.substring(0));
 
     return buf.toString();
-  }
-
-  /**
-   * TODO: move to a test class.
-   * 
-   * @param args command line
-   * @throws InterruptedException checks the exception
-   */
-  public static void main(String[] args) throws InterruptedException {
-    CmsKeyIdGenerator rend = new CmsKeyIdGenerator();
-    final String uiId = rend.getUIIdentifierFromKey("5Y3vKVs0X5");
-    LOGGER.debug("UI Id: {}", uiId);
-
-    final String key = CmsKeyIdGenerator.generate("0X5");
-    LOGGER.debug("generated key: {}", key);
   }
 
 }

@@ -331,21 +331,6 @@ public final class CmsKeyIdGeneratorTest {
     assertThat(actual, is(equalTo(expected)));
   }
 
-  // @Test
-  // public void base62ToBase10_Args__int__String() throws Exception {
-  // final CmsKeyIdGenerator target = null;
-  // // given
-  // int dstLen = 0;
-  // String src = null;
-  // // e.g. : given(mocked.called()).willReturn(1);
-  // // when
-  // String actual = target.base62ToBase10(dstLen, src);
-  // // then
-  // // e.g. : verify(mocked).called();
-  // String expected = null;
-  // assertThat(actual, is(equalTo(expected)));
-  // }
-
   @Test
   public void getUIIdentifierFromKey_Args__String() throws Exception {
     // given
@@ -355,17 +340,6 @@ public final class CmsKeyIdGeneratorTest {
     String actual = CmsKeyIdGenerator.getUIIdentifierFromKey(key);
     final String expected = "0315-2076-8676-8002051";
     assertThat(actual, is(equalTo(expected)));
-  }
-
-  @Test
-  public void main_Args__StringArray() throws Exception {
-    // given
-    String[] args = new String[] {};
-    // e.g. : given(mocked.called()).willReturn(1);
-    // when
-    CmsKeyIdGenerator.main(args);
-    // then
-    // e.g. : verify(mocked).called();
   }
 
 }
