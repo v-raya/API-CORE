@@ -1,20 +1,20 @@
 package gov.ca.cwds.rest.api;
 
-import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
-
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.List;
+
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 
 /**
  * Marker indicating an object is used as a response from the API.
  * 
  * @author CWDS API Team
  */
-public interface Response {
+public interface Response extends Serializable {
 
   /**
-   * Tells whether Jersey response contains additional messages,
+   * Tells whether Jersey response contains additional messages.
    *
    * @return whether Jersey response contains additional messages
    */
@@ -23,13 +23,12 @@ public interface Response {
   }
 
   /**
-   * Returns Set of additional messages from Jersey response.
+   * Returns a List of additional messages from Jersey response.
    *
-   * @return Set of messages or empty set if none
+   * @return List of messages or empty List if none
    * @see #hasMessages()
    */
-  default ArrayList<ErrorMessage> getMessages() {
-
+  default List<ErrorMessage> getMessages() {
     return new ArrayList<>();
   }
 }

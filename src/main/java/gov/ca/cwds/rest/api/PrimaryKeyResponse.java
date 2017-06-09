@@ -25,8 +25,13 @@ public class PrimaryKeyResponse implements Response {
   }
 
   @Override
-  public boolean hasMessages() { return false; }
+  public boolean hasMessages() {
+    return false;
+  }
 
   @Override
-  public ArrayList getMessages() { return null; }
+  public ArrayList getMessages() {
+    return null;
+  }
+
 }
