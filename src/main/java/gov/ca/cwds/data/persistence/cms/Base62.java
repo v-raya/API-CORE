@@ -30,7 +30,7 @@ public class Base62 {
     return toBase10(new StringBuilder(str).reverse().toString().toCharArray());
   }
 
-  private static long toBase10(char[] chars) {
+  private static long toBase10(final char[] chars) {
     long n = 0;
     for (int i = chars.length - 1; i >= 0; i--) {
       n += toBase10(ALPHABET.indexOf(chars[i]), i);

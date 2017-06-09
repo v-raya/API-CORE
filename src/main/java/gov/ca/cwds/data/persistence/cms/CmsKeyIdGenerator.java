@@ -329,8 +329,7 @@ public final class CmsKeyIdGenerator {
         // Break down the number and convert the integer portion to a character.
         integral = (int) raw;
 
-        LOGGER.debug("raw={}, integral={}", raw, integral);
-
+        // LOGGER.debug("raw={}, integral={}", raw, integral);
         // integral = (int) bdRaw.doubleValue();
         // fractional = raw - integral;
 
@@ -451,7 +450,7 @@ public final class CmsKeyIdGenerator {
 
   protected String base62ToBase10(int dstLen, String src) {
     final double d = strToDouble(src, BASE_62_SIZE, POWER_BASE62);
-    LOGGER.debug("d={}", d);
+    // LOGGER.debug("d={}", d);
     return doubleToStrN(dstLen, d, POWER_BASE10);
   }
 
@@ -460,20 +459,17 @@ public final class CmsKeyIdGenerator {
     final String strStaffId = key.substring(LEN_KEYTIMESTAMP);
     LOGGER.debug("strTimestamp={}, strStaffId={}", strTimestamp, strStaffId);
 
-    // final String strHalfTs = strTimestamp.substring(0, 3);
-    // final String fmtHalfTs = base62ToBase10(5, strHalfTs);
-    // LOGGER.debug("strHalfTs={}, fmtHalfTs={}", strHalfTs, fmtHalfTs);
-
-    final String fmtTs = base62ToBase10(LEN_UIIDTIMESTAMP, strTimestamp);
-    final String fmtStaff = base62ToBase10(LEN_UIIDSTAFFID, strStaffId);
-    LOGGER.debug("fmtTs={}, fmtStaff={}", fmtTs, fmtStaff);
+    final String ts =
+        StringUtils.leftPad(String.valueOf(Base62.toBase10(strTimestamp)), LEN_UIIDTIMESTAMP, '0');
+    final String staffId =
+        StringUtils.leftPad(String.valueOf(Base62.toBase10(strStaffId)), LEN_UIIDSTAFFID, '0');
 
     StringBuilder buf1 = new StringBuilder();
-    buf1.append(fmtTs).append(fmtStaff);
+    buf1.append(ts).append(staffId);
     final String w = buf1.toString();
-    LOGGER.debug("w={}", w);
+    LOGGER.debug("w={}, ts={}, staffId={}", w, ts, staffId);
 
-    StringBuilder buf = new StringBuilder();
+    final StringBuilder buf = new StringBuilder();
     buf.append(w.substring(0, 4)).append('-').append(w.substring(4, 8)).append('-')
         .append(w.substring(8, 12)).append('-').append(w.substring(12));
 
@@ -490,6 +486,9 @@ public final class CmsKeyIdGenerator {
     CmsKeyIdGenerator rend = new CmsKeyIdGenerator();
     final String uiId = rend.getUIIdentifierFromKey("5Y3vKVs0X5");
     LOGGER.debug("UI Id: {}", uiId);
+
+    final String key = CmsKeyIdGenerator.generate("0X5");
+    LOGGER.debug("generated key: {}", key);
   }
 
 }
