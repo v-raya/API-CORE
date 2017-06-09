@@ -228,7 +228,7 @@ public final class CmsKeyIdGenerator {
   /**
    * Static class only, do not instantiate.
    */
-  private CmsKeyIdGenerator() {
+  CmsKeyIdGenerator() {
     // Static class only, do not instantiate.
   }
 
@@ -459,7 +459,7 @@ public final class CmsKeyIdGenerator {
    * @param key 10 character, base-62 legacy key
    * @return UI identifier in format 0000-0000-0000-0000000
    */
-  public String getUIIdentifierFromKey(String key) {
+  public static String getUIIdentifierFromKey(String key) {
     final String tsB62 = key.substring(0, LEN_KEYTIMESTAMP);
     final String staffB62 = key.substring(LEN_KEYTIMESTAMP);
     LOGGER.debug("strTimestamp={}, strStaffId={}", tsB62, staffB62);
@@ -473,7 +473,8 @@ public final class CmsKeyIdGenerator {
 
     final StringBuilder buf = new StringBuilder();
     buf.append(tsB10.substring(0, 4)).append('-').append(tsB10.substring(4, 8)).append('-')
-        .append(tsB10.substring(8, 12)).append('-').append(staffB10.substring(0));
+        .append(tsB10.substring(8, 12)).append('-').append(tsB10.substring(12))
+        .append(staffB10.substring(0));
 
     return buf.toString();
   }
