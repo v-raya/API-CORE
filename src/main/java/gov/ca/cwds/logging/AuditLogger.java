@@ -31,7 +31,7 @@ public interface AuditLogger {
   public void storeRemoteAddress(String remoteAddress);
 
   /**
-   * Store the userid
+   * Store the user id
    * 
    * @param userid The user id
    */
@@ -51,6 +51,9 @@ public interface AuditLogger {
    */
   public void storeSessionId(String sessionId);
 
+  /**
+   * Clear the thread's MDC.
+   */
   public void teardownMDC();
 
 }
