@@ -304,7 +304,7 @@ public final class CmsKeyIdGenerator {
     final char[] dest = new char[20];
 
     final BigDecimal bdSrc = BigDecimal.valueOf(src);
-    BigDecimal bdRaw;
+    // BigDecimal bdRaw;
 
     // Determine the largest power of the number.
     for (i = 0; bdSrc.doubleValue() >= powers[i].doubleValue(); i++, p++) { // NOSONAR
@@ -323,7 +323,6 @@ public final class CmsKeyIdGenerator {
 
       for (i = 0; i < p; i++) {
         raw = src / powers[p - i - 1].doubleValue();
-
         // bdRaw = bdSrc.divide(powers[p - i - 1], RoundingMode.DOWN);
 
         // Break down the number and convert the integer portion to a character.
