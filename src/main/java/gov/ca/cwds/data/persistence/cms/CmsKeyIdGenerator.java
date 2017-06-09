@@ -450,28 +450,31 @@ public final class CmsKeyIdGenerator {
 
   protected String base62ToBase10(int dstLen, String src) {
     final double d = strToDouble(src, BASE_62_SIZE, POWER_BASE62);
-    // LOGGER.debug("d={}", d);
     return doubleToStrN(dstLen, d, POWER_BASE10);
   }
 
+  /**
+   * Convert a 10 character, base 62 legacy key to base 10 in format 0000-0000-0000-0000000. Legacy
+   * code refers to this as a UI identifier.
+   * 
+   * @param key 10 character, base-62 legacy key
+   * @return UI identifier in format 0000-0000-0000-0000000
+   */
   public String getUIIdentifierFromKey(String key) {
-    final String strTimestamp = key.substring(0, LEN_KEYTIMESTAMP);
-    final String strStaffId = key.substring(LEN_KEYTIMESTAMP);
-    LOGGER.debug("strTimestamp={}, strStaffId={}", strTimestamp, strStaffId);
+    final String tsB62 = key.substring(0, LEN_KEYTIMESTAMP);
+    final String staffB62 = key.substring(LEN_KEYTIMESTAMP);
+    LOGGER.debug("strTimestamp={}, strStaffId={}", tsB62, staffB62);
 
-    final String ts =
-        StringUtils.leftPad(String.valueOf(Base62.toBase10(strTimestamp)), LEN_UIIDTIMESTAMP, '0');
-    final String staffId =
-        StringUtils.leftPad(String.valueOf(Base62.toBase10(strStaffId)), LEN_UIIDSTAFFID, '0');
+    final String tsB10 =
+        StringUtils.leftPad(String.valueOf(Base62.toBase10(tsB62)), LEN_UIIDTIMESTAMP, '0');
+    final String staffB10 =
+        StringUtils.leftPad(String.valueOf(Base62.toBase10(staffB62)), LEN_UIIDSTAFFID, '0');
 
-    StringBuilder buf1 = new StringBuilder();
-    buf1.append(ts).append(staffId);
-    final String w = buf1.toString();
-    LOGGER.debug("w={}, ts={}, staffId={}", w, ts, staffId);
+    LOGGER.debug("tsB10={}, staffB10={}", tsB10, staffB10);
 
     final StringBuilder buf = new StringBuilder();
-    buf.append(w.substring(0, 4)).append('-').append(w.substring(4, 8)).append('-')
-        .append(w.substring(8, 12)).append('-').append(w.substring(12));
+    buf.append(tsB10.substring(0, 4)).append('-').append(tsB10.substring(4, 8)).append('-')
+        .append(tsB10.substring(8, 12)).append('-').append(staffB10.substring(0));
 
     return buf.toString();
   }
