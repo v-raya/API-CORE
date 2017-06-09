@@ -121,9 +121,13 @@ public final class CmsKeyIdGenerator {
   private static final String DEFAULT_USER_ID = "0X5";
 
   /**
+   * Self-validating bean class for staff id.
+   * 
+   * <p>
    * javax.validation only works on real "bean" classes, not Java native classes like String or
-   * Long. Therefore, we must wrap the incoming staff id in a small class, which follows the Java
-   * Bean specification (i.e., getters and setters).
+   * Long. Therefore, wrap the incoming staff id in a small class, which follows the Java Bean
+   * specification (i.e., getters and setters).
+   * </p>
    * 
    * @author CWDS API Team
    */
@@ -182,21 +186,19 @@ public final class CmsKeyIdGenerator {
   private static final int LEN_UIIDSTAFFID = 6; // for converting a key to a UI identifier
   private static final int LEN_UIIDTIMESTAMP = 13;
 
-  private static final float nSHIFT_HSECOND = 1.71798692E10f; // NOSONAR 34 bit shift (2 to the 34th
-  // power)
+  private static final float nSHIFT_HSECOND = 1.71798692E10f; // NOSONAR 34 bit shift (2 ^ 34)
 
-  private static final float nSHIFT_SECOND = 2.68435456E8f; // NOSONAR 28 bit shift (2 to the 28th
-                                                            // power)
+  private static final float nSHIFT_SECOND = 2.68435456E8f; // NOSONAR 28 bit shift (2 ^ 28)
 
-  private static final float nSHIFT_MINUTE = 4194304; // NOSONAR 22 bit shift (2 to the 22nd power)
+  private static final float nSHIFT_MINUTE = 4194304; // NOSONAR 22 bit shift (2 ^ 22)
 
-  private static final float nSHIFT_HOUR = 131072; // NOSONAR 17 bit shift (2 to the 17th power)
+  private static final float nSHIFT_HOUR = 131072; // NOSONAR 17 bit shift (2 ^ 17)
 
-  private static final float nSHIFT_DAY = 4096; // NOSONAR 12 bit shift (2 to the 12th power)
+  private static final float nSHIFT_DAY = 4096; // NOSONAR 12 bit shift (2 ^ 12)
 
-  private static final float nSHIFT_MONTH = 256; // NOSONAR 8 bit shift (2 to the 8th power)
+  private static final float nSHIFT_MONTH = 256; // NOSONAR 8 bit shift (2 ^ 8)
 
-  private static final float nSHIFT_YEAR = 1; // NOSONAR 0 bit shift (2 to the 0th power)
+  private static final float nSHIFT_YEAR = 1; // NOSONAR 0 bit shift (2 ^ 0)
 
   private static final BigDecimal[] POWER_BASE10 = {BigDecimal.valueOf(1.000000000000000e+000f),
       BigDecimal.valueOf(1.000000000000000e+001f), BigDecimal.valueOf(1.000000000000000e+002f),
@@ -248,7 +250,10 @@ public final class CmsKeyIdGenerator {
    * Format the CMS timestamp String, the last 7 characters of the key.
    * 
    * <p>
-   * Code taken from the original C++ algorithm.
+   * Code taken from the original C++ algorithm, designed for a fat client Visual Basic application.
+   * In that world of dial-up modems, the inefficiency of waiting on hundredths of a second for a
+   * single user was acceptable. Obviously, this approach makes little sense today in the age of web
+   * servers and pervasive, wireless internet connections.
    * </p>
    * 
    * @return CMS formatted timestamp
@@ -258,6 +263,7 @@ public final class CmsKeyIdGenerator {
     double nTimestamp = 0;
     double nPreviousTimestamp = 0; // previous value - used for UNIQUENESS!
 
+    // TODO: #145948067: make previous timestamp thread-safe.
     while (true) { // NOSONAR
       nTimestamp = timestampToDouble(getTimestampSeed(null));
 
