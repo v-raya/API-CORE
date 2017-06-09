@@ -5,14 +5,13 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.regex.Pattern;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -77,6 +76,12 @@ import gov.ca.cwds.rest.services.ServiceException;
 public final class CmsKeyIdGeneratorTest {
 
   private static final int GOOD_KEY_LEN = CmsPersistentObject.CMS_ID_LEN;
+
+  private static final Pattern RGX_LEGACY_KEY =
+      Pattern.compile("([a-z0-9]{10})", Pattern.CASE_INSENSITIVE);
+
+  private static final Pattern RGX_LEGACY_TIMESTAMP =
+      Pattern.compile("([a-z0-9]{7})", Pattern.CASE_INSENSITIVE);
 
   // private CmsKeyIdGenerator inst;
 
@@ -197,7 +202,7 @@ public final class CmsKeyIdGeneratorTest {
 
   @Test
   public void createTimestampStr_Args__Date() throws Exception {
-    CmsKeyIdGenerator target = new CmsKeyIdGenerator();
+    final CmsKeyIdGenerator target = new CmsKeyIdGenerator();
     // given
     Date ts = mock(Date.class);
     // e.g. : given(mocked.called()).willReturn(1);
@@ -205,36 +210,29 @@ public final class CmsKeyIdGeneratorTest {
     String actual = target.createTimestampStr(ts);
     // then
     // e.g. : verify(mocked).called();
-    String expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    assertTrue("bad generated timestamp", RGX_LEGACY_TIMESTAMP.matcher(actual).matches());
   }
 
-  @Test
-  public void createTimestampStr_Args__Date_T__ParseException() throws Exception {
-    CmsKeyIdGenerator target = new CmsKeyIdGenerator();
-    // given
-    Date ts = mock(Date.class);
-    // e.g. : given(mocked.called()).willReturn(1);
-    try {
-      // when
-      target.createTimestampStr(ts);
-      fail("Expected exception was not thrown!");
-    } catch (ParseException e) {
-      // then
-    }
-  }
+  // @Test
+  // public void createTimestampStr_Args__Date_T__ParseException() throws Exception {
+  // final CmsKeyIdGenerator target = new CmsKeyIdGenerator();
+  // // given
+  // Date ts = mock(Date.class);
+  // // e.g. : given(mocked.called()).willReturn(1);
+  // try {
+  // // when
+  // target.createTimestampStr(ts);
+  // fail("Expected exception was not thrown!");
+  // } catch (ParseException e) {
+  // // then
+  // }
+  // }
 
   @Test
   public void createTimestampStr_Args__() throws Exception {
-    CmsKeyIdGenerator target = new CmsKeyIdGenerator();
-    // given
-    // e.g. : given(mocked.called()).willReturn(1);
-    // when
-    String actual = target.createTimestampStr();
-    // then
-    // e.g. : verify(mocked).called();
-    String expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    final CmsKeyIdGenerator target = new CmsKeyIdGenerator();
+    final String actual = target.createTimestampStr();
+    assertTrue("bad generated timestamp", RGX_LEGACY_TIMESTAMP.matcher(actual).matches());
   }
 
   @Test
@@ -251,7 +249,7 @@ public final class CmsKeyIdGeneratorTest {
 
   // @Test
   // public void doubleToStrN_Args__int__double__BigDecimalArray() throws Exception {
-  // CmsKeyIdGenerator target = null;
+  // final CmsKeyIdGenerator target = null;
   // // given
   // int dstLen = 0;
   // double src = 0.0;
@@ -267,7 +265,7 @@ public final class CmsKeyIdGeneratorTest {
   //
   // @Test
   // public void strToDouble_Args__String__int__BigDecimalArray() throws Exception {
-  // CmsKeyIdGenerator target = null;
+  // final CmsKeyIdGenerator target = null;
   // // given
   // String src = null;
   // int base = 0;
@@ -281,80 +279,61 @@ public final class CmsKeyIdGeneratorTest {
   // assertThat(actual, is(equalTo(expected)));
   // }
 
-  @Test
-  public void getTimestampSeed_Args__Date() throws Exception {
-    CmsKeyIdGenerator target = new CmsKeyIdGenerator();
-    // given
-    Date ts = mock(Date.class);
-    // e.g. : given(mocked.called()).willReturn(1);
-    // when
-    Calendar actual = target.getTimestampSeed(ts);
-    // then
-    // e.g. : verify(mocked).called();
-    Calendar expected = null;
-    assertThat(actual, is(equalTo(expected)));
-  }
+  // @Test
+  // public void getTimestampSeed_Args__Date() throws Exception {
+  // final CmsKeyIdGenerator target = new CmsKeyIdGenerator();
+  // // given
+  // final Date ts = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2017-06-09 13:04:22");
+  // final Calendar actual = target.getTimestampSeed(ts);
+  // // then
+  // // e.g. : verify(mocked).called();
+  // Calendar expected = null;
+  // assertThat(actual, is(equalTo(expected)));
+  // }
+  //
+  // @Test
+  // public void getTimestampSeed_Args__Date_T__ParseException() throws Exception {
+  // final CmsKeyIdGenerator target = new CmsKeyIdGenerator();
+  // // given
+  // Date ts = mock(Date.class);
+  // // e.g. : given(mocked.called()).willReturn(1);
+  // try {
+  // // when
+  // target.getTimestampSeed(ts);
+  // fail("Expected exception was not thrown!");
+  // } catch (ParseException e) {
+  // // then
+  // }
+  // }
 
-  @Test
-  public void getTimestampSeed_Args__Date_T__ParseException() throws Exception {
-    CmsKeyIdGenerator target = new CmsKeyIdGenerator();
-    // given
-    Date ts = mock(Date.class);
-    // e.g. : given(mocked.called()).willReturn(1);
-    try {
-      // when
-      target.getTimestampSeed(ts);
-      fail("Expected exception was not thrown!");
-    } catch (ParseException e) {
-      // then
-    }
-  }
-
-  @Test
-  public void makeKey_Args__String__Date() throws Exception {
-    CmsKeyIdGenerator target = new CmsKeyIdGenerator();
-    // given
+  @Test(expected = ServiceException.class)
+  public void makeKey_Args__String__Date__null_staff() throws Exception {
+    final CmsKeyIdGenerator target = new CmsKeyIdGenerator();
     String staffId = null;
     Date ts = mock(Date.class);
-    // e.g. : given(mocked.called()).willReturn(1);
-    // when
     String actual = target.makeKey(staffId, ts);
-    // then
-    // e.g. : verify(mocked).called();
     String expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
-  public void generate_Args__String() throws Exception {
-    // given
-    String staffId = null;
-    // e.g. : given(mocked.called()).willReturn(1);
-    // when
-    String actual = CmsKeyIdGenerator.generate(staffId);
-    // then
-    // e.g. : verify(mocked).called();
-    String expected = null;
-    assertThat(actual, is(equalTo(expected)));
+  public void generate_Args__String__null_staff() throws Exception {
+    String actual = CmsKeyIdGenerator.generate(null);
+    assertTrue("bad generated key", RGX_LEGACY_KEY.matcher(actual).matches());
   }
 
   @Test
   public void generate_Args__String__Date() throws Exception {
-    // given
-    String staffId = null;
-    Date ts = mock(Date.class);
-    // e.g. : given(mocked.called()).willReturn(1);
-    // when
-    String actual = CmsKeyIdGenerator.generate(staffId, ts);
-    // then
-    // e.g. : verify(mocked).called();
-    String expected = null;
+    final String staffId = "0X5";
+    final Date ts = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2017-06-09 13:04:22");
+    final String actual = CmsKeyIdGenerator.generate(staffId, ts);
+    final String expected = "06SoJiH0X5";
     assertThat(actual, is(equalTo(expected)));
   }
 
   // @Test
   // public void base62ToBase10_Args__int__String() throws Exception {
-  // CmsKeyIdGenerator target = null;
+  // final CmsKeyIdGenerator target = null;
   // // given
   // int dstLen = 0;
   // String src = null;

@@ -240,7 +240,7 @@ public final class CmsKeyIdGenerator {
    * @throws ParseException on parsing error
    */
   protected String createTimestampStr(final Date ts) throws ParseException {
-    return ts == null ? createTimestampStr(null)
+    return ts == null ? createTimestampStr()
         : doubleToStrN(7, timestampToDouble(getTimestampSeed(ts)), POWER_BASE62);
   }
 
