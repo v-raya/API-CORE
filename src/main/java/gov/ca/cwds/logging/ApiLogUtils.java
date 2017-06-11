@@ -31,7 +31,6 @@ public class ApiLogUtils<E extends RuntimeException> {
     E ret = null;
 
     try {
-      // Class<E> klazz = getTypeParameterClass();
       ret = klazz.getConstructor(new Class[] {String.class, Throwable.class}).newInstance(msg, t);
     } catch (Exception e) {
       throw new ApiException("Failed to construct type", e);
@@ -77,17 +76,17 @@ public class ApiLogUtils<E extends RuntimeException> {
    * @param args error message, excluding throwable message
    * @throws ApiException runtime exception
    */
-  public void throwFatalError(final Logger log, Throwable t, String pattern, Object... args) {
+  public void raiseError(final Logger log, Throwable t, String pattern, Object... args) {
     final Object[] objs = ArrayUtils.isEmpty(args) ? new Object[0] : args;
     final String pat = !StringUtils.isEmpty(pattern) ? pattern : StringUtils.join(objs, "{}");
     final String msg = MessageFormat.format(pat, objs);
     final Logger logger = log != null ? log : LOGGER;
-    logger.fatal(msg, t);
+    logger.error(msg, t);
     throw newInstance(msg, t);
   }
 
   /**
-   * Convenience overload of {@link #throwFatalError(Logger, Throwable, String, Object...)}. Format
+   * Convenience overload of {@link #raiseError(Logger, Throwable, String, Object...)}. Format
    * message and throw a runtime {@link ApiException}.
    * 
    * @param log class logger
@@ -95,8 +94,39 @@ public class ApiLogUtils<E extends RuntimeException> {
    * @param args error message or throwable message
    * @throws ApiException runtime exception
    */
-  public void throwFatalError(final Logger log, Throwable t, Object... args) {
-    throwFatalError(log, t, null, args);
+  public void raiseError(final Logger log, Throwable t, Object... args) {
+    raiseError(log, t, null, args);
+  }
+
+  /**
+   * Format message and throw a runtime {@link ApiException}. Call to raise an error severe enough
+   * to merit terminating a job or process.
+   * 
+   * @param log class logger
+   * @param t any Throwable
+   * @param pattern MessageFormat pattern
+   * @param args error message, excluding throwable message
+   * @throws ApiException runtime exception
+   */
+  public void raiseError(final org.slf4j.Logger log, Throwable t, String pattern, Object... args) {
+    final Object[] objs = ArrayUtils.isEmpty(args) ? new Object[0] : args;
+    final String pat = !StringUtils.isEmpty(pattern) ? pattern : StringUtils.join(objs, "{}");
+    final String msg = MessageFormat.format(pat, objs);
+    log.error(msg, t);
+    throw newInstance(msg, t);
+  }
+
+  /**
+   * Convenience overload of {@link #raiseError(Logger, Throwable, String, Object...)}. Format
+   * message and throw a runtime {@link ApiException}.
+   * 
+   * @param log class logger
+   * @param t any Throwable
+   * @param args error message or throwable message
+   * @throws ApiException runtime exception
+   */
+  public void raiseError(final org.slf4j.Logger log, Throwable t, Object... args) {
+    raiseError(log, t, null, args);
   }
 
 }

@@ -59,30 +59,40 @@ public class ApiLogUtilsTest {
   @Test(expected = ApiException.class)
   public void throwFatalError_Args__Logger__Throwable__String__ObjectArray() throws Exception {
     final ApiLogUtils<ApiException> target = new ApiLogUtils<>(ApiException.class);
-    // given
     Logger log = mock(Logger.class);
-    Throwable t = null;
+    Throwable t = new IllegalStateException("something bad");
     String pattern = null;
     Object[] args = new Object[] {};
-    // e.g. : given(mocked.called()).willReturn(1);
-    // when
-    target.throwFatalError(log, t, pattern, args);
-    // then
-    // e.g. : verify(mocked).called();
+    target.raiseError(log, t, pattern, args);
   }
 
   @Test(expected = ApiException.class)
   public void throwFatalError_Args__Logger__Throwable__ObjectArray() throws Exception {
     final ApiLogUtils<ApiException> target = new ApiLogUtils<>(ApiException.class);
-    // given
     Logger log = mock(Logger.class);
-    Throwable t = null;
+    Throwable t = new IllegalStateException("something bad");
     Object[] args = new Object[] {};
-    // e.g. : given(mocked.called()).willReturn(1);
-    // when
-    target.throwFatalError(log, t, args);
-    // then
-    // e.g. : verify(mocked).called();
+    target.raiseError(log, t, args);
+  }
+
+  @Test(expected = ApiException.class)
+  public void throwFatalError_Args__orgslf4jLogger__Throwable__String__ObjectArray()
+      throws Exception {
+    final ApiLogUtils<ApiException> target = new ApiLogUtils<>(ApiException.class);
+    org.slf4j.Logger log = mock(org.slf4j.Logger.class);
+    Throwable t = new IllegalStateException("something bad");
+    String pattern = null;
+    Object[] args = new Object[] {};
+    target.raiseError(log, t, pattern, args);
+  }
+
+  @Test(expected = ApiException.class)
+  public void throwFatalError_Args__orgslf4jLogger__Throwable__ObjectArray() throws Exception {
+    final ApiLogUtils<ApiException> target = new ApiLogUtils<>(ApiException.class);
+    org.slf4j.Logger log = mock(org.slf4j.Logger.class);
+    Throwable t = new IllegalStateException("something bad");
+    Object[] args = new Object[] {};
+    target.raiseError(log, t, args);
   }
 
 }
