@@ -23,10 +23,23 @@ public class ApiLogUtils<E extends RuntimeException> {
 
   private Class<E> klazz;
 
+  /**
+   * Construct with the exception class to throw. Unfortunately, Java generics lose runtime type
+   * information without this verbose syntax.
+   * 
+   * @param klazz exception class to throw
+   */
   public ApiLogUtils(Class<E> klazz) {
     this.klazz = klazz;
   }
 
+  /**
+   * Construct a new instance of specified RuntimeException class.
+   * 
+   * @param msg message
+   * @param t Throwable
+   * @return new instance of the RuntimeException class
+   */
   protected E newInstance(String msg, Throwable t) {
     E ret = null;
 
@@ -74,9 +87,10 @@ public class ApiLogUtils<E extends RuntimeException> {
    * @param t any Throwable
    * @param pattern MessageFormat pattern
    * @param args error message, excluding throwable message
-   * @throws ApiException runtime exception
+   * @throws RuntimeException runtime exception
    */
-  public void raiseError(final Logger log, Throwable t, String pattern, Object... args) {
+  public void raiseError(final Logger log, Throwable t, String pattern, Object... args)
+      throws RuntimeException {
     final Object[] objs = ArrayUtils.isEmpty(args) ? new Object[0] : args;
     final String pat = !StringUtils.isEmpty(pattern) ? pattern : StringUtils.join(objs, "{}");
     final String msg = MessageFormat.format(pat, objs);
@@ -92,9 +106,9 @@ public class ApiLogUtils<E extends RuntimeException> {
    * @param log class logger
    * @param t any Throwable
    * @param args error message or throwable message
-   * @throws ApiException runtime exception
+   * @throws RuntimeException runtime exception
    */
-  public void raiseError(final Logger log, Throwable t, Object... args) {
+  public void raiseError(final Logger log, Throwable t, Object... args) throws RuntimeException {
     raiseError(log, t, null, args);
   }
 
