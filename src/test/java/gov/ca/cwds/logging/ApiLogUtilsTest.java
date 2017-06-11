@@ -44,7 +44,7 @@ public class ApiLogUtilsTest {
 
   @Test
   public void logEvery_Args__int__String__ObjectArray() throws Exception {
-    ApiLogUtils target = null;
+    final ApiLogUtils<ApiException> target = new ApiLogUtils<>(ApiException.class);
     // given
     int cntr = 0;
     String action = null;
@@ -56,9 +56,9 @@ public class ApiLogUtilsTest {
     // e.g. : verify(mocked).called();
   }
 
-  @Test
+  @Test(expected = ApiException.class)
   public void throwFatalError_Args__Logger__Throwable__String__ObjectArray() throws Exception {
-    ApiLogUtils target = null;
+    final ApiLogUtils<ApiException> target = new ApiLogUtils<>(ApiException.class);
     // given
     Logger log = mock(Logger.class);
     Throwable t = null;
@@ -71,9 +71,9 @@ public class ApiLogUtilsTest {
     // e.g. : verify(mocked).called();
   }
 
-  @Test
+  @Test(expected = ApiException.class)
   public void throwFatalError_Args__Logger__Throwable__ObjectArray() throws Exception {
-    ApiLogUtils target = null;
+    final ApiLogUtils<ApiException> target = new ApiLogUtils<>(ApiException.class);
     // given
     Logger log = mock(Logger.class);
     Throwable t = null;
