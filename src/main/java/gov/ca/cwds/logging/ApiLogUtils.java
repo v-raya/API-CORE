@@ -25,13 +25,17 @@ public class ApiLogUtils<E extends RuntimeException> {
 
   private static final int DEFAULT_LOG_EVERY = 5000;
 
-  private final ApiSupplier<E> supplier = new ApiSupplier<>(this::newInstance);
+  // private final ApiSupplier<E> supplier = new ApiSupplier<>(this::newInstance);
 
-  // private static final ApiLogUtils instance;
+  static class Typinator<E> {
+    @SuppressWarnings("serial")
+    public final TypeToken<E> type = new TypeToken<E>(getClass()) {};
+  }
 
-  private ApiLogUtils() {
-    // Static methods only, no class instantiation, Evil singleton, blah, blah, blah ... I can't
-    // hear you!
+  private final Typinator<E> typed;
+
+  public ApiLogUtils() {
+    this.typed = new Typinator<>();
   }
 
   @SuppressWarnings("unchecked")
@@ -41,7 +45,7 @@ public class ApiLogUtils<E extends RuntimeException> {
     return (Class<E>) paramType.getActualTypeArguments()[0];
   }
 
-  public E newInstance() {
+  protected E newInstance() {
     E ret;
     try {
       ret = this.getTypeParameterClass().newInstance();
@@ -52,8 +56,24 @@ public class ApiLogUtils<E extends RuntimeException> {
     return ret;
   }
 
-  static class StrawManParameterizedClass<T> {
-    final TypeToken<T> type = new TypeToken<T>(getClass()) {};
+  protected E newInstance(String msg, Throwable t) {
+    E ret = null;
+    // final Typinator<E> typinator = new Typinator<E>() {};
+    final Class<?> klazz = typed.type.getRawType();
+    typed.type.getType();
+    typed.type.getTypes();
+    typed.type.getSubtype(RuntimeException.class);
+    // typinator.type.getSubtype(RuntimeException.class); // bombs
+    // final Class<?> klazz2 = typinator.type.getSubtype(RuntimeException.class).getRawType();
+    final Class<?> class1 = getTypeParameterClass();
+    try {
+      ret =
+          (E) klazz.getConstructor(new Class[] {String.class, Throwable.class}).newInstance(msg, t);
+    } catch (Exception e) {
+      throw new ApiException("Failed to construct type " + klazz.getName(), e);
+    }
+
+    return ret;
   }
 
   /**
@@ -79,7 +99,7 @@ public class ApiLogUtils<E extends RuntimeException> {
    * @param action action message (extract, transform, load, etc)
    * @param args variable message arguments
    */
-  public void logEvery(int cntr, String action, Object... args) {
+  public static void logEvery(int cntr, String action, Object... args) {
     logEvery(LOGGER, cntr, action, args);
   }
 
@@ -88,29 +108,18 @@ public class ApiLogUtils<E extends RuntimeException> {
    * to merit terminating a job or process.
    * 
    * @param log class logger
-   * @param e any Throwable
+   * @param t any Throwable
    * @param pattern MessageFormat pattern
    * @param args error message, excluding throwable message
    * @throws ApiException runtime exception
    */
-  public void throwFatalError(final Logger log, Throwable e, String pattern, Object... args) {
+  public void throwFatalError(final Logger log, Throwable t, String pattern, Object... args) {
     final Object[] objs = ArrayUtils.isEmpty(args) ? new Object[0] : args;
     final String pat = !StringUtils.isEmpty(pattern) ? pattern : StringUtils.join(objs, "{}");
     final String msg = MessageFormat.format(pat, objs);
     final Logger logger = log != null ? log : LOGGER;
-    logger.fatal(msg, e);
-
-    try {
-      final StrawManParameterizedClass<E> smpc = new StrawManParameterizedClass<E>() {};
-      final String string = (String) smpc.type.getRawType().newInstance();
-      System.out.format("string = \"%s\"", string);
-    } catch (Exception e2) {
-      // TODO: handle exception
-    }
-
-    // E ex = supplier.createContents();
-    // throw new E(msg, e);
-    throw new ApiException(msg, e);
+    logger.fatal(msg, t);
+    throw newInstance(msg, t);
   }
 
   /**
@@ -118,12 +127,12 @@ public class ApiLogUtils<E extends RuntimeException> {
    * message and throw a runtime {@link ApiException}.
    * 
    * @param log class logger
-   * @param e any Throwable
+   * @param t any Throwable
    * @param args error message or throwable message
    * @throws ApiException runtime exception
    */
-  public void throwFatalError(final Logger log, Throwable e, Object... args) {
-    throwFatalError(log, e, null, args);
+  public void throwFatalError(final Logger log, Throwable t, Object... args) {
+    throwFatalError(log, t, null, args);
   }
 
 }
