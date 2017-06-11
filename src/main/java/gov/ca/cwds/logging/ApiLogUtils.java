@@ -1,15 +1,11 @@
 package gov.ca.cwds.logging;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.text.MessageFormat;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import com.google.common.reflect.TypeToken;
 
 import gov.ca.cwds.rest.api.ApiException;
 
@@ -25,52 +21,20 @@ public class ApiLogUtils<E extends RuntimeException> {
 
   private static final int DEFAULT_LOG_EVERY = 5000;
 
-  // private final ApiSupplier<E> supplier = new ApiSupplier<>(this::newInstance);
+  private Class<E> klazz;
 
-  static class Typinator<E> {
-    @SuppressWarnings("serial")
-    public final TypeToken<E> type = new TypeToken<E>(getClass()) {};
-  }
-
-  private final Typinator<E> typed;
-
-  public ApiLogUtils() {
-    this.typed = new Typinator<>();
-  }
-
-  @SuppressWarnings("unchecked")
-  public Class<E> getTypeParameterClass() {
-    Type type = getClass().getGenericSuperclass();
-    ParameterizedType paramType = (ParameterizedType) type;
-    return (Class<E>) paramType.getActualTypeArguments()[0];
-  }
-
-  protected E newInstance() {
-    E ret;
-    try {
-      ret = this.getTypeParameterClass().newInstance();
-    } catch (Exception e) {
-      throw new ApiException(e);
-    }
-
-    return ret;
+  public ApiLogUtils(Class<E> klazz) {
+    this.klazz = klazz;
   }
 
   protected E newInstance(String msg, Throwable t) {
     E ret = null;
-    // final Typinator<E> typinator = new Typinator<E>() {};
-    final Class<?> klazz = typed.type.getRawType();
-    typed.type.getType();
-    typed.type.getTypes();
-    typed.type.getSubtype(RuntimeException.class);
-    // typinator.type.getSubtype(RuntimeException.class); // bombs
-    // final Class<?> klazz2 = typinator.type.getSubtype(RuntimeException.class).getRawType();
-    final Class<?> class1 = getTypeParameterClass();
+
     try {
-      ret =
-          (E) klazz.getConstructor(new Class[] {String.class, Throwable.class}).newInstance(msg, t);
+      // Class<E> klazz = getTypeParameterClass();
+      ret = klazz.getConstructor(new Class[] {String.class, Throwable.class}).newInstance(msg, t);
     } catch (Exception e) {
-      throw new ApiException("Failed to construct type " + klazz.getName(), e);
+      throw new ApiException("Failed to construct type", e);
     }
 
     return ret;

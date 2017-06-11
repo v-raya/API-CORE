@@ -19,34 +19,8 @@ public class ApiLogUtilsTest {
   }
 
   @Test
-  public void getTypeParameterClass_Args__() throws Exception {
-    ApiLogUtils target = null;
-    // given
-    // e.g. : given(mocked.called()).willReturn(1);
-    // when
-    Class<Object> actual = target.getTypeParameterClass();
-    // then
-    // e.g. : verify(mocked).called();
-    Class<Object> expected = null;
-    assertThat(actual, is(equalTo(expected)));
-  }
-
-  @Test
-  public void newInstance_Args__() throws Exception {
-    ApiLogUtils target = null;
-    // given
-    // e.g. : given(mocked.called()).willReturn(1);
-    // when
-    Object actual = target.newInstance();
-    // then
-    // e.g. : verify(mocked).called();
-    Object expected = null;
-    assertThat(actual, is(equalTo(expected)));
-  }
-
-  @Test
   public void newInstance_Args__String__Throwable() throws Exception {
-    final ApiLogUtils<ApiException> target = new ApiLogUtils<>();
+    final ApiLogUtils<ApiException> target = new ApiLogUtils<>(ApiException.class);
     String msg = "hola";
     Throwable t = new IllegalStateException("something bad");
     Object actual = target.newInstance(msg, t);
