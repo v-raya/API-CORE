@@ -1088,7 +1088,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    */
   @JsonPropertyOrder({"id", "start_date", "end_date", "county_name", "response_time",
       "legacy_referral_id", "legacy_last_updated", "reporter", "assigned_social_worker",
-      "allegations"})
+      "allegations", "access_limitation"})
   public static class ElasticSearchPersonReferral implements ApiTypedIdentifier<String> {
 
     /**
@@ -1127,6 +1127,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("allegations")
     private List<ElasticSearchPersonAllegation> allegations = new ArrayList<>();
+
+    @JsonProperty("access_limitation")
+    private ElasticSearchAccessLimitation accessLimitation = new ElasticSearchAccessLimitation();
 
     @Override
     public String getId() {
@@ -1210,6 +1213,14 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     public void setAllegations(List<ElasticSearchPersonAllegation> allegations) {
       this.allegations = allegations;
     }
+
+    public ElasticSearchAccessLimitation getAccessLimitation() {
+      return accessLimitation;
+    }
+
+    public void setAccessLimitation(ElasticSearchAccessLimitation accessLimitation) {
+      this.accessLimitation = accessLimitation;
+    }
   }
 
   /**
@@ -1218,7 +1229,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * @author CWDS API Team
    */
   @JsonPropertyOrder({"id", "start_date", "end_date", "county_name", "service_component",
-      "legacy_case_id", "legacy_last_updated", "focus_child", "assigned_social_worker", "parents"})
+      "legacy_case_id", "legacy_last_updated", "focus_child", "assigned_social_worker", "parents",
+      "access_limitation"})
   public static class ElasticSearchPersonCase implements ApiTypedIdentifier<String> {
 
     /**
@@ -1257,6 +1269,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("parents")
     private List<ElasticSearchPersonParent> parents = new ArrayList<>();
+
+    @JsonProperty("access_limitation")
+    private ElasticSearchAccessLimitation accessLimitation = new ElasticSearchAccessLimitation();
 
     @Override
     public String getId() {
@@ -1339,6 +1354,14 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     public void setParents(List<ElasticSearchPersonParent> parents) {
       this.parents = parents;
     }
+
+    public ElasticSearchAccessLimitation getAccessLimitation() {
+      return accessLimitation;
+    }
+
+    public void setAccessLimitation(ElasticSearchAccessLimitation accessLimitation) {
+      this.accessLimitation = accessLimitation;
+    }
   }
 
   /**
@@ -1400,6 +1423,72 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
     public void setRelationship(String relationship) {
       this.relationship = relationship;
+    }
+  }
+
+  /**
+   * Access Limitation (sealed, sensitive, restricted).
+   * 
+   * @author CWDS API Team
+   */
+  @SuppressWarnings("serial")
+  @JsonPropertyOrder({"limited_access_code", "limited_access_date", "limited_access_description",
+      "limited_access_government_entity_id", "limited_access_government_entity_name"})
+  public static class ElasticSearchAccessLimitation {
+
+    @JsonProperty("limited_access_code")
+    private String limitedAccessCode;
+
+    @JsonProperty("limited_access_date")
+    private String limitedAccessDate;
+
+    @JsonProperty("limited_access_description")
+    private String limitedAccessDescription;
+
+    @JsonProperty("limited_access_government_entity_id")
+    private String limitedAccessGovernmentEntityId;
+
+    @JsonProperty("limited_access_government_entity_name")
+    private String limitedAccessGovernmentEntityName;
+
+    public String getLimitedAccessCode() {
+      return limitedAccessCode;
+    }
+
+    public void setLimitedAccessCode(String limitedAccessCode) {
+      this.limitedAccessCode = limitedAccessCode;
+    }
+
+    public String getLimitedAccessDate() {
+      return limitedAccessDate;
+    }
+
+    public void setLimitedAccessDate(String limitedAccessDate) {
+      this.limitedAccessDate = limitedAccessDate;
+    }
+
+    public String getLimitedAccessDescription() {
+      return limitedAccessDescription;
+    }
+
+    public void setLimitedAccessDescription(String limitedAccessDescription) {
+      this.limitedAccessDescription = limitedAccessDescription;
+    }
+
+    public String getLimitedAccessGovernmentEntityId() {
+      return limitedAccessGovernmentEntityId;
+    }
+
+    public void setLimitedAccessGovernmentEntityId(String limitedAccessGovernmentEntityId) {
+      this.limitedAccessGovernmentEntityId = limitedAccessGovernmentEntityId;
+    }
+
+    public String getLimitedAccessGovernmentEntityName() {
+      return limitedAccessGovernmentEntityName;
+    }
+
+    public void setLimitedAccessGovernmentEntityName(String limitedAccessGovernmentEntityName) {
+      this.limitedAccessGovernmentEntityName = limitedAccessGovernmentEntityName;
     }
   }
 
@@ -1809,6 +1898,12 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
   @JsonProperty("type")
   private transient String type;
+
+  @JsonProperty("sensitivity_code")
+  private transient String sensitivityCode;
+
+  @JsonProperty("soc_158_sealed_code")
+  private transient String soc158SealedCode;
 
   @JsonProperty("source")
   private transient String source;
@@ -2342,6 +2437,42 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    */
   public void setType(String type) {
     this.type = type;
+  }
+
+  /**
+   * Get sensitivity code (indicator)
+   * 
+   * @return The sensitivity code (indicator)
+   */
+  public String getSensitivityCode() {
+    return sensitivityCode;
+  }
+
+  /**
+   * Set the sensitivity code (indicator)
+   * 
+   * @param sensitivityCode The sensitivity code (indicator)
+   */
+  public void setSensitivityCode(String sensitivityCode) {
+    this.sensitivityCode = sensitivityCode;
+  }
+
+  /**
+   * Get SOC158 sealed code (indicator)
+   * 
+   * @return SOC158 sealed code (indicator)
+   */
+  public String getSoc158SealedCode() {
+    return soc158SealedCode;
+  }
+
+  /**
+   * Set SOC158 sealed code (indicator)
+   * 
+   * @param soc158SealedCode SOC158 sealed code (indicator)
+   */
+  public void setSoc158SealedCode(String soc158SealedCode) {
+    this.soc158SealedCode = soc158SealedCode;
   }
 
   /**

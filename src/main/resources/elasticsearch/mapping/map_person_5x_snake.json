@@ -57,6 +57,14 @@
 			"type": "text",
 			"store": true
 		},
+		"soc_158_sealed_code": {
+			"type": "text",
+			"store": true
+		},
+		"sensitivity_code": {
+			"type": "text",
+			"store": true
+		},
 		"addresses": {
 			"properties": {
 				"id": {
@@ -283,6 +291,31 @@
 				"response_time": {
 					"type": "text",
 					"store": true
+				},				
+				"access_limitation": {
+					"properties": {
+						"limited_access_code": {
+							"type": "text",
+							"store": true
+						},
+						"limited_access_date": {
+							"format": "strict_date_optional_time||epoch_millis",
+							"type": "date",
+							"store": true
+						},
+						"limited_access_description": {
+							"type": "text",
+							"store": true
+						},
+						"limited_access_government_entity_id": {
+							"type": "short",
+							"store": true
+						},
+						"limited_access_government_entity_name": {
+							"type": "text",
+							"store": true
+						}
+					}
 				},
 				"reporter": {
 					"properties": {
@@ -636,6 +669,31 @@
 				"service_component": {
 					"type": "text",
 					"store": true
+				},
+				"access_limitation": {
+					"properties": {
+						"limited_access_code": {
+							"type": "text",
+							"store": true
+						},
+						"limited_access_date": {
+							"format": "strict_date_optional_time||epoch_millis",
+							"type": "date",
+							"store": true
+						},
+						"limited_access_description": {
+							"type": "text",
+							"store": true
+						},
+						"limited_access_government_entity_id": {
+							"type": "short",
+							"store": true
+						},
+						"limited_access_government_entity_name": {
+							"type": "text",
+							"store": true
+						}
+					}
 				},
 				"focus_child": {
 					"properties": {
