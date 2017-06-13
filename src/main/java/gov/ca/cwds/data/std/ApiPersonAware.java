@@ -63,12 +63,20 @@ public interface ApiPersonAware extends PersistentObject {
   String getNameSuffix();
 
   /**
+   * Get sensitivity indicator. Default implementation returns null.
+   * 
    * @return the sensitivityIndicator
    */
-  String getSensitivityIndicator();
+  default String getSensitivityIndicator() {
+    return null;
+  }
 
   /**
+   * Get SOC158 sealed client indicator. Default implementation returns null..
+   * 
    * @return the soc158SealedClientIndicator
    */
-  String getSoc158SealedClientIndicator();
+  default String getSoc158SealedClientIndicator() {
+    return null;
+  }
 }
