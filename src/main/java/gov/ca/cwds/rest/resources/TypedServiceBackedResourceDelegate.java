@@ -19,9 +19,9 @@ import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 
 /**
- * Implements the {@link ResourceDelegate} and passes work to the service layer. All
- * {@link Resource} should decorate this class. Resources will delegate to this class with the
- * decoration being swagger {@link Annotation} classes for documentation and Jersey
+ * Generic, parameterized class implements the {@link ResourceDelegate} and passes work to the
+ * service layer. All {@link Resource} should decorate this class. Resources will delegate to this
+ * class with the decoration being swagger {@link Annotation} classes for documentation and Jersey
  * {@link Annotation} for RESTful resources.
  * 
  * @author CWDS API Team

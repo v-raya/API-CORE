@@ -265,7 +265,6 @@ public class ElasticsearchDao implements Closeable {
    * @return prepared IndexRequest
    * @throws JsonProcessingException if unable to serialize JSON
    */
-  @SuppressWarnings("rawtypes")
   public ActionRequest bulkAdd(final ObjectMapper mapper, final String id, final Object obj,
       final String alias, final String docType, boolean upsert) throws JsonProcessingException {
     final String json = mapper.writeValueAsString(obj);
@@ -284,7 +283,6 @@ public class ElasticsearchDao implements Closeable {
    * @return prepared IndexRequest
    * @throws JsonProcessingException if unable to serialize JSON
    */
-  @SuppressWarnings("rawtypes")
   public ActionRequest bulkAdd(final ObjectMapper mapper, final String id, final Object obj,
       boolean upsert) throws JsonProcessingException {
     return bulkAdd(mapper, id, obj, getDefaultAlias(), getDefaultDocType(), upsert);
@@ -306,7 +304,6 @@ public class ElasticsearchDao implements Closeable {
    * @return prepared IndexRequest
    * @throws JsonProcessingException if unable to serialize JSON
    */
-  @SuppressWarnings("rawtypes")
   public ActionRequest bulkUpsert(final String id, final String alias, final String docType,
       final String insertJson, final String updateJson) throws JsonProcessingException {
     return new UpdateRequest(alias, docType, id).doc(updateJson)
@@ -322,7 +319,6 @@ public class ElasticsearchDao implements Closeable {
    * @return prepared IndexRequest
    * @throws JsonProcessingException if unable to serialize JSON
    */
-  @SuppressWarnings("rawtypes")
   public ActionRequest bulkUpsert(final String id, final String insertJson, final String updateJson)
       throws JsonProcessingException {
     return bulkUpsert(id, getDefaultAlias(), getDefaultDocType(), insertJson, updateJson);
@@ -350,6 +346,7 @@ public class ElasticsearchDao implements Closeable {
    * @return array of AutoCompletePerson
    * @throws ApiElasticSearchException unable to connect, disconnect, bad hair day, etc.
    */
+  @Deprecated
   public ElasticSearchPerson[] searchPerson(final String searchTerm, final String alias,
       final String docType) throws ApiElasticSearchException {
     checkArgument(!Strings.isNullOrEmpty(searchTerm), "searchTerm cannot be Null or empty");
@@ -387,6 +384,7 @@ public class ElasticsearchDao implements Closeable {
    * @return array of AutoCompletePerson
    * @throws ApiElasticSearchException unable to connect, disconnect, bad hair day, etc.
    */
+  @Deprecated
   public ElasticSearchPerson[] searchPerson(final String searchTerm)
       throws ApiElasticSearchException {
     return searchPerson(searchTerm, getDefaultAlias(), getDefaultDocType());
