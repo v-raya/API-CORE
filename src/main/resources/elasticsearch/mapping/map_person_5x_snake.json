@@ -61,7 +61,7 @@
 			"type": "text",
 			"store": true
 		},
-		"soc_158_sealed_indicator": {
+		"soc158_sealed_client_indicator": {
 			"type": "text",
 			"store": true
 		},		

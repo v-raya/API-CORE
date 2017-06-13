@@ -1902,8 +1902,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonProperty("sensitivity_indicator")
   private transient String sensitivityIndicator;
 
-  @JsonProperty("soc_158_sealed_indicator")
-  private transient String soc158SealedIndicator;
+  @JsonProperty("soc158_sealed_client_indicator")
+  private transient String soc158SealedClientIndicator;
 
   @JsonProperty("source")
   private transient String source;
@@ -2460,19 +2460,19 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   /**
    * Get SOC158 sealed code (indicator)
    * 
-   * @return SOC158 sealed code (indicator)
+   * @return SOC158 sealed client code (indicator)
    */
-  public String getSoc158SealedIndicator() {
-    return soc158SealedIndicator;
+  public String getSoc158SealedClientIndicator() {
+    return soc158SealedClientIndicator;
   }
 
   /**
    * Set SOC158 sealed code (indicator)
    * 
-   * @param soc158SealedIndicator SOC158 sealed code (indicator)
+   * @param soc158SealedClientIndicator SOC158 sealed client code (indicator)
    */
-  public void setSoc158SealedIndicator(String soc158SealedIndicator) {
-    this.soc158SealedIndicator = soc158SealedIndicator;
+  public void SetSoc158SealedClientIndicator(String soc158SealedClientIndicator) {
+    this.soc158SealedClientIndicator = soc158SealedClientIndicator;
   }
 
   /**
