@@ -1877,7 +1877,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * </p>
    */
   @JsonIgnore
-  private String sourceJson;
+  private transient String sourceJson;
 
   /**
    * highlight JSON returned from Elasticsearch with fragments flattened out
