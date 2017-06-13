@@ -1899,11 +1899,11 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonProperty("type")
   private transient String type;
 
-  @JsonProperty("sensitivity_code")
-  private transient String sensitivityCode;
+  @JsonProperty("sensitivity_indicator")
+  private transient String sensitivityIndicator;
 
-  @JsonProperty("soc_158_sealed_code")
-  private transient String soc158SealedCode;
+  @JsonProperty("soc_158_sealed_indicator")
+  private transient String soc158SealedIndicator;
 
   @JsonProperty("source")
   private transient String source;
@@ -2444,8 +2444,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @return The sensitivity code (indicator)
    */
-  public String getSensitivityCode() {
-    return sensitivityCode;
+  public String getSensitivityIndicator() {
+    return sensitivityIndicator;
   }
 
   /**
@@ -2453,8 +2453,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @param sensitivityCode The sensitivity code (indicator)
    */
-  public void setSensitivityCode(String sensitivityCode) {
-    this.sensitivityCode = sensitivityCode;
+  public void setSensitivityIndicator(String sensitivityIndicator) {
+    this.sensitivityIndicator = sensitivityIndicator;
   }
 
   /**
@@ -2462,8 +2462,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @return SOC158 sealed code (indicator)
    */
-  public String getSoc158SealedCode() {
-    return soc158SealedCode;
+  public String getSoc158SealedIndicator() {
+    return soc158SealedIndicator;
   }
 
   /**
@@ -2471,8 +2471,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @param soc158SealedCode SOC158 sealed code (indicator)
    */
-  public void setSoc158SealedCode(String soc158SealedCode) {
-    this.soc158SealedCode = soc158SealedCode;
+  public void setSoc158SealedIndicator(String soc158SealedIndicator) {
+    this.soc158SealedIndicator = soc158SealedIndicator;
   }
 
   /**

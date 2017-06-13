@@ -57,14 +57,14 @@
 			"type": "text",
 			"store": true
 		},
-		"soc_158_sealed_code": {
+		"sensitivity_indicator": {
 			"type": "text",
 			"store": true
 		},
-		"sensitivity_code": {
+		"soc_158_sealed_indicator": {
 			"type": "text",
 			"store": true
-		},
+		},		
 		"addresses": {
 			"properties": {
 				"id": {
