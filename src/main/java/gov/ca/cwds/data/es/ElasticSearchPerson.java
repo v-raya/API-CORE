@@ -2451,7 +2451,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   /**
    * Set the sensitivity code (indicator)
    * 
-   * @param sensitivityCode The sensitivity code (indicator)
+   * @param sensitivityIndicator The sensitivity code (indicator)
    */
   public void setSensitivityIndicator(String sensitivityIndicator) {
     this.sensitivityIndicator = sensitivityIndicator;
@@ -2469,7 +2469,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   /**
    * Set SOC158 sealed code (indicator)
    * 
-   * @param soc158SealedCode SOC158 sealed code (indicator)
+   * @param soc158SealedIndicator SOC158 sealed code (indicator)
    */
   public void setSoc158SealedIndicator(String soc158SealedIndicator) {
     this.soc158SealedIndicator = soc158SealedIndicator;
