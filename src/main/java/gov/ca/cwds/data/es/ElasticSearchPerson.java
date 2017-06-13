@@ -1808,10 +1808,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   private String ssn;
 
   @JsonProperty("type")
-  private String type;
+  private transient String type;
 
   @JsonProperty("source")
-  private String source;
+  private transient String source;
 
   @JsonProperty("legacy_source_table")
   private String legacySourceTable;
@@ -1845,7 +1845,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   private List<ElasticSearchPersonCase> cases = new ArrayList<>();
 
   @Transient
-  private Map<String, String> highlights = new LinkedHashMap<>();
+  private transient Map<String, String> highlights = new LinkedHashMap<>();
 
   /**
    * The identifier is String in legacy (CMS, mainframe DB2) but Long in new style (NS, PostGreSQL).
@@ -1865,7 +1865,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * "gov.ca.cwds.rest.api.persistence.cms.OtherClientName".
    */
   @JsonIgnore
-  private String sourceType;
+  private transient String sourceType;
 
   /**
    * Raw, nested, child document JSON of an API class that implements the CWDS API interface,
@@ -1884,7 +1884,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    */
   @JsonProperty("highlight")
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  private String highlightFields;
+  private transient String highlightFields;
 
   /**
    * Nested document Object, constructed by deserializing {@link #sourceJson} into an instance of
@@ -2441,11 +2441,21 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     return ret;
   }
 
+  /**
+   * Omit transient fields, such as source object and source JSON. Only compare meaningful fields
+   * like "id" or "first name."
+   */
   @Override
   public final int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
+  /**
+   * Omit transient fields, such as source object and source JSON. Only compare meaningful fields
+   * like "id" or "first name." Even "source type" should not affect the comparison, only "real"
+   * fields should. Therefore, if all non-transient fields match, then the objects match, despite
+   * their source.
+   */
   @Override
   public final boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
