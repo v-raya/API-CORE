@@ -316,7 +316,7 @@
 							"store": true
 						},
 						"limited_access_government_entity_id": {
-							"type": "short",
+							"type": "text",
 							"store": true
 						},
 						"limited_access_government_entity_name": {
@@ -710,7 +710,7 @@
 							"store": true
 						},
 						"limited_access_government_entity_id": {
-							"type": "short",
+							"type": "text",
 							"store": true
 						},
 						"limited_access_government_entity_name": {
