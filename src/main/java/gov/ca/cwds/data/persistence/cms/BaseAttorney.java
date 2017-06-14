@@ -406,4 +406,104 @@ public abstract class BaseAttorney extends CmsPersistentObject
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
+  public void setArchiveAssociationIndicator(String archiveAssociationIndicator) {
+    this.archiveAssociationIndicator = archiveAssociationIndicator;
+  }
+
+  public void setBusinessName(String businessName) {
+    this.businessName = businessName;
+  }
+
+  public void setCityName(String cityName) {
+    this.cityName = cityName;
+  }
+
+  public void setCwsAttorneyIndicator(String cwsAttorneyIndicator) {
+    this.cwsAttorneyIndicator = cwsAttorneyIndicator;
+  }
+
+  public void setEmailAddress(String emailAddress) {
+    this.emailAddress = emailAddress;
+  }
+
+  public void setEndDate(Date endDate) {
+    this.endDate = endDate;
+  }
+
+  public void setFaxNumber(BigDecimal faxNumber) {
+    this.faxNumber = faxNumber;
+  }
+
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public void setGovernmentEntityType(Short governmentEntityType) {
+    this.governmentEntityType = governmentEntityType;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public void setLanguageType(Short languageType) {
+    this.languageType = languageType;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  public void setMessagePhoneExtensionNumber(Integer messagePhoneExtensionNumber) {
+    this.messagePhoneExtensionNumber = messagePhoneExtensionNumber;
+  }
+
+  public void setMessagePhoneNumber(BigDecimal messagePhoneNumber) {
+    this.messagePhoneNumber = messagePhoneNumber;
+  }
+
+  public void setMiddleInitialName(String middleInitialName) {
+    this.middleInitialName = middleInitialName;
+  }
+
+  public void setNamePrefixDescription(String namePrefixDescription) {
+    this.namePrefixDescription = namePrefixDescription;
+  }
+
+  public void setPositionTitleDescription(String positionTitleDescription) {
+    this.positionTitleDescription = positionTitleDescription;
+  }
+
+  public void setPrimaryPhoneExtensionNumber(Integer primaryPhoneExtensionNumber) {
+    this.primaryPhoneExtensionNumber = primaryPhoneExtensionNumber;
+  }
+
+  public void setPrimaryPhoneNumber(BigDecimal primaryPhoneNumber) {
+    this.primaryPhoneNumber = primaryPhoneNumber;
+  }
+
+  public void setStateCodeType(Short stateCodeType) {
+    this.stateCodeType = stateCodeType;
+  }
+
+  public void setStreetName(String streetName) {
+    this.streetName = streetName;
+  }
+
+  public void setStreetNumber(String streetNumber) {
+    this.streetNumber = streetNumber;
+  }
+
+  public void setSuffixTitleDescription(String suffixTitleDescription) {
+    this.suffixTitleDescription = suffixTitleDescription;
+  }
+
+  public void setZipNumber(Integer zipNumber) {
+    this.zipNumber = zipNumber;
+  }
+
+  public void setZipSuffixNumber(Short zipSuffixNumber) {
+    this.zipSuffixNumber = zipSuffixNumber;
+  }
+
 }
