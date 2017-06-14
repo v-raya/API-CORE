@@ -469,6 +469,109 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       return null;
     }
 
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((city == null) ? 0 : city.hashCode());
+      result = prime * result + ((county == null) ? 0 : county.hashCode());
+      result = prime * result + ((id == null) ? 0 : id.hashCode());
+      result = prime * result + ((state == null) ? 0 : state.hashCode());
+      result = prime * result + ((stateCode == null) ? 0 : stateCode.hashCode());
+      result = prime * result + ((stateName == null) ? 0 : stateName.hashCode());
+      result = prime * result + ((streetAddress == null) ? 0 : streetAddress.hashCode());
+      result = prime * result + ((streetName == null) ? 0 : streetName.hashCode());
+      result = prime * result + ((streetNumber == null) ? 0 : streetNumber.hashCode());
+      result = prime * result + ((type == null) ? 0 : type.hashCode());
+      result = prime * result + ((unitNumber == null) ? 0 : unitNumber.hashCode());
+      result = prime * result + ((unitType == null) ? 0 : unitType.hashCode());
+      result = prime * result + ((zip == null) ? 0 : zip.hashCode());
+      result = prime * result + ((zip4 == null) ? 0 : zip4.hashCode());
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      ElasticSearchPersonAddress other = (ElasticSearchPersonAddress) obj;
+      if (city == null) {
+        if (other.city != null)
+          return false;
+      } else if (!city.equals(other.city))
+        return false;
+      if (county == null) {
+        if (other.county != null)
+          return false;
+      } else if (!county.equals(other.county))
+        return false;
+      if (id == null) {
+        if (other.id != null)
+          return false;
+      } else if (!id.equals(other.id))
+        return false;
+      if (state == null) {
+        if (other.state != null)
+          return false;
+      } else if (!state.equals(other.state))
+        return false;
+      if (stateCode == null) {
+        if (other.stateCode != null)
+          return false;
+      } else if (!stateCode.equals(other.stateCode))
+        return false;
+      if (stateName == null) {
+        if (other.stateName != null)
+          return false;
+      } else if (!stateName.equals(other.stateName))
+        return false;
+      if (streetAddress == null) {
+        if (other.streetAddress != null)
+          return false;
+      } else if (!streetAddress.equals(other.streetAddress))
+        return false;
+      if (streetName == null) {
+        if (other.streetName != null)
+          return false;
+      } else if (!streetName.equals(other.streetName))
+        return false;
+      if (streetNumber == null) {
+        if (other.streetNumber != null)
+          return false;
+      } else if (!streetNumber.equals(other.streetNumber))
+        return false;
+      if (type == null) {
+        if (other.type != null)
+          return false;
+      } else if (!type.equals(other.type))
+        return false;
+      if (unitNumber == null) {
+        if (other.unitNumber != null)
+          return false;
+      } else if (!unitNumber.equals(other.unitNumber))
+        return false;
+      if (unitType == null) {
+        if (other.unitType != null)
+          return false;
+      } else if (!unitType.equals(other.unitType))
+        return false;
+      if (zip == null) {
+        if (other.zip != null)
+          return false;
+      } else if (!zip.equals(other.zip))
+        return false;
+      if (zip4 == null) {
+        if (other.zip4 != null)
+          return false;
+      } else if (!zip4.equals(other.zip4))
+        return false;
+      return true;
+    }
+
   }
 
   /**
@@ -622,6 +725,103 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.victimLegacyClientId = victimLegacyClientId;
     }
 
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result =
+          prime * result + ((allegationDescription == null) ? 0 : allegationDescription.hashCode());
+      result = prime * result
+          + ((dispositionDescription == null) ? 0 : dispositionDescription.hashCode());
+      result = prime * result + ((dispositionId == null) ? 0 : dispositionId.hashCode());
+      result = prime * result + ((id == null) ? 0 : id.hashCode());
+      result =
+          prime * result + ((perpetratorFirstName == null) ? 0 : perpetratorFirstName.hashCode());
+      result = prime * result + ((perpetratorId == null) ? 0 : perpetratorId.hashCode());
+      result =
+          prime * result + ((perpetratorLastName == null) ? 0 : perpetratorLastName.hashCode());
+      result = prime * result
+          + ((perpetratorLegacyClientId == null) ? 0 : perpetratorLegacyClientId.hashCode());
+      result = prime * result + ((victimFirstName == null) ? 0 : victimFirstName.hashCode());
+      result = prime * result + ((victimId == null) ? 0 : victimId.hashCode());
+      result = prime * result + ((victimLastName == null) ? 0 : victimLastName.hashCode());
+      result =
+          prime * result + ((victimLegacyClientId == null) ? 0 : victimLegacyClientId.hashCode());
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      ElasticSearchPersonAllegation other = (ElasticSearchPersonAllegation) obj;
+      if (allegationDescription == null) {
+        if (other.allegationDescription != null)
+          return false;
+      } else if (!allegationDescription.equals(other.allegationDescription))
+        return false;
+      if (dispositionDescription == null) {
+        if (other.dispositionDescription != null)
+          return false;
+      } else if (!dispositionDescription.equals(other.dispositionDescription))
+        return false;
+      if (dispositionId == null) {
+        if (other.dispositionId != null)
+          return false;
+      } else if (!dispositionId.equals(other.dispositionId))
+        return false;
+      if (id == null) {
+        if (other.id != null)
+          return false;
+      } else if (!id.equals(other.id))
+        return false;
+      if (perpetratorFirstName == null) {
+        if (other.perpetratorFirstName != null)
+          return false;
+      } else if (!perpetratorFirstName.equals(other.perpetratorFirstName))
+        return false;
+      if (perpetratorId == null) {
+        if (other.perpetratorId != null)
+          return false;
+      } else if (!perpetratorId.equals(other.perpetratorId))
+        return false;
+      if (perpetratorLastName == null) {
+        if (other.perpetratorLastName != null)
+          return false;
+      } else if (!perpetratorLastName.equals(other.perpetratorLastName))
+        return false;
+      if (perpetratorLegacyClientId == null) {
+        if (other.perpetratorLegacyClientId != null)
+          return false;
+      } else if (!perpetratorLegacyClientId.equals(other.perpetratorLegacyClientId))
+        return false;
+      if (victimFirstName == null) {
+        if (other.victimFirstName != null)
+          return false;
+      } else if (!victimFirstName.equals(other.victimFirstName))
+        return false;
+      if (victimId == null) {
+        if (other.victimId != null)
+          return false;
+      } else if (!victimId.equals(other.victimId))
+        return false;
+      if (victimLastName == null) {
+        if (other.victimLastName != null)
+          return false;
+      } else if (!victimLastName.equals(other.victimLastName))
+        return false;
+      if (victimLegacyClientId == null) {
+        if (other.victimLegacyClientId != null)
+          return false;
+      } else if (!victimLegacyClientId.equals(other.victimLegacyClientId))
+        return false;
+      return true;
+    }
+
   }
 
   /**
@@ -726,6 +926,80 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
     public void setRelationshipContext(String relationshipContext) {
       this.relationshipContext = relationshipContext;
+    }
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result
+          + ((indexedPersonRelationship == null) ? 0 : indexedPersonRelationship.hashCode());
+      result = prime * result
+          + ((relatedPersonFirstName == null) ? 0 : relatedPersonFirstName.hashCode());
+      result = prime * result + ((relatedPersonId == null) ? 0 : relatedPersonId.hashCode());
+      result =
+          prime * result + ((relatedPersonLastName == null) ? 0 : relatedPersonLastName.hashCode());
+      result =
+          prime * result + ((relatedPersonLegacyId == null) ? 0 : relatedPersonLegacyId.hashCode());
+      result = prime * result + ((relatedPersonLegacySourceTable == null) ? 0
+          : relatedPersonLegacySourceTable.hashCode());
+      result = prime * result
+          + ((relatedPersonRelationship == null) ? 0 : relatedPersonRelationship.hashCode());
+      result =
+          prime * result + ((relationshipContext == null) ? 0 : relationshipContext.hashCode());
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      ElasticSearchPersonRelationship other = (ElasticSearchPersonRelationship) obj;
+      if (indexedPersonRelationship == null) {
+        if (other.indexedPersonRelationship != null)
+          return false;
+      } else if (!indexedPersonRelationship.equals(other.indexedPersonRelationship))
+        return false;
+      if (relatedPersonFirstName == null) {
+        if (other.relatedPersonFirstName != null)
+          return false;
+      } else if (!relatedPersonFirstName.equals(other.relatedPersonFirstName))
+        return false;
+      if (relatedPersonId == null) {
+        if (other.relatedPersonId != null)
+          return false;
+      } else if (!relatedPersonId.equals(other.relatedPersonId))
+        return false;
+      if (relatedPersonLastName == null) {
+        if (other.relatedPersonLastName != null)
+          return false;
+      } else if (!relatedPersonLastName.equals(other.relatedPersonLastName))
+        return false;
+      if (relatedPersonLegacyId == null) {
+        if (other.relatedPersonLegacyId != null)
+          return false;
+      } else if (!relatedPersonLegacyId.equals(other.relatedPersonLegacyId))
+        return false;
+      if (relatedPersonLegacySourceTable == null) {
+        if (other.relatedPersonLegacySourceTable != null)
+          return false;
+      } else if (!relatedPersonLegacySourceTable.equals(other.relatedPersonLegacySourceTable))
+        return false;
+      if (relatedPersonRelationship == null) {
+        if (other.relatedPersonRelationship != null)
+          return false;
+      } else if (!relatedPersonRelationship.equals(other.relatedPersonRelationship))
+        return false;
+      if (relationshipContext == null) {
+        if (other.relationshipContext != null)
+          return false;
+      } else if (!relationshipContext.equals(other.relationshipContext))
+        return false;
+      return true;
     }
 
   }
@@ -1647,6 +1921,47 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @Override
     public String getPhoneId() {
       return this.id;
+    }
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((id == null) ? 0 : id.hashCode());
+      result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
+      result =
+          prime * result + ((phoneNumberExtension == null) ? 0 : phoneNumberExtension.hashCode());
+      result = prime * result + ((phoneType == null) ? 0 : phoneType.hashCode());
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      ElasticSearchPersonPhone other = (ElasticSearchPersonPhone) obj;
+      if (id == null) {
+        if (other.id != null)
+          return false;
+      } else if (!id.equals(other.id))
+        return false;
+      if (phoneNumber == null) {
+        if (other.phoneNumber != null)
+          return false;
+      } else if (!phoneNumber.equals(other.phoneNumber))
+        return false;
+      if (phoneNumberExtension == null) {
+        if (other.phoneNumberExtension != null)
+          return false;
+      } else if (!phoneNumberExtension.equals(other.phoneNumberExtension))
+        return false;
+      if (phoneType != other.phoneType)
+        return false;
+      return true;
     }
 
   }
