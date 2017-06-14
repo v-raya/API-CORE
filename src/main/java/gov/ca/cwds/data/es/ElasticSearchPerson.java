@@ -477,7 +477,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * @author CWDS API Team
    */
   @JsonPropertyOrder({"legacy_allegation_id", "allegation_description", "disposition_description",
-      "perpetrator_id", "perpetrator_legacy_client_id", "perpetrator_first_name",
+      "disposition_id", "perpetrator_id", "perpetrator_legacy_client_id", "perpetrator_first_name",
       "perpetrator_last_name", "victim_id", "victim_legacy_client_id", "victim_first_name",
       "victim_last_name"})
   public static class ElasticSearchPersonAllegation implements ApiTypedIdentifier<String> {
@@ -495,6 +495,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
     @JsonProperty("disposition_description")
     private String dispositionDescription;
+
+    @JsonProperty("disposition_id")
+    private String dispositionId;
 
     @JsonProperty("perpetrator_id")
     private String perpetratorId;
@@ -545,6 +548,14 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
     public void setDispositionDescription(String dispositionDescription) {
       this.dispositionDescription = dispositionDescription;
+    }
+
+    public String getDispositionId() {
+      return dispositionId;
+    }
+
+    public void setDispositionId(String dispositionId) {
+      this.dispositionId = dispositionId;
     }
 
     public String getPerpetratorId() {
@@ -1086,9 +1097,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
-  @JsonPropertyOrder({"id", "start_date", "end_date", "county_name", "response_time",
-      "legacy_referral_id", "legacy_last_updated", "reporter", "assigned_social_worker",
-      "allegations", "access_limitation"})
+  @JsonPropertyOrder({"id", "start_date", "end_date", "county_name", "county_id", "response_time",
+      "response_time_id", "legacy_referral_id", "legacy_last_updated", "reporter",
+      "assigned_social_worker", "allegations", "access_limitation"})
   public static class ElasticSearchPersonReferral implements ApiTypedIdentifier<String> {
 
     /**
@@ -1114,8 +1125,14 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonProperty("county_name")
     private String countyName;
 
+    @JsonProperty("county_id")
+    private String countyId;
+
     @JsonProperty("response_time")
     private String responseTime;
+
+    @JsonProperty("response_time_id")
+    private String responseTimeId;
 
     @JsonProperty("reporter")
     private ElasticSearchPersonReporter reporter = new ElasticSearchPersonReporter();
@@ -1221,6 +1238,22 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     public void setAccessLimitation(ElasticSearchAccessLimitation accessLimitation) {
       this.accessLimitation = accessLimitation;
     }
+
+    public String getCountyId() {
+      return countyId;
+    }
+
+    public void setCountyId(String countyId) {
+      this.countyId = countyId;
+    }
+
+    public String getResponseTimeId() {
+      return responseTimeId;
+    }
+
+    public void setResponseTimeId(String responseTimeId) {
+      this.responseTimeId = responseTimeId;
+    }
   }
 
   /**
@@ -1228,9 +1261,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
-  @JsonPropertyOrder({"id", "start_date", "end_date", "county_name", "service_component",
-      "legacy_case_id", "legacy_last_updated", "focus_child", "assigned_social_worker", "parents",
-      "access_limitation"})
+  @JsonPropertyOrder({"id", "start_date", "end_date", "county_name", "county_id",
+      "service_component", "service_component_id", "legacy_case_id", "legacy_last_updated",
+      "focus_child", "assigned_social_worker", "parents", "access_limitation"})
   public static class ElasticSearchPersonCase implements ApiTypedIdentifier<String> {
 
     /**
@@ -1256,8 +1289,14 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonProperty("county_name")
     private String countyName;
 
+    @JsonProperty("county_id")
+    private String countyId;
+
     @JsonProperty("service_component")
     private String serviceComponent;
+
+    @JsonProperty("service_component_id")
+    private String serviceComponentId;
 
     @JsonProperty("focus_child")
     private ElasticSearchPersonChild focusChild;
@@ -1361,6 +1400,22 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
     public void setAccessLimitation(ElasticSearchAccessLimitation accessLimitation) {
       this.accessLimitation = accessLimitation;
+    }
+
+    public String getCountyId() {
+      return countyId;
+    }
+
+    public void setCountyId(String countyId) {
+      this.countyId = countyId;
+    }
+
+    public String getServiceComponentId() {
+      return serviceComponentId;
+    }
+
+    public void setServiceComponentId(String serviceComponentId) {
+      this.serviceComponentId = serviceComponentId;
     }
   }
 

@@ -288,7 +288,15 @@
 					"type": "text",
 					"store": true
 				},
+				"county_id": {
+					"type": "text",
+					"store": true
+				},
 				"response_time": {
+					"type": "text",
+					"store": true
+				},
+				"response_time_id": {
 					"type": "text",
 					"store": true
 				},				
@@ -427,6 +435,10 @@
 						"disposition_description": {
 							"type": "text",
 							"store": true
+						},
+						"disposition_id": {
+							"type": "text",
+							"store": true
 						}
 					}
 				}
@@ -562,6 +574,10 @@
 						"disposition_description": {
 							"type": "text",
 							"store": true
+						},
+						"disposition_id": {
+							"type": "text",
+							"store": true
 						}
 					}
 				},
@@ -666,7 +682,15 @@
 					"type": "text",
 					"store": true
 				},
+				"county_id": {
+					"type": "text",
+					"store": true
+				},
 				"service_component": {
+					"type": "text",
+					"store": true
+				},
+				"service_component_id": {
 					"type": "text",
 					"store": true
 				},
