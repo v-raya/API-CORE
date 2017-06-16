@@ -21,6 +21,8 @@ import javax.persistence.Transient;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
@@ -725,101 +727,23 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.victimLegacyClientId = victimLegacyClientId;
     }
 
+    // ==============
+    // IDENTITY:
+    // ==============
+
     @Override
-    public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result =
-          prime * result + ((allegationDescription == null) ? 0 : allegationDescription.hashCode());
-      result = prime * result
-          + ((dispositionDescription == null) ? 0 : dispositionDescription.hashCode());
-      result = prime * result + ((dispositionId == null) ? 0 : dispositionId.hashCode());
-      result = prime * result + ((id == null) ? 0 : id.hashCode());
-      result =
-          prime * result + ((perpetratorFirstName == null) ? 0 : perpetratorFirstName.hashCode());
-      result = prime * result + ((perpetratorId == null) ? 0 : perpetratorId.hashCode());
-      result =
-          prime * result + ((perpetratorLastName == null) ? 0 : perpetratorLastName.hashCode());
-      result = prime * result
-          + ((perpetratorLegacyClientId == null) ? 0 : perpetratorLegacyClientId.hashCode());
-      result = prime * result + ((victimFirstName == null) ? 0 : victimFirstName.hashCode());
-      result = prime * result + ((victimId == null) ? 0 : victimId.hashCode());
-      result = prime * result + ((victimLastName == null) ? 0 : victimLastName.hashCode());
-      result =
-          prime * result + ((victimLegacyClientId == null) ? 0 : victimLegacyClientId.hashCode());
-      return result;
+    public String toString() {
+      return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, false);
     }
 
     @Override
-    public boolean equals(Object obj) {
-      if (this == obj)
-        return true;
-      if (obj == null)
-        return false;
-      if (getClass() != obj.getClass())
-        return false;
-      ElasticSearchPersonAllegation other = (ElasticSearchPersonAllegation) obj;
-      if (allegationDescription == null) {
-        if (other.allegationDescription != null)
-          return false;
-      } else if (!allegationDescription.equals(other.allegationDescription))
-        return false;
-      if (dispositionDescription == null) {
-        if (other.dispositionDescription != null)
-          return false;
-      } else if (!dispositionDescription.equals(other.dispositionDescription))
-        return false;
-      if (dispositionId == null) {
-        if (other.dispositionId != null)
-          return false;
-      } else if (!dispositionId.equals(other.dispositionId))
-        return false;
-      if (id == null) {
-        if (other.id != null)
-          return false;
-      } else if (!id.equals(other.id))
-        return false;
-      if (perpetratorFirstName == null) {
-        if (other.perpetratorFirstName != null)
-          return false;
-      } else if (!perpetratorFirstName.equals(other.perpetratorFirstName))
-        return false;
-      if (perpetratorId == null) {
-        if (other.perpetratorId != null)
-          return false;
-      } else if (!perpetratorId.equals(other.perpetratorId))
-        return false;
-      if (perpetratorLastName == null) {
-        if (other.perpetratorLastName != null)
-          return false;
-      } else if (!perpetratorLastName.equals(other.perpetratorLastName))
-        return false;
-      if (perpetratorLegacyClientId == null) {
-        if (other.perpetratorLegacyClientId != null)
-          return false;
-      } else if (!perpetratorLegacyClientId.equals(other.perpetratorLegacyClientId))
-        return false;
-      if (victimFirstName == null) {
-        if (other.victimFirstName != null)
-          return false;
-      } else if (!victimFirstName.equals(other.victimFirstName))
-        return false;
-      if (victimId == null) {
-        if (other.victimId != null)
-          return false;
-      } else if (!victimId.equals(other.victimId))
-        return false;
-      if (victimLastName == null) {
-        if (other.victimLastName != null)
-          return false;
-      } else if (!victimLastName.equals(other.victimLastName))
-        return false;
-      if (victimLegacyClientId == null) {
-        if (other.victimLegacyClientId != null)
-          return false;
-      } else if (!victimLegacyClientId.equals(other.victimLegacyClientId))
-        return false;
-      return true;
+    public final int hashCode() {
+      return HashCodeBuilder.reflectionHashCode(this, false);
+    }
+
+    @Override
+    public final boolean equals(Object obj) {
+      return EqualsBuilder.reflectionEquals(this, obj, false);
     }
 
   }
@@ -1528,6 +1452,26 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     public void setResponseTimeId(String responseTimeId) {
       this.responseTimeId = responseTimeId;
     }
+
+    // ==============
+    // IDENTITY:
+    // ==============
+
+    @Override
+    public String toString() {
+      return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, false);
+    }
+
+    @Override
+    public final int hashCode() {
+      return HashCodeBuilder.reflectionHashCode(this, false);
+    }
+
+    @Override
+    public final boolean equals(Object obj) {
+      return EqualsBuilder.reflectionEquals(this, obj, false);
+    }
+
   }
 
   /**
@@ -1691,6 +1635,26 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     public void setServiceComponentId(String serviceComponentId) {
       this.serviceComponentId = serviceComponentId;
     }
+
+    // ==============
+    // IDENTITY:
+    // ==============
+
+    @Override
+    public String toString() {
+      return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, false);
+    }
+
+    @Override
+    public final int hashCode() {
+      return HashCodeBuilder.reflectionHashCode(this, false);
+    }
+
+    @Override
+    public final boolean equals(Object obj) {
+      return EqualsBuilder.reflectionEquals(this, obj, false);
+    }
+
   }
 
   /**
