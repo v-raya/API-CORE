@@ -21,8 +21,6 @@ import javax.persistence.Transient;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
@@ -47,6 +45,7 @@ import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.CmsSystemCode;
 import gov.ca.cwds.data.std.ApiAddressAware;
 import gov.ca.cwds.data.std.ApiAddressAwareWritable;
+import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.data.std.ApiPhoneAware;
 import gov.ca.cwds.data.std.ApiPhoneAwareWritable;
 import gov.ca.cwds.inject.SystemCodeCache;
@@ -176,7 +175,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * @author CWDS API Team
    */
   @SuppressWarnings("serial")
-  public static class ElasticSearchPersonAddress
+  public static class ElasticSearchPersonAddress extends ApiObjectIdentity
       implements ApiTypedIdentifier<String>, ApiAddressAwareWritable {
 
     private String id;
@@ -471,109 +470,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       return null;
     }
 
-    @Override
-    public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + ((city == null) ? 0 : city.hashCode());
-      result = prime * result + ((county == null) ? 0 : county.hashCode());
-      result = prime * result + ((id == null) ? 0 : id.hashCode());
-      result = prime * result + ((state == null) ? 0 : state.hashCode());
-      result = prime * result + ((stateCode == null) ? 0 : stateCode.hashCode());
-      result = prime * result + ((stateName == null) ? 0 : stateName.hashCode());
-      result = prime * result + ((streetAddress == null) ? 0 : streetAddress.hashCode());
-      result = prime * result + ((streetName == null) ? 0 : streetName.hashCode());
-      result = prime * result + ((streetNumber == null) ? 0 : streetNumber.hashCode());
-      result = prime * result + ((type == null) ? 0 : type.hashCode());
-      result = prime * result + ((unitNumber == null) ? 0 : unitNumber.hashCode());
-      result = prime * result + ((unitType == null) ? 0 : unitType.hashCode());
-      result = prime * result + ((zip == null) ? 0 : zip.hashCode());
-      result = prime * result + ((zip4 == null) ? 0 : zip4.hashCode());
-      return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj)
-        return true;
-      if (obj == null)
-        return false;
-      if (getClass() != obj.getClass())
-        return false;
-      ElasticSearchPersonAddress other = (ElasticSearchPersonAddress) obj;
-      if (city == null) {
-        if (other.city != null)
-          return false;
-      } else if (!city.equals(other.city))
-        return false;
-      if (county == null) {
-        if (other.county != null)
-          return false;
-      } else if (!county.equals(other.county))
-        return false;
-      if (id == null) {
-        if (other.id != null)
-          return false;
-      } else if (!id.equals(other.id))
-        return false;
-      if (state == null) {
-        if (other.state != null)
-          return false;
-      } else if (!state.equals(other.state))
-        return false;
-      if (stateCode == null) {
-        if (other.stateCode != null)
-          return false;
-      } else if (!stateCode.equals(other.stateCode))
-        return false;
-      if (stateName == null) {
-        if (other.stateName != null)
-          return false;
-      } else if (!stateName.equals(other.stateName))
-        return false;
-      if (streetAddress == null) {
-        if (other.streetAddress != null)
-          return false;
-      } else if (!streetAddress.equals(other.streetAddress))
-        return false;
-      if (streetName == null) {
-        if (other.streetName != null)
-          return false;
-      } else if (!streetName.equals(other.streetName))
-        return false;
-      if (streetNumber == null) {
-        if (other.streetNumber != null)
-          return false;
-      } else if (!streetNumber.equals(other.streetNumber))
-        return false;
-      if (type == null) {
-        if (other.type != null)
-          return false;
-      } else if (!type.equals(other.type))
-        return false;
-      if (unitNumber == null) {
-        if (other.unitNumber != null)
-          return false;
-      } else if (!unitNumber.equals(other.unitNumber))
-        return false;
-      if (unitType == null) {
-        if (other.unitType != null)
-          return false;
-      } else if (!unitType.equals(other.unitType))
-        return false;
-      if (zip == null) {
-        if (other.zip != null)
-          return false;
-      } else if (!zip.equals(other.zip))
-        return false;
-      if (zip4 == null) {
-        if (other.zip4 != null)
-          return false;
-      } else if (!zip4.equals(other.zip4))
-        return false;
-      return true;
-    }
-
   }
 
   /**
@@ -585,7 +481,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       "disposition_id", "perpetrator_id", "perpetrator_legacy_client_id", "perpetrator_first_name",
       "perpetrator_last_name", "victim_id", "victim_legacy_client_id", "victim_first_name",
       "victim_last_name"})
-  public static class ElasticSearchPersonAllegation implements ApiTypedIdentifier<String> {
+  public static class ElasticSearchPersonAllegation extends ApiObjectIdentity
+      implements ApiTypedIdentifier<String> {
 
     /**
      * Default serialization version.
@@ -727,25 +624,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.victimLegacyClientId = victimLegacyClientId;
     }
 
-    // ==============
-    // IDENTITY:
-    // ==============
-
-    @Override
-    public String toString() {
-      return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, false);
-    }
-
-    @Override
-    public final int hashCode() {
-      return HashCodeBuilder.reflectionHashCode(this, false);
-    }
-
-    @Override
-    public final boolean equals(Object obj) {
-      return EqualsBuilder.reflectionEquals(this, obj, false);
-    }
-
   }
 
   /**
@@ -753,7 +631,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
-  public static class ElasticSearchPersonRelationship implements Serializable {
+  public static class ElasticSearchPersonRelationship extends ApiObjectIdentity {
 
     /**
      * Default serialization version.
@@ -852,80 +730,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.relationshipContext = relationshipContext;
     }
 
-    @Override
-    public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result
-          + ((indexedPersonRelationship == null) ? 0 : indexedPersonRelationship.hashCode());
-      result = prime * result
-          + ((relatedPersonFirstName == null) ? 0 : relatedPersonFirstName.hashCode());
-      result = prime * result + ((relatedPersonId == null) ? 0 : relatedPersonId.hashCode());
-      result =
-          prime * result + ((relatedPersonLastName == null) ? 0 : relatedPersonLastName.hashCode());
-      result =
-          prime * result + ((relatedPersonLegacyId == null) ? 0 : relatedPersonLegacyId.hashCode());
-      result = prime * result + ((relatedPersonLegacySourceTable == null) ? 0
-          : relatedPersonLegacySourceTable.hashCode());
-      result = prime * result
-          + ((relatedPersonRelationship == null) ? 0 : relatedPersonRelationship.hashCode());
-      result =
-          prime * result + ((relationshipContext == null) ? 0 : relationshipContext.hashCode());
-      return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj)
-        return true;
-      if (obj == null)
-        return false;
-      if (getClass() != obj.getClass())
-        return false;
-      ElasticSearchPersonRelationship other = (ElasticSearchPersonRelationship) obj;
-      if (indexedPersonRelationship == null) {
-        if (other.indexedPersonRelationship != null)
-          return false;
-      } else if (!indexedPersonRelationship.equals(other.indexedPersonRelationship))
-        return false;
-      if (relatedPersonFirstName == null) {
-        if (other.relatedPersonFirstName != null)
-          return false;
-      } else if (!relatedPersonFirstName.equals(other.relatedPersonFirstName))
-        return false;
-      if (relatedPersonId == null) {
-        if (other.relatedPersonId != null)
-          return false;
-      } else if (!relatedPersonId.equals(other.relatedPersonId))
-        return false;
-      if (relatedPersonLastName == null) {
-        if (other.relatedPersonLastName != null)
-          return false;
-      } else if (!relatedPersonLastName.equals(other.relatedPersonLastName))
-        return false;
-      if (relatedPersonLegacyId == null) {
-        if (other.relatedPersonLegacyId != null)
-          return false;
-      } else if (!relatedPersonLegacyId.equals(other.relatedPersonLegacyId))
-        return false;
-      if (relatedPersonLegacySourceTable == null) {
-        if (other.relatedPersonLegacySourceTable != null)
-          return false;
-      } else if (!relatedPersonLegacySourceTable.equals(other.relatedPersonLegacySourceTable))
-        return false;
-      if (relatedPersonRelationship == null) {
-        if (other.relatedPersonRelationship != null)
-          return false;
-      } else if (!relatedPersonRelationship.equals(other.relatedPersonRelationship))
-        return false;
-      if (relationshipContext == null) {
-        if (other.relationshipContext != null)
-          return false;
-      } else if (!relationshipContext.equals(other.relationshipContext))
-        return false;
-      return true;
-    }
-
   }
 
   /**
@@ -933,7 +737,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
-  public abstract static class ElasticSearchPersonNestedPerson
+  public abstract static class ElasticSearchPersonNestedPerson extends ApiObjectIdentity
       implements ApiTypedIdentifier<String> {
 
     /**
@@ -1453,25 +1257,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.responseTimeId = responseTimeId;
     }
 
-    // ==============
-    // IDENTITY:
-    // ==============
-
-    @Override
-    public String toString() {
-      return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, false);
-    }
-
-    @Override
-    public final int hashCode() {
-      return HashCodeBuilder.reflectionHashCode(this, false);
-    }
-
-    @Override
-    public final boolean equals(Object obj) {
-      return EqualsBuilder.reflectionEquals(this, obj, false);
-    }
-
   }
 
   /**
@@ -1482,7 +1267,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonPropertyOrder({"id", "start_date", "end_date", "county_name", "county_id",
       "service_component", "service_component_id", "legacy_case_id", "legacy_last_updated",
       "focus_child", "assigned_social_worker", "parents", "access_limitation"})
-  public static class ElasticSearchPersonCase implements ApiTypedIdentifier<String> {
+  public static class ElasticSearchPersonCase extends ApiObjectIdentity
+      implements ApiTypedIdentifier<String> {
 
     /**
      * Default serialization version.
@@ -1636,25 +1422,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.serviceComponentId = serviceComponentId;
     }
 
-    // ==============
-    // IDENTITY:
-    // ==============
-
-    @Override
-    public String toString() {
-      return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, false);
-    }
-
-    @Override
-    public final int hashCode() {
-      return HashCodeBuilder.reflectionHashCode(this, false);
-    }
-
-    @Override
-    public final boolean equals(Object obj) {
-      return EqualsBuilder.reflectionEquals(this, obj, false);
-    }
-
   }
 
   /**
@@ -1727,7 +1494,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @SuppressWarnings("serial")
   @JsonPropertyOrder({"limited_access_code", "limited_access_date", "limited_access_description",
       "limited_access_government_entity_id", "limited_access_government_entity_name"})
-  public static class ElasticSearchAccessLimitation {
+  public static class ElasticSearchAccessLimitation extends ApiObjectIdentity {
 
     @JsonProperty("limited_access_code")
     private String limitedAccessCode;
@@ -1790,7 +1557,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
-  public static class ElasticSearchPersonPhone
+  public static class ElasticSearchPersonPhone extends ApiObjectIdentity
       implements ApiTypedIdentifier<String>, ApiPhoneAwareWritable {
 
     /**
@@ -1885,47 +1652,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @Override
     public String getPhoneId() {
       return this.id;
-    }
-
-    @Override
-    public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + ((id == null) ? 0 : id.hashCode());
-      result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
-      result =
-          prime * result + ((phoneNumberExtension == null) ? 0 : phoneNumberExtension.hashCode());
-      result = prime * result + ((phoneType == null) ? 0 : phoneType.hashCode());
-      return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj)
-        return true;
-      if (obj == null)
-        return false;
-      if (getClass() != obj.getClass())
-        return false;
-      ElasticSearchPersonPhone other = (ElasticSearchPersonPhone) obj;
-      if (id == null) {
-        if (other.id != null)
-          return false;
-      } else if (!id.equals(other.id))
-        return false;
-      if (phoneNumber == null) {
-        if (other.phoneNumber != null)
-          return false;
-      } else if (!phoneNumber.equals(other.phoneNumber))
-        return false;
-      if (phoneNumberExtension == null) {
-        if (other.phoneNumberExtension != null)
-          return false;
-      } else if (!phoneNumberExtension.equals(other.phoneNumberExtension))
-        return false;
-      if (phoneType != other.phoneType)
-        return false;
-      return true;
     }
 
   }
