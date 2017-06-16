@@ -7,7 +7,18 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * Convenient, default implementations of {@link #toString()}, {@link #hashCode()}, and
+ * {@link #equals(Object)}.
+ * 
+ * @author CWDS API Team
+ */
 public class ApiObjectIdentity implements Serializable {
+
+  /**
+   * Default serialization.
+   */
+  private static final long serialVersionUID = 1L;
 
   @Override
   public String toString() {

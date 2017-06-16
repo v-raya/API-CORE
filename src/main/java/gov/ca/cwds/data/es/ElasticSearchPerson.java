@@ -165,6 +165,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     }
   }
 
+  /**
+   * Enum of optional collections under ES Person, including relationships, referrals, screenings,
+   * and cases.
+   */
   public enum ESOptionalCollection {
     NONE, REFERAL, SCREENING, CASE, RELATIONSHIP
   }
@@ -917,7 +921,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
-  public static class ElasticSearchPersonScreening implements ApiTypedIdentifier<String> {
+  public static class ElasticSearchPersonScreening extends ApiObjectIdentity
+      implements ApiTypedIdentifier<String> {
 
     /**
      * Default serialization version.
@@ -1102,7 +1107,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonPropertyOrder({"id", "start_date", "end_date", "county_name", "county_id", "response_time",
       "response_time_id", "legacy_referral_id", "legacy_last_updated", "reporter",
       "assigned_social_worker", "allegations", "access_limitation"})
-  public static class ElasticSearchPersonReferral implements ApiTypedIdentifier<String> {
+  public static class ElasticSearchPersonReferral extends ApiObjectIdentity
+      implements ApiTypedIdentifier<String> {
 
     /**
      * Default serialization version.
@@ -2609,11 +2615,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   public void setHighlightFields(String highlightFields) {
     this.highlightFields = highlightFields;
   }
-
-  // @Override
-  // public String toString() {
-  // return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
-  // }
 
   @Override
   public String toString() {
