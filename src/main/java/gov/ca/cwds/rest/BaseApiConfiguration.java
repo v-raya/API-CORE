@@ -24,6 +24,7 @@ public class BaseApiConfiguration extends Configuration {
   @NotEmpty
   private String version;
 
+  @Nullable
   private SwaggerConfiguration swaggerConfiguration;
 
   @Nullable
@@ -43,6 +44,9 @@ public class BaseApiConfiguration extends Configuration {
 
   @Nullable
   private TriggerTablesConfiguration triggerTablesConfiguration;
+
+  @Nullable
+  private WebSecurityConfiguration webSecurityConfiguration;
 
   @Nullable
   private ShiroConfiguration shiroConfiguration;
@@ -147,5 +151,15 @@ public class BaseApiConfiguration extends Configuration {
   @JsonProperty
   public void setShiroConfiguration(ShiroConfiguration shiroConfiguration) {
     this.shiroConfiguration = shiroConfiguration;
+  }
+
+  @JsonProperty(value = "webSecurity")
+  public WebSecurityConfiguration getWebSecurityConfiguration() {
+    return webSecurityConfiguration;
+  }
+
+  @JsonProperty
+  public void setWebSecurityConfiguration(WebSecurityConfiguration webSecurityConfiguration) {
+    this.webSecurityConfiguration = webSecurityConfiguration;
   }
 }
