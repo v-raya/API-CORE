@@ -10,6 +10,7 @@ import gov.ca.cwds.rest.filters.WebSecurityFilter;
  * DI for Filter classes
  * 
  * @author CWDS API Team
+ * @param <T> configuration type
  */
 public class FiltersModule<T extends BaseApiConfiguration> extends AbstractModule {
 
