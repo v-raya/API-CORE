@@ -23,6 +23,7 @@ import com.hubspot.dropwizard.guice.GuiceBundle;
 
 import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
 import gov.ca.cwds.rest.filters.UnhandledExceptionMapperImpl;
+import gov.ca.cwds.rest.filters.WebSecurityFilter;
 import gov.ca.cwds.rest.resources.SwaggerResource;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -140,6 +141,10 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
     environment.servlets()
         .addFilter("AuditAndLoggingFilter",
             injector.getInstance(RequestResponseLoggingFilter.class))
+        .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
+
+    environment.servlets()
+        .addFilter("WebSecurityFilter", injector.getInstance(WebSecurityFilter.class))
         .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
   }
 
