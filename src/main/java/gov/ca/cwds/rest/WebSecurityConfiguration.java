@@ -34,7 +34,7 @@ public class WebSecurityConfiguration {
    * Key: HTTP response header to set<br>
    * Value: Response header value
    * 
-   * @param A Map of headers names and their values.
+   * @param httpResponseSecurityHeaders A Map of headers names and their values.
    */
   public void setHttpResponseSecurityHeaders(Map<String, String> httpResponseSecurityHeaders) {
     this.httpResponseSecurityHeaders = httpResponseSecurityHeaders;

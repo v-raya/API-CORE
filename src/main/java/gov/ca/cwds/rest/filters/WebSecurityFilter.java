@@ -28,7 +28,7 @@ public class WebSecurityFilter implements Filter {
   /**
    * Constructor
    * 
-   * @param webSecurityConfiguration
+   * @param webSecurityConfiguration The configuration for this filter
    */
   @Inject
   public WebSecurityFilter(WebSecurityConfiguration webSecurityConfiguration) {
