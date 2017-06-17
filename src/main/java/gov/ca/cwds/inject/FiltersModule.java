@@ -22,8 +22,7 @@ public class FiltersModule extends AbstractModule {
   }
 
   @Provides
-  public WebSecurityConfiguration triggerTablesConfiguration(
-      BaseApiConfiguration apiConfiguration) {
+  public WebSecurityConfiguration webSecurityConfiguration(BaseApiConfiguration apiConfiguration) {
     return apiConfiguration.getWebSecurityConfiguration();
   }
 }
