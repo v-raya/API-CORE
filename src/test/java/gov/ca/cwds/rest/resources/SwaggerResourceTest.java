@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.resources;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -13,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import gov.ca.cwds.rest.SwaggerConfiguration;
+import gov.ca.cwds.rest.views.SwaggerView;
 
 public class SwaggerResourceTest {
   private static SwaggerConfiguration swaggerConfiguration = mock(SwaggerConfiguration.class);
@@ -22,6 +25,7 @@ public class SwaggerResourceTest {
   @Before
   public void setup() throws Exception {
     when(swaggerConfiguration.getTemplateName()).thenReturn("SwaggerResourceTest.template");
+    when(swaggerConfiguration.getJsonUrl()).thenReturn("thejsonurl");
     when(uriInfo.getBaseUriBuilder()).thenReturn(uriBuilder);
     when(uriBuilder.path(anyString())).thenReturn(uriBuilder);
     when(uriBuilder.build()).thenReturn(new URI("some_uri"));
@@ -31,17 +35,24 @@ public class SwaggerResourceTest {
   public void getReturnsSwaggerViewWithCorrectUri() throws Exception {
     when(swaggerConfiguration.isShowSwagger()).thenReturn(true);
     SwaggerResource swaggerResource = new SwaggerResource(swaggerConfiguration);
-    // SwaggerView view = swaggerResource.get(uriInfo);
-    // assertThat(view.getJsonUrl(), is("some_uri"));
+    SwaggerView view = swaggerResource.get(uriInfo);
+    assertThat(view.getCallbackUrl(), is("some_uri"));
+  }
+
+  @Test
+  public void getReturnsSwaggerViewWithJsonUrl() throws Exception {
+    when(swaggerConfiguration.isShowSwagger()).thenReturn(true);
+    SwaggerResource swaggerResource = new SwaggerResource(swaggerConfiguration);
+    SwaggerView view = swaggerResource.get(uriInfo);
+    assertThat(view.getJsonUrl(), is("thejsonurl"));
   }
 
   @Test
   public void getReturnsSwaggerViewWithCorrectTemplateName() throws Exception {
     when(swaggerConfiguration.isShowSwagger()).thenReturn(true);
     SwaggerResource swaggerResource = new SwaggerResource(swaggerConfiguration);
-    // SwaggerView view = swaggerResource.get(uriInfo);
-    // assertThat(view.getTemplateName(),
-    // is("/gov/ca/cwds/rest/views/SwaggerResourceTest.template"));
+    SwaggerView view = swaggerResource.get(uriInfo);
+    assertThat(view.getTemplateName(), is("/gov/ca/cwds/rest/views/SwaggerResourceTest.template"));
   }
 
 }

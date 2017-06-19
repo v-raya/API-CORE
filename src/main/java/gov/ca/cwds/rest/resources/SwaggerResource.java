@@ -36,10 +36,9 @@ public class SwaggerResource implements Resource {
   @GET
   public SwaggerView get(@Context UriInfo uriInfo) {
     UriBuilder ub = uriInfo.getBaseUriBuilder();
-    String swaggerjsonUrl = ub.path("swagger.json").build().toASCIIString();
-    UriBuilder ub2 = uriInfo.getBaseUriBuilder();
-    String callbackUrl = ub2.path("swagger").build().toASCIIString();
+    String callbackUrl = ub.path("swagger").build().toASCIIString();
     if (swaggerConfiguration.isShowSwagger()) {
+      String swaggerjsonUrl = swaggerConfiguration.getJsonUrl();
       return new SwaggerView(swaggerConfiguration, swaggerjsonUrl, callbackUrl);
     } else {
       throw new WebApplicationException(404);
