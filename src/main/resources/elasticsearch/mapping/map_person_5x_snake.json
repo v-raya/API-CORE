@@ -155,6 +155,47 @@
 				}
 			}
 		},
+		"akas": {
+			"properties": {
+				"first_name": {
+					"type": "text",
+					"store": true
+				},
+				"last_name": {
+					"type": "text",
+					"store": true
+				},
+				"middle_name": {
+					"type": "text",
+					"store": true
+				},
+				"prefix": {
+					"type": "text",
+					"store": true
+				},
+				"suffix": {
+					"type": "text",
+					"store": true
+				},
+				"name_type": {
+					"type": "text",
+					"store": true
+				}
+				"legacy_source_table": {
+					"type": "text",
+					"store": true
+				},
+				"legacy_id": {
+					"type": "text",
+					"store": true
+				},
+				"legacy_last_updated": {
+					"format": "strict_date_time",
+					"type": "date",
+					"store": true
+				}
+			}
+		},
 		"languages": {
 			"type": "text",
 			"store": true
