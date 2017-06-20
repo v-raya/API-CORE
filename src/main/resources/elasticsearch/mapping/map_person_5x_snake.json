@@ -180,7 +180,7 @@
 				"name_type": {
 					"type": "text",
 					"store": true
-				}
+				},
 				"legacy_source_table": {
 					"type": "text",
 					"store": true
