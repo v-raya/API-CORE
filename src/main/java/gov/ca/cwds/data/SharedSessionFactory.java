@@ -36,26 +36,42 @@ import org.hibernate.stat.Statistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Reduce pressure on test databases by constructing a single data source (connection pool) for all
+ * test cases. The static session factory will decide to shutdown the shared session factory on
+ * method close, if no further unit tests require it.
+ * 
+ * @author CWDS API Team
+ */
 public class SharedSessionFactory implements SessionFactory {
+
+  /**
+   * Default serialization.
+   */
+  private static final long serialVersionUID = 1L;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SharedSessionFactory.class);
 
   private SessionFactory sf;
   private final Lock lock;
   private final Condition condition;
+  private final boolean testMode;
 
-  private boolean testMode = false;
   private volatile boolean held = true;
 
   public SharedSessionFactory(SessionFactory sf, boolean testMode) {
     this.sf = sf;
+    this.testMode = testMode;
     lock = new ReentrantLock();
     condition = lock.newCondition();
-    this.testMode = testMode;
 
     if (testMode) {
       runCloseThread();
     }
+  }
+
+  public SharedSessionFactory(SessionFactory sf) {
+    this(sf, false);
   }
 
   @Override

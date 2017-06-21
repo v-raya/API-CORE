@@ -32,8 +32,8 @@ public class ApiReferentialIntegrityInterceptor extends EmptyInterceptor {
       Object[] previousState, String[] propertyNames, Type[] types) {
     LOGGER.info("on flush dirty");
 
-    // if (entity instanceof Student) {
-    // LOGGER.info("Student Update Operation");
+    // if (entity instanceof Client) {
+    // LOGGER.info("Client Update Operation");
     // return true;
     // }
 
@@ -54,8 +54,8 @@ public class ApiReferentialIntegrityInterceptor extends EmptyInterceptor {
       Type[] types) {
     LOGGER.info("on save");
 
-    // if (entity instanceof Student) {
-    // LOGGER.info("Student Create Operation");
+    // if (entity instanceof Client) {
+    // LOGGER.info("Client Create Operation");
     // return true;
     // }
 
