@@ -165,12 +165,101 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     }
   }
 
+
+
   /**
    * Enum of optional collections under ES Person, including relationships, referrals, screenings,
    * and cases.
    */
   public enum ESOptionalCollection {
     NONE, REFERAL, SCREENING, CASE, RELATIONSHIP
+  }
+
+  /**
+   * Legacy descriptor.
+   * 
+   * @author CWDS API Team
+   */
+  public static class ElasticSearchLegacyDescriptor extends ApiObjectIdentity {
+
+    private static final long serialVersionUID = 2802094735397568904L;
+
+    @JsonProperty("legacy_id")
+    private String legacyId;
+
+    @JsonProperty("legacy_ui_id")
+    private String legacyUiId;
+
+    @JsonProperty("legacy_last_updated")
+    private String legacyLastUpdated;
+
+    @JsonProperty("legacy_table_name")
+    private String legacyTableName;
+
+    @JsonProperty("legacy_table_description")
+    private String legacyTableDescription;
+
+    @JsonProperty("legacy_column_name")
+    private String legacyColumnName;
+
+    @JsonProperty("legacy_column_description")
+    private String legacyColumnDescription;
+
+    public String getLegacyId() {
+      return legacyId;
+    }
+
+    public void setLegacyId(String legacyId) {
+      this.legacyId = legacyId;
+    }
+
+    public String getLegacyUiId() {
+      return legacyUiId;
+    }
+
+    public void setLegacyUiId(String legacyUiId) {
+      this.legacyUiId = legacyUiId;
+    }
+
+    public String getLegacyLastUpdated() {
+      return legacyLastUpdated;
+    }
+
+    public void setLegacyLastUpdated(String legacyLastUpdated) {
+      this.legacyLastUpdated = legacyLastUpdated;
+    }
+
+    public String getLegacyTableName() {
+      return legacyTableName;
+    }
+
+    public void setLegacyTableName(String legacyTableName) {
+      this.legacyTableName = legacyTableName;
+    }
+
+    public String getLegacyTableDescription() {
+      return legacyTableDescription;
+    }
+
+    public void setLegacyTableDescription(String legacyTableDescription) {
+      this.legacyTableDescription = legacyTableDescription;
+    }
+
+    public String getLegacyColumnName() {
+      return legacyColumnName;
+    }
+
+    public void setLegacyColumnName(String legacyColumnName) {
+      this.legacyColumnName = legacyColumnName;
+    }
+
+    public String getLegacyColumnDescription() {
+      return legacyColumnDescription;
+    }
+
+    public void setLegacyColumnDescription(String legacyColumnDescription) {
+      this.legacyColumnDescription = legacyColumnDescription;
+    }
   }
 
   /**
@@ -1974,9 +2063,15 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonProperty("source")
   private transient String source;
 
+  @JsonProperty("legacy_descriptor")
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
+
+  @Deprecated
   @JsonProperty("legacy_source_table")
   private String legacySourceTable;
 
+  @Deprecated
   @JsonProperty("legacy_id")
   private String legacyId;
 
@@ -2537,7 +2632,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @param soc158SealedClientIndicator SOC158 sealed client code (indicator)
    */
-  public void SetSoc158SealedClientIndicator(String soc158SealedClientIndicator) {
+  public void setSoc158SealedClientIndicator(String soc158SealedClientIndicator) {
     this.soc158SealedClientIndicator = soc158SealedClientIndicator;
   }
 
@@ -2749,20 +2844,41 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     this.cases = cases;
   }
 
+  @Deprecated
   public String getLegacySourceTable() {
     return legacySourceTable;
   }
 
+  @Deprecated
   public void setLegacySourceTable(String legacySourceTable) {
     this.legacySourceTable = legacySourceTable;
   }
 
+  @Deprecated
   public String getLegacyId() {
     return legacyId;
   }
 
+  @Deprecated
   public void setLegacyId(String legacyId) {
     this.legacyId = legacyId;
   }
 
+  /**
+   * Get legacy descriptor
+   * 
+   * @return The legacy descriptor
+   */
+  public ElasticSearchLegacyDescriptor getLegacyDescriptor() {
+    return legacyDescriptor;
+  }
+
+  /**
+   * Set legacy descriptor
+   * 
+   * @param legacyDescriptor The legacy descriptor
+   */
+  public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
+    this.legacyDescriptor = legacyDescriptor;
+  }
 }
