@@ -38,8 +38,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Reduce pressure on test databases by constructing a single data source (connection pool) for all
- * test cases. The static session factory will decide to shutdown the shared session factory on
- * method close, if no further unit tests require it.
+ * test cases. The "closer thread" will shut down the shared session factory on method close, if no
+ * further unit tests require it. When not in test mode, this class merely wraps a SessionFactory.
  * 
  * @author CWDS API Team
  */
@@ -59,6 +59,12 @@ public class SharedSessionFactory implements SessionFactory {
 
   private volatile boolean held = true;
 
+  /**
+   * Constructor.
+   * 
+   * @param sf session factory to wrap
+   * @param testMode for JUnit tests
+   */
   public SharedSessionFactory(SessionFactory sf, boolean testMode) {
     this.sf = sf;
     this.testMode = testMode;
@@ -70,6 +76,11 @@ public class SharedSessionFactory implements SessionFactory {
     }
   }
 
+  /**
+   * Constructor for normal production use.
+   * 
+   * @param sf session factory to wrap
+   */
   public SharedSessionFactory(SessionFactory sf) {
     this(sf, false);
   }
@@ -187,11 +198,12 @@ public class SharedSessionFactory implements SessionFactory {
   @Override
   public void close() {
     if (testMode) {
-      // Close thread calls close().
+      // Thread calls close() for you.
       held = false;
       condition.signalAll();
       lock.unlock();
     } else {
+      // Close normally.
       sf.close();
     }
   }
@@ -261,23 +273,27 @@ public class SharedSessionFactory implements SessionFactory {
     sf.addNamedEntityGraph(graphName, entityGraph);
   }
 
+  /**
+   * Launch the "closer thread" in test mode. Unnecessary in production mode.
+   */
   protected void runCloseThread() {
     new Thread(() -> {
       try {
+        LOGGER.info("START SESSION FACTORY CLOSER THREAD");
         Thread.sleep(2000); // NOSONAR
         while (true) {
-          LOGGER.info("condition.await()");
-          condition.await(); // Possible spurious wake-up. Must still evaluation the situation.
-          Thread.sleep(200); // NOSONAR
+          LOGGER.debug("Await notification ...");
+          condition.await(); // Possible spurious wake-up. Must still evaluate the situation.
+          Thread.sleep(500); // NOSONAR
 
           if (!held) {
             try {
               lock.lock();
               held = false;
               condition.signalAll();
-              LOGGER.warn("SHUTTING DOWN SESSION FACTORY!");
+              LOGGER.info("SHUTTING DOWN SESSION FACTORY!");
               sf.close();
-              LOGGER.warn("SHUT DOWN SESSION FACTORY!");
+              LOGGER.info("SHUT DOWN SESSION FACTORY!");
             } finally {
               lock.unlock(); // Always unlock, no matter what!
             }
@@ -287,6 +303,8 @@ public class SharedSessionFactory implements SessionFactory {
 
       } catch (InterruptedException ie) {
         Thread.currentThread().interrupt();
+      } finally {
+        LOGGER.info("EXIT SESSION FACTORY CLOSER THREAD");
       }
 
     }).start();
