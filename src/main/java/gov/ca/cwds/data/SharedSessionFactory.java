@@ -57,7 +57,7 @@ public class SharedSessionFactory implements SessionFactory {
   private final Condition condition;
   private final boolean testMode;
 
-  private volatile boolean held = true;
+  volatile boolean held = true;
 
   /**
    * Constructor.
