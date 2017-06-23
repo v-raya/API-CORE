@@ -180,6 +180,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
   public static class ElasticSearchLegacyDescriptor extends ApiObjectIdentity {
 
     private static final long serialVersionUID = 2802094735397568904L;
