@@ -87,15 +87,7 @@
         "legacy_table_description": {
           "type": "text",
           "store": true
-        },
-        "legacy_column_name": {
-          "type": "text",
-          "store": true
-        },
-        "legacy_column_description": {
-          "type": "text",
-          "store": true
-        }
+        }        
       }
     },
     "addresses": {
@@ -175,15 +167,7 @@
             "legacy_table_description": {
               "type": "text",
               "store": true
-            },
-            "legacy_column_name": {
-              "type": "text",
-              "store": true
-            },
-            "legacy_column_description": {
-              "type": "text",
-              "store": true
-            }
+            }            
           }
         }
       }
@@ -195,10 +179,6 @@
           "store": true
         },
         "legacy_source_table": {
-          "type": "text",
-          "store": true
-        },
-        "legacy_table_column": {
           "type": "text",
           "store": true
         },
@@ -239,14 +219,6 @@
               "store": true
             },
             "legacy_table_description": {
-              "type": "text",
-              "store": true
-            },
-            "legacy_column_name": {
-              "type": "text",
-              "store": true
-            },
-            "legacy_column_description": {
               "type": "text",
               "store": true
             }
@@ -302,15 +274,7 @@
             "legacy_table_description": {
               "type": "text",
               "store": true
-            },
-            "legacy_column_name": {
-              "type": "text",
-              "store": true
-            },
-            "legacy_column_description": {
-              "type": "text",
-              "store": true
-            }
+            }            
           }
         }
       }
@@ -404,14 +368,6 @@
             "legacy_table_description": {
               "type": "text",
               "store": true
-            },
-            "legacy_column_name": {
-              "type": "text",
-              "store": true
-            },
-            "legacy_column_description": {
-              "type": "text",
-              "store": true
             }
           }
         }
@@ -461,14 +417,6 @@
               "store": true
             },
             "legacy_table_description": {
-              "type": "text",
-              "store": true
-            },
-            "legacy_column_name": {
-              "type": "text",
-              "store": true
-            },
-            "legacy_column_description": {
               "type": "text",
               "store": true
             }
@@ -537,14 +485,6 @@
               "store": true
             },
             "legacy_table_description": {
-              "type": "text",
-              "store": true
-            },
-            "legacy_column_name": {
-              "type": "text",
-              "store": true
-            },
-            "legacy_column_description": {
               "type": "text",
               "store": true
             }
@@ -620,14 +560,6 @@
                 "legacy_table_description": {
                   "type": "text",
                   "store": true
-                },
-                "legacy_column_name": {
-                  "type": "text",
-                  "store": true
-                },
-                "legacy_column_description": {
-                  "type": "text",
-                  "store": true
                 }
               }
             }
@@ -678,14 +610,6 @@
                 "legacy_table_description": {
                   "type": "text",
                   "store": true
-                },
-                "legacy_column_name": {
-                  "type": "text",
-                  "store": true
-                },
-                "legacy_column_description": {
-                  "type": "text",
-                  "store": true
                 }
               }
             }
@@ -693,6 +617,10 @@
         },
         "allegations": {
           "properties": {
+            "id": {
+              "type": "text",
+              "store": true
+            },
             "legacy_allegation_id": {
               "type": "text",
               "store": true
@@ -736,14 +664,6 @@
                 "legacy_table_description": {
                   "type": "text",
                   "store": true
-                },
-                "legacy_column_name": {
-                  "type": "text",
-                  "store": true
-                },
-                "legacy_column_description": {
-                  "type": "text",
-                  "store": true
                 }
               }
             },
@@ -781,14 +701,6 @@
                       "store": true
                     },
                     "legacy_table_description": {
-                      "type": "text",
-                      "store": true
-                    },
-                    "legacy_column_name": {
-                      "type": "text",
-                      "store": true
-                    },
-                    "legacy_column_description": {
                       "type": "text",
                       "store": true
                     }
@@ -830,14 +742,6 @@
                       "store": true
                     },
                     "legacy_table_description": {
-                      "type": "text",
-                      "store": true
-                    },
-                    "legacy_column_name": {
-                      "type": "text",
-                      "store": true
-                    },
-                    "legacy_column_description": {
                       "type": "text",
                       "store": true
                     }
@@ -960,14 +864,6 @@
                 "legacy_table_description": {
                   "type": "text",
                   "store": true
-                },
-                "legacy_column_name": {
-                  "type": "text",
-                  "store": true
-                },
-                "legacy_column_description": {
-                  "type": "text",
-                  "store": true
                 }
               }
             }
@@ -1018,14 +914,6 @@
                 "legacy_table_description": {
                   "type": "text",
                   "store": true
-                },
-                "legacy_column_name": {
-                  "type": "text",
-                  "store": true
-                },
-                "legacy_column_description": {
-                  "type": "text",
-                  "store": true
                 }
               }
             }
@@ -1033,6 +921,10 @@
         },
         "allegations": {
           "properties": {
+            "id": {
+              "type": "text",
+              "store": true
+            },
             "legacy_allegation_id": {
               "type": "text",
               "store": true
@@ -1076,14 +968,6 @@
                 "legacy_table_description": {
                   "type": "text",
                   "store": true
-                },
-                "legacy_column_name": {
-                  "type": "text",
-                  "store": true
-                },
-                "legacy_column_description": {
-                  "type": "text",
-                  "store": true
                 }
               }
             },
@@ -1121,14 +1005,6 @@
                       "store": true
                     },
                     "legacy_table_description": {
-                      "type": "text",
-                      "store": true
-                    },
-                    "legacy_column_name": {
-                      "type": "text",
-                      "store": true
-                    },
-                    "legacy_column_description": {
                       "type": "text",
                       "store": true
                     }
@@ -1170,14 +1046,6 @@
                       "store": true
                     },
                     "legacy_table_description": {
-                      "type": "text",
-                      "store": true
-                    },
-                    "legacy_column_name": {
-                      "type": "text",
-                      "store": true
-                    },
-                    "legacy_column_description": {
                       "type": "text",
                       "store": true
                     }
@@ -1274,14 +1142,6 @@
                 "legacy_table_description": {
                   "type": "text",
                   "store": true
-                },
-                "legacy_column_name": {
-                  "type": "text",
-                  "store": true
-                },
-                "legacy_column_description": {
-                  "type": "text",
-                  "store": true
                 }
               }
             }
@@ -1338,14 +1198,6 @@
                   "store": true
                 },
                 "legacy_table_description": {
-                  "type": "text",
-                  "store": true
-                },
-                "legacy_column_name": {
-                  "type": "text",
-                  "store": true
-                },
-                "legacy_column_description": {
                   "type": "text",
                   "store": true
                 }
@@ -1426,14 +1278,6 @@
             "legacy_table_description": {
               "type": "text",
               "store": true
-            },
-            "legacy_column_name": {
-              "type": "text",
-              "store": true
-            },
-            "legacy_column_description": {
-              "type": "text",
-              "store": true
             }
           }
         },
@@ -1507,14 +1351,6 @@
                 "legacy_table_description": {
                   "type": "text",
                   "store": true
-                },
-                "legacy_column_name": {
-                  "type": "text",
-                  "store": true
-                },
-                "legacy_column_description": {
-                  "type": "text",
-                  "store": true
                 }
               }
             }
@@ -1573,14 +1409,6 @@
                 "legacy_table_description": {
                   "type": "text",
                   "store": true
-                },
-                "legacy_column_name": {
-                  "type": "text",
-                  "store": true
-                },
-                "legacy_column_description": {
-                  "type": "text",
-                  "store": true
                 }
               }
             }
@@ -1629,14 +1457,6 @@
                   "store": true
                 },
                 "legacy_table_description": {
-                  "type": "text",
-                  "store": true
-                },
-                "legacy_column_name": {
-                  "type": "text",
-                  "store": true
-                },
-                "legacy_column_description": {
                   "type": "text",
                   "store": true
                 }

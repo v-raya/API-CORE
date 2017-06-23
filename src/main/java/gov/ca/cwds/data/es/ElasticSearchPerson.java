@@ -32,7 +32,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -200,11 +199,29 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonProperty("legacy_table_description")
     private String legacyTableDescription;
 
-    @JsonProperty("legacy_column_name")
-    private String legacyColumnName;
+    /**
+     * Default no-arg constructor
+     */
+    public ElasticSearchLegacyDescriptor() {}
 
-    @JsonProperty("legacy_column_description")
-    private String legacyColumnDescription;
+    /**
+     * Create with fields
+     * 
+     * @param legacyId Legacy ID
+     * @param legacyUiId Legacy UI ID
+     * @param legacyLastUpdated Legacy last updated time stamp
+     * @param legacyTableName Legacy table name
+     * @param legacyTableDescription Legacy table description
+     */
+    public ElasticSearchLegacyDescriptor(String legacyId, String legacyUiId,
+        String legacyLastUpdated, String legacyTableName, String legacyTableDescription) {
+      super();
+      this.legacyId = legacyId;
+      this.legacyUiId = legacyUiId;
+      this.legacyLastUpdated = legacyLastUpdated;
+      this.legacyTableName = legacyTableName;
+      this.legacyTableDescription = legacyTableDescription;
+    }
 
     public String getLegacyId() {
       return legacyId;
@@ -244,22 +261,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
     public void setLegacyTableDescription(String legacyTableDescription) {
       this.legacyTableDescription = legacyTableDescription;
-    }
-
-    public String getLegacyColumnName() {
-      return legacyColumnName;
-    }
-
-    public void setLegacyColumnName(String legacyColumnName) {
-      this.legacyColumnName = legacyColumnName;
-    }
-
-    public String getLegacyColumnDescription() {
-      return legacyColumnDescription;
-    }
-
-    public void setLegacyColumnDescription(String legacyColumnDescription) {
-      this.legacyColumnDescription = legacyColumnDescription;
     }
   }
 
@@ -323,6 +324,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("street_name")
     private String streetName;
+
+    @JsonProperty("legacy_descriptor")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
 
     /**
      * Default constructor.
@@ -564,6 +569,13 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       return null;
     }
 
+    public ElasticSearchLegacyDescriptor getLegacyDescriptor() {
+      return legacyDescriptor;
+    }
+
+    public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
+      this.legacyDescriptor = legacyDescriptor;
+    }
   }
 
   /**
@@ -571,10 +583,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
-  @JsonPropertyOrder({"legacy_allegation_id", "allegation_description", "disposition_description",
-      "disposition_id", "perpetrator_id", "perpetrator_legacy_client_id", "perpetrator_first_name",
-      "perpetrator_last_name", "victim_id", "victim_legacy_client_id", "victim_first_name",
-      "victim_last_name"})
   public static class ElasticSearchPersonAllegation extends ApiObjectIdentity
       implements ApiTypedIdentifier<String> {
 
@@ -583,8 +591,12 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
      */
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("legacy_allegation_id")
+    @JsonProperty("id")
     private String id;
+
+    @JsonProperty("legacy_allegation_id")
+    @Deprecated
+    private String legacyId;
 
     @JsonProperty("allegation_description")
     private String allegationDescription;
@@ -596,31 +608,64 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     private String dispositionId;
 
     @JsonProperty("perpetrator_id")
+    @Deprecated
     private String perpetratorId;
 
     @JsonProperty("perpetrator_first_name")
+    @Deprecated
     private String perpetratorFirstName;
 
     @JsonProperty("perpetrator_last_name")
+    @Deprecated
     private String perpetratorLastName;
 
     @JsonProperty("perpetrator_legacy_client_id")
+    @Deprecated
     private String perpetratorLegacyClientId;
 
     @JsonProperty("victim_id")
+    @Deprecated
     private String victimId;
 
     @JsonProperty("victim_first_name")
+    @Deprecated
     private String victimFirstName;
 
     @JsonProperty("victim_last_name")
+    @Deprecated
     private String victimLastName;
 
     @JsonProperty("victim_legacy_client_id")
+    @Deprecated
     private String victimLegacyClientId;
 
+    @JsonProperty("legacy_descriptor")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
+
+    @JsonProperty("victim")
+    private ElasticSearchPersonNestedPerson victim = new ElasticSearchPersonNestedPerson();
+
+    @JsonProperty("perpetrator")
+    private ElasticSearchPersonNestedPerson perpetrator = new ElasticSearchPersonNestedPerson();
+
+    public ElasticSearchPersonNestedPerson getVictim() {
+      return victim;
+    }
+
+    public void setVictim(ElasticSearchPersonNestedPerson victim) {
+      this.victim = victim;
+    }
+
+    public ElasticSearchPersonNestedPerson getPerpetrator() {
+      return perpetrator;
+    }
+
+    public void setPerpetrator(ElasticSearchPersonNestedPerson perpetrator) {
+      this.perpetrator = perpetrator;
+    }
+
     @Override
-    @JsonIgnore
     public String getId() {
       return id;
     }
@@ -628,6 +673,16 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @Override
     public void setId(String id) {
       this.id = id;
+    }
+
+    @Deprecated
+    public String getLegacyId() {
+      return legacyId;
+    }
+
+    @Deprecated
+    public void setLegacyId(String legacyId) {
+      this.legacyId = legacyId;
     }
 
     public String getAllegationDescription() {
@@ -654,70 +709,93 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.dispositionId = dispositionId;
     }
 
+    @Deprecated
     public String getPerpetratorId() {
       return perpetratorId;
     }
 
+    @Deprecated
     public void setPerpetratorId(String perpetratorId) {
       this.perpetratorId = perpetratorId;
     }
 
+    @Deprecated
     public String getPerpetratorFirstName() {
       return perpetratorFirstName;
     }
 
+    @Deprecated
     public void setPerpetratorFirstName(String perpetratorFirstName) {
       this.perpetratorFirstName = perpetratorFirstName;
     }
 
+    @Deprecated
     public String getPerpetratorLastName() {
       return perpetratorLastName;
     }
 
+    @Deprecated
     public void setPerpetratorLastName(String perpetratorLastName) {
       this.perpetratorLastName = perpetratorLastName;
     }
 
+    @Deprecated
     public String getPerpetratorLegacyClientId() {
       return perpetratorLegacyClientId;
     }
 
+    @Deprecated
     public void setPerpetratorLegacyClientId(String perpetratorLegacyClientId) {
       this.perpetratorLegacyClientId = perpetratorLegacyClientId;
     }
 
+    @Deprecated
     public String getVictimId() {
       return victimId;
     }
 
+    @Deprecated
     public void setVictimId(String victimId) {
       this.victimId = victimId;
     }
 
+    @Deprecated
     public String getVictimFirstName() {
       return victimFirstName;
     }
 
+    @Deprecated
     public void setVictimFirstName(String victimFirstName) {
       this.victimFirstName = victimFirstName;
     }
 
+    @Deprecated
     public String getVictimLastName() {
       return victimLastName;
     }
 
+    @Deprecated
     public void setVictimLastName(String victimLastName) {
       this.victimLastName = victimLastName;
     }
 
+    @Deprecated
     public String getVictimLegacyClientId() {
       return victimLegacyClientId;
     }
 
+    @Deprecated
     public void setVictimLegacyClientId(String victimLegacyClientId) {
       this.victimLegacyClientId = victimLegacyClientId;
     }
 
+    public ElasticSearchLegacyDescriptor getLegacyDescriptor() {
+      return legacyDescriptor;
+    }
+
+    public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
+      this.legacyDescriptor = legacyDescriptor;
+    }
   }
 
   /**
@@ -745,9 +823,11 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     private String indexedPersonRelationship;
 
     @JsonProperty("related_person_legacy_id")
+    @Deprecated
     private String relatedPersonLegacyId;
 
     @JsonProperty("related_person_legacy_source_table")
+    @Deprecated
     private String relatedPersonLegacySourceTable;
 
     @JsonProperty("related_person_relationship")
@@ -755,6 +835,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
     @JsonProperty("relationship_context")
     private String relationshipContext;
+
+    @JsonProperty("legacy_descriptor")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
 
     @JsonIgnore
     public String getRelatedPersonId() {
@@ -792,18 +876,22 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.indexedPersonRelationship = indexedPersonRelationship;
     }
 
+    @Deprecated
     public String getRelatedPersonLegacyId() {
       return relatedPersonLegacyId;
     }
 
+    @Deprecated
     public void setRelatedPersonLegacyId(String relatedPersonLegacyId) {
       this.relatedPersonLegacyId = relatedPersonLegacyId;
     }
 
+    @Deprecated
     public String getRelatedPersonLegacySourceTable() {
       return relatedPersonLegacySourceTable;
     }
 
+    @Deprecated
     public void setRelatedPersonLegacySourceTable(String relatedPersonLegacySourceTable) {
       this.relatedPersonLegacySourceTable = relatedPersonLegacySourceTable;
     }
@@ -824,6 +912,13 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.relationshipContext = relationshipContext;
     }
 
+    public ElasticSearchLegacyDescriptor getLegacyDescriptor() {
+      return legacyDescriptor;
+    }
+
+    public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
+      this.legacyDescriptor = legacyDescriptor;
+    }
   }
 
   /**
@@ -831,7 +926,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
-  public abstract static class ElasticSearchPersonNestedPerson extends ApiObjectIdentity
+  public static class ElasticSearchPersonNestedPerson extends ApiObjectIdentity
       implements ApiTypedIdentifier<String> {
 
     /**
@@ -848,13 +943,20 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonProperty("last_name")
     private String lastName;
 
+    @JsonProperty("legacy_descriptor")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
+
     @JsonIgnore
+    @Deprecated
     protected String legacyPersonId;
 
     @JsonIgnore
+    @Deprecated
     protected String legacyLastUpdated;
 
     @JsonIgnore
+    @Deprecated
     private String legacySourceTable;
 
     /**
@@ -863,7 +965,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
      * 
      * @return legacy person id
      */
-    public abstract String getLegacyClientId();
+    @Deprecated
+    public String getLegacyClientId() {
+      return legacyPersonId;
+    }
 
     @Override
     public String getId() {
@@ -891,24 +996,37 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.lastName = lastName;
     }
 
+    @Deprecated
     public void setLegacyClientId(String legacyClientId) {
       this.legacyPersonId = legacyClientId;
     }
 
+    @Deprecated
     public String getLegacyLastUpdated() {
       return legacyLastUpdated;
     }
 
+    @Deprecated
     public void setLegacyLastUpdated(String legacyLastUpdated) {
       this.legacyLastUpdated = legacyLastUpdated;
     }
 
+    @Deprecated
     public String getLegacySourceTable() {
       return legacySourceTable;
     }
 
+    @Deprecated
     public void setLegacySourceTable(String legacySourceTable) {
       this.legacySourceTable = legacySourceTable;
+    }
+
+    public ElasticSearchLegacyDescriptor getLegacyDescriptor() {
+      return legacyDescriptor;
+    }
+
+    public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
+      this.legacyDescriptor = legacyDescriptor;
     }
   }
 
@@ -921,22 +1039,26 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   public static class ElasticSearchPersonAny extends ElasticSearchPersonNestedPerson {
 
     @JsonProperty("legacy_source_table")
+    @Deprecated
     private String legacySourceTable;
 
     private List<String> roles = new ArrayList<>();
 
     @Override
     @JsonProperty("legacy_id")
+    @Deprecated
     public String getLegacyClientId() {
       return legacyPersonId;
     }
 
     @Override
+    @Deprecated
     public String getLegacySourceTable() {
       return legacySourceTable;
     }
 
     @Override
+    @Deprecated
     public void setLegacySourceTable(String legacySourceTable) {
       this.legacySourceTable = legacySourceTable;
     }
@@ -957,11 +1079,11 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * @author CWDS API Team
    */
   @SuppressWarnings("serial")
-  @JsonPropertyOrder({"id", "first_name", "last_name", "legacy_reporter_id"})
   public static class ElasticSearchPersonReporter extends ElasticSearchPersonNestedPerson {
 
     @Override
     @JsonProperty("legacy_reporter_id")
+    @Deprecated
     public String getLegacyClientId() {
       return legacyPersonId;
     }
@@ -973,18 +1095,18 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * @author CWDS API Team
    */
   @SuppressWarnings("serial")
-  @JsonPropertyOrder({"id", "first_name", "last_name", "legacy_assigned_social_worker_id",
-      "legacy_assigned_social_worker_last_updated"})
   public static class ElasticSearchPersonSocialWorker extends ElasticSearchPersonNestedPerson {
 
     @Override
     @JsonProperty("legacy_assigned_social_worker_id")
+    @Deprecated
     public String getLegacyClientId() {
       return legacyPersonId;
     }
 
     @Override
     @JsonProperty("legacy_assigned_social_worker_last_updated")
+    @Deprecated
     public String getLegacyLastUpdated() {
       return legacyLastUpdated;
     }
@@ -996,11 +1118,11 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * @author CWDS API Team
    */
   @SuppressWarnings("serial")
-  @JsonPropertyOrder({"id", "first_name", "last_name", "legacy_staff_id"})
   public static class ElasticSearchPersonStaff extends ElasticSearchPersonNestedPerson {
 
     @Override
     @JsonProperty("legacy_staff_id")
+    @Deprecated
     public String getLegacyClientId() {
       return legacyPersonId;
     }
@@ -1060,6 +1182,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
     @JsonProperty("all_people")
     private List<ElasticSearchPersonAny> allPeople = new ArrayList<>();
+
+    @JsonProperty("legacy_descriptor")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
 
     @Override
     public String getId() {
@@ -1187,6 +1313,13 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.referralId = referralId;
     }
 
+    public ElasticSearchLegacyDescriptor getLegacyDescriptor() {
+      return legacyDescriptor;
+    }
+
+    public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
+      this.legacyDescriptor = legacyDescriptor;
+    }
   }
 
   /**
@@ -1194,9 +1327,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
-  @JsonPropertyOrder({"id", "start_date", "end_date", "county_name", "county_id", "response_time",
-      "response_time_id", "legacy_referral_id", "legacy_last_updated", "reporter",
-      "assigned_social_worker", "allegations", "access_limitation"})
   public static class ElasticSearchPersonReferral extends ApiObjectIdentity
       implements ApiTypedIdentifier<String> {
 
@@ -1209,9 +1339,11 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     private String id;
 
     @JsonProperty("legacy_referral_id")
+    @Deprecated
     private String legacyId;
 
     @JsonProperty("legacy_last_updated")
+    @Deprecated
     private String legacyLastUpdated;
 
     @JsonProperty("start_date")
@@ -1246,6 +1378,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonProperty("access_limitation")
     private ElasticSearchAccessLimitation accessLimitation = new ElasticSearchAccessLimitation();
 
+    @JsonProperty("legacy_descriptor")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
+
     @Override
     public String getId() {
       return id;
@@ -1257,18 +1393,22 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     }
 
     @JsonIgnore
+    @Deprecated
     public String getLegacyId() {
       return legacyId;
     }
 
+    @Deprecated
     public void setLegacyId(String legacyId) {
       this.legacyId = legacyId;
     }
 
+    @Deprecated
     public String getLegacyLastUpdated() {
       return legacyLastUpdated;
     }
 
+    @Deprecated
     public void setLegacyLastUpdated(String legacyLastUpdated) {
       this.legacyLastUpdated = legacyLastUpdated;
     }
@@ -1353,6 +1493,13 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.responseTimeId = responseTimeId;
     }
 
+    public ElasticSearchLegacyDescriptor getLegacyDescriptor() {
+      return legacyDescriptor;
+    }
+
+    public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
+      this.legacyDescriptor = legacyDescriptor;
+    }
   }
 
   /**
@@ -1360,9 +1507,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
-  @JsonPropertyOrder({"id", "start_date", "end_date", "county_name", "county_id",
-      "service_component", "service_component_id", "legacy_case_id", "legacy_last_updated",
-      "focus_child", "assigned_social_worker", "parents", "access_limitation"})
   public static class ElasticSearchPersonCase extends ApiObjectIdentity
       implements ApiTypedIdentifier<String> {
 
@@ -1375,9 +1519,11 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     private String id;
 
     @JsonProperty("legacy_case_id")
+    @Deprecated
     private String legacyId;
 
     @JsonProperty("legacy_last_updated")
+    @Deprecated
     private String legacyLastUpdated;
 
     @JsonProperty("start_date")
@@ -1412,6 +1558,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonProperty("access_limitation")
     private ElasticSearchAccessLimitation accessLimitation = new ElasticSearchAccessLimitation();
 
+    @JsonProperty("legacy_descriptor")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
+
     @Override
     public String getId() {
       return id;
@@ -1422,18 +1572,22 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.id = id;
     }
 
+    @Deprecated
     public String getLegacyId() {
       return legacyId;
     }
 
+    @Deprecated
     public void setLegacyId(String legacyId) {
       this.legacyId = legacyId;
     }
 
+    @Deprecated
     public String getLegacyLastUpdated() {
       return legacyLastUpdated;
     }
 
+    @Deprecated
     public void setLegacyLastUpdated(String legacyLastUpdated) {
       this.legacyLastUpdated = legacyLastUpdated;
     }
@@ -1518,6 +1672,13 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.serviceComponentId = serviceComponentId;
     }
 
+    public ElasticSearchLegacyDescriptor getLegacyDescriptor() {
+      return legacyDescriptor;
+    }
+
+    public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
+      this.legacyDescriptor = legacyDescriptor;
+    }
   }
 
   /**
@@ -1526,17 +1687,18 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * @author CWDS API Team
    */
   @SuppressWarnings("serial")
-  @JsonPropertyOrder({"id", "first_name", "last_name", "legacy_client_id", "legacy_last_updated"})
   public static class ElasticSearchPersonChild extends ElasticSearchPersonNestedPerson {
 
     @Override
     @JsonProperty("legacy_client_id")
+    @Deprecated
     public String getLegacyClientId() {
       return legacyPersonId;
     }
 
     @Override
     @JsonProperty("legacy_last_updated")
+    @Deprecated
     public String getLegacyLastUpdated() {
       return legacyLastUpdated;
     }
@@ -1548,8 +1710,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * @author CWDS API Team
    */
   @SuppressWarnings("serial")
-  @JsonPropertyOrder({"id", "first_name", "last_name", "relationship", "legacy_id",
-      "legacy_last_updated"})
   public static class ElasticSearchPersonParent extends ElasticSearchPersonNestedPerson {
 
     @JsonProperty("relationship")
@@ -1557,18 +1717,21 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
     @Override
     @JsonProperty("legacy_id")
+    @Deprecated
     public String getLegacyClientId() {
       return super.legacyPersonId;
     }
 
     @Override
     @JsonProperty("legacy_last_updated")
+    @Deprecated
     public String getLegacyLastUpdated() {
       return super.legacyLastUpdated;
     }
 
     @Override
     @JsonProperty("legacy_source_table")
+    @Deprecated
     public String getLegacySourceTable() {
       return super.legacySourceTable;
     }
@@ -1588,8 +1751,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * @author CWDS API Team
    */
   @SuppressWarnings("serial")
-  @JsonPropertyOrder({"limited_access_code", "limited_access_date", "limited_access_description",
-      "limited_access_government_entity_id", "limited_access_government_entity_name"})
   public static class ElasticSearchAccessLimitation extends ApiObjectIdentity {
 
     @JsonProperty("limited_access_code")
@@ -1677,6 +1838,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private ApiPhoneAware.PhoneType phoneType;
 
+    @JsonProperty("legacy_descriptor")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
+
     /**
      * Default constructor.
      */
@@ -1750,6 +1915,17 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       return this.id;
     }
 
+    public ElasticSearchLegacyDescriptor getLegacyDescriptor() {
+      return legacyDescriptor;
+    }
+
+    public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
+      this.legacyDescriptor = legacyDescriptor;
+    }
+
+    public void setPhoneNumberExtension(String phoneNumberExtension) {
+      this.phoneNumberExtension = phoneNumberExtension;
+    }
   }
 
   // =========================

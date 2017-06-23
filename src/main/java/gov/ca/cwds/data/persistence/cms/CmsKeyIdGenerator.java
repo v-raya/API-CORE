@@ -456,9 +456,14 @@ public final class CmsKeyIdGenerator {
    * code refers to this as a UI identifier.
    * 
    * @param key 10 character, base-62 legacy key
-   * @return UI identifier in format 0000-0000-0000-0000000
+   * @return UI identifier in format 0000-0000-0000-0000000. If provided key is null or enpty, then
+   *         null is returned.
    */
   public static String getUIIdentifierFromKey(String key) {
+    if (StringUtils.isBlank(key)) {
+      return null;
+    }
+
     final String tsB62 = key.substring(0, LEN_KEYTIMESTAMP);
     final String staffB62 = key.substring(LEN_KEYTIMESTAMP);
     LOGGER.debug("strTimestamp={}, strStaffId={}", tsB62, staffB62);
