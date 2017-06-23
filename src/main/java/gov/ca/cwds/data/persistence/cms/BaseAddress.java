@@ -3,6 +3,7 @@ package gov.ca.cwds.data.persistence.cms;
 import java.beans.Transient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -163,6 +164,14 @@ public abstract class BaseAddress extends CmsPersistentObject
    */
   public BaseAddress(String lastUpdateId) {
     super(lastUpdateId);
+  }
+
+  /**
+   * @param lastUpdateId user id of last update
+   * @param lastUpdatedTime time for the last update
+   */
+  public BaseAddress(String lastUpdateId, Date lastUpdatedTime) {
+    super(lastUpdateId, lastUpdatedTime);
   }
 
   // ==================
