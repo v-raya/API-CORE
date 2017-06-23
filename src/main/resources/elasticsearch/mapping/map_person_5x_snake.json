@@ -198,31 +198,6 @@
         "type": {
           "type": "text",
           "store": true
-        },
-        "legacy_descriptor": {
-          "properties": {
-            "legacy_id": {
-              "type": "text",
-              "store": true
-            },
-            "legacy_ui_id": {
-              "type": "text",
-              "store": true
-            },
-            "legacy_last_updated": {
-              "format": "strict_date_time",
-              "type": "date",
-              "store": true
-            },
-            "legacy_table_name": {
-              "type": "text",
-              "store": true
-            },
-            "legacy_table_description": {
-              "type": "text",
-              "store": true
-            }
-          }
         }
       }
     },

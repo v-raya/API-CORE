@@ -1838,10 +1838,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private ApiPhoneAware.PhoneType phoneType;
 
-    @JsonProperty("legacy_descriptor")
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
-
     /**
      * Default constructor.
      */
@@ -1913,14 +1909,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @Override
     public String getPhoneId() {
       return this.id;
-    }
-
-    public ElasticSearchLegacyDescriptor getLegacyDescriptor() {
-      return legacyDescriptor;
-    }
-
-    public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
-      this.legacyDescriptor = legacyDescriptor;
     }
 
     public void setPhoneNumberExtension(String phoneNumberExtension) {
