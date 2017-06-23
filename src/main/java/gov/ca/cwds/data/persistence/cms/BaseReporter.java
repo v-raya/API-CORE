@@ -156,6 +156,16 @@ public abstract class BaseReporter extends CmsPersistentObject
   }
 
   /**
+   * constructor
+   * 
+   * @param lastUpdatedId last updated id
+   * @param lastUpdatedTime last updated time
+   */
+  public BaseReporter(String lastUpdatedId, Date lastUpdatedTime) {
+    super(lastUpdatedId, lastUpdatedTime);
+  }
+
+  /**
    * {@inheritDoc}
    * 
    * @see gov.ca.cwds.data.persistence.PersistentObject#getPrimaryKey()
