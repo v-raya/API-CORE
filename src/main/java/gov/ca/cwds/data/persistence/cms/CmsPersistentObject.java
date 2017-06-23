@@ -59,6 +59,17 @@ public abstract class CmsPersistentObject implements PersistentObject {
   }
 
   /**
+   * Construtor.
+   * 
+   * @param lastUpdatedId the id of the last person to update this object
+   * @param lastUpdatedTime the time of the last person to update this object
+   */
+  protected CmsPersistentObject(String lastUpdatedId, Date lastUpdatedTime) {
+    this.lastUpdatedId = lastUpdatedId;
+    this.lastUpdatedTime = lastUpdatedTime;
+  }
+
+  /**
    * @return the lastUpdatedId
    */
   public String getLastUpdatedId() {
