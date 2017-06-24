@@ -68,7 +68,8 @@ public final class TestAutocloseSessionFactory {
   public static synchronized void init(String hibernateConfig) {
     if (sessionFactory == null) {
       sessionFactory = new SharedSessionFactory(
-          new Configuration().configure(hibernateConfig).buildSessionFactory());
+          new Configuration().setInterceptor(new ApiReferentialIntegrityInterceptor())
+              .configure(hibernateConfig).buildSessionFactory());
     }
   }
 

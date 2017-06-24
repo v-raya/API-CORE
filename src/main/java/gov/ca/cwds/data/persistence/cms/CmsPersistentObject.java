@@ -59,7 +59,7 @@ public abstract class CmsPersistentObject implements PersistentObject {
   }
 
   /**
-   * Construtor.
+   * Constructor.
    * 
    * @param lastUpdatedId the id of the last person to update this object
    * @param lastUpdatedTime the time of the last person to update this object
