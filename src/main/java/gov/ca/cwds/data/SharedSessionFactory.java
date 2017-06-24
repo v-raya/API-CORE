@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.naming.NamingException;
 import javax.naming.Reference;
@@ -37,11 +37,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Reduce pressure on test databases by constructing a single data source (connection pool) for all
- * test cases. The "closer thread" will shut down the shared session factory on method close, if no
- * further unit tests require it. When not in test mode, this class merely wraps a SessionFactory.
+ * Reduce connection pressure on test databases by constructing a single data source (connection
+ * pool) for all test cases. The "closer thread" will shut down the shared session factory on method
+ * close, if no further unit tests require it. When not in test mode, this class merely wraps a
+ * SessionFactory.
+ * 
+ * <p>
+ * Can only be instantiated by child classes and this package.
+ * </p>
  * 
  * @author CWDS API Team
+ * @see TestAutocloseSessionFactory
  */
 public class SharedSessionFactory implements SessionFactory {
 
@@ -53,23 +59,28 @@ public class SharedSessionFactory implements SessionFactory {
   private static final Logger LOGGER = LoggerFactory.getLogger(SharedSessionFactory.class);
 
   private SessionFactory sf;
-  private final Lock lock;
+  private final ReadWriteLock lock;
   private final Condition condition;
   private final boolean testMode;
 
+  /**
+   * Changes become visible to other threads immediately. Only available to child classes and this
+   * package.
+   */
   volatile boolean held = true;
 
   /**
-   * Constructor.
+   * Optional constructor. Pass true to run in test mode. The shared session factory will close down
+   * when testing completes.
    * 
    * @param sf session factory to wrap
    * @param testMode for JUnit tests
    */
-  public SharedSessionFactory(SessionFactory sf, boolean testMode) {
+  SharedSessionFactory(SessionFactory sf, boolean testMode) {
     this.sf = sf;
     this.testMode = testMode;
-    lock = new ReentrantLock();
-    condition = lock.newCondition();
+    lock = new ReentrantReadWriteLock();
+    condition = lock.writeLock().newCondition();
 
     if (testMode) {
       runCloseThread();
@@ -77,12 +88,49 @@ public class SharedSessionFactory implements SessionFactory {
   }
 
   /**
-   * Constructor for normal production use.
+   * Constructor for normal production use. Only available to child classes and this package.
    * 
    * @param sf session factory to wrap
    */
-  public SharedSessionFactory(SessionFactory sf) {
+  SharedSessionFactory(SessionFactory sf) {
     this(sf, false);
+  }
+
+  /**
+   * Launch the "closer thread" in test mode. Unnecessary in production mode.
+   */
+  protected void runCloseThread() {
+    new Thread(() -> {
+      try {
+        LOGGER.info("START SESSION FACTORY CLOSER THREAD");
+        Thread.sleep(2000); // NOSONAR
+        while (true) {
+          LOGGER.debug("Await notification ...");
+          condition.await(); // Possible spurious wake-up. Must still evaluate the situation.
+          Thread.sleep(500); // NOSONAR
+
+          if (!held) {
+            try {
+              lock.writeLock().lock();
+              held = false;
+              condition.signalAll();
+              LOGGER.warn("SHUTTING DOWN SESSION FACTORY!");
+              sf.close();
+              LOGGER.warn("SHUT DOWN SESSION FACTORY!");
+            } finally {
+              lock.writeLock().unlock(); // Always unlock, no matter what!
+            }
+            break;
+          }
+        }
+
+      } catch (InterruptedException ie) {
+        Thread.currentThread().interrupt();
+      } finally {
+        LOGGER.warn("EXIT SESSION FACTORY CLOSER THREAD");
+      }
+
+    }).start();
   }
 
   @Override
@@ -201,7 +249,7 @@ public class SharedSessionFactory implements SessionFactory {
       // Thread calls close() for you.
       held = false;
       condition.signalAll();
-      lock.unlock();
+      lock.writeLock().unlock();
     } else {
       // Close normally.
       sf.close();
@@ -273,43 +321,6 @@ public class SharedSessionFactory implements SessionFactory {
     sf.addNamedEntityGraph(graphName, entityGraph);
   }
 
-  /**
-   * Launch the "closer thread" in test mode. Unnecessary in production mode.
-   */
-  protected void runCloseThread() {
-    new Thread(() -> {
-      try {
-        LOGGER.info("START SESSION FACTORY CLOSER THREAD");
-        Thread.sleep(2000); // NOSONAR
-        while (true) {
-          LOGGER.debug("Await notification ...");
-          condition.await(); // Possible spurious wake-up. Must still evaluate the situation.
-          Thread.sleep(500); // NOSONAR
-
-          if (!held) {
-            try {
-              lock.lock();
-              held = false;
-              condition.signalAll();
-              LOGGER.info("SHUTTING DOWN SESSION FACTORY!");
-              sf.close();
-              LOGGER.info("SHUT DOWN SESSION FACTORY!");
-            } finally {
-              lock.unlock(); // Always unlock, no matter what!
-            }
-            break;
-          }
-        }
-
-      } catch (InterruptedException ie) {
-        Thread.currentThread().interrupt();
-      } finally {
-        LOGGER.info("EXIT SESSION FACTORY CLOSER THREAD");
-      }
-
-    }).start();
-  }
-
   protected boolean isHeld() {
     return held;
   }
@@ -318,7 +329,7 @@ public class SharedSessionFactory implements SessionFactory {
     this.held = held;
   }
 
-  protected Lock getLock() {
+  protected ReadWriteLock getLock() {
     return lock;
   }
 
