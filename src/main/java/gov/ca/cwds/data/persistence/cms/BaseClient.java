@@ -289,10 +289,22 @@ public abstract class BaseClient extends CmsPersistentObject
   }
 
   /**
+   * constructor
+   * 
    * @param lastUpdatedId the last updated Id
    */
   public BaseClient(String lastUpdatedId) {
     super(lastUpdatedId);
+  }
+
+  /**
+   * constructor
+   * 
+   * @param lastUpdatedId the last updated Id
+   * @param lastUpdatedTime the last updated time
+   */
+  public BaseClient(String lastUpdatedId, Date lastUpdatedTime) {
+    super(lastUpdatedId, lastUpdatedTime);
   }
 
   // ==================
@@ -726,6 +738,7 @@ public abstract class BaseClient extends CmsPersistentObject
   /**
    * @return the sensitivityIndicator
    */
+  @Override
   public String getSensitivityIndicator() {
     return StringUtils.trimToEmpty(sensitivityIndicator);
   }
@@ -740,6 +753,7 @@ public abstract class BaseClient extends CmsPersistentObject
   /**
    * @return the soc158SealedClientIndicator
    */
+  @Override
   public String getSoc158SealedClientIndicator() {
     return StringUtils.trimToEmpty(soc158SealedClientIndicator);
   }
