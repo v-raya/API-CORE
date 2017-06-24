@@ -107,7 +107,7 @@ public class SharedSessionFactory implements SessionFactory {
         while (true) {
           LOGGER.debug("Await notification ...");
           condition.await(); // Possible spurious wake-up. Must still evaluate the situation.
-          Thread.sleep(500); // NOSONAR
+          Thread.sleep(2500); // NOSONAR
 
           if (!held) {
             try {

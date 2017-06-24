@@ -60,7 +60,12 @@ public final class TestAutocloseSessionFactory {
     // Statics only.
   }
 
-  private static synchronized void init(String hibernateConfig) {
+  /**
+   * Optionally configure session factory from Hibernate configuration file.
+   * 
+   * @param hibernateConfig location of hibernate config file
+   */
+  public static synchronized void init(String hibernateConfig) {
     if (sessionFactory == null) {
       sessionFactory = new SharedSessionFactory(
           new Configuration().configure(hibernateConfig).buildSessionFactory());
@@ -85,7 +90,7 @@ public final class TestAutocloseSessionFactory {
     } finally {
       sessionFactory.getLock().readLock().unlock(); // Always unlock.
       sessionFactory.held = false;
-      sessionFactory.getCondition().notifyAll();
+      // sessionFactory.getCondition().notifyAll();
     }
 
     return sessionFactory;
