@@ -78,22 +78,16 @@ public final class TestAutocloseSessionFactory {
   }
 
   /**
+   * Increment read lock counter per thread. {@link SharedSessionFactory#close()} releases the lock.
+   * 
    * @return prepared session factory
    */
   public static SessionFactory getSessionFactory() {
-    try {
-      if (sessionFactory == null) {
-        init();
-      }
-
-      sessionFactory.getLock().readLock().lock();
-      sessionFactory.held = true;
-    } finally {
-      sessionFactory.getLock().readLock().unlock(); // Always unlock.
-      sessionFactory.held = false;
-      // sessionFactory.getCondition().notifyAll();
+    if (sessionFactory == null) {
+      init();
     }
 
+    sessionFactory.getLock().readLock().lock();
     return sessionFactory;
   }
 

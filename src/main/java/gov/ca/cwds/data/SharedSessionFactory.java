@@ -60,8 +60,8 @@ public class SharedSessionFactory implements SessionFactory {
 
   private SessionFactory sf;
   private final ReadWriteLock lock;
-  private final Condition condition;
-  private final boolean testMode;
+  private final Condition okToClose;
+  private final boolean closeOnSignal;
 
   /**
    * Changes become visible to other threads immediately. Only available to child classes and this
@@ -78,9 +78,9 @@ public class SharedSessionFactory implements SessionFactory {
    */
   SharedSessionFactory(SessionFactory sf, boolean testMode) {
     this.sf = sf;
-    this.testMode = testMode;
+    this.closeOnSignal = testMode;
     lock = new ReentrantReadWriteLock();
-    condition = lock.writeLock().newCondition();
+    okToClose = lock.writeLock().newCondition();
 
     if (testMode) {
       runCloseThread();
@@ -106,14 +106,14 @@ public class SharedSessionFactory implements SessionFactory {
         Thread.sleep(2000); // NOSONAR
         while (true) {
           LOGGER.debug("Await notification ...");
-          condition.await(); // Possible spurious wake-up. Must still evaluate the situation.
+          okToClose.await(); // Possible spurious wake-up. Must still evaluate the situation.
           Thread.sleep(2500); // NOSONAR
 
           if (!held) {
             try {
               lock.writeLock().lock();
               held = false;
-              condition.signalAll();
+              okToClose.signalAll();
               LOGGER.warn("SHUTTING DOWN SESSION FACTORY!");
               sf.close();
               LOGGER.warn("SHUT DOWN SESSION FACTORY!");
@@ -131,6 +131,22 @@ public class SharedSessionFactory implements SessionFactory {
       }
 
     }).start();
+  }
+
+  @Override
+  public void close() {
+    try {
+      if (!closeOnSignal) {
+        // Close normally.
+        sf.close();
+      } else {
+        // Thread calls close() for you.
+        held = false;
+        okToClose.signalAll();
+      }
+    } finally {
+      lock.readLock().unlock(); // Always unlock on close.
+    }
   }
 
   @Override
@@ -244,19 +260,6 @@ public class SharedSessionFactory implements SessionFactory {
   }
 
   @Override
-  public void close() {
-    if (testMode) {
-      // Thread calls close() for you.
-      held = false;
-      condition.signalAll();
-      lock.writeLock().unlock();
-    } else {
-      // Close normally.
-      sf.close();
-    }
-  }
-
-  @Override
   public FilterDefinition getFilterDefinition(String filterName) throws HibernateException {
     return sf.getFilterDefinition(filterName);
   }
@@ -334,7 +337,7 @@ public class SharedSessionFactory implements SessionFactory {
   }
 
   protected Condition getCondition() {
-    return condition;
+    return okToClose;
   }
 
 }
