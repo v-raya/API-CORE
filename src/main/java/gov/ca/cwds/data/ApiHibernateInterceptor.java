@@ -24,17 +24,17 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   @Override
   public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
-    LOGGER.debug("Delete entity: type={}, id={}", entity.getClass().getName(), id);
+    LOGGER.info("Delete entity: type={}, id={}", entity.getClass().getName(), id);
   }
 
   // Called on entity update.
   @Override
   public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState,
       Object[] previousState, String[] propertyNames, Type[] types) {
-    LOGGER.debug("Flush dirty entity: type={}, id={}", entity.getClass().getName(), id);
+    LOGGER.info("Flush dirty entity: type={}, id={}", entity.getClass().getName(), id);
 
     // if (entity instanceof Client) {
-    // LOGGER.debug("Client Update Operation");
+    // LOGGER.info("Client Update Operation");
     // return true;
     // }
 
@@ -45,17 +45,17 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   @Override
   public boolean onLoad(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
-    LOGGER.debug("Load entity: type={}, id={}", entity.getClass().getName(), id);
+    LOGGER.info("Load entity: type={}, id={}", entity.getClass().getName(), id);
     return true;
   }
 
   @Override
   public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
-    LOGGER.debug("Save entity: type={}, id={}", entity.getClass().getName(), id);
+    LOGGER.info("Save entity: type={}, id={}", entity.getClass().getName(), id);
 
     // if (entity instanceof Client) {
-    // LOGGER.debug("Client Create Operation");
+    // LOGGER.info("Client Create Operation");
     // return true;
     // }
 
@@ -65,13 +65,13 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   // Called before commit to database.
   @Override
   public void preFlush(@SuppressWarnings("rawtypes") Iterator iter) {
-    LOGGER.debug("Before commit");
+    LOGGER.info("Before commit");
 
     while (iter.hasNext()) {
       Object obj = iter.next();
       if (obj instanceof PersistentObject) {
         PersistentObject entity = (PersistentObject) obj;
-        LOGGER.debug("before commit: type={}, id={}", entity.getClass().getName(),
+        LOGGER.info("before commit: type={}, id={}", entity.getClass().getName(),
             entity.getPrimaryKey());
       }
     }
@@ -80,6 +80,6 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   // Called after committed to database.
   @Override
   public void postFlush(@SuppressWarnings("rawtypes") Iterator iterator) {
-    LOGGER.debug("After commit");
+    LOGGER.info("After commit");
   }
 }
