@@ -3142,4 +3142,12 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
     this.legacyDescriptor = legacyDescriptor;
   }
+
+  public List<ElasticSearchPersonAka> getAkas() {
+    return akas;
+  }
+
+  public void setAkas(List<ElasticSearchPersonAka> akas) {
+    this.akas = akas;
+  }
 }
