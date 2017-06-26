@@ -70,6 +70,16 @@ public abstract class BaseClientAddress extends CmsPersistentObject {
     super(lastUpdatedId);
   }
 
+  /**
+   * constructor
+   * 
+   * @param lastUpdatedId staff id who last updated this record
+   * @param lastUpdatedTime the last updated time
+   */
+  public BaseClientAddress(String lastUpdatedId, Date lastUpdatedTime) {
+    super(lastUpdatedId, lastUpdatedTime);
+  }
+
   // ==================
   // IDENTIFIERS:
   // ==================
