@@ -166,13 +166,12 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   }
 
 
-
   /**
    * Enum of optional collections under ES Person, including relationships, referrals, screenings,
    * and cases.
    */
   public enum ESOptionalCollection {
-    NONE, REFERAL, SCREENING, CASE, RELATIONSHIP
+    NONE, REFERRAL, SCREENING, CASE, RELATIONSHIP, AKA
   }
 
   /**
@@ -1127,6 +1126,93 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     public String getLegacyClientId() {
       return legacyPersonId;
     }
+  }
+
+  /**
+   * Aka for "other client name".
+   * 
+   * @author CWDS API Team
+   */
+  public static class ElasticSearchPersonAka implements Serializable {
+
+    /**
+     * Default serialization version.
+     */
+    private static final long serialVersionUID = 1L;
+
+    @JsonProperty("last_name")
+    private String lastLast;
+
+    @JsonProperty("middle_name")
+    private String middleMiddle;
+
+    @JsonProperty("name_type")
+    private String nameName;
+
+    @JsonProperty("prefix")
+    private String prefix;
+
+    @JsonProperty("suffix")
+    private String suffix;
+
+    @JsonProperty("legacy_descriptor")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
+
+    @JsonIgnore
+    public String getLastLast() {
+      return lastLast;
+    }
+
+    public void setLastLast(String lastLast) {
+      this.lastLast = lastLast;
+    }
+
+    @JsonIgnore
+    public String getMiddleMiddle() {
+      return middleMiddle;
+    }
+
+    public void setMiddleMiddle(String middleMiddle) {
+      this.middleMiddle = middleMiddle;
+    }
+
+    @JsonIgnore
+    public String getNameName() {
+      return nameName;
+    }
+
+    public void setNameName(String nameName) {
+      this.nameName = nameName;
+    }
+
+    @JsonIgnore
+    public String getPrefix() {
+      return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+      this.prefix = prefix;
+    }
+
+    @JsonIgnore
+    public String getSuffix() {
+      return suffix;
+    }
+
+    public void setSuffix(String suffix) {
+      this.suffix = suffix;
+    }
+
+    @JsonIgnore
+    public ElasticSearchLegacyDescriptor getLegacyDescriptor() {
+      return legacyDescriptor;
+    }
+
+    public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
+      this.legacyDescriptor = legacyDescriptor;
+    }
+
   }
 
   /**
@@ -2267,6 +2353,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private List<ElasticSearchPersonCase> cases = new ArrayList<>();
 
+  @JsonProperty("akas")
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private List<ElasticSearchPersonAka> akas = new ArrayList<>();
+
   @Transient
   private transient Map<String, String> highlights = new LinkedHashMap<>();
 
@@ -2426,7 +2516,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   public void clearOptionalCollections(ESOptionalCollection... keep) {
     final Set<ESOptionalCollection> keepers = setOf(ESOptionalCollection.class, keep);
 
-    if (!keepers.contains(ESOptionalCollection.REFERAL)) {
+    if (!keepers.contains(ESOptionalCollection.REFERRAL)) {
       LOGGER.trace("clear REFERAL");
       this.referrals = null;
     }
@@ -2441,6 +2531,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     if (!keepers.contains(ESOptionalCollection.CASE)) {
       LOGGER.trace("clear CASE");
       this.cases = null;
+    }
+    if (!keepers.contains(ESOptionalCollection.AKA)) {
+      LOGGER.trace("clear AKA");
+      this.akas = null;
     }
 
     this.highlights = null;
