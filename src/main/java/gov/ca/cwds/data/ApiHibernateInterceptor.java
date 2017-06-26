@@ -8,29 +8,30 @@ import org.hibernate.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.ca.cwds.data.persistence.PersistentObject;
+
 /**
- * Hibernate interceptor traps referential integrity errors.
+ * Hibernate interceptor logs activity and traps referential integrity errors.
  * 
  * @author CWDS API Team
  */
-public class ApiReferentialIntegrityInterceptor extends EmptyInterceptor {
+public class ApiHibernateInterceptor extends EmptyInterceptor {
 
   private static final long serialVersionUID = 1L;
 
-  private static final Logger LOGGER =
-      LoggerFactory.getLogger(ApiReferentialIntegrityInterceptor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ApiHibernateInterceptor.class);
 
   @Override
   public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
-    LOGGER.debug("on delete");
+    LOGGER.debug("Delete entity: type={}, id={}", entity.getClass().getName(), id);
   }
 
   // Called on entity update.
   @Override
   public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState,
       Object[] previousState, String[] propertyNames, Type[] types) {
-    LOGGER.debug("on flush dirty");
+    LOGGER.debug("Flush dirty entity: type={}, id={}", entity.getClass().getName(), id);
 
     // if (entity instanceof Client) {
     // LOGGER.debug("Client Update Operation");
@@ -44,15 +45,14 @@ public class ApiReferentialIntegrityInterceptor extends EmptyInterceptor {
   @Override
   public boolean onLoad(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
-    // log loading events
-    LOGGER.debug("Load Operation");
+    LOGGER.debug("Load entity: type={}, id={}", entity.getClass().getName(), id);
     return true;
   }
 
   @Override
   public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
-    LOGGER.debug("on save");
+    LOGGER.debug("Save entity: type={}, id={}", entity.getClass().getName(), id);
 
     // if (entity instanceof Client) {
     // LOGGER.debug("Client Create Operation");
@@ -64,13 +64,22 @@ public class ApiReferentialIntegrityInterceptor extends EmptyInterceptor {
 
   // Called before commit to database.
   @Override
-  public void preFlush(Iterator iterator) {
-    LOGGER.debug("Before commiting");
+  public void preFlush(@SuppressWarnings("rawtypes") Iterator iter) {
+    LOGGER.debug("Before commit");
+
+    while (iter.hasNext()) {
+      Object obj = iter.next();
+      if (obj instanceof PersistentObject) {
+        PersistentObject entity = (PersistentObject) obj;
+        LOGGER.debug("before commit: type={}, id={}", entity.getClass().getName(),
+            entity.getPrimaryKey());
+      }
+    }
   }
 
   // Called after committed to database.
   @Override
-  public void postFlush(Iterator iterator) {
-    LOGGER.debug("After commiting");
+  public void postFlush(@SuppressWarnings("rawtypes") Iterator iterator) {
+    LOGGER.debug("After commit");
   }
 }

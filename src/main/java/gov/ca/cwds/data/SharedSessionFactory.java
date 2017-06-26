@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
  * </p>
  * 
  * @author CWDS API Team
- * @see TestAutocloseSessionFactory
+ * @see AutocloseSessionFactory
  */
 public class SharedSessionFactory implements SessionFactory {
 

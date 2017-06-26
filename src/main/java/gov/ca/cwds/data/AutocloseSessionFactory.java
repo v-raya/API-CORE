@@ -50,13 +50,13 @@ import org.hibernate.cfg.Configuration;
  * @author CWDS API Team
  * @see SharedSessionFactory
  */
-public final class TestAutocloseSessionFactory {
+public final class AutocloseSessionFactory {
 
   private static final String DEFAULT_HIBERNATE_CONFIG = "hibernate.cfg.xml";
 
   private static SharedSessionFactory sessionFactory;
 
-  private TestAutocloseSessionFactory() {
+  private AutocloseSessionFactory() {
     // Statics only.
   }
 
@@ -68,7 +68,7 @@ public final class TestAutocloseSessionFactory {
   public static synchronized void init(String hibernateConfig) {
     if (sessionFactory == null) {
       sessionFactory = new SharedSessionFactory(
-          new Configuration().setInterceptor(new ApiReferentialIntegrityInterceptor())
+          new Configuration().setInterceptor(new ApiHibernateInterceptor())
               .configure(hibernateConfig).buildSessionFactory());
     }
   }
