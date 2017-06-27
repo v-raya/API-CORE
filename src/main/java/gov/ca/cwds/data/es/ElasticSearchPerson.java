@@ -1231,14 +1231,17 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
      */
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("last_name")
-    private String lastLast;
+    @JsonProperty("first_name")
+    private String firstName;
 
     @JsonProperty("middle_name")
-    private String middleMiddle;
+    private String middleName;
+
+    @JsonProperty("last_name")
+    private String lastName;
 
     @JsonProperty("name_type")
-    private String nameName;
+    private String nameType;
 
     @JsonProperty("prefix")
     private String prefix;
@@ -1252,39 +1255,56 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
     @SuppressWarnings("javadoc")
     @JsonIgnore
-    public String getLastLast() {
-      return lastLast;
+    public ElasticSearchLegacyDescriptor getLegacyDescriptor() {
+      return legacyDescriptor;
     }
 
     @SuppressWarnings("javadoc")
-    public void setLastLast(String lastLast) {
-      this.lastLast = lastLast;
+    public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
+      this.legacyDescriptor = legacyDescriptor;
     }
 
     @SuppressWarnings("javadoc")
-    @JsonIgnore
-    public String getMiddleMiddle() {
-      return middleMiddle;
+    public String getFirstName() {
+      return firstName;
     }
 
     @SuppressWarnings("javadoc")
-    public void setMiddleMiddle(String middleMiddle) {
-      this.middleMiddle = middleMiddle;
+    public void setFirstName(String firstName) {
+      this.firstName = firstName;
     }
 
     @SuppressWarnings("javadoc")
-    @JsonIgnore
-    public String getNameName() {
-      return nameName;
+    public String getMiddleName() {
+      return middleName;
     }
 
     @SuppressWarnings("javadoc")
-    public void setNameName(String nameName) {
-      this.nameName = nameName;
+    public void setMiddleName(String middleName) {
+      this.middleName = middleName;
     }
 
     @SuppressWarnings("javadoc")
-    @JsonIgnore
+    public String getLastName() {
+      return lastName;
+    }
+
+    @SuppressWarnings("javadoc")
+    public void setLastName(String lastName) {
+      this.lastName = lastName;
+    }
+
+    @SuppressWarnings("javadoc")
+    public String getNameType() {
+      return nameType;
+    }
+
+    @SuppressWarnings("javadoc")
+    public void setNameType(String nameType) {
+      this.nameType = nameType;
+    }
+
+    @SuppressWarnings("javadoc")
     public String getPrefix() {
       return prefix;
     }
@@ -1295,7 +1315,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     }
 
     @SuppressWarnings("javadoc")
-    @JsonIgnore
     public String getSuffix() {
       return suffix;
     }
@@ -1303,17 +1322,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @SuppressWarnings("javadoc")
     public void setSuffix(String suffix) {
       this.suffix = suffix;
-    }
-
-    @SuppressWarnings("javadoc")
-    @JsonIgnore
-    public ElasticSearchLegacyDescriptor getLegacyDescriptor() {
-      return legacyDescriptor;
-    }
-
-    @SuppressWarnings("javadoc")
-    public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
-      this.legacyDescriptor = legacyDescriptor;
     }
 
   }
