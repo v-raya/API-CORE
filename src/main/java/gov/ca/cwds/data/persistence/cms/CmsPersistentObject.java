@@ -91,4 +91,12 @@ public abstract class CmsPersistentObject implements PersistentObject {
   @Override
   public abstract Serializable getPrimaryKey();
 
+  public void setLastUpdatedId(String lastUpdatedId) {
+    this.lastUpdatedId = lastUpdatedId;
+  }
+
+  public void setLastUpdatedTime(Date lastUpdatedTime) {
+    this.lastUpdatedTime = lastUpdatedTime;
+  }
+
 }
