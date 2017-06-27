@@ -50,6 +50,9 @@ public abstract class BaseOtherClientName extends CmsPersistentObject implements
   @Column(name = "THIRD_ID", length = CMS_ID_LEN)
   protected String thirdId;
 
+  /**
+   * Default constructor.
+   */
   public BaseOtherClientName() {
     super();
   }
