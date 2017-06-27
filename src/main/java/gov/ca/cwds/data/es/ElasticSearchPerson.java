@@ -33,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -165,13 +166,40 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     }
   }
 
-
   /**
    * Enum of optional collections under ES Person, including relationships, referrals, screenings,
    * and cases.
    */
   public enum ESOptionalCollection {
-    NONE, REFERRAL, SCREENING, CASE, RELATIONSHIP, AKA
+    /**
+     * Just what the name says ...
+     */
+    NONE,
+
+    /**
+     * Referral, stored in legacy.
+     */
+    REFERRAL,
+
+    /**
+     * Intake screening, not from legacy.
+     */
+    SCREENING,
+
+    /**
+     * Case.
+     */
+    CASE,
+
+    /**
+     * Person relationships, from legacy.
+     */
+    RELATIONSHIP,
+
+    /**
+     * "Other client names"
+     */
+    AKA
   }
 
   /**
@@ -200,12 +228,14 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     private String legacyTableDescription;
 
     /**
-     * Default no-arg constructor
+     * Default, no-arg constructor.
      */
-    public ElasticSearchLegacyDescriptor() {}
+    public ElasticSearchLegacyDescriptor() {
+      // Default, no-op.
+    }
 
     /**
-     * Create with fields
+     * Create from all fields.
      * 
      * @param legacyId Legacy ID
      * @param legacyUiId Legacy UI ID
@@ -223,42 +253,52 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.legacyTableDescription = legacyTableDescription;
     }
 
+    @SuppressWarnings("javadoc")
     public String getLegacyId() {
       return legacyId;
     }
 
+    @SuppressWarnings("javadoc")
     public void setLegacyId(String legacyId) {
       this.legacyId = legacyId;
     }
 
+    @SuppressWarnings("javadoc")
     public String getLegacyUiId() {
       return legacyUiId;
     }
 
+    @SuppressWarnings("javadoc")
     public void setLegacyUiId(String legacyUiId) {
       this.legacyUiId = legacyUiId;
     }
 
+    @SuppressWarnings("javadoc")
     public String getLegacyLastUpdated() {
       return legacyLastUpdated;
     }
 
+    @SuppressWarnings("javadoc")
     public void setLegacyLastUpdated(String legacyLastUpdated) {
       this.legacyLastUpdated = legacyLastUpdated;
     }
 
+    @SuppressWarnings("javadoc")
     public String getLegacyTableName() {
       return legacyTableName;
     }
 
+    @SuppressWarnings("javadoc")
     public void setLegacyTableName(String legacyTableName) {
       this.legacyTableName = legacyTableName;
     }
 
+    @SuppressWarnings("javadoc")
     public String getLegacyTableDescription() {
       return legacyTableDescription;
     }
 
+    @SuppressWarnings("javadoc")
     public void setLegacyTableDescription(String legacyTableDescription) {
       this.legacyTableDescription = legacyTableDescription;
     }
@@ -514,45 +554,55 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     }
 
     @JsonIgnore
+    @SuppressWarnings("javadoc")
     public String getStateName() {
       return stateName;
     }
 
+    @SuppressWarnings("javadoc")
     public void setStateName(String stateName) {
       this.stateName = stateName;
     }
 
     @JsonIgnore
+    @SuppressWarnings("javadoc")
     public String getZip4() {
       return zip4;
     }
 
+    @SuppressWarnings("javadoc")
     public void setZip4(String zip4) {
       this.zip4 = zip4;
     }
 
     @JsonIgnore
+    @SuppressWarnings("javadoc")
     public String getUnitType() {
       return unitType;
     }
 
+    @SuppressWarnings("javadoc")
     public void setUnitType(String unitType) {
       this.unitType = unitType;
     }
 
     @JsonIgnore
+    @SuppressWarnings("javadoc")
     public String getUnitNumber() {
       return unitNumber;
     }
 
+    @SuppressWarnings("javadoc")
     public void setUnitNumber(String unitNumber) {
       this.unitNumber = unitNumber;
     }
 
+    @SuppressWarnings("javadoc")
     public void setStreetNumber(String streetNumber) {
       this.streetNumber = streetNumber;
     }
 
+    @SuppressWarnings("javadoc")
     public void setStreetName(String streetName) {
       this.streetName = streetName;
     }
@@ -569,10 +619,12 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       return null;
     }
 
+    @SuppressWarnings("javadoc")
     public ElasticSearchLegacyDescriptor getLegacyDescriptor() {
       return legacyDescriptor;
     }
 
+    @SuppressWarnings("javadoc")
     public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
       this.legacyDescriptor = legacyDescriptor;
     }
@@ -649,18 +701,22 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonProperty("perpetrator")
     private ElasticSearchPersonNestedPerson perpetrator = new ElasticSearchPersonNestedPerson();
 
+    @SuppressWarnings("javadoc")
     public ElasticSearchPersonNestedPerson getVictim() {
       return victim;
     }
 
+    @SuppressWarnings("javadoc")
     public void setVictim(ElasticSearchPersonNestedPerson victim) {
       this.victim = victim;
     }
 
+    @SuppressWarnings("javadoc")
     public ElasticSearchPersonNestedPerson getPerpetrator() {
       return perpetrator;
     }
 
+    @SuppressWarnings("javadoc")
     public void setPerpetrator(ElasticSearchPersonNestedPerson perpetrator) {
       this.perpetrator = perpetrator;
     }
@@ -676,65 +732,79 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     }
 
     @Deprecated
+    @SuppressWarnings("javadoc")
     public String getLegacyId() {
       return legacyId;
     }
 
     @Deprecated
+    @SuppressWarnings("javadoc")
     public void setLegacyId(String legacyId) {
       this.legacyId = legacyId;
     }
 
+    @SuppressWarnings("javadoc")
     public String getAllegationDescription() {
       return allegationDescription;
     }
 
+    @SuppressWarnings("javadoc")
     public void setAllegationDescription(String allegationDescription) {
       this.allegationDescription = allegationDescription;
     }
 
+    @SuppressWarnings("javadoc")
     public String getDispositionDescription() {
       return dispositionDescription;
     }
 
+    @SuppressWarnings("javadoc")
     public void setDispositionDescription(String dispositionDescription) {
       this.dispositionDescription = dispositionDescription;
     }
 
+    @SuppressWarnings("javadoc")
     public String getDispositionId() {
       return dispositionId;
     }
 
+    @SuppressWarnings("javadoc")
     public void setDispositionId(String dispositionId) {
       this.dispositionId = dispositionId;
     }
 
     @Deprecated
+    @SuppressWarnings("javadoc")
     public String getPerpetratorId() {
       return perpetratorId;
     }
 
     @Deprecated
+    @SuppressWarnings("javadoc")
     public void setPerpetratorId(String perpetratorId) {
       this.perpetratorId = perpetratorId;
     }
 
     @Deprecated
+    @SuppressWarnings("javadoc")
     public String getPerpetratorFirstName() {
       return perpetratorFirstName;
     }
 
     @Deprecated
+    @SuppressWarnings("javadoc")
     public void setPerpetratorFirstName(String perpetratorFirstName) {
       this.perpetratorFirstName = perpetratorFirstName;
     }
 
     @Deprecated
+    @SuppressWarnings("javadoc")
     public String getPerpetratorLastName() {
       return perpetratorLastName;
     }
 
     @Deprecated
+    @SuppressWarnings("javadoc")
     public void setPerpetratorLastName(String perpetratorLastName) {
       this.perpetratorLastName = perpetratorLastName;
     }
@@ -745,54 +815,65 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     }
 
     @Deprecated
+    @SuppressWarnings("javadoc")
     public void setPerpetratorLegacyClientId(String perpetratorLegacyClientId) {
       this.perpetratorLegacyClientId = perpetratorLegacyClientId;
     }
 
     @Deprecated
+    @SuppressWarnings("javadoc")
     public String getVictimId() {
       return victimId;
     }
 
     @Deprecated
+    @SuppressWarnings("javadoc")
     public void setVictimId(String victimId) {
       this.victimId = victimId;
     }
 
     @Deprecated
+    @SuppressWarnings("javadoc")
     public String getVictimFirstName() {
       return victimFirstName;
     }
 
     @Deprecated
+    @SuppressWarnings("javadoc")
     public void setVictimFirstName(String victimFirstName) {
       this.victimFirstName = victimFirstName;
     }
 
     @Deprecated
+    @SuppressWarnings("javadoc")
     public String getVictimLastName() {
       return victimLastName;
     }
 
     @Deprecated
+    @SuppressWarnings("javadoc")
     public void setVictimLastName(String victimLastName) {
       this.victimLastName = victimLastName;
     }
 
     @Deprecated
+    @SuppressWarnings("javadoc")
     public String getVictimLegacyClientId() {
       return victimLegacyClientId;
     }
 
     @Deprecated
+    @SuppressWarnings("javadoc")
     public void setVictimLegacyClientId(String victimLegacyClientId) {
       this.victimLegacyClientId = victimLegacyClientId;
     }
 
+    @SuppressWarnings("javadoc")
     public ElasticSearchLegacyDescriptor getLegacyDescriptor() {
       return legacyDescriptor;
     }
 
+    @SuppressWarnings("javadoc")
     public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
       this.legacyDescriptor = legacyDescriptor;
     }
@@ -841,42 +922,51 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
 
     @JsonIgnore
+    @SuppressWarnings("javadoc")
     public String getRelatedPersonId() {
       return relatedPersonId;
     }
 
+    @SuppressWarnings("javadoc")
     public void setRelatedPersonId(String relatedPersonId) {
       this.relatedPersonId = relatedPersonId;
     }
 
     @JsonIgnore
+    @SuppressWarnings("javadoc")
     public String getRelatedPersonFirstName() {
       return relatedPersonFirstName;
     }
 
+    @SuppressWarnings("javadoc")
     public void setRelatedPersonFirstName(String relatedPersonFirstName) {
       this.relatedPersonFirstName = relatedPersonFirstName;
     }
 
     @JsonIgnore
+    @SuppressWarnings("javadoc")
     public String getRelatedPersonLastName() {
       return relatedPersonLastName;
     }
 
+    @SuppressWarnings("javadoc")
     public void setRelatedPersonLastName(String relatedPersonLastName) {
       this.relatedPersonLastName = relatedPersonLastName;
     }
 
     @JsonIgnore
+    @SuppressWarnings("javadoc")
     public String getIndexedPersonRelationship() {
       return indexedPersonRelationship;
     }
 
+    @SuppressWarnings("javadoc")
     public void setIndexedPersonRelationship(String indexedPersonRelationship) {
       this.indexedPersonRelationship = indexedPersonRelationship;
     }
 
     @Deprecated
+    @SuppressWarnings("javadoc")
     public String getRelatedPersonLegacyId() {
       return relatedPersonLegacyId;
     }
@@ -1129,11 +1219,12 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   }
 
   /**
-   * Aka for "other client name".
+   * AKA ("also known as") for "other client name".
    * 
    * @author CWDS API Team
    */
-  public static class ElasticSearchPersonAka implements Serializable {
+  @JsonPropertyOrder(alphabetic = true)
+  public static class ElasticSearchPersonAka extends ApiObjectIdentity {
 
     /**
      * Default serialization version.
@@ -1159,56 +1250,68 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
 
+    @SuppressWarnings("javadoc")
     @JsonIgnore
     public String getLastLast() {
       return lastLast;
     }
 
+    @SuppressWarnings("javadoc")
     public void setLastLast(String lastLast) {
       this.lastLast = lastLast;
     }
 
+    @SuppressWarnings("javadoc")
     @JsonIgnore
     public String getMiddleMiddle() {
       return middleMiddle;
     }
 
+    @SuppressWarnings("javadoc")
     public void setMiddleMiddle(String middleMiddle) {
       this.middleMiddle = middleMiddle;
     }
 
+    @SuppressWarnings("javadoc")
     @JsonIgnore
     public String getNameName() {
       return nameName;
     }
 
+    @SuppressWarnings("javadoc")
     public void setNameName(String nameName) {
       this.nameName = nameName;
     }
 
+    @SuppressWarnings("javadoc")
     @JsonIgnore
     public String getPrefix() {
       return prefix;
     }
 
+    @SuppressWarnings("javadoc")
     public void setPrefix(String prefix) {
       this.prefix = prefix;
     }
 
+    @SuppressWarnings("javadoc")
     @JsonIgnore
     public String getSuffix() {
       return suffix;
     }
 
+    @SuppressWarnings("javadoc")
     public void setSuffix(String suffix) {
       this.suffix = suffix;
     }
 
+    @SuppressWarnings("javadoc")
     @JsonIgnore
     public ElasticSearchLegacyDescriptor getLegacyDescriptor() {
       return legacyDescriptor;
     }
 
+    @SuppressWarnings("javadoc")
     public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
       this.legacyDescriptor = legacyDescriptor;
     }
