@@ -22,15 +22,18 @@
     },
     "first_name": {
       "type": "text",
-      "store": true
+      "store": true,
+      "analyzer": "autocomplete"
     },
     "last_name": {
       "type": "text",
-      "store": true
+      "store": true,
+      "analyzer": "autocomplete"
     },
     "middle_name": {
       "type": "text",
-      "store": true
+      "store": true,
+      "analyzer": "autocomplete"
     },
     "name_suffix": {
       "type": "text",
