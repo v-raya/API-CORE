@@ -7,9 +7,10 @@ import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
 import gov.ca.cwds.rest.filters.WebSecurityFilter;
 
 /**
- * DI for Filter classes
+ * Dependency injection (DI) for Filter classes.
  * 
  * @author CWDS API Team
+ * @param <T> type of API configuration
  */
 public class FiltersModule<T extends BaseApiConfiguration> extends AbstractModule {
 
@@ -20,11 +21,12 @@ public class FiltersModule<T extends BaseApiConfiguration> extends AbstractModul
   }
 
   /*
-   * This @Provodes should work but it is throwing this error:<br>
+   * This @Provides should work but it is throwing this error:<br>
    * "T cannot be used as a key; It is not fully specified."
    */
   // @Provides
   // public WebSecurityConfiguration provideWebSecurityConfiguration(T configuration) {
   // return configuration.getWebSecurityConfiguration();
   // }
+
 }

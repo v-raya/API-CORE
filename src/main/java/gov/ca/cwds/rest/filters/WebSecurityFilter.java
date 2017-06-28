@@ -17,7 +17,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.rest.WebSecurityConfiguration;
 
 /**
- * Sets web security response headers for to prevent common web security threats.
+ * Sets web security response headers to prevent common web security threats.
  * 
  * @author CWDS API Team
  */
@@ -58,8 +58,12 @@ public class WebSecurityFilter implements Filter {
   }
 
   @Override
-  public void init(FilterConfig filterConfig) throws ServletException {}
+  public void init(FilterConfig filterConfig) throws ServletException {
+    // No-op
+  }
 
   @Override
-  public void destroy() {}
+  public void destroy() {
+    // No-op
+  }
 }
