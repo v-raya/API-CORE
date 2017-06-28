@@ -7,6 +7,7 @@ package gov.ca.cwds.data.std;
  * 
  * @author CWDS API Team
  */
+@FunctionalInterface
 public interface ApiLanguageAware {
 
   /**
