@@ -32,7 +32,7 @@ public class ApiRequestCommonTest {
   @Test
   public void getRequestCommon_Args__() throws Exception {
     User user_ = mock(User.class);
-    ApiRequestCommon.pegRequest(user_);
+    ApiRequestCommon.startRequest(user_);
     ApiRequestCommon actual = ApiRequestCommon.getRequestCommon();
     assertThat(actual, is(notNullValue()));
   }
@@ -75,7 +75,7 @@ public class ApiRequestCommonTest {
       Thread.sleep(sleepMillis); // NOSONAR
       final User user_ = mock(User.class);
       when(user_.getRacf()).thenReturn(tid + "_" + sleepMillis);
-      ApiRequestCommon.pegRequest(user_);
+      ApiRequestCommon.startRequest(user_);
       ApiRequestCommon common = ApiRequestCommon.getRequestCommon();
       final Date date = common.getRequestBegin();
       System.out.println("thread id: " + tid + ", racf: " + common.getUser().getRacf() + ", date = "
