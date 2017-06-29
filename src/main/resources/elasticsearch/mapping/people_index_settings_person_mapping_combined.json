@@ -48,17 +48,28 @@
         "first_name": {
           "type": "text",
           "store": true,
-          "analyzer": "autocomplete"
+          "analyzer": "autocomplete",
+          "search_analyzer": "standard",
+          "copy_to": "full_name"
         },
         "last_name": {
           "type": "text",
           "store": true,
-          "analyzer": "autocomplete"
+          "analyzer": "autocomplete",
+          "search_analyzer": "standard",
+          "copy_to": "full_name"
         },
         "middle_name": {
           "type": "text",
           "store": true,
-          "analyzer": "autocomplete"
+          "analyzer": "autocomplete",
+          "search_analyzer": "standard"
+        },
+        "full_name": {
+          "type": "text",
+          "store": true,
+          "analyzer": "autocomplete",
+          "search_analyzer": "standard"
         },
         "name_suffix": {
           "type": "text",
