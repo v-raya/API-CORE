@@ -716,9 +716,9 @@ SYS_ID	FKS_META_T	SHORT_DSC	LGC_ID	INACTV_IND	CATEGORY_ID	OTHER_CD	LONG_DSC
 436	CNT_TYPC	Consult with Sub Care Provider	0004	N	 	 	A contact between a Staff Person and a Substitute Care Provider for the purpose of conferring on a case.
 437	CNT_TYPC	Consult with Service Provider	0005	N	 	 	A contact between a Staff Person and a Client during the course of transporting the Client.
 438	CNT_TYPC	Verify Residence	0006	N	 	 	A contact between a Staff Person and parent or guardian for the purpose of verifying the residence of the person entitled to custody of the child.
-439	CNT_TYPC	Consult with Collateral	0007	N	 	 	A contact between a Staff Person and a Collateral Individual for the pupose of providing/obtaining specific information about a Client.
-440	CNT_TYPC	Deliver Service to Client	0008	N	 	 	A contact between a Staff Person and a Client for the pupose of providing a service specified in the Case Plan.
-441	CNT_TYPC	Supervise Visitation	0009	N	 	 	A contact between a Staff Person, a Child Client , and another party for the pupose of supervising visitation.
+439	CNT_TYPC	Consult with Collateral	0007	N	 	 	A contact between a Staff Person and a Collateral Individual for the purpose of providing/obtaining specific information about a Client.
+440	CNT_TYPC	Deliver Service to Client	0008	N	 	 	A contact between a Staff Person and a Client for the purpose of providing a service specified in the Case Plan.
+441	CNT_TYPC	Supervise Visitation	0009	N	 	 	A contact between a Staff Person, a Child Client, and another party for the purpose of supervising visitation.
 5621	CNT_TYPC	Consult with Staff Person	0010	N	 	 	A contact between a Staff Person and a Staff Person for the purpose of conferring on a case.
 6720	CNT_TYPC	Conduct NMD Safety Assessment	0011	N	 	 	A contact for the purpose of investigating alleged abuse of an NMD at the hands of a Caregiver.
 6721	CNT_TYPC	Extended Foster Care Inquiry	0012	N	 	 	A contact between a Staff Person and a Client for the purpose of fielding an inquiry regarding extended foster care.

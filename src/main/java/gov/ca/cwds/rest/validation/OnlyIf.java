@@ -10,7 +10,7 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- * Annotation indicating that a property can only be set if the if property is set.
+ * Annotation indicating that a property can only be set if the "if" property is set.
  * 
  * @author CWDS API Team
  */

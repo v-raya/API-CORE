@@ -28,7 +28,7 @@ public class SysCodeSerializerInjector {
    * @param om the common ObjectMapper registered with this application
    */
   @Inject
-  public SysCodeSerializerInjector(final CmsSystemCodeSerializer sysCodeSerializer,
+  public SysCodeSerializerInjector(final CmsSystemCodeSerializer sysCodeSerializer, // NOSONAR
       final ObjectMapper om) {
     SimpleModule module =
         new SimpleModule("SystemCodeModule", new Version(0, 1, 0, "cms_sys_code", "alpha", ""));
