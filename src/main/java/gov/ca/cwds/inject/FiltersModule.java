@@ -3,6 +3,7 @@ package gov.ca.cwds.inject;
 import com.google.inject.AbstractModule;
 
 import gov.ca.cwds.rest.BaseApiConfiguration;
+import gov.ca.cwds.rest.filters.RequestCommonInfoFilter;
 import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
 import gov.ca.cwds.rest.filters.WebSecurityFilter;
 
@@ -16,6 +17,7 @@ public class FiltersModule<T extends BaseApiConfiguration> extends AbstractModul
 
   @Override
   protected void configure() {
+    bind(RequestCommonInfoFilter.class);
     bind(RequestResponseLoggingFilter.class);
     bind(WebSecurityFilter.class);
   }
