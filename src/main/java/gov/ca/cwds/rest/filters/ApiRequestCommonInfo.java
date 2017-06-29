@@ -4,7 +4,6 @@ import java.util.Date;
 
 import com.google.common.collect.ImmutableList;
 
-import gov.ca.cwds.auth.User;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
 
 /**
@@ -13,22 +12,22 @@ import gov.ca.cwds.data.std.ApiObjectIdentity;
  * 
  * @author CWDS API Team
  */
-public class ApiRequestCommon extends ApiObjectIdentity {
+public class ApiRequestCommonInfo extends ApiObjectIdentity {
 
   /**
    * Default serialization.
    */
   private static final long serialVersionUID = 1L;
 
-  private static final ThreadLocal<ApiRequestCommon> pegged = new ThreadLocal<>();
+  private static final ThreadLocal<ApiRequestCommonInfo> pegged = new ThreadLocal<>();
 
   private final Date requestBegin;
 
-  private final User user;
+  private final String racf;
 
-  private ApiRequestCommon(User user) {
+  private ApiRequestCommonInfo(String racf) {
     this.requestBegin = new Date();
-    this.user = user;
+    this.racf = racf;
   }
 
   /**
@@ -37,8 +36,8 @@ public class ApiRequestCommon extends ApiObjectIdentity {
    * 
    * @param user User with mainframe RACF id
    */
-  static void startRequest(User user) {
-    pegged.set(new ApiRequestCommon(user));
+  static void startRequest(String racf) {
+    pegged.set(new ApiRequestCommonInfo(racf));
   }
 
   /**
@@ -46,8 +45,8 @@ public class ApiRequestCommon extends ApiObjectIdentity {
    * 
    * @return common request information
    */
-  public static ApiRequestCommon getRequestCommon() {
-    ImmutableList.Builder<ApiRequestCommon> entities = new ImmutableList.Builder<>();
+  public static ApiRequestCommonInfo getRequestCommon() {
+    ImmutableList.Builder<ApiRequestCommonInfo> entities = new ImmutableList.Builder<>();
     entities.add(pegged.get());
     return entities.build().get(0);
   }
@@ -58,8 +57,8 @@ public class ApiRequestCommon extends ApiObjectIdentity {
   }
 
   @SuppressWarnings("javadoc")
-  public User getUser() {
-    return user;
+  public String getRacf() {
+    return racf;
   }
 
 }
