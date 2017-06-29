@@ -75,7 +75,7 @@ public enum LegacyTable {
   /**
    * Get legacy table human readable description.
    * 
-   * @return
+   * @return description of this legacy table
    */
   public String getDescription() {
     return description;
