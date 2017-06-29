@@ -9,7 +9,7 @@ import org.apache.shiro.subject.Subject;
 public class User implements Serializable {
 
   /**
-   * 
+   * Default serialization.
    */
   private static final long serialVersionUID = 1L;
 

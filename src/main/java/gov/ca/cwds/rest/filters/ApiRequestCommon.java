@@ -26,4 +26,12 @@ public class ApiRequestCommon extends ApiObjectIdentity {
     return pegged.get();
   }
 
+  public Date getRequestBegin() {
+    return requestBegin;
+  }
+
+  public User getUser() {
+    return user;
+  }
+
 }
