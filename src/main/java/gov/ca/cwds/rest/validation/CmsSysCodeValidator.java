@@ -5,48 +5,49 @@ import java.text.MessageFormat;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Strings;
+
 /**
- * Validates that the {@code OnlyIf.property} of a given bean is not set unless the
- * {@code Onlyif.ifProperty} is also not empty.
+ * Validates that the {@code CmsSysCode.property} of a given bean must be a valid CMS system code
+ * for its system code category, {@code CmsSysCode.category}.
  * 
  * @author CWDS API Team
  */
 public class CmsSysCodeValidator
-    implements AbstractBeanValidator, ConstraintValidator<OnlyIf, Object> {
+    implements AbstractBeanValidator, ConstraintValidator<CmsSysCode, Object> {
 
   @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsSysCodeValidator.class);
 
-  private String ifProperty;
+  private String category;
   private String property;
+  private boolean required;
 
   @Override
-  public void initialize(OnlyIf constraintAnnotation) {
-    this.ifProperty = constraintAnnotation.ifProperty();
-    this.property = constraintAnnotation.property();
+  public void initialize(CmsSysCode anno) {
+    this.category = anno.category();
+    this.property = anno.property();
+    this.required = anno.required();
   }
 
   @Override
   public boolean isValid(final Object bean, ConstraintValidatorContext context) {
     boolean valid = true;
 
-    String ifValue = readBeanValue(bean, ifProperty);
-    boolean ifValueBlank = StringUtils.isBlank(ifValue);
+    category = readBeanValue(bean, category);
+    final boolean hasValue = !Strings.isNullOrEmpty(property);
 
-    if (ifValueBlank) {
-      String value = readBeanValue(bean, property);
-      if (StringUtils.isNotBlank(value)) {
-        context.disableDefaultConstraintViolation();
-        context
-            .buildConstraintViolationWithTemplate(
-                MessageFormat.format("can only be set if {0} is set", ifProperty))
-            .addPropertyNode(property).addConstraintViolation();
-        valid = false;
-      }
+    if (required && !hasValue) {
+      context.disableDefaultConstraintViolation();
+      context
+          .buildConstraintViolationWithTemplate(MessageFormat.format("{0} is required", property))
+          .addPropertyNode(property).addConstraintViolation();
+      valid = false;
+    } else if (hasValue) {
+      // TODO: validate sys code here.
     }
 
     return valid;

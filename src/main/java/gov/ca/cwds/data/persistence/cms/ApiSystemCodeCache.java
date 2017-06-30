@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -15,7 +16,14 @@ import java.util.List;
  * @author CWDS API Team
  * @see CmsSystemCodeCacheService
  */
-public interface ApiSystemCodeCache {
+public interface ApiSystemCodeCache extends Serializable {
+
+  /**
+   * Register this system code cache instance for system-wide use.
+   */
+  default void register() {
+    DelegatedRegistry.register(this).setCache(this);
+  }
 
   /**
    * Core method. Look up (translate) an incoming system id.
@@ -26,7 +34,7 @@ public interface ApiSystemCodeCache {
   CmsSystemCode lookup(int sysId);
 
   /**
-   * Get all system codes for a system code category.
+   * Get all system codes for a system code category (aka, "meta").
    * 
    * @param meta system code category (aka, "meta")
    * @return List of system codes for this category

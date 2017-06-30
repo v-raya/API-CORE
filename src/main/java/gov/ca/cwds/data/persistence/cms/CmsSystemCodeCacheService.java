@@ -1,6 +1,5 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -24,8 +23,7 @@ import gov.ca.cwds.rest.api.ApiException;
  * 
  * @author CWDS API Team
  */
-public class CmsSystemCodeCacheService
-    implements Serializable, ApiSystemCodeCache, Iterable<CmsSystemCode> {
+public class CmsSystemCodeCacheService implements ApiSystemCodeCache, Iterable<CmsSystemCode> {
 
   /**
    * Base serialization version. Increment per class change.
@@ -68,6 +66,7 @@ public class CmsSystemCodeCacheService
    */
   @Inject
   public CmsSystemCodeCacheService(ApiSystemCodeDao dao) {
+    register();
     this.dao = dao;
     final List<CmsSystemCode> codes = this.dao.getAllSystemCodes();
     Map<Integer, CmsSystemCode> anIdxSysId = new ConcurrentHashMap<>(codes.size());

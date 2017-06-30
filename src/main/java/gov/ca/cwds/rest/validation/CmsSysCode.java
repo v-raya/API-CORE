@@ -20,14 +20,16 @@ import javax.validation.Payload;
 @Constraint(validatedBy = CmsSysCodeValidator.class)
 public @interface CmsSysCode {
 
-  String message() default "{property} can only be set if {ifProperty} is set";
+  String message() default "{property} must be a valid system code for category {category}";
 
   Class<?>[] groups() default {};
 
   Class<? extends Payload>[] payload() default {};
 
-  String ifProperty();
+  String category();
 
   String property();
+
+  boolean required() default false;
 
 }
