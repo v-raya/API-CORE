@@ -22,7 +22,16 @@ public interface ApiSystemCodeCache extends Serializable {
    * Register this system code cache instance for system-wide use.
    */
   default void register() {
-    DelegatedRegistry.register(this).setCache(this);
+    DeferredRegistry.<ApiSystemCodeCache>register(this).setDelegate(this);
+  }
+
+  /**
+   * Globally available, singleton system code cache.
+   * 
+   * @return singleton system code cache
+   */
+  static ApiSystemCodeCache global() {
+    return DeferredRegistry.<ApiSystemCodeCache>unwrap();
   }
 
   /**
@@ -31,7 +40,9 @@ public interface ApiSystemCodeCache extends Serializable {
    * @param sysId unique system id
    * @return return the found system code or null if none found
    */
-  CmsSystemCode lookup(int sysId);
+  CmsSystemCode
+
+      lookup(Integer sysId);
 
   /**
    * Get all system codes for a system code category (aka, "meta").
@@ -49,6 +60,15 @@ public interface ApiSystemCodeCache extends Serializable {
    * @return system code record
    */
   CmsSystemCode lookupByCategoryAndShortDesc(final String meta, final String shortDesc);
+
+  /**
+   * Verify that this system code id matches the given category/meta.
+   * 
+   * @param meta lookup category
+   * @param sysId system code id
+   * @return if category matches system code id
+   */
+  boolean verifyCategoryAndSysCode(final String meta, final Integer sysId);
 
   /**
    * Get system code short description for given system code id.

@@ -23,8 +23,8 @@ import javax.validation.Payload;
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = MutuallyNecassaryValidator.class)
-public @interface MutuallyNecassary {
+@Constraint(validatedBy = MutuallyNecessaryValidator.class)
+public @interface MutuallyNecessary {
   String message() default "{properties} are mutually exclusive but multiple values set";
 
   Class<?>[] groups() default {};

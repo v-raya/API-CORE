@@ -15,17 +15,17 @@ import org.slf4j.LoggerFactory;
  *
  * @author CWDS API Team
  */
-public class MutuallyNecassaryValidator
-    implements AbstractBeanValidator, ConstraintValidator<MutuallyNecassary, Object> {
+public class MutuallyNecessaryValidator
+    implements AbstractBeanValidator, ConstraintValidator<MutuallyNecessary, Object> {
 
   @SuppressWarnings("unused")
-  private static final Logger LOGGER = LoggerFactory.getLogger(MutuallyNecassaryValidator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MutuallyNecessaryValidator.class);
 
   private String[] properties;
   private boolean required;
 
   @Override
-  public void initialize(MutuallyNecassary constraintAnnotation) {
+  public void initialize(MutuallyNecessary constraintAnnotation) {
     this.properties = constraintAnnotation.properties();
     this.required = constraintAnnotation.required();
   }

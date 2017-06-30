@@ -20,18 +20,18 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class MutuallyNecassaryValidatorTest {
+public class MutuallyNecessaryValidatorTest {
   private String abc;
   private String def;
   private String ghi;
 
-  private MutuallyNecassary requiredConstraintAnnotation = mock(MutuallyNecassary.class);
-  private MutuallyNecassary notRequiredConstraintAnnotation = mock(MutuallyNecassary.class);
+  private MutuallyNecessary requiredConstraintAnnotation = mock(MutuallyNecessary.class);
+  private MutuallyNecessary notRequiredConstraintAnnotation = mock(MutuallyNecessary.class);
   private ConstraintValidatorContext context = mock(ConstraintValidatorContext.class);
   private ConstraintViolationBuilder builder = mock(ConstraintViolationBuilder.class);
   private NodeBuilderCustomizableContext nodeBuilder = mock(NodeBuilderCustomizableContext.class);
 
-  private MutuallyNecassaryValidator validator = new MutuallyNecassaryValidator();
+  private MutuallyNecessaryValidator validator = new MutuallyNecessaryValidator();
 
   private String[] properties = {"abc", "def", "ghi"};
 
@@ -52,7 +52,7 @@ public class MutuallyNecassaryValidatorTest {
 
   @Test
   public void validReturnsTrueWhenRequiredAndAllSet() throws Exception {
-    MutuallyNecassaryValidatorTest bean = new MutuallyNecassaryValidatorTest();
+    MutuallyNecessaryValidatorTest bean = new MutuallyNecessaryValidatorTest();
     bean.abc = "abc";
     bean.def = "def";
     bean.ghi = "ghi";
@@ -63,7 +63,7 @@ public class MutuallyNecassaryValidatorTest {
 
   @Test
   public void validReturnsFalseWhenRequiredAndNotAllSet() throws Exception {
-    MutuallyNecassaryValidatorTest bean = new MutuallyNecassaryValidatorTest();
+    MutuallyNecessaryValidatorTest bean = new MutuallyNecessaryValidatorTest();
     bean.abc = "abc";
 
     validator.initialize(requiredConstraintAnnotation);
@@ -72,7 +72,7 @@ public class MutuallyNecassaryValidatorTest {
 
   @Test
   public void validReturnsTrueWhenNotRequiredAndAllSet() throws Exception {
-    MutuallyNecassaryValidatorTest bean = new MutuallyNecassaryValidatorTest();
+    MutuallyNecessaryValidatorTest bean = new MutuallyNecessaryValidatorTest();
     bean.abc = "abc";
     bean.def = "def";
     bean.ghi = "ghi";
@@ -83,7 +83,7 @@ public class MutuallyNecassaryValidatorTest {
 
   @Test
   public void validReturnsTrueWhenNotRequiredAndNoneSet() throws Exception {
-    MutuallyNecassaryValidatorTest bean = new MutuallyNecassaryValidatorTest();
+    MutuallyNecessaryValidatorTest bean = new MutuallyNecessaryValidatorTest();
 
     validator.initialize(notRequiredConstraintAnnotation);
     assertThat(validator.isValid(bean, context), is(equalTo(true)));
@@ -91,7 +91,7 @@ public class MutuallyNecassaryValidatorTest {
 
   @Test
   public void validReturnsFalseWhenNotRequiredAndSomeButNotAllSet() throws Exception {
-    MutuallyNecassaryValidatorTest bean = new MutuallyNecassaryValidatorTest();
+    MutuallyNecessaryValidatorTest bean = new MutuallyNecessaryValidatorTest();
     bean.abc = "abc";
 
     validator.initialize(notRequiredConstraintAnnotation);
@@ -112,8 +112,8 @@ public class MutuallyNecassaryValidatorTest {
    */
   @Test
   public void callBridgeFunctions() throws Exception {
-    MutuallyNecassaryValidator validator = new MutuallyNecassaryValidator();
-    Method initialize = MutuallyNecassaryValidator.class.getMethod("initialize", Annotation.class);
+    MutuallyNecessaryValidator validator = new MutuallyNecessaryValidator();
+    Method initialize = MutuallyNecessaryValidator.class.getMethod("initialize", Annotation.class);
     initialize.invoke(validator, notRequiredConstraintAnnotation);
     Assert.assertTrue(true);
   }

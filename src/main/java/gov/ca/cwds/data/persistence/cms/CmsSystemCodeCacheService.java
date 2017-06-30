@@ -9,21 +9,21 @@ import java.util.Spliterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.rest.api.ApiException;
 
 /**
- * Basic system code cache facility to translate common CMS codes.
+ * System code cache facility to translate common CMS codes.
  * 
  * @author CWDS API Team
  */
-public class CmsSystemCodeCacheService implements ApiSystemCodeCache, Iterable<CmsSystemCode> {
+public class CmsSystemCodeCacheService extends ApiObjectIdentity
+    implements ApiSystemCodeCache, Iterable<CmsSystemCode> {
 
   /**
    * Base serialization version. Increment per class change.
@@ -99,14 +99,25 @@ public class CmsSystemCodeCacheService implements ApiSystemCodeCache, Iterable<C
    * @see gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache#lookup(int)
    */
   @Override
-  public CmsSystemCode lookup(int sysId) {
-    return this.idxSysId.get(sysId);
+  public CmsSystemCode lookup(Integer sysId) {
+    return sysId != null ? this.idxSysId.get(sysId) : null;
   }
 
   @Override
   public CmsSystemCode lookupByCategoryAndShortDesc(String meta, String shortDesc) {
-    final String key = meta.toUpperCase() + "_" + shortDesc.toUpperCase();
-    return idxCategoryShortDesc.get(key);
+    return idxCategoryShortDesc.get(meta.toUpperCase() + "_" + shortDesc.toUpperCase());
+  }
+
+  @Override
+  public boolean verifyCategoryAndSysCode(String meta, final Integer sysId) {
+    boolean valid = false;
+
+    if (sysId != null) {
+      final CmsSystemCode code = this.idxSysId.get(sysId);
+      valid = code != null && code.getFksMetaT().equals(meta);
+    }
+
+    return valid;
   }
 
   /**
@@ -136,7 +147,6 @@ public class CmsSystemCodeCacheService implements ApiSystemCodeCache, Iterable<C
     return codeDesc;
   }
 
-  // #137202471: Tech debt: Cobertura doesn't recognize Java 8 features.
   @Override
   public Iterator<CmsSystemCode> iterator() {
     return this.idxSysId.values().iterator();
@@ -150,16 +160,6 @@ public class CmsSystemCodeCacheService implements ApiSystemCodeCache, Iterable<C
   @Override
   public Spliterator<CmsSystemCode> spliterator() {
     return this.idxSysId.values().spliterator();
-  }
-
-  @Override
-  public final int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this, false);
-  }
-
-  @Override
-  public final boolean equals(Object obj) {
-    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

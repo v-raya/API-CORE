@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
 
+import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
+
 /**
  * Validates that the {@code CmsSysCode.property} of a given bean must be a valid CMS system code
  * for its system code category, {@code CmsSysCode.category}.
@@ -47,7 +49,12 @@ public class CmsSysCodeValidator
           .addPropertyNode(property).addConstraintViolation();
       valid = false;
     } else if (hasValue) {
-      // TODO: validate sys code here.
+      try {
+        final Integer sysId = Integer.parseInt(property);
+        valid = ApiSystemCodeCache.global().verifyCategoryAndSysCode(category, sysId);
+      } catch (NumberFormatException e) {
+        LOGGER.warn("Cannot parse integer from {}", property);
+      }
     }
 
     return valid;
