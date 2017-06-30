@@ -34,6 +34,11 @@ public class ApiRequestCommonInfo extends ApiObjectIdentity {
    * Servlet filter marks the start of a web request. This method is only accessible by the filters
    * package.
    * 
+   * <p>
+   * In the future, this method should accept more parameters for other cross-cutting concerns, such
+   * as user roles, authorization, staff id, and so forth.
+   * </p>
+   * 
    * @param user User with mainframe RACF id
    */
   static void startRequest(String racf) {
@@ -41,7 +46,8 @@ public class ApiRequestCommonInfo extends ApiObjectIdentity {
   }
 
   /**
-   * Retrieve common information for this thread.
+   * Retrieve common information for this thread. No need to synchronize this method, since it read
+   * from ThreadLocal anyway.
    * 
    * @return common request information
    */
