@@ -15,9 +15,11 @@ import org.slf4j.LoggerFactory;
  * 
  * @author CWDS API Team
  */
-public class OnlyIfValidator implements AbstractBeanValidator, ConstraintValidator<OnlyIf, Object> {
+public class CmsSysCodeValidator
+    implements AbstractBeanValidator, ConstraintValidator<OnlyIf, Object> {
+
   @SuppressWarnings("unused")
-  private static final Logger LOGGER = LoggerFactory.getLogger(OnlyIfValidator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CmsSysCodeValidator.class);
 
   private String ifProperty;
   private String property;
@@ -49,4 +51,5 @@ public class OnlyIfValidator implements AbstractBeanValidator, ConstraintValidat
 
     return valid;
   }
+
 }

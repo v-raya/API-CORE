@@ -13,12 +13,12 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Strings;
 
 /**
- * test if value is a valid date
+ * Check whether value is a valid date.
  * 
  * @author CWDS API Team
- *
  */
 public class DateValidator implements ConstraintValidator<Date, String> {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(DateValidator.class);
 
   private String format;
@@ -38,13 +38,15 @@ public class DateValidator implements ConstraintValidator<Date, String> {
       try {
         df.parse(value);
       } catch (ParseException e) {
-        LOGGER.info("Unable to validate date string {} with format {}", value, format);
+        LOGGER.warn("Unable to validate date string {} with format {}", value, format);
         return false;
       } catch (NullPointerException npe) {
-        LOGGER.info("Unable to validate null date string with format {}", format, npe);
+        LOGGER.warn("Unable to validate null date string with format {}", format, npe);
         return false;
       }
     }
+
     return true;
   }
+
 }

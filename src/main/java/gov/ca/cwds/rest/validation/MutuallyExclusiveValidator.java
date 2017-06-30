@@ -28,8 +28,8 @@ import com.google.common.collect.ImmutableList;
  *
  * @author CWDS API Team
  */
-public class MutuallyExclusiveValidator extends AbstractBeanValidator
-    implements ConstraintValidator<MutuallyExclusive, Object> {
+public class MutuallyExclusiveValidator
+    implements AbstractBeanValidator, ConstraintValidator<MutuallyExclusive, Object> {
   @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(MutuallyExclusiveValidator.class);
 

@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
  *
  * @author CWDS API Team
  */
-public class MutuallyNecassaryValidator extends AbstractBeanValidator
-    implements ConstraintValidator<MutuallyNecassary, Object> {
+public class MutuallyNecassaryValidator
+    implements AbstractBeanValidator, ConstraintValidator<MutuallyNecassary, Object> {
 
   @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(MutuallyNecassaryValidator.class);
