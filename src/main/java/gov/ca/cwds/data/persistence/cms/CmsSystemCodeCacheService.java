@@ -9,6 +9,7 @@ import java.util.Spliterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -112,8 +113,20 @@ public class CmsSystemCodeCacheService extends ApiObjectIdentity
   public boolean verifyCategoryAndSysCode(String meta, final Integer sysId) {
     boolean valid = false;
 
-    if (sysId != null) {
+    if (sysId != null && sysId.intValue() != 0) {
       final CmsSystemCode code = this.idxSysId.get(sysId);
+      valid = code != null && code.getFksMetaT().equals(meta);
+    }
+
+    return valid;
+  }
+
+  @Override
+  public boolean verifyCategoryAndSysCode(String meta, String shortDesc) {
+    boolean valid = false;
+
+    if (StringUtils.isNotBlank(shortDesc)) {
+      final CmsSystemCode code = lookupByCategoryAndShortDesc(meta, shortDesc);
       valid = code != null && code.getFksMetaT().equals(meta);
     }
 
@@ -161,5 +174,6 @@ public class CmsSystemCodeCacheService extends ApiObjectIdentity
   public Spliterator<CmsSystemCode> spliterator() {
     return this.idxSysId.values().spliterator();
   }
+
 
 }

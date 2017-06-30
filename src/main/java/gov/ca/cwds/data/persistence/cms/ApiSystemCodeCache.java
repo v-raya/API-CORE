@@ -40,9 +40,7 @@ public interface ApiSystemCodeCache extends Serializable {
    * @param sysId unique system id
    * @return return the found system code or null if none found
    */
-  CmsSystemCode
-
-      lookup(Integer sysId);
+  CmsSystemCode lookup(Integer sysId);
 
   /**
    * Get all system codes for a system code category (aka, "meta").
@@ -69,6 +67,15 @@ public interface ApiSystemCodeCache extends Serializable {
    * @return if category matches system code id
    */
   boolean verifyCategoryAndSysCode(final String meta, final Integer sysId);
+
+  /**
+   * Verify that this system code description matches the given category/meta.
+   * 
+   * @param meta lookup category
+   * @param shortDesc system code description
+   * @return if category matches system code id
+   */
+  boolean verifyCategoryAndSysCode(final String meta, final String shortDesc);
 
   /**
    * Get system code short description for given system code id.

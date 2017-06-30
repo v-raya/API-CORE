@@ -5,31 +5,29 @@ import java.text.MessageFormat;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Strings;
 
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
 
 /**
- * Validates that the {@code CmsSysCode.property} of a given bean must be a valid CMS system code
+ * Validates that the {@code CmsSysCode.property} of a given bean must be a valid CMS system code id
  * for its system code category, {@code CmsSysCode.category}.
  * 
  * @author CWDS API Team
  */
-public class CmsSysCodeValidator
-    implements AbstractBeanValidator, ConstraintValidator<CmsSysCode, Object> {
+public class CmsSysCodeIdValidator
+    implements AbstractBeanValidator, ConstraintValidator<CmsSysCodeId, Object> {
 
-  @SuppressWarnings("unused")
-  private static final Logger LOGGER = LoggerFactory.getLogger(CmsSysCodeValidator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CmsSysCodeIdValidator.class);
 
   private String category;
   private String property;
   private boolean required;
 
   @Override
-  public void initialize(CmsSysCode anno) {
+  public void initialize(CmsSysCodeId anno) {
     this.category = anno.category();
     this.property = anno.property();
     this.required = anno.required();
@@ -40,7 +38,7 @@ public class CmsSysCodeValidator
     boolean valid = true;
 
     category = readBeanValue(bean, category);
-    final boolean hasValue = !Strings.isNullOrEmpty(property);
+    final boolean hasValue = !StringUtils.isNotBlank(property);
 
     if (required && !hasValue) {
       context.disableDefaultConstraintViolation();
@@ -50,7 +48,7 @@ public class CmsSysCodeValidator
       valid = false;
     } else if (hasValue) {
       try {
-        final Integer sysId = Integer.parseInt(property);
+        final Integer sysId = Integer.parseInt(property.trim());
         valid = ApiSystemCodeCache.global().verifyCategoryAndSysCode(category, sysId);
       } catch (NumberFormatException e) {
         LOGGER.warn("Cannot parse integer from {}", property);

@@ -2,7 +2,7 @@ package gov.ca.cwds.data.persistence.cms;
 
 import java.io.Serializable;
 
-public class DeferredRegistry<T> implements Serializable {
+public class DeferredRegistry<T extends Serializable> implements Serializable {
 
   private static DeferredRegistry registry;
 
@@ -12,14 +12,14 @@ public class DeferredRegistry<T> implements Serializable {
     this.wrapped = t;
   }
 
-  private static final synchronized <T> void makeRegistry(T t) {
+  private static final synchronized <T extends Serializable> void makeRegistry(T t) {
     if (registry == null) {
       registry = new DeferredRegistry<T>(t);
     }
   }
 
   @SuppressWarnings("unchecked")
-  public static final <T> DeferredRegistry<T> register(T t) {
+  public static final <T extends Serializable> DeferredRegistry<T> register(T t) {
     if (registry == null) {
       makeRegistry(t);
     }
@@ -28,7 +28,7 @@ public class DeferredRegistry<T> implements Serializable {
   }
 
   @SuppressWarnings("unchecked")
-  static final <T> T unwrap() {
+  static final <T extends Serializable> T unwrap() {
     return ((DeferredRegistry<T>) registry.getDelegate()).getDelegate();
   }
 

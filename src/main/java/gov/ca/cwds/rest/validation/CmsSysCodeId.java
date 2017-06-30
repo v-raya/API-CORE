@@ -10,15 +10,15 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- * Annotation indicating that a property must be a valid CMS system code for its system code
+ * Annotation indicating that a property must be a valid CMS system code id for its system code
  * category.
  * 
  * @author CWDS API Team
  */
 @Target({TYPE_USE})
 @Retention(RUNTIME)
-@Constraint(validatedBy = CmsSysCodeValidator.class)
-public @interface CmsSysCode {
+@Constraint(validatedBy = CmsSysCodeIdValidator.class)
+public @interface CmsSysCodeId {
 
   String message() default "{property} must be a valid system code for category {category}";
 
