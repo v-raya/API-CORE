@@ -19,8 +19,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.rest.api.ApiException;
-
 /**
  * Store common info when an HTTP request begins. Can be merged with
  * {@link PerryAuthenticatingFilter} when ready. See story #147865633.
@@ -57,7 +55,7 @@ public class RequestCommonInfoFilter implements Filter {
         chain.doFilter(httpServletRequest, httpServletResponse);
       } catch (Exception e) {
         LOGGER.error(e.getMessage(), e);
-        throw new ApiException("Unable to handle request", e);
+        throw e;
       }
     }
 
@@ -65,7 +63,7 @@ public class RequestCommonInfoFilter implements Filter {
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {
-    // No-op.
+    LOGGER.info("filterConfig={}", filterConfig.getFilterName());
   }
 
   @Override
