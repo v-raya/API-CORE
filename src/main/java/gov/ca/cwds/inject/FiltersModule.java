@@ -12,7 +12,8 @@ import gov.ca.cwds.rest.filters.WebSecurityFilter;
  * Dependency injection (DI) for Filter classes.
  * 
  * <p>
- * Register filters her with Guice and configure them in {@link BaseApiApplication.registerFilters}.
+ * Register filters her with Guice and configure them in {@link BaseApiApplication}, method
+ * registerFilters.
  * </p>
  * 
  * @author CWDS API Team
