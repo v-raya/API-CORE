@@ -134,11 +134,16 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
     runInternal(configuration, environment);
   }
 
+  /**
+   * Register filters in {@link FilterModule.configure} and configure them here.
+   * 
+   * @param environment
+   */
   private final void registerFilters(final Environment environment) {
     // Story #129093035: Catch/handle 500 errors.
     environment.jersey().register(UnhandledExceptionMapperImpl.class);
 
-    injector = guiceBundle.getInjector();
+    BaseApiApplication.injector = guiceBundle.getInjector();
 
     environment.servlets()
         .addFilter("RequestCommonInfoFilter", injector.getInstance(RequestCommonInfoFilter.class))

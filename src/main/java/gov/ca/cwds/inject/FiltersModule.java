@@ -2,6 +2,7 @@ package gov.ca.cwds.inject;
 
 import com.google.inject.AbstractModule;
 
+import gov.ca.cwds.rest.BaseApiApplication;
 import gov.ca.cwds.rest.BaseApiConfiguration;
 import gov.ca.cwds.rest.filters.RequestCommonInfoFilter;
 import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
@@ -9,6 +10,10 @@ import gov.ca.cwds.rest.filters.WebSecurityFilter;
 
 /**
  * Dependency injection (DI) for Filter classes.
+ * 
+ * <p>
+ * Register filters her with Guice and configure them in {@link BaseApiApplication.registerFilters}.
+ * </p>
  * 
  * @author CWDS API Team
  * @param <T> type of API configuration
