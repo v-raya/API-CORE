@@ -22,7 +22,7 @@ public interface ApiSystemCodeCache extends Serializable {
    * Register this system code cache instance for system-wide use.
    */
   default void register() {
-    DeferredRegistry.<ApiSystemCodeCache>register(this).setDelegate(this);
+    DeferredRegistry.<ApiSystemCodeCache>register(ApiSystemCodeCache.class, this);
   }
 
   /**
@@ -31,7 +31,7 @@ public interface ApiSystemCodeCache extends Serializable {
    * @return singleton system code cache
    */
   static ApiSystemCodeCache global() {
-    return DeferredRegistry.<ApiSystemCodeCache>unwrap();
+    return DeferredRegistry.<ApiSystemCodeCache>unwrap(ApiSystemCodeCache.class);
   }
 
   /**
