@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import java.io.Serializable;
@@ -14,7 +15,6 @@ import javax.validation.ConstraintValidatorContext;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -25,7 +25,7 @@ public class CmsSysCodeDescriptionValidatorTest {
 
   private static final class AnnoTestBean implements Serializable {
 
-    @CmsSysCodeDescription(category = "", required = true)
+    @CmsSysCodeDescription(category = "ABS_BPTC", required = true)
     private String prop1;
 
     private String prop2;
@@ -62,8 +62,7 @@ public class CmsSysCodeDescriptionValidatorTest {
   @BeforeClass
   public static void setupClass() {
     TestSystemCodeCache.init();
-    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-    validator = factory.getValidator();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
   }
 
   @Test
@@ -89,7 +88,6 @@ public class CmsSysCodeDescriptionValidatorTest {
     CmsSysCodeDescriptionValidator target = new CmsSysCodeDescriptionValidator();
     String value = "";
     ConstraintValidatorContext context_ = mock(ConstraintValidatorContext.class);
-    // when(context_.)
     boolean actual = target.isValid(value, context_);
     boolean expected = false;
     assertThat(actual, is(equalTo(expected)));
@@ -97,10 +95,18 @@ public class CmsSysCodeDescriptionValidatorTest {
 
   @Test
   public void validateManually() throws Exception {
-    final AnnoTestBean bean = new AnnoTestBean("one", "two");
+    final AnnoTestBean bean = new AnnoTestBean("Breasts", "two");
     Set<ConstraintViolation<AnnoTestBean>> violations = validator.validate(bean);
-    assertFalse(violations.isEmpty());
+    System.out.println(violations);
+    assertTrue(violations.isEmpty());
+  }
 
+  @Test
+  public void validateManually2() throws Exception {
+    final AnnoTestBean bean = new AnnoTestBean("djdjskshahfdsa", "two");
+    Set<ConstraintViolation<AnnoTestBean>> violations = validator.validate(bean);
+    System.out.println(violations);
+    assertFalse(violations.isEmpty());
   }
 
 }

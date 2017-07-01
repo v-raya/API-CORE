@@ -7,8 +7,6 @@ import javax.validation.ConstraintValidatorContext;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.google.common.base.Strings;
-
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
 
 /**
@@ -32,9 +30,9 @@ public class CmsSysCodeDescriptionValidator
   @Override
   public boolean isValid(final String value, ConstraintValidatorContext context) {
     boolean valid = false;
-    final boolean hasProp = !StringUtils.isNotBlank(value);
+    final boolean hasProp = StringUtils.isNotBlank(value);
 
-    if (required || !Strings.isNullOrEmpty(value)) {
+    if (required && !hasProp) {
       context.disableDefaultConstraintViolation();
       context
           .buildConstraintViolationWithTemplate(
