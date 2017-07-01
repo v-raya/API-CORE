@@ -7,6 +7,8 @@ import javax.validation.ConstraintValidatorContext;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.google.common.base.Strings;
+
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
 
 /**
@@ -16,33 +18,30 @@ import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
  * @author CWDS API Team
  */
 public class CmsSysCodeDescriptionValidator
-    implements AbstractBeanValidator, ConstraintValidator<CmsSysCodeId, Object> {
+    implements AbstractBeanValidator, ConstraintValidator<CmsSysCodeDescription, String> {
 
   private String category;
-  private String property;
   private boolean required;
 
   @Override
-  public void initialize(CmsSysCodeId anno) {
+  public void initialize(CmsSysCodeDescription anno) {
     this.category = anno.category();
-    this.property = anno.property();
     this.required = anno.required();
   }
 
   @Override
-  public boolean isValid(final Object bean, ConstraintValidatorContext context) {
+  public boolean isValid(final String value, ConstraintValidatorContext context) {
     boolean valid = false;
+    final boolean hasProp = !StringUtils.isNotBlank(value);
 
-    category = readBeanValue(bean, category);
-    final boolean hasValue = !StringUtils.isNotBlank(property);
-
-    if (required && !hasValue) {
+    if (required || !Strings.isNullOrEmpty(value)) {
       context.disableDefaultConstraintViolation();
       context
-          .buildConstraintViolationWithTemplate(MessageFormat.format("{0} is required", property))
-          .addPropertyNode(property).addConstraintViolation();
-    } else if (hasValue) {
-      valid = ApiSystemCodeCache.global().verifyCategoryAndSysCodeShortDescription(category, property);
+          .buildConstraintViolationWithTemplate(
+              MessageFormat.format("{0} description is required", category))
+          .addPropertyNode(category).addConstraintViolation();
+    } else if (hasProp) {
+      valid = ApiSystemCodeCache.global().verifyCategoryAndSysCodeShortDescription(category, value);
     }
 
     return valid;

@@ -17,7 +17,7 @@ import javax.validation.Payload;
  */
 @Target({TYPE_USE})
 @Retention(RUNTIME)
-@Constraint(validatedBy = CmsSysCodeIdValidator.class)
+@Constraint(validatedBy = CmsSysCodeDescriptionValidator.class)
 public @interface CmsSysCodeDescription {
 
   String message() default "{property} must be a valid system code for category {category}";
@@ -28,7 +28,7 @@ public @interface CmsSysCodeDescription {
 
   String category();
 
-  String property();
+  // String property();
 
   boolean required() default false;
 

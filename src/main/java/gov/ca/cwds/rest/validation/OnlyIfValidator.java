@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
  * @author CWDS API Team
  */
 public class OnlyIfValidator implements AbstractBeanValidator, ConstraintValidator<OnlyIf, Object> {
+
   @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(OnlyIfValidator.class);
 
@@ -23,9 +24,9 @@ public class OnlyIfValidator implements AbstractBeanValidator, ConstraintValidat
   private String property;
 
   @Override
-  public void initialize(OnlyIf constraintAnnotation) {
-    this.ifProperty = constraintAnnotation.ifProperty();
-    this.property = constraintAnnotation.property();
+  public void initialize(OnlyIf anno) {
+    this.ifProperty = anno.ifProperty();
+    this.property = anno.property();
   }
 
   @Override
