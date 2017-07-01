@@ -8,7 +8,7 @@ package gov.ca.cwds.data.std;
  * @author CWDS API Team
  */
 @FunctionalInterface
-public interface ApiLanguageAware {
+public interface ApiLanguageAware extends ApiMarker {
 
   /**
    * Getter for language SYS ID code.

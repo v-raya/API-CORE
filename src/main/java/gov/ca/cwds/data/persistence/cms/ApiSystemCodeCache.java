@@ -1,7 +1,8 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import java.io.Serializable;
 import java.util.List;
+
+import gov.ca.cwds.data.std.ApiMarker;
 
 /**
  * Interface for CMS system code cache facility to translate common CMS codes.
@@ -16,7 +17,7 @@ import java.util.List;
  * @author CWDS API Team
  * @see CmsSystemCodeCacheService
  */
-public interface ApiSystemCodeCache extends Serializable {
+public interface ApiSystemCodeCache extends ApiMarker {
 
   /**
    * Register this system code cache instance for system-wide use.

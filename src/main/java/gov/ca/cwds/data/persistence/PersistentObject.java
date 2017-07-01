@@ -2,6 +2,8 @@ package gov.ca.cwds.data.persistence;
 
 import java.io.Serializable;
 
+import gov.ca.cwds.data.std.ApiMarker;
+
 /**
  * Marker interface for all persistent classes.
  * 
@@ -21,7 +23,7 @@ import java.io.Serializable;
  * @see TypedPersistentObject
  */
 @FunctionalInterface
-public interface PersistentObject extends Serializable {
+public interface PersistentObject extends ApiMarker {
 
   /**
    * The key may be any serializable object, including String, Number (and its extensions), or

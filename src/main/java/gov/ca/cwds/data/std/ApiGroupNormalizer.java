@@ -1,6 +1,5 @@
 package gov.ca.cwds.data.std;
 
-import java.io.Serializable;
 import java.util.Map;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
@@ -16,7 +15,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * @author CWDS API Team
  * @param <N> type to reduce to
  */
-public interface ApiGroupNormalizer<N extends PersistentObject> extends Serializable {
+public interface ApiGroupNormalizer<N extends PersistentObject> extends ApiMarker {
 
   /**
    * Convenience method returns class type of N.

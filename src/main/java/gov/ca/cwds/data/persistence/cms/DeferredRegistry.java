@@ -1,8 +1,9 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import gov.ca.cwds.data.std.ApiMarker;
 
 /**
  * Store generic type instance statically for easy retrieval.
@@ -10,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @param <T> type to wrap
  * @author CWDS API Team
  */
-public final class DeferredRegistry<T extends Serializable> implements Serializable {
+public final class DeferredRegistry<T extends ApiMarker> implements ApiMarker {
 
   /**
    * Default.
@@ -27,7 +28,7 @@ public final class DeferredRegistry<T extends Serializable> implements Serializa
    * type.
    * </p>
    */
-  private static Map<Class<?>, DeferredRegistry<Serializable>> registry = new ConcurrentHashMap<>();
+  private static Map<Class<?>, DeferredRegistry<ApiMarker>> registry = new ConcurrentHashMap<>();
 
   private final T wrapped;
   private final Class<T> klass;
@@ -38,15 +39,27 @@ public final class DeferredRegistry<T extends Serializable> implements Serializa
   }
 
   /**
+   * Register this instance. Allows overwrite of already registered instance.
+   * 
+   * @param klass class
+   * @param t serializable type
+   * @param overwrite overwrite if already registered
+   */
+  @SuppressWarnings("unchecked")
+  static final <T extends ApiMarker> void register(Class<T> klass, T t, boolean overwrite) {
+    if (overwrite || !registry.containsKey(klass)) {
+      registry.put(klass, (DeferredRegistry<ApiMarker>) new DeferredRegistry<>(klass, t));
+    }
+  }
+
+  /**
    * Register this instance.
    * 
    * @param t serializable type
+   * @param t serializable type
    */
-  @SuppressWarnings("unchecked")
-  static final <T extends Serializable> void register(Class<T> klass, T t) {
-    if (!registry.containsKey(klass)) {
-      registry.put(klass, (DeferredRegistry<Serializable>) new DeferredRegistry<>(klass, t));
-    }
+  static final <T extends ApiMarker> void register(Class<T> klass, T t) {
+    register(klass, t, false);
   }
 
   /**
@@ -55,7 +68,7 @@ public final class DeferredRegistry<T extends Serializable> implements Serializa
    * @return the underlying
    */
   @SuppressWarnings("unchecked")
-  static final <T extends Serializable> T unwrap(Class<?> klass) {
+  static final <T extends ApiMarker> T unwrap(Class<?> klass) {
     return ((DeferredRegistry<T>) registry.get(klass)).wrapped;
   }
 
