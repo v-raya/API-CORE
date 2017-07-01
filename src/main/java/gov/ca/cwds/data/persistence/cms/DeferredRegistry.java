@@ -29,11 +29,11 @@ public class DeferredRegistry<T extends Serializable> implements Serializable {
 
   @SuppressWarnings("unchecked")
   static final <T extends Serializable> T unwrap() {
-    return ((DeferredRegistry<T>) registry.getDelegate()).getDelegate();
+    return ((DeferredRegistry<T>) registry).getDelegate();
   }
 
   @SuppressWarnings("javadoc")
-  public T getDelegate() {
+  protected T getDelegate() {
     return wrapped;
   }
 

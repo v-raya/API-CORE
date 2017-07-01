@@ -105,12 +105,12 @@ public class CmsSystemCodeCacheService extends ApiObjectIdentity
   }
 
   @Override
-  public CmsSystemCode lookupByCategoryAndShortDesc(String meta, String shortDesc) {
+  public CmsSystemCode lookupByCategoryAndShortDescription(String meta, String shortDesc) {
     return idxCategoryShortDesc.get(meta.toUpperCase() + "_" + shortDesc.toUpperCase());
   }
 
   @Override
-  public boolean verifyCategoryAndSysCode(String meta, final Integer sysId) {
+  public boolean verifyCategoryAndSysCodeId(String meta, final Integer sysId) {
     boolean valid = false;
 
     if (sysId != null && sysId.intValue() != 0) {
@@ -122,11 +122,11 @@ public class CmsSystemCodeCacheService extends ApiObjectIdentity
   }
 
   @Override
-  public boolean verifyCategoryAndSysCode(String meta, String shortDesc) {
+  public boolean verifyCategoryAndSysCodeShortDescription(String meta, String shortDesc) {
     boolean valid = false;
 
     if (StringUtils.isNotBlank(shortDesc)) {
-      final CmsSystemCode code = lookupByCategoryAndShortDesc(meta, shortDesc);
+      final CmsSystemCode code = lookupByCategoryAndShortDescription(meta, shortDesc);
       valid = code != null && code.getFksMetaT().equals(meta);
     }
 

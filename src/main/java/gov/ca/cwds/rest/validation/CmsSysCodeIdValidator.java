@@ -35,7 +35,7 @@ public class CmsSysCodeIdValidator
 
   @Override
   public boolean isValid(final Object bean, ConstraintValidatorContext context) {
-    boolean valid = true;
+    boolean valid = false;
 
     category = readBeanValue(bean, category);
     final boolean hasValue = !StringUtils.isNotBlank(property);
@@ -45,13 +45,12 @@ public class CmsSysCodeIdValidator
       context
           .buildConstraintViolationWithTemplate(MessageFormat.format("{0} is required", property))
           .addPropertyNode(property).addConstraintViolation();
-      valid = false;
     } else if (hasValue) {
       try {
         final Integer sysId = Integer.parseInt(property.trim());
-        valid = ApiSystemCodeCache.global().verifyCategoryAndSysCode(category, sysId);
+        valid = ApiSystemCodeCache.global().verifyCategoryAndSysCodeId(category, sysId);
       } catch (NumberFormatException e) {
-        LOGGER.warn("Cannot parse integer from {}", property);
+        LOGGER.warn("Cannot parse system code id from {}", property);
       }
     }
 

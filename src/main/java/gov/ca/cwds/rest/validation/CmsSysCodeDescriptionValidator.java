@@ -6,8 +6,6 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
 
@@ -19,9 +17,6 @@ import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
  */
 public class CmsSysCodeDescriptionValidator
     implements AbstractBeanValidator, ConstraintValidator<CmsSysCodeId, Object> {
-
-  private static final Logger LOGGER =
-      LoggerFactory.getLogger(CmsSysCodeDescriptionValidator.class);
 
   private String category;
   private String property;
@@ -36,7 +31,7 @@ public class CmsSysCodeDescriptionValidator
 
   @Override
   public boolean isValid(final Object bean, ConstraintValidatorContext context) {
-    boolean valid = true;
+    boolean valid = false;
 
     category = readBeanValue(bean, category);
     final boolean hasValue = !StringUtils.isNotBlank(property);
@@ -46,9 +41,8 @@ public class CmsSysCodeDescriptionValidator
       context
           .buildConstraintViolationWithTemplate(MessageFormat.format("{0} is required", property))
           .addPropertyNode(property).addConstraintViolation();
-      valid = false;
     } else if (hasValue) {
-      valid = ApiSystemCodeCache.global().verifyCategoryAndSysCode(category, property);
+      valid = ApiSystemCodeCache.global().verifyCategoryAndSysCodeShortDescription(category, property);
     }
 
     return valid;
