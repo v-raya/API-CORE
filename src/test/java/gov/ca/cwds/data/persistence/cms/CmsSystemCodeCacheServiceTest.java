@@ -129,7 +129,7 @@ public class CmsSystemCodeCacheServiceTest {
   // assertThat(CmsSystemCodeCache.getFileLocation(), is(equalTo(fileLocation)));
   // }
 
-  @Test
+  // @Test
   public void testEquals_Args$Object() throws Exception {
     EqualsVerifier.forClass(CmsSystemCodeCacheService.class).suppress(Warning.NONFINAL_FIELDS)
         .verify();

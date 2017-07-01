@@ -97,7 +97,7 @@ public class CmsSystemCodeCacheService extends ApiObjectIdentity
   /**
    * {@inheritDoc}
    * 
-   * @see gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache#lookup(int)
+   * @see gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache#lookup(Integer)
    */
   @Override
   public CmsSystemCode lookup(Integer sysId) {
