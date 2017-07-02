@@ -33,8 +33,6 @@ public @interface CmsSysCodeDescription {
 
   String category();
 
-  // String property();
-
   boolean required() default false;
 
 }

@@ -5,10 +5,6 @@ import java.text.MessageFormat;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
 
 /**
@@ -18,40 +14,30 @@ import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
  * @author CWDS API Team
  */
 public class CmsSysCodeIdValidator
-    implements AbstractBeanValidator, ConstraintValidator<CmsSysCodeId, Object> {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(CmsSysCodeIdValidator.class);
+    implements AbstractBeanValidator, ConstraintValidator<CmsSysCodeId, Number> {
 
   private String category;
-  private String property;
   private boolean required;
 
   @Override
   public void initialize(CmsSysCodeId anno) {
     this.category = anno.category();
-    this.property = anno.property();
     this.required = anno.required();
   }
 
   @Override
-  public boolean isValid(final Object bean, ConstraintValidatorContext context) {
+  public boolean isValid(final Number value, ConstraintValidatorContext context) {
     boolean valid = false;
+    final boolean hasProp = value != null && value.intValue() != 0;
 
-    category = readBeanValue(bean, category);
-    final boolean hasValue = !StringUtils.isNotBlank(property);
-
-    if (required && !hasValue) {
+    if (required && !hasProp) {
       context.disableDefaultConstraintViolation();
       context
-          .buildConstraintViolationWithTemplate(MessageFormat.format("{0} is required", property))
-          .addPropertyNode(property).addConstraintViolation();
-    } else if (hasValue) {
-      try {
-        final Integer sysId = Integer.parseInt(property.trim());
-        valid = ApiSystemCodeCache.global().verifyCategoryAndSysCodeId(category, sysId);
-      } catch (NumberFormatException e) {
-        LOGGER.warn("Cannot parse system code id from {}", property);
-      }
+          .buildConstraintViolationWithTemplate(
+              MessageFormat.format("{0} sys code is required", category))
+          .addPropertyNode(category).addConstraintViolation();
+    } else if (hasProp) {
+      valid = ApiSystemCodeCache.global().verifyCategoryAndSysCodeId(category, value.intValue());
     }
 
     return valid;
