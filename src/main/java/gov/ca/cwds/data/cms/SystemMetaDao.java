@@ -1,13 +1,13 @@
 package gov.ca.cwds.data.cms;
 
-import gov.ca.cwds.data.CrudsDaoImpl;
-import gov.ca.cwds.data.persistence.cms.SystemMeta;
-import gov.ca.cwds.inject.CmsSessionFactory;
-
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import com.google.inject.Inject;
+
+import gov.ca.cwds.data.CrudsDaoImpl;
+import gov.ca.cwds.data.persistence.cms.SystemMeta;
+import gov.ca.cwds.inject.CmsSessionFactory;
 
 /**
  * Hibernate DAO for DB2 {@link SystemMeta}.
@@ -26,14 +26,15 @@ public class SystemMetaDao extends CrudsDaoImpl<SystemMeta> {
     super(sessionFactory);
   }
 
+  /**
+   * @return all meta data records
+   */
   @SuppressWarnings("unchecked")
   public SystemMeta[] findAll() {
-    Query query =
-        this.getSessionFactory().getCurrentSession()
-            .getNamedQuery("gov.ca.cwds.data.persistence.cms.SystemMeta.findAll");
+    Query query = this.getSessionFactory().getCurrentSession()
+        .getNamedQuery(SystemMeta.class.getName() + ".findAll");
 
     return (SystemMeta[]) query.list().toArray(new SystemMeta[0]);
-
   }
 
 }
