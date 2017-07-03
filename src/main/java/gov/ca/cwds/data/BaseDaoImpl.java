@@ -74,9 +74,8 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
     try {
       txn = session.beginTransaction();
       // Compatible with both DB2 z/OS and Linux.
-      Query query = session.getNamedQuery(namedQueryName)
-          // .setResultTransformer(DistinctRootEntityResultTransformer.INSTANCE)
-          .setTimestamp("after", new java.sql.Timestamp(datetime.getTime()));
+      Query query = session.getNamedQuery(namedQueryName).setTimestamp("after",
+          new java.sql.Timestamp(datetime.getTime()));
       ImmutableList.Builder<T> results = new ImmutableList.Builder<>();
       results.addAll(query.list());
       txn.commit();
@@ -230,4 +229,5 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
   private String constructNamedQueryName(String suffix) {
     return getEntityClass().getName() + "." + suffix;
   }
+
 }

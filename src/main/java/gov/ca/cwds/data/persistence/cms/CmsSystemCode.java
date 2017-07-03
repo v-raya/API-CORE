@@ -1,11 +1,10 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import java.io.Serializable;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import gov.ca.cwds.data.std.ApiMarker;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
@@ -18,7 +17,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * 
  * @author CWDS API Team
  */
-public final class CmsSystemCode implements Serializable {
+public final class CmsSystemCode implements ApiMarker {
 
   /**
    * Base serialization value. Increment per class change.
@@ -40,14 +39,15 @@ public final class CmsSystemCode implements Serializable {
    * @param sysId unique system code id
    * @param fksMetaT system code category
    * @param shortDsc short description (e.g., "California")
-   * @param logicalId logical id. Often zero-padded sort order (e.g., "0002") or standard code ("CA")
+   * @param logicalId logical id. Often zero-padded sort order (e.g., "0002") or standard code
+   *        ("CA")
    * @param inactive inactive flag (N or Y)
    * @param categoryId sub-category
    * @param otherCd optional, 2 character code, such as "CA" for the State of California.
    * @param longDsc long description. Only populated occasionally.
    */
-  public CmsSystemCode(int sysId, String fksMetaT, String shortDsc, String logicalId, String inactive,
-      String categoryId, String otherCd, String longDsc) {
+  public CmsSystemCode(int sysId, String fksMetaT, String shortDsc, String logicalId,
+      String inactive, String categoryId, String otherCd, String longDsc) {
     this.sysId = sysId;
     this.fksMetaT = fksMetaT;
     this.shortDsc = shortDsc;
