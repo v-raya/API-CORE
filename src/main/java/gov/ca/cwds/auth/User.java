@@ -2,11 +2,16 @@ package gov.ca.cwds.auth;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.io.Serializable;
-
 import org.apache.shiro.subject.Subject;
 
-public class User implements Serializable {
+import gov.ca.cwds.data.std.ApiMarker;
+
+/**
+ * Represents a logged in user with a mainframe RACF.
+ * 
+ * @author CWDS API Team
+ */
+public class User implements ApiMarker {
 
   /**
    * Default serialization.

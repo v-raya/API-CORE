@@ -212,6 +212,7 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
     }
   }
 
+  @SuppressWarnings("javadoc")
   public static Injector getInjector() {
     return injector;
   }
