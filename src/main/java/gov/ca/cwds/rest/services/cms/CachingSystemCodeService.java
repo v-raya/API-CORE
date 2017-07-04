@@ -63,7 +63,6 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
    * @param systemMetaDao System meta DAO
    * @param secondsToRefreshCache Seconds after which cache entries will be invalidated for refresh.
    */
-  @Inject
   public CachingSystemCodeService(SystemCodeDao systemCodeDao, SystemMetaDao systemMetaDao,
       long secondsToRefreshCache) {
     super(systemCodeDao, systemMetaDao);
