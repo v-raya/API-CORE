@@ -7,6 +7,7 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
@@ -18,8 +19,14 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * 
  * @author CWDS API Team
  */
-@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.SystemCode.findByForeignKeyMetaTable",
-    query = "FROM SystemCode WHERE inactiveIndicator = 'N' AND foreignKeyMetaTable = :foreignKeyMetaTable")
+@NamedQueries({@NamedQuery(
+    name = "gov.ca.cwds.data.persistence.cms.SystemCode.findByForeignKeyMetaTable",
+    query = "FROM SystemCode WHERE inactiveIndicator = 'N' AND foreignKeyMetaTable = :foreignKeyMetaTable"),
+
+    @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.SystemCode.findBySystemCodeId",
+        query = "FROM SystemCode WHERE inactiveIndicator = 'N' AND systemId = :systemId")
+
+})
 @Entity
 @Table(name = "SYS_CD_C")
 public class SystemCode extends CmsPersistentObject {

@@ -1,9 +1,12 @@
 package gov.ca.cwds.rest.api.domain.cms;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -24,17 +27,37 @@ public class SystemMetaListResponse extends ReportingDomain implements Response 
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("system_metas")
-  private Set<SystemMeta> systemMetas;
+  private Set<SystemMeta> systemMetas = new HashSet<>();
 
   /**
-   * 
+   * Default no-arg constructor.
    */
-  public SystemMetaListResponse() {
-    // default
+  public SystemMetaListResponse() {}
+
+  /**
+   * Construct with system meta set.
+   * 
+   * @param systemMetas System meta set
+   */
+  public SystemMetaListResponse(Set<SystemMeta> systemMetas) {
+    this.setSystemMetas(systemMetas);
   }
 
+  /**
+   * Get system meta set.
+   * 
+   * @return Sustem meta set
+   */
+  public Set<SystemMeta> getSystemMetas() {
+    return systemMetas;
+  }
 
-  public SystemMetaListResponse(Set<SystemMeta> systemMetas) {
+  /**
+   * Set system meta set.
+   * 
+   * @param systemMetas System meta set
+   */
+  public void setSystemMetas(Set<SystemMeta> systemMetas) {
     this.systemMetas = systemMetas;
   }
 
@@ -48,7 +71,6 @@ public class SystemMetaListResponse extends ReportingDomain implements Response 
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
-
   /*
    * (non-Javadoc)
    * 
@@ -59,4 +81,8 @@ public class SystemMetaListResponse extends ReportingDomain implements Response 
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+  }
 }

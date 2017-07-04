@@ -1,0 +1,93 @@
+{
+"system_codes" : [ {
+"system_id" : 27,
+"category_id" : 0,
+"inactive_indicator" : "N",
+"other_cd" : "",
+"short_description" : "Business",
+"logical_id" : "0001",
+"third_id" : "0000000000",
+"foreign_key_meta_table" : "ADDR_TPC",
+"long_description" : ""
+}, {
+"system_id" : 28,
+"category_id" : 0,
+"inactive_indicator" : "N",
+"other_cd" : "",
+"short_description" : "Day Care",
+"logical_id" : "0002",
+"third_id" : "0000000000",
+"foreign_key_meta_table" : "ADDR_TPC",
+"long_description" : ""
+}, {
+"system_id" : 29,
+"category_id" : 0,
+"inactive_indicator" : "N",
+"other_cd" : "",
+"short_description" : "Homeless",
+"logical_id" : "0003",
+"third_id" : "0000000000",
+"foreign_key_meta_table" : "ADDR_TPC",
+"long_description" : ""
+}, {
+"system_id" : 30,
+"category_id" : 0,
+"inactive_indicator" : "N",
+"other_cd" : "",
+"short_description" : "Penal Institution ",
+"logical_id" : "0004",
+"third_id" : "0000000000",
+"foreign_key_meta_table" : "ADDR_TPC",
+"long_description" : ""
+}, {
+"system_id" : 31,
+"category_id" : 0,
+"inactive_indicator" : "N",
+"other_cd" : "",
+"short_description" : "Permanent Mailing Address ",
+"logical_id" : "0005",
+"third_id" : "0000000000",
+"foreign_key_meta_table" : "ADDR_TPC",
+"long_description" : ""
+}, {
+"system_id" : 32,
+"category_id" : 0,
+"inactive_indicator" : "N",
+"other_cd" : "",
+"short_description" : "Residence ",
+"logical_id" : "0006",
+"third_id" : "0000000000",
+"foreign_key_meta_table" : "ADDR_TPC",
+"long_description" : ""
+}, {
+"system_id" : 6271,
+"category_id" : 0,
+"inactive_indicator" : "N",
+"other_cd" : "",
+"short_description" : "Residence 2 ",
+"logical_id" : "0007",
+"third_id" : "0000000000",
+"foreign_key_meta_table" : "ADDR_TPC",
+"long_description" : ""
+}, {
+"system_id" : 6272,
+"category_id" : 0,
+"inactive_indicator" : "N",
+"other_cd" : "",
+"short_description" : "Other Mailing ",
+"logical_id" : "0008",
+"third_id" : "0000000000",
+"foreign_key_meta_table" : "ADDR_TPC",
+"long_description" : ""
+}, {
+"system_id" : 6273,
+"category_id" : 0,
+"inactive_indicator" : "N",
+"other_cd" : "",
+"short_description" : "Common",
+"logical_id" : "0009",
+"third_id" : "0000000000",
+"foreign_key_meta_table" : "ADDR_TPC",
+"long_description" : ""
+} ]
+}

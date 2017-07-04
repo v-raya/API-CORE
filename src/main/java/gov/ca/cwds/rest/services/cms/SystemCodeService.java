@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.jadira.usertype.spi.utils.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
@@ -50,12 +50,25 @@ public class SystemCodeService implements CrudsService {
    */
   @Override
   public Response find(Serializable primaryKey) {
-    assert primaryKey instanceof java.lang.String;
-    if (("").equals(primaryKey)) {
-      return listOfSystemMetas();
+    if (primaryKey == null || StringUtils.isBlank(primaryKey.toString())) {
+      return loadSystemMetas();
     } else {
-      return listOfSystemCodes(primaryKey);
+      return loadSystemCodesForMeta(primaryKey);
     }
+  }
+
+  protected Response loadSystemCode(Serializable systemCodeId) {
+    if (systemCodeId == null) {
+      return null;
+    }
+
+    Response response = null;
+    gov.ca.cwds.data.persistence.cms.SystemCode systemCode =
+        systemCodeDao.findBySystemCodeId((Short) systemCodeId);
+    if (systemCode != null) {
+      response = new SystemCode(systemCode);
+    }
+    return response;
   }
 
   /**
@@ -64,49 +77,56 @@ public class SystemCodeService implements CrudsService {
    * @return the response containing List of Values from System Code Table that map to the
    *         primaryKey
    */
-  private Response listOfSystemCodes(Serializable foreignKeyMetaTable) {
-    gov.ca.cwds.data.persistence.cms.SystemCode[] systemCodes = findByCriteria(foreignKeyMetaTable);
-    ImmutableSet.Builder<SystemCode> builder = ImmutableSet.builder();
-    for (gov.ca.cwds.data.persistence.cms.SystemCode systemCode : systemCodes) {
-      if (systemCode != null) {
-        builder.add(new gov.ca.cwds.rest.api.domain.cms.SystemCode(systemCode));
+  protected Response loadSystemCodesForMeta(Serializable foreignKeyMetaTable) {
+    if (foreignKeyMetaTable == null) {
+      return null;
+    }
+
+    gov.ca.cwds.data.persistence.cms.SystemCode[] systemCodes =
+        systemCodeDao.findByForeignKeyMetaTable(foreignKeyMetaTable.toString());
+
+    Response response = null;
+
+    if (systemCodes != null) {
+      ImmutableSet.Builder<SystemCode> builder = ImmutableSet.builder();
+      for (gov.ca.cwds.data.persistence.cms.SystemCode systemCode : systemCodes) {
+        if (systemCode != null) {
+          builder.add(new gov.ca.cwds.rest.api.domain.cms.SystemCode(systemCode));
+        }
+      }
+      Set<SystemCode> sysCodes = builder.build();
+      if (!sysCodes.isEmpty()) {
+        response = new SystemCodeListResponse(sysCodes);
       }
     }
-    Set<SystemCode> sysCodes = builder.build();
-    return new SystemCodeListResponse(sysCodes);
+    return response;
   }
 
   /**
    * 
    * @return the response containing List of Values from System Meta Table
    */
-  private Response listOfSystemMetas() {
+  protected Response loadSystemMetas() {
+    Response response = null;
     SystemMeta[] sysMeta = systemMetaDao.findAll();
-    ImmutableSet.Builder<gov.ca.cwds.rest.api.domain.cms.SystemMeta> builder =
-        ImmutableSet.builder();
-    for (SystemMeta s : sysMeta) {
-      if (s != null) {
-        builder.add(new gov.ca.cwds.rest.api.domain.cms.SystemMeta(s));
+
+    if (sysMeta != null) {
+      ImmutableSet.Builder<gov.ca.cwds.rest.api.domain.cms.SystemMeta> builder =
+          ImmutableSet.builder();
+
+      for (SystemMeta s : sysMeta) {
+        if (s != null) {
+          builder.add(new gov.ca.cwds.rest.api.domain.cms.SystemMeta(s));
+        }
+      }
+
+      Set<gov.ca.cwds.rest.api.domain.cms.SystemMeta> systemMetas = builder.build();
+      if (systemMetas != null) {
+        response = new SystemMetaListResponse(builder.build());
       }
     }
-    return new SystemMetaListResponse(builder.build());
+    return response;
   }
-
-  /**
-   * 
-   * @param id the foreignKeyMetaTable the foreignKey to System Meta Table
-   * @return the List of Values from System Code Table that map to id
-   */
-  public gov.ca.cwds.data.persistence.cms.SystemCode[] findByCriteria(Serializable id) {
-    String foreignKeyMetaTable = id.toString();
-
-    if (StringUtils.isNotEmpty(foreignKeyMetaTable)) {
-      return systemCodeDao.findByForeignKeyMetaTable(foreignKeyMetaTable);
-    }
-    return new gov.ca.cwds.data.persistence.cms.SystemCode[1];
-  }
-
-
 
   /**
    * {@inheritDoc}

@@ -4,6 +4,8 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -82,14 +84,12 @@ public class SystemMeta extends ReportingDomain implements Response {
     return logicalTableDsdName;
   }
 
-
   /**
    * @return the userTableName
    */
   public String getUserTableName() {
     return userTableName;
   }
-
 
   /**
    * @return the shortDescriptionName
@@ -98,6 +98,10 @@ public class SystemMeta extends ReportingDomain implements Response {
     return shortDescriptionName;
   }
 
+  public gov.ca.cwds.data.persistence.cms.SystemMeta createPersistenceSystemMeta() {
+    return new gov.ca.cwds.data.persistence.cms.SystemMeta(logicalTableDsdName, userTableName,
+        shortDescriptionName);
+  }
 
   /*
    * (non-Javadoc)
@@ -109,7 +113,6 @@ public class SystemMeta extends ReportingDomain implements Response {
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
-
   /*
    * (non-Javadoc)
    * 
@@ -120,6 +123,9 @@ public class SystemMeta extends ReportingDomain implements Response {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
-
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+  }
 
 }

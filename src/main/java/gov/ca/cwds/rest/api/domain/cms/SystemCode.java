@@ -4,6 +4,8 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -181,6 +183,11 @@ public class SystemCode extends ReportingDomain implements Response {
     return longDescription;
   }
 
+  public gov.ca.cwds.data.persistence.cms.SystemCode createPersistenceSystemCode() {
+    return new gov.ca.cwds.data.persistence.cms.SystemCode(systemId, categoryId, inactiveIndicator,
+        otherCd, shortDescription, logicalId, thirdId, foreignKeyMetaTable, longDescription);
+  }
+
   /*
    * (non-Javadoc)
    * 
@@ -199,5 +206,10 @@ public class SystemCode extends ReportingDomain implements Response {
   @Override
   public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
   }
 }

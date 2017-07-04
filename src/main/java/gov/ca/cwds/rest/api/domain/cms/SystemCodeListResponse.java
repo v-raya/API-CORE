@@ -1,9 +1,12 @@
 package gov.ca.cwds.rest.api.domain.cms;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -24,16 +27,37 @@ public class SystemCodeListResponse extends ReportingDomain implements Response 
   private static final long serialVersionUID = -4392912596188537533L;
 
   @JsonProperty("system_codes")
-  private Set<SystemCode> systemCodes;
+  private Set<SystemCode> systemCodes = new HashSet<>();
 
   /**
    * Default no-arg constructor.
    */
-  public SystemCodeListResponse() {
-    // default
+  public SystemCodeListResponse() {}
+
+  /**
+   * Construct with args
+   * 
+   * @param systemCod Set of system codes
+   */
+  public SystemCodeListResponse(Set<SystemCode> systemCodes) {
+    this.systemCodes = systemCodes;
   }
 
-  public SystemCodeListResponse(Set<SystemCode> systemCodes) {
+  /**
+   * Get set of system codes.
+   * 
+   * @return Set of system codes
+   */
+  public Set<SystemCode> getSystemCodes() {
+    return systemCodes;
+  }
+
+  /**
+   * Set system codes
+   * 
+   * @param systemCodes Set of system codes.
+   */
+  public void setSystemCodes(Set<SystemCode> systemCodes) {
     this.systemCodes = systemCodes;
   }
 
@@ -47,7 +71,6 @@ public class SystemCodeListResponse extends ReportingDomain implements Response 
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
-
   /*
    * (non-Javadoc)
    * 
@@ -56,5 +79,10 @@ public class SystemCodeListResponse extends ReportingDomain implements Response 
   @Override
   public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
   }
 }

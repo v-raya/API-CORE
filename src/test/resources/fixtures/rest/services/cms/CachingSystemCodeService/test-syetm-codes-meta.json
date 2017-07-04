@@ -1,0 +1,775 @@
+{
+  "system_metas" : [ {
+    "logical_table_dsd_name" : "ABS_BPTC",
+    "user_table_name" : "Physical Abuse Body Part Type           ",
+    "short_description_name" : "Physical Abuse Body Part                "
+  }, {
+    "logical_table_dsd_name" : "ADDR_TPC",
+    "user_table_name" : "Address Type                            ",
+    "short_description_name" : "Address Type                            "
+  }, {
+    "logical_table_dsd_name" : "ADPLCREC",
+    "user_table_name" : "Adoptive Placement Removal Type         ",
+    "short_description_name" : "Adoptive Placement Removal              "
+  }, {
+    "logical_table_dsd_name" : "ADPT_REL",
+    "user_table_name" : "Adoptive Parent Relationshp To Child Typ",
+    "short_description_name" : "Adoptive Parent Relationship            "
+  }, {
+    "logical_table_dsd_name" : "AGN_RSPC",
+    "user_table_name" : "Agency Responsible Type                 ",
+    "short_description_name" : "Agency Responsible                      "
+  }, {
+    "logical_table_dsd_name" : "AID_TPC ",
+    "user_table_name" : "Aid Code Type                           ",
+    "short_description_name" : "Aid Code                                "
+  }, {
+    "logical_table_dsd_name" : "ALG_DSPC",
+    "user_table_name" : "Allegation Disposition Type             ",
+    "short_description_name" : "Allegation Disposition                  "
+  }, {
+    "logical_table_dsd_name" : "APL_CTXC",
+    "user_table_name" : "Application Context Type                ",
+    "short_description_name" : "Application Context Type                "
+  }, {
+    "logical_table_dsd_name" : "APPL_STC",
+    "user_table_name" : "Application Status Type                 ",
+    "short_description_name" : "Application Status                      "
+  }, {
+    "logical_table_dsd_name" : "APPL_TYC",
+    "user_table_name" : "Application Type                        ",
+    "short_description_name" : "Application Type                        "
+  }, {
+    "logical_table_dsd_name" : "APPS_TPC",
+    "user_table_name" : "Apps Schedule Level Type                ",
+    "short_description_name" : "Apps Schedule Level                     "
+  }, {
+    "logical_table_dsd_name" : "APRVL_C ",
+    "user_table_name" : "Approval Type                           ",
+    "short_description_name" : "Approval Type                           "
+  }, {
+    "logical_table_dsd_name" : "APV_STC ",
+    "user_table_name" : "Approval Status Type                    ",
+    "short_description_name" : "Approval Status Type                    "
+  }, {
+    "logical_table_dsd_name" : "ARS_JSTC",
+    "user_table_name" : "Arrest Juvenile Justice Rec Type        ",
+    "short_description_name" : "Arrest Juvenile Justice Rec Type        "
+  }, {
+    "logical_table_dsd_name" : "ASSG_RLC",
+    "user_table_name" : "Secondary Assignment Role Type          ",
+    "short_description_name" : "Secondary Assignment Role               "
+  }, {
+    "logical_table_dsd_name" : "ASSM_TPC",
+    "user_table_name" : "Assessment Type                         ",
+    "short_description_name" : "Assessment Type                         "
+  }, {
+    "logical_table_dsd_name" : "CAIC_STC",
+    "user_table_name" : "CAIC Status Type                        ",
+    "short_description_name" : "CAIC Status Type                        "
+  }, {
+    "logical_table_dsd_name" : "BKGRCHKC",
+    "user_table_name" : "Background Check Type                   ",
+    "short_description_name" : "Background Check                        "
+  }, {
+    "logical_table_dsd_name" : "ACTV_RNC",
+    "user_table_name" : "Safety Alert Activation Reason Type     ",
+    "short_description_name" : "Safety Alert Activation Reason          "
+  }, {
+    "logical_table_dsd_name" : "CL_SRVDC",
+    "user_table_name" : "Licensed Client Served Type             ",
+    "short_description_name" : "Licensed Client Served Type             "
+  }, {
+    "logical_table_dsd_name" : "CLNTRELC",
+    "user_table_name" : "Client Relationship Type                ",
+    "short_description_name" : "Client Relationship                     "
+  }, {
+    "logical_table_dsd_name" : "CLS_RSNC",
+    "user_table_name" : "Case Closure Reason Type                ",
+    "short_description_name" : "Case Closure Reason                     "
+  }, {
+    "logical_table_dsd_name" : "CLT_CONC",
+    "user_table_name" : "Client Condition Type                   ",
+    "short_description_name" : "Client Condition                        "
+  }, {
+    "logical_table_dsd_name" : "CMM_MTHC",
+    "user_table_name" : "Communication Method Type               ",
+    "short_description_name" : "Communication Method                    "
+  }, {
+    "logical_table_dsd_name" : "CND_CATC",
+    "user_table_name" : "Client Condition Category Type          ",
+    "short_description_name" : "Client Condition Category               "
+  }, {
+    "logical_table_dsd_name" : "CNT_LOC ",
+    "user_table_name" : "Contact Location Type                   ",
+    "short_description_name" : "Contact Location                        "
+  }, {
+    "logical_table_dsd_name" : "CNT_PRTC",
+    "user_table_name" : "Contact Party Type                      ",
+    "short_description_name" : "Contact Party Type                      "
+  }, {
+    "logical_table_dsd_name" : "CNT_TYPC",
+    "user_table_name" : "Contact Type                            ",
+    "short_description_name" : "Contact Type                            "
+  }, {
+    "logical_table_dsd_name" : "CNTHRG_C",
+    "user_table_name" : "Continuance Hearing Type                ",
+    "short_description_name" : "Continuance Hearing Type                "
+  }, {
+    "logical_table_dsd_name" : "CNTRY_C ",
+    "user_table_name" : "Country Code Type                       ",
+    "short_description_name" : "Country Name                            "
+  }, {
+    "logical_table_dsd_name" : "COL_RELC",
+    "user_table_name" : "Collateral Client Rptr Relationship Type",
+    "short_description_name" : "Collateral Client Reporter Relationship "
+  }, {
+    "logical_table_dsd_name" : "CRSP_TPC",
+    "user_table_name" : "Print Clearance Response Type           ",
+    "short_description_name" : "Print Clearance Response                "
+  }, {
+    "logical_table_dsd_name" : "CRTFNDGC",
+    "user_table_name" : "Court Finding Type                      ",
+    "short_description_name" : "Court Finding Type                      "
+  }, {
+    "logical_table_dsd_name" : "CT_RPT_C",
+    "user_table_name" : "Report To Court Type                    ",
+    "short_description_name" : "Report To Court Type                    "
+  }, {
+    "logical_table_dsd_name" : "CTRB_FAC",
+    "user_table_name" : "Contributing Factor Type                ",
+    "short_description_name" : "Contributing Factor                     "
+  }, {
+    "logical_table_dsd_name" : "DOC_INFC",
+    "user_table_name" : "Court Document Inform Type              ",
+    "short_description_name" : "Court Document Inform Method            "
+  }, {
+    "logical_table_dsd_name" : "DOC_EXTC",
+    "user_table_name" : "Document Extension Type                 ",
+    "short_description_name" : "Document Extension                      "
+  }, {
+    "logical_table_dsd_name" : "PACKITMC",
+    "user_table_name" : "SIJS Packet Item Type                   ",
+    "short_description_name" : "SIJS Packet Item Type                   "
+  }, {
+    "logical_table_dsd_name" : "DOE_ST_C",
+    "user_table_name" : "DOE Status Type                         ",
+    "short_description_name" : "DOE Status                              "
+  }, {
+    "logical_table_dsd_name" : "DOJ_ATVC",
+    "user_table_name" : "DOJ Active Status Type                  ",
+    "short_description_name" : "DOJ Active Status                       "
+  }, {
+    "logical_table_dsd_name" : "DSP_RSNC",
+    "user_table_name" : "Disposition Closure Reason Type         ",
+    "short_description_name" : "Disposition Closure Reason              "
+  }, {
+    "logical_table_dsd_name" : "DSTR_OFC",
+    "user_table_name" : "District Office Type                    ",
+    "short_description_name" : "District Office Type                    "
+  }, {
+    "logical_table_dsd_name" : "DTH_CIRC",
+    "user_table_name" : "Death Circumstances Type                ",
+    "short_description_name" : "Death Circumstances                     "
+  }, {
+    "logical_table_dsd_name" : "ED_GRD_C",
+    "user_table_name" : "Education Grade Level Type              ",
+    "short_description_name" : "Education Grade Level                   "
+  }, {
+    "logical_table_dsd_name" : "ED_REC_C",
+    "user_table_name" : "Education Record Type                   ",
+    "short_description_name" : "Record Type                             "
+  }, {
+    "logical_table_dsd_name" : "EDPP_TPC",
+    "user_table_name" : "Education Provider Profile Type         ",
+    "short_description_name" : "Education Provider Profile Type         "
+  }, {
+    "logical_table_dsd_name" : "EDUC_TPC",
+    "user_table_name" : "Education Type                          ",
+    "short_description_name" : "Education                               "
+  }, {
+    "logical_table_dsd_name" : "ELG_DNLC",
+    "user_table_name" : "Foster Care Elig Denial Reason Type     ",
+    "short_description_name" : "Foster Care Eligibility Denial Reason   "
+  }, {
+    "logical_table_dsd_name" : "ELG_TRMC",
+    "user_table_name" : "Foster Care Elig Termination Reason Type",
+    "short_description_name" : "Foster Care Eligib Termination Reason   "
+  }, {
+    "logical_table_dsd_name" : "EMPS_TPC",
+    "user_table_name" : "Employment Status Type                  ",
+    "short_description_name" : "Employment Status                       "
+  }, {
+    "logical_table_dsd_name" : "ERL_TRMC",
+    "user_table_name" : "Enrollment Termination Reason Type      ",
+    "short_description_name" : "Enrollment Termination Reason           "
+  }, {
+    "logical_table_dsd_name" : "ETHNCTYC",
+    "user_table_name" : "Ethnicity Type                          ",
+    "short_description_name" : "Ethnicity                               "
+  }, {
+    "logical_table_dsd_name" : "EXMP_STC",
+    "user_table_name" : "Exemption Decision Status Type          ",
+    "short_description_name" : "Exemption Decision                      "
+  }, {
+    "logical_table_dsd_name" : "FAC_LIC ",
+    "user_table_name" : "Facility License Status Type            ",
+    "short_description_name" : "License Status                          "
+  }, {
+    "logical_table_dsd_name" : "FAC_TPC ",
+    "user_table_name" : "Facility Type                           ",
+    "short_description_name" : "Type of Facility                        "
+  }, {
+    "logical_table_dsd_name" : "SIJ_STC ",
+    "user_table_name" : "SIJS Application Status Type            ",
+    "short_description_name" : "SIJS Application Status Type            "
+  }, {
+    "logical_table_dsd_name" : "SSI_STC ",
+    "user_table_name" : "SSI Application Status Type             ",
+    "short_description_name" : "SSI Application Status Type             "
+  }, {
+    "logical_table_dsd_name" : "FAMSTR_D",
+    "user_table_name" : "Family Structure Type                   ",
+    "short_description_name" : "Family Structure                        "
+  }, {
+    "logical_table_dsd_name" : "FC2_PINC",
+    "user_table_name" : "FC2 Child Property Income Type          ",
+    "short_description_name" : "Type of Child Property Income           "
+  }, {
+    "logical_table_dsd_name" : "FFH_TYPC",
+    "user_table_name" : "FFH Type                                ",
+    "short_description_name" : "FFH                                     "
+  }, {
+    "logical_table_dsd_name" : "FMY_STGC",
+    "user_table_name" : "Family Strength Type                    ",
+    "short_description_name" : "Family Strength                         "
+  }, {
+    "logical_table_dsd_name" : "FNCT_SPC",
+    "user_table_name" : "Functional Specialty Type               ",
+    "short_description_name" : "Functional Speciality                   "
+  }, {
+    "logical_table_dsd_name" : "GOAL_TPC",
+    "user_table_name" : "Goal Type                               ",
+    "short_description_name" : "Goal Type                               "
+  }, {
+    "logical_table_dsd_name" : "GVR_ENTC",
+    "user_table_name" : "Government Entity Type                  ",
+    "short_description_name" : "Government Entity                       "
+  }, {
+    "logical_table_dsd_name" : "GVR_ORGC",
+    "user_table_name" : "Government Organization Type            ",
+    "short_description_name" : "Government Organization                 "
+  }, {
+    "logical_table_dsd_name" : "HLD_RSNC",
+    "user_table_name" : "Facility Hold Reason Type               ",
+    "short_description_name" : "Reason Held                             "
+  }, {
+    "logical_table_dsd_name" : "HRG_SUBC",
+    "user_table_name" : "Hearing Sub Type                        ",
+    "short_description_name" : "Hearing Sub Type                        "
+  }, {
+    "logical_table_dsd_name" : "HRNG_NTC",
+    "user_table_name" : "Notice Of Hearing Type                  ",
+    "short_description_name" : "Notice of Hearing Type                  "
+  }, {
+    "logical_table_dsd_name" : "HRNG_TPC",
+    "user_table_name" : "Hearing Type                            ",
+    "short_description_name" : "Hearing Type                            "
+  }, {
+    "logical_table_dsd_name" : "HS_STC  ",
+    "user_table_name" : "Home Study Status Type                  ",
+    "short_description_name" : "Home Study Status                       "
+  }, {
+    "logical_table_dsd_name" : "PH_ENDC ",
+    "user_table_name" : "Placement Home End Reason Type          ",
+    "short_description_name" : "Placement Home End Reason Type          "
+  }, {
+    "logical_table_dsd_name" : "IMGT_STC",
+    "user_table_name" : "Immigration Status Type                 ",
+    "short_description_name" : "Immigration Status                      "
+  }, {
+    "logical_table_dsd_name" : "IMNZTN_C",
+    "user_table_name" : "Immunization Type                       ",
+    "short_description_name" : "Immunization Type                       "
+  }, {
+    "logical_table_dsd_name" : "INCD_PMC",
+    "user_table_name" : "Incidental Payment Type                 ",
+    "short_description_name" : "Incidental Payment Type                 "
+  }, {
+    "logical_table_dsd_name" : "CODELVLC",
+    "user_table_name" : "CWS Workstation Code Levels             ",
+    "short_description_name" : "Code Level                              "
+  }, {
+    "logical_table_dsd_name" : "CRG_RSNC",
+    "user_table_name" : "Reason Caregiver Not Signed Type        ",
+    "short_description_name" : "Reason Caregiver Not Signed Type        "
+  }, {
+    "logical_table_dsd_name" : "INCM_TPC",
+    "user_table_name" : "Income Type                             ",
+    "short_description_name" : "Income                                  "
+  }, {
+    "logical_table_dsd_name" : "IND_TRBC",
+    "user_table_name" : "Indian Tribe Type                       ",
+    "short_description_name" : "Indian Tribe Type                       "
+  }, {
+    "logical_table_dsd_name" : "INDN_STC",
+    "user_table_name" : "Indian Status Type                      ",
+    "short_description_name" : "Indian Status                           "
+  }, {
+    "logical_table_dsd_name" : "INJR_HMC",
+    "user_table_name" : "Injury Harm Type                        ",
+    "short_description_name" : "Injury/Harm Type                        "
+  }, {
+    "logical_table_dsd_name" : "INTVRSNC",
+    "user_table_name" : "Intervention Reason Type                ",
+    "short_description_name" : "Intervention Reason                     "
+  }, {
+    "logical_table_dsd_name" : "JDCL_TLC",
+    "user_table_name" : "Judicial Officer Title Type             ",
+    "short_description_name" : "Judicial Officer Title                  "
+  }, {
+    "logical_table_dsd_name" : "LANG_TPC",
+    "user_table_name" : "Language Type                           ",
+    "short_description_name" : "Language                                "
+  }, {
+    "logical_table_dsd_name" : "LIC_BSNC",
+    "user_table_name" : "Licensed Business Type                  ",
+    "short_description_name" : "Business Type                           "
+  }, {
+    "logical_table_dsd_name" : "LIC_CNTY",
+    "user_table_name" : "Licensing County Type                   ",
+    "short_description_name" : "Licensing County                        "
+  }, {
+    "logical_table_dsd_name" : "LIC_STC ",
+    "user_table_name" : "License Status Type                     ",
+    "short_description_name" : "License Status                          "
+  }, {
+    "logical_table_dsd_name" : "LICI_TPC",
+    "user_table_name" : "License Issue Type                      ",
+    "short_description_name" : "License Issue                           "
+  }, {
+    "logical_table_dsd_name" : "LVL_ATHC",
+    "user_table_name" : "Staff Person Level of Authority Type    ",
+    "short_description_name" : "Authority Level                         "
+  }, {
+    "logical_table_dsd_name" : "MEDTYP_C",
+    "user_table_name" : "Medical Test Type                       ",
+    "short_description_name" : "Medical Test Type                       "
+  }, {
+    "logical_table_dsd_name" : "MRG_TRMC",
+    "user_table_name" : "Marriage Termination Type               ",
+    "short_description_name" : "Marriage Termination Reason             "
+  }, {
+    "logical_table_dsd_name" : "MRTL_STC",
+    "user_table_name" : "Marital Status Type                     ",
+    "short_description_name" : "Marital Status                          "
+  }, {
+    "logical_table_dsd_name" : "NAME_TPC",
+    "user_table_name" : "Name Type                               ",
+    "short_description_name" : "Name Type                               "
+  }, {
+    "logical_table_dsd_name" : "NCWSNO_T",
+    "user_table_name" : "Other Non CWS Client Id Type            ",
+    "short_description_name" : "Other Non-CWS Client ID                 "
+  }, {
+    "logical_table_dsd_name" : "MAX_STOR",
+    "user_table_name" : "Max_Storage_Allowed Type                ",
+    "short_description_name" : "Max_Storage_Allowed                     "
+  }, {
+    "logical_table_dsd_name" : "LLC_STC ",
+    "user_table_name" : "Lifelong Connection Status Type         ",
+    "short_description_name" : "Lifelong Connection Status Type         "
+  }, {
+    "logical_table_dsd_name" : "NFC_TRMC",
+    "user_table_name" : "NFC Termination Reason Type             ",
+    "short_description_name" : "NFC_TRMC                                "
+  }, {
+    "logical_table_dsd_name" : "OCRN_EXC",
+    "user_table_name" : "Occurrence Exception Type               ",
+    "short_description_name" : "Occurrence Exception Type               "
+  }, {
+    "logical_table_dsd_name" : "ORD_TYPC",
+    "user_table_name" : "Court Order Type                        ",
+    "short_description_name" : "Court Order Type                        "
+  }, {
+    "logical_table_dsd_name" : "OTH_ID_C",
+    "user_table_name" : "Other Non CWS ID Number Type            ",
+    "short_description_name" : "Other Non-CWS ID Number                 "
+  }, {
+    "logical_table_dsd_name" : "PAYEETPC",
+    "user_table_name" : "Payee Type                              ",
+    "short_description_name" : "Payee Type                              "
+  }, {
+    "logical_table_dsd_name" : "PEFT_RNC",
+    "user_table_name" : "PE Foster Care Termination Reason Type  ",
+    "short_description_name" : "PE Foster Care Termination Reason       "
+  }, {
+    "logical_table_dsd_name" : "PEN_TRMC",
+    "user_table_name" : "PE NFC Termination Reason Type          ",
+    "short_description_name" : "PEN_TRMC                                "
+  }, {
+    "logical_table_dsd_name" : "PERS_TPC",
+    "user_table_name" : "Personnel Type                          ",
+    "short_description_name" : "Type of Personnel                       "
+  }, {
+    "logical_table_dsd_name" : "PETN_STC",
+    "user_table_name" : "Petition Status Type                    ",
+    "short_description_name" : "Petition Status                         "
+  }, {
+    "logical_table_dsd_name" : "PETN_TPC",
+    "user_table_name" : "Petition Type                           ",
+    "short_description_name" : "Petition Type                           "
+  }, {
+    "logical_table_dsd_name" : "PLC_ATHC",
+    "user_table_name" : "Legal Authority For Placement Type      ",
+    "short_description_name" : "Legal Authority For Placement           "
+  }, {
+    "logical_table_dsd_name" : "PLC_FCLC",
+    "user_table_name" : "Placement Facility Type                 ",
+    "short_description_name" : "Licensed Facility Type                  "
+  }, {
+    "logical_table_dsd_name" : "PLC_HLDR",
+    "user_table_name" : "Place Holder Table                      ",
+    "short_description_name" : "Place Holder                            "
+  }, {
+    "logical_table_dsd_name" : "PLCG_RNC",
+    "user_table_name" : "Placement Change Reason Type            ",
+    "short_description_name" : "Placement Change Reason                 "
+  }, {
+    "logical_table_dsd_name" : "POP_SRVC",
+    "user_table_name" : "Population Served Type                  ",
+    "short_description_name" : "Population Served                       "
+  }, {
+    "logical_table_dsd_name" : "PRIVLG_C",
+    "user_table_name" : "Staff Person Privilege Type             ",
+    "short_description_name" : "Staff Person Privilege                  "
+  }, {
+    "logical_table_dsd_name" : "PRTERM_C",
+    "user_table_name" : "Parental Right Termination Type         ",
+    "short_description_name" : "Parental Right Termination              "
+  }, {
+    "logical_table_dsd_name" : "OGVR_ENT",
+    "user_table_name" : "Other Government Type Entity Type       ",
+    "short_description_name" : "Other Government Entity                 "
+  }, {
+    "logical_table_dsd_name" : "NFC_FCLC",
+    "user_table_name" : "NFC Facility Type                       ",
+    "short_description_name" : "NFC Facility                            "
+  }, {
+    "logical_table_dsd_name" : "PRVT_SVC",
+    "user_table_name" : "Preplcmnt Preventative Svc Type         ",
+    "short_description_name" : "Preplacement Preventative Service       "
+  }, {
+    "logical_table_dsd_name" : "PTY_NTFC",
+    "user_table_name" : "Temp Custody Notified Party Type        ",
+    "short_description_name" : "Temporary Custody Notified Party        "
+  }, {
+    "logical_table_dsd_name" : "RAP_ST_C",
+    "user_table_name" : "RAP Status Type                         ",
+    "short_description_name" : "Rap Status                              "
+  }, {
+    "logical_table_dsd_name" : "RCM_LVLC",
+    "user_table_name" : "Recommended Level of Care Type          ",
+    "short_description_name" : "Recommended Level Of Care               "
+  }, {
+    "logical_table_dsd_name" : "RCM_PLC ",
+    "user_table_name" : "Recommended Placement Type              ",
+    "short_description_name" : "Recommended Placement Type              "
+  }, {
+    "logical_table_dsd_name" : "RFR_RSPC",
+    "user_table_name" : "Referral Response Type                  ",
+    "short_description_name" : "Referral Response                       "
+  }, {
+    "logical_table_dsd_name" : "RFRD_RSC",
+    "user_table_name" : "Referred To Resource Type               ",
+    "short_description_name" : "Referred To Resource                    "
+  }, {
+    "logical_table_dsd_name" : "RGN_CTR ",
+    "user_table_name" : "Regional Center Type                    ",
+    "short_description_name" : "Regional Center                         "
+  }, {
+    "logical_table_dsd_name" : "RGN_SV_L",
+    "user_table_name" : "Regional Service Level Type             ",
+    "short_description_name" : "Regional Service Level                  "
+  }, {
+    "logical_table_dsd_name" : "RJT_TPC ",
+    "user_table_name" : "Rejection Reason Type                   ",
+    "short_description_name" : "Rejection Reason                        "
+  }, {
+    "logical_table_dsd_name" : "RLGN_TPC",
+    "user_table_name" : "Religion Type                           ",
+    "short_description_name" : "Religion                                "
+  }, {
+    "logical_table_dsd_name" : "RLS_RSNC",
+    "user_table_name" : "Reason For Release Type                 ",
+    "short_description_name" : "Reason For Release                      "
+  }, {
+    "logical_table_dsd_name" : "RMV_FRMC",
+    "user_table_name" : "Removed From Caretaker Type             ",
+    "short_description_name" : "Caretaker Relationship                  "
+  }, {
+    "logical_table_dsd_name" : "RMV_RSNC",
+    "user_table_name" : "Reason For Removal Type                 ",
+    "short_description_name" : "Reason For Removal                      "
+  }, {
+    "logical_table_dsd_name" : "RMVPL_C ",
+    "user_table_name" : "Removal Placement Plan Type             ",
+    "short_description_name" : "Removal Placement Plan                  "
+  }, {
+    "logical_table_dsd_name" : "RQST_STC",
+    "user_table_name" : "Request Status Type                     ",
+    "short_description_name" : "ICPC Request Status                     "
+  }, {
+    "logical_table_dsd_name" : "SBPLRSNC",
+    "user_table_name" : "Siblings Not Placed Together Reason Type",
+    "short_description_name" : "Siblings Not Placed Together Reason     "
+  }, {
+    "logical_table_dsd_name" : "D90_XCPC",
+    "user_table_name" : "90-Day Exception Type                   ",
+    "short_description_name" : "90-Day Exception Type                   "
+  }, {
+    "logical_table_dsd_name" : "NTF_RSPC",
+    "user_table_name" : "Relative Notification Response Type     ",
+    "short_description_name" : "Relative Notification Response Type     "
+  }, {
+    "logical_table_dsd_name" : "SCNT_TPC",
+    "user_table_name" : "Search County Type                      ",
+    "short_description_name" : "Search County Type                      "
+  }, {
+    "logical_table_dsd_name" : "SCP_RLTC",
+    "user_table_name" : "S C P Relationship To Child Type        ",
+    "short_description_name" : "Relationship To Child                   "
+  }, {
+    "logical_table_dsd_name" : "SOCD_TPC",
+    "user_table_name" : "School Ownership Code Type              ",
+    "short_description_name" : "School Ownership Code Type              "
+  }, {
+    "logical_table_dsd_name" : "SPC_PMTC",
+    "user_table_name" : "Specialized Care Incr Pmt Type          ",
+    "short_description_name" : "Specialized Care Incr Payment Type      "
+  }, {
+    "logical_table_dsd_name" : "SRCH_SRC",
+    "user_table_name" : "Search Source Type                      ",
+    "short_description_name" : "Search Source                           "
+  }, {
+    "logical_table_dsd_name" : "SREG_TPC",
+    "user_table_name" : "Search Region Type                      ",
+    "short_description_name" : "Search Region Type                      "
+  }, {
+    "logical_table_dsd_name" : "SRV_CMPC",
+    "user_table_name" : "Service Component Type                  ",
+    "short_description_name" : "Service Component                       "
+  }, {
+    "logical_table_dsd_name" : "SRV_FRQC",
+    "user_table_name" : "Service Activity Frequency Type         ",
+    "short_description_name" : "Service Activity Frequency              "
+  }, {
+    "logical_table_dsd_name" : "SRV_OBJC",
+    "user_table_name" : "Service Objective Type                  ",
+    "short_description_name" : "Service Objective                       "
+  }, {
+    "logical_table_dsd_name" : "SRV_RSNC",
+    "user_table_name" : "Secondary_Reason_For_Removal_Type       ",
+    "short_description_name" : "Secondary Reason for Removal            "
+  }, {
+    "logical_table_dsd_name" : "SRVC_TPC",
+    "user_table_name" : "Service Type                            ",
+    "short_description_name" : "Service Type                            "
+  }, {
+    "logical_table_dsd_name" : "ST_SFX_C",
+    "user_table_name" : "Street Suffix Type                      ",
+    "short_description_name" : "Street Suffix                           "
+  }, {
+    "logical_table_dsd_name" : "STATE_C ",
+    "user_table_name" : "State Code Type                         ",
+    "short_description_name" : "State Name                              "
+  }, {
+    "logical_table_dsd_name" : "SVCPVDRC",
+    "user_table_name" : "Service Provider Type                   ",
+    "short_description_name" : "Service Provider Type                   "
+  }, {
+    "logical_table_dsd_name" : "SYS_DMC ",
+    "user_table_name" : "System Domain Type                      ",
+    "short_description_name" : "Domain Name                             "
+  }, {
+    "logical_table_dsd_name" : "TERM_C  ",
+    "user_table_name" : "Termination Reason Type                 ",
+    "short_description_name" : "Termination Reason                      "
+  }, {
+    "logical_table_dsd_name" : "TKL_MSGC",
+    "user_table_name" : "Tickle Message Type                     ",
+    "short_description_name" : "Tickle Message                          "
+  }, {
+    "logical_table_dsd_name" : "SUSPRSNC",
+    "user_table_name" : "Suspension Reason Type                  ",
+    "short_description_name" : "Suspension Reason Type                  "
+  }, {
+    "logical_table_dsd_name" : "SUBABUSC",
+    "user_table_name" : "Substance Abuse Type                    ",
+    "short_description_name" : "Substance Abuse                         "
+  }, {
+    "logical_table_dsd_name" : "TRNS_TPC",
+    "user_table_name" : "Transaction Type                        ",
+    "short_description_name" : "Transaction                             "
+  }, {
+    "logical_table_dsd_name" : "UNT_DSGC",
+    "user_table_name" : "Unit Designator Type                    ",
+    "short_description_name" : "Unit Designator                         "
+  }, {
+    "logical_table_dsd_name" : "USERTY_C",
+    "user_table_name" : "User Action Type                        ",
+    "short_description_name" : "User Action Type                        "
+  }, {
+    "logical_table_dsd_name" : "VIST_TPC",
+    "user_table_name" : "Visit Type                              ",
+    "short_description_name" : "Visit                                   "
+  }, {
+    "logical_table_dsd_name" : "WIC_AJ_C",
+    "user_table_name" : "Court WIC A J Type                      ",
+    "short_description_name" : "Court WIC A J Type                      "
+  }, {
+    "logical_table_dsd_name" : "XRPT_MTC",
+    "user_table_name" : "Cross Report Method Type                ",
+    "short_description_name" : "Cross Report Method                     "
+  }, {
+    "logical_table_dsd_name" : "TRB_RELC",
+    "user_table_name" : "Tribal Relative Type                    ",
+    "short_description_name" : "Tribal Relative                         "
+  }, {
+    "logical_table_dsd_name" : "TMPL_CTC",
+    "user_table_name" : "Template Category Type                  ",
+    "short_description_name" : "Template Category                       "
+  }, {
+    "logical_table_dsd_name" : "NTF_XCPC",
+    "user_table_name" : "Relative Notification Method Excp Type  ",
+    "short_description_name" : "Relative Notification Method Excp Type  "
+  }, {
+    "logical_table_dsd_name" : "OTH_ST_C",
+    "user_table_name" : "Other State Code Type                   ",
+    "short_description_name" : "Out of Country                          "
+  }, {
+    "logical_table_dsd_name" : "TILP_DFC",
+    "user_table_name" : "TILP Deferred Type                      ",
+    "short_description_name" : "TILP Deferred Type                      "
+  }, {
+    "logical_table_dsd_name" : "YTH_RSNC",
+    "user_table_name" : "Reason Youth Not Signed Type            ",
+    "short_description_name" : "Reason Youth Not Signed Type            "
+  }, {
+    "logical_table_dsd_name" : "ST_SPRJC",
+    "user_table_name" : "Statewide Special Projects Type         ",
+    "short_description_name" : "Statewide Special Projects              "
+  }, {
+    "logical_table_dsd_name" : "HL_CNSTC",
+    "user_table_name" : "Health Consent Type                     ",
+    "short_description_name" : "Health Consent Type                     "
+  }, {
+    "logical_table_dsd_name" : "HL_INTVC",
+    "user_table_name" : "Health Intervention Choice Type         ",
+    "short_description_name" : "Health Intervention Choice Type         "
+  }, {
+    "logical_table_dsd_name" : "HL_REF2C",
+    "user_table_name" : "Health Referred To Type                 ",
+    "short_description_name" : "Health Referred To Type                 "
+  }, {
+    "logical_table_dsd_name" : "HL_REFC ",
+    "user_table_name" : "Health Referral Type                    ",
+    "short_description_name" : "Health Referral Type                    "
+  }, {
+    "logical_table_dsd_name" : "HL_SCRDC",
+    "user_table_name" : "Health Screened By Type                 ",
+    "short_description_name" : "Health Screened By Type                 "
+  }, {
+    "logical_table_dsd_name" : "HL_SCRNC",
+    "user_table_name" : "Health Screening Type                   ",
+    "short_description_name" : "Health Screening Type                   "
+  }, {
+    "logical_table_dsd_name" : "HL_TERMC",
+    "user_table_name" : "Health Plan Termination Type            ",
+    "short_description_name" : "Health Plan Termination Type            "
+  }, {
+    "logical_table_dsd_name" : "PLC_PRGC",
+    "user_table_name" : "Placement Program Type                  ",
+    "short_description_name" : "Placement Program Type                  "
+  }, {
+    "logical_table_dsd_name" : "PMT_ENDC",
+    "user_table_name" : "Payment End Reason Type                 ",
+    "short_description_name" : "Payment End Reason Type                 "
+  }, {
+    "logical_table_dsd_name" : "PMT_LVLC",
+    "user_table_name" : "Payment Rate Level Type                 ",
+    "short_description_name" : "Payment Rate Level Type                 "
+  }, {
+    "logical_table_dsd_name" : "ST_PCATC",
+    "user_table_name" : "Participation Category Type             ",
+    "short_description_name" : "Participation Category Type             "
+  }, {
+    "logical_table_dsd_name" : "ST_PDEC ",
+    "user_table_name" : "Participation Detail Type               ",
+    "short_description_name" : "Participation Detail Type               "
+  }, {
+    "logical_table_dsd_name" : "ST_PENDC",
+    "user_table_name" : "Participation End Reason Type           ",
+    "short_description_name" : "Participation End Reason Type           "
+  }, {
+    "logical_table_dsd_name" : "ICHS_CRC",
+    "user_table_name" : "ICPC Home Study Care Type               ",
+    "short_description_name" : "ICPC Home Study Care                    "
+  }, {
+    "logical_table_dsd_name" : "ICHS_DLC",
+    "user_table_name" : "ICPC Home Study Delay Type              ",
+    "short_description_name" : "ICPC Home Study Delay                   "
+  }, {
+    "logical_table_dsd_name" : "ICHS_STC",
+    "user_table_name" : "ICPC Home Study Status Type             ",
+    "short_description_name" : "ICPC Home Study Status                  "
+  }, {
+    "logical_table_dsd_name" : "ICPCACTC",
+    "user_table_name" : "ICPC Action Type                        ",
+    "short_description_name" : "ICPC Action                             "
+  }, {
+    "logical_table_dsd_name" : "ICPCRELC",
+    "user_table_name" : "ICPC Relationship To Child Type         ",
+    "short_description_name" : "ICPC Relationship To Child              "
+  }, {
+    "logical_table_dsd_name" : "ICPCTRMC",
+    "user_table_name" : "ICPC Termination Reason Type            ",
+    "short_description_name" : "ICPC Termination Reason                 "
+  }, {
+    "logical_table_dsd_name" : "ICRQ_STC",
+    "user_table_name" : "ICPC Request Status Type                ",
+    "short_description_name" : "ICPC Request Status                     "
+  }, {
+    "logical_table_dsd_name" : "CRDTAGYC",
+    "user_table_name" : "Credit Agency Type                      ",
+    "short_description_name" : "Credit Agency Type                      "
+  }, {
+    "logical_table_dsd_name" : "CRPTREQC",
+    "user_table_name" : "Requested By Type                       ",
+    "short_description_name" : "Requested By Type                       "
+  }, {
+    "logical_table_dsd_name" : "CRPTSTAC",
+    "user_table_name" : "Credit Report Status Type               ",
+    "short_description_name" : "Credit Report Status Type               "
+  }, {
+    "logical_table_dsd_name" : "REFROPNC",
+    "user_table_name" : "Referral Reopen Reason Type             ",
+    "short_description_name" : "Referral Reopen Reason                  "
+  }, {
+    "logical_table_dsd_name" : "CAER_RLC",
+    "user_table_name" : "CAER Relationship To Child Type         ",
+    "short_description_name" : "CAER Relationship To Child Type         "
+  }, {
+    "logical_table_dsd_name" : "CSEC_TPC",
+    "user_table_name" : "Sexual Exploitation Type                ",
+    "short_description_name" : "Sexual Exploitation Type                "
+  }, {
+    "logical_table_dsd_name" : "EXAMRSLC",
+    "user_table_name" : "Exam Results Type                       ",
+    "short_description_name" : "Exam Results Type                       "
+  }, {
+    "logical_table_dsd_name" : "GRADMTHC",
+    "user_table_name" : "Graduation Method Type                  ",
+    "short_description_name" : "Graduation Method Type                  "
+  } ]
+}
