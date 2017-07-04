@@ -10,7 +10,6 @@ import org.junit.Test;
 
 /**
  * @author CWDS API Team
- *
  */
 @SuppressWarnings("javadoc")
 public class AbstractBeanValidatorTest {
@@ -22,7 +21,6 @@ public class AbstractBeanValidatorTest {
 
   private String property = "somevalue";
 
-
   @Test
   public void readBeanValueReturnsCorrectValue() throws Exception {
     assertThat(abstractBeanValidator.readBeanValue(this, "property"), is(equalTo("somevalue")));
@@ -31,7 +29,6 @@ public class AbstractBeanValidatorTest {
   @Test
   public void readBeanValueThrowsValidationExceptionWhenReflectionIssue() throws Exception {
     thrown.expect(ValidationException.class);
-
     abstractBeanValidator.readBeanValue(this, "foobar");
   }
 
@@ -41,6 +38,5 @@ public class AbstractBeanValidatorTest {
   public String getProperty() {
     return property;
   }
-
 
 }

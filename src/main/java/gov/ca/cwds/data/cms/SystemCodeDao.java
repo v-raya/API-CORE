@@ -26,19 +26,22 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
     super(sessionFactory);
   }
 
+  /**
+   * @param foreignKeyMetaTable meta group
+   * @return all keys by meta table
+   */
   @SuppressWarnings("unchecked")
   public SystemCode[] findByForeignKeyMetaTable(String foreignKeyMetaTable) {
     Query query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery("gov.ca.cwds.data.persistence.cms.SystemCode.findByForeignKeyMetaTable")
+        .getNamedQuery(SystemCode.class.getName() + ".findByForeignKeyMetaTable")
         .setString("foreignKeyMetaTable", foreignKeyMetaTable);
     return (SystemCode[]) query.list().toArray(new SystemCode[0]);
-
   }
 
   @SuppressWarnings("unchecked")
   public SystemCode findBySystemCodeId(Short systemCodeId) {
     Query query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery("gov.ca.cwds.data.persistence.cms.SystemCode.findBySystemCodeId")
+        .getNamedQuery(SystemCode.class.getName() + ".findBySystemCodeId")
         .setShort("systemId", systemCodeId);
     return (SystemCode) query.getSingleResult();
 

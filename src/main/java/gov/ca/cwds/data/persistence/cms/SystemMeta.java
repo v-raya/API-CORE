@@ -46,7 +46,6 @@ public class SystemMeta extends CmsPersistentObject {
     super();
   }
 
-
   /**
    * 
    * @param logicalTableDsdName the Logical Table Dsd Name
@@ -60,15 +59,12 @@ public class SystemMeta extends CmsPersistentObject {
     this.shortDescriptionName = shortDescriptionName;
   }
 
-
-
   /**
    * @return the logicalTableDsdName
    */
   public String getLogicalTableDsdName() {
     return logicalTableDsdName;
   }
-
 
   /**
    * @return the userTableName
@@ -77,14 +73,12 @@ public class SystemMeta extends CmsPersistentObject {
     return userTableName;
   }
 
-
   /**
    * @return the shortDescriptionName
    */
   public String getShortDescriptionName() {
     return shortDescriptionName;
   }
-
 
   /**
    * {@inheritDoc}

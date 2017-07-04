@@ -6,8 +6,14 @@ import org.apache.shiro.authc.AuthenticationToken;
 
 @SuppressWarnings("serial")
 public class PerryShiroToken implements AuthenticationToken {
+
   private final String token;
 
+  /**
+   * Construct from authentication token.
+   * 
+   * @param token Perry token
+   */
   public PerryShiroToken(String token) {
     this.token = checkNotNull(token, "token cannot be null.");
   }
@@ -22,6 +28,7 @@ public class PerryShiroToken implements AuthenticationToken {
     return token;
   }
 
+  @SuppressWarnings("javadoc")
   public String getToken() {
     return token;
   }
@@ -48,4 +55,5 @@ public class PerryShiroToken implements AuthenticationToken {
   public int hashCode() {
     return token.hashCode();
   }
+
 }

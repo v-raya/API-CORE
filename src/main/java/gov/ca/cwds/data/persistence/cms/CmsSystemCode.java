@@ -1,11 +1,10 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import java.io.Serializable;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import gov.ca.cwds.data.std.ApiMarker;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
@@ -18,7 +17,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * 
  * @author CWDS API Team
  */
-public final class CmsSystemCode implements Serializable {
+public final class CmsSystemCode implements ApiMarker {
 
   /**
    * Base serialization value. Increment per class change.
@@ -28,8 +27,8 @@ public final class CmsSystemCode implements Serializable {
   private final int sysId;
   private final String fksMetaT;
   private final String shortDsc;
-  private final String lgcId;
-  private final String inactvInd;
+  private final String logicalId;
+  private final String inactive;
   private final String categoryId;
   private final String otherCd;
   private final String longDsc;
@@ -40,19 +39,20 @@ public final class CmsSystemCode implements Serializable {
    * @param sysId unique system code id
    * @param fksMetaT system code category
    * @param shortDsc short description (e.g., "California")
-   * @param lgcId logical id. Often zero-padded sort order (e.g., "0002") or standard code ("CA")
-   * @param inactvInd inactive flag (N or Y)
+   * @param logicalId logical id. Often zero-padded sort order (e.g., "0002") or standard code
+   *        ("CA")
+   * @param inactive inactive flag (N or Y)
    * @param categoryId sub-category
    * @param otherCd optional, 2 character code, such as "CA" for the State of California.
    * @param longDsc long description. Only populated occasionally.
    */
-  public CmsSystemCode(int sysId, String fksMetaT, String shortDsc, String lgcId, String inactvInd,
-      String categoryId, String otherCd, String longDsc) {
+  public CmsSystemCode(int sysId, String fksMetaT, String shortDsc, String logicalId,
+      String inactive, String categoryId, String otherCd, String longDsc) {
     this.sysId = sysId;
     this.fksMetaT = fksMetaT;
     this.shortDsc = shortDsc;
-    this.lgcId = lgcId;
-    this.inactvInd = inactvInd;
+    this.logicalId = logicalId;
+    this.inactive = inactive;
     this.categoryId = categoryId;
     this.otherCd = otherCd;
     this.longDsc = longDsc;
@@ -148,7 +148,7 @@ public final class CmsSystemCode implements Serializable {
    * @return logical id
    */
   public String getLgcId() {
-    return lgcId;
+    return logicalId;
   }
 
   /**
@@ -157,7 +157,7 @@ public final class CmsSystemCode implements Serializable {
    * @return inactive flag
    */
   public String getInactvInd() {
-    return inactvInd;
+    return inactive;
   }
 
   /**

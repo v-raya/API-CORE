@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  * 
  * @author CWDS API Team
  */
-public interface ApiPhoneAware {
+public interface ApiPhoneAware extends ApiMarker {
 
   /**
    * Common phone types.

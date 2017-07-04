@@ -74,9 +74,8 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
     try {
       txn = session.beginTransaction();
       // Compatible with both DB2 z/OS and Linux.
-      Query query = session.getNamedQuery(namedQueryName)
-          // .setResultTransformer(DistinctRootEntityResultTransformer.INSTANCE)
-          .setTimestamp("after", new java.sql.Timestamp(datetime.getTime()));
+      Query query = session.getNamedQuery(namedQueryName).setTimestamp("after",
+          new java.sql.Timestamp(datetime.getTime()));
       ImmutableList.Builder<T> results = new ImmutableList.Builder<>();
       results.addAll(query.list());
       txn.commit();
@@ -95,8 +94,8 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
    * analytic function</a>, whereas DB2 10.5, lacking modern analytics, would likely rely on nested
    * or correlated queries. Note that DB2 doesn't even provide basic pseudo-columns, like ROWNUM,
    * without enabling <a href=
-   * "http://www.ibm.com/support/knowledgecenter/SSEPGG_10.5.0/com.ibm.db2.luw.apdv.porting.doc/doc/r0052867.html">"compatibility
-   * vectors"</a> or writing a
+   * "http://www.ibm.com/support/knowledgecenter/SSEPGG_10.5.0/com.ibm.db2.luw.apdv.porting.doc/doc/r0052867.html">
+   * "compatibility vectors"</a> or writing a
    * <a href="http://hoteljavaopensource.blogspot.com/2011/06/ntile-and-db2.html">user-defined
    * function</a>.
    * 
@@ -143,6 +142,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
       Query query = session.getNamedQuery(namedQueryName).setInteger("bucket_num", (int) bucketNum)
           .setInteger("total_buckets", (int) totalBuckets).setString("min_id", minId)
           .setString("max_id", maxId);
+
       ImmutableList.Builder<T> results = new ImmutableList.Builder<>();
       results.addAll(query.list());
       txn.commit();
@@ -162,8 +162,8 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
    * function</a>, whereas DB2 10.5, lacking modern analytics, would likely rely on nested or
    * correlated queries. Note that DB2 doesn't even provide common pseudo-columns, like ROWNUM,
    * without enabling <a href=
-   * "http://www.ibm.com/support/knowledgecenter/SSEPGG_10.5.0/com.ibm.db2.luw.apdv.porting.doc/doc/r0052867.html">"compatibility
-   * vectors"</a> or writing a
+   * "http://www.ibm.com/support/knowledgecenter/SSEPGG_10.5.0/com.ibm.db2.luw.apdv.porting.doc/doc/r0052867.html">
+   * "compatibility vectors"</a> or writing a
    * <a href="http://hoteljavaopensource.blogspot.com/2011/06/ntile-and-db2.html">user-defined
    * function</a>.
    * 
@@ -230,4 +230,5 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
   private String constructNamedQueryName(String suffix) {
     return getEntityClass().getName() + "." + suffix;
   }
+
 }

@@ -16,22 +16,22 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- * Checks to see that the value is in a valid date format.
+ * Annotation indicating that all of the given properties are required together.
+ * 
+ * @author CWDS API Team
  */
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = DateValidator.class)
-public @interface Date {
-
-  String message() default "must be in the format of {format}";
+@Constraint(validatedBy = MutuallyNecessaryValidator.class)
+public @interface MutuallyNecessary {
+  String message() default "{properties} are mutually exclusive but multiple values set";
 
   Class<?>[] groups() default {};
 
   Class<? extends Payload>[] payload() default {};
 
-  String format() default "yyyy-MM-dd";
+  String[] properties() default {};
 
-  boolean required() default false;
-
+  boolean required() default true;
 }

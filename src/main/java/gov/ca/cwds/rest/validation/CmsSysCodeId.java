@@ -8,7 +8,6 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -16,21 +15,23 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- * Checks to see that the value is in a valid date format.
+ * Annotation indicating that a property must be a valid CMS system code id for its system code
+ * category.
+ * 
+ * @author CWDS API Team
  */
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
-@Documented
-@Constraint(validatedBy = DateValidator.class)
-public @interface Date {
+@Constraint(validatedBy = CmsSysCodeIdValidator.class)
+public @interface CmsSysCodeId {
 
-  String message() default "must be in the format of {format}";
+  String message() default "{property} must be a valid system code for category {category}";
 
   Class<?>[] groups() default {};
 
   Class<? extends Payload>[] payload() default {};
 
-  String format() default "yyyy-MM-dd";
+  String category();
 
   boolean required() default false;
 

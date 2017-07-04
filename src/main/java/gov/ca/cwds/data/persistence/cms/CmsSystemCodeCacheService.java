@@ -1,6 +1,5 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -10,22 +9,22 @@ import java.util.Spliterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.rest.api.ApiException;
 
 /**
- * Basic system code cache facility to translate common CMS codes.
+ * System code cache facility to translate common CMS codes.
  * 
  * @author CWDS API Team
  */
-public class CmsSystemCodeCacheService
-    implements Serializable, ApiSystemCodeCache, Iterable<CmsSystemCode> {
+public class CmsSystemCodeCacheService extends ApiObjectIdentity
+    implements ApiSystemCodeCache, Iterable<CmsSystemCode> {
 
   /**
    * Base serialization version. Increment per class change.
@@ -68,6 +67,7 @@ public class CmsSystemCodeCacheService
    */
   @Inject
   public CmsSystemCodeCacheService(ApiSystemCodeDao dao) {
+    register();
     this.dao = dao;
     final List<CmsSystemCode> codes = this.dao.getAllSystemCodes();
     Map<Integer, CmsSystemCode> anIdxSysId = new ConcurrentHashMap<>(codes.size());
@@ -97,17 +97,40 @@ public class CmsSystemCodeCacheService
   /**
    * {@inheritDoc}
    * 
-   * @see gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache#lookup(int)
+   * @see gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache#lookup(Integer)
    */
   @Override
-  public CmsSystemCode lookup(int sysId) {
-    return this.idxSysId.get(sysId);
+  public CmsSystemCode lookup(Integer sysId) {
+    return sysId != null ? this.idxSysId.get(sysId) : null;
   }
 
   @Override
-  public CmsSystemCode lookupByCategoryAndShortDesc(String meta, String shortDesc) {
-    final String key = meta.toUpperCase() + "_" + shortDesc.toUpperCase();
-    return idxCategoryShortDesc.get(key);
+  public CmsSystemCode lookupByCategoryAndShortDescription(String meta, String shortDesc) {
+    return idxCategoryShortDesc.get(meta.toUpperCase() + "_" + shortDesc.toUpperCase());
+  }
+
+  @Override
+  public boolean verifyCategoryAndSysCodeId(String meta, final Integer sysId) {
+    boolean valid = false;
+
+    if (sysId != null && sysId.intValue() != 0) {
+      final CmsSystemCode code = this.idxSysId.get(sysId);
+      valid = code != null && code.getFksMetaT().equals(meta);
+    }
+
+    return valid;
+  }
+
+  @Override
+  public boolean verifyCategoryAndSysCodeShortDescription(String meta, String shortDesc) {
+    boolean valid = false;
+
+    if (StringUtils.isNotBlank(shortDesc)) {
+      final CmsSystemCode code = lookupByCategoryAndShortDescription(meta, shortDesc);
+      valid = code != null && code.getFksMetaT().equals(meta);
+    }
+
+    return valid;
   }
 
   /**
@@ -137,7 +160,6 @@ public class CmsSystemCodeCacheService
     return codeDesc;
   }
 
-  // #137202471: Tech debt: Cobertura doesn't recognize Java 8 features.
   @Override
   public Iterator<CmsSystemCode> iterator() {
     return this.idxSysId.values().iterator();
@@ -153,14 +175,5 @@ public class CmsSystemCodeCacheService
     return this.idxSysId.values().spliterator();
   }
 
-  @Override
-  public final int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this, false);
-  }
-
-  @Override
-  public final boolean equals(Object obj) {
-    return EqualsBuilder.reflectionEquals(this, obj, false);
-  }
 
 }

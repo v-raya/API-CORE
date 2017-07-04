@@ -7,8 +7,8 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
 
-public class SystemCodeValidator extends AbstractBeanValidator
-    implements ConstraintValidator<SystemCode, Object> {
+public class SystemCodeValidator
+    implements AbstractBeanValidator, ConstraintValidator<SystemCode, Object> {
 
   @Inject
   private ApiSystemCodeCache systemCodes;

@@ -17,8 +17,7 @@ import com.google.common.collect.ImmutableList;
  * 
  * @author CWDS API Team
  */
-public class IfThenValidator extends AbstractBeanValidator
-    implements ConstraintValidator<IfThen, Object> {
+public class IfThenValidator implements AbstractBeanValidator, ConstraintValidator<IfThen, Object> {
   @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(IfThenValidator.class);
 

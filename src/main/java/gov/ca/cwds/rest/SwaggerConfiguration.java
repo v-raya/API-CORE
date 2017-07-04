@@ -111,6 +111,7 @@ public class SwaggerConfiguration {
     return showSwagger;
   }
 
+  @SuppressWarnings("javadoc")
   public String getSpId() {
     return spId;
   }
