@@ -19,13 +19,13 @@ import javax.validation.Validator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import gov.ca.cwds.data.persistence.cms.TestSystemCodeCache;
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 
-public class CmsSysCodeIdValidatorTest {
+public class SystemCodeIdValidatorTest {
 
   private static final class AnnoTestBean implements Serializable {
 
-    @CmsSysCodeId(category = "ABS_BPTC", required = true)
+    @ValidSystemCodeId(category = "ABS_BPTC", required = true)
     private Short prop1;
 
     private String prop2;
@@ -61,31 +61,31 @@ public class CmsSysCodeIdValidatorTest {
 
   @BeforeClass
   public static void setupClass() {
-    TestSystemCodeCache.init();
+    SystemCodeCache systemCodeCache = new TestSystemCodeCache();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
   }
 
   @Test
   public void type() throws Exception {
-    assertThat(CmsSysCodeIdValidator.class, notNullValue());
+    assertThat(SystemCodeIdValidator.class, notNullValue());
   }
 
   @Test
   public void instantiation() throws Exception {
-    CmsSysCodeIdValidator target = new CmsSysCodeIdValidator();
+    SystemCodeIdValidator target = new SystemCodeIdValidator();
     assertThat(target, notNullValue());
   }
 
   @Test
   public void initialize_Args__CmsSysCodeId() throws Exception {
-    CmsSysCodeIdValidator target = new CmsSysCodeIdValidator();
-    CmsSysCodeId anno = mock(CmsSysCodeId.class);
+    SystemCodeIdValidator target = new SystemCodeIdValidator();
+    ValidSystemCodeId anno = mock(ValidSystemCodeId.class);
     target.initialize(anno);
   }
 
   @Test
   public void isValid_Args__Object__ConstraintValidatorContext() throws Exception {
-    CmsSysCodeIdValidator target = new CmsSysCodeIdValidator();
+    SystemCodeIdValidator target = new SystemCodeIdValidator();
     Short value = new Short((short) 456);
     ConstraintValidatorContext context_ = mock(ConstraintValidatorContext.class);
     boolean actual = target.isValid(value, context_);
@@ -108,6 +108,5 @@ public class CmsSysCodeIdValidatorTest {
     System.out.println(violations);
     assertFalse(violations.isEmpty());
   }
-
 }
 

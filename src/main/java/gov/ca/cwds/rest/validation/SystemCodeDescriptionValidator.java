@@ -7,7 +7,7 @@ import javax.validation.ConstraintValidatorContext;
 
 import org.apache.commons.lang3.StringUtils;
 
-import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 
 /**
  * Validates that the {@code CmsSysCode.property} of a given bean must be a valid CMS system code
@@ -15,14 +15,14 @@ import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
  * 
  * @author CWDS API Team
  */
-public class CmsSysCodeDescriptionValidator
-    implements AbstractBeanValidator, ConstraintValidator<CmsSysCodeDescription, String> {
+public class SystemCodeDescriptionValidator
+    implements AbstractBeanValidator, ConstraintValidator<ValidSystemCodeDescription, String> {
 
   private String category;
   private boolean required;
 
   @Override
-  public void initialize(CmsSysCodeDescription anno) {
+  public void initialize(ValidSystemCodeDescription anno) {
     this.category = anno.category();
     this.required = anno.required();
   }
@@ -39,7 +39,7 @@ public class CmsSysCodeDescriptionValidator
               MessageFormat.format("{0} description is required", category))
           .addPropertyNode(category).addConstraintViolation();
     } else if (hasProp) {
-      valid = ApiSystemCodeCache.global().verifyCategoryAndSysCodeShortDescription(category, value);
+      valid = SystemCodeCache.global().verifyActiveSystemCodeDescriptionForMeta(value, category);
     }
 
     return valid;

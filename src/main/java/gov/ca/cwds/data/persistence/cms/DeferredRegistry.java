@@ -46,7 +46,7 @@ public final class DeferredRegistry<T extends ApiMarker> implements ApiMarker {
    * @param overwrite overwrite if already registered
    */
   @SuppressWarnings("unchecked")
-  static final <T extends ApiMarker> void register(Class<T> klass, T t, boolean overwrite) {
+  public static final <T extends ApiMarker> void register(Class<T> klass, T t, boolean overwrite) {
     if (overwrite || !registry.containsKey(klass)) {
       registry.put(klass, (DeferredRegistry<ApiMarker>) new DeferredRegistry<>(klass, t));
     }
@@ -58,7 +58,7 @@ public final class DeferredRegistry<T extends ApiMarker> implements ApiMarker {
    * @param t serializable type
    * @param t serializable type
    */
-  static final <T extends ApiMarker> void register(Class<T> klass, T t) {
+  public static final <T extends ApiMarker> void register(Class<T> klass, T t) {
     register(klass, t, false);
   }
 
@@ -68,7 +68,7 @@ public final class DeferredRegistry<T extends ApiMarker> implements ApiMarker {
    * @return the underlying
    */
   @SuppressWarnings("unchecked")
-  static final <T extends ApiMarker> T unwrap(Class<?> klass) {
+  public static final <T extends ApiMarker> T unwrap(Class<?> klass) {
     return ((DeferredRegistry<T>) registry.get(klass)).wrapped;
   }
 

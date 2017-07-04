@@ -5,22 +5,22 @@ import java.text.MessageFormat;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 
 /**
- * Validates that the {@code CmsSysCode.property} of a given bean must be a valid CMS system code id
- * for its system code category, {@code CmsSysCode.category}.
+ * Validates that the {@code SystemCodeId.property} of a given bean must be a valid CMS system code
+ * id for its system code category, {@code SystemCodeId.category}.
  * 
  * @author CWDS API Team
  */
-public class CmsSysCodeIdValidator
-    implements AbstractBeanValidator, ConstraintValidator<CmsSysCodeId, Number> {
+public class SystemCodeIdValidator
+    implements AbstractBeanValidator, ConstraintValidator<ValidSystemCodeId, Number> {
 
   private String category;
   private boolean required;
 
   @Override
-  public void initialize(CmsSysCodeId anno) {
+  public void initialize(ValidSystemCodeId anno) {
     this.category = anno.category();
     this.required = anno.required();
   }
@@ -37,7 +37,8 @@ public class CmsSysCodeIdValidator
               MessageFormat.format("{0} sys code is required", category))
           .addPropertyNode(category).addConstraintViolation();
     } else if (hasProp) {
-      valid = ApiSystemCodeCache.global().verifyCategoryAndSysCodeId(category, value.intValue());
+      valid =
+          SystemCodeCache.global().verifyActiveSystemCodeIdForMeta(value.shortValue(), category);
     }
 
     return valid;

@@ -19,13 +19,13 @@ import javax.validation.Validator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import gov.ca.cwds.data.persistence.cms.TestSystemCodeCache;
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 
-public class CmsSysCodeDescriptionValidatorTest {
+public class SystemCodeDescriptionValidatorTest {
 
   private static final class AnnoTestBean implements Serializable {
 
-    @CmsSysCodeDescription(category = "ABS_BPTC", required = true)
+    @ValidSystemCodeDescription(category = "ABS_BPTC", required = true)
     private String prop1;
 
     private String prop2;
@@ -58,34 +58,36 @@ public class CmsSysCodeDescriptionValidatorTest {
   }
 
   private static Validator validator;
+  private static SystemCodeCache systemCodeCache;
 
   @BeforeClass
   public static void setupClass() {
-    TestSystemCodeCache.init();
+    SystemCodeCache systemCodeCache = new TestSystemCodeCache();
+    // TestSystemCodeCache.init();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
   }
 
   @Test
   public void type() throws Exception {
-    assertThat(CmsSysCodeDescriptionValidator.class, notNullValue());
+    assertThat(SystemCodeDescriptionValidator.class, notNullValue());
   }
 
   @Test
   public void instantiation() throws Exception {
-    CmsSysCodeDescriptionValidator target = new CmsSysCodeDescriptionValidator();
+    SystemCodeDescriptionValidator target = new SystemCodeDescriptionValidator();
     assertThat(target, notNullValue());
   }
 
   @Test
   public void initialize_Args__CmsSysCodeId() throws Exception {
-    CmsSysCodeDescriptionValidator target = new CmsSysCodeDescriptionValidator();
-    CmsSysCodeDescription anno = mock(CmsSysCodeDescription.class);
+    SystemCodeDescriptionValidator target = new SystemCodeDescriptionValidator();
+    ValidSystemCodeDescription anno = mock(ValidSystemCodeDescription.class);
     target.initialize(anno);
   }
 
   @Test
   public void isValid_Args__Object__ConstraintValidatorContext() throws Exception {
-    CmsSysCodeDescriptionValidator target = new CmsSysCodeDescriptionValidator();
+    SystemCodeDescriptionValidator target = new SystemCodeDescriptionValidator();
     String value = "";
     ConstraintValidatorContext context_ = mock(ConstraintValidatorContext.class);
     boolean actual = target.isValid(value, context_);
@@ -108,6 +110,5 @@ public class CmsSysCodeDescriptionValidatorTest {
     System.out.println(violations);
     assertFalse(violations.isEmpty());
   }
-
 }
 

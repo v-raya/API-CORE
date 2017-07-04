@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,17 +25,15 @@ public class CachingSystemCodeServiceTest {
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
-  private SystemMetaListResponse systemMetaListResponse;
-  private SystemCodeListResponse systemCodeListResponse;
-  private SystemCodeDao systemCodeDao;
-  private SystemMetaDao systemMetaDao;
-  private CachingSystemCodeService cachingSystemCodeService;
+  private static SystemMetaListResponse systemMetaListResponse;
+  private static SystemCodeListResponse systemCodeListResponse;
+  private static CachingSystemCodeService cachingSystemCodeService;
 
   @SuppressWarnings("javadoc")
-  @Before
-  public void setup() throws Exception {
-    systemCodeDao = mock(SystemCodeDao.class);
-    systemMetaDao = mock(SystemMetaDao.class);
+  @BeforeClass
+  public static void setupClass() throws Exception {
+    SystemCodeDao systemCodeDao = mock(SystemCodeDao.class);
+    SystemMetaDao systemMetaDao = mock(SystemMetaDao.class);
 
     systemMetaListResponse = MAPPER.readValue(
         fixture("fixtures/rest/services/cms/CachingSystemCodeService/test-syetm-codes-meta.json"),
@@ -64,9 +62,16 @@ public class CachingSystemCodeServiceTest {
     Assert.assertNotNull(actualSystemMetaListResponse);
     Assert.assertEquals(systemMetaListResponse, actualSystemMetaListResponse);
 
-    Set<SystemMeta> actualMetas = cachingSystemCodeService.getSystemMetas();
+    Set<SystemMeta> actualMetas = cachingSystemCodeService.getAllSystemMetas();
     Assert.assertNotNull(actualMetas);
     Assert.assertEquals(systemMetaListResponse.getSystemMetas(), actualMetas);
+  }
+
+  @Test
+  public void testAllSystemCodes() throws Exception {
+    Set<SystemCode> actualCodes = cachingSystemCodeService.getAllSystemCodes();
+    Assert.assertNotNull(actualCodes);
+    Assert.assertEquals(systemCodeListResponse.getSystemCodes(), actualCodes);
   }
 
   @Test
@@ -80,6 +85,64 @@ public class CachingSystemCodeServiceTest {
     Assert.assertNotNull(actualCodes);
     Assert.assertEquals(systemCodeListResponse.getSystemCodes(), actualCodes);
   }
+
+  @Test
+  public void testSystemCodeDescription() throws Exception {
+    String shortDescription = cachingSystemCodeService.getSystemCodeShortDescription((short) 27);
+    Assert.assertNotNull(shortDescription);
+    Assert.assertEquals("Business", shortDescription);
+
+    shortDescription = cachingSystemCodeService.getSystemCodeShortDescription(null);
+    Assert.assertNull(shortDescription);
+
+    shortDescription = cachingSystemCodeService.getSystemCodeShortDescription((short) 999999);
+    Assert.assertNull(shortDescription);
+  }
+
+  @Test
+  public void testVerifySystemCodeDescription() throws Exception {
+    boolean validCode =
+        cachingSystemCodeService.verifyActiveSystemCodeDescriptionForMeta("Business", "ADDR_TPC");
+    Assert.assertTrue(validCode);
+
+    validCode = cachingSystemCodeService.verifyActiveSystemCodeDescriptionForMeta("Business-kjhkh",
+        "ADDR_TPC");
+    Assert.assertFalse(validCode);
+
+    validCode = cachingSystemCodeService.verifyActiveSystemCodeDescriptionForMeta("Business", " ");
+    Assert.assertFalse(validCode);
+
+    validCode = cachingSystemCodeService.verifyActiveSystemCodeDescriptionForMeta("Business", null);
+    Assert.assertFalse(validCode);
+
+    validCode = cachingSystemCodeService.verifyActiveSystemCodeDescriptionForMeta(null, null);
+    Assert.assertFalse(validCode);
+  }
+
+  @Test
+  public void testVerifySystemCodeId() throws Exception {
+    boolean validCode =
+        cachingSystemCodeService.verifyActiveSystemCodeIdForMeta((short) 27, "ADDR_TPC");
+    Assert.assertTrue(validCode);
+
+    validCode = cachingSystemCodeService.verifyActiveSystemCodeIdForMeta((short) 99999, "ADDR_TPC");
+    Assert.assertFalse(validCode);
+
+    validCode = cachingSystemCodeService.verifyActiveSystemCodeIdForMeta((short) 99999, " ");
+    Assert.assertFalse(validCode);
+
+    validCode = cachingSystemCodeService.verifyActiveSystemCodeIdForMeta((short) 99999, null);
+    Assert.assertFalse(validCode);
+
+    validCode = cachingSystemCodeService.verifyActiveSystemCodeIdForMeta(null, null);
+    Assert.assertFalse(validCode);
+  }
+
+  // @Test
+  // public void testGlobalRegistration() throws Exception {
+  // SystemCodeCache global = SystemCodeCache.global();
+  // Assert.assertEquals(cachingSystemCodeService, global);
+  // }
 
   @Test
   public void testNotExtistingSystemMeta() throws Exception {
@@ -126,7 +189,7 @@ public class CachingSystemCodeServiceTest {
 
   }
 
-  private gov.ca.cwds.data.persistence.cms.SystemMeta[] createPersistenceSystemMetas(
+  private static gov.ca.cwds.data.persistence.cms.SystemMeta[] createPersistenceSystemMetas(
       SystemMetaListResponse systemMetaListResponse) {
     Set<SystemMeta> systemMetas = systemMetaListResponse.getSystemMetas();
     Set<gov.ca.cwds.data.persistence.cms.SystemMeta> persistenceSystemMetas = new HashSet<>();
@@ -138,7 +201,7 @@ public class CachingSystemCodeServiceTest {
     return persistenceSystemMetas.toArray(new gov.ca.cwds.data.persistence.cms.SystemMeta[0]);
   }
 
-  private gov.ca.cwds.data.persistence.cms.SystemCode[] createPersistenceSystemCodes(
+  private static gov.ca.cwds.data.persistence.cms.SystemCode[] createPersistenceSystemCodes(
       SystemCodeListResponse systemCodeListResponse) {
 
     Set<SystemCode> systemCodes = systemCodeListResponse.getSystemCodes();
@@ -151,7 +214,7 @@ public class CachingSystemCodeServiceTest {
     return persistenceSystemCodes.toArray(new gov.ca.cwds.data.persistence.cms.SystemCode[0]);
   }
 
-  private gov.ca.cwds.data.persistence.cms.SystemCode getPersistenceSystemCode(
+  private static gov.ca.cwds.data.persistence.cms.SystemCode getPersistenceSystemCode(
       SystemCodeListResponse systemCodeListResponse, Short systemCodeId) {
 
     Set<SystemCode> systemCodes = systemCodeListResponse.getSystemCodes();

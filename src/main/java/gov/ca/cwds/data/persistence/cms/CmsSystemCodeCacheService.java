@@ -22,7 +22,10 @@ import gov.ca.cwds.rest.api.ApiException;
  * System code cache facility to translate common CMS codes.
  * 
  * @author CWDS API Team
+ * 
+ * @deprecated Use gov.ca.cwds.rest.services.cms.CachingSystemCodeService
  */
+@Deprecated
 public class CmsSystemCodeCacheService extends ApiObjectIdentity
     implements ApiSystemCodeCache, Iterable<CmsSystemCode> {
 

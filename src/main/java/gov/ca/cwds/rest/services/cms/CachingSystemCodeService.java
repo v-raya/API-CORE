@@ -24,12 +24,14 @@ import gov.ca.cwds.data.cms.SystemCodeDao;
 import gov.ca.cwds.data.cms.SystemMetaDao;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.SystemCode;
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeListResponse;
 import gov.ca.cwds.rest.api.domain.cms.SystemMeta;
 import gov.ca.cwds.rest.api.domain.cms.SystemMetaListResponse;
-import gov.ca.cwds.rest.services.ServiceException;
 
 public class CachingSystemCodeService extends SystemCodeService implements SystemCodeCache {
+
+  private static final long serialVersionUID = 1468150983558929580L;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CachingSystemCodeService.class);
 
@@ -65,6 +67,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
   public CachingSystemCodeService(SystemCodeDao systemCodeDao, SystemMetaDao systemMetaDao,
       long secondsToRefreshCache) {
     super(systemCodeDao, systemMetaDao);
+    // register();
 
     SystemCodeCacheLoader cacheLoader = new SystemCodeCacheLoader(this);
     systemCodeCache = CacheBuilder.newBuilder()
@@ -73,33 +76,56 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
     /**
      * Pre-load cache
      */
-    try {
-      Map<CacheKey, Object> systemCodes = cacheLoader.loadAll();
-      systemCodeCache.putAll(systemCodes);
-    } catch (Exception e) {
-      LOGGER.error("Error loading system codes", e);
-      throw new ServiceException(e);
-    }
+    // try {
+    // Map<CacheKey, Object> systemCodes = cacheLoader.loadAll();
+    // systemCodeCache.putAll(systemCodes);
+    // } catch (Exception e) {
+    // LOGGER.error("Error loading system codes", e);
+    // throw new ServiceException(e);
+    // }
   }
 
   @Override
-  public Response find(Serializable metaId) {
-    CacheKey cacheKey = null;
+  public Response find(Serializable key) {
+    Response response = null;
 
-    if (metaId == null || StringUtils.isBlank(metaId.toString())) {
-      cacheKey = CacheKey.createForAllMetas();
+    if (key == null || StringUtils.isBlank(key.toString())) {
+      response = (Response) getFromCache(CacheKey.createForAllMetas());
+
+      // } else if ("ALL_SYTEM_CODES".equals(key.toString().toUpperCase())) {
+      // Set<SystemCode> systemCodes = getAllSystemCodes();
+      // response = new SystemCodeListResponse(systemCodes);
+
     } else {
-      cacheKey = CacheKey.createForMeta(metaId.toString());
+      response = (Response) getFromCache(CacheKey.createForMeta(key.toString()));
     }
 
-    return (Response) getFromCache(cacheKey);
+    return response;
   }
 
   @Override
-  public Set<SystemMeta> getSystemMetas() {
+  public Set<SystemMeta> getAllSystemMetas() {
+    Set<SystemMeta> systemMetas = new HashSet<>();
     CacheKey cacheKey = CacheKey.createForAllMetas();
     SystemMetaListResponse systemMetaListResponse = (SystemMetaListResponse) getFromCache(cacheKey);
-    return systemMetaListResponse.getSystemMetas();
+    if (systemMetaListResponse != null) {
+      systemMetas = systemMetaListResponse.getSystemMetas();
+    }
+    return systemMetas;
+  }
+
+  @Override
+  public Set<SystemCode> getAllSystemCodes() {
+    Set<SystemCode> systemCodes = new HashSet<>();
+    Set<SystemMeta> systemMetas = getAllSystemMetas();
+    if (systemMetas != null) {
+      for (SystemMeta systemMeta : systemMetas) {
+        Set<SystemCode> systemCodesForMeta =
+            getSystemCodesForMeta(systemMeta.getLogicalTableDsdName());
+        systemCodes.addAll(systemCodesForMeta);
+      }
+    }
+    return systemCodes;
   }
 
   @Override
@@ -125,13 +151,49 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
 
   @Override
   public Set<SystemCode> getSystemCodesForMeta(final String metaId) {
-    if (StringUtils.isBlank(metaId)) {
-      return new HashSet<SystemCode>();
+    Set<SystemCode> systemCodes = new HashSet<>();
+
+    if (!StringUtils.isBlank(metaId)) {
+      CacheKey cacheKey = CacheKey.createForMeta(metaId);
+      SystemCodeListResponse systemCodeListResponse =
+          (SystemCodeListResponse) getFromCache(cacheKey);
+      if (systemCodeListResponse != null) {
+        systemCodes = systemCodeListResponse.getSystemCodes();
+      }
     }
 
-    CacheKey cacheKey = CacheKey.createForMeta(metaId);
-    SystemCodeListResponse systemCodeListResponse = (SystemCodeListResponse) getFromCache(cacheKey);
-    return systemCodeListResponse.getSystemCodes();
+    return systemCodes;
+  }
+
+  @Override
+  public boolean verifyActiveSystemCodeIdForMeta(Short systemCodeId, String metaId) {
+    boolean valid = false;
+    Set<SystemCode> systemCodes = getSystemCodesForMeta(metaId);
+    if (systemCodes != null) {
+      for (SystemCode systemCode : systemCodes) {
+        if (systemCodeId.equals(systemCode.getSystemId())) {
+          valid = "N".equals(systemCode.getInactiveIndicator().toUpperCase());
+        }
+      }
+    }
+
+    return valid;
+  }
+
+  @Override
+  public boolean verifyActiveSystemCodeDescriptionForMeta(String shortDesc, String metaId) {
+    boolean valid = false;
+    Set<SystemCode> systemCodes = getSystemCodesForMeta(metaId);
+    if (systemCodes != null) {
+      for (SystemCode systemCode : systemCodes) {
+        if (StringUtils.equalsIgnoreCase(StringUtils.trim(shortDesc),
+            StringUtils.trim(systemCode.getShortDescription()))) {
+          valid = "N".equals(systemCode.getInactiveIndicator().toUpperCase());
+        }
+      }
+    }
+
+    return valid;
   }
 
   /**

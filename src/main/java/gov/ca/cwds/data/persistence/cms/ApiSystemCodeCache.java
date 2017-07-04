@@ -16,7 +16,10 @@ import gov.ca.cwds.data.std.ApiMarker;
  * 
  * @author CWDS API Team
  * @see CmsSystemCodeCacheService
+ * 
+ * @deprecated Use gov.ca.cwds.rest.api.domain.cms.SystemCodeCache
  */
+@Deprecated
 public interface ApiSystemCodeCache extends ApiMarker {
 
   /**
