@@ -37,7 +37,7 @@ public class SystemCodeListResponse extends ReportingDomain implements Response 
   /**
    * Construct with args
    * 
-   * @param systemCod Set of system codes
+   * @param systemCodes Set of system codes
    */
   public SystemCodeListResponse(Set<SystemCode> systemCodes) {
     this.systemCodes = systemCodes;
