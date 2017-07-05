@@ -28,17 +28,13 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeListResponse;
 import gov.ca.cwds.rest.api.domain.cms.SystemMeta;
 import gov.ca.cwds.rest.api.domain.cms.SystemMetaListResponse;
+import gov.ca.cwds.rest.services.ServiceException;
 
 public class CachingSystemCodeService extends SystemCodeService implements SystemCodeCache {
 
   private static final long serialVersionUID = 1468150983558929580L;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CachingSystemCodeService.class);
-
-  /**
-   * Seconds after which cache entries will be invalidated for refresh. Default is 15 days.
-   */
-  private static final long DEFAULT_SECONDS_TO_REFRESH_CACHE = 15 * 24 * 60 * 60;
 
   /**
    * System codes cache.
@@ -50,38 +46,27 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
    * 
    * @param systemCodeDao System codes DAO
    * @param systemMetaDao System meta DAO
+   * @param secondsToRefreshCache Seconds after which cache entries will be invalidated for refresh.
+   * @param preloadCache If true then preload all system code cache
    */
   @Inject
-  public CachingSystemCodeService(SystemCodeDao systemCodeDao, SystemMetaDao systemMetaDao) {
-    this(systemCodeDao, systemMetaDao, DEFAULT_SECONDS_TO_REFRESH_CACHE);
-  }
-
-  /**
-   * Construct the object
-   * 
-   * @param systemCodeDao System codes DAO
-   * @param systemMetaDao System meta DAO
-   * @param secondsToRefreshCache Seconds after which cache entries will be invalidated for refresh.
-   */
   public CachingSystemCodeService(SystemCodeDao systemCodeDao, SystemMetaDao systemMetaDao,
-      long secondsToRefreshCache) {
+      long secondsToRefreshCache, boolean preloadCache) {
     super(systemCodeDao, systemMetaDao);
-    // register();
 
     SystemCodeCacheLoader cacheLoader = new SystemCodeCacheLoader(this);
     systemCodeCache = CacheBuilder.newBuilder()
         .refreshAfterWrite(secondsToRefreshCache, TimeUnit.SECONDS).build(cacheLoader);
 
-    /**
-     * Pre-load cache
-     */
-    // try {
-    // Map<CacheKey, Object> systemCodes = cacheLoader.loadAll();
-    // systemCodeCache.putAll(systemCodes);
-    // } catch (Exception e) {
-    // LOGGER.error("Error loading system codes", e);
-    // throw new ServiceException(e);
-    // }
+    if (preloadCache) {
+      try {
+        Map<CacheKey, Object> systemCodes = cacheLoader.loadAll();
+        systemCodeCache.putAll(systemCodes);
+      } catch (Exception e) {
+        LOGGER.error("Error loading system codes", e);
+        throw new ServiceException(e);
+      }
+    }
   }
 
   @Override
@@ -90,11 +75,6 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
 
     if (key == null || StringUtils.isBlank(key.toString())) {
       response = (Response) getFromCache(CacheKey.createForAllMetas());
-
-      // } else if ("ALL_SYTEM_CODES".equals(key.toString().toUpperCase())) {
-      // Set<SystemCode> systemCodes = getAllSystemCodes();
-      // response = new SystemCodeListResponse(systemCodes);
-
     } else {
       response = (Response) getFromCache(CacheKey.createForMeta(key.toString()));
     }
