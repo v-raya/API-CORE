@@ -38,19 +38,16 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.inject.Inject;
 
 import gov.ca.cwds.data.ApiSysCodeAware;
 import gov.ca.cwds.data.ApiTypedIdentifier;
-import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
-import gov.ca.cwds.data.persistence.cms.CmsSystemCode;
 import gov.ca.cwds.data.std.ApiAddressAware;
 import gov.ca.cwds.data.std.ApiAddressAwareWritable;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.data.std.ApiPhoneAware;
 import gov.ca.cwds.data.std.ApiPhoneAwareWritable;
-import gov.ca.cwds.inject.SystemCodeCache;
 import gov.ca.cwds.rest.api.domain.DomainChef;
+import gov.ca.cwds.rest.api.domain.cms.SystemCode;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
@@ -415,18 +412,20 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
       if (systemCodes != null) {
         if (address.getStateCd() != null && address.getStateCd().intValue() != 0) {
-          final CmsSystemCode sysCode = systemCodes.lookup(address.getStateCd().intValue());
-          this.stateName = sysCode.getLongDsc();
-          this.stateCode = sysCode.getLgcId();
+          final SystemCode sysCode = systemCodes.getSystemCode(address.getStateCd());
+          this.stateName = sysCode.getShortDescription();
+          this.stateCode = sysCode.getLogicalId();
         }
 
         if (address.getApiAdrAddressType() != null
             && address.getApiAdrAddressType().intValue() != 0) {
-          this.type = systemCodes.lookup(address.getApiAdrAddressType().intValue()).getLongDsc();
+          this.type =
+              systemCodes.getSystemCode(address.getApiAdrAddressType()).getShortDescription();
         }
 
         if (address.getApiAdrUnitType() != null && address.getApiAdrUnitType().intValue() != 0) {
-          this.unitType = systemCodes.lookup(address.getApiAdrUnitType().intValue()).getLongDsc();
+          this.unitType =
+              systemCodes.getSystemCode(address.getApiAdrUnitType()).getShortDescription();
         }
       } else {
         LOGGER.error("SYSCODE TRANSLATOR NOT SET!!!");
@@ -2339,7 +2338,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchPerson.class);
 
-  private static ApiSystemCodeCache systemCodes;
+  private static gov.ca.cwds.rest.api.domain.cms.SystemCodeCache systemCodes =
+      gov.ca.cwds.rest.api.domain.cms.SystemCodeCache.global();
 
   /**
    * Base serialization version. Increment by class version.
@@ -2697,18 +2697,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @return reference to CMS system code cache
    */
-  public static ApiSystemCodeCache getSystemCodes() {
+  public static gov.ca.cwds.rest.api.domain.cms.SystemCodeCache getSystemCodes() {
     return ElasticSearchPerson.systemCodes;
-  }
-
-  /**
-   * Store a reference to the singleton CMS system code cache for quick convenient access.
-   * 
-   * @param systemCodes CMS system code cache
-   */
-  @Inject
-  public static void setSystemCodes(@SystemCodeCache ApiSystemCodeCache systemCodes) {
-    ElasticSearchPerson.systemCodes = systemCodes;
   }
 
   /**

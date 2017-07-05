@@ -10,11 +10,9 @@ import java.lang.annotation.Target;
 import com.fasterxml.jackson.annotation.JacksonAnnotation;
 import com.google.inject.BindingAnnotation;
 
-import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
-
 /**
  * CWDS API annotation marks fields, methods, and parameters which should be translated via
- * {@link ApiSystemCodeCache}.
+ * {@link SystemCodeCache}.
  * 
  * @author CWDS API Team
  * @see ApiSysCodeAware

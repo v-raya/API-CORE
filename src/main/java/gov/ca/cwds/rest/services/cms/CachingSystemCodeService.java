@@ -28,7 +28,6 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeListResponse;
 import gov.ca.cwds.rest.api.domain.cms.SystemMeta;
 import gov.ca.cwds.rest.api.domain.cms.SystemMetaListResponse;
-import gov.ca.cwds.rest.services.ServiceException;
 
 public class CachingSystemCodeService extends SystemCodeService implements SystemCodeCache {
 
@@ -76,13 +75,13 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
     /**
      * Pre-load cache
      */
-    try {
-      Map<CacheKey, Object> systemCodes = cacheLoader.loadAll();
-      systemCodeCache.putAll(systemCodes);
-    } catch (Exception e) {
-      LOGGER.error("Error loading system codes", e);
-      throw new ServiceException(e);
-    }
+    // try {
+    // Map<CacheKey, Object> systemCodes = cacheLoader.loadAll();
+    // systemCodeCache.putAll(systemCodes);
+    // } catch (Exception e) {
+    // LOGGER.error("Error loading system codes", e);
+    // throw new ServiceException(e);
+    // }
   }
 
   @Override
