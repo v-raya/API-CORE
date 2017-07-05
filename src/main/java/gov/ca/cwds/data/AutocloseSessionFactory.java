@@ -52,8 +52,6 @@ import org.hibernate.cfg.Configuration;
  */
 public final class AutocloseSessionFactory {
 
-  private static final String DEFAULT_HIBERNATE_CONFIG = "hibernate.cfg.xml";
-
   private static SharedSessionFactory sessionFactory;
 
   private AutocloseSessionFactory() {
@@ -65,16 +63,22 @@ public final class AutocloseSessionFactory {
    * 
    * @param hibernateConfig location of hibernate config file
    */
-  public static synchronized void init(String hibernateConfig) {
+  protected static synchronized void init(String hibernateConfig) {
     if (sessionFactory == null) {
-      sessionFactory = new SharedSessionFactory(
-          new Configuration().setInterceptor(new ApiHibernateInterceptor())
-              .configure(hibernateConfig).buildSessionFactory());
+      sessionFactory =
+          new SharedSessionFactory(new Configuration().setInterceptor(new ApiHibernateInterceptor())
+              .configure(hibernateConfig).buildSessionFactory(), true);
     }
   }
 
-  private static synchronized void init() {
-    init(DEFAULT_HIBERNATE_CONFIG);
+  /**
+   * Configure the underlying session factory with defaults and a {@link ApiHibernateInterceptor}.
+   */
+  protected static synchronized void init() {
+    if (sessionFactory == null) {
+      sessionFactory = new SharedSessionFactory(new Configuration()
+          .setInterceptor(new ApiHibernateInterceptor()).configure().buildSessionFactory(), true);
+    }
   }
 
   /**
