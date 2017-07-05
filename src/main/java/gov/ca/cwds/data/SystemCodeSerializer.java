@@ -12,7 +12,7 @@ import com.google.inject.BindingAnnotation;
 
 /**
  * CWDS API annotation marks fields, methods, and parameters which should be translated via
- * {@link SystemCodeCache}.
+ * SystemCodeCache
  * 
  * @author CWDS API Team
  * @see ApiSysCodeAware
