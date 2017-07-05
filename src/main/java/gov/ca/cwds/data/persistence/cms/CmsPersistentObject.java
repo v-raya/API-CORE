@@ -9,6 +9,7 @@ import javax.persistence.MappedSuperclass;
 import org.hibernate.annotations.Type;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.data.std.ApiObjectIdentity;
 
 
 /**
@@ -17,7 +18,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * @author CWDS API Team
  */
 @MappedSuperclass
-public abstract class CmsPersistentObject implements PersistentObject {
+public abstract class CmsPersistentObject extends ApiObjectIdentity implements PersistentObject {
 
   /**
    * Baseline serialization version.
@@ -91,10 +92,12 @@ public abstract class CmsPersistentObject implements PersistentObject {
   @Override
   public abstract Serializable getPrimaryKey();
 
+  @SuppressWarnings("javadoc")
   public void setLastUpdatedId(String lastUpdatedId) {
     this.lastUpdatedId = lastUpdatedId;
   }
 
+  @SuppressWarnings("javadoc")
   public void setLastUpdatedTime(Date lastUpdatedTime) {
     this.lastUpdatedTime = lastUpdatedTime;
   }
