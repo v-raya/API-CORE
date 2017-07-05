@@ -41,6 +41,7 @@ public final class DeferredRegistry<T extends ApiMarker> implements ApiMarker {
   /**
    * Register this instance. Allows overwrite of already registered instance.
    * 
+   * @param <T> type to wrap
    * @param klass class
    * @param t serializable type
    * @param overwrite overwrite if already registered
@@ -55,7 +56,8 @@ public final class DeferredRegistry<T extends ApiMarker> implements ApiMarker {
   /**
    * Register this instance.
    * 
-   * @param t serializable type
+   * @param <T> type to wrap
+   * @param klass class
    * @param t serializable type
    */
   public static final <T extends ApiMarker> void register(Class<T> klass, T t) {
@@ -65,6 +67,8 @@ public final class DeferredRegistry<T extends ApiMarker> implements ApiMarker {
   /**
    * Unwrap the underlying of the given type.
    * 
+   * @param <T> type to wrap
+   * @param klass class
    * @return the underlying
    */
   @SuppressWarnings("unchecked")
