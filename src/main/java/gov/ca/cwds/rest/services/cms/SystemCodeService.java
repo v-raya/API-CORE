@@ -64,7 +64,7 @@ public class SystemCodeService implements CrudsService {
 
     Response response = null;
     gov.ca.cwds.data.persistence.cms.SystemCode systemCode =
-        systemCodeDao.findBySystemCodeId((Short) systemCodeId);
+        systemCodeDao.findBySystemCodeId((Number) systemCodeId);
     if (systemCode != null) {
       response = new SystemCode(systemCode);
     }

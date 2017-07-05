@@ -1,11 +1,15 @@
 package gov.ca.cwds.data.cms;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.CrudsDaoImpl;
+import gov.ca.cwds.data.DaoException;
 import gov.ca.cwds.data.persistence.cms.SystemMeta;
 import gov.ca.cwds.inject.CmsSessionFactory;
 
@@ -31,10 +35,22 @@ public class SystemMetaDao extends CrudsDaoImpl<SystemMeta> {
    */
   @SuppressWarnings("unchecked")
   public SystemMeta[] findAll() {
-    Query query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery(SystemMeta.class.getName() + ".findAll");
 
-    return (SystemMeta[]) query.list().toArray(new SystemMeta[0]);
+    final String namedQueryName = SystemMeta.class.getName() + ".findAll";
+    Session session = getSessionFactory().getCurrentSession();
+
+    Transaction txn = null;
+    try {
+      txn = session.beginTransaction();
+      Query query = session.getNamedQuery(namedQueryName);
+      SystemMeta[] systemMetas = (SystemMeta[]) query.list().toArray(new SystemMeta[0]);
+      txn.commit();
+      return systemMetas;
+    } catch (HibernateException h) {
+      if (txn != null) {
+        txn.rollback();
+      }
+      throw new DaoException(h);
+    }
   }
-
 }

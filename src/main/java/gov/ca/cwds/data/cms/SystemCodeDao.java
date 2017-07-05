@@ -1,11 +1,15 @@
 package gov.ca.cwds.data.cms;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.CrudsDaoImpl;
+import gov.ca.cwds.data.DaoException;
 import gov.ca.cwds.data.persistence.cms.SystemCode;
 import gov.ca.cwds.inject.CmsSessionFactory;
 
@@ -32,19 +36,43 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
    */
   @SuppressWarnings("unchecked")
   public SystemCode[] findByForeignKeyMetaTable(String foreignKeyMetaTable) {
-    Query query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery(SystemCode.class.getName() + ".findByForeignKeyMetaTable")
-        .setString("foreignKeyMetaTable", foreignKeyMetaTable);
-    return (SystemCode[]) query.list().toArray(new SystemCode[0]);
+    final String namedQueryName = SystemCode.class.getName() + ".findByForeignKeyMetaTable";
+    Session session = getSessionFactory().getCurrentSession();
+
+    Transaction txn = null;
+    try {
+      txn = session.beginTransaction();
+      Query query = session.getNamedQuery(namedQueryName).setString("foreignKeyMetaTable",
+          foreignKeyMetaTable);
+      SystemCode[] systemCodes = (SystemCode[]) query.list().toArray(new SystemCode[0]);
+      txn.commit();
+      return systemCodes;
+    } catch (HibernateException h) {
+      if (txn != null) {
+        txn.rollback();
+      }
+      throw new DaoException(h);
+    }
   }
 
   @SuppressWarnings("unchecked")
-  public SystemCode findBySystemCodeId(Short systemCodeId) {
-    Query query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery(SystemCode.class.getName() + ".findBySystemCodeId")
-        .setShort("systemId", systemCodeId);
-    return (SystemCode) query.getSingleResult();
+  public SystemCode findBySystemCodeId(Number systemCodeId) {
+    final String namedQueryName = SystemCode.class.getName() + ".findBySystemCodeId";
+    Session session = getSessionFactory().getCurrentSession();
 
+    Transaction txn = null;
+    try {
+      txn = session.beginTransaction();
+      Query query =
+          session.getNamedQuery(namedQueryName).setShort("systemId", systemCodeId.shortValue());
+      SystemCode systemCode = (SystemCode) query.getSingleResult();
+      txn.commit();
+      return systemCode;
+    } catch (HibernateException h) {
+      if (txn != null) {
+        txn.rollback();
+      }
+      throw new DaoException(h);
+    }
   }
-
 }

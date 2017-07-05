@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.junit.Test;
 
@@ -35,10 +36,12 @@ public class SystemCodeDaoTest {
   public void findAll_Args__() throws Exception {
     SessionFactory sessionFactory = mock(SessionFactory.class);
     Session session = mock(Session.class);
+    Transaction tx = mock(Transaction.class);
     Query query = mock(Query.class);
 
     when(sessionFactory.getCurrentSession()).thenReturn(session);
     when(session.getNamedQuery(any(String.class))).thenReturn(query);
+    when(session.beginTransaction()).thenReturn(tx);
     when(query.list()).thenReturn(new ArrayList<SystemCode>());
     when(query.setString(any(String.class), any(String.class))).thenReturn(query);
 

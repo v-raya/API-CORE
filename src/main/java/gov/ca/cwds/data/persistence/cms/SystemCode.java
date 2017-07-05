@@ -19,12 +19,12 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * 
  * @author CWDS API Team
  */
-@NamedQueries({@NamedQuery(
-    name = "gov.ca.cwds.data.persistence.cms.SystemCode.findByForeignKeyMetaTable",
-    query = "FROM SystemCode WHERE inactiveIndicator = 'N' AND foreignKeyMetaTable = :foreignKeyMetaTable"),
+@NamedQueries({
+    @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.SystemCode.findByForeignKeyMetaTable",
+        query = "FROM SystemCode WHERE foreignKeyMetaTable = :foreignKeyMetaTable"),
 
     @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.SystemCode.findBySystemCodeId",
-        query = "FROM SystemCode WHERE inactiveIndicator = 'N' AND systemId = :systemId")
+        query = "FROM SystemCode WHERE systemId = :systemId")
 
 })
 @Entity

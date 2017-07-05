@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.junit.Test;
 
@@ -33,10 +34,12 @@ public class SystemMetaDaoTest {
   public void findAll_Args__() throws Exception {
     SessionFactory sessionFactory = mock(SessionFactory.class);
     Session session = mock(Session.class);
+    Transaction tx = mock(Transaction.class);
     Query query = mock(Query.class);
 
     when(sessionFactory.getCurrentSession()).thenReturn(session);
     when(session.getNamedQuery(any(String.class))).thenReturn(query);
+    when(session.beginTransaction()).thenReturn(tx);
 
     SystemMetaDao target = new SystemMetaDao(sessionFactory);
     SystemMeta[] actual = target.findAll();
