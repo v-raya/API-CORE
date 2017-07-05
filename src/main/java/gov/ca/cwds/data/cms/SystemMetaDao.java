@@ -39,12 +39,15 @@ public class SystemMetaDao extends CrudsDaoImpl<SystemMeta> {
     final String namedQueryName = SystemMeta.class.getName() + ".findAll";
     Session session = getSessionFactory().getCurrentSession();
 
-    Transaction txn = null;
+    Transaction txn = session.getTransaction();
+    boolean transactionExists = txn != null;
+
     try {
-      txn = session.beginTransaction();
+      txn = transactionExists ? txn : session.beginTransaction();
       Query query = session.getNamedQuery(namedQueryName);
       SystemMeta[] systemMetas = (SystemMeta[]) query.list().toArray(new SystemMeta[0]);
-      txn.commit();
+      if (!transactionExists)
+        txn.commit();
       return systemMetas;
     } catch (HibernateException h) {
       if (txn != null) {

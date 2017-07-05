@@ -39,13 +39,16 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
     final String namedQueryName = SystemCode.class.getName() + ".findByForeignKeyMetaTable";
     Session session = getSessionFactory().getCurrentSession();
 
-    Transaction txn = null;
+    Transaction txn = session.getTransaction();
+    boolean transactionExists = txn != null;
+
     try {
-      txn = session.beginTransaction();
+      txn = transactionExists ? txn : session.beginTransaction();
       Query query = session.getNamedQuery(namedQueryName).setString("foreignKeyMetaTable",
           foreignKeyMetaTable);
       SystemCode[] systemCodes = (SystemCode[]) query.list().toArray(new SystemCode[0]);
-      txn.commit();
+      if (!transactionExists)
+        txn.commit();
       return systemCodes;
     } catch (HibernateException h) {
       if (txn != null) {
