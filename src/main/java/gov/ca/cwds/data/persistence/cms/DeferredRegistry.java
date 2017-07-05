@@ -4,12 +4,43 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import gov.ca.cwds.data.std.ApiMarker;
+import gov.ca.cwds.inject.SystemCodeCache;
 
 /**
- * Store generic type instance statically for easy retrieval.
+ * Store singleton, typed instances for easy retrieval. This is useful where dependency injection
+ * into short-lived beans is overly complicated or unwieldy.
  * 
- * @param <T> type to wrap
+ * <h4>Usage:</h4>
+ * 
+ * <p>
+ * See {@link SystemCodeCache} for usage. An implementation calls {@code SystemCodeCache.register()}
+ * from its constructor to register a singleton instance, and users call
+ * {@code SystemCodeCache.global()} to retrieve the singleton instance.
+ * </p>
+ * 
+ * <h4>Note on static generics:</h4>
+ * 
+ * <p>
+ * Note that Java Generics are NOT C++ templates. That is, Java does not recompile a class type into
+ * a separate class with its own static variables, but rather, generic classes
+ * <strong>share</strong> static variables among all type instances. Naughty Java!
+ * </p>
+ * 
+ * <p>
+ * To paraphrase Java's documentation, static variables and methods are shared among ALL class
+ * instances. For example, {@code MyClass<T>} would contain hypothetical static variable
+ * {@code private static T shared}. Unfortunately, {@code MyClass<ABC>} would <strong>share</strong>
+ * that static variable with {@code MyClass<XYZ>}. Which static type would win, ABC or XYZ?
+ * </p>
+ * 
+ * <p>
+ * Therefore, to prevent confusion, static variables cannot follow an instance type because ALL
+ * instances would refer to the same static type.
+ * </p>
+ * 
+ * @param <T> CWDS type to wrap
  * @author CWDS API Team
+ * @see SystemCodeCache
  */
 public final class DeferredRegistry<T extends ApiMarker> implements ApiMarker {
 
@@ -19,21 +50,21 @@ public final class DeferredRegistry<T extends ApiMarker> implements ApiMarker {
   private static final long serialVersionUID = 1L;
 
   /**
-   * Java loses type info on static generic members. Naughty Java!
-   * 
-   * <p>
-   * A class's static variables and methods are shared among ALL instances. Therefore, it is
-   * illogical to refer to type parameters of type declarations in a static methods or initializers,
-   * or in declarations or initializers of static variables because they'd all refer to the same
-   * type.
-   * </p>
+   * Store deferred registry entries by type.
    */
   private static Map<Class<?>, DeferredRegistry<ApiMarker>> registry = new ConcurrentHashMap<>();
 
   private final T wrapped;
   private final Class<T> klass;
 
-  private DeferredRegistry(Class<T> klass, T t) {
+  /**
+   * Construct from class type and instance. Since Java loses abandons type information at runtime,
+   * a generic instance of T is insufficient.
+   * 
+   * @param klass class type to wrap
+   * @param t instance to wrap
+   */
+  protected DeferredRegistry(Class<T> klass, T t) {
     this.wrapped = t;
     this.klass = klass;
   }
@@ -54,7 +85,8 @@ public final class DeferredRegistry<T extends ApiMarker> implements ApiMarker {
   }
 
   /**
-   * Register this instance.
+   * Register this instance. Do not overwrite a registered instance, if the same type has already
+   * been registered.
    * 
    * @param <T> type to wrap
    * @param klass class
