@@ -22,7 +22,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.ContextualSerializer;
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.CmsSystemCode;
 import gov.ca.cwds.rest.api.domain.cms.SystemCode;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
@@ -89,7 +88,7 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short>implements Con
    * Factory map for this contextual serializer. Saves thread-safe serializer instances by
    * combination of settings.
    * 
-   * @see #buildSerializer(ApiSystemCodeCache, boolean, boolean, boolean)
+   * @see #buildSerializer(SystemCodeCache, boolean, boolean, boolean)
    */
   protected static Map<BitSet, CmsSystemCodeSerializer> serializerStyles =
       new ConcurrentHashMap<>();
@@ -103,7 +102,7 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short>implements Con
    *        constructor)
    * @return a BitSet that uniquely identifies serializer settings
    * 
-   * @see #buildSerializer(ApiSystemCodeCache, boolean, boolean, boolean)
+   * @see #buildSerializer(SystemCodeCache, boolean, boolean, boolean)
    */
   protected static BitSet buildBits(boolean... flags) {
     BitSet bs = new BitSet();

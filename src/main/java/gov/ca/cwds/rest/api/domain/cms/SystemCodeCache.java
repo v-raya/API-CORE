@@ -61,7 +61,7 @@ public interface SystemCodeCache extends ApiMarker {
   /**
    * Get short description of system code identified by given system code id.
    * 
-   * @param systemCodeId
+   * @param systemCodeId System code ID
    * @return Short description of system code identified by given system code id. Returns null if
    *         system code not found.
    */
