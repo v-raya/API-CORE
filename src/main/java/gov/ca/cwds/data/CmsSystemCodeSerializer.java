@@ -24,6 +24,8 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.CmsSystemCode;
+import gov.ca.cwds.rest.api.domain.cms.SystemCode;
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 
 /**
  * Jackson JSON serializer automatically translates CMS system codes on the fly.
@@ -40,11 +42,11 @@ import gov.ca.cwds.data.persistence.cms.CmsSystemCode;
  * 
  * @author CWDS API Team
  */
-public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements ContextualSerializer {
+public class CmsSystemCodeSerializer extends JsonSerializer<Short>implements ContextualSerializer {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsSystemCodeSerializer.class);
 
-  private final ApiSystemCodeCache cache;
+  private final SystemCodeCache cache;
   private final boolean showShortDescription;
   private final boolean showLogicalId;
   private final boolean showMetaCategory;
@@ -55,7 +57,7 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
    * @param cache syscode cache implementation.
    */
   @Inject
-  public CmsSystemCodeSerializer(ApiSystemCodeCache cache) {
+  public CmsSystemCodeSerializer(SystemCodeCache cache) {
     this.cache = cache;
     this.showShortDescription = true;
     this.showLogicalId = false;
@@ -75,7 +77,7 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
    * @param showLogicalId show logical id, such as "CA" for California
    * @param showMetaCategory show the "meta", the system code category
    */
-  public CmsSystemCodeSerializer(ApiSystemCodeCache cache, boolean showShortDescription,
+  public CmsSystemCodeSerializer(SystemCodeCache cache, boolean showShortDescription,
       boolean showLogicalId, boolean showMetaCategory) {
     this.cache = cache;
     this.showShortDescription = showShortDescription;
@@ -126,7 +128,7 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
    * @param showMetaCategory show meta/category flag
    * @return syscode serializer with the given settings
    */
-  protected static CmsSystemCodeSerializer buildSerializer(ApiSystemCodeCache cache,
+  protected static CmsSystemCodeSerializer buildSerializer(SystemCodeCache cache,
       boolean showShortDescription, boolean showLogicalId, boolean showMetaCategory) {
     final BitSet bs =
         buildBits(cache != null, showShortDescription, showLogicalId, showMetaCategory);
@@ -188,13 +190,13 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
       jgen.writeStartObject();
       jgen.writeNumberField("sys_id", s);
 
-      final CmsSystemCode code = cache.lookup(s.intValue());
+      final SystemCode code = cache.getSystemCode(s.intValue());
       if (code != null) {
         if (this.showShortDescription) {
-          jgen.writeStringField("short_description", code.getShortDsc());
+          jgen.writeStringField("short_description", code.getShortDescription());
         }
         if (this.showLogicalId) {
-          jgen.writeStringField("logical_id", code.getLgcId());
+          jgen.writeStringField("logical_id", code.getLogicalId());
         }
       } else {
         LOGGER.error("UNKNOWN SYS_ID: {}! NOT TRANSLATED!", s.intValue());

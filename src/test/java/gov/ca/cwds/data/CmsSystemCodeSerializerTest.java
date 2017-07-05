@@ -18,15 +18,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
-import gov.ca.cwds.data.persistence.cms.ApiSystemCodeCache;
-import gov.ca.cwds.data.persistence.cms.CmsSystemCodeCacheService;
 import gov.ca.cwds.data.persistence.cms.CmsTestEntity;
-import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
+import gov.ca.cwds.rest.validation.TestSystemCodeCache;
 
 public class CmsSystemCodeSerializerTest {
 
-  private final static CmsSystemCodeCacheService CACHE =
-      new CmsSystemCodeCacheService(new SystemCodeDaoFileImpl());
+  private final static TestSystemCodeCache CACHE = new TestSystemCodeCache();
 
   private ObjectMapper objectMapper = new ObjectMapper();
   private SimpleModule module = new SimpleModule();
@@ -47,7 +45,7 @@ public class CmsSystemCodeSerializerTest {
 
   @Test
   public void instantiation() throws Exception {
-    ApiSystemCodeCache cache = null;
+    SystemCodeCache cache = null;
     CmsSystemCodeSerializer target = new CmsSystemCodeSerializer(cache);
     assertThat(target, notNullValue());
   }
@@ -99,7 +97,7 @@ public class CmsSystemCodeSerializerTest {
 
   @Test
   public void buildBits_Args$booleanArray() throws Exception {
-    ApiSystemCodeCache cache = null;
+    SystemCodeCache cache = null;
     CmsSystemCodeSerializer target = new CmsSystemCodeSerializer(cache);
     // given
     boolean[] flags = new boolean[] {};
@@ -114,7 +112,7 @@ public class CmsSystemCodeSerializerTest {
 
   @Test
   public void buildSerializer_Args$ISystemCodeCache$boolean$boolean$boolean() throws Exception {
-    ApiSystemCodeCache cache = null;
+    SystemCodeCache cache = null;
     CmsSystemCodeSerializer target = new CmsSystemCodeSerializer(cache);
     boolean showShortDescription = false;
     boolean showLogicalId = false;
@@ -128,7 +126,7 @@ public class CmsSystemCodeSerializerTest {
 
   @Test
   public void serialize_Args$Short$JsonGenerator$SerializerProvider() throws Exception {
-    ApiSystemCodeCache cache = null;
+    SystemCodeCache cache = null;
     CmsSystemCodeSerializer target = new CmsSystemCodeSerializer(cache);
     // given
     Short s = null;

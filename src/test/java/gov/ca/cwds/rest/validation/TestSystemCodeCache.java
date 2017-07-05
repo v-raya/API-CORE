@@ -7,9 +7,9 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.api.domain.cms.SystemMeta;
 
 @SuppressWarnings("serial")
-class TestSystemCodeCache implements SystemCodeCache {
+public class TestSystemCodeCache implements SystemCodeCache {
 
-  TestSystemCodeCache() {
+  public TestSystemCodeCache() {
     register();
   }
 
@@ -27,7 +27,10 @@ class TestSystemCodeCache implements SystemCodeCache {
 
   @Override
   public SystemCode getSystemCode(Number systemCodeId) {
-    // TODO Auto-generated method stub
+    if (1828 == systemCodeId.intValue()) {
+      return new SystemCode(systemCodeId.shortValue(), null, null, null, "California", "CA", null,
+          null, null);
+    }
     return null;
   }
 
@@ -58,9 +61,6 @@ class TestSystemCodeCache implements SystemCodeCache {
 
   @Override
   public boolean verifyActiveSystemCodeDescriptionForMeta(String shortDesc, String metaId) {
-    System.out
-        .println("TestSystemCodeCache.verifyActiveSystemCodeDescriptionForMeta -> shortDesc: ["
-            + shortDesc + "]");
     if ("djdjskshahfdsa".equals(shortDesc)) {
       return false;
     } else if ("".equals(shortDesc)) {
