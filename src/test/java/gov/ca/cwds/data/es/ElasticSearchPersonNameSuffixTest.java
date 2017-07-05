@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.data.es.ElasticSearchPerson.ESColumn;
+import gov.ca.cwds.rest.validation.TestSystemCodeCache;
 
 /**
  * NOTE: cannot define all test cases for CMS persistence classes found in CWDS API because they are
@@ -35,6 +36,7 @@ import gov.ca.cwds.data.es.ElasticSearchPerson.ESColumn;
 @SuppressWarnings("javadoc")
 public class ElasticSearchPersonNameSuffixTest {
 
+  private static final TestSystemCodeCache systemCodeCache = new TestSystemCodeCache();
   private static final ObjectMapper MAPPER = ElasticSearchPerson.MAPPER;
 
   String id = "1234567ABC";
