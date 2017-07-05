@@ -52,7 +52,7 @@ public class CachingSystemCodeServiceTest {
     when(systemCodeDao.findBySystemCodeId((short) 27))
         .thenReturn(getPersistenceSystemCode(systemCodeListResponse, (short) 27));
 
-    cachingSystemCodeService = new CachingSystemCodeService(systemCodeDao, systemMetaDao, 1);
+    cachingSystemCodeService = new CachingSystemCodeService(systemCodeDao, systemMetaDao, 1, false);
   }
 
   @Test

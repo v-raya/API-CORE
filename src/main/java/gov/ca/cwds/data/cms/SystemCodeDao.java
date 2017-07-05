@@ -40,7 +40,7 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
     Session session = getSessionFactory().getCurrentSession();
 
     Transaction txn = session.getTransaction();
-    boolean transactionExists = txn != null;
+    boolean transactionExists = txn != null && txn.isActive();
 
     try {
       txn = transactionExists ? txn : session.beginTransaction();
