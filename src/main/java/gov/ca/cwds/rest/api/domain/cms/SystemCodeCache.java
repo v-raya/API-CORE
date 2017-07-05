@@ -6,9 +6,10 @@ import gov.ca.cwds.data.persistence.cms.DeferredRegistry;
 import gov.ca.cwds.data.std.ApiMarker;
 
 /**
- * Interface for system code cache facility.
+ * Interface for the CMS system code cache facility.
  * 
  * @author CWDS API Team
+ * @see DeferredRegistry
  */
 public interface SystemCodeCache extends ApiMarker {
 

@@ -1,9 +1,9 @@
 package gov.ca.cwds.rest.api;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import gov.ca.cwds.data.std.ApiMarker;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 
 /**
@@ -11,7 +11,7 @@ import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
  * 
  * @author CWDS API Team
  */
-public interface Response extends Serializable {
+public interface Response extends ApiMarker {
 
   /**
    * Tells whether Jersey response contains additional messages.
@@ -31,4 +31,5 @@ public interface Response extends Serializable {
   default List<ErrorMessage> getMessages() {
     return new ArrayList<>();
   }
+
 }

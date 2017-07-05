@@ -3,10 +3,10 @@ package gov.ca.cwds.data.std;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Cobertura doesn't recognize static methods on interfaces without ASM 5.x. Until Cobertura fully
- * supports Java 8 features, put static address support methods here.
+ * Common address methods.
  * 
  * @author CWDS API Team
+ * @see ApiAddressAware
  */
 public class ApiAddressUtils {
 
@@ -35,6 +35,5 @@ public class ApiAddressUtils {
     return zip5 != null && zip5 != 0 ? StringUtils.leftPad(String.valueOf(zip5.intValue()), 5, '0')
         : null;
   }
-
 
 }
