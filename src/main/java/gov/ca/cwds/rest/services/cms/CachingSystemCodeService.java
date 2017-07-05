@@ -128,7 +128,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
   }
 
   @Override
-  public SystemCode getSystemCode(final Short systemCodeId) {
+  public SystemCode getSystemCode(final Number systemCodeId) {
     if (systemCodeId == null) {
       return null;
     }
@@ -139,7 +139,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
   }
 
   @Override
-  public String getSystemCodeShortDescription(final Short systemCodeId) {
+  public String getSystemCodeShortDescription(final Number systemCodeId) {
     String shortDescription = null;
     SystemCode systemCode = getSystemCode(systemCodeId);
     if (systemCode != null) {
@@ -165,7 +165,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
   }
 
   @Override
-  public boolean verifyActiveSystemCodeIdForMeta(Short systemCodeId, String metaId) {
+  public boolean verifyActiveSystemCodeIdForMeta(Number systemCodeId, String metaId) {
     boolean valid = false;
     Set<SystemCode> systemCodes = getSystemCodesForMeta(metaId);
     if (systemCodes != null) {

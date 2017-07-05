@@ -48,7 +48,7 @@ public interface SystemCodeCache extends ApiMarker {
    * @param systemCodeId System code identifier.
    * @return System code if found, otherwise null.
    */
-  SystemCode getSystemCode(final Short systemCodeId);
+  SystemCode getSystemCode(final Number systemCodeId);
 
   /**
    * Get system codes for given meta identifier.
@@ -65,7 +65,7 @@ public interface SystemCodeCache extends ApiMarker {
    * @return Short description of system code identified by given system code id. Returns null if
    *         system code not found.
    */
-  String getSystemCodeShortDescription(final Short systemCodeId);
+  String getSystemCodeShortDescription(final Number systemCodeId);
 
   /**
    * Verify that given active system code ID exists for given meta ID.
@@ -74,7 +74,7 @@ public interface SystemCodeCache extends ApiMarker {
    * @param metaId Meta ID
    * @return True if active system code ID exists under given meta.
    */
-  boolean verifyActiveSystemCodeIdForMeta(Short systemCodeId, String metaId);
+  boolean verifyActiveSystemCodeIdForMeta(Number systemCodeId, String metaId);
 
   /**
    * Verify that given active system code short description exists for given meta. ID.

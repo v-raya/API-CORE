@@ -26,7 +26,7 @@ class TestSystemCodeCache implements SystemCodeCache {
   }
 
   @Override
-  public SystemCode getSystemCode(Short systemCodeId) {
+  public SystemCode getSystemCode(Number systemCodeId) {
     // TODO Auto-generated method stub
     return null;
   }
@@ -38,20 +38,18 @@ class TestSystemCodeCache implements SystemCodeCache {
   }
 
   @Override
-  public String getSystemCodeShortDescription(Short systemCodeId) {
+  public String getSystemCodeShortDescription(Number systemCodeId) {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public boolean verifyActiveSystemCodeIdForMeta(Short systemCodeId, String metaId) {
-    System.out.println("TestSystemCodeCache.verifyActiveSystemCodeIdForMeta -> systemCodeId: ["
-        + systemCodeId + "]");
-    if (456 == systemCodeId) {
+  public boolean verifyActiveSystemCodeIdForMeta(Number systemCodeId, String metaId) {
+    if (456 == systemCodeId.intValue()) {
       return false;
-    } else if (6404 == systemCodeId) {
+    } else if (6404 == systemCodeId.intValue()) {
       return false;
-    } else if (19 == systemCodeId) {
+    } else if (19 == systemCodeId.intValue()) {
       return true;
     }
 
