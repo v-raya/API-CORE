@@ -66,11 +66,11 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
     txn = transactionExists ? txn : session.beginTransaction();
 
     try {
-      txn = session.beginTransaction();
       Query query =
           session.getNamedQuery(namedQueryName).setShort("systemId", systemCodeId.shortValue());
       SystemCode systemCode = (SystemCode) query.getSingleResult();
-      txn.commit();
+      if (!transactionExists)
+        txn.commit();
       return systemCode;
     } catch (HibernateException h) {
       txn.rollback();
