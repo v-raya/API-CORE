@@ -186,7 +186,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
     try {
       obj = systemCodeCache.get(cacheEntryKey);
     } catch (Exception e) {
-      LOGGER.warn("getFromCache -> Unable to load object for key: " + cacheEntryKey);
+      LOGGER.warn("getFromCache -> Unable to load object for key: " + cacheEntryKey, e);
     }
 
     return obj;
