@@ -127,11 +127,6 @@ public class ElasticsearchDao implements Closeable {
   /**
    * Create ES index based on supplied parameters.
    * 
-   * <p>
-   * This method intentionally synchronizes against race conditions by multiple, simultaneous
-   * attempts to create the same index.
-   * </p>
-   * 
    * @param index Index name
    * @param type Index document type
    * @param settingsJsonFile Setting file
@@ -157,21 +152,18 @@ public class ElasticsearchDao implements Closeable {
   }
 
   /**
-   * Create an index, if needed, before blasting documents into it.
-   * 
-   * <p>
-   * Defaults to 5 shards and 1 replica.
-   * </p>
+   * Create ES index based on supplied parameters if it does not already exists.
    * 
    * <p>
    * This method intentionally synchronizes against race conditions by multiple, simultaneous
    * attempts to create the same index.
    * </p>
    * 
-   * @param index index name or alias
-   * @param optShards optional number of shards. Defaults to 5.
-   * @param optReplicas optional number of replicas. Defaults to 1.
-   * @throws IOException on disconnect, hang, etc.
+   * @param index Index name
+   * @param type Index document type
+   * @param settingsJsonFile Setting file
+   * @param mappingJsonFile Mapping file
+   * @throws IOException
    */
   public synchronized void createIndexIfNeeded(final String index, final String type,
       final String settingsJsonFile, final String mappingJsonFile) throws IOException {
