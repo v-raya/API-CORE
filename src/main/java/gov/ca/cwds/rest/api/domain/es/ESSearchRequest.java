@@ -194,7 +194,7 @@ public final class ESSearchRequest extends DomainObject implements Request {
    */
   @JsonSnakeCase
   @FunctionalInterface
-  public static interface ESSearchElement {
+  public static interface ESSearchElement extends Serializable {
     ElementType getElementType();
   }
 
