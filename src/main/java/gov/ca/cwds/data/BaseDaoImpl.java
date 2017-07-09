@@ -43,18 +43,15 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
     final String namedQueryName = constructNamedQueryName("findAll");
     Session session = getSessionFactory().getCurrentSession();
 
-    Transaction txn = null;
+    Transaction txn = session.beginTransaction();
     try {
-      txn = session.beginTransaction();
       Query query = session.getNamedQuery(namedQueryName);
       ImmutableList.Builder<T> entities = new ImmutableList.Builder<>();
       entities.addAll(query.list());
       txn.commit();
       return entities.build();
     } catch (HibernateException h) {
-      if (txn != null) {
-        txn.rollback();
-      }
+      txn.rollback();
       throw new DaoException(h);
     }
   }
@@ -70,9 +67,8 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
     final String namedQueryName = constructNamedQueryName("findAllUpdatedAfter");
     Session session = getSessionFactory().getCurrentSession();
 
-    Transaction txn = null;
+    Transaction txn = session.beginTransaction();
     try {
-      txn = session.beginTransaction();
       // Compatible with both DB2 z/OS and Linux.
       Query query = session.getNamedQuery(namedQueryName).setTimestamp("after",
           new java.sql.Timestamp(datetime.getTime()));
@@ -81,9 +77,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
       txn.commit();
       return results.build();
     } catch (HibernateException h) {
-      if (txn != null) {
-        txn.rollback();
-      }
+      txn.rollback();
       throw new DaoException(h);
     }
   }
@@ -136,9 +130,8 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
     final String namedQueryName = getEntityClass().getName() + ".findPartitionedBuckets";
     Session session = getSessionFactory().getCurrentSession();
 
-    Transaction txn = null;
+    Transaction txn = session.beginTransaction();
     try {
-      txn = session.beginTransaction();
       Query query = session.getNamedQuery(namedQueryName).setInteger("bucket_num", (int) bucketNum)
           .setInteger("total_buckets", (int) totalBuckets).setString("min_id", minId)
           .setString("max_id", maxId);
@@ -148,9 +141,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
       txn.commit();
       return results.build();
     } catch (HibernateException h) {
-      if (txn != null) {
-        txn.rollback();
-      }
+      txn.rollback();
       throw new DaoException(h);
     }
   }
@@ -204,9 +195,8 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
     final String namedQueryName = constructNamedQueryName("findAllByBucket");
     Session session = getSessionFactory().getCurrentSession();
 
-    Transaction txn = null;
+    Transaction txn = session.beginTransaction();
     try {
-      txn = session.beginTransaction();
       Query query = session.getNamedQuery(namedQueryName).setInteger("bucket_num", (int) bucketNum)
           .setInteger("total_buckets", (int) totalBuckets);
       ImmutableList.Builder<T> results = new ImmutableList.Builder<>();
@@ -214,9 +204,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
       txn.commit();
       return results.build();
     } catch (HibernateException h) {
-      if (txn != null) {
-        txn.rollback();
-      }
+      txn.rollback();
       throw new DaoException(h);
     }
   }

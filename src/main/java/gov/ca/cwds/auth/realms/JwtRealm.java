@@ -17,6 +17,8 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -33,6 +35,9 @@ import io.jsonwebtoken.Jwts;
  * claim as secondary. So authorization process will expect 2 principals.
  */
 public class JwtRealm extends AuthorizingRealm {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(JwtRealm.class);
+
   /**
    * primary principal equals to username secondary principal equals to user token
    */
@@ -192,6 +197,7 @@ public class JwtRealm extends AuthorizingRealm {
     try {
       return objectMapper.readValue(json, PerryAccount.class);
     } catch (IOException e) {
+      LOGGER.info(e.getMessage());
       // Mapping doesn't apply
       return new PerryAccount() {
         {

@@ -39,7 +39,12 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
   /**
    * System codes cache.
    */
-  private LoadingCache<CacheKey, Object> systemCodeCache;
+  private transient LoadingCache<CacheKey, Object> systemCodeCache;
+
+  /**
+   * Default no-arg constructor.
+   */
+  private CachingSystemCodeService() {}
 
   /**
    * Construct the object
