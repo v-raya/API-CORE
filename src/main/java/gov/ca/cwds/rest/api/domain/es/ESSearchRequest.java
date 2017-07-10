@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.domain.es;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -193,7 +194,7 @@ public final class ESSearchRequest extends DomainObject implements Request {
    */
   @JsonSnakeCase
   @FunctionalInterface
-  public static interface ESSearchElement {
+  public static interface ESSearchElement extends Serializable {
     ElementType getElementType();
   }
 
@@ -203,7 +204,10 @@ public final class ESSearchRequest extends DomainObject implements Request {
    * @author CWDS API Team
    */
   @JsonSnakeCase
-  public static final class ESSearchGroup implements ESSearchElement {
+  public static final class ESSearchGroup implements ESSearchElement, Serializable {
+
+    private static final long serialVersionUID = -4882405417378548558L;
+
     private LogicalOperation logic = LogicalOperation.OR;
     private List<ESSearchElement> elems = new ArrayList<>();
 

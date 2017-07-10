@@ -45,8 +45,8 @@ public interface BatchBucketDao<T extends PersistentObject> {
    * analytic function</a>, whereas DB2 10.5, lacking modern analytics, would likely rely on nested
    * or correlated queries. Note that DB2 doesn't even provide basic pseudo-columns, like ROWNUM,
    * without enabling <a href=
-   * "http://www.ibm.com/support/knowledgecenter/SSEPGG_10.5.0/com.ibm.db2.luw.apdv.porting.doc/doc/r0052867.html">"compatibility
-   * vectors"</a> or writing a
+   * "http://www.ibm.com/support/knowledgecenter/SSEPGG_10.5.0/com.ibm.db2.luw.apdv.porting.doc/doc/r0052867.html">
+   * "compatibility vectors"</a> or writing a
    * <a href="http://hoteljavaopensource.blogspot.com/2011/06/ntile-and-db2.html">user-defined
    * function</a>.
    * 
@@ -80,9 +80,8 @@ public interface BatchBucketDao<T extends PersistentObject> {
     final String namedQueryName = getEntityClass().getName() + ".findAllByBucket";
     Session session = getSessionFactory().getCurrentSession();
 
-    Transaction txn = null;
+    Transaction txn = session.beginTransaction();
     try {
-      txn = session.beginTransaction();
       Query query = session.getNamedQuery(namedQueryName).setInteger("bucket_num", (int) bucketNum)
           .setInteger("total_buckets", (int) totalBuckets);
       ImmutableList.Builder<T> results = new ImmutableList.Builder<>();
@@ -90,9 +89,7 @@ public interface BatchBucketDao<T extends PersistentObject> {
       txn.commit();
       return results.build();
     } catch (HibernateException h) {
-      if (txn != null) {
-        txn.rollback();
-      }
+      txn.rollback();
       throw new DaoException(h);
     }
   }
@@ -103,8 +100,8 @@ public interface BatchBucketDao<T extends PersistentObject> {
    * analytic function</a>, whereas DB2 10.5, lacking modern analytics, would likely rely on nested
    * or correlated queries. Note that DB2 doesn't even provide basic pseudo-columns, like ROWNUM,
    * without enabling <a href=
-   * "http://www.ibm.com/support/knowledgecenter/SSEPGG_10.5.0/com.ibm.db2.luw.apdv.porting.doc/doc/r0052867.html">"compatibility
-   * vectors"</a> or writing a
+   * "http://www.ibm.com/support/knowledgecenter/SSEPGG_10.5.0/com.ibm.db2.luw.apdv.porting.doc/doc/r0052867.html">
+   * "compatibility vectors"</a> or writing a
    * <a href="http://hoteljavaopensource.blogspot.com/2011/06/ntile-and-db2.html">user-defined
    * function</a>.
    * 
@@ -144,9 +141,8 @@ public interface BatchBucketDao<T extends PersistentObject> {
     final String namedQueryName = getEntityClass().getName() + ".findPartitionedBuckets";
     Session session = getSessionFactory().getCurrentSession();
 
-    Transaction txn = null;
+    Transaction txn = session.beginTransaction();
     try {
-      txn = session.beginTransaction();
       Query query = session.getNamedQuery(namedQueryName).setInteger("bucket_num", (int) bucketNum)
           .setInteger("total_buckets", (int) totalBuckets).setString("min_id", minId)
           .setString("max_id", maxId);
@@ -155,9 +151,7 @@ public interface BatchBucketDao<T extends PersistentObject> {
       txn.commit();
       return results.build();
     } catch (HibernateException h) {
-      if (txn != null) {
-        txn.rollback();
-      }
+      txn.rollback();
       throw new DaoException(h);
     }
   }

@@ -31,6 +31,11 @@ public class SystemCodeService implements CrudsService {
   private SystemMetaDao systemMetaDao;
 
   /**
+   * Default no-arg constructor.
+   */
+  protected SystemCodeService() {}
+
+  /**
    * 
    * @param systemCodeDao The {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.cms.SystemCode} objects.

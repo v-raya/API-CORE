@@ -39,7 +39,12 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
   /**
    * System codes cache.
    */
-  private LoadingCache<CacheKey, Object> systemCodeCache;
+  private transient LoadingCache<CacheKey, Object> systemCodeCache;
+
+  /**
+   * Default no-arg constructor.
+   */
+  private CachingSystemCodeService() {}
 
   /**
    * Construct the object
@@ -186,7 +191,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
     try {
       obj = systemCodeCache.get(cacheEntryKey);
     } catch (Exception e) {
-      LOGGER.warn("getFromCache -> Unable to load object for key: " + cacheEntryKey);
+      LOGGER.warn("getFromCache -> Unable to load object for key: " + cacheEntryKey, e);
     }
 
     return obj;

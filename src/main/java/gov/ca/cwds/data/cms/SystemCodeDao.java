@@ -41,9 +41,9 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
 
     Transaction txn = session.getTransaction();
     boolean transactionExists = txn != null && txn.isActive();
+    txn = transactionExists ? txn : session.beginTransaction();
 
     try {
-      txn = transactionExists ? txn : session.beginTransaction();
       Query query = session.getNamedQuery(namedQueryName).setString("foreignKeyMetaTable",
           foreignKeyMetaTable);
       SystemCode[] systemCodes = (SystemCode[]) query.list().toArray(new SystemCode[0]);
@@ -51,9 +51,7 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
         txn.commit();
       return systemCodes;
     } catch (HibernateException h) {
-      if (txn != null) {
-        txn.rollback();
-      }
+      txn.rollback();
       throw new DaoException(h);
     }
   }
@@ -63,18 +61,19 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
     final String namedQueryName = SystemCode.class.getName() + ".findBySystemCodeId";
     Session session = getSessionFactory().getCurrentSession();
 
-    Transaction txn = null;
+    Transaction txn = session.getTransaction();
+    boolean transactionExists = txn != null && txn.isActive();
+    txn = transactionExists ? txn : session.beginTransaction();
+
     try {
-      txn = session.beginTransaction();
       Query query =
           session.getNamedQuery(namedQueryName).setShort("systemId", systemCodeId.shortValue());
       SystemCode systemCode = (SystemCode) query.getSingleResult();
-      txn.commit();
+      if (!transactionExists)
+        txn.commit();
       return systemCode;
     } catch (HibernateException h) {
-      if (txn != null) {
-        txn.rollback();
-      }
+      txn.rollback();
       throw new DaoException(h);
     }
   }

@@ -23,12 +23,16 @@
     "first_name": {
       "type": "text",
       "store": true,
-      "copy_to": "full_name"
+      "analyzer": "autocomplete",
+      "search_analyzer": "standard",
+      "copy_to": ["full_name", "searchable_name"]
     },
     "last_name": {
       "type": "text",
       "store": true,
-      "copy_to": "full_name"
+      "analyzer": "autocomplete",
+      "search_analyzer": "standard",
+      "copy_to": ["full_name", "searchable_name"]
     },
     "middle_name": {
       "type": "text",
@@ -36,7 +40,15 @@
     },
     "full_name": {
       "type": "text",
-      "store": true
+      "store": true,
+      "analyzer": "autocomplete",
+      "search_analyzer": "standard"
+    },
+    "searchable_name": {
+      "type": "text",
+      "store": true,
+      "analyzer": "autocomplete",
+      "search_analyzer": "standard"
     },
     "name_suffix": {
       "type": "text",
@@ -211,11 +223,13 @@
       "properties": {
         "first_name": {
           "type": "text",
-          "store": true
+          "store": true,
+          "copy_to": ["searchable_name"]
         },
         "last_name": {
           "type": "text",
-          "store": true
+          "store": true,
+          "copy_to": ["searchable_name"]
         },
         "middle_name": {
           "type": "text",
