@@ -1,6 +1,7 @@
 package gov.ca.cwds.data.es;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -9,10 +10,19 @@ import java.util.Date;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
+ * Enumeration of ES query types by String format. Builds appropriate ES query objects via
+ * #{@link ElasticSearchQuery#buildQuery(BoolQueryBuilder, String)}.
+ * 
+ * <p>
+ * Each enumerated type can match an appropriate String format for suitability.
+ * </p>
  * 
  * @author CWDS API Team
+ * @see ElasticsearchDao
  */
 public enum ElasticSearchQuery {
 
@@ -83,22 +93,18 @@ public enum ElasticSearchQuery {
             esdf.setLenient(false);
             formattedDate = esdf.format(dob);
           }
-        } catch (Exception e) {
-          // TODO: handle exception.
+        } catch (ParseException e) {
+          LOGGER.warn("ElasticSearchQuery: unable to parse birth date {}", term);
           return queryBuilder;
         }
       }
-      try {
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
-        formatter = formatter.withResolverStyle(ResolverStyle.STRICT);
-        LocalDate dateOfBirth = LocalDate.parse(formattedDate, formatter);
-        formattedDate = dateOfBirth.format(formatter);
-        queryBuilder.should(QueryBuilders.matchQuery(DATE_OF_BIRTH, formattedDate));
-        return queryBuilder;
-      } catch (Exception e) {
-        // TODO: handle exception.
-        return queryBuilder;
-      }
+
+      DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
+      formatter = formatter.withResolverStyle(ResolverStyle.STRICT);
+      LocalDate dateOfBirth = LocalDate.parse(formattedDate, formatter);
+      formattedDate = dateOfBirth.format(formatter);
+      queryBuilder.should(QueryBuilders.matchQuery(DATE_OF_BIRTH, formattedDate));
+      return queryBuilder;
     }
 
   },
@@ -122,6 +128,14 @@ public enum ElasticSearchQuery {
 
   private static final String DATE_OF_BIRTH = ElasticSearchPerson.ESColumn.BIRTH_DATE.getCol();
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchQuery.class);
+
+  /**
+   * Match the format of the given String to the first matching ElasticSearchQuery type.
+   * 
+   * @param term String term to evaluate
+   * @return ES search query instance
+   */
   public static ElasticSearchQuery getQueryFromTerm(String term) {
     for (ElasticSearchQuery query : values()) {
       if (query.match(term)) {
@@ -132,8 +146,21 @@ public enum ElasticSearchQuery {
     return UNKNOWN;
   }
 
+  /**
+   * Evaluate whether this String format matches this type
+   * 
+   * @param term String to evaluate
+   * @return if String format matches this type
+   */
   abstract boolean match(String term);
 
+  /**
+   * Add a String term to boolean query builder.
+   * 
+   * @param queryBuilder ES boolean query builder
+   * @param term String to evaluate
+   * @return the same boolean query builder
+   */
   abstract BoolQueryBuilder buildQuery(BoolQueryBuilder queryBuilder, String term);
 
 }

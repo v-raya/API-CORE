@@ -59,8 +59,10 @@ public class SharedSessionFactory implements SessionFactory {
   private static final Logger LOGGER = LoggerFactory.getLogger(SharedSessionFactory.class);
 
   private SessionFactory sf;
-  private final ReadWriteLock lock;
-  private final Condition okToClose;
+
+  private transient final ReadWriteLock lock;
+  private transient final Condition okToClose;
+
   private final boolean closeOnSignal;
   private final boolean testMode;
 
