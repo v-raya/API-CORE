@@ -21,6 +21,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.hubspot.dropwizard.guice.GuiceBundle;
 
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.filters.RequestCommonInfoFilter;
 import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
 import gov.ca.cwds.rest.filters.UnhandledExceptionMapperImpl;
@@ -130,6 +131,9 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
 
     LOGGER.info("Registering Filters");
     registerFilters(environment, guiceBundle);
+
+    LOGGER.info("Registering SystemCodeCache");
+    injector.getInstance(SystemCodeCache.class);
 
     runInternal(configuration, environment);
   }
