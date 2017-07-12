@@ -26,6 +26,7 @@ import gov.ca.cwds.rest.api.ApiException;
 public class DomainChefTest {
   protected static final String DATE_FORMAT = "yyyy-MM-dd";
   protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
+  protected static final String LEGACY_TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
   protected static final String TIME_FORMAT = "HH:mm:ss";
 
   @Rule
@@ -175,6 +176,15 @@ public class DomainChefTest {
     String dateString = df.format(date);
 
     assertThat(DomainChef.uncookTimestampString(dateString), is(equalTo(date)));
+  }
+
+  @Test
+  public void uncookLegacyTimestampStringReturnsCorrectDate() throws Exception {
+    DateFormat df = new SimpleDateFormat(LEGACY_TIMESTAMP_FORMAT);
+    Date date = new Date();
+    String dateString = df.format(date);
+
+    assertThat(DomainChef.uncookLegacyTimestampString(dateString), is(equalTo(date)));
   }
 
   @Test

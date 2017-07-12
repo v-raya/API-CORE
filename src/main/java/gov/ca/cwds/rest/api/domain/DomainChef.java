@@ -44,6 +44,11 @@ public class DomainChef {
   public static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
 
   /**
+   * Common timestamp format for legacy DB.
+   */
+  public static final String LEGACY_TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
+
+  /**
    * Strict timestamp format (yyyy-MM-dd'T'HH:mm:ss.SSSZZ).
    */
   public static final String TIMESTAMP_STRICT_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZZ";
@@ -177,6 +182,23 @@ public class DomainChef {
     if (StringUtils.isNotEmpty(trimTimestamp)) {
       try {
         DateFormat df = new SimpleDateFormat(TIMESTAMP_FORMAT);
+        return df.parse(trimTimestamp);
+      } catch (Exception e) {
+        throw new ApiException(e);
+      }
+    }
+    return null;
+  }
+
+  /**
+   * @param timestamp timestamp to uncook
+   * @return Date
+   */
+  public static Date uncookLegacyTimestampString(String timestamp) {
+    String trimTimestamp = StringUtils.trim(timestamp);
+    if (StringUtils.isNotEmpty(trimTimestamp)) {
+      try {
+        DateFormat df = new SimpleDateFormat(LEGACY_TIMESTAMP_FORMAT);
         return df.parse(trimTimestamp);
       } catch (Exception e) {
         throw new ApiException(e);
