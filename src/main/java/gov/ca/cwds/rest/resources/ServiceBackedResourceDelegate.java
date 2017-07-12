@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.resources;
 
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage.ErrorType;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
@@ -102,26 +103,34 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
       if (e.getCause() instanceof EntityExistsException) {
         response = Response.status(Response.Status.CONFLICT).entity(null).build();
       } else if (e.getCause() instanceof ValidationException) {
-        Set<ErrorMessage> errorMessages = new HashSet<>();
-        String[] messages = e.getMessage().split("&&");
-        if (messages.length > 1) {
-          for (int i = 0; i < messages.length; i++) {
-            ErrorMessage message =
-                new ErrorMessage(ErrorMessage.ErrorType.VALIDATION, messages[i], "");
-            errorMessages.add(message);
-          }
-        } else {
-          ErrorMessage message =
-              new ErrorMessage(ErrorMessage.ErrorType.VALIDATION, messages[0], "");
-          errorMessages.add(message);
-        }
+        Set<ErrorMessage> errorMessages = buildErrorMessages(e,ErrorMessage.ErrorType.VALIDATION);
         response = Response.status(Response.Status.BAD_REQUEST).entity(errorMessages).build();
-      } else {
+      } else if(e.getCause() instanceof ClientException){
+        Set<ErrorMessage> errorMessages = buildErrorMessages(e, ErrorType.CLIENT_CONTRACT);
+        response = Response.status(422).entity(errorMessages).build();
+      } else  {
         LOGGER.error("Unable to handle request", e);
         response = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
       }
     }
     return response;
+  }
+
+  private Set<ErrorMessage> buildErrorMessages(ServiceException e, ErrorType errorType) {
+    Set<ErrorMessage> errorMessages = new HashSet<>();
+    String[] messages = e.getMessage().split("&&");
+    if (messages.length > 1) {
+      for (int i = 0; i < messages.length; i++) {
+        ErrorMessage message =
+            new ErrorMessage(errorType, messages[i], "");
+        errorMessages.add(message);
+      }
+    } else {
+      ErrorMessage message =
+          new ErrorMessage(errorType, messages[0], "");
+      errorMessages.add(message);
+    }
+    return errorMessages;
   }
 
   /**
