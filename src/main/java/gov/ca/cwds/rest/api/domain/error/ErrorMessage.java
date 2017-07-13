@@ -29,6 +29,7 @@ public class ErrorMessage {
     }
 
     public static enum ErrorType {
+        CLIENT_CONTRACT("Client Contract Error"),
         VALIDATION("Validation Error"),
         BUSINESS("Buiness Rules"),
         DATA_ACCESS("Data Access");
