@@ -1,19 +1,16 @@
 package gov.ca.cwds.rest.resources;
 
+import gov.ca.cwds.rest.SwaggerConfiguration;
+import gov.ca.cwds.rest.views.SwaggerView;
+import io.swagger.annotations.Api;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
 
 import com.google.inject.Inject;
-
-import gov.ca.cwds.rest.SwaggerConfiguration;
-import gov.ca.cwds.rest.views.SwaggerView;
-import io.swagger.annotations.Api;
 
 /**
  * CWDS API implementation of the API {@link Resource} marker interface to interact with Swagger.
@@ -34,9 +31,8 @@ public class SwaggerResource implements Resource {
   }
 
   @GET
-  public SwaggerView get(@Context UriInfo uriInfo) {
-    UriBuilder ub = uriInfo.getBaseUriBuilder();
-    String callbackUrl = ub.path("swagger").build().toASCIIString();
+  public SwaggerView get() {
+    String callbackUrl = swaggerConfiguration.getCallbackUrl();
     if (swaggerConfiguration.isShowSwagger()) {
       String swaggerjsonUrl = swaggerConfiguration.getJsonUrl();
       return new SwaggerView(swaggerConfiguration, swaggerjsonUrl, callbackUrl);
