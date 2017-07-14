@@ -60,8 +60,8 @@ public class SharedSessionFactory implements SessionFactory {
 
   private SessionFactory sf;
 
-  private transient final ReadWriteLock lock;
-  private transient final Condition okToClose;
+  private final transient ReadWriteLock lock;
+  private final transient Condition okToClose;
 
   private final boolean closeOnSignal;
   private final boolean testMode;

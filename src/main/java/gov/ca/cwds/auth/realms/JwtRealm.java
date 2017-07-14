@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.Key;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -166,7 +169,8 @@ public class JwtRealm extends AuthorizingRealm {
         .parseClaimsJws(token).getBody().get(IDENTITY_CLAIM);
   }
 
-  private KeyStore getKeyStore() throws Exception {
+  private KeyStore getKeyStore()
+      throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException {
     KeyStore ks = KeyStore.getInstance("JKS");
     try (InputStream readStream = new FileInputStream(keyStorePath)) {
       char keyPassword[] = keyStorePassword.toCharArray();
@@ -197,7 +201,7 @@ public class JwtRealm extends AuthorizingRealm {
     try {
       return objectMapper.readValue(json, PerryAccount.class);
     } catch (IOException e) {
-      LOGGER.info(e.getMessage());
+      LOGGER.info(e.getMessage(), e);
       // Mapping doesn't apply
       return new PerryAccount() {
         {

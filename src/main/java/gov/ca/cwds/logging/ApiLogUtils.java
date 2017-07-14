@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import gov.ca.cwds.rest.api.ApiException;
+import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * Logging utilities for CWDS projects.
@@ -87,10 +88,9 @@ public class ApiLogUtils<E extends RuntimeException> {
    * @param t any Throwable
    * @param pattern MessageFormat pattern
    * @param args error message, excluding throwable message
-   * @throws RuntimeException runtime exception
+   * @throws ServiceException runtime exception
    */
-  public void raiseError(final Logger log, Throwable t, String pattern, Object... args)
-      throws RuntimeException {
+  public void raiseError(final Logger log, Throwable t, String pattern, Object... args) {
     final Object[] objs = ArrayUtils.isEmpty(args) ? new Object[0] : args;
     final String pat = !StringUtils.isEmpty(pattern) ? pattern : StringUtils.join(objs, "{}");
     final String msg = MessageFormat.format(pat, objs);
