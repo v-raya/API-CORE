@@ -15,7 +15,8 @@ project.ext {
     dropwizardFlywayVersion = "1.0.0-1"
     metricsVersion = "3.1.0"
     dropwizardSwaggerVersion = "1.0.0-1"
-    elasticsearchVersion = "5.4.0"
+    // elasticsearchVersion = "5.4.0"
+    elasticsearchVersion = "5.3.2"
     log4jVersion = "2.8.2"
 }
 
