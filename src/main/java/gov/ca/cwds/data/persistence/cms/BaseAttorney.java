@@ -128,10 +128,18 @@ public abstract class BaseAttorney extends CmsPersistentObject
   @Column(name = "ZIP_SFX_NO")
   protected Short zipSuffixNumber;
 
+  /**
+   * Default constructor.
+   */
   public BaseAttorney() {
     super();
   }
 
+  /**
+   * Construct from last updated user id.
+   * 
+   * @param lastUpdatedId last updated id
+   */
   public BaseAttorney(String lastUpdatedId) {
     super(lastUpdatedId);
   }

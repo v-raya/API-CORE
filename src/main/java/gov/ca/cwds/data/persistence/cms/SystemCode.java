@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
@@ -41,12 +42,15 @@ public class SystemCode extends CmsPersistentObject {
   private String inactiveIndicator;
 
   @Column(name = "OTHER_CD")
+  @ColumnTransformer(read = "trim(OTHER_CD)")
   private String otherCd;
 
   @Column(name = "SHORT_DSC")
+  @ColumnTransformer(read = "trim(SHORT_DSC)")
   private String shortDescription;
 
   @Column(name = "LGC_ID")
+  @ColumnTransformer(read = "trim(LGC_ID)")
   private String logicalId;
 
   @Column(name = "THIRD_ID")
@@ -56,6 +60,7 @@ public class SystemCode extends CmsPersistentObject {
   private String foreignKeyMetaTable;
 
   @Column(name = "LONG_DSC")
+  @ColumnTransformer(read = "trim(LONG_DSC)")
   private String longDescription;
 
   /**
