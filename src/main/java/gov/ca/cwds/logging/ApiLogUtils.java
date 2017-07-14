@@ -108,7 +108,7 @@ public class ApiLogUtils<E extends RuntimeException> {
    * @param args error message or throwable message
    * @throws RuntimeException runtime exception
    */
-  public void raiseError(final Logger log, Throwable t, Object... args) throws RuntimeException {
+  public void raiseError(final Logger log, Throwable t, Object... args) {
     raiseError(log, t, null, args);
   }
 
