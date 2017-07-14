@@ -20,7 +20,9 @@ import gov.ca.cwds.inject.SystemCodeCache;
  * {@code SystemCodeCache.global()} to retrieve the singleton instance.
  * </p>
  * 
- * <h4>Note on static generics:</h4>
+ * <p>
+ * Note on static generics:
+ * </p>
  * 
  * <p>
  * Note that Java Generics are NOT C++ templates. That is, Java does not recompile a class type into
