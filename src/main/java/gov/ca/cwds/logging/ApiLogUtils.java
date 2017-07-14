@@ -90,8 +90,7 @@ public class ApiLogUtils<E extends RuntimeException> {
    * @param args error message, excluding throwable message
    * @throws ServiceException runtime exception
    */
-  public void raiseError(final Logger log, Throwable t, String pattern, Object... args)
-      throws ServiceException {
+  public void raiseError(final Logger log, Throwable t, String pattern, Object... args) {
     final Object[] objs = ArrayUtils.isEmpty(args) ? new Object[0] : args;
     final String pat = !StringUtils.isEmpty(pattern) ? pattern : StringUtils.join(objs, "{}");
     final String msg = MessageFormat.format(pat, objs);
