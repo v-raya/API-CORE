@@ -163,7 +163,7 @@ public class ElasticsearchDao implements Closeable {
    * @param type Index document type
    * @param settingsJsonFile Setting file
    * @param mappingJsonFile Mapping file
-   * @throws IOException
+   * @throws IOException on disconnect
    */
   public synchronized void createIndexIfNeeded(final String index, final String type,
       final String settingsJsonFile, final String mappingJsonFile) throws IOException {
@@ -421,6 +421,7 @@ public class ElasticsearchDao implements Closeable {
       return new ElasticSearchPerson[0];
     }
 
+    // Old highlights commented out.
     SearchRequestBuilder builder = client.prepareSearch(alias).setTypes(docType)
         .setQuery(queryBuilder).setFrom(0).setSize(DEFAULT_MAX_RESULTS)
         // .addHighlightedField(ElasticSearchPerson.ESColumn.FIRST_NAME.getCol())
@@ -589,7 +590,7 @@ public class ElasticsearchDao implements Closeable {
    * 
    * <p>
    * Note that this implementation calls the Elasticsearch HTTP transport, not the Java transport.
-   * <p/>
+   * </p>
    * 
    * @param targetURL the target URL
    * @param payload the payload specified by user

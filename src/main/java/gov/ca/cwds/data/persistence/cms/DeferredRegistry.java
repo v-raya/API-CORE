@@ -10,7 +10,9 @@ import gov.ca.cwds.inject.SystemCodeCache;
  * Store singleton, typed instances for easy retrieval. This is useful where dependency injection
  * into short-lived beans is overly complicated or unwieldy.
  * 
- * <h4>Usage:</h4>
+ * <p>
+ * Usage:
+ * </p>
  * 
  * <p>
  * See {@link SystemCodeCache} for usage. An implementation calls {@code SystemCodeCache.register()}
