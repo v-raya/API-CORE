@@ -44,7 +44,9 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
   /**
    * Default no-arg constructor.
    */
-  private CachingSystemCodeService() {}
+  private CachingSystemCodeService() {
+    // No-op.
+  }
 
   /**
    * Construct the object
@@ -76,7 +78,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
 
   @Override
   public Response find(Serializable key) {
-    Response response = null;
+    Response response;
 
     if (key == null || StringUtils.isBlank(key.toString())) {
       response = (Response) getFromCache(CacheKey.createForAllMetas());
