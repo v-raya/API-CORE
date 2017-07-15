@@ -8,10 +8,6 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +18,7 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.cms.SystemCodeDao;
 import gov.ca.cwds.data.cms.SystemMetaDao;
+import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.SystemCode;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
@@ -44,12 +41,13 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
   /**
    * Default no-arg constructor.
    */
+  @SuppressWarnings("unused")
   private CachingSystemCodeService() {
     // No-op.
   }
 
   /**
-   * Construct the object
+   * Construct the object.
    * 
    * @param systemCodeDao System codes DAO
    * @param systemMetaDao System meta DAO
@@ -120,9 +118,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
       return null;
     }
 
-    CacheKey cacheKey = CacheKey.createForSystemCode(systemCodeId);
-    SystemCode systemCode = (SystemCode) getFromCache(cacheKey);
-    return systemCode;
+    return (SystemCode) getFromCache(CacheKey.createForSystemCode(systemCodeId));
   }
 
   @Override
@@ -158,7 +154,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
     if (systemCodes != null) {
       for (SystemCode systemCode : systemCodes) {
         if (systemCodeId.equals(systemCode.getSystemId())) {
-          valid = "N".equals(systemCode.getInactiveIndicator().toUpperCase());
+          valid = "N".equalsIgnoreCase(systemCode.getInactiveIndicator());
         }
       }
     }
@@ -174,7 +170,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
       for (SystemCode systemCode : systemCodes) {
         if (StringUtils.equalsIgnoreCase(StringUtils.trim(shortDesc),
             StringUtils.trim(systemCode.getShortDescription()))) {
-          valid = "N".equals(systemCode.getInactiveIndicator().toUpperCase());
+          valid = "N".equalsIgnoreCase(systemCode.getInactiveIndicator());
         }
       }
     }
@@ -222,25 +218,19 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
       Object objectToCache = null;
 
       if (CacheKey.ALL_METAS_TYPE.equals(key.getType())) {
-        /**
-         * Load all system metas
-         */
+        // Load all system metas
         SystemMetaListResponse metaList =
             (SystemMetaListResponse) systemCodeService.loadSystemMetas();
         objectToCache = metaList;
 
       } else if (CacheKey.META_ID_TYPE.equals(key.getType())) {
-        /**
-         * Add SystemCodeListResponse objects keyed by Meta ID.
-         */
+        // Add SystemCodeListResponse objects keyed by Meta ID.
         SystemCodeListResponse sysCodeList =
             (SystemCodeListResponse) systemCodeService.loadSystemCodesForMeta(key.getValue());
         objectToCache = sysCodeList;
 
       } else if (CacheKey.SYSTEM_CODE_ID_TYPE.equals(key.getType())) {
-        /**
-         * Add SystemCode objects keyed by System Code ID.
-         */
+        // Add SystemCode objects keyed by System Code ID.
         SystemCode systemCode = (SystemCode) systemCodeService.loadSystemCode(key.getValue());
         objectToCache = systemCode;
       }
@@ -252,7 +242,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
      * Loads all system code cache entries.
      * 
      * @return All system code cache entries.
-     * @throws Exception
+     * @throws Exception on disconnect, NPE, etc.
      */
     public Map<CacheKey, Object> loadAll() throws Exception {
       LOGGER.info("Loading all system code cache...");
@@ -302,11 +292,16 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
    * Cache key. <br>
    * ===============================================================================
    */
-  private static class CacheKey {
+  private static class CacheKey extends ApiObjectIdentity {
 
-    private static String ALL_METAS_TYPE = "ALL_METAS";
-    private static String META_ID_TYPE = "META_ID";
-    private static String SYSTEM_CODE_ID_TYPE = "SYSTEM_CODE_ID";
+    /**
+     * Default.
+     */
+    private static final long serialVersionUID = 1L;
+
+    private static final String ALL_METAS_TYPE = "ALL_METAS";
+    private static final String META_ID_TYPE = "META_ID";
+    private static final String SYSTEM_CODE_ID_TYPE = "SYSTEM_CODE_ID";
 
     private Serializable value;
     private String type;
@@ -336,19 +331,6 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
       return new CacheKey(SYSTEM_CODE_ID_TYPE, value);
     }
 
-    @Override
-    public int hashCode() {
-      return HashCodeBuilder.reflectionHashCode(this, false);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-      return EqualsBuilder.reflectionEquals(this, obj, false);
-    }
-
-    @Override
-    public String toString() {
-      return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
-    }
   }
+
 }
