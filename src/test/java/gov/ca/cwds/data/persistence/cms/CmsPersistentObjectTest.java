@@ -39,8 +39,20 @@ public class CmsPersistentObjectTest {
   }
 
   @Test
-  public void instantiation() throws Exception {
+  public void instantiation1() throws Exception {
     CmsPersistentObject target = new TestCmsPersistentObject();
+    assertThat(target, notNullValue());
+  }
+
+  @Test
+  public void instantiation2() throws Exception {
+    CmsPersistentObject target = new TestCmsPersistentObject("0x5", new Date());
+    assertThat(target, notNullValue());
+  }
+
+  @Test
+  public void instantiation3() throws Exception {
+    CmsPersistentObject target = new TestCmsPersistentObject("0x5");
     assertThat(target, notNullValue());
   }
 
@@ -75,4 +87,3 @@ public class CmsPersistentObjectTest {
   }
 
 }
-

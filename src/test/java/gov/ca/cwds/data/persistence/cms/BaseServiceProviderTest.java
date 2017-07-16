@@ -222,8 +222,10 @@ public class BaseServiceProviderTest {
   @Test
   public void getZip_Args__() throws Exception {
     BaseServiceProvider target = new TestOnlyBaseServiceProvider();
+    target.zipNumber = 95762;
+    target.zipSuffixNumber = (short) 1234;
     String actual = target.getZip();
-    String expected = "";
+    String expected = "95762-1234";
     assertThat(actual, is(equalTo(expected)));
   }
 

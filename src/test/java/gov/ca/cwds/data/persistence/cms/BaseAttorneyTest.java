@@ -287,6 +287,15 @@ public class BaseAttorneyTest {
   }
 
   @Test
+  public void getPhones_Args2__() throws Exception {
+    BaseAttorney target = new TestOnlyBaseAttorney();
+    target.primaryPhoneNumber = new BigDecimal("4083742790");
+    target.messagePhoneNumber = new BigDecimal("4083742790");
+    ApiPhoneAware[] actual = target.getPhones();
+    assertThat(actual, notNullValue());
+  }
+
+  @Test
   public void setArchiveAssociationIndicator_Args__String() throws Exception {
     BaseAttorney target = new TestOnlyBaseAttorney();
     String archiveAssociationIndicator = null;
