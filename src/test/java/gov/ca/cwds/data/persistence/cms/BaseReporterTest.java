@@ -326,6 +326,16 @@ public class BaseReporterTest {
   }
 
   @Test
+  public void getZip_Args2__() throws Exception {
+    BaseReporter target = new TestOnlyBaseReporter();
+    target.zipNumber = 95762;
+    target.zipSuffixNumber = (short) 1234;
+    String actual = target.getZip();
+    String expected = "95762-1234";
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
   public void getCounty_Args__() throws Exception {
     BaseReporter target = new TestOnlyBaseReporter();
     String actual = target.getCounty();
@@ -339,6 +349,15 @@ public class BaseReporterTest {
     ApiPhoneAware[] actual = target.getPhones();
     ApiPhoneAware[] expected = new ApiPhoneAware[0];
     assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getPhones_Args2__() throws Exception {
+    BaseReporter target = new TestOnlyBaseReporter();
+    target.primaryPhoneNumber = new BigDecimal("4083742790");
+    target.messagePhoneNumber = new BigDecimal("4083742790");
+    ApiPhoneAware[] actual = target.getPhones();
+    assertThat(actual, notNullValue());
   }
 
   @Test
