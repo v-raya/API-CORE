@@ -2,8 +2,11 @@ package gov.ca.cwds.rest.resources;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
 
 import org.hamcrest.junit.ExpectedException;
+import org.hibernate.service.spi.ServiceException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -130,6 +133,15 @@ public class TypedServiceBackedResourceDelegateTest {
   public void create_Args__Object() throws Exception {
     TypedServiceBackedResourceDelegate target = new TypedServiceBackedResourceDelegate(service);
     TestOnlyRequest request = new TestOnlyRequest();
+    javax.ws.rs.core.Response actual = target.create(request);
+    assertThat(actual, notNullValue());
+  }
+
+  @Test
+  public void create_Args__Object2() throws Exception {
+    TypedServiceBackedResourceDelegate target = new TypedServiceBackedResourceDelegate(service);
+    TestOnlyRequest request = new TestOnlyRequest();
+    when(service.find(any())).thenThrow(new ServiceException("hello world"));
     javax.ws.rs.core.Response actual = target.create(request);
     assertThat(actual, notNullValue());
   }
