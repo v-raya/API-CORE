@@ -54,7 +54,7 @@ dependencies {
     compile group: 'io.swagger', name: 'swagger-annotations', version: '1.5.9'
     compile group: "org.postgresql", name: "postgresql", version: "9.4.1208.jre7"
     //SECURITY
-    compile group: 'gov.ca.cwds.api', name:'shiro-security', version: '0.25.65'
+    compile group: 'gov.ca.cwds.api', name:'shiro-security', version: '0.25.69'
 
 	// LOGGING:
 	compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4jVersion
