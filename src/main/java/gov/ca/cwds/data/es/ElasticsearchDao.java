@@ -16,6 +16,7 @@ import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.ActionRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
+import org.elasticsearch.action.admin.indices.create.CreateIndexRequestBuilder;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.update.UpdateRequest;
@@ -23,6 +24,7 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.client.Requests;
 import org.elasticsearch.cluster.metadata.MetaData;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.indices.InvalidIndexNameException;
@@ -123,6 +125,66 @@ public class ElasticsearchDao implements Closeable {
   }
 
   /**
+   * Create ES index based on supplied parameters.
+   * 
+   * @param index Index name
+   * @param type Index document type
+   * @param settingsJsonFile Setting file
+   * @param mappingJsonFile Mapping file
+   * @throws IOException
+   */
+  private void createIndex(final String index, final String type, final String settingsJsonFile,
+      final String mappingJsonFile) throws IOException {
+    LOGGER.warn("CREATING ES INDEX [{}] for type [{}] with settings [{}] and mappings [{}]...",
+        index, type, settingsJsonFile, mappingJsonFile);
+
+    final String settingsSource = readFile(settingsJsonFile);
+    final String mappingSource = readFile(mappingJsonFile);
+
+    CreateIndexRequestBuilder createIndexRequestBuilder =
+        getClient().admin().indices().prepareCreate(index);
+
+    createIndexRequestBuilder.setSettings(settingsSource, XContentType.JSON);
+    createIndexRequestBuilder.addMapping(type, mappingSource, XContentType.JSON);
+
+    CreateIndexRequest indexRequest = createIndexRequestBuilder.request();
+    getClient().admin().indices().create(indexRequest).actionGet();
+  }
+
+  /**
+   * Create ES index based on supplied parameters if it does not already exists.
+   * 
+   * <p>
+   * This method intentionally synchronizes against race conditions by multiple, simultaneous
+   * attempts to create the same index.
+   * </p>
+   * 
+   * @param index Index name
+   * @param type Index document type
+   * @param settingsJsonFile Setting file
+   * @param mappingJsonFile Mapping file
+   * @throws IOException on disconnect
+   */
+  public synchronized void createIndexIfNeeded(final String index, final String type,
+      final String settingsJsonFile, final String mappingJsonFile) throws IOException {
+
+    if (!doesIndexExist(index)) {
+      LOGGER.warn("ES INDEX {} DOES NOT EXIST!", index);
+      createIndex(index, type, settingsJsonFile, mappingJsonFile);
+
+      // Let Elasticsearch catch its breath.
+      try {
+        Thread.sleep(2000); // NOSONAR
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+        LOGGER.warn("Interrupted!");
+      }
+    } else {
+      LOGGER.warn("INDEX {} already exists!", index);
+    }
+  }
+
+  /**
    * Create an index and apply a mapping before blasting documents into it.
    * 
    * @param index index name or alias
@@ -130,7 +192,8 @@ public class ElasticsearchDao implements Closeable {
    * @param numReplicas number of replicas
    * @throws IOException on disconnect, hang, etc.
    */
-  public void createIndex(final String index, int numShards, int numReplicas) throws IOException {
+  @Deprecated
+  private void createIndex(final String index, int numShards, int numReplicas) throws IOException {
     LOGGER.warn("CREATE ES INDEX {} with {} shards and {} replicas", index, numShards, numReplicas);
 
     try {
@@ -172,7 +235,8 @@ public class ElasticsearchDao implements Closeable {
    * @param optReplicas optional number of replicas. Defaults to 1.
    * @throws IOException on disconnect, hang, etc.
    */
-  public synchronized void createIndexIfNeeded(final String index,
+  @Deprecated
+  private synchronized void createIndexIfNeeded(final String index,
       final Optional<Integer> optShards, final Optional<Integer> optReplicas) throws IOException {
 
     final int shards = optShards.orElse(5);
@@ -203,6 +267,7 @@ public class ElasticsearchDao implements Closeable {
    * @throws IOException on disconnect, hang, etc.
    * @see #createIndexIfNeeded(String, Optional, Optional)
    */
+  @Deprecated
   public synchronized void createIndexIfNeeded(final String index) throws IOException {
     createIndexIfNeeded(index, Optional.<Integer>empty(), Optional.<Integer>empty());
   }
@@ -336,8 +401,8 @@ public class ElasticsearchDao implements Closeable {
    * 
    * <p>
    * This method calls Elasticsearch's <a href=
-   * "https://www.elastic.co/guide/en/elasticsearch/guide/current/_best_fields.html#dis-max-query"
-   * >"dis max"</a> query feature.
+   * "https://www.elastic.co/guide/en/elasticsearch/guide/current/_best_fields.html#dis-max-query" >
+   * "dis max"</a> query feature.
    * </p>
    * 
    * @param searchTerm ES search String
@@ -356,6 +421,7 @@ public class ElasticsearchDao implements Closeable {
       return new ElasticSearchPerson[0];
     }
 
+    // Old highlights commented out.
     SearchRequestBuilder builder = client.prepareSearch(alias).setTypes(docType)
         .setQuery(queryBuilder).setFrom(0).setSize(DEFAULT_MAX_RESULTS)
         // .addHighlightedField(ElasticSearchPerson.ESColumn.FIRST_NAME.getCol())
@@ -402,8 +468,8 @@ public class ElasticsearchDao implements Closeable {
    */
   public String searchIndexByQuery(final String index, final String query, final String protocol,
       final int port, final String docType) {
-    LOGGER.warn(" index: {}", index);
-    LOGGER.warn(" QUERY: {}", query);
+    LOGGER.info(" index: {}", index);
+    LOGGER.info(" query: {}", query);
     checkArgument(!Strings.isNullOrEmpty(query), "query cannot be Null or empty");
     checkArgument(!Strings.isNullOrEmpty(index), "index name cannot be Null or empty");
 
@@ -412,7 +478,7 @@ public class ElasticsearchDao implements Closeable {
         .append(port).append('/').append(index).append('/').append(docType.trim())
         .append("/_search");
     final String targetURL = buf.toString();
-    LOGGER.warn("ES SEARCH URL: {}", targetURL);
+    LOGGER.info("ES SEARCH URL: {}", targetURL);
     return executionResult(targetURL, query);
   }
 
@@ -452,8 +518,8 @@ public class ElasticsearchDao implements Closeable {
   }
 
   /**
-   * Builds an Elasticsearch compound query by combining multiple <b>should</b> clauses in a Bool
-   * Query
+   * Builds an Elasticsearch compound query by combining multiple <b>should</b> clauses into a
+   * Boolean Query.
    * 
    * @param searchTerm the user entered values to search for separated by space
    * @return the Elasticsearch compound query
@@ -520,7 +586,11 @@ public class ElasticsearchDao implements Closeable {
   }
 
   /**
-   * Consume an external REST web service, specifying URL, request headers and JSON payload
+   * Consume an external REST web service, specifying URL, request headers and JSON payload.
+   * 
+   * <p>
+   * Note that this implementation calls the Elasticsearch HTTP transport, not the Java transport.
+   * </p>
    * 
    * @param targetURL the target URL
    * @param payload the payload specified by user
@@ -568,6 +638,13 @@ public class ElasticsearchDao implements Closeable {
       }
     }
     return jsonString.toString();
+  }
+
+  private String readFile(String sourceFile) throws IOException {
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    IOUtils.copy(this.getClass().getResourceAsStream(sourceFile), out);
+    out.flush();
+    return out.toString();
   }
 
 }

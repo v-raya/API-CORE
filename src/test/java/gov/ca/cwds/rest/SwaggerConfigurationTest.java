@@ -69,6 +69,14 @@ public class SwaggerConfigurationTest {
   }
 
   @Test
+  public void getCallbackUrl_Args__() throws Exception {
+    SwaggerConfiguration target = new SwaggerConfiguration();
+    String actual = target.getCallbackUrl();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
   public void getLogo_Args__() throws Exception {
     SwaggerConfiguration target = new SwaggerConfiguration();
     String actual = target.getLogo();

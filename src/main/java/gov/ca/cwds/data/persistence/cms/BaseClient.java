@@ -25,8 +25,10 @@ import gov.ca.cwds.data.std.ApiMultipleLanguagesAware;
 import gov.ca.cwds.data.std.ApiPersonAware;
 
 /**
+ * Column structure for CMS Client. OLTP class extends this one without decoration. Replication
+ * class extends and adds replication columns.
+ * 
  * @author CDWS API Team
- *
  */
 @SuppressWarnings("javadoc")
 @MappedSuperclass
@@ -1152,26 +1154,5 @@ public abstract class BaseClient extends CmsPersistentObject
   public void setZippyCreatedIndicator(String zippyCreatedIndicator) {
     this.zippyCreatedIndicator = zippyCreatedIndicator;
   }
-
-  // @Override
-  // public ApiPhoneAware[] getPhones() {
-  // List<ApiPhoneAware> phones = new ArrayList<>();
-  // if (this.primaryPhoneNumber != null && !BigDecimal.ZERO.equals(this.primaryPhoneNumber)) {
-  // phones.add(new ReadablePhone(this.primaryPhoneNumber.toPlainString(),
-  // this.primaryPhoneExtensionNumber != null ? this.primaryPhoneExtensionNumber.toString()
-  // : null,
-  // null));
-  // }
-  //
-  // if (this.messagePhoneNumber != null && !BigDecimal.ZERO.equals(this.messagePhoneNumber)) {
-  // phones
-  // .add(new ReadablePhone(
-  // this.messagePhoneNumber.toPlainString(), this.messagePhoneExtensionNumber != null
-  // ? this.messagePhoneExtensionNumber.toString() : null,
-  // ApiPhoneAware.PhoneType.Cell));
-  // }
-  //
-  // return phones.toArray(new ApiPhoneAware[0]);
-  // }
 
 }

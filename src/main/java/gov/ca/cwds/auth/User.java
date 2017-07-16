@@ -2,6 +2,8 @@ package gov.ca.cwds.auth;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.io.Serializable;
+
 import org.apache.shiro.subject.Subject;
 
 import gov.ca.cwds.data.std.ApiMarker;
@@ -11,7 +13,7 @@ import gov.ca.cwds.data.std.ApiMarker;
  * 
  * @author CWDS API Team
  */
-public class User implements ApiMarker {
+public class User implements ApiMarker, Serializable {
 
   /**
    * Default serialization.
@@ -19,7 +21,7 @@ public class User implements ApiMarker {
   private static final long serialVersionUID = 1L;
 
   private final String racf;
-  private final Subject subject;
+  private final transient Subject subject;
 
   /**
    * Constructor.

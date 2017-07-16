@@ -37,6 +37,10 @@ public class SwaggerConfiguration {
 
   @JsonProperty
   @NotEmpty
+  private String callbackUrl;
+
+  @JsonProperty
+  @NotEmpty
   private String logo;
 
   @JsonProperty
@@ -88,6 +92,13 @@ public class SwaggerConfiguration {
    */
   public String getJsonUrl() {
     return jsonUrl;
+  }
+
+  /**
+   * @return the callbackUrl
+   */
+  public String getCallbackUrl() {
+    return callbackUrl;
   }
 
   /**

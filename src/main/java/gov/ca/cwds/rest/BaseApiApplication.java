@@ -21,6 +21,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.hubspot.dropwizard.guice.GuiceBundle;
 
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.filters.RequestCommonInfoFilter;
 import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
 import gov.ca.cwds.rest.filters.UnhandledExceptionMapperImpl;
@@ -129,7 +130,10 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
     configureSwagger(configuration, environment);
 
     LOGGER.info("Registering Filters");
-    registerFilters(environment);
+    registerFilters(environment, guiceBundle);
+
+    LOGGER.info("Registering SystemCodeCache");
+    injector.getInstance(SystemCodeCache.class);
 
     runInternal(configuration, environment);
   }
@@ -139,7 +143,7 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
    * 
    * @param environment
    */
-  private final void registerFilters(final Environment environment) {
+  private static void registerFilters(final Environment environment, GuiceBundle guiceBundle) {
     // Story #129093035: Catch/handle 500 errors.
     environment.jersey().register(UnhandledExceptionMapperImpl.class);
 
@@ -159,7 +163,7 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
         .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
   }
 
-  private final void configureCors(final Environment environment) {
+  private static void configureCors(final Environment environment) {
     FilterRegistration.Dynamic filter =
         environment.servlets().addFilter("CORS", CrossOriginFilter.class);
     filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");

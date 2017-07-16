@@ -50,14 +50,14 @@
           "store": true,
           "analyzer": "autocomplete",
           "search_analyzer": "standard",
-          "copy_to": "full_name"
+          "copy_to": ["full_name", "searchable_name"]
         },
         "last_name": {
           "type": "text",
           "store": true,
           "analyzer": "autocomplete",
           "search_analyzer": "standard",
-          "copy_to": "full_name"
+          "copy_to": ["full_name", "searchable_name"]
         },
         "middle_name": {
           "type": "text",
@@ -66,6 +66,12 @@
           "search_analyzer": "standard"
         },
         "full_name": {
+          "type": "text",
+          "store": true,
+          "analyzer": "autocomplete",
+          "search_analyzer": "standard"
+        },
+        "searchable_name": {
           "type": "text",
           "store": true,
           "analyzer": "autocomplete",
@@ -244,11 +250,13 @@
           "properties": {
             "first_name": {
               "type": "text",
-              "store": true
+              "store": true,
+              "copy_to": ["searchable_name"]
             },
             "last_name": {
               "type": "text",
-              "store": true
+              "store": true,
+              "copy_to": ["searchable_name"]
             },
             "middle_name": {
               "type": "text",
