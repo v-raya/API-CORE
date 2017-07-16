@@ -29,7 +29,6 @@ import gov.ca.cwds.data.std.ApiPhoneAware;
 
 /**
  * @author CWDS API Team
- *
  */
 @SuppressWarnings("javadoc")
 @MappedSuperclass
@@ -425,7 +424,14 @@ public abstract class BaseAddress extends CmsPersistentObject
   @Override
   public String getStreetAddress() {
     StringBuilder buf = new StringBuilder();
-    buf.append(this.streetNumber).append(" ").append(this.streetName);
+    if (StringUtils.isNoneBlank(this.streetNumber)) {
+      buf.append(this.streetNumber).append(" ");
+    }
+
+    if (StringUtils.isNoneBlank(this.streetName)) {
+      buf.append(this.streetName);
+    }
+
     if (StringUtils.isNotBlank(this.unitNumber)) {
       buf.append(" #").append(this.unitNumber);
     }
