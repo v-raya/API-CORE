@@ -176,14 +176,6 @@ public abstract class BaseOtherClientName extends CmsPersistentObject implements
   }
 
   @Override
-  public String toString() {
-    return "OtherClientName [id=" + clientId + ", firstName=" + firstName + ", lastName=" + lastName
-        + ", middleName=" + middleName + ", namePrefixDescription=" + namePrefixDescription
-        + ", nameType=" + nameType + ", suffixTitleDescription=" + suffixTitleDescription
-        + ", thirdId=" + thirdId + "]";
-  }
-
-  @Override
   public Serializable getPrimaryKey() {
     return this.thirdId;
   }

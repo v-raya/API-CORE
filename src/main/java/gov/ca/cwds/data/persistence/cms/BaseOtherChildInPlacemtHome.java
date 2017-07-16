@@ -19,8 +19,8 @@ public abstract class BaseOtherChildInPlacemtHome extends CmsPersistentObject
     implements ApiPersonAware {
 
   /**
-  * 
-  */
+   * Default.
+   */
   private static final long serialVersionUID = 1L;
 
   @Column(name = "YR_INC_AMT")
