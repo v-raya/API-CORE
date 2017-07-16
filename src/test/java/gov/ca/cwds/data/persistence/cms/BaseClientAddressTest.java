@@ -170,22 +170,4 @@ public class BaseClientAddressTest {
     target.setEffStartDt(effStartDt);
   }
 
-  @Test
-  public void hashCode_Args__() throws Exception {
-    BaseClientAddress target = new TestOnlyClientAddress();
-    int actual = target.hashCode();
-    int expected = -196513505;
-    assertThat(actual, is(equalTo(expected)));
-  }
-
-  @Test
-  public void equals_Args__Object() throws Exception {
-    BaseClientAddress target = new TestOnlyClientAddress();
-    Object obj = null;
-    boolean actual = target.equals(obj);
-    boolean expected = false;
-    assertThat(actual, is(equalTo(expected)));
-  }
-
 }
-
