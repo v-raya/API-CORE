@@ -14,6 +14,18 @@ public class BaseEducationProviderContactTest {
 
   private static final class TestOnlyEducationProviderContact extends BaseEducationProviderContact {
 
+    public TestOnlyEducationProviderContact() {
+      super();
+    }
+
+    public TestOnlyEducationProviderContact(String lastUpdatedId) {
+      super(lastUpdatedId);
+    }
+
+    public TestOnlyEducationProviderContact(String lastUpdatedId, Date lastUpdatedTime) {
+      super(lastUpdatedId, lastUpdatedTime);
+    }
+
   }
 
   @Test
@@ -24,6 +36,18 @@ public class BaseEducationProviderContactTest {
   @Test
   public void instantiation() throws Exception {
     BaseEducationProviderContact target = new TestOnlyEducationProviderContact();
+    assertThat(target, notNullValue());
+  }
+
+  @Test
+  public void instantiation2() throws Exception {
+    BaseEducationProviderContact target = new TestOnlyEducationProviderContact("0x5");
+    assertThat(target, notNullValue());
+  }
+
+  @Test
+  public void instantiation3() throws Exception {
+    BaseEducationProviderContact target = new TestOnlyEducationProviderContact("0x5", new Date());
     assertThat(target, notNullValue());
   }
 
@@ -128,6 +152,14 @@ public class BaseEducationProviderContactTest {
     String actual = target.getPhoneNumber();
     String expected = null;
     assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getPhoneNumber_Args2_() throws Exception {
+    BaseEducationProviderContact target = new TestOnlyEducationProviderContact();
+    target.phoneNumber = new BigDecimal("4083742790");
+    String actual = target.getPhoneNumber();
+    assertThat(actual, notNullValue());
   }
 
   @Test

@@ -3,6 +3,7 @@ package gov.ca.cwds.data.persistence.cms;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.math.BigDecimal;
@@ -300,6 +301,14 @@ public class BaseCollateralIndividualTest {
   }
 
   @Test
+  public void getState_Args2_() throws Exception {
+    BaseCollateralIndividual target = new TestOnlyCollateralIndividual();
+    target.stateCode = (short) 1860;
+    String actual = target.getState();
+    assertThat(actual, notNullValue());
+  }
+
+  @Test
   public void getZip_Args__() throws Exception {
     BaseCollateralIndividual target = new TestOnlyCollateralIndividual();
     String actual = target.getZip();
@@ -308,11 +317,18 @@ public class BaseCollateralIndividualTest {
   }
 
   @Test
+  public void getZip_Args2_() throws Exception {
+    BaseCollateralIndividual target = new TestOnlyCollateralIndividual();
+    target.zipNumber = 95762;
+    String actual = target.getZip();
+    assertThat(actual, notNullValue());
+  }
+
+  @Test
   public void getCounty_Args__() throws Exception {
     BaseCollateralIndividual target = new TestOnlyCollateralIndividual();
     String actual = target.getCounty();
-    String expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    assertThat(actual, nullValue());
   }
 
   @Test

@@ -640,6 +640,15 @@ public class BaseClientTest {
   }
 
   @Test
+  public void getLanguages_Args2_() throws Exception {
+    BaseClient target = new TestOnlyClient();
+    target.primaryLanguageType = (short) 1249;
+    target.secondaryLanguageType = (short) 1260;
+    ApiLanguageAware[] actual = target.getLanguages();
+    assertThat(actual, notNullValue());
+  }
+
+  @Test
   public void getSerialversionuid_Args__() throws Exception {
     long actual = BaseClient.getSerialversionuid();
     long expected = 1L;

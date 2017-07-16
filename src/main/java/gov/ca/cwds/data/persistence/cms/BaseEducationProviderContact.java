@@ -68,14 +68,25 @@ public abstract class BaseEducationProviderContact extends CmsPersistentObject
   protected String titleDescription;
 
   /**
+   * Default constructor.
+   */
+  public BaseEducationProviderContact() {
+    super();
+  }
+
+  public BaseEducationProviderContact(String lastUpdatedId) {
+    super(lastUpdatedId);
+  }
+
+  public BaseEducationProviderContact(String lastUpdatedId, Date lastUpdatedTime) {
+    super(lastUpdatedId, lastUpdatedTime);
+  }
+
+  /**
    * @return serialVersionUID
    */
   public static long getSerialversionuid() {
     return serialVersionUID;
-  }
-
-  public BaseEducationProviderContact() {
-    super();
   }
 
   /**
@@ -185,10 +196,6 @@ public abstract class BaseEducationProviderContact extends CmsPersistentObject
    */
   public String getTitleDescription() {
     return titleDescription;
-  }
-
-  public BaseEducationProviderContact(String lastUpdatedId) {
-    super(lastUpdatedId);
   }
 
   @Override

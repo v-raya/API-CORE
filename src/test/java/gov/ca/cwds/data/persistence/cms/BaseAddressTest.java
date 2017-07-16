@@ -181,6 +181,14 @@ public class BaseAddressTest {
   }
 
   @Test
+  public void getState_Args2_() throws Exception {
+    BaseAddress target = new TestOnlyBaseAddress();
+    target.state = 1860;
+    String actual = target.getState();
+    assertThat(actual, notNullValue());
+  }
+
+  @Test
   public void getStateCd_Args__() throws Exception {
     BaseAddress target = new TestOnlyBaseAddress();
     Short actual = target.getStateCd();
@@ -391,11 +399,39 @@ public class BaseAddressTest {
   }
 
   @Test
+  public void getPhones_Args2_() throws Exception {
+    BaseAddress target = new TestOnlyBaseAddress();
+
+    target.primaryExtension = 123;
+    target.primaryNumber = new BigDecimal("4083742790");
+
+    target.messageExtension = 456;
+    target.messageNumber = new BigDecimal("9163742790");
+
+    target.emergencyExtension = 789;
+    target.emergencyNumber = new BigDecimal("5303742790");
+
+    ApiPhoneAware[] actual = target.getPhones();
+    assertThat(actual, notNullValue());
+  }
+
+  @Test
   public void getStreetAddress_Args__() throws Exception {
     BaseAddress target = new TestOnlyBaseAddress();
     String actual = target.getStreetAddress();
     String expected = "";
     assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getStreetAddress_Args2_() throws Exception {
+    BaseAddress target = new TestOnlyBaseAddress();
+    target.streetName = "main";
+    target.streetNumber = "123";
+    target.unitNumber = "45";
+
+    String actual = target.getStreetAddress();
+    assertThat(actual, notNullValue());
   }
 
   @Test
