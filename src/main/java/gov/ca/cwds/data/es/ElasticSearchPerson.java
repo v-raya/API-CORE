@@ -1032,6 +1032,12 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonProperty("last_name")
     private String lastName;
 
+    /**
+     * Optional field
+     */
+    @JsonProperty("sensitivity_indicator")
+    private transient String sensitivityIndicator;
+
     @JsonProperty("legacy_descriptor")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
@@ -1116,6 +1122,14 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
     public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
       this.legacyDescriptor = legacyDescriptor;
+    }
+
+    public String getSensitivityIndicator() {
+      return sensitivityIndicator;
+    }
+
+    public void setSensitivityIndicator(String sensitivityIndicator) {
+      this.sensitivityIndicator = sensitivityIndicator;
     }
   }
 
