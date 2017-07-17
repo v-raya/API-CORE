@@ -12,21 +12,20 @@ import java.util.List;
 import java.util.Map;
 
 import org.elasticsearch.search.SearchHit;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import gov.ca.cwds.data.es.ElasticSearchPerson.ESColumn;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ESOptionalCollection;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchLegacyDescriptor;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonAddress;
-import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonAka;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonCase;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonPhone;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonReferral;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonRelationship;
-import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonScreening;
 import gov.ca.cwds.rest.validation.TestSystemCodeCache;
 
 public class ElasticSearchPersonTest {
-
   private static final TestSystemCodeCache systemCodeCache = new TestSystemCodeCache();
 
   @Test
@@ -518,6 +517,32 @@ public class ElasticSearchPersonTest {
     ElasticSearchPerson target = new ElasticSearchPerson();
     List<ElasticSearchPersonAka> akas = target.getAkas();
     target.setAkas(akas);
+  }
+
+  @Test
+  public void pullCol_Args__Map__Object() throws Exception {
+    Map<String, Object> m = new HashMap<String, Object>();
+    ESColumn f = ESColumn.FIRST_NAME;
+    Object actual = ElasticSearchPerson.pullCol(m, f);
+    assertThat(actual, notNullValue());
+  }
+
+  @Test
+  @Ignore
+  public void hashCode_Args__() throws Exception {
+    ElasticSearchPerson target = new ElasticSearchPerson();
+    int actual = target.hashCode();
+    int expected = 0;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void equals_Args__Object() throws Exception {
+    ElasticSearchPerson target = new ElasticSearchPerson();
+    Object obj = null;
+    boolean actual = target.equals(obj);
+    boolean expected = false;
+    assertThat(actual, is(equalTo(expected)));
   }
 
 }
