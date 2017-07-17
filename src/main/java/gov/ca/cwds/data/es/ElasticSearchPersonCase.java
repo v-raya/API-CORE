@@ -7,8 +7,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.data.ApiTypedIdentifier;
-import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchAccessLimitation;
-import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchLegacyDescriptor;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonChild;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonParent;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonSocialWorker;

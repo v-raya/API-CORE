@@ -17,7 +17,6 @@ import org.junit.Test;
 
 import gov.ca.cwds.data.es.ElasticSearchPerson.ESColumn;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ESOptionalCollection;
-import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchLegacyDescriptor;
 import gov.ca.cwds.rest.validation.TestSystemCodeCache;
 
 public class ElasticSearchPersonTest {

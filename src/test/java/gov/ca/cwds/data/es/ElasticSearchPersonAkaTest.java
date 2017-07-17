@@ -8,8 +8,6 @@ import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 
-import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchLegacyDescriptor;
-
 public class ElasticSearchPersonAkaTest {
 
   @Test

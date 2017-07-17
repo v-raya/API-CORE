@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.data.ApiTypedIdentifier;
-import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchLegacyDescriptor;
 import gov.ca.cwds.data.std.ApiAddressAware;
 import gov.ca.cwds.data.std.ApiAddressAwareWritable;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
