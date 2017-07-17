@@ -23,12 +23,11 @@ import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonPhone;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonReferral;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonRelationship;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonScreening;
+import gov.ca.cwds.rest.validation.TestSystemCodeCache;
 
 public class ElasticSearchPersonTest {
 
-  public static void setupSuite() {
-    // DeferredRegistry.<SystemCodeCache>register(SystemCodeCache.class, this);
-  }
+  private static final TestSystemCodeCache systemCodeCache = new TestSystemCodeCache();
 
   @Test
   public void type() throws Exception {
@@ -79,16 +78,14 @@ public class ElasticSearchPersonTest {
   @Test
   public void getSystemCodes_Args__() throws Exception {
     gov.ca.cwds.rest.api.domain.cms.SystemCodeCache actual = ElasticSearchPerson.getSystemCodes();
-    gov.ca.cwds.rest.api.domain.cms.SystemCodeCache expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    assertThat(actual, notNullValue());
   }
 
   @Test
   public void makeESPerson_Args__SearchHit() throws Exception {
     SearchHit hit = mock(SearchHit.class);
     ElasticSearchPerson actual = ElasticSearchPerson.makeESPerson(hit);
-    ElasticSearchPerson expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    assertThat(actual, notNullValue());
   }
 
   @Test
@@ -305,33 +302,14 @@ public class ElasticSearchPersonTest {
   public void toString_Args__() throws Exception {
     ElasticSearchPerson target = new ElasticSearchPerson();
     String actual = target.toString();
-    String expected = null;
-    assertThat(actual, is(equalTo(expected)));
-  }
-
-  @Test
-  public void hashCode_Args__() throws Exception {
-    ElasticSearchPerson target = new ElasticSearchPerson();
-    int actual = target.hashCode();
-    int expected = 0;
-    assertThat(actual, is(equalTo(expected)));
-  }
-
-  @Test
-  public void equals_Args__Object() throws Exception {
-    ElasticSearchPerson target = new ElasticSearchPerson();
-    Object obj = null;
-    boolean actual = target.equals(obj);
-    boolean expected = false;
-    assertThat(actual, is(equalTo(expected)));
+    assertThat(actual, notNullValue());
   }
 
   @Test
   public void getHighlights_Args__() throws Exception {
     ElasticSearchPerson target = new ElasticSearchPerson();
     Map<String, String> actual = target.getHighlights();
-    Map<String, String> expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    assertThat(actual, notNullValue());
   }
 
   @Test
@@ -373,8 +351,7 @@ public class ElasticSearchPersonTest {
   public void getLanguages_Args__() throws Exception {
     ElasticSearchPerson target = new ElasticSearchPerson();
     List<String> actual = target.getLanguages();
-    List<String> expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    assertThat(actual, notNullValue());
   }
 
   @Test
@@ -519,8 +496,7 @@ public class ElasticSearchPersonTest {
   public void getLegacyDescriptor_Args__() throws Exception {
     ElasticSearchPerson target = new ElasticSearchPerson();
     Object actual = target.getLegacyDescriptor();
-    Object expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    assertThat(actual, notNullValue());
   }
 
   @Test

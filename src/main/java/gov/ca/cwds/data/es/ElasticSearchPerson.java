@@ -19,8 +19,6 @@ import java.util.stream.Collectors;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
@@ -3106,25 +3104,25 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     return ret;
   }
 
-  /**
-   * Omit transient fields, such as source object and source JSON. Only compare meaningful fields
-   * like "id" or "first name."
-   */
-  @Override
-  public final int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this, false);
-  }
-
-  /**
-   * Omit transient fields, such as source object and source JSON. Only compare meaningful fields
-   * like "id" or "first name." Even "source type" should not affect the comparison, only "real"
-   * fields should. Therefore, if all non-transient fields match, then the objects match, despite
-   * their source.
-   */
-  @Override
-  public final boolean equals(Object obj) {
-    return EqualsBuilder.reflectionEquals(this, obj, false);
-  }
+  // /**
+  // * Omit transient fields, such as source object and source JSON. Only compare meaningful fields
+  // * like "id" or "first name."
+  // */
+  // @Override
+  // public final int hashCode() {
+  // return HashCodeBuilder.reflectionHashCode(this, false);
+  // }
+  //
+  // /**
+  // * Omit transient fields, such as source object and source JSON. Only compare meaningful fields
+  // * like "id" or "first name." Even "source type" should not affect the comparison, only "real"
+  // * fields should. Therefore, if all non-transient fields match, then the objects match, despite
+  // * their source.
+  // */
+  // @Override
+  // public final boolean equals(Object obj) {
+  // return EqualsBuilder.reflectionEquals(this, obj, false);
+  // }
 
   @JsonIgnore
   public Map<String, String> getHighlights() {

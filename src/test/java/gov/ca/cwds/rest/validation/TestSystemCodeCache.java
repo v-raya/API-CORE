@@ -15,13 +15,11 @@ public class TestSystemCodeCache implements SystemCodeCache {
 
   @Override
   public Set<SystemMeta> getAllSystemMetas() {
-    // TODO Auto-generated method stub
     return null;
   }
 
   @Override
   public Set<SystemCode> getAllSystemCodes() {
-    // TODO Auto-generated method stub
     return null;
   }
 
@@ -31,18 +29,17 @@ public class TestSystemCodeCache implements SystemCodeCache {
       return new SystemCode(systemCodeId.shortValue(), null, null, null, "California", "CA", null,
           null, null);
     }
+
     return null;
   }
 
   @Override
   public Set<SystemCode> getSystemCodesForMeta(String metaId) {
-    // TODO Auto-generated method stub
     return null;
   }
 
   @Override
   public String getSystemCodeShortDescription(Number systemCodeId) {
-    // TODO Auto-generated method stub
     return null;
   }
 
@@ -68,6 +65,8 @@ public class TestSystemCodeCache implements SystemCodeCache {
     } else if ("Breasts".equals(shortDesc)) {
       return true;
     }
+
     return true;
   }
+
 }
