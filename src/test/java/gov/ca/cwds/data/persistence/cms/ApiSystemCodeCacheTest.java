@@ -10,7 +10,7 @@ import org.junit.Test;
 
 public class ApiSystemCodeCacheTest {
 
-  private static final class TestSysCodeCache implements ApiSystemCodeCache {
+  public static final class TestSysCodeCache implements ApiSystemCodeCache {
 
     @Override
     public CmsSystemCode lookup(Integer sysId) {
