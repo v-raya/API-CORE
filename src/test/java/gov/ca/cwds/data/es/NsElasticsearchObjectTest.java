@@ -11,6 +11,14 @@ public class NsElasticsearchObjectTest {
 
   private static final class TestOnlyNsElasticsearchObject extends NsElasticsearchObject {
 
+    public TestOnlyNsElasticsearchObject() {
+      super();
+    }
+
+    public TestOnlyNsElasticsearchObject(String updatedAt) {
+      super(updatedAt);
+    }
+
   }
 
   @Test
@@ -21,6 +29,12 @@ public class NsElasticsearchObjectTest {
   @Test
   public void instantiation() throws Exception {
     NsElasticsearchObject target = new TestOnlyNsElasticsearchObject();
+    assertThat(target, notNullValue());
+  }
+
+  @Test
+  public void instantiation2() throws Exception {
+    NsElasticsearchObject target = new TestOnlyNsElasticsearchObject("2014-10-31-11.13.12.111");
     assertThat(target, notNullValue());
   }
 

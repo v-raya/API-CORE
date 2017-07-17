@@ -189,49 +189,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   }
 
   /**
-   * Screening person for "all_people" element.
-   * 
-   * @author CWDS API Team
-   */
-  @SuppressWarnings("serial")
-  public static class ElasticSearchPersonAny extends ElasticSearchPersonNestedPerson {
-
-    @JsonProperty("legacy_source_table")
-    @Deprecated
-    private String legacySourceTable;
-
-    private List<String> roles = new ArrayList<>();
-
-    @Override
-    @JsonProperty("legacy_id")
-    @Deprecated
-    public String getLegacyClientId() {
-      return legacyPersonId;
-    }
-
-    @Override
-    @Deprecated
-    public String getLegacySourceTable() {
-      return legacySourceTable;
-    }
-
-    @Override
-    @Deprecated
-    public void setLegacySourceTable(String legacySourceTable) {
-      this.legacySourceTable = legacySourceTable;
-    }
-
-    public List<String> getRoles() {
-      return roles;
-    }
-
-    public void setRoles(List<String> roles) {
-      this.roles = roles;
-    }
-
-  }
-
-  /**
    * Screening reporter.
    * 
    * @author CWDS API Team
@@ -309,47 +266,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     }
   }
 
-  /**
-   * Parent.
-   * 
-   * @author CWDS API Team
-   */
-  @SuppressWarnings("serial")
-  public static class ElasticSearchPersonParent extends ElasticSearchPersonNestedPerson {
-
-    @JsonProperty("relationship")
-    private String relationship;
-
-    @Override
-    @JsonProperty("legacy_id")
-    @Deprecated
-    public String getLegacyClientId() {
-      return super.legacyPersonId;
-    }
-
-    @Override
-    @JsonProperty("legacy_last_updated")
-    @Deprecated
-    public String getLegacyLastUpdated() {
-      return super.legacyLastUpdated;
-    }
-
-    @Override
-    @JsonProperty("legacy_source_table")
-    @Deprecated
-    public String getLegacySourceTable() {
-      return super.legacySourceTable;
-    }
-
-    public String getRelationship() {
-      return relationship;
-    }
-
-    public void setRelationship(String relationship) {
-      this.relationship = relationship;
-    }
-  }
-
   // =========================
   // PRIVATE STATIC:
   // =========================
@@ -392,11 +308,15 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     @JsonIgnore
     private final String[] legacy;
 
-    // Key = legacy free-form value.
+    /**
+     * Key = legacy free-form value.
+     */
     @JsonIgnore
     private static final Map<String, ElasticSearchPersonNameSuffix> mapLegacy = new HashMap<>();
 
-    // Key = Intake value.
+    /**
+     * Key = Intake value.
+     */
     @JsonIgnore
     private static final Map<String, ElasticSearchPersonNameSuffix> mapIntake = new HashMap<>();
 
