@@ -18,11 +18,6 @@ import org.junit.Test;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ESColumn;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ESOptionalCollection;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchLegacyDescriptor;
-import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonAddress;
-import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonCase;
-import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonPhone;
-import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonReferral;
-import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonRelationship;
 import gov.ca.cwds.rest.validation.TestSystemCodeCache;
 
 public class ElasticSearchPersonTest {
