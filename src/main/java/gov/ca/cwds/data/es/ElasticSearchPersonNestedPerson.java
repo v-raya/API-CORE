@@ -14,7 +14,6 @@ import gov.ca.cwds.data.std.ApiObjectIdentity;
  */
 public class ElasticSearchPersonNestedPerson extends ApiObjectIdentity
     implements ApiTypedIdentifier<String> {
-
   /**
    * Default serialization version.
    */
@@ -29,6 +28,12 @@ public class ElasticSearchPersonNestedPerson extends ApiObjectIdentity
   @JsonProperty("last_name")
   private String lastName;
 
+  /**
+   * Optional field
+   */
+  @JsonProperty("sensitivity_indicator")
+  private transient String sensitivityIndicator;
+
   @JsonProperty("legacy_descriptor")
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
@@ -42,7 +47,8 @@ public class ElasticSearchPersonNestedPerson extends ApiObjectIdentity
   protected String legacyLastUpdated;
 
   @JsonIgnore
-  @Deprecated String legacySourceTable;
+  @Deprecated
+  private String legacySourceTable;
 
   /**
    * Getter for legacy person id. Child classes override the JSON field name, per the document
@@ -112,5 +118,13 @@ public class ElasticSearchPersonNestedPerson extends ApiObjectIdentity
 
   public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
     this.legacyDescriptor = legacyDescriptor;
+  }
+
+  public String getSensitivityIndicator() {
+    return sensitivityIndicator;
+  }
+
+  public void setSensitivityIndicator(String sensitivityIndicator) {
+    this.sensitivityIndicator = sensitivityIndicator;
   }
 }

@@ -1,8 +1,8 @@
 package gov.ca.cwds.data.es;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.data.std.ApiObjectIdentity;
 
@@ -14,7 +14,6 @@ import gov.ca.cwds.data.std.ApiObjectIdentity;
 @SuppressWarnings("serial")
 @JsonInclude(value = Include.NON_EMPTY)
 public class ElasticSearchAccessLimitation extends ApiObjectIdentity {
-
   @JsonProperty("limited_access_code")
   private String limitedAccessCode;
 
@@ -69,4 +68,5 @@ public class ElasticSearchAccessLimitation extends ApiObjectIdentity {
   public void setLimitedAccessGovernmentEntityName(String limitedAccessGovernmentEntityName) {
     this.limitedAccessGovernmentEntityName = limitedAccessGovernmentEntityName;
   }
+
 }

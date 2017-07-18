@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @SuppressWarnings("serial")
 public class ElasticSearchPersonAny extends ElasticSearchPersonNestedPerson {
-
   @JsonProperty("legacy_source_table")
   @Deprecated
   private String legacySourceTable;

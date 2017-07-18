@@ -12,7 +12,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonReporter;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonSocialWorker;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonStaff;
 

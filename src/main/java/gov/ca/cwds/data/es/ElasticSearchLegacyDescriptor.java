@@ -46,8 +46,8 @@ public class ElasticSearchLegacyDescriptor extends ApiObjectIdentity {
    * @param legacyTableName Legacy table name
    * @param legacyTableDescription Legacy table description
    */
-  public ElasticSearchLegacyDescriptor(String legacyId, String legacyUiId,
-      String legacyLastUpdated, String legacyTableName, String legacyTableDescription) {
+  public ElasticSearchLegacyDescriptor(String legacyId, String legacyUiId, String legacyLastUpdated,
+      String legacyTableName, String legacyTableDescription) {
     super();
     this.legacyId = legacyId;
     this.legacyUiId = legacyUiId;
@@ -105,4 +105,5 @@ public class ElasticSearchLegacyDescriptor extends ApiObjectIdentity {
   public void setLegacyTableDescription(String legacyTableDescription) {
     this.legacyTableDescription = legacyTableDescription;
   }
+
 }

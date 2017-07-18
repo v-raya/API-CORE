@@ -31,7 +31,7 @@ public class ElasticSearchPersonParent extends ElasticSearchPersonNestedPerson {
   @JsonProperty("legacy_source_table")
   @Deprecated
   public String getLegacySourceTable() {
-    return super.legacySourceTable;
+    return super.getLegacySourceTable();
   }
 
   public String getRelationship() {
@@ -41,4 +41,5 @@ public class ElasticSearchPersonParent extends ElasticSearchPersonNestedPerson {
   public void setRelationship(String relationship) {
     this.relationship = relationship;
   }
+
 }

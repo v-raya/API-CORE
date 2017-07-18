@@ -121,20 +121,21 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
 
     if (ElasticSearchPerson.systemCodes != null) {
       if (address.getStateCd() != null && address.getStateCd().intValue() != 0) {
-        final SystemCode sysCode = ElasticSearchPerson.systemCodes.getSystemCode(address.getStateCd());
+        final SystemCode sysCode =
+            ElasticSearchPerson.systemCodes.getSystemCode(address.getStateCd());
         this.stateName = sysCode.getShortDescription();
         this.stateCode = sysCode.getLogicalId();
       }
 
       if (address.getApiAdrAddressType() != null
           && address.getApiAdrAddressType().intValue() != 0) {
-        this.type =
-            ElasticSearchPerson.systemCodes.getSystemCode(address.getApiAdrAddressType()).getShortDescription();
+        this.type = ElasticSearchPerson.systemCodes.getSystemCode(address.getApiAdrAddressType())
+            .getShortDescription();
       }
 
       if (address.getApiAdrUnitType() != null && address.getApiAdrUnitType().intValue() != 0) {
-        this.unitType =
-            ElasticSearchPerson.systemCodes.getSystemCode(address.getApiAdrUnitType()).getShortDescription();
+        this.unitType = ElasticSearchPerson.systemCodes.getSystemCode(address.getApiAdrUnitType())
+            .getShortDescription();
       }
     } else {
       ElasticSearchPerson.LOGGER.error("SYSCODE TRANSLATOR NOT SET!!!");

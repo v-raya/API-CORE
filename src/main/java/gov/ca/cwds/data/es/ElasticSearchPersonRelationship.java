@@ -136,4 +136,5 @@ public class ElasticSearchPersonRelationship extends ApiObjectIdentity {
   public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
     this.legacyDescriptor = legacyDescriptor;
   }
+
 }
