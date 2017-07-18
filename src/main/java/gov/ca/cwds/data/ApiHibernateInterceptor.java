@@ -2,6 +2,9 @@ package gov.ca.cwds.data;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.Type;
@@ -21,13 +24,18 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ApiHibernateInterceptor.class);
 
+  private static final Map<Class<? extends PersistentObject>, Consumer<PersistentObject>> handlers =
+      new ConcurrentHashMap<>();
+
   @Override
   public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
     LOGGER.info("Delete entity: type={}, id={}", entity.getClass().getName(), id);
   }
 
-  // Called on entity update.
+  /**
+   * Called on entity update.
+   */
   @Override
   public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState,
       Object[] previousState, String[] propertyNames, Type[] types) {
@@ -41,7 +49,9 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     return false;
   }
 
-  // Called on entity load.
+  /**
+   * Called on entity load.
+   */
   @Override
   public boolean onLoad(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
@@ -62,7 +72,9 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     return false;
   }
 
-  // Called before commit to database.
+  /**
+   * Called before commit to database.
+   */
   @Override
   public void preFlush(@SuppressWarnings("rawtypes") Iterator iter) {
     LOGGER.info("Before commit");
@@ -73,13 +85,28 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
         PersistentObject entity = (PersistentObject) obj;
         LOGGER.info("before commit: type={}, id={}", entity.getClass().getName(),
             entity.getPrimaryKey());
+
+        final Class<?> klazz = entity.getClass();
+        if (handlers.containsKey(klazz)) {
+          LOGGER.info("handler for class {}", klazz);
+          handlers.get(klazz).accept(entity);
+        }
+
       }
     }
   }
 
-  // Called after committed to database.
+  /**
+   * Called after committed to database.
+   */
   @Override
   public void postFlush(@SuppressWarnings("rawtypes") Iterator iterator) {
     LOGGER.info("After commit");
   }
+
+  public static void addHandler(Class<? extends PersistentObject> klass,
+      Consumer<PersistentObject> consumer) {
+    handlers.put(klass, consumer);
+  }
+
 }

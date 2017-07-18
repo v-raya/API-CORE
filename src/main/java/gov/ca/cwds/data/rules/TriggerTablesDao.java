@@ -5,7 +5,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.rest.TriggerTablesConfiguration;
 
 /**
- * A DAO for Triggertables.
+ * A DAO for Trigger tables.
  * 
  * @author CWDS API Team
  */
