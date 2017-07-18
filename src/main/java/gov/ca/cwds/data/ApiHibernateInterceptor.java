@@ -24,7 +24,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ApiHibernateInterceptor.class);
 
-  private static final Map<Class<? extends PersistentObject>, Consumer<PersistentObject>> handlers =
+  private static final Map<Class<? extends PersistentObject>, Consumer<PersistentObject>> commitHandlers =
       new ConcurrentHashMap<>();
 
   @Override
@@ -87,9 +87,9 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
             entity.getPrimaryKey());
 
         final Class<?> klazz = entity.getClass();
-        if (handlers.containsKey(klazz)) {
+        if (commitHandlers.containsKey(klazz)) {
           LOGGER.info("handler for class {}", klazz);
-          handlers.get(klazz).accept(entity);
+          commitHandlers.get(klazz).accept(entity);
         }
 
       }
@@ -104,9 +104,15 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     LOGGER.info("After commit");
   }
 
-  public static void addHandler(Class<? extends PersistentObject> klass,
+  /**
+   * Register an on-commit handler for an entity.
+   * 
+   * @param klass entity class to handle
+   * @param consumer handler implementation
+   */
+  public static void addCommitHandler(Class<? extends PersistentObject> klass,
       Consumer<PersistentObject> consumer) {
-    handlers.put(klass, consumer);
+    commitHandlers.put(klass, consumer);
   }
 
 }
