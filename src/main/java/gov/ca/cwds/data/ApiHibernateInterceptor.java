@@ -25,12 +25,15 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ApiHibernateInterceptor.class);
 
+  /**
+   * Types of Hibernate events to handle.
+   */
+  public enum ApiHibernateEvent {
+    COMMIT, SAVE, LOAD, TXN_BEGIN;
+  }
+
   private static final Map<Class<? extends PersistentObject>, Consumer<PersistentObject>> commitHandlers =
       new ConcurrentHashMap<>();
-
-  public enum ApiHibernateEvent {
-
-  }
 
   @Override
   public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames,
