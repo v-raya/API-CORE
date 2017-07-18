@@ -12,8 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.MDC;
 
 /**
- * 
- * 
  * @author CWDS API Team
  */
 public class AuditLoggerImplTest {
@@ -88,6 +86,13 @@ public class AuditLoggerImplTest {
   public void uniqueIdStoresIdInMdc() throws Exception {
     String id = auditLoggerImpl.uniqueId();
     assertThat(MDC.get(AuditLoggerImpl.UNIQUE_ID), is(id));
+  }
+
+  @Test
+  public void audit_Args__String() throws Exception {
+    AuditLoggerImpl target = new AuditLoggerImpl();
+    String data = null;
+    target.audit(data);
   }
 
 }

@@ -26,6 +26,7 @@ import gov.ca.cwds.auth.PerryShiroToken;
 import gov.ca.cwds.logging.AuditLogger;
 
 public class PerryAuthenticatingFilter extends AuthenticatingFilter {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(PerryAuthenticatingFilter.class);
   private static final String PARAM_TOKEN = "token";
   private static final String HEADER_AUTHORIZATION = "Authorization";
@@ -34,9 +35,10 @@ public class PerryAuthenticatingFilter extends AuthenticatingFilter {
 
   /**
    * Constructor
-   * 
    */
-  public PerryAuthenticatingFilter() {}
+  public PerryAuthenticatingFilter() {
+    // No-op.
+  }
 
   /**
    * Creates a token based on the request/response pair. For Perry authentication, the token is

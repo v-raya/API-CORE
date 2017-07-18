@@ -1,7 +1,6 @@
 package gov.ca.cwds.data.es;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -11,16 +10,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.data.ApiTypedIdentifier;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonReporter;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonSocialWorker;
-import gov.ca.cwds.data.es.ElasticSearchPerson.ElasticSearchPersonStaff;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
-import gov.ca.cwds.rest.api.domain.DomainChef;
 
 /**
- * Screening.
+ * Referral.
  * 
  * @author CWDS API Team
  */
-public class ElasticSearchPersonScreening extends ApiObjectIdentity
+public class ElasticSearchPersonReferral extends ApiObjectIdentity
     implements ApiTypedIdentifier<String> {
 
   /**
@@ -28,10 +25,16 @@ public class ElasticSearchPersonScreening extends ApiObjectIdentity
    */
   private static final long serialVersionUID = 1L;
 
+  @JsonProperty("id")
   private String id;
 
-  @JsonProperty("referral_id")
-  private String referralId;
+  @JsonProperty("legacy_referral_id")
+  @Deprecated
+  private String legacyId;
+
+  @JsonProperty("legacy_last_updated")
+  @Deprecated
+  private String legacyLastUpdated;
 
   @JsonProperty("start_date")
   private String startDate;
@@ -42,17 +45,14 @@ public class ElasticSearchPersonScreening extends ApiObjectIdentity
   @JsonProperty("county_name")
   private String countyName;
 
-  @JsonProperty("decision")
-  private String decision;
+  @JsonProperty("county_id")
+  private String countyId;
 
   @JsonProperty("response_time")
   private String responseTime;
 
-  @JsonProperty("service_name")
-  private String serviceName;
-
-  @JsonProperty("category")
-  private String category;
+  @JsonProperty("response_time_id")
+  private String responseTimeId;
 
   @JsonProperty("reporter")
   private ElasticSearchPersonReporter reporter = new ElasticSearchPersonReporter();
@@ -61,14 +61,12 @@ public class ElasticSearchPersonScreening extends ApiObjectIdentity
   private ElasticSearchPersonSocialWorker assignedSocialWorker =
       new ElasticSearchPersonSocialWorker();
 
-  @JsonProperty("staff_name")
-  private ElasticSearchPersonStaff staffName = new ElasticSearchPersonStaff();
-
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   @JsonProperty("allegations")
   private List<ElasticSearchPersonAllegation> allegations = new ArrayList<>();
 
-  @JsonProperty("all_people")
-  private List<ElasticSearchPersonAny> allPeople = new ArrayList<>();
+  @JsonProperty("access_limitation")
+  private ElasticSearchAccessLimitation accessLimitation = new ElasticSearchAccessLimitation();
 
   @JsonProperty("legacy_descriptor")
   @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -85,24 +83,42 @@ public class ElasticSearchPersonScreening extends ApiObjectIdentity
   }
 
   @JsonIgnore
-  public Date getStartDate() {
-    return DomainChef.uncookDateString(startDate);
+  @Deprecated
+  public String getLegacyId() {
+    return legacyId;
   }
 
-  public void setStartDate(Date startDate) {
-    this.startDate = DomainChef.cookDate(startDate);
+  @Deprecated
+  public void setLegacyId(String legacyId) {
+    this.legacyId = legacyId;
   }
 
-  @JsonIgnore
-  public Date getEndDate() {
-    return DomainChef.uncookDateString(endDate);
+  @Deprecated
+  public String getLegacyLastUpdated() {
+    return legacyLastUpdated;
   }
 
-  public void setEndDate(Date endDate) {
-    this.endDate = DomainChef.cookDate(endDate);
+  @Deprecated
+  public void setLegacyLastUpdated(String legacyLastUpdated) {
+    this.legacyLastUpdated = legacyLastUpdated;
   }
 
-  @JsonIgnore
+  public String getStartDate() {
+    return startDate;
+  }
+
+  public void setStartDate(String startDate) {
+    this.startDate = startDate;
+  }
+
+  public String getEndDate() {
+    return endDate;
+  }
+
+  public void setEndDate(String endDate) {
+    this.endDate = endDate;
+  }
+
   public String getCountyName() {
     return countyName;
   }
@@ -111,16 +127,6 @@ public class ElasticSearchPersonScreening extends ApiObjectIdentity
     this.countyName = countyName;
   }
 
-  @JsonIgnore
-  public String getDecision() {
-    return decision;
-  }
-
-  public void setDecision(String decision) {
-    this.decision = decision;
-  }
-
-  @JsonIgnore
   public String getResponseTime() {
     return responseTime;
   }
@@ -129,25 +135,6 @@ public class ElasticSearchPersonScreening extends ApiObjectIdentity
     this.responseTime = responseTime;
   }
 
-  @JsonIgnore
-  public String getServiceName() {
-    return serviceName;
-  }
-
-  public void setServiceName(String serviceName) {
-    this.serviceName = serviceName;
-  }
-
-  @JsonIgnore
-  public String getCategory() {
-    return category;
-  }
-
-  public void setCategory(String category) {
-    this.category = category;
-  }
-
-  @JsonIgnore
   public ElasticSearchPersonReporter getReporter() {
     return reporter;
   }
@@ -156,7 +143,6 @@ public class ElasticSearchPersonScreening extends ApiObjectIdentity
     this.reporter = reporter;
   }
 
-  @JsonIgnore
   public ElasticSearchPersonSocialWorker getAssignedSocialWorker() {
     return assignedSocialWorker;
   }
@@ -165,16 +151,6 @@ public class ElasticSearchPersonScreening extends ApiObjectIdentity
     this.assignedSocialWorker = assignedSocialWorker;
   }
 
-  @JsonIgnore
-  public ElasticSearchPersonStaff getStaffName() {
-    return staffName;
-  }
-
-  public void setStaffName(ElasticSearchPersonStaff staffName) {
-    this.staffName = staffName;
-  }
-
-  @JsonIgnore
   public List<ElasticSearchPersonAllegation> getAllegations() {
     return allegations;
   }
@@ -183,21 +159,28 @@ public class ElasticSearchPersonScreening extends ApiObjectIdentity
     this.allegations = allegations;
   }
 
-  @JsonIgnore
-  public List<ElasticSearchPersonAny> getAllPeople() {
-    return allPeople;
+  public ElasticSearchAccessLimitation getAccessLimitation() {
+    return accessLimitation;
   }
 
-  public void setAllPeople(List<ElasticSearchPersonAny> allPeople) {
-    this.allPeople = allPeople;
+  public void setAccessLimitation(ElasticSearchAccessLimitation accessLimitation) {
+    this.accessLimitation = accessLimitation;
   }
 
-  public String getReferralId() {
-    return referralId;
+  public String getCountyId() {
+    return countyId;
   }
 
-  public void setReferralId(String referralId) {
-    this.referralId = referralId;
+  public void setCountyId(String countyId) {
+    this.countyId = countyId;
+  }
+
+  public String getResponseTimeId() {
+    return responseTimeId;
+  }
+
+  public void setResponseTimeId(String responseTimeId) {
+    this.responseTimeId = responseTimeId;
   }
 
   public ElasticSearchLegacyDescriptor getLegacyDescriptor() {

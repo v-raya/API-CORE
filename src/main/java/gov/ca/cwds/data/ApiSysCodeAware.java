@@ -1,11 +1,13 @@
 package gov.ca.cwds.data;
 
+import gov.ca.cwds.data.std.ApiMarker;
+
 /**
  * Interface marks a Java bean or component as aware of CMS system codes.
  * 
  * @author CWDS API Team
  */
-public interface ApiSysCodeAware {
+public interface ApiSysCodeAware extends ApiMarker {
 
   /**
    * Getter for the unique SYS_ID code.
