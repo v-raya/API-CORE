@@ -5,8 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
@@ -15,18 +14,15 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 
 
 /**
- * {@link PersistentObject} representing a SystemCode
+ * {@link PersistentObject} representing a CMS System Code record.
  * 
  * @author CWDS API Team
  */
 @NamedQueries({
     @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.SystemCode.findByForeignKeyMetaTable",
         query = "FROM SystemCode WHERE foreignKeyMetaTable = :foreignKeyMetaTable"),
-
     @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.SystemCode.findBySystemCodeId",
-        query = "FROM SystemCode WHERE systemId = :systemId")
-
-})
+        query = "FROM SystemCode WHERE systemId = :systemId")})
 @Entity
 @Table(name = "SYS_CD_C")
 public class SystemCode extends CmsPersistentObject {
@@ -46,12 +42,15 @@ public class SystemCode extends CmsPersistentObject {
   private String inactiveIndicator;
 
   @Column(name = "OTHER_CD")
+  @ColumnTransformer(read = "trim(OTHER_CD)")
   private String otherCd;
 
   @Column(name = "SHORT_DSC")
+  @ColumnTransformer(read = "trim(SHORT_DSC)")
   private String shortDescription;
 
   @Column(name = "LGC_ID")
+  @ColumnTransformer(read = "trim(LGC_ID)")
   private String logicalId;
 
   @Column(name = "THIRD_ID")
@@ -61,6 +60,7 @@ public class SystemCode extends CmsPersistentObject {
   private String foreignKeyMetaTable;
 
   @Column(name = "LONG_DSC")
+  @ColumnTransformer(read = "trim(LONG_DSC)")
   private String longDescription;
 
   /**
@@ -176,16 +176,6 @@ public class SystemCode extends CmsPersistentObject {
    */
   public String getLongDescription() {
     return longDescription;
-  }
-
-  @Override
-  public final int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this, false);
-  }
-
-  @Override
-  public final boolean equals(Object obj) {
-    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

@@ -12,6 +12,7 @@ import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.flyway.FlywayFactory;
 
 public class BaseApiConfiguration extends Configuration {
+
   /**
    * The application name
    */

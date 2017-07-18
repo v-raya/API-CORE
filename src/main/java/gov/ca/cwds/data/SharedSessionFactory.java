@@ -59,9 +59,12 @@ public class SharedSessionFactory implements SessionFactory {
   private static final Logger LOGGER = LoggerFactory.getLogger(SharedSessionFactory.class);
 
   private SessionFactory sf;
-  private final ReadWriteLock lock;
-  private final Condition okToClose;
+
+  private final transient ReadWriteLock lock;
+  private final transient Condition okToClose;
+
   private final boolean closeOnSignal;
+  private final boolean testMode;
 
   /**
    * Changes become visible to other threads immediately. Only available to child classes and this
@@ -79,10 +82,11 @@ public class SharedSessionFactory implements SessionFactory {
   SharedSessionFactory(SessionFactory sf, boolean testMode) {
     this.sf = sf;
     this.closeOnSignal = testMode;
-    lock = new ReentrantReadWriteLock();
-    okToClose = lock.writeLock().newCondition();
+    this.testMode = testMode;
+    this.lock = new ReentrantReadWriteLock();
+    this.okToClose = lock.writeLock().newCondition();
 
-    if (testMode) {
+    if (this.testMode) {
       runCloseThread();
     }
   }
@@ -93,7 +97,7 @@ public class SharedSessionFactory implements SessionFactory {
    * @param sf session factory to wrap
    */
   SharedSessionFactory(SessionFactory sf) {
-    this(sf, false);
+    this(sf, true);
   }
 
   /**

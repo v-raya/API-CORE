@@ -109,4 +109,3 @@ public class SystemCodeIdValidatorTest {
     assertFalse(violations.isEmpty());
   }
 }
-

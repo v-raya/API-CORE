@@ -11,6 +11,7 @@ import java.util.Date;
 import org.junit.Test;
 
 public class NsPersistentObjectTest {
+
   private static final class TestNsPersistentObject extends NsPersistentObject {
 
     private String id;
@@ -19,6 +20,10 @@ public class NsPersistentObjectTest {
 
     public TestNsPersistentObject(String id) {
       this.id = id;
+    }
+
+    protected TestNsPersistentObject(String lastUpdatedId, String createUserId) {
+      super(lastUpdatedId, createUserId);
     }
 
     @Override
@@ -56,9 +61,9 @@ public class NsPersistentObjectTest {
 
   @Test
   public void getCreateUserId_Args__() throws Exception {
-    NsPersistentObject target = new TestNsPersistentObject();
+    NsPersistentObject target = new TestNsPersistentObject("0x4", "0x5");
     String actual = target.getCreateUserId();
-    String expected = null;
+    String expected = "0x5";
     assertThat(actual, is(equalTo(expected)));
   }
 

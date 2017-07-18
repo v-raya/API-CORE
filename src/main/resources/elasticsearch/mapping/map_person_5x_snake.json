@@ -676,6 +676,10 @@
                   "type": "text",
                   "store": true
                 },
+                "sensitivity_indicator": {
+                  "type": "text",
+                  "store": true
+                },
                 "legacy_descriptor": {
                   "properties": {
                     "legacy_id": {
@@ -714,6 +718,10 @@
                   "store": true
                 },
                 "last_name": {
+                  "type": "text",
+                  "store": true
+                },
+                "sensitivity_indicator": {
                   "type": "text",
                   "store": true
                 },
@@ -1324,6 +1332,10 @@
               "type": "date",
               "store": true
             },
+            "sensitivity_indicator": {
+              "type": "text",
+              "store": true
+            },
             "legacy_descriptor": {
               "properties": {
                 "legacy_id": {
@@ -1380,6 +1392,10 @@
             "legacy_last_updated": {
               "format": "strict_date_time",
               "type": "date",
+              "store": true
+            },
+            "sensitivity_indicator": {
+              "type": "text",
               "store": true
             },
             "legacy_descriptor": {

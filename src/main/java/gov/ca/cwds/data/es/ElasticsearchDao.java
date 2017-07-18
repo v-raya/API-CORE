@@ -163,7 +163,7 @@ public class ElasticsearchDao implements Closeable {
    * @param type Index document type
    * @param settingsJsonFile Setting file
    * @param mappingJsonFile Mapping file
-   * @throws IOException
+   * @throws IOException on disconnect
    */
   public synchronized void createIndexIfNeeded(final String index, final String type,
       final String settingsJsonFile, final String mappingJsonFile) throws IOException {
@@ -421,6 +421,7 @@ public class ElasticsearchDao implements Closeable {
       return new ElasticSearchPerson[0];
     }
 
+    // Old highlights commented out.
     SearchRequestBuilder builder = client.prepareSearch(alias).setTypes(docType)
         .setQuery(queryBuilder).setFrom(0).setSize(DEFAULT_MAX_RESULTS)
         // .addHighlightedField(ElasticSearchPerson.ESColumn.FIRST_NAME.getCol())
@@ -467,8 +468,8 @@ public class ElasticsearchDao implements Closeable {
    */
   public String searchIndexByQuery(final String index, final String query, final String protocol,
       final int port, final String docType) {
-    LOGGER.warn(" index: {}", index);
-    LOGGER.warn(" QUERY: {}", query);
+    LOGGER.info(" index: {}", index);
+    LOGGER.info(" query: {}", query);
     checkArgument(!Strings.isNullOrEmpty(query), "query cannot be Null or empty");
     checkArgument(!Strings.isNullOrEmpty(index), "index name cannot be Null or empty");
 
@@ -477,7 +478,7 @@ public class ElasticsearchDao implements Closeable {
         .append(port).append('/').append(index).append('/').append(docType.trim())
         .append("/_search");
     final String targetURL = buf.toString();
-    LOGGER.warn("ES SEARCH URL: {}", targetURL);
+    LOGGER.info("ES SEARCH URL: {}", targetURL);
     return executionResult(targetURL, query);
   }
 
@@ -517,8 +518,8 @@ public class ElasticsearchDao implements Closeable {
   }
 
   /**
-   * Builds an Elasticsearch compound query by combining multiple <b>should</b> clauses in a Bool
-   * Query
+   * Builds an Elasticsearch compound query by combining multiple <b>should</b> clauses into a
+   * Boolean Query.
    * 
    * @param searchTerm the user entered values to search for separated by space
    * @return the Elasticsearch compound query
@@ -585,7 +586,11 @@ public class ElasticsearchDao implements Closeable {
   }
 
   /**
-   * Consume an external REST web service, specifying URL, request headers and JSON payload
+   * Consume an external REST web service, specifying URL, request headers and JSON payload.
+   * 
+   * <p>
+   * Note that this implementation calls the Elasticsearch HTTP transport, not the Java transport.
+   * </p>
    * 
    * @param targetURL the target URL
    * @param payload the payload specified by user
@@ -641,4 +646,5 @@ public class ElasticsearchDao implements Closeable {
     out.flush();
     return out.toString();
   }
+
 }

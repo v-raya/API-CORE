@@ -11,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Type;
 
@@ -29,7 +27,6 @@ import gov.ca.cwds.data.std.ApiPhoneAware;
 
 /**
  * @author CWDS API Team
- *
  */
 @SuppressWarnings("javadoc")
 @MappedSuperclass
@@ -186,16 +183,6 @@ public abstract class BaseAddress extends CmsPersistentObject
   @Override
   public String getPrimaryKey() {
     return getId();
-  }
-
-  @Override
-  public int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this, false);
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
   // ==================
@@ -425,7 +412,14 @@ public abstract class BaseAddress extends CmsPersistentObject
   @Override
   public String getStreetAddress() {
     StringBuilder buf = new StringBuilder();
-    buf.append(this.streetNumber).append(" ").append(this.streetName);
+    if (StringUtils.isNoneBlank(this.streetNumber)) {
+      buf.append(this.streetNumber).append(" ");
+    }
+
+    if (StringUtils.isNoneBlank(this.streetName)) {
+      buf.append(this.streetName);
+    }
+
     if (StringUtils.isNotBlank(this.unitNumber)) {
       buf.append(" #").append(this.unitNumber);
     }

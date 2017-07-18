@@ -29,8 +29,9 @@ public final class Base62 {
     if (i == 0) {
       return "a";
     }
-    while (i > 0) {
-      i = fromBase10(i, sb);
+    long j = i;
+    while (j > 0) {
+      j = fromBase10(j, sb);
     }
     return sb.reverse().toString();
   }

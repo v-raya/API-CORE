@@ -11,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -128,10 +126,18 @@ public abstract class BaseAttorney extends CmsPersistentObject
   @Column(name = "ZIP_SFX_NO")
   protected Short zipSuffixNumber;
 
+  /**
+   * Default constructor.
+   */
   public BaseAttorney() {
     super();
   }
 
+  /**
+   * Construct from last updated user id.
+   * 
+   * @param lastUpdatedId last updated id
+   */
   public BaseAttorney(String lastUpdatedId) {
     super(lastUpdatedId);
   }
@@ -384,26 +390,6 @@ public abstract class BaseAttorney extends CmsPersistentObject
     }
 
     return phones.toArray(new ApiPhoneAware[0]);
-  }
-
-  /**
-   * {@inheritDoc}
-   * 
-   * @see java.lang.Object#hashCode()
-   */
-  @Override
-  public int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this, false);
-  }
-
-  /**
-   * {@inheritDoc}
-   * 
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
-  @Override
-  public boolean equals(Object obj) {
-    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
   public void setArchiveAssociationIndicator(String archiveAssociationIndicator) {

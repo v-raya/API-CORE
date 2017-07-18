@@ -14,8 +14,8 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 @MappedSuperclass
 public abstract class NsElasticsearchObject {
 
-  private String updated_at;
-  private String created_at;
+  private String updatedAt;
+  private String createdAt;
 
   /**
    * Default constructor
@@ -30,22 +30,22 @@ public abstract class NsElasticsearchObject {
    * @param updatedAt The time of last update of this object
    */
   protected NsElasticsearchObject(String updatedAt) {
-    this.updated_at = updatedAt;
-    this.created_at = DomainChef.cookTimestamp(new Date()).toString();
+    this.updatedAt = updatedAt;
+    this.createdAt = DomainChef.cookTimestamp(new Date()).toString();
   }
 
   /**
    * @return the updated_at
    */
-  public String getUpdated_at() {
-    return updated_at;
+  public String getUpdatedAt() {
+    return updatedAt;
   }
 
   /**
    * @return the created_at
    */
-  public String getCreated_at() {
-    return created_at;
+  public String getCreatedAt() {
+    return createdAt;
   }
 
 }

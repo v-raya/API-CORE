@@ -9,7 +9,7 @@ sourceCompatibility = 1.8
 compileJava {options.encoding = "UTF-8"}   
 
 project.ext {
-    apiVersion = "0.25"
+    apiVersion = "0.27"
     configPath = "$rootProject.projectDir/config/"
     dropwizardVersion = "1.1.0"
     dropwizardFlywayVersion = "1.0.0-1"
@@ -52,12 +52,10 @@ dependencies {
     compile group: 'io.swagger', name: 'swagger-jersey2-jaxrs', version: '1.5.9'
     compile group: 'io.swagger', name: 'swagger-annotations', version: '1.5.9'
     compile group: "org.postgresql", name: "postgresql", version: "9.4.1208.jre7"
+    //SECURITY
+    compile group: 'gov.ca.cwds.api', name:'shiro-security', version: '0.25.69'
 
-    compile('io.jsonwebtoken:jjwt:0.7.0') {
-        exclude group: 'org.bouncycastle'
-    }
-
-	// LOGGING:	
+	// LOGGING:
 	compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4jVersion
   	compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: log4jVersion
 	compile group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: log4jVersion
