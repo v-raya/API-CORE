@@ -33,6 +33,12 @@ public class ElasticsearchConfiguration {
   @JsonProperty("elasticsearch.doctype")
   private String elasticsearchDocType;
 
+  @JsonProperty("elasticsearch.xpack.user")
+  private String user;
+
+  @JsonProperty("elasticsearch.xpack.password")
+  private String password;
+
   /**
    * Default constructor.
    */
@@ -73,5 +79,13 @@ public class ElasticsearchConfiguration {
    */
   public String getElasticsearchDocType() {
     return elasticsearchDocType;
+  }
+
+  public String getUser() {
+    return user;
+  }
+
+  public String getPassword() {
+    return password;
   }
 }
