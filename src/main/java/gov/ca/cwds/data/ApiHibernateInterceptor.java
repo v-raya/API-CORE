@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 import org.hibernate.EmptyInterceptor;
+import org.hibernate.Transaction;
 import org.hibernate.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,10 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   private static final Map<Class<? extends PersistentObject>, Consumer<PersistentObject>> commitHandlers =
       new ConcurrentHashMap<>();
 
+  public enum ApiHibernateEvent {
+
+  }
+
   @Override
   public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
@@ -40,11 +45,6 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState,
       Object[] previousState, String[] propertyNames, Type[] types) {
     LOGGER.info("Flush dirty entity: type={}, id={}", entity.getClass().getName(), id);
-
-    // if (entity instanceof Client) {
-    // LOGGER.info("Client Update Operation");
-    // return true;
-    // }
 
     return false;
   }
@@ -63,11 +63,6 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
     LOGGER.info("Save entity: type={}, id={}", entity.getClass().getName(), id);
-
-    // if (entity instanceof Client) {
-    // LOGGER.info("Client Create Operation");
-    // return true;
-    // }
 
     return false;
   }
@@ -113,6 +108,24 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   public static void addCommitHandler(Class<? extends PersistentObject> klass,
       Consumer<PersistentObject> consumer) {
     commitHandlers.put(klass, consumer);
+  }
+
+  @Override
+  public void afterTransactionBegin(Transaction tx) {
+    super.afterTransactionBegin(tx);
+    LOGGER.info("afterTransactionBegin");
+  }
+
+  @Override
+  public void afterTransactionCompletion(Transaction tx) {
+    super.afterTransactionCompletion(tx);
+    LOGGER.info("afterTransactionCompletion");
+  }
+
+  @Override
+  public void beforeTransactionCompletion(Transaction tx) {
+    super.beforeTransactionCompletion(tx);
+    LOGGER.info("beforeTransactionCompletion");
   }
 
 }
