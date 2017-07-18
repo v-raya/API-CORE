@@ -5,8 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.NamedQuery;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
@@ -29,12 +28,15 @@ public class SystemMeta extends CmsPersistentObject {
 
   @Id
   @Column(name = "TBL_DSD_NM")
+  @ColumnTransformer(read = "trim(TBL_DSD_NM)")
   private String logicalTableDsdName;
 
   @Column(name = "USR_TBL_NM")
+  @ColumnTransformer(read = "trim(USR_TBL_NM)")
   private String userTableName;
 
   @Column(name = "SHT_DSC_NM")
+  @ColumnTransformer(read = "trim(SHT_DSC_NM)")
   private String shortDescriptionName;
 
   /**
@@ -47,6 +49,7 @@ public class SystemMeta extends CmsPersistentObject {
   }
 
   /**
+   * Construct from required fields.
    * 
    * @param logicalTableDsdName the Logical Table Dsd Name
    * @param userTableName the User Table Name
@@ -88,17 +91,6 @@ public class SystemMeta extends CmsPersistentObject {
   @Override
   public String getPrimaryKey() {
     return getLogicalTableDsdName();
-  }
-
-
-  @Override
-  public final int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this, false);
-  }
-
-  @Override
-  public final boolean equals(Object obj) {
-    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }
