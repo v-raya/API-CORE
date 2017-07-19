@@ -18,6 +18,11 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 /**
  * Hibernate interceptor logs activity and traps referential integrity errors.
  * 
+ * <p>
+ * Methods that return a boolean should return true if the interceptor changed the object, which it
+ * does not <i>yet</i> do.
+ * </p>
+ * 
  * @author CWDS API Team
  */
 public class ApiHibernateInterceptor extends EmptyInterceptor {
@@ -33,7 +38,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     BEFORE_COMMIT, AFTER_COMMIT, SAVE, LOAD, DELETE, AFTER_TXN_BEGIN, BEFORE_TXN_COMPLETE, AFTER_TXN_COMPLETE;
   }
 
-  private static final Map<Class<? extends PersistentObject>, Consumer<PersistentObject>> commitHandlers =
+  private static final Map<Class<? extends PersistentObject>, Consumer<PersistentObject>> handlers =
       new ConcurrentHashMap<>();
 
   @Override
@@ -74,19 +79,19 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
    */
   @Override
   public void preFlush(@SuppressWarnings("rawtypes") Iterator iter) {
-    LOGGER.info("Before commit");
+    LOGGER.info("preFlush");
 
     while (iter.hasNext()) {
       Object obj = iter.next();
       if (obj instanceof PersistentObject) {
         PersistentObject entity = (PersistentObject) obj;
-        LOGGER.info("before commit: type={}, id={}", entity.getClass().getName(),
+        LOGGER.info("preFlush: type={}, id={}", entity.getClass().getName(),
             entity.getPrimaryKey());
 
         final Class<?> klazz = entity.getClass();
-        if (commitHandlers.containsKey(klazz)) {
+        if (handlers.containsKey(klazz)) {
           LOGGER.info("handler for class {}", klazz);
-          commitHandlers.get(klazz).accept(entity);
+          handlers.get(klazz).accept(entity);
         }
 
       }
@@ -94,22 +99,22 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   }
 
   /**
-   * Called after committed to database.
+   * Called after the transaction commits.
    */
   @Override
   public void postFlush(@SuppressWarnings("rawtypes") Iterator iterator) {
-    LOGGER.info("After commit");
+    LOGGER.info("postFlush, After commit");
   }
 
   /**
-   * Register an on-commit handler for an entity.
+   * Register an RI handler by entity.
    * 
    * @param klass entity class to handle
    * @param consumer handler implementation
    */
-  public static void addCommitHandler(Class<? extends PersistentObject> klass,
+  public static void addHandler(Class<? extends PersistentObject> klass,
       Consumer<PersistentObject> consumer) {
-    commitHandlers.put(klass, consumer);
+    handlers.put(klass, consumer);
   }
 
   @Override
