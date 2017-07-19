@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 import org.hibernate.EmptyInterceptor;
+import org.hibernate.EntityMode;
 import org.hibernate.Transaction;
 import org.hibernate.type.Type;
 import org.slf4j.Logger;
@@ -25,12 +26,15 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ApiHibernateInterceptor.class);
 
+  /**
+   * Types of Hibernate events to handle.
+   */
+  public enum ApiHibernateEvent {
+    BEFORE_COMMIT, AFTER_COMMIT, SAVE, LOAD, DELETE, AFTER_TXN_BEGIN, BEFORE_TXN_COMPLETE, AFTER_TXN_COMPLETE;
+  }
+
   private static final Map<Class<? extends PersistentObject>, Consumer<PersistentObject>> commitHandlers =
       new ConcurrentHashMap<>();
-
-  public enum ApiHibernateEvent {
-
-  }
 
   @Override
   public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames,
@@ -45,7 +49,6 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState,
       Object[] previousState, String[] propertyNames, Type[] types) {
     LOGGER.info("Flush dirty entity: type={}, id={}", entity.getClass().getName(), id);
-
     return false;
   }
 
@@ -56,14 +59,13 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   public boolean onLoad(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
     LOGGER.info("Load entity: type={}, id={}", entity.getClass().getName(), id);
-    return true;
+    return false;
   }
 
   @Override
   public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
     LOGGER.info("Save entity: type={}, id={}", entity.getClass().getName(), id);
-
     return false;
   }
 
@@ -113,19 +115,25 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   @Override
   public void afterTransactionBegin(Transaction tx) {
     super.afterTransactionBegin(tx);
-    LOGGER.info("afterTransactionBegin");
-  }
-
-  @Override
-  public void afterTransactionCompletion(Transaction tx) {
-    super.afterTransactionCompletion(tx);
-    LOGGER.info("afterTransactionCompletion");
+    LOGGER.info("afterTransactionBegin: txt status={}", tx.getStatus());
   }
 
   @Override
   public void beforeTransactionCompletion(Transaction tx) {
     super.beforeTransactionCompletion(tx);
-    LOGGER.info("beforeTransactionCompletion");
+    LOGGER.info("beforeTransactionCompletion: txt status={}", tx.getStatus());
+  }
+
+  @Override
+  public void afterTransactionCompletion(Transaction tx) {
+    super.afterTransactionCompletion(tx);
+    LOGGER.info("afterTransactionCompletion: txt status={}", tx.getStatus());
+  }
+
+  @Override
+  public Object instantiate(String entityName, EntityMode entityMode, Serializable id) {
+    LOGGER.info("instantiate: entityName={}, id={}", entityName, id);
+    return super.instantiate(entityName, entityMode, id);
   }
 
 }
