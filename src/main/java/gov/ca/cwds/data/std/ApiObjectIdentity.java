@@ -11,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * 
  * @author CWDS API Team
  */
-public class ApiObjectIdentity implements ApiMarker {
+public abstract class ApiObjectIdentity implements ApiMarker {
 
   /**
    * Default serialization.
