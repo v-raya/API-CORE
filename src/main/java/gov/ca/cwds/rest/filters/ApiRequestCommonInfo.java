@@ -79,7 +79,7 @@ public class ApiRequestCommonInfo extends ApiObjectIdentity {
    * 
    * @return available sequence number
    */
-  int getSequenceExternalTable() {
+  public int getSequenceExternalTable() {
     return sequenceExternalTable;
   }
 
@@ -88,7 +88,7 @@ public class ApiRequestCommonInfo extends ApiObjectIdentity {
    * 
    * @return available sequence number
    */
-  int incrementAndGetSequenceExternalTable() {
+  public int incrementAndGetSequenceExternalTable() {
     ++sequenceExternalTable;
     return sequenceExternalTable;
   }
