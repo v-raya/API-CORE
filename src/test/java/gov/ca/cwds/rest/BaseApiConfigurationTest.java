@@ -6,6 +6,9 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Test;
 import org.secnod.dropwizard.shiro.ShiroConfiguration;
 
@@ -118,16 +121,17 @@ public class BaseApiConfigurationTest {
   @Test
   public void getElasticsearchConfiguration_Args__() throws Exception {
     BaseApiConfiguration target = new BaseApiConfiguration();
-    ElasticsearchConfiguration actual = target.getElasticsearchConfiguration();
-    ElasticsearchConfiguration expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    Map<String, ElasticsearchConfiguration> actual = target.getElasticsearchConfigurations();
+    assertThat(actual, is(notNullValue()));
   }
 
   @Test
   public void setElasticsearchConfiguration_Args__ElasticsearchConfiguration() throws Exception {
     BaseApiConfiguration target = new BaseApiConfiguration();
     ElasticsearchConfiguration elasticsearchConfiguration = mock(ElasticsearchConfiguration.class);
-    target.setElasticsearchConfiguration(elasticsearchConfiguration);
+    Map<String, ElasticsearchConfiguration> esConfigs = new HashMap<>();
+    esConfigs.put("some-key", elasticsearchConfiguration);
+    target.setElasticsearchConfigurations(esConfigs);
   }
 
   @Test

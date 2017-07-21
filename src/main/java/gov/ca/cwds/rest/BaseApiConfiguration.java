@@ -1,5 +1,8 @@
 package gov.ca.cwds.rest;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Nullable;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -38,7 +41,7 @@ public class BaseApiConfiguration extends Configuration {
   private DataSourceFactory cmsDataSourceFactory;
 
   @Nullable
-  private ElasticsearchConfiguration elasticsearchConfiguration;
+  private Map<String, ElasticsearchConfiguration> elasticsearchConfigurations = new HashMap<>();
 
   @Nullable
   private SmartyStreetsConfiguration smartyStreetsConfiguration;
@@ -120,13 +123,14 @@ public class BaseApiConfiguration extends Configuration {
 
 
   @JsonProperty(value = "elasticsearch")
-  public ElasticsearchConfiguration getElasticsearchConfiguration() {
-    return elasticsearchConfiguration;
+  public Map<String, ElasticsearchConfiguration> getElasticsearchConfigurations() {
+    return elasticsearchConfigurations;
   }
 
   @JsonProperty
-  public void setElasticsearchConfiguration(ElasticsearchConfiguration elasticsearchConfiguration) {
-    this.elasticsearchConfiguration = elasticsearchConfiguration;
+  public void setElasticsearchConfigurations(
+      Map<String, ElasticsearchConfiguration> elasticsearchConfigurations) {
+    this.elasticsearchConfigurations = elasticsearchConfigurations;
   }
 
   @JsonProperty(value = "smartystreets")
