@@ -34,19 +34,18 @@ public class DateValidator implements ConstraintValidator<Date, String> {
   public boolean isValid(String value, ConstraintValidatorContext context) {
     DateFormat df = new SimpleDateFormat(format);
     df.setLenient(false);
-    if (required || !Strings.isNullOrEmpty(value)) {
+    boolean valid = false;
+
+    if (Strings.isNullOrEmpty(value)) {
+      valid = !required;
+    } else {
       try {
         df.parse(value);
+        valid = true;
       } catch (ParseException e) {
         LOGGER.warn("Unable to validate date string {} with format {}", value, format);
-        return false;
-      } catch (NullPointerException npe) {
-        LOGGER.warn("Unable to validate null date string with format {}", format, npe);
-        return false;
       }
     }
-
-    return true;
+    return valid;
   }
-
 }
