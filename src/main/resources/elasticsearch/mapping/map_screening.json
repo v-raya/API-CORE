@@ -1,53 +1,25 @@
 {
-    "screenings": {
-        "mappings": {
-            "screening": {
-                "dynamic": "strict",
-                "properties": {
-                    "additional_information": {
-                        "type": "string"
-                    },
-                    "assignee": {
-                        "type": "string"
-                    },
-                    "communication_method": {
-                        "type": "string"
-                    },
-                    "ended_at": {
-                        "type": "string"
-                    },
-                    "id": {
-                        "type": "string"
-                    },
-                    "incident_county": {
-                        "type": "string"
-                    },
-                    "incident_date": {
-                        "type": "string"
-                    },
-                    "location_type": {
-                        "type": "string"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "reference": {
-                        "type": "string"
-                    },
-                    "report_narrative": {
-                        "type": "string"
-                    },
-                    "screening_decision": {
-                        "type": "string"
-                    },
-                    "screening_decision_detail": {
-                        "type": "string"
-                    },
-                    "started_at": {
-                        "type": "string"
-                    }
-                }
-            }
-        }
+  "properties": {
+    "id": {
+      "type": "text"
+    },
+    "name": {
+      "type": "text"
+    },
+    "reference": {
+      "type": "text"
+    },
+    "screening_decision": {
+      "type": "text"
+    },
+    "screening_decision_detail": {
+      "type": "text"
+    },
+    "assignee": {
+      "type": "text"
+    },
+    "started_at": {
+      "type": "text"
     }
+  }
 }

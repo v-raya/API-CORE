@@ -58,11 +58,12 @@ dependencies {
 
 	// LOGGING:
 	compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4jVersion
-  	compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: log4jVersion
-	compile group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: log4jVersion
-	compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.1'
-	compile group: 'org.slf4j', name: 'slf4j-ext', version: '1.7.25'
-	compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: log4jVersion
+    compile group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: log4jVersion
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.1'
+    compile group: 'org.slf4j', name: 'slf4j-ext', version: '1.7.25'
+    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
+    compile group: 'gov.ca.cwds.api', name:'shiro-security', version: '0.25.65'
 
 	compile 'com.fasterxml.jackson.module:jackson-module-guice:2.8.2'
 	compile group: 'org.secnod.dropwizard', name: 'dropwizard-shiro', version: '0.2.0'

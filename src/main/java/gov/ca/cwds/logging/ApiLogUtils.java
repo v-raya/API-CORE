@@ -4,11 +4,10 @@ import java.text.MessageFormat;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.rest.api.ApiException;
-import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * Logging utilities for CWDS projects.
@@ -18,7 +17,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  */
 public class ApiLogUtils<E extends RuntimeException> {
 
-  private static final Logger LOGGER = LogManager.getLogger(ApiLogUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ApiLogUtils.class);
 
   private static final int DEFAULT_LOG_EVERY = 5000;
 
@@ -90,14 +89,14 @@ public class ApiLogUtils<E extends RuntimeException> {
    * @param args error message, excluding throwable message
    * @throws ServiceException runtime exception
    */
-  public void raiseError(final Logger log, Throwable t, String pattern, Object... args) {
-    final Object[] objs = ArrayUtils.isEmpty(args) ? new Object[0] : args;
-    final String pat = !StringUtils.isEmpty(pattern) ? pattern : StringUtils.join(objs, "{}");
-    final String msg = MessageFormat.format(pat, objs);
-    final Logger logger = log != null ? log : LOGGER;
-    logger.error(msg, t);
-    throw newInstance(msg, t);
-  }
+  // public void raiseError(final Logger log, Throwable t, String pattern, Object... args) {
+  // final Object[] objs = ArrayUtils.isEmpty(args) ? new Object[0] : args;
+  // final String pat = !StringUtils.isEmpty(pattern) ? pattern : StringUtils.join(objs, "{}");
+  // final String msg = MessageFormat.format(pat, objs);
+  // final Logger logger = log != null ? log : LOGGER;
+  // logger.error(msg, t);
+  // throw newInstance(msg, t);
+  // }
 
   /**
    * Convenience overload of {@link #raiseError(Logger, Throwable, String, Object...)}. Format
@@ -108,9 +107,9 @@ public class ApiLogUtils<E extends RuntimeException> {
    * @param args error message or throwable message
    * @throws RuntimeException runtime exception
    */
-  public void raiseError(final Logger log, Throwable t, Object... args) {
-    raiseError(log, t, null, args);
-  }
+  // public void raiseError(final Logger log, Throwable t, Object... args) {
+  // raiseError(log, t, null, args);
+  // }
 
   /**
    * Format message and throw a runtime {@link ApiException}. Call to raise an error severe enough

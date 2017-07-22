@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -38,7 +38,7 @@ import io.dropwizard.jackson.Jackson;
  */
 public class ElasticSearchLiveTestRunner implements Runnable {
 
-  private static final Logger LOGGER = LogManager.getLogger(ElasticSearchLiveTestRunner.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchLiveTestRunner.class);
 
   private static final ObjectMapper YAML_MAPPER = new ObjectMapper(new YAMLFactory());
 
