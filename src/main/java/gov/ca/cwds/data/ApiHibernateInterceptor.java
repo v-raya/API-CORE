@@ -79,7 +79,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
    */
   @Override
   public void preFlush(@SuppressWarnings("rawtypes") Iterator iter) {
-    LOGGER.info("preFlush");
+    LOGGER.debug("preFlush: begin");
 
     while (iter.hasNext()) {
       Object obj = iter.next();
@@ -96,6 +96,8 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
 
       }
     }
+
+    LOGGER.debug("preFlush: done");
   }
 
   /**
@@ -114,25 +116,26 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
    */
   public static void addHandler(Class<? extends PersistentObject> klass,
       Consumer<PersistentObject> consumer) {
+    LOGGER.info("addHandler: class: {}", klass.getName());
     handlers.put(klass, consumer);
   }
 
   @Override
   public void afterTransactionBegin(Transaction tx) {
-    super.afterTransactionBegin(tx);
     LOGGER.info("afterTransactionBegin: txt status={}", tx.getStatus());
+    super.afterTransactionBegin(tx);
   }
 
   @Override
   public void beforeTransactionCompletion(Transaction tx) {
-    super.beforeTransactionCompletion(tx);
     LOGGER.info("beforeTransactionCompletion: txt status={}", tx.getStatus());
+    super.beforeTransactionCompletion(tx);
   }
 
   @Override
   public void afterTransactionCompletion(Transaction tx) {
-    super.afterTransactionCompletion(tx);
     LOGGER.info("afterTransactionCompletion: txt status={}", tx.getStatus());
+    super.afterTransactionCompletion(tx);
   }
 
   @Override
