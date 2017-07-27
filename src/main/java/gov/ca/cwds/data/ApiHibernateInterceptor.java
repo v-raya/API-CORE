@@ -1,10 +1,10 @@
 package gov.ca.cwds.data;
 
 import java.io.Serializable;
+import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.EntityMode;
@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.rest.api.ApiException;
 
 /**
  * Hibernate interceptor logs activity and traps referential integrity errors.
@@ -38,7 +39,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     BEFORE_COMMIT, AFTER_COMMIT, SAVE, LOAD, DELETE, AFTER_TXN_BEGIN, BEFORE_TXN_COMPLETE, AFTER_TXN_COMPLETE;
   }
 
-  private static final Map<Class<? extends PersistentObject>, Consumer<PersistentObject>> handlers =
+  private static final Map<Class<? extends PersistentObject>, ApiReferentialCheck<PersistentObject>> handlers =
       new ConcurrentHashMap<>();
 
   @Override
@@ -91,7 +92,13 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
         final Class<?> klazz = entity.getClass();
         if (handlers.containsKey(klazz)) {
           LOGGER.info("handler for class {}", klazz);
-          handlers.get(klazz).accept(entity);
+
+          if (!handlers.get(klazz).apply(entity)) {
+            final String msg =
+                MessageFormat.format("RI FAILED FOR CLASS {}, entity: {}", klazz, entity);
+            LOGGER.error(msg);
+            throw new ApiException(msg);
+          }
         }
 
       }
@@ -113,7 +120,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
    * @param consumer handler implementation
    */
   public static void addHandler(Class<? extends PersistentObject> klass,
-      Consumer<PersistentObject> consumer) {
+      ApiReferentialCheck<PersistentObject> consumer) {
     handlers.put(klass, consumer);
   }
 
