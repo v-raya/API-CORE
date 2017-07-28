@@ -84,6 +84,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     while (iter.hasNext()) {
       Object obj = iter.next();
       if (obj instanceof PersistentObject) {
+
         PersistentObject entity = (PersistentObject) obj;
         LOGGER.info("preFlush: type={}, id={}", entity.getClass().getName(),
             entity.getPrimaryKey());
