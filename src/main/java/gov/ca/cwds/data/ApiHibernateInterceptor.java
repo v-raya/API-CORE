@@ -16,9 +16,34 @@ import org.slf4j.LoggerFactory;
 import gov.ca.cwds.data.persistence.PersistentObject;
 
 /**
- * Hibernate interceptor logs activity and traps referential integrity errors.
+ * Hibernate interceptor that logs SQL activity and traps referential integrity (RI) errors as a
+ * <strong>last resort</strong>.
+ * 
+ * <p>
+ * Validate any other "last ditch" constraints or business rules here before committing a
+ * transaction to the database. Register handlers with method {@link #addHandler(Class, Consumer)}.
+ * </p>
+ * 
+ * <p>
+ * Enforce foreign key constraints using "normal" Hibernate mechanisms, such as this typical FK:
+ * </p>
+ * <blockquote>
+ * 
+ * <pre>
+ * &#64;ManyToOne(optional = false)
+ * &#64;JoinColumn(name = "FKCLIENT_T", nullable = false, updatable = false, insertable = false)
+ * private Client client;
+ * </pre>
+ * 
+ * </blockquote>
+ * 
+ * <p>
+ * Boolean return methods should return true <i>only</i> if the interceptor changes the object,
+ * which it <i>does not yet</i> do.
+ * </p>
  * 
  * @author CWDS API Team
+ * @see ApiReferentialCheck
  */
 public class ApiHibernateInterceptor extends EmptyInterceptor {
 
@@ -33,7 +58,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     BEFORE_COMMIT, AFTER_COMMIT, SAVE, LOAD, DELETE, AFTER_TXN_BEGIN, BEFORE_TXN_COMPLETE, AFTER_TXN_COMPLETE;
   }
 
-  private static final Map<Class<? extends PersistentObject>, Consumer<PersistentObject>> commitHandlers =
+  private static final Map<Class<? extends PersistentObject>, Consumer<PersistentObject>> handlers =
       new ConcurrentHashMap<>();
 
   @Override
@@ -70,69 +95,73 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   }
 
   /**
-   * Called before commit to database.
+   * Called <strong>before</strong> the transaction commits.
    */
   @Override
   public void preFlush(@SuppressWarnings("rawtypes") Iterator iter) {
-    LOGGER.info("Before commit");
+    LOGGER.debug("before commit: begin");
 
     while (iter.hasNext()) {
       Object obj = iter.next();
       if (obj instanceof PersistentObject) {
+
         PersistentObject entity = (PersistentObject) obj;
         LOGGER.info("before commit: type={}, id={}", entity.getClass().getName(),
             entity.getPrimaryKey());
 
         final Class<?> klazz = entity.getClass();
-        if (commitHandlers.containsKey(klazz)) {
+        if (handlers.containsKey(klazz)) {
           LOGGER.info("handler for class {}", klazz);
-          commitHandlers.get(klazz).accept(entity);
+          handlers.get(klazz).accept(entity);
         }
 
       }
     }
+
+    LOGGER.debug("before commit: done");
   }
 
   /**
-   * Called after committed to database.
+   * Called <strong>after</strong> the transaction commits.
    */
   @Override
   public void postFlush(@SuppressWarnings("rawtypes") Iterator iterator) {
-    LOGGER.info("After commit");
+    LOGGER.debug("postFlush, after commit");
   }
 
   /**
-   * Register an on-commit handler for an entity.
+   * Register an RI handler by entity.
    * 
    * @param klass entity class to handle
    * @param consumer handler implementation
    */
-  public static void addCommitHandler(Class<? extends PersistentObject> klass,
+  public static void addHandler(Class<? extends PersistentObject> klass,
       Consumer<PersistentObject> consumer) {
-    commitHandlers.put(klass, consumer);
+    LOGGER.debug("addHandler: class: {}", klass.getName());
+    handlers.put(klass, consumer);
   }
 
   @Override
   public void afterTransactionBegin(Transaction tx) {
+    LOGGER.debug("afterTransactionBegin: txt status={}", tx.getStatus());
     super.afterTransactionBegin(tx);
-    LOGGER.info("afterTransactionBegin: txt status={}", tx.getStatus());
   }
 
   @Override
   public void beforeTransactionCompletion(Transaction tx) {
+    LOGGER.debug("beforeTransactionCompletion: txt status={}", tx.getStatus());
     super.beforeTransactionCompletion(tx);
-    LOGGER.info("beforeTransactionCompletion: txt status={}", tx.getStatus());
   }
 
   @Override
   public void afterTransactionCompletion(Transaction tx) {
+    LOGGER.debug("afterTransactionCompletion: txt status={}", tx.getStatus());
     super.afterTransactionCompletion(tx);
-    LOGGER.info("afterTransactionCompletion: txt status={}", tx.getStatus());
   }
 
   @Override
   public Object instantiate(String entityName, EntityMode entityMode, Serializable id) {
-    LOGGER.info("instantiate: entityName={}, id={}", entityName, id);
+    LOGGER.debug("instantiate: entityName={}, id={}", entityName, id);
     return super.instantiate(entityName, entityMode, id);
   }
 
