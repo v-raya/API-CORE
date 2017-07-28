@@ -25,38 +25,8 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * </p>
  * 
  * <p>
- * Example RI check implementation: <blockquote>
- * 
- * <pre>
- * public class RIClientCollateral implements ApiReferentialCheck<ClientCollateral> {
- *   private static final Logger LOGGER = LoggerFactory.getLogger(ClientCollateral.class);
- *   private ClientDao clientDao;
- * 
- *   &#64;Inject
- *   public RIClientCollateral(final ClientDao clientDao) {
- *     this.clientDao = clientDao;
- * 
- *     ApiHibernateInterceptor.addHandler(ClientCollateral.class, c -> {
- *       if (!apply((ClientCollateral) c)) {
- *         throw new ApiException("RI ERROR: ClientCollateral => Client");
- *       }
- *     });
- * 
- *   }
- * 
- *   &#64;Override
- *   public Boolean apply(ClientCollateral t) {
- *     LOGGER.debug("RI: ClientCollateral");
- *     return clientDao.find(t.getClientId()) != null;
- *   }
- * }
- * </pre>
- * 
- * </blockquote>
- * </p>
- * 
- * <p>
  * Enforce foreign key constraints using "normal" Hibernate mechanisms, such as this typical FK:
+ * </p>
  * <blockquote>
  * 
  * <pre>
@@ -66,7 +36,6 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * </pre>
  * 
  * </blockquote>
- * </p>
  * 
  * <p>
  * Boolean return methods should return true <i>only</i> if the interceptor changes the object,
@@ -74,6 +43,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * </p>
  * 
  * @author CWDS API Team
+ * @see ApiReferentialCheck
  */
 public class ApiHibernateInterceptor extends EmptyInterceptor {
 
