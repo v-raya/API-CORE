@@ -9,7 +9,7 @@ sourceCompatibility = 1.8
 compileJava {options.encoding = "UTF-8"}   
 
 project.ext {
-    apiVersion = "0.27"
+    apiVersion = "0.28"
     configPath = "$rootProject.projectDir/config/"
     dropwizardVersion = "1.1.0"
     dropwizardFlywayVersion = "1.0.0-1"
