@@ -14,7 +14,7 @@
             "state":"AL",
             "street_address":"123 Fake St",
             "zip":"11222",
-            "type":"Home"
+            "type": 32
          },
          {
             "city":"Melbourne",
@@ -22,7 +22,7 @@
             "state":"AK",
             "street_address":"12 Camden St",
             "zip":"22333",
-            "type":"School"
+            "type": 32
          }
       ],
       "phone_numbers":[
