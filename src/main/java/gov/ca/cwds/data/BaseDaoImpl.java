@@ -3,11 +3,17 @@ package gov.ca.cwds.data;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.CacheMode;
+import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.ScrollMode;
+import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 
@@ -22,6 +28,8 @@ import gov.ca.cwds.data.std.BatchBucketDao;
  */
 public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoImpl<T>
     implements BaseDao<T>, BatchBucketDao<T> {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(BaseDaoImpl.class);
 
   /**
    * Constructor
@@ -70,12 +78,32 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
     Transaction txn = session.beginTransaction();
     try {
       // Compatible with both DB2 z/OS and Linux.
-      Query query = session.getNamedQuery(namedQueryName).setTimestamp("after",
-          new java.sql.Timestamp(datetime.getTime()));
-      ImmutableList.Builder<T> results = new ImmutableList.Builder<>();
-      results.addAll(query.list());
+      Query query = session.getNamedQuery(namedQueryName).setCacheable(false)
+          .setFlushMode(FlushMode.MANUAL).setReadOnly(true).setCacheMode(CacheMode.IGNORE)
+          .setTimestamp("after", new java.sql.Timestamp(datetime.getTime()));
+
+      // Iterate, process, flush.
+      final int fetchSize = 5000;
+      query.setFetchSize(fetchSize);
+      ScrollableResults results = query.scroll(ScrollMode.FORWARD_ONLY);
+      ImmutableList.Builder<T> ret = new ImmutableList.Builder<>();
+      int cnt = 0;
+
+      while (results.next()) {
+        Object[] row = results.get();
+        ret.add((T) row[0]);
+
+        if (((++cnt) % fetchSize) == 0) {
+          LOGGER.info("recs read: {}", cnt);
+          session.flush();
+        }
+      }
+
+      session.flush();
+      results.close();
       txn.commit();
-      return results.build();
+      return ret.build();
+
     } catch (HibernateException h) {
       txn.rollback();
       throw new DaoException(h);
@@ -128,18 +156,36 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
   public List<T> partitionedBucketList(long bucketNum, long totalBuckets, String minId,
       String maxId) {
     final String namedQueryName = getEntityClass().getName() + ".findPartitionedBuckets";
-    Session session = getSessionFactory().getCurrentSession();
 
+    Session session = getSessionFactory().getCurrentSession();
     Transaction txn = session.beginTransaction();
     try {
       Query query = session.getNamedQuery(namedQueryName).setInteger("bucket_num", (int) bucketNum)
           .setInteger("total_buckets", (int) totalBuckets).setString("min_id", minId)
-          .setString("max_id", maxId);
+          .setString("max_id", maxId).setCacheable(false).setFlushMode(FlushMode.MANUAL)
+          .setReadOnly(true).setCacheMode(CacheMode.IGNORE);
 
-      ImmutableList.Builder<T> results = new ImmutableList.Builder<>();
-      results.addAll(query.list());
+      // Iterate, process, flush.
+      final int fetchSize = 5000;
+      query.setFetchSize(fetchSize);
+      ScrollableResults results = query.scroll(ScrollMode.FORWARD_ONLY);
+      ImmutableList.Builder<T> ret = new ImmutableList.Builder<>();
+      int cnt = 0;
+
+      while (results.next()) {
+        Object[] row = results.get();
+        ret.add((T) row[0]);
+
+        if (((++cnt) % fetchSize) == 0) {
+          LOGGER.info("recs read: {}", cnt);
+          session.flush();
+        }
+      }
+
+      session.flush();
+      results.close();
       txn.commit();
-      return results.build();
+      return ret.build();
     } catch (HibernateException h) {
       txn.rollback();
       throw new DaoException(h);
@@ -194,15 +240,35 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
   public List<T> bucketList(long bucketNum, long totalBuckets) {
     final String namedQueryName = constructNamedQueryName("findAllByBucket");
     Session session = getSessionFactory().getCurrentSession();
-
     Transaction txn = session.beginTransaction();
     try {
-      Query query = session.getNamedQuery(namedQueryName).setInteger("bucket_num", (int) bucketNum)
+      Query query = session.getNamedQuery(namedQueryName).setCacheable(false)
+          .setFlushMode(FlushMode.MANUAL).setReadOnly(true).setCacheMode(CacheMode.IGNORE)
+          .setInteger("bucket_num", (int) bucketNum)
           .setInteger("total_buckets", (int) totalBuckets);
-      ImmutableList.Builder<T> results = new ImmutableList.Builder<>();
-      results.addAll(query.list());
+
+      // Iterate, process, flush.
+      final int fetchSize = 5000;
+      query.setFetchSize(fetchSize);
+      ScrollableResults results = query.scroll(ScrollMode.FORWARD_ONLY);
+      ImmutableList.Builder<T> ret = new ImmutableList.Builder<>();
+      int cnt = 0;
+
+      while (results.next()) {
+        Object[] row = results.get();
+        ret.add((T) row[0]);
+
+        if (((++cnt) % fetchSize) == 0) {
+          LOGGER.info("recs read: {}", cnt);
+          session.flush();
+        }
+      }
+
+      session.flush();
+      results.close();
       txn.commit();
-      return results.build();
+      return ret.build();
+
     } catch (HibernateException h) {
       txn.rollback();
       throw new DaoException(h);
