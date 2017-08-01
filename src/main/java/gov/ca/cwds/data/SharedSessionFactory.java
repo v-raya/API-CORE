@@ -56,6 +56,8 @@ public class SharedSessionFactory implements SessionFactory {
    */
   private static final long serialVersionUID = 1L;
 
+  private static final int DEFAULT_DELAY = 3500;
+
   private static final Logger LOGGER = LoggerFactory.getLogger(SharedSessionFactory.class);
 
   private SessionFactory sf;
@@ -107,11 +109,11 @@ public class SharedSessionFactory implements SessionFactory {
     new Thread(() -> {
       try {
         LOGGER.info("START SESSION FACTORY CLOSER THREAD");
-        Thread.sleep(2000); // NOSONAR
+        Thread.sleep(DEFAULT_DELAY); // NOSONAR
         while (true) {
           LOGGER.debug("Await notification ...");
           okToClose.await(); // Possible spurious wake-up. Must still evaluate the situation.
-          Thread.sleep(2500); // NOSONAR
+          Thread.sleep(DEFAULT_DELAY); // NOSONAR
 
           if (!held) {
             try {

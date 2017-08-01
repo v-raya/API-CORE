@@ -11,7 +11,6 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
@@ -26,6 +25,7 @@ import gov.ca.cwds.auth.PerryShiroToken;
 import gov.ca.cwds.auth.clients.PerryClient;
 
 public class PerryRealm extends AuthorizingRealm {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(PerryRealm.class);
   private PerryClient client = null;
 
@@ -61,8 +61,7 @@ public class PerryRealm extends AuthorizingRealm {
 
   protected AuthenticationInfo mapIdentity(String identity, AuthenticationToken token) {
     List<Object> principals = Lists.newArrayList(identity);
-    PrincipalCollection principalCollection =
-        new SimplePrincipalCollection(principals, getName());
+    PrincipalCollection principalCollection = new SimplePrincipalCollection(principals, getName());
     return new SimpleAuthenticationInfo(principalCollection, token);
   }
 
@@ -72,7 +71,5 @@ public class PerryRealm extends AuthorizingRealm {
   public void setClient(PerryClient client) {
     this.client = client;
   }
-
-
 
 }

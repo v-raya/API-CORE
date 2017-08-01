@@ -64,7 +64,7 @@ public interface BatchBucketDao<T extends PersistentObject> {
    *       from ( select c.identifier from client_t c ) x 
    *    ) y 
    * ) z 
-   * where z.bucket = 3 for read only;
+   * where z.bucket = 3 FOR READ ONLY WITH UR;
    * </pre>
    * 
    * <p>
@@ -121,7 +121,7 @@ public interface BatchBucketDao<T extends PersistentObject> {
    *       WHERE x.identifier >= 'B3bMRWu8NW' and x.identifier < 'DW5GzxJ30A') x 
    *    ) y 
    * ) z 
-   * where z.bucket = 3 for read only;
+   * where z.bucket = 3 FOR READ ONLY WITH UR;
    * }
    * </pre>
    * 

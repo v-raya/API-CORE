@@ -41,9 +41,9 @@ public class WebSecurityFilter implements Filter {
 
     if (response instanceof HttpServletResponse) {
       HttpServletResponse httpResponse = (HttpServletResponse) response;
-
       Map<String, String> securityHeaders =
           this.webSecurityConfiguration.getHttpResponseSecurityHeaders();
+
       if (securityHeaders != null) {
         for (String headerName : securityHeaders.keySet()) {
           String headerValue = securityHeaders.get(headerName);

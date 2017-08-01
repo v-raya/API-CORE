@@ -137,7 +137,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
    *       WHERE x.identifier >= 'B3bMRWu8NW' and x.identifier < 'DW5GzxJ30A') x 
    *    ) y 
    * ) z 
-   * where z.bucket = 3 for read only;
+   * where z.bucket = 3 FOR READ ONLY WITH UR;
    * }
    * </pre>
    * 
@@ -218,7 +218,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
    *       from ( select c.identifier from client_t c ) x 
    *    ) y 
    * ) z 
-   * where z.bucket = :bucket_num for read only;
+   * where z.bucket = :bucket_num fFOR READ ONLY WITH UR;
    * </pre>
    * 
    * <p>

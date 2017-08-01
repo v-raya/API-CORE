@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.std;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
@@ -41,6 +42,6 @@ public interface ApiGroupNormalizer<N extends PersistentObject> extends ApiMarke
    * 
    * @return grouping key or identifier
    */
-  Object getNormalizationGroupKey();
+  Serializable getNormalizationGroupKey();
 
 }
