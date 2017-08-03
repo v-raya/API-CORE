@@ -22,8 +22,6 @@ import com.google.inject.Module;
 import com.hubspot.dropwizard.guice.GuiceBundle;
 
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
-import gov.ca.cwds.rest.filters.RequestCommonInfoFilter;
-import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
 import gov.ca.cwds.rest.filters.UnhandledExceptionMapperImpl;
 import gov.ca.cwds.rest.filters.WebSecurityFilter;
 import gov.ca.cwds.rest.resources.SwaggerResource;
@@ -148,15 +146,6 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
     environment.jersey().register(UnhandledExceptionMapperImpl.class);
 
     BaseApiApplication.injector = guiceBundle.getInjector();
-
-    environment.servlets()
-        .addFilter("RequestCommonInfoFilter", injector.getInstance(RequestCommonInfoFilter.class))
-        .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
-
-    environment.servlets()
-        .addFilter("AuditAndLoggingFilter",
-            injector.getInstance(RequestResponseLoggingFilter.class))
-        .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
 
     environment.servlets()
         .addFilter("WebSecurityFilter", injector.getInstance(WebSecurityFilter.class))

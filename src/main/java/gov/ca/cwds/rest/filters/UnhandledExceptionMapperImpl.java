@@ -8,11 +8,11 @@ import javax.ws.rs.ext.Provider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.logging.AuditLoggerImpl;
+import gov.ca.cwds.logging.LoggingContext;
+import gov.ca.cwds.logging.LoggingContext.LogParameter;
 
 /**
  * This is the main class to catch exceptions in CWDS API and PERRY with a valid uniqueId to track
@@ -25,11 +25,15 @@ public class UnhandledExceptionMapperImpl implements ExceptionMapper<Exception> 
 
   private static final Logger LOGGER = LoggerFactory.getLogger(UnhandledExceptionMapperImpl.class);
 
+  private LoggingContext loggingContext;
+
   /**
    * Default constructor
    */
   @Inject
-  public UnhandledExceptionMapperImpl() {}
+  public UnhandledExceptionMapperImpl(LoggingContext loggingContext) {
+    this.loggingContext = loggingContext;
+  }
 
   /**
    * Get the uniqueId from the auditLoggerImpl for the exception thrown and log the error. This
@@ -39,7 +43,7 @@ public class UnhandledExceptionMapperImpl implements ExceptionMapper<Exception> 
   public Response toResponse(Exception ex) {
     if (!(ex instanceof WebApplicationException)) {
       LOGGER.error("EXCEPTION MAPPER: {}", ex.getMessage(), ex);
-      final String uniqueId = MDC.get(AuditLoggerImpl.UNIQUE_ID);
+      final String uniqueId = loggingContext.getLogParameter(LogParameter.UNIQUE_ID);
       final Result result = new Result(uniqueId, "500");
       return Response.status(500).entity(result).type(MediaType.APPLICATION_JSON).build();
     } else {

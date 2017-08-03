@@ -11,6 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import gov.ca.cwds.logging.AuditLoggerImpl;
+import gov.ca.cwds.logging.LoggingContext;
+import gov.ca.cwds.logging.LoggingContext.LogParameter;
+import gov.ca.cwds.logging.MDCLoggingContext;
 import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.filters.UnhandledExceptionMapperImpl.Result;
 
@@ -22,14 +25,15 @@ import gov.ca.cwds.rest.filters.UnhandledExceptionMapperImpl.Result;
 public class UnhandledExceptionMapperImplTest {
 
   private AuditLoggerImpl auditLogger = new AuditLoggerImpl();
+  private LoggingContext loggingContext = new MDCLoggingContext();
 
   private UnhandledExceptionMapperImpl unhandledExceptionMapper;
 
   @Before
   public void setup() {
-    auditLogger.uniqueId();
-    auditLogger.storeRemoteAddress("Host");
-    unhandledExceptionMapper = new UnhandledExceptionMapperImpl();
+    loggingContext.initialize();
+    loggingContext.setLogParameter(LogParameter.REMOTE_ADDRESS, "Host");
+    unhandledExceptionMapper = new UnhandledExceptionMapperImpl(loggingContext);
   }
 
   /*
