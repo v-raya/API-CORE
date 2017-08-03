@@ -40,7 +40,7 @@ public class SystemCodeIdValidator
           .buildConstraintViolationWithTemplate(
               MessageFormat.format("{0} sys code is required", category))
           .addPropertyNode(category).addConstraintViolation();
-    } else if (!required && ignoreable && value.intValue() == ignoredValue) {
+    } else if (isIgnorable(value)) {
       valid = true;
     } else if (hasProp) {
       valid =
@@ -48,6 +48,10 @@ public class SystemCodeIdValidator
     }
 
     return valid;
+  }
+
+  public boolean isIgnorable(Number value){
+    return !required && ignoreable && value != null && value.intValue() == ignoredValue ;
   }
 
 }

@@ -148,4 +148,11 @@ public class SystemCodeIdValidatorTest {
     Set<ConstraintViolation<AnnoTestBean>> violations = validator.validate(bean);
     assertFalse(violations.isEmpty());
   }
+
+  @Test
+  public void shouldFailValidationWhenValueIsNullAndNotRequiredAndFieldIsANotAValidCode() throws Exception {
+    final AnnoTestBean bean = new AnnoTestBean( VALID_SYSTEM_CODE_VALUE, "two", null);
+    Set<ConstraintViolation<AnnoTestBean>> violations = validator.validate(bean);
+    assertFalse(violations.isEmpty());
+  }
 }
