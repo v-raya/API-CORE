@@ -11,7 +11,7 @@ public interface LoggingContext {
    * Allowed log parameters.
    */
   public enum LogParameter {
-    USER_ID, REMOTE_ADDRESS, SESSION_ID, REQUEST_ID, UNIQUE_ID
+    USER_ID, REMOTE_ADDRESS, SESSION_ID, REQUEST_ID, UNIQUE_ID, REQUEST_START_TIME
   }
 
   /**
