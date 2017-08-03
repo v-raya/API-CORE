@@ -191,23 +191,6 @@ public class DomainChef {
   }
 
   /**
-   * @param timestamp timestamp to uncook
-   * @return Date
-   */
-  public static Date uncookLegacyTimestampString(String timestamp) {
-    String trimTimestamp = StringUtils.trim(timestamp);
-    if (StringUtils.isNotEmpty(trimTimestamp)) {
-      try {
-        DateFormat df = new SimpleDateFormat(LEGACY_TIMESTAMP_FORMAT);
-        return df.parse(trimTimestamp);
-      } catch (Exception e) {
-        throw new ApiException(e);
-      }
-    }
-    return null;
-  }
-
-  /**
    * @param timestamp timestamp to convert into Date
    * @return Date A Date object based on strict timestamot format
    *         {@link DomainChef#TIMESTAMP_STRICT_FORMAT}

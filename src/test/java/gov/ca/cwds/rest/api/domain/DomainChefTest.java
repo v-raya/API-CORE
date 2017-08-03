@@ -179,15 +179,6 @@ public class DomainChefTest {
   }
 
   @Test
-  public void uncookLegacyTimestampStringReturnsCorrectDate() throws Exception {
-    DateFormat df = new SimpleDateFormat(LEGACY_TIMESTAMP_FORMAT);
-    Date date = new Date();
-    String dateString = df.format(date);
-
-    assertThat(DomainChef.uncookLegacyTimestampString(dateString), is(equalTo(date)));
-  }
-
-  @Test
   public void uncookTimestampStringReturnsNullOnNullString() throws Exception {
     assertThat(DomainChef.uncookTimestampString(null), is(nullValue()));
   }
