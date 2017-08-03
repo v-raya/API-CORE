@@ -24,7 +24,6 @@ import io.dropwizard.jackson.Jackson;
 public class CachingSystemCodeServiceTest {
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
-
   private static SystemMetaListResponse systemMetaListResponse;
   private static SystemCodeListResponse systemCodeListResponse;
   private static CachingSystemCodeService cachingSystemCodeService;
@@ -51,6 +50,7 @@ public class CachingSystemCodeServiceTest {
     when(systemCodeDao.findByForeignKeyMetaTable("ADDR_TPC")).thenReturn(persistenceSystemCodes);
     when(systemCodeDao.findBySystemCodeId((short) 27))
         .thenReturn(getPersistenceSystemCode(systemCodeListResponse, (short) 27));
+    when(systemCodeDao.findByForeignKeyMetaTable("GVR_ENTC")).thenReturn(persistenceSystemCodes);
 
     cachingSystemCodeService = new CachingSystemCodeService(systemCodeDao, systemMetaDao, 1, false);
   }
@@ -119,6 +119,7 @@ public class CachingSystemCodeServiceTest {
     Assert.assertFalse(validCode);
   }
 
+
   @Test
   public void testVerifySystemCodeId() throws Exception {
     boolean validCode =
@@ -135,6 +136,25 @@ public class CachingSystemCodeServiceTest {
     Assert.assertFalse(validCode);
 
     validCode = cachingSystemCodeService.verifyActiveSystemCodeIdForMeta(null, null);
+    Assert.assertFalse(validCode);
+  }
+
+  @Test
+  public void testVerifyLogicalId() throws Exception {
+    boolean validCode =
+        cachingSystemCodeService.verifyActiveLogicalIdForMeta( "01", "GVR_ENTC");
+    Assert.assertTrue(validCode);
+
+    validCode = cachingSystemCodeService.verifyActiveLogicalIdForMeta( "99999", "GVR_ENTC");
+    Assert.assertFalse(validCode);
+
+    validCode = cachingSystemCodeService.verifyActiveLogicalIdForMeta( "99999", " ");
+    Assert.assertFalse(validCode);
+
+    validCode = cachingSystemCodeService.verifyActiveLogicalIdForMeta( "99999", null);
+    Assert.assertFalse(validCode);
+
+    validCode = cachingSystemCodeService.verifyActiveLogicalIdForMeta(null, null);
     Assert.assertFalse(validCode);
   }
 
@@ -185,7 +205,7 @@ public class CachingSystemCodeServiceTest {
 
     Set<SystemCode> systemCodesForMeta = cachingSystemCodeService.getSystemCodesForMeta("ADDR_TPC");
     Assert.assertNotNull(systemCodesForMeta);
-    Assert.assertEquals(9, systemCodesForMeta.size());
+    Assert.assertEquals(12, systemCodesForMeta.size());
 
   }
 

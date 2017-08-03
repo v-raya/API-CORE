@@ -56,6 +56,18 @@ public class TestSystemCodeCache implements SystemCodeCache {
     return true;
   }
 
+  public boolean verifyActiveLogicalIdForMeta(String systemCodeId, String metaId) {
+    if ("524".equals(systemCodeId)) {
+      return false;
+    } else if ("4046".equals(systemCodeId)) {
+      return false;
+    } else if ("10".equals(systemCodeId)) {
+      return true;
+    }
+
+    return true;
+  }
+
   @Override
   public boolean verifyActiveSystemCodeDescriptionForMeta(String shortDesc, String metaId) {
     if ("djdjskshahfdsa".equals(shortDesc)) {

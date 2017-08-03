@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.services.cms;
 
+import gov.ca.cwds.rest.validation.LogicalIdLovValidation;
+import gov.ca.cwds.rest.validation.SystemCodeIdLovLValidation;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,6 +30,8 @@ import gov.ca.cwds.rest.api.domain.cms.SystemMetaListResponse;
 import gov.ca.cwds.rest.services.ServiceException;
 
 public class CachingSystemCodeService extends SystemCodeService implements SystemCodeCache {
+  private static final String SYSTEM_ID = "system_id";
+  public static final String LOGICAL_ID = "logical_id";
 
   private static final long serialVersionUID = 1468150983558929580L;
 
@@ -149,17 +153,16 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
 
   @Override
   public boolean verifyActiveSystemCodeIdForMeta(Number systemCodeId, String metaId) {
-    boolean valid = false;
     Set<SystemCode> systemCodes = getSystemCodesForMeta(metaId);
-    if (systemCodes != null) {
-      for (SystemCode systemCode : systemCodes) {
-        if (systemCodeId.equals(systemCode.getSystemId())) {
-          valid = "N".equalsIgnoreCase(systemCode.getInactiveIndicator());
-        }
-      }
-    }
+    SystemCodeIdLovLValidation validation = new SystemCodeIdLovLValidation(systemCodes);
+    return validation.isValid(systemCodeId);
+  }
 
-    return valid;
+  @Override
+  public boolean verifyActiveLogicalIdForMeta(String logicalId, String metaId) {
+    Set<SystemCode> systemCodes = getSystemCodesForMeta(metaId);
+    LogicalIdLovValidation validation = new LogicalIdLovValidation(systemCodes);
+    return validation.isValid(logicalId);
   }
 
   @Override
@@ -181,7 +184,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
   /**
    * Get cached object identified by given cache key.
    * 
-   * @param key Cache key
+   * @param cacheEntryKey Cache key
    * @return Cached object if found, otherwise null.
    */
   private Object getFromCache(CacheKey cacheEntryKey) {

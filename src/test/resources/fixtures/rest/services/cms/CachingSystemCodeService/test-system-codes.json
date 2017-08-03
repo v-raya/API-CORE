@@ -89,5 +89,35 @@
 "third_id" : "0000000000",
 "foreign_key_meta_table" : "ADDR_TPC",
 "long_description" : ""
-} ]
+}, {
+"system_id": 1068,
+"category_id": 0,
+"inactive_indicator": "N",
+"other_cd": "Y",
+"short_description": "Alameda",
+"logical_id": "01",
+"third_id": "0000000000",
+"foreign_key_meta_table": "GVR_ENTC",
+"long_description": ""
+}, {
+"system_id": 1069,
+"category_id": 0,
+"inactive_indicator": "N",
+"other_cd": "",
+"short_description": "Alpine",
+"logical_id": "02",
+"third_id": "0000000000",
+"foreign_key_meta_table": "GVR_ENTC",
+"long_description": ""
+}, {
+"system_id": 1070,
+"category_id": 0,
+"inactive_indicator": "N",
+"other_cd": "",
+"short_description": "Amador",
+"logical_id": "03",
+"third_id": "0000000000",
+"foreign_key_meta_table": "GVR_ENTC",
+"long_description": ""
+}]
 }

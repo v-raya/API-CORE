@@ -78,6 +78,15 @@ public interface SystemCodeCache extends ApiMarker {
   boolean verifyActiveSystemCodeIdForMeta(Number systemCodeId, String metaId);
 
   /**
+   * Verify that given active system code ID exists for given meta ID.
+   *
+   * @param logicalId Logical ID
+   * @param metaId Meta ID
+   * @return True if active Logical ID exists under given meta.
+   */
+  boolean verifyActiveLogicalIdForMeta(String logicalId, String metaId);
+
+  /**
    * Verify that given active system code short description exists for given meta. ID.
    * 
    * @param shortDesc System code short description
