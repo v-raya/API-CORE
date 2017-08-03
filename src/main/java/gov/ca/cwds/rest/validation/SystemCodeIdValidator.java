@@ -51,7 +51,7 @@ public class SystemCodeIdValidator
   }
 
   public boolean isIgnorable(Number value){
-    return !required && ignoreable && value != null && value.intValue() == ignoredValue ;
+    return !required && ignoreable && (value == null || value != null && value.intValue() == ignoredValue) ;
   }
 
 }
