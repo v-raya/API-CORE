@@ -18,11 +18,15 @@ public class SystemCodeIdValidator
 
   private String category;
   private boolean required;
+  private int ignoredValue;
+  private boolean ignoreable;
 
   @Override
   public void initialize(ValidSystemCodeId anno) {
     this.category = anno.category();
     this.required = anno.required();
+    this.ignoredValue = anno.ignoredValue();
+    this.ignoreable = anno.ignoreable();
   }
 
   @Override
@@ -36,6 +40,8 @@ public class SystemCodeIdValidator
           .buildConstraintViolationWithTemplate(
               MessageFormat.format("{0} sys code is required", category))
           .addPropertyNode(category).addConstraintViolation();
+    } else if (!required && ignoreable && value.intValue() == ignoredValue) {
+      valid = true;
     } else if (hasProp) {
       valid =
           SystemCodeCache.global().verifyActiveSystemCodeIdForMeta(value.shortValue(), category);

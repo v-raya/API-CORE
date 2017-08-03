@@ -33,6 +33,10 @@ public @interface ValidSystemCodeId {
 
   String category();
 
+  boolean ignoreable() default false;
+
+  int ignoredValue() default 0;
+
   boolean required() default false;
 
 }

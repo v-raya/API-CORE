@@ -24,10 +24,10 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 
 public class SystemCodeIdValidatorTest {
 
-  public static final int INVALID_SYSTEM_CODE_VALUE = 456;
+  public static final short INVALID_SYSTEM_CODE_VALUE = 456;
   public static final int ANOTHER_INVALID_SYSTEM_CODE_VALUE = 6404;
-  public static final Short VALID_SYSTEM_CODE_VALUE = new Short((short)19);
-  public static final int VALID_LOGICAL_CODE_VALUE = 10;
+  public static final short VALID_SYSTEM_CODE_VALUE = 19;
+  public static final short IGNORED_VALUE = 9;
   public static final int INVALID_LOGICAL_CODE_VALUE = 4046;
   private SystemCodeIdValidator target;
 
@@ -38,6 +38,9 @@ public class SystemCodeIdValidatorTest {
 
     private String prop2;
 
+    @ValidSystemCodeId(category = "ABS_BPTC", required = false, ignoreable = true, ignoredValue = IGNORED_VALUE)
+    private Short prop3;
+
     private String fieldName;
 
     public AnnoTestBean() {
@@ -47,6 +50,12 @@ public class SystemCodeIdValidatorTest {
     public AnnoTestBean(Short prop1, String prop2 ) {
       this.prop1 = prop1;
       this.prop2 = prop2;
+      this.prop3 = VALID_SYSTEM_CODE_VALUE;
+    }
+    public AnnoTestBean(Short prop1, String prop2 , Short prop3) {
+      this.prop1 = prop1;
+      this.prop2 = prop2;
+      this.prop3 = prop3;
     }
 
     Short getProp1() {
@@ -106,18 +115,37 @@ public class SystemCodeIdValidatorTest {
   }
 
   @Test
-  public void validateManually() throws Exception {
+  public void shouldPassValidationWhenAValidCode() throws Exception {
     final AnnoTestBean bean = new AnnoTestBean(VALID_SYSTEM_CODE_VALUE, "two");
     Set<ConstraintViolation<AnnoTestBean>> violations = validator.validate(bean);
-    System.out.println(violations);
     assertTrue(violations.isEmpty());
   }
 
   @Test
-  public void validateManually2() throws Exception {
+  public void shouldFailValidationWhenNotAValidCode() throws Exception {
     final AnnoTestBean bean = new AnnoTestBean((short) ANOTHER_INVALID_SYSTEM_CODE_VALUE, "two");
     Set<ConstraintViolation<AnnoTestBean>> violations = validator.validate(bean);
-    System.out.println(violations);
+    assertFalse(violations.isEmpty());
+  }
+
+  @Test
+  public void shouldPassValidationWhenNotRequiredAndFieldIsIgnoreValue() throws Exception {
+    final AnnoTestBean bean = new AnnoTestBean( VALID_SYSTEM_CODE_VALUE, "two", IGNORED_VALUE);
+    Set<ConstraintViolation<AnnoTestBean>> violations = validator.validate(bean);
+    assertTrue(violations.isEmpty());
+  }
+
+  @Test
+  public void shouldPassValidationWhenNotRequiredAndFieldIsAValidCode() throws Exception {
+    final AnnoTestBean bean = new AnnoTestBean( VALID_SYSTEM_CODE_VALUE, "two", VALID_SYSTEM_CODE_VALUE);
+    Set<ConstraintViolation<AnnoTestBean>> violations = validator.validate(bean);
+    assertTrue(violations.isEmpty());
+  }
+
+  @Test
+  public void shouldFailValidationWhenNotRequiredAndFieldIsANotAValidCode() throws Exception {
+    final AnnoTestBean bean = new AnnoTestBean( VALID_SYSTEM_CODE_VALUE, "two", INVALID_SYSTEM_CODE_VALUE);
+    Set<ConstraintViolation<AnnoTestBean>> violations = validator.validate(bean);
     assertFalse(violations.isEmpty());
   }
 }

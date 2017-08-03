@@ -38,15 +38,14 @@ public class LogicalIdValidatorTest {
   }
 
   @Test
-  public void shouldPassValidationWhenNotAValidCode() throws Exception {
-    // final AnnoTestBean bean = new AnnoTestBean((short) VALID_SYSTEM_CODE_VALUE, "two");
+  public void shouldPassValidationWhenAValidCode() throws Exception {
     final AnnoTestBean bean = new AnnoTestBean(VALID_LOGICAL_CODE_VALUE, "two");
     Set<ConstraintViolation<AnnoTestBean>> violations = validator.validate(bean);
     assertTrue(violations.isEmpty());
   }
 
   @Test
-  public void shouldFailValidationWhenNotAValidCode() throws Exception {
+  public void shouldFailValidationWhenNotAvalidCode() throws Exception {
     final AnnoTestBean bean = new AnnoTestBean( INVALID_LOGICAL_CODE_VALUE, "two");
     Set<ConstraintViolation<AnnoTestBean>> violations = validator.validate(bean);
     assertFalse(violations.isEmpty());
