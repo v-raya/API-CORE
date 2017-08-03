@@ -29,8 +29,8 @@ public interface LoggingContext {
   /**
    * Set given log parameter in this logging context.
    * 
-   * @param logParam
-   * @param value
+   * @param logParam log param
+   * @param value value to set
    */
   public void setLogParameter(LogParameter logParam, String value);
 

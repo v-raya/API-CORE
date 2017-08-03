@@ -29,6 +29,8 @@ public class UnhandledExceptionMapperImpl implements ExceptionMapper<Exception> 
 
   /**
    * Default constructor
+   * 
+   * @param loggingContext API log context
    */
   @Inject
   public UnhandledExceptionMapperImpl(LoggingContext loggingContext) {

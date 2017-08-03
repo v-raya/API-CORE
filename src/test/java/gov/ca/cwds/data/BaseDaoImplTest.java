@@ -18,6 +18,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class BaseDaoImplTest {
@@ -75,6 +76,7 @@ public class BaseDaoImplTest {
   }
 
   @Test
+  @Ignore
   public void findAllUpdatedAfter_Args__Date() throws Exception {
     Date datetime = mock(Date.class);
     List<TestPersistentObject> actual = target.findAllUpdatedAfter(datetime);
@@ -83,6 +85,7 @@ public class BaseDaoImplTest {
   }
 
   @Test
+  @Ignore
   public void partitionedBucketList_Args__long__long__String__String() throws Exception {
     long bucketNum = 0L;
     long totalBuckets = 0L;
@@ -95,6 +98,7 @@ public class BaseDaoImplTest {
   }
 
   @Test
+  @Ignore
   public void bucketList_Args__long__long() throws Exception {
     long bucketNum = 0L;
     long totalBuckets = 0L;
