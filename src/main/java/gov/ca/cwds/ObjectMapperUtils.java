@@ -40,7 +40,7 @@ public class ObjectMapperUtils {
     objectMapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
 
     // The mainframe DB2 database runs in PST, and so we must too.
-    final TimeZone tz = TimeZone.getTimeZone("PST");
+    final TimeZone tz = TimeZone.getTimeZone("America/Los_Angeles");
 
     final DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
     fmt.setTimeZone(tz);
