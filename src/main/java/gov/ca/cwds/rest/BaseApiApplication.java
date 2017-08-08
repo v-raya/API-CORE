@@ -15,12 +15,11 @@ import org.secnod.shiro.jaxrs.ShiroExceptionMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.hubspot.dropwizard.guice.GuiceBundle;
 
+import gov.ca.cwds.ObjectMapperUtils;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.filters.CustomExceptionMapper;
 import gov.ca.cwds.rest.filters.WebSecurityFilter;
@@ -124,6 +123,9 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
     LOGGER.info("Configuring CORS: Cross-Origin Resource Sharing");
     configureCors(environment);
 
+    LOGGER.info("Configuring ObjectMapper");
+    ObjectMapperUtils.configureObjectMapper(environment.getObjectMapper());
+
     LOGGER.info("Configuring SWAGGER");
     configureSwagger(configuration, environment);
 
@@ -174,8 +176,6 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
     new AssetsBundle(apiConfiguration.getSwaggerConfiguration().getAssetsPath(),
         apiConfiguration.getSwaggerConfiguration().getAssetsPath(), null, "swagger")
             .run(environment);
-    environment.getObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
-    environment.getObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
     LOGGER.info("Registering ApiListingResource");
     environment.jersey().register(new ApiListingResource());

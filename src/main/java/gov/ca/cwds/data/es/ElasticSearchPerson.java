@@ -1,9 +1,7 @@
 package gov.ca.cwds.data.es;
 
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -12,7 +10,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 import javax.persistence.Transient;
@@ -32,9 +29,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import gov.ca.cwds.ObjectMapperUtils;
 import gov.ca.cwds.data.ApiTypedIdentifier;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.services.ServiceException;
@@ -343,37 +340,38 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * it, such as ignoring unknown JSON properties, applies to ALL target class types.
    * </p>
    */
-  public static final ObjectMapper MAPPER;
+  public static final ObjectMapper MAPPER = ObjectMapperUtils.createObjectMapper();
 
   // =========================
   // STATIC INITIALIZATION:
   // =========================
 
-  /**
-   * Relax strict constraints regarding unknown JSON properties, since API classes may change over
-   * time, and not all classes emit version information in JSON.
-   * 
-   * <p>
-   * Bug #140710983: Bug: Person Search converts dates to GMT. Set default time zone to JVM default,
-   * which must match the database and Elasticsearch server.
-   * </p>
-   */
-  static {
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    mapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
-
-    // The mainframe DB2 database runs in PST, and so we must too.
-    final TimeZone tz = TimeZone.getTimeZone("PST");
-
-    final DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-    fmt.setTimeZone(tz);
-    mapper.setDateFormat(fmt);
-    mapper.getSerializationConfig().with(fmt);
-    mapper.setTimeZone(tz);
-    mapper.getSerializationConfig().with(tz);
-    MAPPER = mapper;
-  }
+  // /**
+  // * Relax strict constraints regarding unknown JSON properties, since API classes may change over
+  // * time, and not all classes emit version information in JSON.
+  // *
+  // * <p>
+  // * Bug #140710983: Bug: Person Search converts dates to GMT. Set default time zone to JVM
+  // default,
+  // * which must match the database and Elasticsearch server.
+  // * </p>
+  // */
+  // static {
+  // ObjectMapper mapper = new ObjectMapper();
+  // mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+  // mapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
+  //
+  // // The mainframe DB2 database runs in PST, and so we must too.
+  // final TimeZone tz = TimeZone.getTimeZone("PST");
+  //
+  // final DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+  // fmt.setTimeZone(tz);
+  // mapper.setDateFormat(fmt);
+  // mapper.getSerializationConfig().with(fmt);
+  // mapper.setTimeZone(tz);
+  // mapper.getSerializationConfig().with(tz);
+  // MAPPER = mapper;
+  // }
 
   // ================
   // MEMBERS:
