@@ -8,7 +8,7 @@ import gov.ca.cwds.logging.LoggingContext.LogParameter;
 import gov.ca.cwds.logging.MDCLoggingContext;
 import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.filters.CustomExceptionMapper.Result;
-import gov.ca.cwds.rest.services.ServiceException;
+import gov.ca.cwds.rest.validation.ReferentialIntegrityException;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -73,19 +73,21 @@ public class CustomExceptionMapperTest {
   }
 
   /*
-   * Test for expected error response for Service Exception
+   * Test for expected error response for ReferentialIntegrityException
    */
   @Test
-  public void testServiceExceptionToResponseResult() {
+  public void ReferentialIntegrityExceptionToResponseResult() {
     Response response =
-        customExceptionMapper.toResponse(new ServiceException("This is a service exception"));
+        customExceptionMapper.toResponse(new ReferentialIntegrityException(
+            "This is a referential integrity exception"));
     Result result = (Result) response.getEntity();
-    assertThat(result.getCode(), is("500"));
+    assertThat(result.getCode(), is("422"));
     assertThat(
         result.getMessage(),
         is("There was an error processing your request. It has been logged with uniqueId "
             + result.getUniqueId()));
-    assertThat(result.getError(), is("This is a service exception"));
+    assertThat(result.getError(),
+        is("Referential Integrity Error: This is a referential integrity exception"));
     Assert.assertNotNull(result.getUniqueId());
   }
 

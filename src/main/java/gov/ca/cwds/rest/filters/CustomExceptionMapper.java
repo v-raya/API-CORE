@@ -2,7 +2,7 @@ package gov.ca.cwds.rest.filters;
 
 import gov.ca.cwds.logging.LoggingContext;
 import gov.ca.cwds.logging.LoggingContext.LogParameter;
-import gov.ca.cwds.rest.services.ServiceException;
+import gov.ca.cwds.rest.validation.ReferentialIntegrityException;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
@@ -25,8 +25,9 @@ import com.google.inject.Inject;
 public class CustomExceptionMapper implements ExceptionMapper<Exception> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CustomExceptionMapper.class);
-
+  private static final String REFERENTIAL_INTEGRITY_ERROR = "Referential Integrity Error: ";
   private LoggingContext loggingContext;
+
 
   /**
    * Default constructor
@@ -48,13 +49,15 @@ public class CustomExceptionMapper implements ExceptionMapper<Exception> {
       LOGGER.error("EXCEPTION MAPPER: {}", ex.getMessage(), ex);
       final String uniqueId = loggingContext.getLogParameter(LogParameter.UNIQUE_ID);
       final Result result;
-      if (ex instanceof ServiceException) {
-        String errors = ex.getMessage();
-        result = new Result(uniqueId, "500", errors);
+      int code = 500;
+      if (ex instanceof ReferentialIntegrityException) {
+        code = 422;
+        String errors = REFERENTIAL_INTEGRITY_ERROR + ex.getMessage();
+        result = new Result(uniqueId, "422", errors);
       } else {
         result = new Result(uniqueId, "500");
       }
-      return Response.status(500).entity(result).type(MediaType.APPLICATION_JSON).build();
+      return Response.status(code).entity(result).type(MediaType.APPLICATION_JSON).build();
     } else {
       WebApplicationException webApplicationException = (WebApplicationException) ex;
       return webApplicationException.getResponse();
