@@ -1,5 +1,9 @@
 package gov.ca.cwds.rest.filters;
 
+import gov.ca.cwds.logging.LoggingContext;
+import gov.ca.cwds.logging.LoggingContext.LogParameter;
+import gov.ca.cwds.rest.services.ServiceException;
+
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -11,9 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.logging.LoggingContext;
-import gov.ca.cwds.logging.LoggingContext.LogParameter;
-
 /**
  * This is the main class to catch exceptions in CWDS API and PERRY with a valid uniqueId to track
  * the errors
@@ -21,9 +22,9 @@ import gov.ca.cwds.logging.LoggingContext.LogParameter;
  * @author CWDS API Team
  */
 @Provider
-public class UnhandledExceptionMapperImpl implements ExceptionMapper<Exception> {
+public class CustomExceptionMapper implements ExceptionMapper<Exception> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(UnhandledExceptionMapperImpl.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CustomExceptionMapper.class);
 
   private LoggingContext loggingContext;
 
@@ -33,7 +34,7 @@ public class UnhandledExceptionMapperImpl implements ExceptionMapper<Exception> 
    * @param loggingContext API log context
    */
   @Inject
-  public UnhandledExceptionMapperImpl(LoggingContext loggingContext) {
+  public CustomExceptionMapper(LoggingContext loggingContext) {
     this.loggingContext = loggingContext;
   }
 
@@ -46,7 +47,13 @@ public class UnhandledExceptionMapperImpl implements ExceptionMapper<Exception> 
     if (!(ex instanceof WebApplicationException)) {
       LOGGER.error("EXCEPTION MAPPER: {}", ex.getMessage(), ex);
       final String uniqueId = loggingContext.getLogParameter(LogParameter.UNIQUE_ID);
-      final Result result = new Result(uniqueId, "500");
+      final Result result;
+      if (ex instanceof ServiceException) {
+        String errors = ex.getMessage();
+        result = new Result(uniqueId, "500", errors);
+      } else {
+        result = new Result(uniqueId, "500");
+      }
       return Response.status(500).entity(result).type(MediaType.APPLICATION_JSON).build();
     } else {
       WebApplicationException webApplicationException = (WebApplicationException) ex;
@@ -60,6 +67,14 @@ public class UnhandledExceptionMapperImpl implements ExceptionMapper<Exception> 
     private String code;
     private String message =
         "There was an error processing your request. It has been logged with uniqueId";
+    private String error;
+
+    public Result(String uniqueId, String code, String error) {
+      this.uniqueId = uniqueId;
+      message = message + " " + uniqueId;
+      this.code = code;
+      this.error = error;
+    }
 
     public Result(String uniqueId, String code) {
       this.uniqueId = uniqueId;
@@ -77,6 +92,10 @@ public class UnhandledExceptionMapperImpl implements ExceptionMapper<Exception> 
 
     public String getMessage() {
       return message;
+    }
+
+    public String getError() {
+      return error;
     }
 
   }

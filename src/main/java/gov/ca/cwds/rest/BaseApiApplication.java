@@ -22,7 +22,7 @@ import com.google.inject.Module;
 import com.hubspot.dropwizard.guice.GuiceBundle;
 
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
-import gov.ca.cwds.rest.filters.UnhandledExceptionMapperImpl;
+import gov.ca.cwds.rest.filters.CustomExceptionMapper;
 import gov.ca.cwds.rest.filters.WebSecurityFilter;
 import gov.ca.cwds.rest.resources.SwaggerResource;
 import io.dropwizard.Application;
@@ -143,7 +143,7 @@ public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends
    */
   private static void registerFilters(final Environment environment, GuiceBundle guiceBundle) {
     // Story #129093035: Catch/handle 500 errors.
-    environment.jersey().register(UnhandledExceptionMapperImpl.class);
+    environment.jersey().register(CustomExceptionMapper.class);
 
     BaseApiApplication.injector = guiceBundle.getInjector();
 
