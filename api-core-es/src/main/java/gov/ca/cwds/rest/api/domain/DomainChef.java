@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.domain;
 
+import gov.ca.cwds.rest.api.ApiException;
 import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.ParseException;
@@ -7,10 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.commons.lang3.StringUtils;
-
-import gov.ca.cwds.rest.api.ApiException;
 
 /**
  * Utility class for CWDS API domain field data conversion.

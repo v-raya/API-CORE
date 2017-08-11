@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.api.domain;
+package cwds.rest.api.domain;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -6,6 +6,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.startsWith;
 
+import gov.ca.cwds.rest.api.ApiException;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,8 +17,6 @@ import org.hamcrest.core.Is;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import gov.ca.cwds.rest.api.ApiException;
 
 /**
  * @author CWDS API Team
