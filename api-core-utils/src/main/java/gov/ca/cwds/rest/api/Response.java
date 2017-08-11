@@ -1,10 +1,9 @@
 package gov.ca.cwds.rest.api;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import gov.ca.cwds.data.std.ApiMarker;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Marker indicating an object is used as a response from the API.

@@ -22,14 +22,18 @@ version = apiVersion
 repositories {
     mavenCentral()
     maven {
-        url "https://plugins.gradle.org/m2/"
+        mavenLocal()
+        jcenter()
+        mavenCentral()
         url "http://maven2.cwds.tabordasolutions.net"
     }
 }
 
 dependencies {
 
-	// MAIN:
+    compile group: 'gov.ca.cwds.api', name: 'api-core-utils', version: apiVersion , changing: true
+
+    // MAIN:
     compile group: "io.dropwizard", name: "dropwizard-views-mustache", version: dropwizardVersion
     compile group: 'io.dropwizard', name: 'dropwizard-assets', version: dropwizardVersion
     

@@ -1,19 +1,17 @@
-package gov.ca.cwds.rest.serializer;
-
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.junit.Before;
+package cwds.rest.serializer;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
-
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
+import gov.ca.cwds.rest.serializer.ErrorMessageSerializer;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.HashSet;
+import java.util.Set;
+import org.junit.Before;
 
 public class ErrorMessageSerializerTest {
 

@@ -1,16 +1,17 @@
-package gov.ca.cwds.rest.api.domain.error;
+package cwds.rest.api.domain.error;
 
+import static org.junit.Assert.assertEquals;
+
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage.ErrorType;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class ErrorMessageTest {
   @Test
   public void shouldCreateAnErrorMessageWithTypeValidation(){
     String error = "error occured";
-    ErrorMessage message = new ErrorMessage(ErrorMessage.ErrorType.VALIDATION, error, "DB");
-    assertEquals(message.getType(), ErrorMessage.ErrorType.VALIDATION);
+    ErrorMessage message = new ErrorMessage(ErrorType.VALIDATION, error, "DB");
+    assertEquals(message.getType(), ErrorType.VALIDATION);
     assertEquals(message.getMessage(), error);
     assertEquals(message.getSource(), "DB");
   }
