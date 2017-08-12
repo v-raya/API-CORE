@@ -1,0 +1,1463 @@
+PUT /people/person/123456789
+{
+    "first_name": "Gregg",
+    "last_name": "Hill",
+    "gender": "Male",
+    "date_of_birth": "1964-09-21",
+    "id": "123456",
+    "legacy_source_table": "CLIENT_T",
+    "legacy_id": "1234567890",
+    "source": "SOURCE FOR GREGG HILL",
+    "type": "gov.ca.cwds.data.persistence.cms.rep.ReplicatedClient",
+    "ssn": "111223333",
+    "addresses": [
+    	{
+	    	"id": "111",
+	    	"legacy_address_id": "111222",
+	    	"street_address": "1234 Elm Avenue",
+	    	"city": "Rocklin",
+	    	"state": "CA",
+	    	"zip": "95765",
+	    	"type": "residence"
+	    },
+    	{
+	    	"id": "112",
+	    	"legacy_address_id": "112222",
+	    	"street_address": "1234 Elm Ave",
+	    	"city": "Rocklin",
+	    	"state": "CA",
+	    	"zip": "95765",
+	    	"type": "house"
+	    },
+    	{
+	    	"id": "113",
+	    	"legacy_address_id": "113222",
+	    	"street_address": "1234 Fig Street",
+	    	"city": "Rocklin",
+	    	"state": "CA",
+	    	"zip": "95765",
+	    	"type": "residence"
+	    }
+    ],
+    "phoneNumbers": [
+    	{
+    		"id": "1111",
+    		"number": "916.555.1212 x11",
+    		"type": "mobile"
+    	},
+    	{
+    		"id": "1112",
+    		"number": "916.555.1212 x12",
+    		"type": "mobile"
+    	},
+    	{
+    		"id": "1113",
+    		"number": "911.555.1212 x11",
+    		"type": "mobile"
+    	},
+    	{
+    		"id": "1114",
+    		"number": "916.555.1212 x111",
+    		"type": "mobile"
+    	}
+    ],
+    "languages": [
+		"English",
+		"Javascript"
+    ],
+    "races": [
+    	{
+	    	"race": "Formula 1",
+	    	"race_detail": "Monaco Grand Prix"
+    	},
+    	{
+	    	"race": "Formula E",
+	    	"race_detail": "Laguna Seca"
+    	}
+    ],
+    "ethnicity": {
+    	"hispanic_latino_origin": "No",
+    	"ethnicity_detail": "Caucasian"
+    },
+	"relationships": [
+		{
+			"related_person_first_name": "Maria",
+			"related_person_last_name": "Hill",
+	   		"related_person_relationship": "Spouse",
+	   		"indexed_person_relationship": "Spouse",
+	   		"relationship_context": "Loving",
+	        "related_person_id": "12333",
+	   		"related_person_legacy_source_table": "CHLD_CLT",
+	   		"related_person_legacy_id": "1234567844"
+   		},
+		{
+			"related_person_first_name": "Phil",
+			"related_person_last_name": "Hill",
+	   		"related_person_relationship": "Brother",
+	   		"indexed_person_relationship": "Brother",
+	   		"relationship_context": "Full",
+	        "related_person_id": "12344",
+	   		"related_person_legacy_source_table": "CHLD_CLT",
+	   		"related_person_legacy_id": "1234567899"
+   		},
+		{
+			"related_person_first_name": "Harriet-the-Cat",
+			"related_person_last_name": "Hill",
+	   		"relationship": "Owner/Cat",
+	   		"related_person_relationship": "Cat",
+	   		"indexed_person_relationship": "Owner",
+	        "related_person_id": "12344",
+	   		"related_person_legacy_source_table": "CAT_NAMS",
+	   		"related_person_legacy_id": "1234567811"
+   		},
+		{
+			"related_person_first_name": "Cordelia-the-Cat",
+			"related_person_last_name": "Hill",
+	   		"related_person_relationship": "Cat",
+	   		"indexed_person_relationship": "Owner",
+	        "related_person_id": "12345",
+	   		"related_person_legacy_source_table": "CAT_NAMS",
+	   		"related_person_legacy_id": "1234567812"
+   		},
+		{
+			"related_person_first_name": "Abigail-the-Cat",
+			"related_person_last_name": "Hill",
+	   		"related_person_relationship": "Cat",
+	   		"indexed_person_relationship": "Owner",
+	        "related_person_id": "12324",
+	   		"related_person_legacy_source_table": "CAT_NAMS",
+	   		"related_person_legacy_id": "1234567711"
+   		},
+		{
+			"related_person_first_name": "Flipper",
+			"related_person_last_name": "Porpoise",
+	   		"related_person_relationship": "No relation",
+	   		"indexed_person_relationship": "No relation",
+	        "related_person_id": "12324",
+	   		"related_person_legacy_source_table": "FISH_NAMS",
+	   		"related_person_legacy_id": "1234567711"
+   		}
+   	],
+	"safety_alerts": [
+		{
+			"safety_alert": "Dangerous Kitten on premises",
+			"legacy_client_id": "1234567890",
+			"activated_county": "Placer",
+			"activated_date": "2012-04-01",
+			"deactivated_county": "Placer",
+			"deactivated_date": "2012-07-01"
+		},
+		{
+			"safety_alert": "Dangerous Puppy on premises",
+			"legacy_client_id": "1234567890",
+			"activated_county": "Placer",
+			"activated_date": "2014-12-01",
+			"deactivated_county": "Placer",
+			"deactivated_date": "2015-07-01"
+		},
+		{
+			"safety_alert": "Carries loaded squirtgun",
+			"legacy_client_id": "1234567890",
+			"activated_county": "Placer",
+			"activated_date": "2011-04-01"
+		}
+	],
+   	"referrals": [
+   		{
+			"id": "1234567",
+			"legacy_referral_id": "1234567890123456700",
+			"start_date": "2016-09-21",
+			"county_name": "Placer",
+			"response_time": "Immediate",
+			"reporter": {
+	    		"first_name": "Benny",
+	    		"last_name": "Hill",
+		        "id": "987654321",
+		        "legacy_reporter_id": "987654321"
+			},
+			"assigned_social_worker": {
+	    		"first_name": "Harriet",
+	    		"last_name": "Hill",
+		        "id": "348743",
+		        "legacy_assigned_social_worker_id": "987654321"
+			},
+			"allegations": [
+				{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "1234567",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Abby-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "9834758",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Furniture",
+		    		"disposition_description": ""
+				},
+				{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "1234568",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Harriet-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "983475831",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Sofa",
+		    		"disposition_description": ""
+				},
+				{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Maria",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "1234566",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Cordelia-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "123456780",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Finger",
+		    		"disposition_description": ""
+				}
+			]
+		},
+   		{
+			"id": "7234567",
+			"legacy_referral_id": "0234567890123456700",
+			"start_date": "2016-11-21",
+			"county_name": "Placer",
+			"response_time": "3 Days",
+			"reporter": {
+	    		"first_name": "Bob-the-Cat",
+	    		"last_name": "Hill",
+		        "id": "987654321",
+		        "legacy_reporter_id": "987654321"
+			},
+			"assigned_social_worker": {
+	    		"first_name": "Blueberry",
+	    		"last_name": "Hill",
+		        "id": "348743",
+		        "legacy_assigned_social_worker_id": "987651321"
+			},
+			"allegations": [
+				{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Colette-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "983475800",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Face",
+		    		"disposition_description": ""
+				},
+				{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Harriet-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "983475831",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Finger",
+		    		"disposition_description": ""
+				},
+				{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "123456780",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Leg",
+		    		"disposition_description": ""
+				}
+			]
+		}
+	],
+   	"screenings": [
+   		{
+			"id": "1234567890123453333",
+			"start_date": "2016-09-10",
+			"end_date": "2016-09-11",
+			"county_name": "Placer",
+			"reporter": {
+	    		"first_name": "Benny",
+	    		"last_name": "Hill",
+		        "id": "987654321",
+		        "legacy_reporter_id": "987654320"
+			},
+			"assigned_social_worker": {
+	    		"first_name": "Harriet",
+	    		"last_name": "Hill",
+		        "id": "348743",
+		        "legacy_assigned_social_worker_id": "348743444"
+			},
+			"allegations": [
+				{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Abby-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "983475839",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Furniture",
+		    		"disposition_description": ""
+				},
+				{
+		    		"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Harriet-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "983475831",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Sofa",
+		    		"disposition_description": ""
+				},
+				{
+		    		"victim_first_name": "Maria",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Cordelia-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "123456780",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Finger",
+		    		"disposition_description": ""
+				}
+			],
+			"all_people": [
+				{
+	        		"first_name": "Benny",
+	        		"last_name": "Hill",
+	        		"roles": ["Reporter"],
+			        "legacy_source_table": "REPRTR",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Harriet",
+	        		"last_name": "Hill",
+	        		"roles": ["Assigned Social Worker"],
+			        "legacy_source_table": "REPRTR",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Maria",
+	        		"last_name": "Hill",
+	        		"roles": ["Victim"],
+			        "legacy_source_table": "CLIENT_T",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Gregg",
+	        		"last_name": "Hill",
+	        		"roles": ["Victim"],
+			        "legacy_source_table": "CLIENT_T",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Abby-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Perpetrator"],
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Harriet-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Perpetrator"],
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Cordelia-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Perpetrator"],
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Kermit-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Cat","Kitten","Pet"],
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "12334342344"
+			    },
+				{
+	        		"first_name": "Colette-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Cat"],
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434355"
+			    }
+			],
+    		"response_time": "Immediate",
+    		"decision": "Referral",
+    		"staff_name": {
+	    		"first_name": "Lucinda",
+	    		"last_name": "Hill",
+		        "id": "348221",
+		        "legacy_staff_id": "348221"
+    		},
+    		"service_name": "Sample service name",
+    		"category": "Denial"
+   		},
+   		{
+			"id": "9934567890123456700",
+			"start_date": "2016-11-11",
+			"county_name": "Placer",
+			"response_time": "Immediate",
+			"reporter": {
+	    		"first_name": "Abigail-the-Cat",
+	    		"last_name": "Hill",
+		        "id": "987654388",
+		        "legacy_reporter_id": "987654320"
+			},
+			"assigned_social_worker": {
+	    		"first_name": "Strawberry",
+	    		"last_name": "Hill",
+		        "id": "348740",
+		        "legacy_assigned_social_worker_id": "348743444"
+			},
+			"allegations": [
+				{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Colette-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "983475800",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Face",
+		    		"disposition_description": ""
+				},
+				{
+		    		"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Harriet-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "983475831",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Finger",
+		    		"disposition_description": ""
+				},
+				{
+		    		"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Cordelia-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "123456780",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Leg",
+		    		"disposition_description": ""
+				}
+			]
+		}
+	],
+   	"cases": [
+   		{
+			"id": "8884567890123",
+			"legacy_case_id": "8884567890123453333",
+			"start_date": "2016-09-29",
+			"county_name": "Placer",
+			"assigned_social_worker": {
+	    		"first_name": "Harriet-the-Cat",
+	    		"last_name": "Hill",
+		        "id": "348743",
+		        "legacy_assigned_social_worker_id": "348743444"
+			},
+			"focus_child": [
+				{
+		    		"first_name": "Bart-the-Kitten",
+		    		"last_name": "Hill",
+			        "id": "348793",
+			        "legacy_client_id": "348793"
+			    }
+			],
+			"parents": [
+				{
+					"first_name": "Hannibal-the-Cat",
+					"last_name": "Hill",
+					"relationship": "Father",
+				    "id": "348443",
+			   		"legacy_source_table": "CLN_COLT",
+			   		"legacy_id": "1234567844"
+				},
+				{
+					"first_name": "Henrietta-the-Cat",
+					"last_name": "Hill",
+					"relationship": "Mother",
+					"id": "778790",
+			   		"legacy_source_table": "CLN_COLT",
+			   		"legacy_id": "1234567845"
+				}
+			]
+		}
+	]
+}
+
+
+PUT /people/person/123456780
+{
+    "first_name": "Maria",
+    "last_name": "Hill",
+    "gender": "Female",
+    "date_of_birth": "1964-01-21",
+    "id": "123456780",
+    "legacy_source_table": "CLIENT_T",
+    "legacy_id": "123456780",
+    "source": "SOURCE FOR MARIA HILL",
+    "type": "gov.ca.cwds.data.persistence.cms.rep.ReplicatedClient",
+    "ssn": "111224444",
+    "addresses": [
+    	{
+	    	"id": "211",
+	    	"legacy_address_id": "211222",
+	    	"street_address": "1234 Elm Avenue",
+	    	"city": "Rocklin",
+	    	"state": "CA",
+	    	"zip": "95765",
+	    	"type": "residence"
+	    },
+    	{
+	    	"id": "213",
+	    	"legacy_address_id": "213222",
+	    	"street_address": "1234 Fig Street",
+	    	"city": "Rocklin",
+	    	"state": "CA",
+	    	"zip": "95765",
+	    	"type": "residence"
+	    }
+    ],
+    "phoneNumbers": [
+    	{
+    		"id": "4111",
+    		"number": "916.444.1212 x11",
+    		"type": "mobile"
+    	},
+    	{
+    		"id": "4114",
+    		"number": "916.444.1212 x111",
+    		"type": "mobile"
+    	}
+    ],
+    "languages": [
+    	"English",
+	    "Spanish"
+    ],
+    "races": [
+    	{
+	    	"race": "880",
+	    	"race_detail": "Middle Distance"
+    	},
+    	{
+	    	"race": "440",
+	    	"race_detail": "Short Distance"
+    	}
+    ],
+    "ethnicity": {
+    	"hispanic_latino_origin": "Yes",
+    	"ethnicity_detail": "Mexican"
+    },
+	"relationships": [
+		{
+			"related_person_first_name": "Gregg",
+			"related_person_last_name": "Hill",
+	   		"related_person_relationship": "Spouse",
+	   		"indexed_person_relationship": "Spouse",
+	   		"relationship_context": "Devoted",
+	        "related_person_id": "12345",
+	   		"related_person_legacy_source_table": "CHLD_CLT",
+	   		"related_person_legacy_id": "1234567890"
+   		},
+		{
+			"related_person_first_name": "Phil",
+			"related_person_last_name": "Hill",
+	   		"related_person_relationship": "Brother",
+	   		"indexed_person_relationship": "Sister",
+	   		"relationship_context": "Half",
+	        "related_person_id": "12344",
+	   		"related_person_legacy_source_table": "CHLD_CLT",
+	   		"related_person_legacy_id": "1234567899"
+   		},
+		{
+			"related_person_first_name": "Harriet-the-Cat",
+			"related_person_last_name": "Hill",
+	   		"related_person_relationship": "Cat",
+	   		"indexed_person_relationship": "Owner",
+	        "related_person_id": "12344",
+	   		"related_person_legacy_source_table": "CAT_NAMS",
+	   		"related_person_legacy_id": "1234567811"
+   		},
+		{
+			"related_person_first_name": "Cordelia-the-Cat",
+			"related_person_last_name": "Hill",
+	   		"related_person_relationship": "Cat",
+	   		"indexed_person_relationship": "Owner",
+	        "related_person_id": "12345",
+	   		"related_person_legacy_source_table": "CAT_NAMS",
+	   		"related_person_legacy_id": "1234567812"
+   		},
+		{
+			"related_person_first_name": "Abigail-the-Cat",
+			"related_person_last_name": "Hill",
+	   		"related_person_relationship": "Cat",
+	   		"indexed_person_relationship": "Owner",
+	        "related_person_id": "12324",
+	   		"related_person_legacy_source_table": "CAT_NAMS",
+	   		"related_person_legacy_id": "1234567711"
+   		},
+		{
+			"related_person_first_name": "Flipper",
+			"related_person_last_name": "Porpoise",
+	   		"related_person_relationship": "No relation",
+	   		"indexed_person_relationship": "No relation",
+	        "related_person_id": "12324",
+	   		"related_person_legacy_source_table": "FISH_NAMS",
+	   		"related_person_legacy_id": "1234567711"
+   		}
+	],
+	"safety_alerts": [
+		{
+			"safety_alert": "High Fructose Syrup drinks on premises",
+			"legacy_client_id": "1234567891",
+			"activated_county": "Placer",
+			"activated_date": "2012-03-01",
+			"deactivated_county": "Placer",
+			"deactivated_date": "2012-06-01"
+		},
+		{
+			"safety_alert": "Dangerous Hamster on premises",
+			"legacy_client_id": "1234567890",
+			"activated_county": "Placer",
+			"activated_date": "2014-12-01",
+			"deactivated_county": "Placer",
+			"deactivated_date": "2015-07-01"
+		},
+		{
+			"safety_alert": "Carries water balloons",
+			"legacy_client_id": "1234567890",
+			"activated_county": "Placer",
+			"activated_date": "2011-04-01"
+		}
+	],
+	"referrals": [
+		{
+			"id": "12345678901",
+			"legacy_referral_id": "1234567890123456700",
+			"start_date": "2016-09-21",
+			"county_name": "Placer",
+			"response_time": "Immediate",
+			"reporter": {
+	    		"first_name": "Benny",
+	    		"last_name": "Hill",
+		        "id": "9876543",
+		        "legacy_reporter_id": "987643331"
+			},
+			"assigned_social_worker": {
+	    		"first_name": "Harriet",
+	    		"last_name": "Hill",
+		        "id": "348743",
+		        "legacy_assigned_social_worker_id": "348743444"
+			},
+			"allegations": [
+				{
+			        "legacy_allegation_id": "1234567890",
+					"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Abby-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "983475839",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Furniture",
+		    		"disposition_description": ""
+		    	},
+	 			{
+		     		"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Harriet-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "983475831",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Sofa",
+		    		"disposition_description": ""
+		    	},
+		    	{
+		    		"victim_first_name": "Maria",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456780",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Cordelia-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "123456780",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Finger",
+		    		"disposition_description": ""
+		    	}
+			]
+		},
+		{	
+			"id": "02345678901211",
+			"legacy_referral_id": "1234567890123456700",
+			"start_date": "2016-11-24",
+			"county_name": "Placer",
+			"response_time": "3 Days",
+			"reporter": {
+	    		"first_name": "Bob-the-Cat",
+	    		"last_name": "Hill",
+		        "id": "987654321",
+		        "legacy_reporter_id": "987643331"
+			},
+			"assigned_social_worker": {
+	    		"first_name": "Strawberry",
+	    		"last_name": "Hill",
+		        "id": "348745",
+		        "legacy_assigned_social_worker_id": "348743444"
+			},
+			"allegations": [
+				{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Maria",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456780",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Colette-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "983475800",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Elbow",
+		    		"disposition_description": ""
+	    		},
+	    		{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Maria",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456780",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Harriet-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "983475831",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Foot",
+		    		"disposition_description": ""
+	    		},
+	    		{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Maria",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456780",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Cordelia-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "123456780",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Thumb",
+		    		"disposition_description": ""
+		    	}
+			]
+		}
+	],
+   	"screenings": [
+   		{
+			"id": "1234567890123453333",
+			"start_date": "2016-09-10",
+			"county_name": "Placer",
+			"reporter": {
+	    		"first_name": "Benny",
+	    		"last_name": "Hill",
+		        "id": "987654321",
+		        "legacy_reporter_id": "987643331"
+			},
+			"assigned_social_worker": {
+	    		"first_name": "Harriet",
+	    		"last_name": "Hill",
+		        "id": "348743",
+		        "legacy_assigned_social_worker_id": "348743444"
+			},
+			"allegations": [
+				{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Abby-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "983475839",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Furniture",
+		    		"disposition_description": ""
+				},
+				{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Harriet-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "983475831",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Sofa",
+		    		"disposition_description": ""
+				},
+				{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Maria",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Cordelia-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "123456780",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Finger",
+		    		"disposition_description": ""
+				}
+			],
+			"all_people": [
+				{
+	        		"first_name": "Benny",
+	        		"last_name": "Hill",
+	        		"roles": ["Reporter"],
+			        "legacy_source_table": "REPRTR",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Harriet",
+	        		"last_name": "Hill",
+	        		"roles": ["Assigned Social Worker"],
+			        "legacy_source_table": "REPRTR",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Maria",
+	        		"last_name": "Hill",
+	        		"roles": ["Victim"],
+			        "legacy_source_table": "CLIENT_T",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Gregg",
+	        		"last_name": "Hill",
+	        		"roles": ["Victim"],
+			        "legacy_source_table": "CLIENT_T",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Abby-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Perpetrator"],
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Harriet-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Perpetrator"],
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Cordelia-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Perpetrator"],
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Kermit-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Cat","Kitten","Pet"],
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "12334342344"
+			    },
+				{
+	        		"first_name": "Colette-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Cat"],
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434355"
+			    }
+			],
+    		"response_time": "Immediate",
+    		"decision": "Referral",
+    		"staff_name": {
+	    		"first_name": "Lucinda",
+	    		"last_name": "Hill",
+		        "id": "348221",
+		        "legacy_staff_id": "348221"
+    		},
+    		"service_name": "Sample service name",
+    		"category": "Denial"
+   		},
+   		{
+			"id": "9934567890123456700",
+			"start_date": "2016-11-11",
+			"end_date": "2016-11-13",
+			"county_name": "Placer",
+			"response_time": "Immediate",
+			"reporter": {
+	    		"first_name": "Abigail-the-Cat",
+	    		"last_name": "Hill",
+		        "id": "987654388",
+		        "legacy_reporter_id": "987643331"
+			},
+			"assigned_social_worker": {
+	    		"first_name": "Strawberry",
+	    		"last_name": "Hill",
+		        "id": "348740",
+		        "legacy_assigned_social_worker_id": "348743444"
+			},
+			"allegations": [
+				{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Colette-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "983475800",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Face",
+		    		"disposition_description": ""
+				},
+				{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Harriet-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "983475831",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Finger",
+		    		"disposition_description": ""
+				},
+				{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Cordelia-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "123456780",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Leg",
+		    		"disposition_description": ""
+				}
+			]
+		}
+	],
+   	"cases": [
+   		{
+			"id": "88845678903",
+			"legacy_case_id": "8884567890123453333",
+			"start_date": "2016-09-29",
+			"county_name": "Placer",
+			"assigned_social_worker": {
+	    		"first_name": "Harriet-the-Cat",
+	    		"last_name": "Hill",
+		        "id": "348743",
+		        "legacy_assigned_social_worker_id": "348743444"
+			},
+			"focus_child": [
+				{
+		    		"first_name": "Millicent-the-Kitten",
+		    		"last_name": "Hill",
+			        "id": "348799",
+			        "legacy_client_id": "348793"
+			    }
+			],
+			"parents": [
+				{
+					"first_name": "Hannibal-the-Cat",
+					"last_name": "Hill",
+					"relationship": "Father",
+				    "id": "348443",
+			   		"legacy_source_table": "CLN_COLT",
+			   		"legacy_id": "1234567844"
+				},
+				{
+					"first_name": "Henrietta-the-Cat",
+					"last_name": "Hill",
+					"relationship": "Mother",
+					"id": "778790",
+			   		"legacy_source_table": "CLN_COLT",
+			   		"legacy_id": "1234567844"
+				}
+			]
+		}
+	]}
+
+PUT /people/person/123456783
+{
+    "first_name": "Phil",
+    "last_name": "Hill",
+    "gender": "Male",
+    "date_of_birth": "1967-12-01",
+    "id": "123456788",
+    "legacy_source_table": "CLIENT_T",
+    "legacy_id": "12312312312",
+    "source": "SOURCE FOR PHIL HILL",
+    "type": "gov.ca.cwds.data.persistence.cms.rep.ReplicatedClient",
+    "ssn": "111225555",
+    "addresses": [
+    	{
+	    	"id": "111",
+	    	"street_address": "1234 Elm Avenue",
+	    	"city": "Rocklin",
+	    	"state": "CA",
+	    	"zip": "95765",
+	    	"type": "residence"
+	    },
+    	{
+	    	"id": "112",
+	    	"street_address": "1234 Gold Ave",
+	    	"city": "Rocklin",
+	    	"state": "CA",
+	    	"zip": "95765",
+	    	"type": "house"
+	    },
+    	{
+	    	"id": "113",
+	    	"street_address": "1234 Silver Street",
+	    	"city": "Rocklin",
+	    	"state": "CA",
+	    	"zip": "95765",
+	    	"type": "residence"
+	    }
+    ],
+    "phoneNumbers": [
+    	{
+    		"id": "6111",
+    		"number": "916.333.1212",
+    		"type": "mobile"
+    	},
+    	{
+    		"id": "6114",
+    		"number": "916.333.1212 x111",
+    		"type": "mobile"
+    	}
+    ],
+    "languages": [
+    	"English",
+	    "Excel"
+    ],
+    "races": [
+    	{
+	    	"race": "Formula 1",
+	    	"race_detail": "United States Grand Prix"
+    	},
+    	{
+	    	"race": "Formula 2",
+	    	"race_detail": "Sonoma Raceway"
+    	}
+    ],
+    "ethnicity": {
+    	"hispanic_latino_origin": "No",
+    	"ethnicity_detail": "Caucasian"
+    },
+	"relationships": [
+		{
+			"related_person_first_name": "Gregg",
+			"related_person_last_name": "Hill",
+	   		"related_person_relationship": "Brother",
+	   		"indexed_person_relationship": "Brother",
+	        "related_person_id": "12345",
+	   		"related_person_legacy_source_table": "CHLD_CLT",
+	   		"related_person_legacy_id": "1234567890"
+   		},
+		{
+			"related_person_first_name": "Maria",
+			"related_person_last_name": "Hill",
+	   		"related_person_relationship": "Sister",
+	   		"indexed_person_relationship": "Brother",
+	   		"relationship_context": "In Law",
+	        "related_person_id": "12344",
+	   		"related_person_legacy_source_table": "CHLD_CLT",
+	   		"related_person_legacy_id": "1234567899"
+   		},
+		{
+			"related_person_first_name": "Sammy-the-Cat",
+			"related_person_last_name": "Hill",
+	   		"related_person_relationship": "Cat",
+	   		"indexed_person_relationship": "Owner",
+	        "related_person_id": "12341",
+	   		"related_person_legacy_source_table": "CAT_NAMS",
+	   		"related_person_legacy_id": "1234567890"
+   		},
+		{
+			"related_person_first_name": "Cassie-the-Dog",
+			"related_person_last_name": "Hill",
+	   		"related_person_relationship": "Dog",
+	   		"indexed_person_relationship": "Owner",
+	        "related_person_id": "12141",
+	   		"related_person_legacy_source_table": "DOG_NAMS",
+	   		"related_person_legacy_id": "1237767890"
+   		},
+		{
+			"related_person_first_name": "Flipper",
+			"related_person_last_name": "Porpoise",
+	   		"related_person_relationship": "No Relation",
+	   		"indexed_person_relationship": "No Relation",
+	        "related_person_id": "12324",
+	   		"related_person_legacy_source_table": "FISH_NAMS",
+	   		"related_person_legacy_id": "1234567711"
+   		}
+	],
+	"safety_alerts": [
+		{
+			"safety_alert": "Dangerous Goldfish on premises",
+			"legacy_client_id": "1234567890",
+			"activated_county": "Yuba",
+			"activated_date": "2012-04-01",
+			"deactivated_county": "Yuba",
+			"deactivated_date": "2012-07-01"
+		},
+		{
+			"safety_alert": "Dangerous chicks on premises",
+			"legacy_client_id": "1234567890",
+			"activated_county": "Yolo",
+			"activated_date": "2014-12-01",
+			"deactivated_county": "Yolo",
+			"deactivated_date": "2015-07-01"
+		},
+		{
+			"safety_alert": "Carries loaded sawed off squirtgun",
+			"legacy_client_id": "1234567890",
+			"activated_county": "Sacramento",
+			"activated_date": "2011-04-01"
+		}
+	],
+	"referrals": [
+		{
+			"id": "12345656722",
+			"legacy_referral_id": "1234567890123456700",
+			"start_date": "2017-01-21",
+			"county_name": "Placer",
+			"response_time": "24 months",
+			"reporter": {
+	    		"first_name": "Bunny",
+	    		"last_name": "Hill",
+		        "id": "987654322",
+		        "legacy_reporter_id": "987643331"
+			},
+			"assigned_social_worker": {
+	    		"first_name": "Harriend",
+	    		"last_name": "Hill",
+		        "id": "348744",
+		        "legacy_assigned_social_worker_id": "348743444"
+			},
+			"allegations": [
+				{
+			        "legacy_allegation_id": "1234567890",
+					"victim_first_name": "Phil",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456788",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Sammy-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "983475866",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Wrist",
+		    		"disposition_description": ""
+		    	}
+			]
+		},
+		{	
+			"id": "023456456777",
+			"legacy_referral_id": "1234567890123456700",
+			"start_date": "2016-11-22",
+			"county_name": "Placer",
+			"response_time": "Immediate",
+			"reporter": {
+	    		"first_name": "Gregg",
+	    		"last_name": "Hill",
+		        "id": "123456789",
+		        "legacy_reporter_id": "987643331"
+			},
+			"assigned_social_worker": {
+	    		"first_name": "Plum",
+	    		"last_name": "Hill",
+		        "id": "348746",
+		        "legacy_assigned_social_worker_id": "348743444"
+			},
+			"allegations": [
+				{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Phil",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456788",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Cassie-the-Dog",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "983475866",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Chest",
+		    		"disposition_description": ""
+	    		}
+			]
+		}
+	],
+   	"screenings": [
+   		{
+			"id": "1234567890123453333",
+			"start_date": "2016-09-10",
+			"county_name": "Placer",
+			"reporter": {
+	    		"first_name": "Benny",
+	    		"last_name": "Hill",
+		        "id": "987654321",
+		        "legacy_reporter_id": "987643331"
+			},
+			"assigned_social_worker": {
+	    		"first_name": "Harriet",
+	    		"last_name": "Hill",
+		        "id": "348743",
+		        "legacy_assigned_social_worker_id": "348743444"
+			},
+			"allegations": [
+				{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Abby-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "983475839",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Furniture",
+		    		"disposition_description": ""
+				},
+				{
+		    		"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Harriet-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "983475831",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Sofa",
+		    		"disposition_description": ""
+				},
+				{
+		    		"victim_first_name": "Maria",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Cordelia-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "123456780",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Finger",
+		    		"disposition_description": ""
+				}
+			],
+			"all_people": [
+				{
+	        		"first_name": "Benny",
+	        		"last_name": "Hill",
+	        		"roles": ["Reporter"],
+			        "legacy_source_table": "REPRTR",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Harriet",
+	        		"last_name": "Hill",
+	        		"roles": ["Assigned Social Worker"],
+			        "legacy_source_table": "REPRTR",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Maria",
+	        		"last_name": "Hill",
+	        		"roles": ["Victim"],
+			        "legacy_source_table": "CLIENT_T",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Gregg",
+	        		"last_name": "Hill",
+	        		"roles": ["Victim"],
+			        "legacy_source_table": "CLIENT_T",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Abby-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Perpetrator"],
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Harriet-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Perpetrator"],
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Cordelia-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Perpetrator"],
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434354"
+			    },
+				{
+	        		"first_name": "Kermit-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Cat","Kitten","Pet"],
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "12334342344"
+			    },
+				{
+	        		"first_name": "Colette-the-Cat",
+	        		"last_name": "Hill",
+	        		"roles": ["Cat"],
+			        "legacy_source_table": "CAT_NMS",
+			        "legacy_id": "1233434355"
+			    }
+			],
+    		"response_time": "Immediate",
+    		"decision": "Referral",
+    		"staff_name": {
+	    		"first_name": "Lucinda",
+	    		"last_name": "Hill",
+		        "id": "348221",
+		        "legacy_staff_id": "348221"
+    		},
+    		"service_name": "Sample service name",
+    		"category": "Denial"
+   		},
+   		{
+			"id": "9934567890123456700",
+			"start_date": "2016-11-11",
+			"county_name": "Placer",
+			"response_time": "Immediate",
+			"reporter": {
+	    		"first_name": "Abigail-the-Cat",
+	    		"last_name": "Hill",
+		        "id": "987654388",
+		        "legacy_reporter_id": "987643331"
+			},
+			"assigned_social_worker": {
+	    		"first_name": "Strawberry",
+	    		"last_name": "Hill",
+		        "id": "348740",
+		        "legacy_assigned_social_worker_id": "348743444"
+			},
+			"allegations": [
+				{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Colette-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "983475800",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Face",
+		    		"disposition_description": ""
+				},
+				{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Harriet-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "983475831",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Finger",
+		    		"disposition_description": ""
+				},
+				{
+			        "legacy_allegation_id": "1234567890",
+		    		"victim_first_name": "Gregg",
+		    		"victim_last_name": "Hill",
+			        "victim_id": "123456789",
+			        "victim_legacy_client_id": "1234567890",
+		    		"perpetrator_first_name": "Cordelia-the-Cat",
+		    		"perpetrator_last_name": "Hill",
+			        "perpetrator_id": "123456780",
+			        "perpetrator_legacy_client_id": "1234567443",
+		    		"allegation_description": "Scratched Leg",
+		    		"disposition_description": ""
+				}
+			]
+		}
+	],
+   	"cases": [
+   		{
+			"id": "88845678901",
+			"legacy_case_id": "8884567890123453333",
+			"start_date": "2016-09-29",
+			"county_name": "Placer",
+			"assigned_social_worker": {
+	    		"first_name": "Harriet-the-Cat",
+	    		"last_name": "Hill",
+		        "id": "348743",
+		        "legacy_assigned_social_worker_id": "348743444"
+			},
+			"focus_child": [
+				{
+		    		"first_name": "Ben-the-Kitten",
+		    		"last_name": "Hill",
+			        "id": "348790",
+			        "legacy_client_id": "348793"
+			    }
+			],
+			"parents": [
+				{
+					"first_name": "Hannibal-the-Cat",
+					"last_name": "Hill",
+					"relationship": "Father",
+				    "id": "348443",
+			   		"legacy_source_table": "CLN_COLT",
+			   		"legacy_id": "1234567844"
+				},
+				{
+					"first_name": "Henrietta-the-Cat",
+					"last_name": "Hill",
+					"relationship": "Mother",
+					"id": "778790",
+			   		"legacy_source_table": "CLN_COLT",
+			   		"legacy_id": "1234567844"
+				}
+			]
+		}
+	]
+}
+

@@ -37,7 +37,7 @@ import io.swagger.jaxrs.listing.ApiListingResource;
  * @author CWDS API Team
  * @param <T> type of configuration
  */
-public abstract class BaseApiApplication<T extends BaseApiConfiguration> extends Application<T> {
+public abstract class BaseApiApplication<T extends ApiConfiguration> extends Application<T> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BaseApiApplication.class);
 

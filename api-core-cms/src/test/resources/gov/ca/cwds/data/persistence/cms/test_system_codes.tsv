@@ -1,0 +1,27 @@
+SYS_ID	FKS_META_T	SHORT_DSC	LGC_ID	INACTV_IND	CATEGORY_ID	OTHER_CD	LONG_DSC
+1	ABS_BPTC	Head	10	N	 	 	 
+9	ABS_BPTC	Ears	100	N	 	 	 
+10	ABS_BPTC	Eyes	105	N	 	 	 
+11	ABS_BPTC	Mouth/Teeth	110	N	 	 	 
+12	ABS_BPTC	Nose	115	N	 	 	 
+13	ABS_BPTC	Brain	120	N	 	 	 
+14	ABS_BPTC	Skull	125	N	 	 	 
+15	ABS_BPTC	Other Head Area	130	N	 	 	 
+2	ABS_BPTC	Face	15	N	 	 	 
+3	ABS_BPTC	Torso	20	N	 	 	 
+16	ABS_BPTC	Abdomen	200	N	 	 	 
+17	ABS_BPTC	Back	205	N	 	 	 
+18	ABS_BPTC	Breasts	210	N	 	 	 
+19	ABS_BPTC	Buttocks	215	N	 	 	 
+20	ABS_BPTC	Chest	220	N	 	 	 
+21	ABS_BPTC	Ribs	225	N	 	 	 
+22	ABS_BPTC	Shoulders	230	N	 	 	 
+4	ABS_BPTC	Arm	25	N	 	 	 
+5	ABS_BPTC	Leg	30	N	 	 	 
+6	ABS_BPTC	Hand	35	N	 	 	 
+7	ABS_BPTC	Foot	40	N	 	 	 
+8	ABS_BPTC	Genitals	45	N	 	 	 
+23	ABS_BPTC	Testicles	700	N	 	 	 
+24	ABS_BPTC	Vaginal Area (External)	705	N	 	 	 
+25	ABS_BPTC	Vaginal Area (Internal)	710	N	 	 	 
+26	ABS_BPTC	Rectum/Anus	715	N	 	 	 

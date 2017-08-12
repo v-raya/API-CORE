@@ -31,7 +31,7 @@ repositories {
 
 dependencies {
 
-    compile group: 'gov.ca.cwds.api', name: 'api-core-utils', version: apiVersion , changing: true
+    compile group: 'gov.ca.cwds.api', name: 'api-core-common', version: apiVersion , changing: true
 
     // MAIN:
     compile group: "io.dropwizard", name: "dropwizard-views-mustache", version: dropwizardVersion

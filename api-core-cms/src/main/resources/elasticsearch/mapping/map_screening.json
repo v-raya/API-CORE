@@ -1,0 +1,25 @@
+{
+  "properties": {
+    "id": {
+      "type": "text"
+    },
+    "name": {
+      "type": "text"
+    },
+    "reference": {
+      "type": "text"
+    },
+    "screening_decision": {
+      "type": "text"
+    },
+    "screening_decision_detail": {
+      "type": "text"
+    },
+    "assignee": {
+      "type": "text"
+    },
+    "started_at": {
+      "type": "text"
+    }
+  }
+}

@@ -1,1 +1,6 @@
 rootProject.name = 'api-core'
+include 'api-core-common'
+include 'api-core-persistence'
+include 'api-core-rest'
+include 'api-core-cms'
+include 'api-core-parent'
