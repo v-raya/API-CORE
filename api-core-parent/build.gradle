@@ -31,8 +31,7 @@ repositories {
 }
 
 dependencies {
-    compile group: 'gov.ca.cwds.api', name: 'api-core-persistence', version: apiVersion , changing: true
-    compile group: 'gov.ca.cwds.api', name: 'api-core-utils', version: apiVersion , changing: true
+    compile group: 'gov.ca.cwds.api', name: 'api-core-common', version: apiVersion , changing: true
     compile group: 'gov.ca.cwds.api', name: 'api-core-rest', version: apiVersion , changing: true
     compile group: 'gov.ca.cwds.api', name: 'api-core-cms', version: apiVersion , changing: true
     compile group: "io.dropwizard.modules", name: "dropwizard-flyway", version: dropwizardFlywayVersion

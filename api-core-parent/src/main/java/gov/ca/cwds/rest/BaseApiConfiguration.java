@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.secnod.dropwizard.shiro.ShiroConfiguration;
 
-public class BaseApiConfiguration extends ApiConfiguration {
+public class BaseApiConfiguration extends MinimalApiConfiguration {
 
   @Nullable
   private DataSourceFactory nsDataSourceFactory;

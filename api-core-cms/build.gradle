@@ -32,7 +32,6 @@ repositories {
 
 dependencies {
 
-    compile group: 'gov.ca.cwds.api', name: 'api-core-persistence', version: apiVersion , changing: true
     compile group: 'gov.ca.cwds.api', name: 'api-core-common', version: apiVersion , changing: true
 
 	// MAIN:

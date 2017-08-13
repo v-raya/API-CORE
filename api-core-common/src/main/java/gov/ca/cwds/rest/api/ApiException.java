@@ -67,7 +67,7 @@ public class ApiException extends RuntimeException {
   /**
    * {@inheritDoc}
    * 
-   * @see java.lang.Object#hashCode()
+   * @see Object#hashCode()
    */
   @Override
   public final int hashCode() {
@@ -76,8 +76,8 @@ public class ApiException extends RuntimeException {
 
   /**
    * {@inheritDoc}
-   * 
-   * @see java.lang.Object#equals(java.lang.Object)
+   *
+   * @see Object#equals(Object)
    */
   @Override
   public final boolean equals(Object obj) {
