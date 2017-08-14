@@ -1,0 +1,49 @@
+dependencies {
+    compile project(':api-core-common')
+
+    // MAIN:
+    compile group: "io.dropwizard", name: "dropwizard-hibernate", version: dropwizardVersion
+    compile group: "io.dropwizard", name: "dropwizard-views-mustache", version: dropwizardVersion
+    compile group: 'io.dropwizard', name: 'dropwizard-assets', version: dropwizardVersion
+    
+    compile group: "org.glassfish.jersey.ext", name: "jersey-declarative-linking", version: glassfishJerseyExtVersion
+    compile group: 'com.google.guava', name: 'guava', version: guavaVersion
+
+	compile group: 'com.hubspot.dropwizard', name: 'dropwizard-guice', version: '1.0.6.0'
+    
+    compile group: 'io.swagger', name: 'swagger-jersey2-jaxrs', version: swaggerVersion
+    compile group: 'io.swagger', name: 'swagger-annotations', version: swaggerVersion
+    //SECURITY
+    compile group: 'gov.ca.cwds.api', name:'shiro-security', version: shiroSecurityVersion
+
+	compile group: 'org.secnod.dropwizard', name: 'dropwizard-shiro', version: '0.2.0'
+	compile group: 'org.glassfish.jersey.core', name: 'jersey-client', version: glassfishJerseyCoreVersion
+    compile group: 'org.json', name: 'json', version: '20090211'
+
+	// TEST:
+    testCompile group: "io.dropwizard", name: "dropwizard-testing", version: dropwizardVersion
+    testCompile('org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:2.23.2') {
+        exclude group: 'javax.servlet', module: 'javax.servlet-api'
+        exclude group: 'junit', module: 'junit'
+    }
+    
+    testCompile group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '2.1.6'
+    testCompile 'org.ow2.asm:asm-all:5.1'
+}
+
+publishing {
+  publications {
+    library(MavenPublication) {
+      from components.java
+      groupId commonGroupId
+      artifactId 'api-core-rest'
+        version version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
+    }
+  }
+  repositories {
+    maven {
+      //TODO : set to http url
+      url "file:///usr/share/nginx/html/maven2"
+    }
+  }
+}

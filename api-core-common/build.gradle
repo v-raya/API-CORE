@@ -1,0 +1,20 @@
+dependencies {
+    compile group: "io.dropwizard", name: "dropwizard-views-mustache", version: dropwizardVersion
+}
+
+publishing {
+  publications {
+    library(MavenPublication) {
+      from components.java
+      groupId commonGroupId
+      artifactId 'api-core-common'
+        version version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
+    }
+  }
+  repositories {
+    maven {
+      //TODO : set to http url
+      url "file:///usr/share/nginx/html/maven2"
+    }
+  }
+}
