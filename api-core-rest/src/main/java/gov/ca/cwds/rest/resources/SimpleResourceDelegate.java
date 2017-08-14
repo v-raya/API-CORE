@@ -1,31 +1,35 @@
 package gov.ca.cwds.rest.resources;
 
-import com.google.inject.Inject;
-import gov.ca.cwds.rest.api.ApiException;
-import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.services.ServiceException;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
+
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Response;
+
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.inject.Inject;
+
+import gov.ca.cwds.rest.api.ApiException;
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * Standard implementation of interface {@link ApiSimpleResourceDelegate}. Incoming API requests
  * delegate work to the service layer. All Non-CRUD {@link Resource} classes should extend this
  * class or nest delegate members.
- * 
+ *
  * <p>
  * Non-CRUD resources delegate to this class with the decoration being Swagger {@link Annotation}
  * classes for documentation and Jersey {@link Annotation} for RESTful resources.
  * </p>
- * 
+ *
  * <p>
  * NOTE: CRUD resources should use {@link TypedResourceDelegate} instead, which provides methods to
  * Create, Read, Update, and Delete underlying persistence objects. This class is intended for
@@ -36,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * @param <Q> reQuest type
  * @param <P> resPonse type
  * @param <S> Service type
- * 
+ *
  * @author CWDS API Team
  * @see ApiSimpleResourceService
  */
@@ -55,7 +59,7 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
 
   /**
    * Constructor
-   * 
+   *
    * @param service The {@link ApiSimpleResourceService} for this resource.
    */
   @Inject
@@ -69,11 +73,11 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
    * {@link ApiSimpleResourceService#handle(Request)} and wrapping resulting API
    * {@link gov.ca.cwds.rest.api.Response} with a Java standard web service response.
    * </p>
-   * 
+   *
    * <p>
    * See method {@link #handleException(Exception)} for the list of possible HTTP Response Codes.
    * </p>
-   * 
+   *
    * @param req input CWDS API {@link Request}
    * @return web service {@link Response}
    * @throws ApiException if service call fails, catch and throw an ApiException
@@ -96,11 +100,11 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
   /**
    * Find object by its key by delegating to wrapped service method,
    * {@link ApiSimpleResourceService#find(Serializable)}.
-   * 
+   *
    * <p>
    * See method {@link #handleException(Exception)} for the list of possible HTTP Response Codes.
    * </p>
-   * 
+   *
    * @param key key to search for
    * @return The API {@link Response}
    * @throws ApiException if service call fails, catch and throw an ApiException
@@ -121,11 +125,11 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
 
   /**
    * Exposes the wrapped {@link ApiSimpleResourceService}.
-   * 
+   *
    * <p>
    * Usually not needed, but the interface is exposed for convenience.
    * </p>
-   * 
+   *
    * @return the underlying, wrapped {@link ApiSimpleResourceService}
    */
   @Override
@@ -135,7 +139,7 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
 
   /**
    * Validate an outbound API {@link Response}, type P.
-   * 
+   *
    * @param resp API response
    * @throws ConstraintViolationException if the response fails validation
    */
@@ -145,7 +149,7 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
 
   /**
    * Validate an incoming API {@link Request}, type Q.
-   * 
+   *
    * @param req API request
    * @throws ConstraintViolationException if the request fails validation
    */
@@ -155,7 +159,7 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
 
   /**
    * Validate an incoming key, type K.
-   * 
+   *
    * @param key key to validate
    * @throws ConstraintViolationException if the key fails validation
    */
@@ -165,7 +169,7 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
 
   /**
    * Convenience method. Returns the typed parameters for this class.
-   * 
+   *
    * @return typed parameters
    */
   public final Object[] getTypeParams() {
@@ -178,26 +182,26 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
    * {@link ApiSimpleResourceService#handle(Request)} and wrapping resulting API
    * {@link gov.ca.cwds.rest.api.Response} with a Java standard web service response.
    * </p>
-   * 
+   *
    * <p>
    * Web Service Response, not a CWDS API Response.
    * </p>
-   * 
+   *
    * <p>
    * HTTP Response Codes
    * </p>
-   * 
+   *
    * The default method implementation may return the following HTTP response codes:
    * <ul>
-   * <li>{@link Response.Status#OK}</li>
-   * <li>{@link Response.Status#NOT_FOUND}</li>
-   * <li>{@link Response.Status#CONFLICT}</li>
-   * <li>{@link Response.Status#INTERNAL_SERVER_ERROR}</li>
-   * <li>{@link Response.Status#EXPECTATION_FAILED}</li>
-   * <li>{@link Response.Status#NOT_IMPLEMENTED}</li>
-   * <li>{@link Response.Status#SERVICE_UNAVAILABLE}</li>
+   * <li>{@link javax.ws.rs.core.Response.Status#OK}</li>
+   * <li>{@link javax.ws.rs.core.Response.Status#NOT_FOUND}</li>
+   * <li>{@link javax.ws.rs.core.Response.Status#CONFLICT}</li>
+   * <li>{@link javax.ws.rs.core.Response.Status#INTERNAL_SERVER_ERROR}</li>
+   * <li>{@link javax.ws.rs.core.Response.Status#EXPECTATION_FAILED}</li>
+   * <li>{@link javax.ws.rs.core.Response.Status#NOT_IMPLEMENTED}</li>
+   * <li>{@link javax.ws.rs.core.Response.Status#SERVICE_UNAVAILABLE}</li>
    * </ul>
-   * 
+   *
    * @param e {@link ServiceException} to inspect
    * @return web service {@link Response}
    * @see ApiSimpleResourceService#handle(Request)
@@ -262,11 +266,11 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
 
   /**
    * Default behavior for {@link #find(Serializable)} method. Delegates to service.
-   * 
+   *
    * <p>
    * Implementations are free to override this behavior, as needed.
    * </p>
-   * 
+   *
    * @param key Serializable, unique key
    * @return API Response
    * @throws ServiceException on service error
@@ -277,11 +281,11 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
 
   /**
    * Default behavior for {@link #handle(Request)} method. Delegates to service.
-   * 
+   *
    * <p>
    * Implementations are free to override this behavior, as needed.
    * </p>
-   * 
+   *
    * @param req API Request
    * @return API Response
    * @throws ServiceException on service error

@@ -1,28 +1,34 @@
 package gov.ca.cwds.rest.resources;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.inject.Inject;
-import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage.ErrorType;
-import gov.ca.cwds.rest.services.CrudsService;
-import gov.ca.cwds.rest.services.ServiceException;
-import gov.ca.cwds.rest.validation.ValidationException;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import javax.ws.rs.core.Response;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.inject.Inject;
+
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
+import gov.ca.cwds.rest.services.CrudsService;
+import gov.ca.cwds.rest.services.ServiceException;
+import gov.ca.cwds.rest.validation.ValidationException;
 
 /**
  * Implements the {@link ResourceDelegate} and passes work to the service layer. All
  * {@link Resource} should decorate this class. Resources will delegate to this class with the
  * decoration being swagger {@link Annotation} classes for documentation and Jersey
  * {@link Annotation} for RESTful resources.
- * 
+ *
  * @author CWDS API Team
  */
 public final class ServiceBackedResourceDelegate implements ResourceDelegate {
@@ -35,7 +41,7 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
 
   /**
    * Constructor
-   * 
+   *
    * @param crudsService The crudsService for this resource.
    */
   @Inject
@@ -45,8 +51,8 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
 
   /**
    * {@inheritDoc}
-   * 
-   * @see ResourceDelegate#get(Serializable)
+   *
+   * @see gov.ca.cwds.rest.resources.ResourceDelegate#get(java.io.Serializable)
    */
   @Override
   public Response get(Serializable id) {
@@ -61,7 +67,7 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
   /**
    * {@inheritDoc}
    *
-   * @see ResourceDelegate#delete(Serializable)
+   * @see gov.ca.cwds.rest.resources.ResourceDelegate#delete(java.io.Serializable)
    */
   @Override
   public Response delete(Serializable id) {
@@ -76,7 +82,7 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
   /**
    * {@inheritDoc}
    *
-   * @see ResourceDelegate#create(Request)
+   * @see gov.ca.cwds.rest.resources.ResourceDelegate#create(gov.ca.cwds.rest.api.Request)
    */
   @Override
   public Response create(Request request) {
@@ -94,8 +100,10 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
       }
       response = Response.status(responseStatus).entity(entity).build();
     } catch (ServiceException e) {
-      if (e.getCause() instanceof ValidationException) {
-        Set<ErrorMessage> errorMessages = buildErrorMessages(e, ErrorType.VALIDATION);
+      if (e.getCause() instanceof EntityExistsException) {
+        response = Response.status(Response.Status.CONFLICT).entity(null).build();
+      } else if (e.getCause() instanceof ValidationException) {
+        Set<ErrorMessage> errorMessages = buildErrorMessages(e,ErrorMessage.ErrorType.VALIDATION);
         response = Response.status(Response.Status.BAD_REQUEST).entity(errorMessages).build();
       } else if(e.getCause() instanceof ClientException){
         Set<ErrorMessage> errorMessages = buildErrorMessages(e, ErrorType.CLIENT_CONTRACT);
@@ -128,8 +136,8 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
   /**
    * {@inheritDoc}
    *
-   * @see ResourceDelegate#update(Serializable,
-   *      Request)
+   * @see gov.ca.cwds.rest.resources.ResourceDelegate#update(java.io.Serializable,
+   *      gov.ca.cwds.rest.api.Request)
    */
   @Override
   public Response update(Serializable id, Request request) {
@@ -137,15 +145,26 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
     try {
       response = Response.status(Response.Status.OK).entity(service.update(id, request)).build();
     } catch (ServiceException e) {
+      Object entity = null;
+      if (e.getCause() instanceof EntityNotFoundException) {
+        if (StringUtils.isNotEmpty(e.getMessage())) {
+          ImmutableMap<String, String> map =
+              ImmutableMap.<String, String>builder().put("message", e.getMessage()).build();
+          entity = map;
+        }
+
+        response = Response.status(Response.Status.NOT_FOUND).entity(entity).build();
+      } else {
         LOGGER.error("Unable to handle request", e);
         response = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
+      }
     }
     return response;
   }
 
   /**
    * Exposes the wrapped {@link CrudsService}.
-   * 
+   *
    * @return the underlying, wrapped {@link CrudsService}
    */
   public CrudsService getService() {
