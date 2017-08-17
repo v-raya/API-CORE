@@ -1,9 +1,12 @@
 package gov.ca.cwds.data.es;
 
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -395,6 +398,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonProperty("date_of_birth")
   private String dateOfBirth;
 
+  // @JsonProperty("searchable_date_of_birth")
+  // private String[] searchableDateOfBirth;
+
   @JsonProperty("gender")
   private String gender;
 
@@ -406,9 +412,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
   @JsonProperty("sensitivity_indicator")
   private transient String sensitivityIndicator;
-
-  @JsonProperty("soc158_sealed_client_indicator")
-  private transient String soc158SealedClientIndicator;
 
   @JsonProperty("source")
   private transient String source;
@@ -558,7 +561,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       }
     }
 
-    this.dateOfBirth = trim(birthDate);
+    setDateOfBirth(birthDate);
     this.ssn = trim(ssn);
 
     if (addresses != null && !addresses.isEmpty()) {
@@ -923,7 +926,66 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * @param dateOfBirth birth date
    */
   public void setDateOfBirth(String dateOfBirth) {
-    this.dateOfBirth = dateOfBirth;
+    this.dateOfBirth = trim(dateOfBirth);
+  }
+
+  /**
+   * Getter for searchable date of birth.
+   *
+   * @return Searchable date of birth
+   */
+  @JsonProperty("searchable_date_of_birth")
+  public String[] getSearchableDateOfBirth() {
+    String[] searchableDob = null;
+    if (!StringUtils.isBlank(this.dateOfBirth)) {
+      searchableDob = new String[2];
+      Date date = DomainChef.uncookDateString(this.dateOfBirth);
+
+      DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+      searchableDob[0] = df.format(date);
+
+      df = new SimpleDateFormat("M/d/yyyy");
+      searchableDob[1] = df.format(date);
+
+    }
+    return searchableDob;
+  }
+
+  /**
+   * Getter for searchable name.
+   *
+   * @return Searchable name
+   */
+  @JsonProperty("searchable_name")
+  public String[] getSearchableName() {
+    String[] searchableName = null;
+    List<String> names = new ArrayList<>();
+
+    if (!StringUtils.isBlank(this.firstName)) {
+      names.add(this.firstName);
+    }
+
+    if (!StringUtils.isBlank(this.lastName)) {
+      names.add(this.lastName);
+    }
+
+    if (this.akas != null) {
+      for (ElasticSearchPersonAka aka : this.akas) {
+        if (!StringUtils.isBlank(aka.getFirstName())) {
+          names.add(aka.getFirstName());
+        }
+
+        if (!StringUtils.isBlank(aka.getLastName())) {
+          names.add(aka.getLastName());
+        }
+      }
+    }
+
+    if (!names.isEmpty()) {
+      searchableName = names.toArray(new String[names.size()]);
+    }
+
+    return searchableName;
   }
 
   /**
@@ -980,24 +1042,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    */
   public void setSensitivityIndicator(String sensitivityIndicator) {
     this.sensitivityIndicator = sensitivityIndicator;
-  }
-
-  /**
-   * Get SOC158 sealed code (indicator)
-   * 
-   * @return SOC158 sealed client code (indicator)
-   */
-  public String getSoc158SealedClientIndicator() {
-    return soc158SealedClientIndicator;
-  }
-
-  /**
-   * Set SOC158 sealed code (indicator)
-   * 
-   * @param soc158SealedClientIndicator SOC158 sealed client code (indicator)
-   */
-  public void setSoc158SealedClientIndicator(String soc158SealedClientIndicator) {
-    this.soc158SealedClientIndicator = soc158SealedClientIndicator;
   }
 
   /**

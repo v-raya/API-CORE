@@ -24,25 +24,17 @@
       "type": "text",
       "store": true,
       "analyzer": "autocomplete",
-      "search_analyzer": "standard",
-      "copy_to": ["full_name", "searchable_name"]
+      "search_analyzer": "standard"
     },
     "last_name": {
       "type": "text",
       "store": true,
       "analyzer": "autocomplete",
-      "search_analyzer": "standard",
-      "copy_to": ["full_name", "searchable_name"]
+      "search_analyzer": "standard"
     },
     "middle_name": {
       "type": "text",
       "store": true
-    },
-    "full_name": {
-      "type": "text",
-      "store": true,
-      "analyzer": "autocomplete",
-      "search_analyzer": "standard"
     },
     "searchable_name": {
       "type": "text",
@@ -63,9 +55,17 @@
       "type": "date",
       "store": true
     },
+    "searchable_date_of_birth": {
+      "type": "text",
+      "store": true,
+      "analyzer": "autocomplete",
+      "search_analyzer": "standard"
+    },
     "ssn": {
       "type": "text",
-      "store": true
+      "store": true,
+      "analyzer": "autocomplete",
+      "search_analyzer": "standard"
     },
     "source": {
       "type": "text",
@@ -76,10 +76,6 @@
       "store": true
     },
     "sensitivity_indicator": {
-      "type": "text",
-      "store": true
-    },
-    "soc158_sealed_client_indicator": {
       "type": "text",
       "store": true
     },
@@ -224,12 +220,14 @@
         "first_name": {
           "type": "text",
           "store": true,
-          "copy_to": ["searchable_name"]
+          "analyzer": "autocomplete",
+          "search_analyzer": "standard"
         },
         "last_name": {
           "type": "text",
           "store": true,
-          "copy_to": ["searchable_name"]
+          "analyzer": "autocomplete",
+          "search_analyzer": "standard"
         },
         "middle_name": {
           "type": "text",

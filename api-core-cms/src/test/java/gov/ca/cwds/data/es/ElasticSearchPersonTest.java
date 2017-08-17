@@ -219,21 +219,6 @@ public class ElasticSearchPersonTest {
   }
 
   @Test
-  public void getSoc158SealedClientIndicator_Args__() throws Exception {
-    ElasticSearchPerson target = new ElasticSearchPerson();
-    String actual = target.getSoc158SealedClientIndicator();
-    String expected = null;
-    assertThat(actual, is(equalTo(expected)));
-  }
-
-  @Test
-  public void setSoc158SealedClientIndicator_Args__String() throws Exception {
-    ElasticSearchPerson target = new ElasticSearchPerson();
-    String soc158SealedClientIndicator = null;
-    target.setSoc158SealedClientIndicator(soc158SealedClientIndicator);
-  }
-
-  @Test
   public void getSource_Args__() throws Exception {
     ElasticSearchPerson target = new ElasticSearchPerson();
     String actual = target.getSource();
