@@ -875,22 +875,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     this.lastName = lastName;
   }
 
-  // /**
-  // * Getter for full name. Full name is considered to be concatenation of first name and last
-  // name.
-  // *
-  // * @return full name
-  // */
-  // @JsonProperty("full_name")
-  // public String getFullName() {
-  // String fullName = null;
-  // String name = StringUtils.join(new String[] {firstName, lastName}, ' ');
-  // if (!StringUtils.isBlank(name)) {
-  // fullName = name.trim();
-  // }
-  // return fullName;
-  // }
-
   /**
    * Getter for gender.
    * 
