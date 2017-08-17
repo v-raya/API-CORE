@@ -922,15 +922,47 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   public String[] getSearchableDateOfBirth() {
     String[] searchableDob = null;
     if (!StringUtils.isBlank(this.dateOfBirth)) {
-      searchableDob = new String[2];
+      List<String> dobValues = new ArrayList<>();
       Date date = DomainChef.uncookDateString(this.dateOfBirth);
 
-      DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-      searchableDob[0] = df.format(date);
+      // With zeros, e.g) 01/09/1995
+      DateFormat df = new SimpleDateFormat("MMddyyyy");
+      String mmddyyyyDob = df.format(date);
+      dobValues.add(mmddyyyyDob);
 
-      df = new SimpleDateFormat("M/d/yyyy");
-      searchableDob[1] = df.format(date);
+      // Month and Year only, e.g) 09/1995
+      df = new SimpleDateFormat("MMyyyy");
+      String mmyyyyDob = df.format(date);
+      dobValues.add(mmyyyyDob);
 
+      // Year only, e.g) 1995
+      df = new SimpleDateFormat("yyyy");
+      String yyyyDob = df.format(date);
+      dobValues.add(yyyyDob);
+
+      // Month and Day, e.g) 01/09
+      df = new SimpleDateFormat("MMdd");
+      String mmddDob = df.format(date);
+      dobValues.add(mmddDob);
+
+      // Remove leading zeros, e.g) 1/9/1995
+      df = new SimpleDateFormat("Mdyyyy");
+      String mdyyyyDob = df.format(date);
+      if (!mmddyyyyDob.equals(mdyyyyDob)) {
+        dobValues.add(mdyyyyDob);
+
+        // Month and year only without zeros, e.g) 9/1995
+        df = new SimpleDateFormat("Myyyy");
+        String myyyyDob = df.format(date);
+        dobValues.add(myyyyDob);
+
+        // Month and Day without zeros, e.g) 1/9
+        df = new SimpleDateFormat("Md");
+        String mdDob = df.format(date);
+        dobValues.add(mdDob);
+      }
+
+      searchableDob = dobValues.toArray(new String[dobValues.size()]);
     }
     return searchableDob;
   }
