@@ -43,7 +43,9 @@ public enum LegacyTable {
 
   ALLEGATION("ALLGTN_T", "Allegation"),
 
-  ADDRESS("ADDRS_T", "Address");
+  ADDRESS("ADDRS_T", "Address"),
+
+  SAFETY_ALERT("SAF_ALRT", "Safety Alert");
 
   //
   // CHECKSTYLE:ON
