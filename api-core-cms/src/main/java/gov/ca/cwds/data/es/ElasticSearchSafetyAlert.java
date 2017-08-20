@@ -41,13 +41,13 @@ public class ElasticSearchSafetyAlert extends ApiObjectIdentity
   private String deactivationDate;
 
   @JsonProperty("deactivation_county")
-  private Integer deactivationCounty;
+  private String deactivationCounty;
 
   @JsonProperty("deactivation_county_id")
-  private Integer deactivationCountyId;
+  private String deactivationCountyId;
 
   @JsonProperty("deactivation_explanation")
-  private Integer deactivationExplanation;
+  private String deactivationExplanation;
 
   @JsonProperty("legacy_descriptor")
   @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -108,19 +108,19 @@ public class ElasticSearchSafetyAlert extends ApiObjectIdentity
     this.deactivationDate = deactivationDate;
   }
 
-  public Integer getDeactivationCounty() {
+  public String getDeactivationCounty() {
     return deactivationCounty;
   }
 
-  public void setDeactivationCounty(Integer deactivationCounty) {
+  public void setDeactivationCounty(String deactivationCounty) {
     this.deactivationCounty = deactivationCounty;
   }
 
-  public Integer getDeactivationExplanation() {
+  public String getDeactivationExplanation() {
     return deactivationExplanation;
   }
 
-  public void setDeactivationExplanation(Integer deactivationExplanation) {
+  public void setDeactivationExplanation(String deactivationExplanation) {
     this.deactivationExplanation = deactivationExplanation;
   }
 
@@ -148,11 +148,11 @@ public class ElasticSearchSafetyAlert extends ApiObjectIdentity
     this.activationCountyId = activationCountyId;
   }
 
-  public Integer getDeactivationCountyId() {
+  public String getDeactivationCountyId() {
     return deactivationCountyId;
   }
 
-  public void setDeactivationCountyId(Integer deactivationCountyId) {
+  public void setDeactivationCountyId(String deactivationCountyId) {
     this.deactivationCountyId = deactivationCountyId;
   }
 }
