@@ -185,7 +185,12 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     /**
      * "Other client names"
      */
-    AKA
+    AKA,
+
+    /**
+     * Safety alerts
+     */
+    SAFETY_ALERT
   }
 
   /**
@@ -457,6 +462,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private List<ElasticSearchPersonAka> akas = new ArrayList<>();
 
+  @JsonProperty("safety_alerts")
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private List<ElasticSearchSafetyAlert> safetyAlerts = new ArrayList<>();
+
   @Transient
   private transient Map<String, String> highlights = new LinkedHashMap<>();
 
@@ -635,6 +644,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     if (!keepers.contains(ESOptionalCollection.AKA)) {
       LOGGER.trace("clear AKA");
       this.akas = null;
+    }
+    if (!keepers.contains(ESOptionalCollection.SAFETY_ALERT)) {
+      LOGGER.trace("clear SAFETY_ALERT");
+      this.safetyAlerts = null;
     }
 
     this.highlights = null;
@@ -1266,6 +1279,14 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
   public void setCases(List<ElasticSearchPersonCase> cases) {
     this.cases = cases;
+  }
+
+  public List<ElasticSearchSafetyAlert> getSafetyAlerts() {
+    return safetyAlerts;
+  }
+
+  public void setSafetyAlerts(List<ElasticSearchSafetyAlert> safetyAlerts) {
+    this.safetyAlerts = safetyAlerts;
   }
 
   @Deprecated
