@@ -2,10 +2,12 @@ package gov.ca.cwds.data;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+import org.apache.commons.collections.IteratorUtils;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.EntityMode;
 import org.hibernate.Transaction;
@@ -114,9 +116,10 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
    * Called <strong>before</strong> the transaction commits.
    */
   @Override
-  public void preFlush(@SuppressWarnings("rawtypes") Iterator iter) {
-    while (iter.hasNext()) {
-      Object obj = iter.next();
+  @SuppressWarnings("rawtypes")
+  public void preFlush(Iterator iter) {
+    List list = IteratorUtils.toList(iter);
+    for (Object obj : list) {
       if (obj instanceof PersistentObject) {
 
         PersistentObject entity = (PersistentObject) obj;

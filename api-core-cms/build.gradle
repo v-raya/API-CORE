@@ -9,6 +9,8 @@ dependencies {
     compile group: "io.dropwizard.modules", name: "dropwizard-flyway", version: dropwizardFlywayVersion
     compile group: "org.glassfish.jersey.ext", name: "jersey-declarative-linking", version: glassfishJerseyExtVersion
     compile group: 'com.google.guava', name: 'guava', version: guavaVersion
+	compile group: 'commons-collections', name: 'commons-collections', version: '3.0'
+    
 
     // ES 5.x:
     compile group: 'org.elasticsearch', name: 'elasticsearch', version: elasticsearchVersion
