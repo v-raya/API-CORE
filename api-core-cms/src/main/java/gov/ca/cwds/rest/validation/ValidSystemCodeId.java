@@ -26,7 +26,7 @@ import javax.validation.Payload;
 public @interface ValidSystemCodeId {
 
 
-  String message() default "'${validatedValue}' must be a valid system code for category {category}";
+  String message() default " must be a valid system code for category {category}";
 
   Class<?>[] groups() default {};
 
