@@ -25,13 +25,16 @@ import javax.validation.Payload;
 @Constraint(validatedBy = SystemCodeIdValidator.class)
 public @interface ValidSystemCodeId {
 
-  String message() default "{property} must be a valid system code for category {category}";
+
+  String message() default "'${validatedValue}' must be a valid system code for category {category}";
 
   Class<?>[] groups() default {};
 
   Class<? extends Payload>[] payload() default {};
 
   String category();
+
+  boolean checkCategoryIdValueIsZero() default false;
 
   boolean ignoreable() default false;
 

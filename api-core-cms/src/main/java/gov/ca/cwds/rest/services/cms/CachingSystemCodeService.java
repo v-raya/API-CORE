@@ -1,7 +1,18 @@
 package gov.ca.cwds.rest.services.cms;
 
+import gov.ca.cwds.data.cms.SystemCodeDao;
+import gov.ca.cwds.data.cms.SystemMetaDao;
+import gov.ca.cwds.data.std.ApiObjectIdentity;
+import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.cms.SystemCode;
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeListResponse;
+import gov.ca.cwds.rest.api.domain.cms.SystemMeta;
+import gov.ca.cwds.rest.api.domain.cms.SystemMetaListResponse;
+import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.validation.LogicalIdLovValidation;
 import gov.ca.cwds.rest.validation.SystemCodeIdLovLValidation;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,17 +28,6 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.inject.Inject;
-
-import gov.ca.cwds.data.cms.SystemCodeDao;
-import gov.ca.cwds.data.cms.SystemMetaDao;
-import gov.ca.cwds.data.std.ApiObjectIdentity;
-import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.cms.SystemCode;
-import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
-import gov.ca.cwds.rest.api.domain.cms.SystemCodeListResponse;
-import gov.ca.cwds.rest.api.domain.cms.SystemMeta;
-import gov.ca.cwds.rest.api.domain.cms.SystemMetaListResponse;
-import gov.ca.cwds.rest.services.ServiceException;
 
 public class CachingSystemCodeService extends SystemCodeService implements SystemCodeCache {
   private static final String SYSTEM_ID = "system_id";
@@ -64,8 +64,9 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
     super(systemCodeDao, systemMetaDao);
 
     SystemCodeCacheLoader cacheLoader = new SystemCodeCacheLoader(this);
-    systemCodeCache = CacheBuilder.newBuilder()
-        .refreshAfterWrite(secondsToRefreshCache, TimeUnit.SECONDS).build(cacheLoader);
+    systemCodeCache =
+        CacheBuilder.newBuilder().refreshAfterWrite(secondsToRefreshCache, TimeUnit.SECONDS)
+            .build(cacheLoader);
 
     if (preloadCache) {
       try {
@@ -152,10 +153,11 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
   }
 
   @Override
-  public boolean verifyActiveSystemCodeIdForMeta(Number systemCodeId, String metaId) {
+  public boolean verifyActiveSystemCodeIdForMeta(Number systemCodeId, String metaId,
+      boolean checkCategoryIdValueIsZero) {
     Set<SystemCode> systemCodes = getSystemCodesForMeta(metaId);
     SystemCodeIdLovLValidation validation = new SystemCodeIdLovLValidation(systemCodes);
-    return validation.isValid(systemCodeId);
+    return validation.isValid(systemCodeId, checkCategoryIdValueIsZero);
   }
 
   @Override

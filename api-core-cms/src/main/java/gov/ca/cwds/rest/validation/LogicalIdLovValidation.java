@@ -10,8 +10,9 @@ public class LogicalIdLovValidation extends LovValidation {
   }
 
   @Override
-  protected boolean isValidCode(Object logicalId, SystemCode systemCode) {
-    if (!(logicalId instanceof String)){
+  protected boolean isValidCode(Object logicalId, SystemCode systemCode,
+      boolean checkCategoryIdValueIsZero) {
+    if (!(logicalId instanceof String)) {
       return false;
     }
 

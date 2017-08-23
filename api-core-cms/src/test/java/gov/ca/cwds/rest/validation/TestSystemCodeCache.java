@@ -1,10 +1,10 @@
 package gov.ca.cwds.rest.validation;
 
-import java.util.Set;
-
 import gov.ca.cwds.rest.api.domain.cms.SystemCode;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.api.domain.cms.SystemMeta;
+
+import java.util.Set;
 
 @SuppressWarnings("serial")
 public class TestSystemCodeCache implements SystemCodeCache {
@@ -44,7 +44,8 @@ public class TestSystemCodeCache implements SystemCodeCache {
   }
 
   @Override
-  public boolean verifyActiveSystemCodeIdForMeta(Number systemCodeId, String metaId) {
+  public boolean verifyActiveSystemCodeIdForMeta(Number systemCodeId, String metaId,
+      boolean checkCategoryIdValueIsZero) {
     if (456 == systemCodeId.intValue()) {
       return false;
     } else if (6404 == systemCodeId.intValue()) {
@@ -56,6 +57,7 @@ public class TestSystemCodeCache implements SystemCodeCache {
     return true;
   }
 
+  @Override
   public boolean verifyActiveLogicalIdForMeta(String systemCodeId, String metaId) {
     if ("524".equals(systemCodeId)) {
       return false;

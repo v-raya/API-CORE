@@ -1,11 +1,12 @@
 package gov.ca.cwds.rest.validation;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
-
 import gov.ca.cwds.rest.api.domain.cms.SystemCode;
+
 import java.util.HashSet;
 import java.util.Set;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,32 +15,32 @@ public class LovValidationTest {
   String systemCodeId = "systemCodeId";
 
   @Before
-  public void setup(){
+  public void setup() {
 
     Set systemCodes = new HashSet();
-    SystemCode systemCode1  = mock(SystemCode.class);
-    SystemCode systemCode2  = mock(SystemCode.class);
+    SystemCode systemCode1 = mock(SystemCode.class);
+    SystemCode systemCode2 = mock(SystemCode.class);
     testValidation = new TestLovValidation(systemCodes);
   }
 
   @Test
-  public void shouldReturnFalseIfSystemCodesAreNull(){
+  public void shouldReturnFalseIfSystemCodesAreNull() {
     testValidation = new TestLovValidation(null);
-    boolean isValid = testValidation.isValid(systemCodeId) ;
+    boolean isValid = testValidation.isValid(systemCodeId);
     assertFalse(isValid);
   }
 
   @Test
-  public void shouldReturnFalseIfNoneOfTheSystemCodesAreValid(){
+  public void shouldReturnFalseIfNoneOfTheSystemCodesAreValid() {
     testValidation.setValid(false);
-    boolean isValid = testValidation.isValid(systemCodeId) ;
+    boolean isValid = testValidation.isValid(systemCodeId);
     assertFalse(isValid);
   }
 
   @Test
-  public void shouldReturnTrueIfAnySystemCodesAreValid(){
+  public void shouldReturnTrueIfAnySystemCodesAreValid() {
     testValidation.setValid(false);
-    boolean isValid = testValidation.isValid(systemCodeId) ;
+    boolean isValid = testValidation.isValid(systemCodeId);
     assertFalse(isValid);
   }
 
@@ -51,11 +52,12 @@ public class LovValidationTest {
     }
 
     @Override
-    protected boolean isValidCode(Object systemCodeId, SystemCode systemCode) {
+    protected boolean isValidCode(Object systemCodeId, SystemCode systemCode,
+        boolean checkCategoryIdValueIsZero) {
       return false;
     }
 
-    public void setValid(boolean isValid){
+    public void setValid(boolean isValid) {
       this.valid = isValid;
     }
   }

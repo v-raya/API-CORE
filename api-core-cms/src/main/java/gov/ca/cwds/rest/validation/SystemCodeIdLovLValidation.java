@@ -10,12 +10,15 @@ public class SystemCodeIdLovLValidation extends LovValidation {
   }
 
   @Override
-  protected boolean isValidCode(Object systemCodeId, SystemCode systemCode) {
-    if (!(systemCodeId instanceof Number)){
+  protected boolean isValidCode(Object systemCodeId, SystemCode systemCode,
+      boolean checkCategoryIdValueIsZero) {
+    if (!(systemCodeId instanceof Number)) {
       return false;
     }
-
     if (systemCodeId.equals(systemCode.getSystemId())) {
+      if (checkCategoryIdValueIsZero && systemCode.getCategoryId() != 0) {
+        return false;
+      }
       return "N".equalsIgnoreCase(systemCode.getInactiveIndicator());
     }
     return false;
