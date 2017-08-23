@@ -112,13 +112,24 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     return false;
   }
 
+  private synchronized List<?> iterToList(@SuppressWarnings("rawtypes") Iterator iter) {
+    return IteratorUtils.toList(iter);
+  }
+
   /**
    * Called <strong>before</strong> the transaction commits.
+   * 
+   * <p>
+   * The underlying iterator's container may share records with other threads, though those records
+   * are not visible here. To avoid concurrent modification exceptions, this method synchronizes
+   * briefly, converts the iterator to a list, and iterates the list.
+   * </p>
    */
   @Override
   @SuppressWarnings("rawtypes")
   public void preFlush(Iterator iter) {
-    List list = IteratorUtils.toList(iter);
+
+    final List list = iterToList(iter);
     for (Object obj : list) {
       if (obj instanceof PersistentObject) {
 
