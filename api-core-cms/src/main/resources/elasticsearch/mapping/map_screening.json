@@ -3,6 +3,9 @@
     "id": {
       "type": "text"
     },
+    "referral_id": {
+      "type": "text"
+    },
     "name": {
       "type": "text"
     },
