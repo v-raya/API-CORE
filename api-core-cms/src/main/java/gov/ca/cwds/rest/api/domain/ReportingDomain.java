@@ -1,8 +1,6 @@
 package gov.ca.cwds.rest.api.domain;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -12,13 +10,14 @@ import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 
 /**
  * @author CWDS API Team
- *
  */
 public abstract class ReportingDomain extends DomainObject implements Request, Response {
+
   /**
    * Serialization version
    */
   private static final long serialVersionUID = 1L;
+
   @JsonIgnore
   private ArrayList<ErrorMessage> messages = new ArrayList<>();
 
@@ -48,4 +47,5 @@ public abstract class ReportingDomain extends DomainObject implements Request, R
   public boolean hasMessages() {
     return messages != null && !messages.isEmpty();
   }
+
 }
