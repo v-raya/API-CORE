@@ -17,7 +17,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * 
  * @author CWDS API Team
  */
-public final class CmsSystemCode implements ApiMarker {
+public class CmsSystemCode implements ApiMarker {
 
   /**
    * Base serialization value. Increment per class change.
