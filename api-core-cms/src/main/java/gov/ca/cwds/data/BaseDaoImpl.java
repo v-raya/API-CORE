@@ -51,7 +51,9 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
     final String namedQueryName = constructNamedQueryName("findAll");
     Session session = getSessionFactory().getCurrentSession();
 
-    Transaction txn = session.beginTransaction();
+    Transaction txn = session.getTransaction();
+    txn = txn != null ? txn : session.beginTransaction();
+
     try {
       Query query = session.getNamedQuery(namedQueryName);
       ImmutableList.Builder<T> entities = new ImmutableList.Builder<>();
