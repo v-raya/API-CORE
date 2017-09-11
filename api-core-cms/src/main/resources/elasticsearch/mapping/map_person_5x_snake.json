@@ -77,7 +77,8 @@
     },
     "sensitivity_indicator": {
       "type": "text",
-      "store": true
+      "store": true,
+      "null_value": "N"
     },
     "legacy_descriptor": {
       "properties": {
@@ -511,7 +512,8 @@
           "properties": {
             "limited_access_code": {
               "type": "text",
-              "store": true
+              "store": true,
+              "null_value": "N"
             },
             "limited_access_date": {
               "format": "strict_date_optional_time||epoch_millis",
@@ -700,7 +702,8 @@
                 },
                 "sensitivity_indicator": {
                   "type": "text",
-                  "store": true
+                  "store": true,
+                  "null_value": "N"
                 },
                 "legacy_descriptor": {
                   "properties": {
@@ -745,7 +748,8 @@
                 },
                 "sensitivity_indicator": {
                   "type": "text",
-                  "store": true
+                  "store": true,
+                  "null_value": "N"
                 },
                 "legacy_descriptor": {
                   "properties": {
@@ -1310,7 +1314,8 @@
           "properties": {
             "limited_access_code": {
               "type": "text",
-              "store": true
+              "store": true,
+              "null_value": "N"
             },
             "limited_access_date": {
               "format": "strict_date_optional_time||epoch_millis",
@@ -1356,7 +1361,8 @@
             },
             "sensitivity_indicator": {
               "type": "text",
-              "store": true
+              "store": true,
+              "null_value": "N"
             },
             "legacy_descriptor": {
               "properties": {
@@ -1418,7 +1424,8 @@
             },
             "sensitivity_indicator": {
               "type": "text",
-              "store": true
+              "store": true,
+              "null_value": "N"
             },
             "legacy_descriptor": {
               "properties": {
