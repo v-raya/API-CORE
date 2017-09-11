@@ -24,7 +24,7 @@ public class ElasticSearchAccessLimitationTest {
   public void getLimitedAccessCode_Args__() throws Exception {
     ElasticSearchAccessLimitation target = new ElasticSearchAccessLimitation();
     String actual = target.getLimitedAccessCode();
-    String expected = null;
+    String expected = "N";
     assertThat(actual, is(equalTo(expected)));
   }
 
@@ -33,6 +33,10 @@ public class ElasticSearchAccessLimitationTest {
     ElasticSearchAccessLimitation target = new ElasticSearchAccessLimitation();
     String limitedAccessCode = null;
     target.setLimitedAccessCode(limitedAccessCode);
+
+    String actual = target.getLimitedAccessCode();
+    String expected = "N";
+    assertThat(actual, is(equalTo(expected)));
   }
 
   @Test

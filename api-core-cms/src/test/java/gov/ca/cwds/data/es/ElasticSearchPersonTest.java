@@ -207,7 +207,7 @@ public class ElasticSearchPersonTest {
   public void getSensitivityIndicator_Args__() throws Exception {
     ElasticSearchPerson target = new ElasticSearchPerson();
     String actual = target.getSensitivityIndicator();
-    String expected = null;
+    String expected = "N";
     assertThat(actual, is(equalTo(expected)));
   }
 
@@ -216,6 +216,17 @@ public class ElasticSearchPersonTest {
     ElasticSearchPerson target = new ElasticSearchPerson();
     String sensitivityIndicator = null;
     target.setSensitivityIndicator(sensitivityIndicator);
+
+    String actual = target.getSensitivityIndicator();
+    String expected = "N";
+    assertThat(actual, is(equalTo(expected)));
+
+    sensitivityIndicator = "R";
+    target.setSensitivityIndicator(sensitivityIndicator);
+
+    actual = target.getSensitivityIndicator();
+    expected = "R";
+    assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
