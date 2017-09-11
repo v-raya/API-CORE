@@ -385,6 +385,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   // MEMBERS:
   // ================
 
+  private static final String DEFAULT_SENSITIVITY_INDICATOR = "N";
+
   @JsonIgnore
   private transient boolean upsert = false;
 
@@ -403,9 +405,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonProperty("date_of_birth")
   private String dateOfBirth;
 
-  // @JsonProperty("searchable_date_of_birth")
-  // private String[] searchableDateOfBirth;
-
   @JsonProperty("gender")
   private String gender;
 
@@ -416,7 +415,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   private transient String type;
 
   @JsonProperty("sensitivity_indicator")
-  private transient String sensitivityIndicator;
+  private transient String sensitivityIndicator = DEFAULT_SENSITIVITY_INDICATOR;
 
   @JsonProperty("source")
   private transient String source;
@@ -1070,7 +1069,11 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * @param sensitivityIndicator The sensitivity code (indicator)
    */
   public void setSensitivityIndicator(String sensitivityIndicator) {
-    this.sensitivityIndicator = sensitivityIndicator;
+    if (StringUtils.isBlank(sensitivityIndicator)) {
+      this.sensitivityIndicator = DEFAULT_SENSITIVITY_INDICATOR;
+    } else {
+      this.sensitivityIndicator = sensitivityIndicator;
+    }
   }
 
   /**

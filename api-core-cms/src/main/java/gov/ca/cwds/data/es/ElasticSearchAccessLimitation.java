@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.es;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,8 +16,11 @@ import gov.ca.cwds.data.std.ApiObjectIdentity;
 @SuppressWarnings("serial")
 @JsonInclude(value = Include.NON_EMPTY)
 public class ElasticSearchAccessLimitation extends ApiObjectIdentity {
+
+  private static final String DEFAULT_LIMITED_ACCESS_CODE = "N";
+
   @JsonProperty("limited_access_code")
-  private String limitedAccessCode;
+  private String limitedAccessCode = DEFAULT_LIMITED_ACCESS_CODE;
 
   @JsonProperty("limited_access_date")
   private String limitedAccessDate;
@@ -34,7 +39,11 @@ public class ElasticSearchAccessLimitation extends ApiObjectIdentity {
   }
 
   public void setLimitedAccessCode(String limitedAccessCode) {
-    this.limitedAccessCode = limitedAccessCode;
+    if (StringUtils.isBlank(limitedAccessCode)) {
+      this.limitedAccessCode = DEFAULT_LIMITED_ACCESS_CODE;
+    } else {
+      this.limitedAccessCode = limitedAccessCode;
+    }
   }
 
   public String getLimitedAccessDate() {
