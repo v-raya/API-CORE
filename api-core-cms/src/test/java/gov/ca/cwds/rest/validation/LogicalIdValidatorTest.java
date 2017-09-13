@@ -50,18 +50,37 @@ public class LogicalIdValidatorTest {
     Set<ConstraintViolation<AnnoTestBean>> violations = validator.validate(bean);
     assertFalse(violations.isEmpty());
   }
-  private static final class AnnoTestBean implements Serializable {
 
+  @Test
+  public void shouldPassValidationWhenValueIsAnIgnorableValueNotMatchingAValidCode() throws
+      Exception {
+    final AnnoTestBean bean = new AnnoTestBean( VALID_LOGICAL_CODE_VALUE, "foo");
+    Set<ConstraintViolation<AnnoTestBean>> violations = validator.validate(bean);
+    assertTrue(violations.isEmpty());
+  }
+
+  @Test
+  public void shouldFailValidationWhenValueIsNotAnIgnorableValueAndNotMatchingAValidCode() throws
+      Exception {
+    final AnnoTestBean bean = new AnnoTestBean( VALID_LOGICAL_CODE_VALUE, "bar");
+    Set<ConstraintViolation<AnnoTestBean>> violations = validator.validate(bean);
+    assertFalse(violations.isEmpty());
+  }
+
+  /**
+   * A testing helper class to apply ValidLogicalId validation on its fields.
+   */
+  private static final class AnnoTestBean implements Serializable {
     @ValidLogicalId(category = "GVR_ENTC", required = true)
     private String prop1;
 
+    @ValidLogicalId(category = "GVR_ENTC", required = false, ignoreable = true, ignoredValue =
+        "foo")
     private String prop2;
 
     private String fieldName;
 
-    public AnnoTestBean() {
-
-    }
+    public AnnoTestBean() { }
 
     public AnnoTestBean(String prop1, String prop2) {
       this.prop1 = prop1;

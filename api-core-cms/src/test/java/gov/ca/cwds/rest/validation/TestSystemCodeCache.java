@@ -65,6 +65,8 @@ public class TestSystemCodeCache implements SystemCodeCache {
       return false;
     } else if ("10".equals(systemCodeId)) {
       return true;
+    } else if ("foo".equals(systemCodeId) || "bar".equals(systemCodeId)) {
+      return false;
     }
 
     return true;

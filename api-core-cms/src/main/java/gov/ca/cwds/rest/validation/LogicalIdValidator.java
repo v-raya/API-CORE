@@ -8,16 +8,17 @@ import javax.validation.ConstraintValidatorContext;
 public class LogicalIdValidator implements AbstractBeanValidator,
     ConstraintValidator<ValidLogicalId, String> {
 
-//  private static final String SYSTEM_ID = "system_id";
-//  public static final String LOGICAL_ID = "logical_id";
   private String category;
   private boolean required;
-//  private String fieldName = SYSTEM_ID;
+  private String ignoredValue;
+  private boolean ignoreable;
 
   @Override
   public void initialize(ValidLogicalId constraintAnnotation) {
     this.category = constraintAnnotation.category();
     this.required = constraintAnnotation.required();
+    this.ignoredValue = constraintAnnotation.ignoredValue();
+    this.ignoreable = constraintAnnotation.ignoreable();
   }
 
   @Override
@@ -30,7 +31,11 @@ public class LogicalIdValidator implements AbstractBeanValidator,
       context.buildConstraintViolationWithTemplate(
           MessageFormat.format("{0} sys code is required", category))
           .addPropertyNode(category).addConstraintViolation();
-    } else if (hasProp) {
+    }
+    else if (isIgnorable(value)) {
+      valid = true;
+    }
+    else if (hasProp) {
         valid =
             SystemCodeCache.global().verifyActiveLogicalIdForMeta(value, category);
     }
@@ -38,4 +43,11 @@ public class LogicalIdValidator implements AbstractBeanValidator,
     return valid;
   }
 
+  private boolean isIgnorable(String value) {
+    return !required && ignoreable && hasIgnorableValue(value);
+  }
+
+  private boolean hasIgnorableValue(String value) {
+    return value == null || (value.trim().equals(ignoredValue.trim()));
+  }
 }

@@ -33,5 +33,9 @@ public @interface ValidLogicalId {
 
   String category();
 
+  boolean ignoreable() default false;
+
+  String ignoredValue() default "";
+
   boolean required() default false;
 }
