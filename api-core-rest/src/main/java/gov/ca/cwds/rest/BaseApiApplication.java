@@ -1,5 +1,10 @@
 package gov.ca.cwds.rest;
 
+import gov.ca.cwds.rest.exception.CustomExceptionMapperBinder;
+import gov.ca.cwds.rest.exception.mapper.BusinessValidationExceptionMapper;
+import gov.ca.cwds.rest.exception.mapper.ExpectedExceptionMapperImpl;
+import gov.ca.cwds.rest.exception.mapper.UnexpectedExceptionMapperImpl;
+import gov.ca.cwds.rest.exception.mapper.ValidationExceptionMapperImpl;
 import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
@@ -96,6 +101,8 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
     environment.jersey().register(new ShiroExceptionMapper());
     environment.servlets().setSessionHandler(new SessionHandler());
 
+    registerExceptionMappers(environment);
+
     LOGGER.info("Application name: {}, Version: {}", configuration.getApplicationName(),
         configuration.getVersion());
 
@@ -113,6 +120,14 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
 
     LOGGER.info("Registering SystemCodeCache");
     runInternal(configuration, environment);
+  }
+
+  private void registerExceptionMappers(Environment environment) {
+    environment.jersey().register(UnexpectedExceptionMapperImpl.class);
+    environment.jersey().register(ExpectedExceptionMapperImpl.class);
+    environment.jersey().register(ValidationExceptionMapperImpl.class);
+    environment.jersey().register(BusinessValidationExceptionMapper.class);
+    environment.jersey().register(new CustomExceptionMapperBinder(true));
   }
 
   /**
