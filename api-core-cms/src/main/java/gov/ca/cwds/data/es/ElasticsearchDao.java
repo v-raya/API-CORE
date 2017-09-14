@@ -621,6 +621,7 @@ public class ElasticsearchDao implements Closeable {
         jsonString.append(line);
       }
     } catch (Exception e) {
+      // TODO: log the *context*. Payload?
       final String msg = "Error in ElasticSearch : " + e.getMessage();
       LOGGER.error(msg, e);
       throw new ApiElasticSearchException(msg, e);
