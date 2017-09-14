@@ -1,24 +1,15 @@
 package gov.ca.cwds.rest;
 
-import java.util.EnumSet;
-
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
-
-import org.eclipse.jetty.server.session.SessionHandler;
-import org.eclipse.jetty.servlets.CrossOriginFilter;
-import org.secnod.dropwizard.shiro.ShiroBundle;
-import org.secnod.dropwizard.shiro.ShiroConfiguration;
-import org.secnod.shiro.jaxrs.ShiroExceptionMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.hubspot.dropwizard.guice.GuiceBundle;
-
 import gov.ca.cwds.ObjectMapperUtils;
-import gov.ca.cwds.rest.filters.CustomExceptionMapper;
+import gov.ca.cwds.logging.LoggingContext;
+import gov.ca.cwds.rest.exception.CustomExceptionMapperBinder;
+import gov.ca.cwds.rest.exception.mapper.BusinessValidationExceptionMapper;
+import gov.ca.cwds.rest.exception.mapper.ExpectedExceptionMapperImpl;
+import gov.ca.cwds.rest.exception.mapper.UnexpectedExceptionMapperImpl;
+import gov.ca.cwds.rest.exception.mapper.ValidationExceptionMapperImpl;
 import gov.ca.cwds.rest.filters.WebSecurityFilter;
 import gov.ca.cwds.rest.resources.SwaggerResource;
 import io.dropwizard.Application;
@@ -30,6 +21,16 @@ import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
+import java.util.EnumSet;
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
+import org.eclipse.jetty.server.session.SessionHandler;
+import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.secnod.dropwizard.shiro.ShiroBundle;
+import org.secnod.dropwizard.shiro.ShiroConfiguration;
+import org.secnod.shiro.jaxrs.ShiroExceptionMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Base execution class for CWDS REST API applications.
@@ -96,6 +97,8 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
     environment.jersey().register(new ShiroExceptionMapper());
     environment.servlets().setSessionHandler(new SessionHandler());
 
+    registerExceptionMappers(environment);
+
     LOGGER.info("Application name: {}, Version: {}", configuration.getApplicationName(),
         configuration.getVersion());
 
@@ -115,15 +118,21 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
     runInternal(configuration, environment);
   }
 
+  private void registerExceptionMappers(Environment environment) {
+    LoggingContext loggingContext = guiceBundle.getInjector().getInstance(LoggingContext.class);
+    environment.jersey().register(new UnexpectedExceptionMapperImpl(loggingContext));
+    environment.jersey().register(new ExpectedExceptionMapperImpl(loggingContext));
+    environment.jersey().register(new ValidationExceptionMapperImpl());
+    environment.jersey().register(new BusinessValidationExceptionMapper());
+    environment.jersey().register(new CustomExceptionMapperBinder(loggingContext, true));
+  }
+
   /**
    * Register filters in {@link FilterModule.configure} and configure them here.
    * 
    * @param environment
    */
   private static void registerFilters(final Environment environment, GuiceBundle guiceBundle) {
-    // Story #129093035: Catch/handle 500 errors.
-    environment.jersey().register(CustomExceptionMapper.class);
-
     BaseApiApplication.injector = guiceBundle.getInjector();
 
     environment.servlets()
