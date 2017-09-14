@@ -42,4 +42,11 @@ public interface LoggingContext {
    */
   public String getLogParameter(LogParameter logParam);
 
+  /**
+   * Get LogParameter.UNIQUE_ID stored in this context
+   *
+   * @return Value of UNIQUE_ID log parameter
+   */
+  public String getUniqueId();
+
 }

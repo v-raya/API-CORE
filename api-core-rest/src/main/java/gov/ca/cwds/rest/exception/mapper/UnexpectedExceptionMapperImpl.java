@@ -2,7 +2,7 @@ package gov.ca.cwds.rest.exception.mapper;
 
 import static gov.ca.cwds.rest.exception.IssueDetails.BASE_MESSAGE;
 
-import gov.ca.cwds.logging.LoggingContext.LogParameter;
+import gov.ca.cwds.logging.LoggingContext;
 import gov.ca.cwds.rest.exception.BaseExceptionResponse;
 import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.rest.exception.IssueType;
@@ -11,29 +11,33 @@ import java.util.Set;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 
 /**
  * @author CWDS CALS API Team
  */
 
-@Provider
-public class UnexpectedExceptionMapperImpl implements ExceptionMapper<RuntimeException> {
+public class UnexpectedExceptionMapperImpl implements ExceptionMapper<Exception> {
 
   private static final Logger LOGGER = LoggerFactory
       .getLogger(UnexpectedExceptionMapperImpl.class);
 
-  public Response toResponse(RuntimeException ex) {
+  private final LoggingContext loggingContext;
+
+  public UnexpectedExceptionMapperImpl(LoggingContext loggingContext) {
+    this.loggingContext = loggingContext;
+  }
+
+  @Override
+  public Response toResponse(Exception ex) {
     LOGGER.error("EXCEPTION MAPPER: {}", ex.getMessage(), ex);
     IssueDetails details = new IssueDetails();
 
     details.setType(IssueType.UNEXPECTED_EXCEPTION);
-    details.setIncidentId(MDC.get(LogParameter.UNIQUE_ID.name()));
+    details.setIncidentId(loggingContext.getUniqueId());
     details.setUserMessage(BASE_MESSAGE);
     details.setTechnicalMessage(ex.getMessage());
 

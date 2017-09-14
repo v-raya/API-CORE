@@ -3,7 +3,7 @@ package gov.ca.cwds.rest.exception.mapper;
 import static gov.ca.cwds.rest.exception.IssueDetails.BASE_MESSAGE;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import gov.ca.cwds.logging.LoggingContext.LogParameter;
+import gov.ca.cwds.logging.LoggingContext;
 import gov.ca.cwds.rest.exception.BaseExceptionResponse;
 import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.rest.exception.IssueType;
@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.ws.rs.core.Response;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.MDC;
 
 /**
  * @author CWDS CALS API Team
@@ -21,8 +20,11 @@ import org.slf4j.MDC;
 
 public class CustomJsonProcessingExceptionMapper extends JsonProcessingExceptionMapper {
 
-  public CustomJsonProcessingExceptionMapper(boolean showDetails) {
+  private final LoggingContext loggingContext;
+
+  public CustomJsonProcessingExceptionMapper(LoggingContext loggingContext, boolean showDetails) {
     super(showDetails);
+    this.loggingContext = loggingContext;
   }
 
   @Override
@@ -35,7 +37,7 @@ public class CustomJsonProcessingExceptionMapper extends JsonProcessingException
 
     IssueDetails details = new IssueDetails();
     details.setType(IssueType.JSON_PROCESSING_EXCEPTION);
-    details.setIncidentId(MDC.get(LogParameter.UNIQUE_ID.name()));
+    details.setIncidentId(loggingContext.getUniqueId());
     details.setUserMessage(BASE_MESSAGE);
     details.setTechnicalMessage(
         StringUtils.join(new Object[]{errorMessage.getMessage(), errorMessage.getDetails()}, ". "));

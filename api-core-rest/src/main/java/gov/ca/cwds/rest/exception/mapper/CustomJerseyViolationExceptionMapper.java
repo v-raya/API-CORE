@@ -13,7 +13,6 @@ import javax.validation.ConstraintViolation;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
 import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.server.model.Invocable;
 import org.slf4j.Logger;
@@ -23,7 +22,6 @@ import org.slf4j.LoggerFactory;
  * @author CWDS CALS API Team
  */
 
-@Provider
 public class CustomJerseyViolationExceptionMapper implements
     ExceptionMapper<JerseyViolationException> {
 

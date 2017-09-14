@@ -34,4 +34,10 @@ public class MDCLoggingContext implements LoggingContext {
   public String getLogParameter(LogParameter logParam) {
     return MDC.get(logParam.name());
   }
+
+  @Override
+  public String getUniqueId() {
+    return getLogParameter(LogParameter.UNIQUE_ID);
+  }
+
 }

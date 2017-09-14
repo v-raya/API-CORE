@@ -2,7 +2,7 @@ package gov.ca.cwds.rest.exception.mapper;
 
 import static gov.ca.cwds.rest.exception.IssueDetails.BASE_MESSAGE;
 
-import gov.ca.cwds.logging.LoggingContext.LogParameter;
+import gov.ca.cwds.logging.LoggingContext;
 import gov.ca.cwds.rest.exception.BaseExceptionResponse;
 import gov.ca.cwds.rest.exception.ExpectedException;
 import gov.ca.cwds.rest.exception.IssueDetails;
@@ -12,21 +12,24 @@ import java.util.Set;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
-import org.slf4j.MDC;
 
 /**
  * @author CWDS CALS API Team
  */
 
-@Provider
 public class ExpectedExceptionMapperImpl implements ExceptionMapper<ExpectedException> {
+
+  private final LoggingContext loggingContext;
+
+  public ExpectedExceptionMapperImpl(LoggingContext loggingContext) {
+    this.loggingContext = loggingContext;
+  }
 
   @Override
   public Response toResponse(ExpectedException exception) {
     IssueDetails details = new IssueDetails();
     details.setType(IssueType.EXPECTED_EXCEPTION);
-    details.setIncidentId(MDC.get(LogParameter.UNIQUE_ID.name()));
+    details.setIncidentId(loggingContext.getUniqueId());
     details.setTechnicalMessage(exception.getMessage());
     details.setUserMessage(BASE_MESSAGE);
 
