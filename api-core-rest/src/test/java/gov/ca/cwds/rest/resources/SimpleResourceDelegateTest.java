@@ -10,16 +10,15 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
-import gov.ca.cwds.rest.api.ApiException;
-import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.services.ServiceException;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
+
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.ws.rs.core.Response;
+
 import org.hamcrest.junit.ExpectedException;
 import org.hibernate.SessionFactory;
 import org.junit.Before;
@@ -29,6 +28,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+
+import gov.ca.cwds.rest.api.ApiException;
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.services.ServiceException;
 
 
 public class SimpleResourceDelegateTest {
@@ -160,7 +163,7 @@ public class SimpleResourceDelegateTest {
     assertTrue(actual.getEntity() instanceof TestApiResponse);
   }
 
-  @Test(expected = ServiceException.class)
+  @Test(expected = ApiException.class)
   public void handle_A$Object_T$ServiceException() throws Exception {
     TestApiRequest req = new TestApiRequest("&*^(%*#");
     when(svc.handle(req))
@@ -170,7 +173,7 @@ public class SimpleResourceDelegateTest {
     assertTrue(response.getStatus() != Response.Status.OK.ordinal());
   }
 
-  @Test(expected = ServiceException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void handle_Args$Object() throws Exception {
     TestApiRequest req = null;
     Response actual = target.handle(req);
@@ -178,14 +181,14 @@ public class SimpleResourceDelegateTest {
     assertThat(actual, is(equalTo(expected)));
   }
 
-  @Test(expected = ServiceException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void handle_Args$Object_Throws$ServiceException() throws Exception {
     TestApiRequest req = null;
     target.handle(req);
     fail("Expected exception was not thrown!");
   }
 
-  @Test(expected = ServiceException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void find_Args$Object_Throws$ServiceException() throws Exception {
     final String key = null;
     Response actual = target.find(key);

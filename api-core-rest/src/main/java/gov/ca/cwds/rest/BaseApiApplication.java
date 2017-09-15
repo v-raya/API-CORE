@@ -21,6 +21,7 @@ import gov.ca.cwds.logging.LoggingContext;
 import gov.ca.cwds.rest.exception.CustomExceptionMapperBinder;
 import gov.ca.cwds.rest.exception.mapper.ApiSecurityExceptionMapper;
 import gov.ca.cwds.rest.exception.mapper.BusinessValidationExceptionMapper;
+import gov.ca.cwds.rest.exception.mapper.DaoExceptionMapper;
 import gov.ca.cwds.rest.exception.mapper.ExpectedExceptionMapperImpl;
 import gov.ca.cwds.rest.exception.mapper.ReferentialIntegrityExceptionMapper;
 import gov.ca.cwds.rest.exception.mapper.UnexpectedExceptionMapperImpl;
@@ -130,6 +131,7 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
     environment.jersey().register(new ValidationExceptionMapperImpl(loggingContext));
     environment.jersey().register(new BusinessValidationExceptionMapper());
     environment.jersey().register(new ReferentialIntegrityExceptionMapper(loggingContext));
+    environment.jersey().register(new DaoExceptionMapper(loggingContext));
     environment.jersey().register(new CustomExceptionMapperBinder(loggingContext, true));
   }
 

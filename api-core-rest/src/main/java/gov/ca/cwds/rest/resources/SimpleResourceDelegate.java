@@ -37,8 +37,11 @@ import gov.ca.cwds.rest.services.ServiceException;
  * </p>
  *
  * @param <K> Key type
- * @param <Q> reQuest type
- * @param <P> resPonse type
+ * @param
+ *        <Q>reQuest type
+ * @param
+ *        <P>
+ *        resPonse type
  * @param <S> Service type
  *
  * @author CWDS API Team
@@ -74,10 +77,6 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
    * {@link gov.ca.cwds.rest.api.Response} with a Java standard web service response.
    * </p>
    *
-   * <p>
-   * See method {@link #handleException(Exception)} for the list of possible HTTP Response Codes.
-   * </p>
-   *
    * @param req input CWDS API {@link Request}
    * @return web service {@link Response}
    * @throws ApiException if service call fails, catch and throw an ApiException
@@ -85,25 +84,15 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
    */
   @Override
   public final Response handle(@Valid @NotNull Q req) throws ApiException {
-    Response wsResponse = null;
-    try {
-      validateRequest(req);
-      final P resp = execHandle(req);
-      validateResponse(resp);
-      wsResponse = Response.status(Response.Status.OK).entity(resp).build();
-    } catch (Exception e) {
-      wsResponse = handleException(e);
-    }
-    return wsResponse;
+    validateRequest(req);
+    final P resp = execHandle(req);
+    validateResponse(resp);
+    return Response.status(Response.Status.OK).entity(resp).build();
   }
 
   /**
    * Find object by its key by delegating to wrapped service method,
    * {@link ApiSimpleResourceService#find(Serializable)}.
-   *
-   * <p>
-   * See method {@link #handleException(Exception)} for the list of possible HTTP Response Codes.
-   * </p>
    *
    * @param key key to search for
    * @return The API {@link Response}
@@ -111,16 +100,10 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
    */
   @Override
   public final Response find(@Valid @NotNull K key) throws ApiException {
-    Response wsResponse = null;
-    try {
-      validateKey(key);
-      final P resp = execFind(key);
-      validateResponse(resp);
-      wsResponse = Response.status(Response.Status.OK).entity(resp).build();
-    } catch (Exception e) {
-      wsResponse = handleException(e);
-    }
-    return wsResponse;
+    validateKey(key);
+    final P resp = execFind(key);
+    validateResponse(resp);
+    return Response.status(Response.Status.OK).entity(resp).build();
   }
 
   /**

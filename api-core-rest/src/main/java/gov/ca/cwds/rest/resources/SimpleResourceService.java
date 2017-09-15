@@ -1,17 +1,20 @@
 package gov.ca.cwds.rest.resources;
 
-import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.services.ServiceException;
 import java.io.Serializable;
+
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * Standard implementation of interface {@link ApiSimpleResourceService} for non-CRUD services.
@@ -19,8 +22,11 @@ import org.slf4j.LoggerFactory;
  * should extend this class or nest delegate members.
  * 
  * @param <K> Key type
- * @param <Q> reQuest type
- * @param <P> resPonse type
+ * @param
+ *        <Q>reQuest type
+ * @param
+ *        <P>
+ *        resPonse type
  * 
  * @author CWDS API Team
  * @see ApiSimpleResourceService
@@ -40,11 +46,7 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
    * @throws ConstraintViolationException if the incoming request fails validation
    */
   protected final void validateRequest(Q req) throws ServiceException {
-    try {
-      ResourceParamValidator.<Q>validate(req);
-    } catch (Exception e) {
-      throw new ServiceException("Validation error. " + e.getMessage(), e);
-    }
+    ResourceParamValidator.<Q>validate(req);
   }
 
   /**
@@ -54,11 +56,7 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
    * @throws ConstraintViolationException if the incoming key fails validation
    */
   protected final void validateKey(K key) throws ServiceException {
-    try {
-      ResourceParamValidator.<K>validate(key);
-    } catch (Exception e) {
-      throw new ServiceException("Validation error. " + e.getMessage(), e);
-    }
+    ResourceParamValidator.<K>validate(key);
   }
 
   /**
@@ -92,7 +90,7 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
    * @throws ServiceException wraps incoming exception in a ServiceException
    */
   @CoverageIgnore
-  protected void handleException(Exception e) throws ServiceException {
+  private void handleException(Exception e) throws ServiceException {
 
     if (e.getCause() instanceof ConstraintViolationException) {
       LOGGER.error("Failed validation! {}", e.getMessage(), e);
@@ -133,27 +131,15 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
   @CoverageIgnore
   @Override
   public P handle(@Valid @NotNull Q req) throws ServiceException {
-    P apiResponse = null;
-    try {
-      validateRequest(req);
-      apiResponse = handleRequest(req);
-    } catch (Exception e) {
-      handleException(e);
-    }
-    return apiResponse;
+    validateRequest(req);
+    return handleRequest(req);
   }
 
   @CoverageIgnore
   @Override
   public P find(@Valid @NotNull K key) throws ServiceException {
-    P apiResponse = null;
-    try {
-      validateKey(key);
-      apiResponse = handleFind(key);
-    } catch (Exception e) {
-      handleException(e);
-    }
-    return apiResponse;
+    validateKey(key);
+    return handleFind(key);
   }
 
   /**

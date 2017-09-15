@@ -24,6 +24,8 @@ public enum IssueType {
 
   SECURITY_EXCEPTION("security_exception"),
 
+  DATA_ACCESS_EXCEPTION("data_access_exception"),
+
   UNEXPECTED_EXCEPTION("unexpected_exception"),
 
   EXPECTED_EXCEPTION("expected_exception");

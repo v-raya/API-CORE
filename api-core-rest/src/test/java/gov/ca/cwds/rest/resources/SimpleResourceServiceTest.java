@@ -9,11 +9,11 @@ import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
-import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.services.ServiceException;
 import java.util.ArrayList;
 import java.util.UUID;
+
 import javax.validation.constraints.Pattern;
+
 import org.hamcrest.junit.ExpectedException;
 import org.hibernate.SessionFactory;
 import org.junit.Before;
@@ -23,6 +23,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+
+import gov.ca.cwds.rest.api.Request;
 
 public class SimpleResourceServiceTest {
 
@@ -190,12 +192,12 @@ public class SimpleResourceServiceTest {
     try {
       target.find(key);
       fail("Expected exception was not thrown!");
-    } catch (ServiceException e) {
+    } catch (Exception e) {
       // all good
     }
   }
 
-  @Test(expected = ServiceException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void handle_A$Object_T$ServiceException__NullParm() throws Exception {
     TestApiRequest req = null;
     target.handle(req);
@@ -216,12 +218,12 @@ public class SimpleResourceServiceTest {
     try {
       target.find(id);
       fail("Expected exception was not thrown!");
-    } catch (ServiceException e) {
+    } catch (Exception e) {
       // all good
     }
   }
 
-  @Test(expected = ServiceException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void find_A$Object_T$ServiceException_NullParm() throws Exception {
     String key = null;
     target.find(key);
