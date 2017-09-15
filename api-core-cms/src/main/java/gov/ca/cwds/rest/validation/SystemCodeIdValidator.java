@@ -1,11 +1,12 @@
 package gov.ca.cwds.rest.validation;
 
-import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
-
 import java.text.MessageFormat;
+import java.util.Set;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 
 /**
  * Validates that the {@code SystemCodeId.property} of a given bean must be a valid CMS system code
@@ -13,8 +14,8 @@ import javax.validation.ConstraintValidatorContext;
  * 
  * @author CWDS API Team
  */
-public class SystemCodeIdValidator implements AbstractBeanValidator,
-    ConstraintValidator<ValidSystemCodeId, Number> {
+public class SystemCodeIdValidator
+    implements AbstractBeanValidator, ConstraintValidator<ValidSystemCodeId, Object> {
 
   private String message;
   private String category;
@@ -34,27 +35,21 @@ public class SystemCodeIdValidator implements AbstractBeanValidator,
   }
 
   @Override
-  public boolean isValid(final Number value, ConstraintValidatorContext context) {
-    boolean valid = false;
-    final boolean hasProp = value != null && value.intValue() != 0;
+  public boolean isValid(final Object param, ConstraintValidatorContext context) {
 
-    if (required && !hasProp) {
-      context.disableDefaultConstraintViolation();
-      context
-          .buildConstraintViolationWithTemplate(
-              MessageFormat.format("{0} sys code is required", category)).addPropertyNode(category)
-          .addConstraintViolation();
-    } else if (isIgnorable(value)) {
-      valid = true;
-    } else if (hasProp) {
-      if (checkCategoryIdValueIsZero) {
-        context.disableDefaultConstraintViolation();
-        context.buildConstraintViolationWithTemplate(message + " where category id is 0")
-            .addConstraintViolation();
+    boolean valid = false;
+    if (param != null && param instanceof Number) {
+      valid = isSystemmCodeValid((Number) param, context);
+
+    } else if (param != null && param instanceof Set) {
+      Set<Number> values = (Set<Number>) param;
+      for (Number value : values) {
+        valid = isSystemmCodeValid(value, context);
+        if (!valid) {
+          break;
+        }
       }
-      valid =
-          SystemCodeCache.global().verifyActiveSystemCodeIdForMeta(value.shortValue(), category,
-              checkCategoryIdValueIsZero);
+
     }
 
     return valid;
@@ -69,4 +64,29 @@ public class SystemCodeIdValidator implements AbstractBeanValidator,
   }
 
 
+  private Boolean isSystemmCodeValid(final Number value, ConstraintValidatorContext context) {
+
+    boolean valid = false;
+    final boolean hasProp = value != null && value.intValue() != 0;
+
+    if (required && !hasProp) {
+      context.disableDefaultConstraintViolation();
+      context
+          .buildConstraintViolationWithTemplate(
+              MessageFormat.format("{0} sys code is required", category))
+          .addPropertyNode(category).addConstraintViolation();
+    } else if (isIgnorable(value)) {
+      valid = true;
+    } else if (hasProp) {
+      if (checkCategoryIdValueIsZero) {
+        context.disableDefaultConstraintViolation();
+        context.buildConstraintViolationWithTemplate(message + " where category id is 0")
+            .addConstraintViolation();
+      }
+      valid = SystemCodeCache.global().verifyActiveSystemCodeIdForMeta(value.shortValue(), category,
+          checkCategoryIdValueIsZero);
+    }
+
+    return valid;
+  }
 }

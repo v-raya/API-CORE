@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.rules;
 
+import gov.ca.cwds.data.DaoException;
+
 /**
  * Base exception class for CWDS API Trigger Table exceptions.
  * 
@@ -11,7 +13,7 @@ package gov.ca.cwds.data.rules;
  * @author CWDS API Team
  */
 @SuppressWarnings("serial")
-public class TriggerTableException extends RuntimeException {
+public class TriggerTableException extends DaoException {
 
   /**
    * Construct an API Trigger Table exception.
