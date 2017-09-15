@@ -1,9 +1,11 @@
 package gov.ca.cwds.rest.exception;
 
+import java.io.Serializable;
+
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import java.io.Serializable;
-import javax.validation.constraints.NotNull;
 
 /**
  * @author CWDS CALS API Team
@@ -16,6 +18,8 @@ public class IssueDetails implements Serializable {
   public static final String BASE_MESSAGE =
       "There was an error processing your request. It has been logged with unique incident id";
 
+  private String incidentId;
+
   @NotNull
   private IssueType type;
 
@@ -23,10 +27,11 @@ public class IssueDetails implements Serializable {
   private String userMessage;
 
   private String code;
-  private String incidentId;
   private String technicalMessage;
   private String stackTrace;
   private String causeStackTrace;
+  private String property;
+  private Object invalidValue;
 
   public IssueType getType() {
     return type;
@@ -82,5 +87,21 @@ public class IssueDetails implements Serializable {
 
   public void setCauseStackTrace(String causeStackTrace) {
     this.causeStackTrace = causeStackTrace;
+  }
+
+  public String getProperty() {
+    return property;
+  }
+
+  public void setProperty(String property) {
+    this.property = property;
+  }
+
+  public Object getInvalidValue() {
+    return invalidValue;
+  }
+
+  public void setInvalidValue(Object invalidValue) {
+    this.invalidValue = invalidValue;
   }
 }

@@ -26,11 +26,11 @@ import javax.validation.Payload;
 public @interface ValidSystemCodeId {
 
 
-  String message() default " must be a valid system code for category {category}";
+  String message() default "must be a valid system code for category {category}";
 
-  Class<?>[] groups() default {};
+  Class<?>[]groups() default {};
 
-  Class<? extends Payload>[] payload() default {};
+  Class<? extends Payload>[]payload() default {};
 
   String category();
 

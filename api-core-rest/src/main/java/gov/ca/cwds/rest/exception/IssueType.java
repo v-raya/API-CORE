@@ -10,11 +10,25 @@ import com.fasterxml.jackson.annotation.JsonValue;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum IssueType {
 
+  //
+  // CHECKSTYLE:OFF
+  //
+
   JSON_PROCESSING_EXCEPTION("json_processing_exception"),
+
   BUSINESS_VALIDATION("business_validation"),
+
   CONSTRAINT_VALIDATION("constraint_validation"),
+
+  REFRENTIAL_INTEGRITY_VIOLATION("refrential_integrity_violation"),
+
   UNEXPECTED_EXCEPTION("unexpected_exception"),
+
   EXPECTED_EXCEPTION("expected_exception");
+
+  //
+  // CHECKSTYLE:ON
+  //
 
   private String value;
 

@@ -25,11 +25,11 @@ import javax.validation.Payload;
 @Constraint(validatedBy = LogicalIdValidator.class)
 public @interface ValidLogicalId {
 
-  String message() default "{property} must be a valid logical id code for category {category}";
+  String message() default "must be a valid logical id code for category {category}";
 
-  Class<?>[] groups() default {};
+  Class<?>[]groups() default {};
 
-  Class<? extends Payload>[] payload() default {};
+  Class<? extends Payload>[]payload() default {};
 
   String category();
 
