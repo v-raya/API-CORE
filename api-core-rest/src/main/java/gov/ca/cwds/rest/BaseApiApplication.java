@@ -9,7 +9,6 @@ import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.secnod.dropwizard.shiro.ShiroBundle;
 import org.secnod.dropwizard.shiro.ShiroConfiguration;
-import org.secnod.shiro.jaxrs.ShiroExceptionMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +19,7 @@ import com.hubspot.dropwizard.guice.GuiceBundle;
 import gov.ca.cwds.ObjectMapperUtils;
 import gov.ca.cwds.logging.LoggingContext;
 import gov.ca.cwds.rest.exception.CustomExceptionMapperBinder;
+import gov.ca.cwds.rest.exception.mapper.ApiSecurityExceptionMapper;
 import gov.ca.cwds.rest.exception.mapper.BusinessValidationExceptionMapper;
 import gov.ca.cwds.rest.exception.mapper.ExpectedExceptionMapperImpl;
 import gov.ca.cwds.rest.exception.mapper.ReferentialIntegrityExceptionMapper;
@@ -124,7 +124,7 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
 
   private void registerExceptionMappers(Environment environment) {
     LoggingContext loggingContext = guiceBundle.getInjector().getInstance(LoggingContext.class);
-    environment.jersey().register(new ShiroExceptionMapper());
+    environment.jersey().register(new ApiSecurityExceptionMapper());
     environment.jersey().register(new UnexpectedExceptionMapperImpl(loggingContext));
     environment.jersey().register(new ExpectedExceptionMapperImpl(loggingContext));
     environment.jersey().register(new ValidationExceptionMapperImpl(loggingContext));

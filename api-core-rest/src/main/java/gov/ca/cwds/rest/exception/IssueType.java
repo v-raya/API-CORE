@@ -22,6 +22,8 @@ public enum IssueType {
 
   REFRENTIAL_INTEGRITY_VIOLATION("refrential_integrity_violation"),
 
+  SECURITY_EXCEPTION("security_exception"),
+
   UNEXPECTED_EXCEPTION("unexpected_exception"),
 
   EXPECTED_EXCEPTION("expected_exception");

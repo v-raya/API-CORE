@@ -69,6 +69,7 @@ public class CustomJerseyViolationExceptionMapper
         details.setProperty(property);
         details.setInvalidValue(invalidValue);
         details.setUserMessage(message);
+        // details.setStackTrace(ExceptionUtils.getStackTrace(exception));
         details.setType(IssueType.CONSTRAINT_VALIDATION);
       }
       details.setIncidentId(loggingContext.getUniqueId());
