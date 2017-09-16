@@ -1,12 +1,13 @@
 package gov.ca.cwds;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
 
 /**
  * Static functions for ObjectMapper creation and configuration.
@@ -27,7 +28,25 @@ public class ObjectMapperUtils {
   }
 
   /**
-   * Configure given ObjectMapper
+   * Configure given ObjectMapper.
+   * 
+   * {@link ObjectMapper}, used to deserialize JSON Strings from member {@link #sourceJson} into
+   * instances of {@link #sourceType}.
+   * 
+   * <p>
+   * This mapper is thread-safe and reusable across multiple threads, yet any configuration made to
+   * it, such as ignoring unknown JSON properties, applies to ALL target class types.
+   * </p>
+   * 
+   * <p>
+   * Relax strict constraints regarding unknown JSON properties, since API classes may change over
+   * time, and not all classes emit version information in JSON.
+   * <p>
+   *
+   * <p>
+   * Fixes bug #140710983: Bug: Person Search converts dates to GMT. Set default time zone to JVM
+   * default, which must match the database and Elasticsearch server.
+   * </p>
    * 
    * @param objectMapper ObjectMapper to configure
    */
@@ -48,4 +67,9 @@ public class ObjectMapperUtils {
     objectMapper.setTimeZone(tz);
     objectMapper.getSerializationConfig().with(tz);
   }
+
+  private ObjectMapperUtils() { // NOSONAR
+    // Hidden constructor.
+  }
+
 }

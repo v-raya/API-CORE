@@ -350,37 +350,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    */
   public static final ObjectMapper MAPPER = ObjectMapperUtils.createObjectMapper();
 
-  // =========================
-  // STATIC INITIALIZATION:
-  // =========================
-
-  // /**
-  // * Relax strict constraints regarding unknown JSON properties, since API classes may change over
-  // * time, and not all classes emit version information in JSON.
-  // *
-  // * <p>
-  // * Bug #140710983: Bug: Person Search converts dates to GMT. Set default time zone to JVM
-  // default,
-  // * which must match the database and Elasticsearch server.
-  // * </p>
-  // */
-  // static {
-  // ObjectMapper mapper = new ObjectMapper();
-  // mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-  // mapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
-  //
-  // // The mainframe DB2 database runs in PST, and so we must too.
-  // final TimeZone tz = TimeZone.getTimeZone("PST");
-  //
-  // final DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-  // fmt.setTimeZone(tz);
-  // mapper.setDateFormat(fmt);
-  // mapper.getSerializationConfig().with(fmt);
-  // mapper.setTimeZone(tz);
-  // mapper.getSerializationConfig().with(tz);
-  // MAPPER = mapper;
-  // }
-
   // ================
   // MEMBERS:
   // ================
