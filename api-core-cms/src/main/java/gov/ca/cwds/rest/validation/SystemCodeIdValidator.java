@@ -43,6 +43,9 @@ public class SystemCodeIdValidator
 
     } else if (param != null && param instanceof Set) {
       Set<Number> values = (Set<Number>) param;
+      if (values.isEmpty()) {
+        return true;
+      }
       for (Number value : values) {
         valid = isSystemmCodeValid(value, context);
         if (!valid) {
