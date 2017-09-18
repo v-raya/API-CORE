@@ -41,6 +41,10 @@ public class SwaggerView extends View {
     return swaggerConfiguration.getLoginUrl();
   }
 
+  public String getLogoutUrl() {
+    return swaggerConfiguration.getLogoutUrl();
+  }
+
   public boolean getShowLoginButton() {
     return !StringUtils.isEmpty(swaggerConfiguration.getLoginUrl());
   }

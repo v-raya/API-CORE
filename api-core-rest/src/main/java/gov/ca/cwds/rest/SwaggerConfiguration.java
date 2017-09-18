@@ -1,8 +1,7 @@
 package gov.ca.cwds.rest;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * Read JSON configuration for Swagger settings.
@@ -45,6 +44,9 @@ public class SwaggerConfiguration {
 
   @JsonProperty
   private String loginUrl;
+
+  @JsonProperty
+  private String logoutUrl;
 
   @JsonProperty
   private boolean showSwagger = false;
@@ -113,6 +115,13 @@ public class SwaggerConfiguration {
    */
   public String getLoginUrl() {
     return loginUrl;
+  }
+
+  /**
+   * @returnthe logoutUrl
+   */
+  public String getLogoutUrl() {
+    return logoutUrl;
   }
 
   /**

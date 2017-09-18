@@ -97,11 +97,23 @@
     <div id=apiDescription>{{description}}</div>
 <div id="message-bar" class="swagger-ui-wrap" data-sw-translate>&nbsp;</div>
   <div align="right">
-    <form action="{{loginUrl}}">
-      <input type="hidden" name="callback" value="{{callbackUrl}}"/>
-        <input type="hidden" name="sp_id" value="{{spId}}"/>
-      <input type="submit" value="LOGIN" />
-    </form>
+      <table>
+        <tr>
+          <td>
+            <form action="{{loginUrl}}">
+              <input type="hidden" name="callback" value="{{callbackUrl}}"/>
+              <input type="hidden" name="sp_id" value="{{spId}}"/>
+              <input type="submit" value="LOGIN" />
+            </form>
+          </td>
+          <td>
+            <form action="{{logoutUrl}}">
+              <input type="hidden" name="callback" value="{{callbackUrl}}"/>
+              <input type="submit" value="LOGOUT" />
+            </form>
+          </td>
+        </tr>
+      </table>
   </div>
   </div>
 </div>
