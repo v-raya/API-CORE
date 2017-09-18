@@ -1,11 +1,9 @@
 package gov.ca.cwds.rest.views;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.base.Charsets;
-
 import gov.ca.cwds.rest.SwaggerConfiguration;
 import io.dropwizard.views.View;
+import org.apache.commons.lang3.StringUtils;
 
 public class SwaggerView extends View {
 
@@ -39,6 +37,10 @@ public class SwaggerView extends View {
 
   public String getLoginUrl() {
     return swaggerConfiguration.getLoginUrl();
+  }
+
+  public String getLogoutUrl() {
+    return swaggerConfiguration.getLogoutUrl();
   }
 
   public boolean getShowLoginButton() {
