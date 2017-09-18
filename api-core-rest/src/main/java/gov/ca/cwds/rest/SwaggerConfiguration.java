@@ -118,7 +118,7 @@ public class SwaggerConfiguration {
   }
 
   /**
-   * @returnthe logoutUrl
+   * @return the logoutUrl
    */
   public String getLogoutUrl() {
     return logoutUrl;
