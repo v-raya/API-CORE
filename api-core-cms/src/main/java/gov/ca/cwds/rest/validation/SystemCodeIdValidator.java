@@ -53,6 +53,8 @@ public class SystemCodeIdValidator
         }
       }
 
+    } else if (param == null) {
+      valid = isIgnorable((Number) param);
     }
 
     return valid;
