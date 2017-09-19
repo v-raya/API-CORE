@@ -1,5 +1,4 @@
 package gov.ca.cwds.data.es;
-
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -7,11 +6,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
@@ -19,11 +16,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import gov.ca.cwds.data.es.ElasticSearchPerson.ESColumn;
 import gov.ca.cwds.rest.validation.TestSystemCodeCache;
 
@@ -35,10 +30,8 @@ import gov.ca.cwds.rest.validation.TestSystemCodeCache;
  */
 @SuppressWarnings("javadoc")
 public class ElasticSearchPersonNameSuffixTest {
-
   private static final TestSystemCodeCache systemCodeCache = new TestSystemCodeCache();
   private static final ObjectMapper MAPPER = ElasticSearchPerson.MAPPER;
-
   String id = "1234567ABC";
   String firstName = "Mike";
   String middleName = "Lavell";
@@ -50,10 +43,8 @@ public class ElasticSearchPersonNameSuffixTest {
   String sourceType = "gov.ca.cwds.data.persistence.cms.rep.ReplicatedClient";
   String sourceJson = null;
   String highlight = "{\"firstName\":\"<em>mik</em>\",\"lastName\":\"<em>ith</em>\"}";
-
   @Mock
   private SearchHit hit;
-
   @Before
   public void setUp() throws Exception {
     Map<String, HighlightField> highlights = new HashMap();
@@ -74,11 +65,10 @@ public class ElasticSearchPersonNameSuffixTest {
 
   @Test
   public void testPullColFirstNameSuccess() throws Exception {
-    // given
+    
     Map<String, Object> m = new HashMap<String, Object>();
     final String value = "fred";
     m.put(ESColumn.FIRST_NAME.getCol(), value);
-
     Object actual = ElasticSearchPerson.<String>pullCol(m, ESColumn.FIRST_NAME);
     Object expected = value;
     assertThat(actual, is(equalTo(expected)));
@@ -89,7 +79,6 @@ public class ElasticSearchPersonNameSuffixTest {
     Map<String, Object> m = new HashMap<String, Object>();
     final String value = "last name";
     m.put(ESColumn.LAST_NAME.getCol(), value);
-
     Object actual = ElasticSearchPerson.<String>pullCol(m, ESColumn.LAST_NAME);
     Object expected = value;
     assertThat(actual, is(equalTo(expected)));
@@ -100,7 +89,6 @@ public class ElasticSearchPersonNameSuffixTest {
     Map<String, Object> m = new HashMap<String, Object>();
     final String value = "M";
     m.put(ESColumn.GENDER.getCol(), value);
-
     Object actual = ElasticSearchPerson.<String>pullCol(m, ESColumn.GENDER);
     Object expected = value;
     assertThat(actual, is(equalTo(expected)));
@@ -111,7 +99,6 @@ public class ElasticSearchPersonNameSuffixTest {
     Map<String, Object> m = new HashMap<String, Object>();
     final String value = "2000-10-31";
     m.put(ESColumn.BIRTH_DATE.getCol(), value);
-
     Object actual = ElasticSearchPerson.<String>pullCol(m, ESColumn.BIRTH_DATE);
     Object expected = value;
     assertThat(actual, is(equalTo(expected)));
@@ -122,7 +109,6 @@ public class ElasticSearchPersonNameSuffixTest {
     Map<String, Object> m = new HashMap<String, Object>();
     final String value = "111122333";
     m.put(ESColumn.SSN.getCol(), value);
-
     Object actual = ElasticSearchPerson.<String>pullCol(m, ESColumn.SSN);
     Object expected = value;
     assertThat(actual, is(equalTo(expected)));
@@ -133,7 +119,6 @@ public class ElasticSearchPersonNameSuffixTest {
     Map<String, Object> m = new HashMap<String, Object>();
     final String value = "gov.ca.cwds.data.persistence.cms.rep.ReplicatedClient";
     m.put(ESColumn.TYPE.getCol(), value);
-
     Object actual = ElasticSearchPerson.<String>pullCol(m, ESColumn.TYPE);
     Object expected = value;
     assertThat(actual, is(equalTo(expected)));
@@ -145,7 +130,6 @@ public class ElasticSearchPersonNameSuffixTest {
     final String value =
         "{\"adjudicatedDelinquentIndicator\":\"\",\"adoptionStatusCode\":\"N\",\"alienRegistrationNumber\":\"\"}";
     m.put(ESColumn.SOURCE.getCol(), value);
-
     Object actual = ElasticSearchPerson.<String>pullCol(m, ESColumn.SOURCE);
     Object expected = value;
     assertThat(actual, is(equalTo(expected)));
@@ -153,11 +137,10 @@ public class ElasticSearchPersonNameSuffixTest {
 
   @Test
   public void testPullColNameNullSuccess() throws Exception {
-    // given
+    
     Map<String, Object> m = new HashMap<String, Object>();
     final String value = null;
     m.put(ESColumn.FIRST_NAME.getCol(), value);
-
     Object actual = ElasticSearchPerson.<String>pullCol(m, ESColumn.FIRST_NAME);
     Object expected = value;
     assertThat(actual, is(equalTo(expected)));
@@ -165,11 +148,10 @@ public class ElasticSearchPersonNameSuffixTest {
 
   @Test
   public void testPullColUnknownKeyFail() throws Exception {
-    // given
+    
     Map<String, Object> m = new HashMap<String, Object>();
     final String value = "something";
     m.put("who knows", value);
-
     Object actual = ElasticSearchPerson.<String>pullCol(m, ESColumn.FIRST_NAME);
     Assert.assertTrue("unknown column in map",
         actual instanceof String && StringUtils.isEmpty((String) actual));
@@ -177,13 +159,13 @@ public class ElasticSearchPersonNameSuffixTest {
 
   @Test
   public void trim_Args$String() throws Exception {
-    // given
+    
     String s = null;
-    // e.g. : given(mocked.called()).willReturn(1);
-    // when
+    
+    
     String actual = ElasticSearchPerson.trim(s);
-    // then
-    // e.g. : verify(mocked).called();
+    
+    
     String expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
@@ -195,7 +177,6 @@ public class ElasticSearchPersonNameSuffixTest {
     m.put(ESColumn.FIRST_NAME.getCol(), "john");
     m.put(ESColumn.GENDER.getCol(), "U");
     when(hit.getSource()).thenReturn(m);
-
     ElasticSearchPerson actual = ElasticSearchPerson.makeESPerson(hit);
     actual.setHighlightFields("{}");
     ElasticSearchPerson expected = new ElasticSearchPerson("", "john", "", null, null, "U", null,
@@ -232,7 +213,6 @@ public class ElasticSearchPersonNameSuffixTest {
       throws IOException, JsonMappingException, IOException {
     ElasticSearchPerson esp = new ElasticSearchPerson(id, firstName, lastName, null, null, gender,
         birthDate, ssn, sourceType, sourceJson, highlight, null, null, null, null);
-
     final String actual = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(esp);
     ElasticSearchPerson expectedEsp =
         MAPPER.readValue(fixture("fixtures/data/es/expected.json"), ElasticSearchPerson.class);
@@ -257,6 +237,7 @@ public class ElasticSearchPersonNameSuffixTest {
   // } else {
   // System.out.println("is NOT person aware " + sourceObj.getClass().getName());
   // }
+
   //
   // }
 
@@ -265,4 +246,5 @@ public class ElasticSearchPersonNameSuffixTest {
     return MAPPER.readValue(fixture("fixtures/data/es/validElasticSearchPerson.json"),
         ElasticSearchPerson.class);
   }
+
 }
