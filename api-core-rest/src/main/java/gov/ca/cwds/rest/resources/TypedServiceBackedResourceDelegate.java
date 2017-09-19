@@ -1,18 +1,17 @@
 package gov.ca.cwds.rest.resources;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.inject.Inject;
-import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.services.ServiceException;
-import gov.ca.cwds.rest.services.TypedCrudsService;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
+
 import javax.ws.rs.core.Response;
-import org.apache.commons.lang3.StringUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.inject.Inject;
+
+import gov.ca.cwds.rest.api.Request;
+import gov.ca.cwds.rest.services.TypedCrudsService;
 
 /**
  * Generic, parameterized class implements the {@link ResourceDelegate} and passes work to the
@@ -21,8 +20,11 @@ import org.slf4j.LoggerFactory;
  * {@link Annotation} for RESTful resources.
  * 
  * @author CWDS API Team
- * @param <P> Primary key type
- * @param <Q> reQuest type
+ * @param
+ *        <P>
+ *        Primary key type
+ * @param
+ *        <Q>reQuest type
  * @param <S> reSponse type
  */
 public final class TypedServiceBackedResourceDelegate<P extends Serializable, Q extends Request, S extends gov.ca.cwds.rest.api.Response>
@@ -83,47 +85,17 @@ public final class TypedServiceBackedResourceDelegate<P extends Serializable, Q 
    */
   @Override
   public Response create(Q request) {
-    Response response = null;
-    try {
-      response = Response.status(Response.Status.CREATED).entity(service.create(request)).build();
-    } catch (ServiceException e) {
-      if (e.getCause() instanceof EntityExistsException) {
-        response = Response.status(Response.Status.CONFLICT).entity(null).build();
-      } else {
-        LOGGER.error("Unable to handle request", e);
-        response = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
-      }
-    }
-    return response;
+    return Response.status(Response.Status.CREATED).entity(service.create(request)).build();
   }
 
   /**
    * {@inheritDoc}
    *
-   * @see ResourceDelegate#update(Serializable,
-   *      Request)
+   * @see ResourceDelegate#update(Serializable, Request)
    */
   @Override
   public Response update(P id, Q request) {
-    Response response = null;
-    try {
-      response = Response.status(Response.Status.OK).entity(service.update(id, request)).build();
-    } catch (ServiceException e) {
-      Object entity = null;
-      if (e.getCause() instanceof EntityNotFoundException) {
-        if (StringUtils.isNotEmpty(e.getMessage())) {
-          ImmutableMap<String, String> map =
-              ImmutableMap.<String, String>builder().put("message", e.getMessage()).build();
-          entity = map;
-        }
-
-        response = Response.status(Response.Status.NOT_FOUND).entity(entity).build();
-      } else {
-        LOGGER.error("Unable to handle request", e);
-        response = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
-      }
-    }
-    return response;
+    return Response.status(Response.Status.OK).entity(service.update(id, request)).build();
   }
 
   /**

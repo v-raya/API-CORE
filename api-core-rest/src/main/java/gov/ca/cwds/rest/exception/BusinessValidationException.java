@@ -8,6 +8,8 @@ import java.util.Set;
 
 public class BusinessValidationException extends RuntimeException {
 
+  private static final long serialVersionUID = 1L;
+
   private final Set<IssueDetails> validationDetailsList;
 
   public BusinessValidationException(Set<IssueDetails> validationDetailsList) {

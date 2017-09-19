@@ -4,8 +4,11 @@ package gov.ca.cwds.rest.validation;
  * Runtime exception indicating a problem when performing a validation
  * 
  * @author CWDS API Team
+ * @deprecated Use BusinessValidationException
  */
+@Deprecated
 @SuppressWarnings("serial")
+
 public class ValidationException extends RuntimeException {
 
   public ValidationException() {

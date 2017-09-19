@@ -189,7 +189,9 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
    * @return web service {@link Response}
    * @see ApiSimpleResourceService#handle(Request)
    * @see ApiSimpleResourceService#find(Serializable)
+   * @deprecated Moved to ServiceExceptionMapper
    */
+  @Deprecated
   protected Response handleException(Exception e) throws ServiceException {
     Response ret;
 

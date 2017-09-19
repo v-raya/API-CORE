@@ -1,12 +1,10 @@
 package gov.ca.cwds.rest.resources;
 
-import gov.ca.cwds.rest.api.domain.error.ErrorMessage.ErrorType;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.ws.rs.core.Response;
 
@@ -19,9 +17,9 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage.ErrorType;
 import gov.ca.cwds.rest.services.CrudsService;
 import gov.ca.cwds.rest.services.ServiceException;
-import gov.ca.cwds.rest.validation.ValidationException;
 
 /**
  * Implements the {@link ResourceDelegate} and passes work to the service layer. All
@@ -86,48 +84,30 @@ public final class ServiceBackedResourceDelegate implements ResourceDelegate {
    */
   @Override
   public Response create(Request request) {
-    Response response = null;
-    try {
-      gov.ca.cwds.rest.api.Response serviceResponse = service.create(request);
-      Object entity;
-      Response.Status responseStatus;
-      if (serviceResponse.hasMessages()) {
-        entity = serviceResponse.getMessages();
-        responseStatus = Response.Status.BAD_REQUEST;
-      } else {
-        entity = serviceResponse;
-        responseStatus = Response.Status.CREATED;
-      }
-      response = Response.status(responseStatus).entity(entity).build();
-    } catch (ServiceException e) {
-      if (e.getCause() instanceof EntityExistsException) {
-        response = Response.status(Response.Status.CONFLICT).entity(null).build();
-      } else if (e.getCause() instanceof ValidationException) {
-        Set<ErrorMessage> errorMessages = buildErrorMessages(e,ErrorMessage.ErrorType.VALIDATION);
-        response = Response.status(Response.Status.BAD_REQUEST).entity(errorMessages).build();
-      } else if(e.getCause() instanceof ClientException){
-        Set<ErrorMessage> errorMessages = buildErrorMessages(e, ErrorType.CLIENT_CONTRACT);
-        response = Response.status(422).entity(errorMessages).build();
-      } else  {
-        LOGGER.error("Unable to handle request", e);
-        response = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
-      }
+    gov.ca.cwds.rest.api.Response serviceResponse = service.create(request);
+    Object entity;
+    Response.Status responseStatus;
+    if (serviceResponse.hasMessages()) {
+      entity = serviceResponse.getMessages();
+      responseStatus = Response.Status.BAD_REQUEST;
+    } else {
+      entity = serviceResponse;
+      responseStatus = Response.Status.CREATED;
     }
-    return response;
+    return Response.status(responseStatus).entity(entity).build();
   }
 
+  @Deprecated
   private Set<ErrorMessage> buildErrorMessages(ServiceException e, ErrorType errorType) {
     Set<ErrorMessage> errorMessages = new HashSet<>();
     String[] messages = e.getMessage().split("&&");
     if (messages.length > 1) {
       for (int i = 0; i < messages.length; i++) {
-        ErrorMessage message =
-            new ErrorMessage(errorType, messages[i], "");
+        ErrorMessage message = new ErrorMessage(errorType, messages[i], "");
         errorMessages.add(message);
       }
     } else {
-      ErrorMessage message =
-          new ErrorMessage(errorType, messages[0], "");
+      ErrorMessage message = new ErrorMessage(errorType, messages[0], "");
       errorMessages.add(message);
     }
     return errorMessages;
