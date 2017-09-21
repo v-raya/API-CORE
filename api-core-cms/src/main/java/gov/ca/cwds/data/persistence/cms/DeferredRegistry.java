@@ -74,7 +74,7 @@ public final class DeferredRegistry<T extends ApiMarker> implements ApiMarker {
   }
 
   /**
-   * Register this instance. Allows overwrite of already registered instance.
+   * Register an instance. Allows overwrite of previously registered instances.
    * 
    * @param <T> type to wrap
    * @param klass class
