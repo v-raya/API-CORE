@@ -6,6 +6,18 @@
     "id": {
       "type": "text",
       "store": true
+    },    
+    "client_counties": {
+      "properties": {
+        "county_id": {
+          "type": "text",
+          "store": true
+        },
+        "county_name": {
+          "type": "text",
+          "store": true
+        }
+      }
     },
     "legacy_source_table": {
       "type": "text",

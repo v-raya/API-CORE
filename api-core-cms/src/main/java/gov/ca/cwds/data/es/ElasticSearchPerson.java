@@ -465,6 +465,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private List<ElasticSearchSafetyAlert> safetyAlerts = new ArrayList<>();
 
+  @JsonProperty("client_counties")
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private List<ElasticSearchPersonCounty> clientCounties = new ArrayList<>();
+
   @Transient
   private transient Map<String, String> highlights = new LinkedHashMap<>();
 
@@ -1336,5 +1340,23 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
   public void setAkas(List<ElasticSearchPersonAka> akas) {
     this.akas = akas;
+  }
+
+  /**
+   * Get client counties
+   * 
+   * @return The client counties
+   */
+  public List<ElasticSearchPersonCounty> getClientCounties() {
+    return clientCounties;
+  }
+
+  /**
+   * Set client counties
+   * 
+   * @param clientCounties The client counties
+   */
+  public void setClientCounties(List<ElasticSearchPersonCounty> clientCounties) {
+    this.clientCounties = clientCounties;
   }
 }
