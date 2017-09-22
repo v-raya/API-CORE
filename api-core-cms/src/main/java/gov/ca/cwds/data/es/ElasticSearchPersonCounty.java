@@ -58,7 +58,7 @@ public class ElasticSearchPersonCounty extends ApiObjectIdentity
   /**
    * Set county name
    * 
-   * @param countyName The county name
+   * @param name The county name
    */
   public void setName(String name) {
     this.name = name;

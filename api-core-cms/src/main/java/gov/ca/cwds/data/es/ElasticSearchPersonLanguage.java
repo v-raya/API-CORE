@@ -63,9 +63,9 @@ public class ElasticSearchPersonLanguage extends ApiObjectIdentity
   }
 
   /**
-   * Set language description
+   * Set language name
    * 
-   * @param description The language description
+   * @param name The language name
    */
   public void setName(String name) {
     this.name = name;
