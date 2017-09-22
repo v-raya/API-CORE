@@ -408,7 +408,7 @@ public class ElasticsearchDao implements Closeable {
    * @param searchTerm ES search String
    * @param alias index alias
    * @param docType document type
-   * @return array of AutoCompletePerson
+   * @return array of ElasticSearchPerson
    * @throws ApiElasticSearchException unable to connect, disconnect, bad hair day, etc.
    */
   @Deprecated
@@ -447,7 +447,7 @@ public class ElasticsearchDao implements Closeable {
 
   /**
    * @param searchTerm ES search String
-   * @return array of AutoCompletePerson
+   * @return array of ElasticSearchPerson
    * @throws ApiElasticSearchException unable to connect, disconnect, bad hair day, etc.
    */
   @Deprecated
