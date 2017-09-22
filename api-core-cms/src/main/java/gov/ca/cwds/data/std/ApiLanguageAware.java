@@ -17,4 +17,12 @@ public interface ApiLanguageAware extends ApiMarker {
    */
   Integer getLanguageSysId();
 
+  /**
+   * Get if this primary language
+   * 
+   * @return Is this primary language.
+   */
+  default Boolean getPrimary() {
+    return Boolean.FALSE;
+  }
 }

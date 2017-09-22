@@ -38,9 +38,21 @@
          }
       ],
       "languages":[
-         "Arabic",
-         "Cantonese",
-         "Filipino"
+        {
+          "id": "111",
+          "name": "Arabic",
+          "primary": true
+        },
+        {
+          "id": "222",
+          "name": "Cantonese",
+          "primary": false
+        },
+        {
+          "id": "333",
+          "name": "Filipino",
+          "primary": false
+        }         
       ],
       "races":[
          {

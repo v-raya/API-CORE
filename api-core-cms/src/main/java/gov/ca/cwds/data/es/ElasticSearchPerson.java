@@ -439,7 +439,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   private List<ElasticSearchPersonPhone> phones = new ArrayList<>();
 
   @JsonProperty("languages")
-  private List<String> languages = new ArrayList<>();
+  private List<ElasticSearchPersonLanguage> languages = new ArrayList<>();
 
   @JsonProperty("screenings")
   @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -547,7 +547,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   public ElasticSearchPerson(String id, String firstName, String lastName, String middleName,
       String nameSuffix, String gender, String birthDate, String ssn, String sourceType,
       String sourceJson, String highlight, List<ElasticSearchPersonAddress> addresses,
-      List<ElasticSearchPersonPhone> phones, List<String> languages,
+      List<ElasticSearchPersonPhone> phones, List<ElasticSearchPersonLanguage> languages,
       List<ElasticSearchPersonScreening> screenings) {
 
     // CMS/legacy String id:
@@ -1220,11 +1220,11 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   }
 
   @JsonIgnore
-  public List<String> getLanguages() {
+  public List<ElasticSearchPersonLanguage> getLanguages() {
     return languages;
   }
 
-  public void setLanguages(List<String> languages) {
+  public void setLanguages(List<ElasticSearchPersonLanguage> languages) {
     this.languages = languages;
   }
 

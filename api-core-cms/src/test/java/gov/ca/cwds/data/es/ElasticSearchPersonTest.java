@@ -339,14 +339,14 @@ public class ElasticSearchPersonTest {
   @Test
   public void getLanguages_Args__() throws Exception {
     ElasticSearchPerson target = new ElasticSearchPerson();
-    List<String> actual = target.getLanguages();
+    List<ElasticSearchPersonLanguage> actual = target.getLanguages();
     assertThat(actual, notNullValue());
   }
 
   @Test
   public void setLanguages_Args__List() throws Exception {
     ElasticSearchPerson target = new ElasticSearchPerson();
-    List<String> languages = new ArrayList<String>();
+    List<ElasticSearchPersonLanguage> languages = new ArrayList<>();
     target.setLanguages(languages);
   }
 

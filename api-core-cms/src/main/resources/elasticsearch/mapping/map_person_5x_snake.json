@@ -9,11 +9,11 @@
     },    
     "client_counties": {
       "properties": {
-        "county_id": {
+        "id": {
           "type": "text",
           "store": true
         },
-        "county_name": {
+        "name": {
           "type": "text",
           "store": true
         }
@@ -285,8 +285,20 @@
       }
     },
     "languages": {
-      "type": "text",
-      "store": true
+      "properties": {
+        "id": {
+          "type": "text",
+          "store": true
+        },
+        "name": {
+          "type": "text",
+          "store": true
+        },
+        "primary": {
+          "type": "boolean",
+          "store": true
+        }
+      }
     },
     "races": {
       "properties": {

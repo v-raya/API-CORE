@@ -1,26 +1,25 @@
 package gov.ca.cwds.data.es;
 
-import java.io.Serializable;
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import gov.ca.cwds.data.ApiTypedIdentifier;
+import gov.ca.cwds.data.std.ApiObjectIdentity;
 
 /**
  * Client county
  * 
  * @author CWDS API Team
  */
-public class ElasticSearchPersonCounty implements Serializable {
+public class ElasticSearchPersonCounty extends ApiObjectIdentity
+    implements ApiTypedIdentifier<String> {
 
   private static final long serialVersionUID = 4396490810924002909L;
 
-  @JsonProperty("county_id")
-  private String countyId;
+  @JsonProperty("id")
+  private String id;
 
-  @JsonProperty("county_name")
-  private String countyName;
+  @JsonProperty("name")
+  private String name;
 
   /**
    * Default no-arg constructor
@@ -32,17 +31,19 @@ public class ElasticSearchPersonCounty implements Serializable {
    * 
    * @return The county id
    */
-  public String getCountyId() {
-    return countyId;
+  @Override
+  public String getId() {
+    return id;
   }
 
   /**
    * Set county id
    * 
-   * @param countyId The county id
+   * @param id The county id
    */
-  public void setCountyId(String countyId) {
-    this.countyId = countyId;
+  @Override
+  public void setId(String id) {
+    this.id = id;
   }
 
   /**
@@ -50,8 +51,8 @@ public class ElasticSearchPersonCounty implements Serializable {
    * 
    * @return The county name
    */
-  public String getCountyName() {
-    return countyName;
+  public String getName() {
+    return name;
   }
 
   /**
@@ -59,27 +60,7 @@ public class ElasticSearchPersonCounty implements Serializable {
    * 
    * @param countyName The county name
    */
-  public void setCountyName(String countyName) {
-    this.countyName = countyName;
-  }
-
-  /**
-   * {@inheritDoc}
-   * 
-   * @see java.lang.Object#hashCode()
-   */
-  @Override
-  public final int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this, false);
-  }
-
-  /**
-   * {@inheritDoc}
-   * 
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
-  @Override
-  public final boolean equals(Object obj) {
-    return EqualsBuilder.reflectionEquals(this, obj, false);
+  public void setName(String name) {
+    this.name = name;
   }
 }

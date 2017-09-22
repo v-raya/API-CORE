@@ -856,6 +856,11 @@ public abstract class BaseClient extends CmsPersistentObject
         public Integer getLanguageSysId() {
           return primaryLanguageType.intValue();
         }
+
+        @Override
+        public Boolean getPrimary() {
+          return Boolean.TRUE;
+        }
       });
     }
 
