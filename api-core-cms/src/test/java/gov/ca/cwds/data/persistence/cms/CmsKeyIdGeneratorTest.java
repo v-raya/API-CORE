@@ -14,6 +14,7 @@ import java.util.TimeZone;
 import java.util.regex.Pattern;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator.KeyDetail;
@@ -52,6 +53,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * 
  * <pre>
  * {@code java -Djava.library.path=.:/usr/local/lib/ -cp .:/var/lib/jenkins/workspace/API/build/classes/main:/var/lib/jenkins/workspace/API/build/classes/test:/var/lib/jenkins/workspace/API/build/resources/test:/var/lib/jenkins/test_lib/junit-4.12.jar:/var/lib/jenkins/test_lib/hamcrest-core-1.3.jar:/var/lib/jenkins/test_lib/* org.junit.runner.JUnitCore gov.ca.cwds.rest.util.jni.KeyGenTest}
+ * 
  * </pre>
  * 
  * </blockquote>
@@ -66,6 +68,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * 
  * <pre>
  * {@code -Dcwds.jni.force=Y}
+ * 
  * </pre>
  * 
  * </blockquote>
@@ -76,24 +79,21 @@ import gov.ca.cwds.rest.services.ServiceException;
 public final class CmsKeyIdGeneratorTest {
 
   private static final int GOOD_KEY_LEN = CmsPersistentObject.CMS_ID_LEN;
-
   private static final Pattern RGX_LEGACY_KEY =
       Pattern.compile("([a-z0-9]{10})", Pattern.CASE_INSENSITIVE);
-
   private static final Pattern RGX_LEGACY_TIMESTAMP =
       Pattern.compile("([a-z0-9]{7})", Pattern.CASE_INSENSITIVE);
 
-  // private CmsKeyIdGenerator inst;
+  private CmsKeyIdGenerator target;
 
   @Before
-  public void setUpBeforeTest() throws Exception {
-    // this.inst = new CmsKeyIdGenerator();
+  public void setUp() throws Exception {
+    target = new CmsKeyIdGenerator();
   }
 
   // ===================
   // GENERATE KEY:
   // ===================
-
   @Test
   public void testGenKeyGood() {
     final String key = CmsKeyIdGenerator.generate("0X5");
@@ -115,6 +115,7 @@ public final class CmsKeyIdGeneratorTest {
   }
 
   // TODO: #145948067: default staff id until Perry is ready.
+  @Test
   // @Test(expected = ServiceException.class)
   public void testGenKeyBadStaffNull() {
     // Null staff id.
@@ -154,8 +155,8 @@ public final class CmsKeyIdGeneratorTest {
   // ===================
   // DECOMPOSE KEY:
   // ===================
-
-  // @Test
+  @Test
+  @Ignore
   public void testDecomposeGoodKey() {
     // Good key, decomposes correctly.
     KeyDetail kd = new KeyDetail();
@@ -163,7 +164,8 @@ public final class CmsKeyIdGeneratorTest {
     // assertTrue("Staff ID empty", kd.staffId != null && "0X5".equals(kd.staffId));
   }
 
-  // @Test
+  @Test
+  @Ignore
   public void testDecomposeKeyLong() {
     // Wrong staff id size: too long.
     KeyDetail kd = new KeyDetail();
@@ -171,7 +173,8 @@ public final class CmsKeyIdGeneratorTest {
     // assertTrue("Staff ID not empty", kd.staffId == null || "".equals(kd.staffId));
   }
 
-  // @Test
+  @Test
+  @Ignore
   public void testDecomposeKeyShort() {
     // Wrong staff id size: too short.
     KeyDetail kd = new KeyDetail();
@@ -179,7 +182,8 @@ public final class CmsKeyIdGeneratorTest {
     // assertTrue("Staff ID not empty", kd.staffId == null || "".equals(kd.staffId));
   }
 
-  // @Test
+  @Test
+  @Ignore
   public void testDecomposeKeyEmpty() {
     // Empty staff id.
     KeyDetail kd = new KeyDetail();
@@ -187,7 +191,8 @@ public final class CmsKeyIdGeneratorTest {
     // assertTrue("Staff ID not empty", kd.staffId == null || "".equals(kd.staffId));
   }
 
-  // @Test
+  @Test
+  @Ignore
   public void testDecomposeKeyNull() {
     // Null staff id.
     KeyDetail kd = new KeyDetail();
@@ -202,25 +207,15 @@ public final class CmsKeyIdGeneratorTest {
 
   @Test
   public void createTimestampStr_Args__Date() throws Exception {
-    final CmsKeyIdGenerator target = new CmsKeyIdGenerator();
-    // given
     Date ts = mock(Date.class);
-    // e.g. : given(mocked.called()).willReturn(1);
-    // when
     String actual = target.createTimestampStr(ts);
-    // then
-    // e.g. : verify(mocked).called();
     assertTrue("bad generated timestamp", RGX_LEGACY_TIMESTAMP.matcher(actual).matches());
   }
 
-  // @Test
   // public void createTimestampStr_Args__Date_T__ParseException() throws Exception {
-  // final CmsKeyIdGenerator target = new CmsKeyIdGenerator();
-  // // given
   // Date ts = mock(Date.class);
-  // // e.g. : given(mocked.called()).willReturn(1);
+  //
   // try {
-  // // when
   // target.createTimestampStr(ts);
   // fail("Expected exception was not thrown!");
   // } catch (ParseException e) {
@@ -230,85 +225,66 @@ public final class CmsKeyIdGeneratorTest {
 
   @Test
   public void createTimestampStr_Args__() throws Exception {
-    final CmsKeyIdGenerator target = new CmsKeyIdGenerator();
     final String actual = target.createTimestampStr();
     assertTrue("bad generated timestamp", RGX_LEGACY_TIMESTAMP.matcher(actual).matches());
   }
 
   @Test
   public void timestampToDouble_Args__Calendar() throws Exception {
-    final CmsKeyIdGenerator target = new CmsKeyIdGenerator();
     final Calendar cal = Calendar.getInstance();
     cal.setTimeZone(TimeZone.getTimeZone("PST"));
     cal.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2017-06-09 13:04:22"));
-
     final double actual = target.timestampToDouble(cal);
     final double expected = 5.922526581E9;
     assertThat(actual, is(equalTo(expected)));
   }
 
-  // @Test
   // public void doubleToStrN_Args__int__double__BigDecimalArray() throws Exception {
   // final CmsKeyIdGenerator target = null;
-  // // given
   // int dstLen = 0;
   // double src = 0.0;
   // BigDecimal[] powers = new BigDecimal[] {};
-  // // e.g. : given(mocked.called()).willReturn(1);
-  // // when
   // String actual = target.doubleToStrN(dstLen, src, powers);
-  // // then
-  // // e.g. : verify(mocked).called();
   // String expected = null;
   // assertThat(actual, is(equalTo(expected)));
   // }
-  //
-  // @Test
+
+  // @Test @Ignore
   // public void strToDouble_Args__String__int__BigDecimalArray() throws Exception {
   // final CmsKeyIdGenerator target = null;
-  // // given
+  //
   // String src = null;
   // int base = 0;
   // BigDecimal[] powers = new BigDecimal[] {};
-  // // e.g. : given(mocked.called()).willReturn(1);
-  // // when
   // double actual = target.strToDouble(src, base, powers);
-  // // then
-  // // e.g. : verify(mocked).called();
   // double expected = 0.0;
   // assertThat(actual, is(equalTo(expected)));
   // }
 
-  // @Test
+  // @Test @Ignore
   // public void getTimestampSeed_Args__Date() throws Exception {
-  // final CmsKeyIdGenerator target = new CmsKeyIdGenerator();
-  // // given
+  //
+  //
   // final Date ts = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2017-06-09 13:04:22");
   // final Calendar actual = target.getTimestampSeed(ts);
-  // // then
-  // // e.g. : verify(mocked).called();
   // Calendar expected = null;
   // assertThat(actual, is(equalTo(expected)));
   // }
-  //
-  // @Test
+
+  // @Test @Ignore
   // public void getTimestampSeed_Args__Date_T__ParseException() throws Exception {
-  // final CmsKeyIdGenerator target = new CmsKeyIdGenerator();
-  // // given
+  //
+  //
   // Date ts = mock(Date.class);
-  // // e.g. : given(mocked.called()).willReturn(1);
   // try {
-  // // when
   // target.getTimestampSeed(ts);
   // fail("Expected exception was not thrown!");
   // } catch (ParseException e) {
   // // then
   // }
-  // }
 
   @Test(expected = ServiceException.class)
   public void makeKey_Args__String__Date__null_staff() throws Exception {
-    final CmsKeyIdGenerator target = new CmsKeyIdGenerator();
     String staffId = null;
     Date ts = mock(Date.class);
     String actual = target.makeKey(staffId, ts);
@@ -333,11 +309,8 @@ public final class CmsKeyIdGeneratorTest {
 
   @Test
   public void getUIIdentifierFromKey_Args__String() throws Exception {
-    // given
     final String key = "5Y3vKVs0X5";
-    // e.g. : given(mocked.called()).willReturn(1);
-    // when
-    String actual = CmsKeyIdGenerator.getUIIdentifierFromKey(key);
+    final String actual = CmsKeyIdGenerator.getUIIdentifierFromKey(key);
     final String expected = "0315-2076-8676-8002051";
     assertThat(actual, is(equalTo(expected)));
   }
