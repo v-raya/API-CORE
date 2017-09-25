@@ -23,6 +23,9 @@
     },
     "started_at": {
       "type": "text"
+    },
+    "assignee_Id":{  
+      "type":"text"
     }
   }
 }
