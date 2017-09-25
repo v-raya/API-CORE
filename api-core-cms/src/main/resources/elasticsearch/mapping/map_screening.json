@@ -24,7 +24,7 @@
     "started_at": {
       "type": "text"
     },
-    "assignee_Id":{  
+    "assignee_id":{  
       "type":"text"
     }
   }
