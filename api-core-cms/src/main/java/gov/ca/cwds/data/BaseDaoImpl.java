@@ -12,6 +12,7 @@ import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +54,10 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
 
     Transaction txn = session.getTransaction();
     txn = txn != null ? txn : session.beginTransaction();
+
+    if (TransactionStatus.NOT_ACTIVE.equals(txn.getStatus())) {
+      txn.begin();
+    }
 
     try {
       Query query = session.getNamedQuery(namedQueryName);
