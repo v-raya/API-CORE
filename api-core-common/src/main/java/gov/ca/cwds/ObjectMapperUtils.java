@@ -30,8 +30,8 @@ public class ObjectMapperUtils {
   /**
    * Configure given ObjectMapper.
    * 
-   * {@link ObjectMapper}, used to deserialize JSON Strings from member {@link #sourceJson} into
-   * instances of {@link #sourceType}.
+   * {@link ObjectMapper}, used to deserialize JSON Strings from source into instances of chosen
+   * type.
    * 
    * <p>
    * This mapper is thread-safe and reusable across multiple threads, yet any configuration made to
@@ -41,7 +41,7 @@ public class ObjectMapperUtils {
    * <p>
    * Relax strict constraints regarding unknown JSON properties, since API classes may change over
    * time, and not all classes emit version information in JSON.
-   * <p>
+   * </p>
    *
    * <p>
    * Fixes bug #140710983: Bug: Person Search converts dates to GMT. Set default time zone to JVM
