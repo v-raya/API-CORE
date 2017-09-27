@@ -3,34 +3,41 @@ package gov.ca.cwds.rest.exception.mapper;
 import static javax.validation.ElementKind.METHOD;
 import static javax.validation.ElementKind.PARAMETER;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
-import io.dropwizard.jersey.validation.JerseyParameterNameProvider;
-import io.dropwizard.validation.ValidationMethod;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.ElementKind;
 import javax.validation.Path;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.glassfish.jersey.server.model.Invocable;
 import org.glassfish.jersey.server.model.Parameter;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
+import com.google.common.collect.Iterables;
+
+import io.dropwizard.jersey.validation.JerseyParameterNameProvider;
+import io.dropwizard.validation.ValidationMethod;
+
 /**
- * This is modified copy of io.dropwizard.jersey.validation.ConstraintMessage
- * The only change is removing of caching messages
+ * This is modified copy of io.dropwizard.jersey.validation.ConstraintMessage The only change is
+ * removing of caching messages
  */
 public class CustomConstraintMessage {
 
-  private CustomConstraintMessage() {
-  }
+  private CustomConstraintMessage() {}
 
   /**
    * Gets the human friendly location of where the violation was raised.
+   * 
+   * @param v constraint violation
+   * @param invocable action to invoke
+   * @return readable error message
    */
   public static String getMessage(ConstraintViolation<?> v, Invocable invocable) {
     return calculateMessage(v, invocable);
@@ -39,8 +46,8 @@ public class CustomConstraintMessage {
   private static String calculateMessage(ConstraintViolation<?> v, Invocable invocable) {
     final Optional<String> returnValueName = getMethodReturnValueName(v);
     if (returnValueName.isPresent()) {
-      final String name = isValidationMethod(v) ?
-          StringUtils.substringBeforeLast(returnValueName.get(), ".") : returnValueName.get();
+      final String name = isValidationMethod(v)
+          ? StringUtils.substringBeforeLast(returnValueName.get(), ".") : returnValueName.get();
       return name + " " + v.getMessage();
     }
 
@@ -72,6 +79,10 @@ public class CustomConstraintMessage {
   /**
    * Determines if constraint violation occurred in the request entity. If it did, return a client
    * friendly string representation of where the error occurred (eg. "patient.name")
+   * 
+   * @param violation constraint violation
+   * @param invocable invocable action
+   * @return optional string
    */
   public static Optional<String> isRequestEntity(ConstraintViolation<?> violation,
       Invocable invocable) {
@@ -82,8 +93,8 @@ public class CustomConstraintMessage {
     final List<Parameter> parameters = invocable.getParameters();
 
     if (parent.getKind() == PARAMETER) {
-      final Parameter param = parameters
-          .get(parent.as(Path.ParameterNode.class).getParameterIndex());
+      final Parameter param =
+          parameters.get(parent.as(Path.ParameterNode.class).getParameterIndex());
       if (param.getSource() == Parameter.Source.UNKNOWN) {
         return Optional.of(Joiner.on('.').join(Iterables.skip(violation.getPropertyPath(), 2)));
       }
@@ -108,8 +119,8 @@ public class CustomConstraintMessage {
     if (parent.getKind() == PARAMETER) {
       // Constraint violation most likely failed with a BeanParam
       final List<Parameter> parameters = invocable.getParameters();
-      final Parameter param = parameters
-          .get(parent.as(Path.ParameterNode.class).getParameterIndex());
+      final Parameter param =
+          parameters.get(parent.as(Path.ParameterNode.class).getParameterIndex());
 
       // Extract the failing *Param annotation inside the Bean Param
       if (param.getSource() == Parameter.Source.BEAN_PARAM) {
@@ -148,9 +159,13 @@ public class CustomConstraintMessage {
 
   /**
    * Given a set of constraint violations and a Jersey {@link Invocable} where the constraint
-   * occurred, determine the  HTTP Status code for the response. A return value violation is an
-   * internal server error, an invalid request body is unprocessable entity, and any params that
-   * are invalid means a bad request
+   * occurred, determine the HTTP Status code for the response. A return value violation is an
+   * internal server error, an invalid request body is unprocessable entity, and any params that are
+   * invalid means a bad request
+   * 
+   * @param violations violations to process
+   * @param invocable action to invoke
+   * @return complete constraint violation
    */
   public static <T extends ConstraintViolation<?>> int determineStatus(Set<T> violations,
       Invocable invocable) {
