@@ -62,7 +62,8 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
       return entities.build();
     } catch (HibernateException h) {
       txn.rollback();
-      throw new DaoException(h);
+      String message = h.getMessage() + ". Transaction Status: " + txn.getStatus();
+      throw new DaoException(message, h);
     }
   }
 
