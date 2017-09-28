@@ -386,6 +386,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonProperty("sensitivity_indicator")
   private transient String sensitivityIndicator = DEFAULT_SENSITIVITY_INDICATOR;
 
+  @JsonProperty("client_county")
+  private ElasticSearchPersonCounty clientCounty;
+
   @JsonProperty("source")
   private transient String source;
 
@@ -433,10 +436,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonProperty("safety_alerts")
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private List<ElasticSearchSafetyAlert> safetyAlerts = new ArrayList<>();
-
-  @JsonProperty("client_counties")
-  @JsonInclude(JsonInclude.Include.NON_NULL)
-  private List<ElasticSearchPersonCounty> clientCounties = new ArrayList<>();
 
   @Transient
   private transient Map<String, String> highlights = new LinkedHashMap<>();
@@ -1312,20 +1311,20 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   }
 
   /**
-   * Get client counties
+   * Get client county
    * 
-   * @return The client counties
+   * @return The client county
    */
-  public List<ElasticSearchPersonCounty> getClientCounties() {
-    return clientCounties;
+  public ElasticSearchPersonCounty getClientCounty() {
+    return clientCounty;
   }
 
   /**
-   * Set client counties
+   * Set client county
    * 
-   * @param clientCounties The client counties
+   * @param clientCounty The client county
    */
-  public void setClientCounties(List<ElasticSearchPersonCounty> clientCounties) {
-    this.clientCounties = clientCounties;
+  public void setClientCounty(ElasticSearchPersonCounty clientCounty) {
+    this.clientCounty = clientCounty;
   }
 }

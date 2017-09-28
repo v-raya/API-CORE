@@ -7,7 +7,7 @@
       "type": "text",
       "store": true
     },    
-    "client_counties": {
+    "client_county": {
       "properties": {
         "id": {
           "type": "text",
