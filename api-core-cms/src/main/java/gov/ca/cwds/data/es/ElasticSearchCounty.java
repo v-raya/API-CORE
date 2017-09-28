@@ -10,7 +10,7 @@ import gov.ca.cwds.data.std.ApiObjectIdentity;
  * 
  * @author CWDS API Team
  */
-public class ElasticSearchPersonCounty extends ApiObjectIdentity
+public class ElasticSearchCounty extends ApiObjectIdentity
     implements ApiTypedIdentifier<String> {
 
   private static final long serialVersionUID = 4396490810924002909L;
@@ -24,7 +24,7 @@ public class ElasticSearchPersonCounty extends ApiObjectIdentity
   /**
    * Default no-arg constructor
    */
-  public ElasticSearchPersonCounty() {}
+  public ElasticSearchCounty() {}
 
   /**
    * Get county id
