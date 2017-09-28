@@ -55,7 +55,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
     Transaction txn = session.getTransaction();
     txn = txn != null ? txn : session.beginTransaction();
 
-    if (TransactionStatus.NOT_ACTIVE.equals(txn.getStatus())) {
+    if (TransactionStatus.NOT_ACTIVE.equals(txn.getStatus()) || !txn.isActive()) {
       txn.begin();
     }
 
