@@ -11,7 +11,6 @@ import gov.ca.cwds.data.ApiTypedIdentifier;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.data.std.ApiPhoneAware;
 import gov.ca.cwds.data.std.ApiPhoneAwareWritable;
-import gov.ca.cwds.data.std.ApiPhoneAware.PhoneType;
 
 /**
  * Simplistic, all String representation of ES person.phone_numbers.
