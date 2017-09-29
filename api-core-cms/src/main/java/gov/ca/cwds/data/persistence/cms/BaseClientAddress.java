@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -13,6 +14,11 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import gov.ca.cwds.data.CmsSystemCodeDeserializer;
 import gov.ca.cwds.data.SystemCodeSerializer;
 
+/**
+ * Base class for regular and replicated versions of table ADDRS_T.
+ * 
+ * @author CWDS API Team
+ */
 @MappedSuperclass
 public abstract class BaseClientAddress extends CmsPersistentObject {
 
@@ -32,6 +38,7 @@ public abstract class BaseClientAddress extends CmsPersistentObject {
   protected Short addressType;
 
   @Column(name = "BK_INMT_ID", nullable = false, length = CMS_ID_LEN)
+  @ColumnTransformer(read = "trim(BK_INMT_ID)")
   protected String bkInmtId;
 
   @Type(type = "date")
@@ -52,6 +59,7 @@ public abstract class BaseClientAddress extends CmsPersistentObject {
   protected String homelessInd;
 
   @Column(name = "FKREFERL_T", nullable = true, length = CMS_ID_LEN)
+  @ColumnTransformer(read = "trim(FKREFERL_T)")
   protected String fkReferral;
 
   /**

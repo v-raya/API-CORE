@@ -1,6 +1,5 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import java.beans.Transient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -384,11 +383,11 @@ public abstract class BaseAddress extends CmsPersistentObject
   // ApiMultiplePhonesAware:
   // =======================
 
-  @JsonIgnore
+  // @JsonIgnore
+  // @Transient
   @Override
-  @Transient
   public ApiPhoneAware[] getPhones() {
-    List<ApiPhoneAware> phones = new ArrayList<>();
+    final List<ApiPhoneAware> phones = new ArrayList<>();
     if (this.primaryNumber != null && !BigDecimal.ZERO.equals(this.primaryNumber)) {
       phones.add(new ReadablePhone(null, this.primaryNumber.toPlainString(),
           this.primaryExtension != null ? this.primaryExtension.toString() : null, null));
@@ -411,7 +410,7 @@ public abstract class BaseAddress extends CmsPersistentObject
 
   @Override
   public String getStreetAddress() {
-    StringBuilder buf = new StringBuilder();
+    final StringBuilder buf = new StringBuilder();
     if (StringUtils.isNoneBlank(this.streetNumber)) {
       buf.append(this.streetNumber).append(" ");
     }
