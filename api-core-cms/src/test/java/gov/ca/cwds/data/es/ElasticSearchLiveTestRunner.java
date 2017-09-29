@@ -130,12 +130,6 @@ public class ElasticSearchLiveTestRunner implements Runnable {
   }
 
   private static Client elasticsearchClient(ElasticsearchConfiguration config) throws Exception {
-    // Settings settings =
-    // Settings.builder().put("cluster.name", config.getElasticsearchCluster()).build();
-    // return TransportClient.builder().settings(settings).build().addTransportAddress(
-    // new InetSocketTransportAddress(InetAddress.getByName(config.getElasticsearchHost()),
-    // Integer.parseInt(config.getElasticsearchPort())));
-
     TransportClient ret = new PreBuiltTransportClient(
         Settings.builder().put("cluster.name", config.getElasticsearchCluster()).build());
     ret.addTransportAddress(
@@ -145,4 +139,3 @@ public class ElasticSearchLiveTestRunner implements Runnable {
   }
 
 }
-
