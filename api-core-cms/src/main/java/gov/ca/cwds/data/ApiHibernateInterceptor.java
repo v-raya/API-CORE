@@ -63,13 +63,25 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   private static final Map<Class<? extends PersistentObject>, Consumer<PersistentObject>> handlers =
       new ConcurrentHashMap<>();
 
+  /**
+   * Register an RI handler by entity.
+   * 
+   * @param klass entity class to handle
+   * @param consumer handler implementation
+   */
+  public static void addHandler(Class<? extends PersistentObject> klass,
+      Consumer<PersistentObject> consumer) {
+    LOGGER.info("addHandler -> class={}", klass.getName());
+    handlers.put(klass, consumer);
+  }
+
   @Override
   public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
-    if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("onDelete -> id={}, entity={}", id, entity);
+    if (LOGGER.isTraceEnabled()) {
+      LOGGER.trace("onDelete -> id={}, entity={}", id, entity);
     } else {
-      LOGGER.info("onDelete -> id={}, entityClass={}", id, entity.getClass().getName());
+      LOGGER.debug("onDelete -> id={}, entityClass={}", id, entity.getClass().getName());
     }
   }
 
@@ -79,8 +91,8 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   @Override
   public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState,
       Object[] previousState, String[] propertyNames, Type[] types) {
-    if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("onFlushDirty -> id={}, entity={}", id, entity);
+    if (LOGGER.isTraceEnabled()) {
+      LOGGER.trace("onFlushDirty -> id={}, entity={}", id, entity);
     } else {
       LOGGER.info("onFlushDirty -> id={}, entityClass={}", id, entity.getClass().getName());
     }
@@ -93,10 +105,10 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   @Override
   public boolean onLoad(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
-    if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("onLoad -> id={}, entity={}", id, entity);
+    if (LOGGER.isTraceEnabled()) {
+      LOGGER.trace("onLoad -> id={}, entity={}", id, entity);
     } else {
-      LOGGER.info("onLoad -> id={}, entityClass={}", id, entity.getClass().getName());
+      LOGGER.debug("onLoad -> id={}, entityClass={}", id, entity.getClass().getName());
     }
     return false;
   }
@@ -104,16 +116,12 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   @Override
   public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
-    if (LOGGER.isDebugEnabled()) {
+    if (LOGGER.isTraceEnabled()) {
       LOGGER.debug("onSave -> id={}, entity={}", id, entity);
     } else {
       LOGGER.info("onSave -> id={}, entityClass={}", id, entity.getClass().getName());
     }
     return false;
-  }
-
-  private synchronized List<?> iterToList(@SuppressWarnings("rawtypes") Iterator iter) {
-    return IteratorUtils.toList(iter);
   }
 
   /**
@@ -143,7 +151,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
 
         final Class<?> klazz = entity.getClass();
         if (handlers.containsKey(klazz)) {
-          LOGGER.debug("handler for class {}", klazz);
+          LOGGER.info("handler for class {}", klazz);
           handlers.get(klazz).accept(entity);
         }
 
@@ -157,18 +165,6 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   @Override
   public void postFlush(@SuppressWarnings("rawtypes") Iterator iterator) {
     LOGGER.info("postFlush -> after commit");
-  }
-
-  /**
-   * Register an RI handler by entity.
-   * 
-   * @param klass entity class to handle
-   * @param consumer handler implementation
-   */
-  public static void addHandler(Class<? extends PersistentObject> klass,
-      Consumer<PersistentObject> consumer) {
-    LOGGER.trace("addHandler -> class={}", klass.getName());
-    handlers.put(klass, consumer);
   }
 
   @Override
@@ -193,6 +189,10 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   public Object instantiate(String entityName, EntityMode entityMode, Serializable id) {
     LOGGER.trace("preFlush -> id={}, entityClass={}", id, entityName);
     return super.instantiate(entityName, entityMode, id);
+  }
+
+  private synchronized List<?> iterToList(@SuppressWarnings("rawtypes") Iterator iter) {
+    return IteratorUtils.toList(iter);
   }
 
 }
