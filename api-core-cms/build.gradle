@@ -34,7 +34,7 @@ dependencies {
     }
     
     testCompile group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '2.1.6'
-    testCompile 'org.ow2.asm:asm-all:5.1'
+    testCompile 'org.ow2.asm:asm-all:5.2'
 }
 
 publishing {
@@ -48,7 +48,7 @@ publishing {
   }
   repositories {
     maven {
-      //TODO : set to http url
+      // THOUGHT: set to http url or network share.
       url "file:///usr/share/nginx/html/maven2"
     }
   }

@@ -21,13 +21,14 @@ import gov.ca.cwds.inject.SystemCodeCache;
  * </p>
  * 
  * <p>
- * Note on static generics:
+ * <strong>Note on static generics:</strong>
  * </p>
  * 
  * <p>
- * Note that Java Generics are NOT C++ templates. That is, Java does not recompile a class type into
- * a separate class with its own static variables, but rather, generic classes
- * <strong>share</strong> static variables among all type instances. Naughty Java!
+ * Java Generics are <strong>NOT</strong> C++ templates. That is, Java does not compile a class type
+ * into byte code with its own static variables, but rather, generic classes <strong>share</strong>
+ * static variables among all type instances. In other words, static members lack type information,
+ * since types are only carried at the class instance level. Naughty Java!
  * </p>
  * 
  * <p>
@@ -46,7 +47,7 @@ import gov.ca.cwds.inject.SystemCodeCache;
  * @author CWDS API Team
  * @see SystemCodeCache
  */
-public final class DeferredRegistry<T extends ApiMarker> implements ApiMarker {
+public class DeferredRegistry<T extends ApiMarker> implements ApiMarker {
 
   /**
    * Default.
@@ -71,6 +72,23 @@ public final class DeferredRegistry<T extends ApiMarker> implements ApiMarker {
   protected DeferredRegistry(Class<T> klass, T t) {
     this.wrapped = t;
     this.klass = klass;
+  }
+
+  /**
+   * Construct from class type and instance. Since Java loses abandons type information at runtime,
+   * a generic instance of T is insufficient.
+   * 
+   * @param klass class type to wrap
+   * @param t instance to wrap
+   * @param overwrite overwrite registered instance
+   */
+  public DeferredRegistry(Class<T> klass, T t, boolean overwrite) {
+    this.wrapped = t;
+    this.klass = klass;
+
+    if (overwrite || !registry.containsKey(klass)) {
+      registry.put(klass, (DeferredRegistry<ApiMarker>) this);
+    }
   }
 
   /**
