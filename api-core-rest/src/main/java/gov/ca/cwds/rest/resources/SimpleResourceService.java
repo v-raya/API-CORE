@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceException;
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -13,6 +12,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.ca.cwds.data.std.ApiMarker;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.services.ServiceException;
 
@@ -22,17 +22,19 @@ import gov.ca.cwds.rest.services.ServiceException;
  * should extend this class or nest delegate members.
  * 
  * @param <K> Key type
- * @param
- *        <Q>reQuest type
- * @param
- *        <P>
- *        resPonse type
+ * @param <Q> reQuest type
+ * @param <P> resPonse type
  * 
  * @author CWDS API Team
  * @see ApiSimpleResourceService
  */
 public abstract class SimpleResourceService<K extends Serializable, Q extends Request, P extends gov.ca.cwds.rest.api.Response>
-    implements ApiSimpleResourceService<K, Q, P> {
+    implements ApiSimpleResourceService<K, Q, P>, ApiMarker {
+
+  /**
+   * Default serialization.
+   */
+  private static final long serialVersionUID = 1L;
 
   /**
    * Logger for this class.
@@ -94,17 +96,11 @@ public abstract class SimpleResourceService<K extends Serializable, Q extends Re
 
     if (e.getCause() instanceof ConstraintViolationException) {
       LOGGER.error("Failed validation! {}", e.getMessage(), e);
-      ConstraintViolationException cve = (ConstraintViolationException) e.getCause();
-      for (ConstraintViolation<?> cv : cve.getConstraintViolations()) {
-        LOGGER.error("validation error: {}, invalid value: {}", cv.getMessage(),
-            cv.getInvalidValue());
-      }
+      final ConstraintViolationException cve = (ConstraintViolationException) e.getCause();
 
-      // TODO: Story #137202471: Cobertura doesn't handle Java 8 features.
-      // cve.getConstraintViolations().stream().forEach(System.out::println);
-      // cve.getConstraintViolations().stream()
-      // .forEach(err -> LOGGER.error("validation error: {}, invalid value: {}", err.getMessage(),
-      // err.getInvalidValue()));
+      cve.getConstraintViolations().stream()
+          .forEach(err -> LOGGER.error("validation error: {}, invalid value: {}", err.getMessage(),
+              err.getInvalidValue()));
 
       throw new ServiceException("Failed validation! " + e.getMessage(), cve);
     } else if (e.getCause() instanceof EntityNotFoundException) {

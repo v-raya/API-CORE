@@ -127,7 +127,8 @@ public class DeferredRegistry<T extends ApiMarker> implements ApiMarker {
    */
   @SuppressWarnings("unchecked")
   public static final <T extends ApiMarker> T unwrap(Class<?> klass) {
-    return ((DeferredRegistry<T>) registry.get(klass)).wrapped;
+    final DeferredRegistry<T> reg = (DeferredRegistry<T>) registry.get(klass);
+    return reg != null ? reg.wrapped : null;
   }
 
   @SuppressWarnings("javadoc")
