@@ -383,8 +383,6 @@ public abstract class BaseAddress extends CmsPersistentObject
   // ApiMultiplePhonesAware:
   // =======================
 
-  // @JsonIgnore
-  // @Transient
   @Override
   public ApiPhoneAware[] getPhones() {
     final List<ApiPhoneAware> phones = new ArrayList<>();
