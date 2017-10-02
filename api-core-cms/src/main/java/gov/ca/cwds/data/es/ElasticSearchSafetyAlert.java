@@ -19,35 +19,11 @@ public class ElasticSearchSafetyAlert extends ApiObjectIdentity
   @JsonProperty("id")
   private String id;
 
-  @JsonProperty("activation_reason")
-  private String activationReason;
+  @JsonProperty("activation")
+  private Activation activation;
 
-  @JsonProperty("activation_reason_id")
-  private String activationReasonId;
-
-  @JsonProperty("activation_date")
-  private String activationDate;
-
-  @JsonProperty("activation_county")
-  private String activationCounty;
-
-  @JsonProperty("activation_county_id")
-  private String activationCountyId;
-
-  @JsonProperty("activation_explanation")
-  private String activationExplanation;
-
-  @JsonProperty("deactivation_date")
-  private String deactivationDate;
-
-  @JsonProperty("deactivation_county")
-  private String deactivationCounty;
-
-  @JsonProperty("deactivation_county_id")
-  private String deactivationCountyId;
-
-  @JsonProperty("deactivation_explanation")
-  private String deactivationExplanation;
+  @JsonProperty("deactivation")
+  private Deactivation deactivation;
 
   @JsonProperty("legacy_descriptor")
   @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -68,60 +44,20 @@ public class ElasticSearchSafetyAlert extends ApiObjectIdentity
     this.id = id;
   }
 
-  public String getActivationReason() {
-    return activationReason;
+  public Activation getActivation() {
+    return activation;
   }
 
-  public void setActivationReason(String activationReason) {
-    this.activationReason = activationReason;
+  public void setActivation(Activation activation) {
+    this.activation = activation;
   }
 
-  public String getActivationDate() {
-    return activationDate;
+  public Deactivation getDeactivation() {
+    return deactivation;
   }
 
-  public void setActivationDate(String activationDate) {
-    this.activationDate = activationDate;
-  }
-
-  public String getActivationCounty() {
-    return activationCounty;
-  }
-
-  public void setActivationCounty(String activationCounty) {
-    this.activationCounty = activationCounty;
-  }
-
-  public String getActivationExplanation() {
-    return activationExplanation;
-  }
-
-  public void setActivationExplanation(String activationExplanation) {
-    this.activationExplanation = activationExplanation;
-  }
-
-  public String getDeactivationDate() {
-    return deactivationDate;
-  }
-
-  public void setDeactivationDate(String deactivationDate) {
-    this.deactivationDate = deactivationDate;
-  }
-
-  public String getDeactivationCounty() {
-    return deactivationCounty;
-  }
-
-  public void setDeactivationCounty(String deactivationCounty) {
-    this.deactivationCounty = deactivationCounty;
-  }
-
-  public String getDeactivationExplanation() {
-    return deactivationExplanation;
-  }
-
-  public void setDeactivationExplanation(String deactivationExplanation) {
-    this.deactivationExplanation = deactivationExplanation;
+  public void setDeactivation(Deactivation deactivation) {
+    this.deactivation = deactivation;
   }
 
   public ElasticSearchLegacyDescriptor getLegacyDescriptor() {
@@ -132,27 +68,125 @@ public class ElasticSearchSafetyAlert extends ApiObjectIdentity
     this.legacyDescriptor = legacyDescriptor;
   }
 
-  public String getActivationReasonId() {
-    return activationReasonId;
+  /**
+   * ==========================================================================
+   */
+
+  /**
+   * Safety alert activation
+   */
+  public static final class Activation extends ApiObjectIdentity {
+
+    private static final long serialVersionUID = 2260969282923941516L;
+
+    @JsonProperty("activation_reason")
+    private String activationReason;
+
+    @JsonProperty("activation_reason_id")
+    private String activationReasonId;
+
+    @JsonProperty("activation_date")
+    private String activationDate;
+
+    @JsonProperty("activation_county")
+    private ElasticSearchCounty activationCounty;
+
+    @JsonProperty("activation_explanation")
+    private String activationExplanation;
+
+    /**
+     * No argument constructor
+     */
+    public Activation() {}
+
+    public String getActivationReason() {
+      return activationReason;
+    }
+
+    public void setActivationReason(String activationReason) {
+      this.activationReason = activationReason;
+    }
+
+    public String getActivationReasonId() {
+      return activationReasonId;
+    }
+
+    public void setActivationReasonId(String activationReasonId) {
+      this.activationReasonId = activationReasonId;
+    }
+
+    public String getActivationDate() {
+      return activationDate;
+    }
+
+    public void setActivationDate(String activationDate) {
+      this.activationDate = activationDate;
+    }
+
+    public ElasticSearchCounty getActivationCounty() {
+      return activationCounty;
+    }
+
+    public void setActivationCounty(ElasticSearchCounty activationCounty) {
+      this.activationCounty = activationCounty;
+    }
+
+    public String getActivationExplanation() {
+      return activationExplanation;
+    }
+
+    public void setActivationExplanation(String activationExplanation) {
+      this.activationExplanation = activationExplanation;
+    }
   }
 
-  public void setActivationReasonId(String activationReasonId) {
-    this.activationReasonId = activationReasonId;
-  }
+  /**
+   * ==========================================================================
+   */
 
-  public String getActivationCountyId() {
-    return activationCountyId;
-  }
+  /**
+   * Safety alert de-activation
+   */
+  public static final class Deactivation extends ApiObjectIdentity {
 
-  public void setActivationCountyId(String activationCountyId) {
-    this.activationCountyId = activationCountyId;
-  }
+    private static final long serialVersionUID = -6039499940899007533L;
 
-  public String getDeactivationCountyId() {
-    return deactivationCountyId;
-  }
+    @JsonProperty("deactivation_date")
+    private String deactivationDate;
 
-  public void setDeactivationCountyId(String deactivationCountyId) {
-    this.deactivationCountyId = deactivationCountyId;
+    @JsonProperty("deactivation_county")
+    private ElasticSearchCounty deactivationCounty;
+
+    @JsonProperty("deactivation_explanation")
+    private String deactivationExplanation;
+
+    /**
+     * No argument constructor
+     */
+    public Deactivation() {}
+
+    public String getDeactivationDate() {
+      return deactivationDate;
+    }
+
+    public void setDeactivationDate(String deactivationDate) {
+      this.deactivationDate = deactivationDate;
+    }
+
+    public ElasticSearchCounty getDeactivationCounty() {
+      return deactivationCounty;
+    }
+
+    public void setDeactivationCounty(ElasticSearchCounty deactivationCounty) {
+      this.deactivationCounty = deactivationCounty;
+    }
+
+    public String getDeactivationExplanation() {
+      return deactivationExplanation;
+    }
+
+    public void setDeactivationExplanation(String deactivationExplanation) {
+      this.deactivationExplanation = deactivationExplanation;
+    }
   }
 }

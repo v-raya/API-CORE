@@ -395,48 +395,64 @@
         "id": {
           "type": "text",
           "store": true
+        },        
+        "activation": {
+          "properties": {
+            "activation_reason": {
+              "type": "text",
+              "store": true
+            },
+            "activation_reason_id": {
+              "type": "text",
+              "store": true
+            },
+            "activation_date": {
+              "format": "strict_date_optional_time||epoch_millis",
+              "type": "date",
+              "store": true
+            },
+            "activation_explanation": {
+              "type": "text",
+              "store": true
+            },
+            "activation_county": {
+              "properties": {
+                "id": {
+                  "type": "text",
+                  "store": true
+                },
+                "name": {
+                  "type": "text",
+                  "store": true
+                }
+              }
+            }
+          }
         },
-        "activation_reason": {
-          "type": "text",
-          "store": true
-        },
-        "activation_reason_id": {
-          "type": "text",
-          "store": true
-        },
-        "activation_date": {
-          "format": "strict_date_optional_time||epoch_millis",
-          "type": "date",
-          "store": true
-        },
-        "activation_county": {
-          "type": "text",
-          "store": true
-        },
-        "activation_county_id": {
-          "type": "text",
-          "store": true
-        },
-        "activation_explanation": {
-          "type": "text",
-          "store": true
-        },
-        "deactivation_date": {
-          "format": "strict_date_optional_time||epoch_millis",
-          "type": "date",
-          "store": true
-        },
-        "deactivation_county": {
-          "type": "text",
-          "store": true
-        },
-        "deactivation_county_id": {
-          "type": "text",
-          "store": true
-        },
-        "deactivation_explanation": {
-          "type": "text",
-          "store": true
+        "deactivation": {
+          "properties": {
+            "deactivation_explanation": {
+              "type": "text",
+              "store": true
+            },
+            "deactivation_date": {
+              "format": "strict_date_optional_time||epoch_millis",
+              "type": "date",
+              "store": true
+            },
+            "deactivation_county": {
+              "properties": {
+                "id": {
+                  "type": "text",
+                  "store": true
+                },
+                "name": {
+                  "type": "text",
+                  "store": true
+                }
+              }
+            }
+          }
         },
         "legacy_descriptor": {
           "properties": {
