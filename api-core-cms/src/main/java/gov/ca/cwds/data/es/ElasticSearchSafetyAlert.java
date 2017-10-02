@@ -79,8 +79,8 @@ public class ElasticSearchSafetyAlert extends ApiObjectIdentity
 
     private static final long serialVersionUID = 2260969282923941516L;
 
-    @JsonProperty("activation_reason")
-    private String activationReason;
+    @JsonProperty("activation_reason_description")
+    private String activationReasonDescription;
 
     @JsonProperty("activation_reason_id")
     private String activationReasonId;
@@ -99,12 +99,12 @@ public class ElasticSearchSafetyAlert extends ApiObjectIdentity
      */
     public Activation() {}
 
-    public String getActivationReason() {
-      return activationReason;
+    public String getActivationReasonDescription() {
+      return activationReasonDescription;
     }
 
-    public void setActivationReason(String activationReason) {
-      this.activationReason = activationReason;
+    public void setActivationReasonDescription(String activationReasonDescription) {
+      this.activationReasonDescription = activationReasonDescription;
     }
 
     public String getActivationReasonId() {

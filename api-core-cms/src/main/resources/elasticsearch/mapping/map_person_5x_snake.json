@@ -398,7 +398,7 @@
         },        
         "activation": {
           "properties": {
-            "activation_reason": {
+            "activation_reason_description": {
               "type": "text",
               "store": true
             },
