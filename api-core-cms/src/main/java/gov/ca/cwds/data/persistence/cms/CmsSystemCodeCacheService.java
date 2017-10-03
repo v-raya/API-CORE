@@ -36,7 +36,7 @@ public class CmsSystemCodeCacheService extends ApiObjectIdentity
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsSystemCodeCacheService.class);
 
-  private final transient ApiSystemCodeDao dao;
+  private transient ApiSystemCodeDao dao;
 
   /**
    * Key = system code id, value = CMS system code record
