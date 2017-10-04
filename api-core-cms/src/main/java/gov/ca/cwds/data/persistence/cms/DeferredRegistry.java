@@ -82,6 +82,7 @@ public class DeferredRegistry<T extends ApiMarker> implements ApiMarker {
    * @param t instance to wrap
    * @param overwrite overwrite registered instance
    */
+  @SuppressWarnings("unchecked")
   public DeferredRegistry(Class<T> klass, T t, boolean overwrite) {
     this.wrapped = t;
     this.klass = klass;
