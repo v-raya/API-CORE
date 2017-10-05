@@ -50,7 +50,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
   @Override
   public List<T> findAll() {
     final String namedQueryName = constructNamedQueryName("findAll");
-    Session session = getSessionFactory().getCurrentSession();
+    final Session session = getSessionFactory().getCurrentSession();
 
     Transaction txn = session.getTransaction();
     txn = txn != null ? txn : session.beginTransaction();
@@ -81,12 +81,11 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
   @Override
   public List<T> findAllUpdatedAfter(Date datetime) {
     final String namedQueryName = constructNamedQueryName("findAllUpdatedAfter");
-    Session session = getSessionFactory().getCurrentSession();
-
-    Transaction txn = session.beginTransaction();
+    final Session session = getSessionFactory().getCurrentSession();
+    final Transaction txn = session.beginTransaction();
     try {
       // Compatible with both DB2 z/OS and Linux.
-      Query query = session.getNamedQuery(namedQueryName).setCacheable(false)
+      final Query query = session.getNamedQuery(namedQueryName).setCacheable(false)
           .setFlushMode(FlushMode.MANUAL).setReadOnly(true).setCacheMode(CacheMode.IGNORE)
           .setTimestamp("after", new java.sql.Timestamp(datetime.getTime()));
 
@@ -102,7 +101,6 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
         ret.add((T) row[0]);
 
         if (((++cnt) % fetchSize) == 0) {
-          LOGGER.info("recs read: {}", cnt);
           session.flush();
         }
       }
@@ -111,7 +109,6 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
       results.close();
       txn.commit();
       return ret.build();
-
     } catch (HibernateException h) {
       txn.rollback();
       throw new DaoException(h);
@@ -164,14 +161,14 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
   public List<T> partitionedBucketList(long bucketNum, long totalBuckets, String minId,
       String maxId) {
     final String namedQueryName = getEntityClass().getName() + ".findPartitionedBuckets";
+    final Session session = getSessionFactory().getCurrentSession();
+    final Transaction txn = session.beginTransaction();
 
-    Session session = getSessionFactory().getCurrentSession();
-    Transaction txn = session.beginTransaction();
     try {
-      Query query = session.getNamedQuery(namedQueryName).setInteger("bucket_num", (int) bucketNum)
-          .setInteger("total_buckets", (int) totalBuckets).setString("min_id", minId)
-          .setString("max_id", maxId).setCacheable(false).setFlushMode(FlushMode.MANUAL)
-          .setReadOnly(true).setCacheMode(CacheMode.IGNORE);
+      final Query query = session.getNamedQuery(namedQueryName)
+          .setInteger("bucket_num", (int) bucketNum).setInteger("total_buckets", (int) totalBuckets)
+          .setString("min_id", minId).setString("max_id", maxId).setCacheable(false)
+          .setFlushMode(FlushMode.MANUAL).setReadOnly(true).setCacheMode(CacheMode.IGNORE);
 
       // Iterate, process, flush.
       final int fetchSize = 5000;
@@ -185,7 +182,6 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
         ret.add((T) row[0]);
 
         if (((++cnt) % fetchSize) == 0) {
-          LOGGER.info("recs read: {}", cnt);
           session.flush();
         }
       }
