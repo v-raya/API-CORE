@@ -5,6 +5,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
@@ -20,6 +22,8 @@ import gov.ca.cwds.inject.CmsSessionFactory;
  */
 public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(SystemCodeDao.class);
+
   /**
    * Constructor
    * 
@@ -31,22 +35,39 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
   }
 
   /**
+   * Get the current session, if available, or open a new one.
+   * 
+   * @return Hibernate session
+   */
+  protected Session getCurrentSession() {
+    Session session;
+    try {
+      session = getSessionFactory().getCurrentSession();
+    } catch (HibernateException e) { // NOSONAR
+      LOGGER.warn("NO SESSION!");
+      session = getSessionFactory().openSession();
+    }
+
+    return session;
+  }
+
+  /**
    * @param foreignKeyMetaTable meta group
    * @return all keys by meta table
    */
   @SuppressWarnings("unchecked")
   public SystemCode[] findByForeignKeyMetaTable(String foreignKeyMetaTable) {
     final String namedQueryName = SystemCode.class.getName() + ".findByForeignKeyMetaTable";
-    Session session = getSessionFactory().getCurrentSession();
 
+    final Session session = getCurrentSession();
     Transaction txn = session.getTransaction();
     boolean transactionExists = txn != null && txn.isActive();
     txn = transactionExists ? txn : session.beginTransaction();
 
     try {
-      Query query = session.getNamedQuery(namedQueryName).setString("foreignKeyMetaTable",
+      final Query query = session.getNamedQuery(namedQueryName).setString("foreignKeyMetaTable",
           foreignKeyMetaTable);
-      SystemCode[] systemCodes = (SystemCode[]) query.list().toArray(new SystemCode[0]);
+      final SystemCode[] systemCodes = (SystemCode[]) query.list().toArray(new SystemCode[0]);
       if (!transactionExists)
         txn.commit();
       return systemCodes;
@@ -66,9 +87,9 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
     txn = transactionExists ? txn : session.beginTransaction();
 
     try {
-      Query query =
+      final Query query =
           session.getNamedQuery(namedQueryName).setShort("systemId", systemCodeId.shortValue());
-      SystemCode systemCode = (SystemCode) query.getSingleResult();
+      final SystemCode systemCode = (SystemCode) query.getSingleResult();
       if (!transactionExists)
         txn.commit();
       return systemCode;
