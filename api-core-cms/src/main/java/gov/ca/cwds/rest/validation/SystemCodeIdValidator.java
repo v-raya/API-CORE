@@ -1,7 +1,7 @@
 package gov.ca.cwds.rest.validation;
 
 import java.text.MessageFormat;
-import java.util.Set;
+import java.util.Collection;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -46,13 +46,13 @@ public class SystemCodeIdValidator
   }
 
   private boolean validateObject(Object param, ConstraintValidatorContext context) {
-    if (param instanceof Set) {
-      return validateSet((Set<?>) param, context);
+    if (param instanceof Collection) {
+      return validateCollection((Collection<?>) param, context);
     }
     return validateString(param.toString(), context);
   }
 
-  private boolean validateSet(Set<?> param, ConstraintValidatorContext context) {
+  private boolean validateCollection(Collection<?> param, ConstraintValidatorContext context) {
 
     if (param.isEmpty()) {
       return (!required && ignoreable);
@@ -67,7 +67,7 @@ public class SystemCodeIdValidator
 
   private boolean validateString(String value, ConstraintValidatorContext context) {
     if (StringUtils.isNumeric(value)) {
-      Integer numericValue = Integer.valueOf((String) value);
+      Integer numericValue = Integer.valueOf(value);
       return isSystemCodeValid(numericValue, context);
     }
     return false;
