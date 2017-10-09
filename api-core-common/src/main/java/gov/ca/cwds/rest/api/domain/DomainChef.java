@@ -54,6 +54,11 @@ public class DomainChef {
   public static final String TIMESTAMP_STRICT_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZZ";
 
   /**
+   * ISO8601 timestamp format (yyyy-MM-dd'T'HH:mm:ss.SSS'Z').
+   */
+  public static final String TIMESTAMP_ISO8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+
+  /**
    * Common time format for domain classes.
    */
   public static final String TIME_FORMAT = "HH:mm:ss";
@@ -217,6 +222,25 @@ public class DomainChef {
     if (StringUtils.isNotEmpty(trimTimestamp)) {
       try {
         DateFormat df = new SimpleDateFormat(TIME_FORMAT);
+        return df.parse(trimTimestamp);
+      } catch (Exception e) {
+        throw new ApiException(e);
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Extract Date object from ISO8601 formatted String
+   * 
+   * @param timestamp the string to extract from
+   * @return Date
+   */
+  public static Date uncookISO8601Timestamp(String timestamp) {
+    String trimTimestamp = StringUtils.trim(timestamp);
+    if (StringUtils.isNotEmpty(trimTimestamp)) {
+      try {
+        DateFormat df = new SimpleDateFormat(TIMESTAMP_ISO8601_FORMAT);
         return df.parse(trimTimestamp);
       } catch (Exception e) {
         throw new ApiException(e);
