@@ -59,7 +59,7 @@ node ('tpt2-slave'){
 	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test', reportFiles: 'index.html', reportName: 'JUnit Report', reportTitles: 'JUnit tests summary'])
    }
    stage('License Report') {
-      		buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'downloadLicenses'
+      		buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'libLicenseReport'
       		publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/dependency-license', reportFiles: 'licenses.html', reportName: 'License Report', reportTitles: 'License summary'])
       }
    stage('SonarQube analysis'){
