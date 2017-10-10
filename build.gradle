@@ -12,7 +12,7 @@ allprojects {
     compileJava {options.encoding = "UTF-8"}
 
     project.ext {
-        apiVersion = "3.6"
+        apiVersion = "0.4.4-SNAPSHOT"
         commonGroupId = "gov.ca.cwds.api"
         shiroSecurityVersion = "0.25.69"
         configPath = "$rootProject.projectDir/config/"
@@ -46,7 +46,7 @@ allprojects {
         mavenLocal()
         mavenCentral()
         maven {
-            url "http://maven2.cwds.tabordasolutions.net"
+            url "http://sonar.dev.cwds.io:8081/artifactory/repo"
         }
     }
 
@@ -125,17 +125,17 @@ dependencies {
 
 publishing {
     publications {
-        library(MavenPublication) {
+        mavenJava(MavenPublication) {
             from components.java
             groupId commonGroupId
             artifactId 'api-core'
-            version version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
+            version version + ((System.properties.getProperty('build') != null) ? '.' + System.properties.getProperty('build') : '')
         }
     }
     repositories {
+        //mavenLocal()
         maven {
-            //TODO : set to http url
-            url "file:///usr/share/nginx/html/maven2"
+            url "http://sonar.dev.cwds.io:8081/artifactory/repo"
         }
     }
 }
