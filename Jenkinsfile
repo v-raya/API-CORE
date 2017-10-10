@@ -58,6 +58,10 @@ node ('tpt2-slave'){
        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test jacocoTestReport', switches: '--stacktrace'
 	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test', reportFiles: 'index.html', reportName: 'JUnit Report', reportTitles: 'JUnit tests summary'])
    }
+   stage('License Report') {
+      		buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'downloadLicenses'
+      		publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/dependency-license', reportFiles: 'licenses.html', reportName: 'License Report', reportTitles: 'License summary'])
+      }
    stage('SonarQube analysis'){
 		withSonarQubeEnv('Core-SonarQube') {
 			buildInfo = rtGradle.run buildFile: 'build.gradle', switches: '--info', tasks: 'sonarqube'
