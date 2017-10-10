@@ -89,7 +89,7 @@ public class ElasticSearchSafetyAlert extends ApiObjectIdentity
     private String activationDate;
 
     @JsonProperty("activation_county")
-    private ElasticSearchCounty activationCounty;
+    private ElasticSearchSystemCode activationCounty;
 
     @JsonProperty("activation_explanation")
     private String activationExplanation;
@@ -123,11 +123,11 @@ public class ElasticSearchSafetyAlert extends ApiObjectIdentity
       this.activationDate = activationDate;
     }
 
-    public ElasticSearchCounty getActivationCounty() {
+    public ElasticSearchSystemCode getActivationCounty() {
       return activationCounty;
     }
 
-    public void setActivationCounty(ElasticSearchCounty activationCounty) {
+    public void setActivationCounty(ElasticSearchSystemCode activationCounty) {
       this.activationCounty = activationCounty;
     }
 
@@ -155,7 +155,7 @@ public class ElasticSearchSafetyAlert extends ApiObjectIdentity
     private String deactivationDate;
 
     @JsonProperty("deactivation_county")
-    private ElasticSearchCounty deactivationCounty;
+    private ElasticSearchSystemCode deactivationCounty;
 
     @JsonProperty("deactivation_explanation")
     private String deactivationExplanation;
@@ -173,11 +173,11 @@ public class ElasticSearchSafetyAlert extends ApiObjectIdentity
       this.deactivationDate = deactivationDate;
     }
 
-    public ElasticSearchCounty getDeactivationCounty() {
+    public ElasticSearchSystemCode getDeactivationCounty() {
       return deactivationCounty;
     }
 
-    public void setDeactivationCounty(ElasticSearchCounty deactivationCounty) {
+    public void setDeactivationCounty(ElasticSearchSystemCode deactivationCounty) {
       this.deactivationCounty = deactivationCounty;
     }
 
