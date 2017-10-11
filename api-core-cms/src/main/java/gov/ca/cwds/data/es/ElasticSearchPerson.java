@@ -386,10 +386,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonProperty("sensitivity_indicator")
   private transient String sensitivityIndicator = DEFAULT_SENSITIVITY_INDICATOR;
 
-  @JsonProperty("race_ethnicity")
+  @JsonProperty("client_county")
   private ElasticSearchSystemCode clientCounty;
 
-  @JsonProperty("race_")
+  @JsonProperty("race_ethnicity")
   private ElasticSearchRaceAndEthnicity cleintRace;
 
   @JsonProperty("source")
