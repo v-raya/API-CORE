@@ -386,8 +386,11 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonProperty("sensitivity_indicator")
   private transient String sensitivityIndicator = DEFAULT_SENSITIVITY_INDICATOR;
 
-  @JsonProperty("client_county")
+  @JsonProperty("race_ethnicity")
   private ElasticSearchSystemCode clientCounty;
+
+  @JsonProperty("race_")
+  private ElasticSearchRaceAndEthnicity cleintRace;
 
   @JsonProperty("source")
   private transient String source;
@@ -1326,5 +1329,23 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    */
   public void setClientCounty(ElasticSearchSystemCode clientCounty) {
     this.clientCounty = clientCounty;
+  }
+
+  /**
+   * Get client race
+   * 
+   * @return The client race
+   */
+  public ElasticSearchRaceAndEthnicity getCleintRace() {
+    return cleintRace;
+  }
+
+  /**
+   * Set client race
+   * 
+   * @param cleintRace The client race
+   */
+  public void setCleintRace(ElasticSearchRaceAndEthnicity cleintRace) {
+    this.cleintRace = cleintRace;
   }
 }
