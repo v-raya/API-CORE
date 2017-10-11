@@ -58,7 +58,7 @@ public class ElasticSearchSystemCode extends ApiObjectIdentity
   /**
    * Set description
    * 
-   * @param name The code description
+   * @param description The code description
    */
   public void setDescription(String description) {
     this.description = description;
