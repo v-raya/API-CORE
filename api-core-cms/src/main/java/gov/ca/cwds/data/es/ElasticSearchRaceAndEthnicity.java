@@ -10,8 +10,11 @@ public class ElasticSearchRaceAndEthnicity extends ApiObjectIdentity {
 
   private static final long serialVersionUID = -862544185919199877L;
 
-  @JsonProperty("races")
-  private List<ElasticSearchSystemCode> races;
+  @JsonProperty("race_codes")
+  private List<ElasticSearchSystemCode> raceCodes;
+
+  @JsonProperty("hispanic_codes")
+  private List<ElasticSearchSystemCode> hispanicCodes;
 
   @JsonProperty("unable_to_determine_code")
   private String unableToDetermineCode;
@@ -24,12 +27,20 @@ public class ElasticSearchRaceAndEthnicity extends ApiObjectIdentity {
 
   public ElasticSearchRaceAndEthnicity() {}
 
-  public List<ElasticSearchSystemCode> getRaces() {
-    return races;
+  public List<ElasticSearchSystemCode> getRaceCodes() {
+    return raceCodes;
   }
 
-  public void setRaces(List<ElasticSearchSystemCode> races) {
-    this.races = races;
+  public void setRaceCodes(List<ElasticSearchSystemCode> raceCodes) {
+    this.raceCodes = raceCodes;
+  }
+
+  public List<ElasticSearchSystemCode> getHispanicCodes() {
+    return hispanicCodes;
+  }
+
+  public void setHispanicCodes(List<ElasticSearchSystemCode> hispanicCodes) {
+    this.hispanicCodes = hispanicCodes;
   }
 
   public String getUnableToDetermineCode() {

@@ -314,7 +314,19 @@
           "type": "text",
           "store": true
         },
-        "races": {
+        "race_codes": {
+          "properties": {
+            "id": {
+              "type": "text",
+              "store": true
+            },
+            "description": {
+              "type": "text",
+              "store": true
+            }
+          } 
+        },
+        "hispanic_codes": {
           "properties": {
             "id": {
               "type": "text",
