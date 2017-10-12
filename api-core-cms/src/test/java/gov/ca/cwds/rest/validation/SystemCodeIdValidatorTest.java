@@ -6,19 +6,23 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.ConstraintValidatorContext;
+import javax.validation.ConstraintValidatorContext.ConstraintViolationBuilder;
+import javax.validation.ConstraintValidatorContext.ConstraintViolationBuilder.NodeBuilderCustomizableContext;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
@@ -27,6 +31,7 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
  * 
  * @author CWDS API Team
  */
+@SuppressWarnings("javadoc")
 public class SystemCodeIdValidatorTest {
 
   public static final short INVALID_SYSTEM_CODE_VALUE = 456;
@@ -37,6 +42,11 @@ public class SystemCodeIdValidatorTest {
   private SystemCodeIdValidator target;
 
   private static final class AnnoTestBean implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
     @ValidSystemCodeId(category = "ABS_BPTC", required = true)
     private Short prop1;
@@ -159,10 +169,84 @@ public class SystemCodeIdValidatorTest {
   }
 
   @Test
-  @Ignore
   public void shouldPassValidationWhenValueIsNullAndNotRequired() throws Exception {
     final AnnoTestBean bean = new AnnoTestBean(VALID_SYSTEM_CODE_VALUE, "two", null);
     Set<ConstraintViolation<AnnoTestBean>> violations = validator.validate(bean);
     assertTrue(violations.isEmpty());
   }
+
+  @Test
+  public void isValid_Args__Object__ValidCollection() throws Exception {
+    ValidSystemCodeId anno = mock(ValidSystemCodeId.class);
+    when(anno.required()).thenReturn(true);
+    target.initialize(anno);
+    Set<String> validCodes = new HashSet<>();
+    validCodes.add("100");
+    ConstraintValidatorContext context_ = mock(ConstraintValidatorContext.class);
+    boolean actual = target.isValid(validCodes, context_);
+    boolean expected = true;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void isValid_Args__Object__EmptyCollection() throws Exception {
+    ValidSystemCodeId anno = mock(ValidSystemCodeId.class);
+    when(anno.required()).thenReturn(true);
+    target.initialize(anno);
+    Set<String> validCodes = new HashSet<>();
+    ConstraintValidatorContext context_ = mock(ConstraintValidatorContext.class);
+    boolean actual = target.isValid(validCodes, context_);
+    boolean expected = false;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void isValid_Args__Object__EmptyCollectionPassWhenIgnorableTrue() throws Exception {
+    ValidSystemCodeId anno = mock(ValidSystemCodeId.class);
+    when(anno.required()).thenReturn(false);
+    when(anno.ignoreable()).thenReturn(true);
+    target.initialize(anno);
+    Set<String> validCodes = new HashSet<>();
+    ConstraintValidatorContext context_ = mock(ConstraintValidatorContext.class);
+    boolean actual = target.isValid(validCodes, context_);
+    boolean expected = true;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void isValid_Args__Object__InvalidCollectionValues() throws Exception {
+    ValidSystemCodeId anno = mock(ValidSystemCodeId.class);
+    when(anno.required()).thenReturn(true);
+    when(anno.category()).thenReturn("ETHNCTYC");
+    target.initialize(anno);
+    Set<String> validCodes = new HashSet<>();
+    validCodes.add("0");
+    ConstraintValidatorContext context_ = mock(ConstraintValidatorContext.class);
+    ConstraintViolationBuilder builder = mock(ConstraintViolationBuilder.class);
+    when(builder.addPropertyNode(any())).thenReturn(mock(NodeBuilderCustomizableContext.class));
+    when(context_.buildConstraintViolationWithTemplate(any())).thenReturn(builder);
+    boolean actual = target.isValid(validCodes, context_);
+    boolean expected = false;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void isValid_Args__Object__ValidWhenIgnoredValue0() throws Exception {
+    ValidSystemCodeId anno = mock(ValidSystemCodeId.class);
+    when(anno.required()).thenReturn(false);
+    when(anno.ignoreable()).thenReturn(true);
+    when(anno.ignoredValue()).thenReturn(0);
+    when(anno.category()).thenReturn("ETHNCTYC");
+    target.initialize(anno);
+    Set<String> validCodes = new HashSet<>();
+    validCodes.add("0");
+    ConstraintValidatorContext context_ = mock(ConstraintValidatorContext.class);
+    ConstraintViolationBuilder builder = mock(ConstraintViolationBuilder.class);
+    when(builder.addPropertyNode(any())).thenReturn(mock(NodeBuilderCustomizableContext.class));
+    when(context_.buildConstraintViolationWithTemplate(any())).thenReturn(builder);
+    boolean actual = target.isValid(validCodes, context_);
+    boolean expected = true;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
 }
