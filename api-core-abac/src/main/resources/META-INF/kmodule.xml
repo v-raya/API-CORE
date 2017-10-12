@@ -1,5 +1,0 @@
-<kmodule xmlns="http://www.drools.org/xsd/kmodule">
-  <kbase name="countydeterminationbase" packages="rules.countydetermination">
-    <ksession name="clientCountyDeterminationSession"/>
-  </kbase>
-</kmodule>

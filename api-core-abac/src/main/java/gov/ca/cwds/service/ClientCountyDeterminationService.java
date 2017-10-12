@@ -5,5 +5,11 @@ package gov.ca.cwds.service;
  */
 public interface ClientCountyDeterminationService {
 
-  public String getClientCountyById(String clientId);
+  /**
+   * This method determines client county by Client ID
+   *
+   * @param clientId Client ID
+   * @return client county
+   */
+  Short getClientCountyById(String clientId);
 }
