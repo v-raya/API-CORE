@@ -1,0 +1,15 @@
+import gov.ca.cwds.data.*;
+import gov.ca.cwds.rules.*;
+
+global gov.ca.cwds.rules.CountyDeterminationFact countyDeterminationFact;
+
+rule  "Determine client's county"
+      dialect "mvel"
+  agenda-group "client-county-determination-group"
+  when
+    $countyDeterminationFact : CountyDeterminationFact(clientCounty.equals("kek"));
+  then
+//  if (countyDeterminationFact.getClientCounty() == "")
+
+  countyDeterminationFact.setClientCounty("test");
+end
