@@ -57,7 +57,7 @@ public class CountyDeterminationDao extends CrudsDaoImpl<CmsPersistentObject> {
   public List<Short> getClientCountyByActiveCase(String clientId) {
 
     String namedQuery = "SELECT GVR_ENTC\n"
-        + "FROM CWSRS1.CASE_T\n"
+        + "FROM CASE_T\n"
         + "WHERE FKCHLD_CLT = :clientId\n"
         + "      AND END_DT IS NULL";
 
@@ -68,7 +68,6 @@ public class CountyDeterminationDao extends CrudsDaoImpl<CmsPersistentObject> {
    * @param clientId Client ID
    * @return List of counties for Client by Active Referrals with whom this Client is related
    */
-  @SuppressWarnings("unchecked")
   public List<Short> getCountyByActiveReferrals(String clientId) {
     String namedQuery = "SELECT GVR_ENTC\n"
         + "FROM REFERL_T A, REFR_CLT B\n"
@@ -86,7 +85,7 @@ public class CountyDeterminationDao extends CrudsDaoImpl<CmsPersistentObject> {
    */
   public List<Short> getClientCountyByClosedCase(String clientId) {
     String namedQuery = "SELECT GVR_ENTC\n"
-        + "FROM CWSRS1.CASE_T\n"
+        + "FROM CASE_T\n"
         + "WHERE FKCHLD_CLT = :clientId\n"
         + "      AND END_DT IS NOT NULL";
 
@@ -114,7 +113,7 @@ public class CountyDeterminationDao extends CrudsDaoImpl<CmsPersistentObject> {
    */
   public List<Short> getClientByClientAnyActiveCase(String clientId) {
     String namedQuery = "SELECT GVR_ENTC\n"
-        + "FROM CWSRS1.CASE_T A, CWSRS1.CLN_RELT B\n"
+        + "FROM CASE_T A, CLN_RELT B\n"
         + "WHERE (B.FKCLIENT_0 = :clientId\n"
         + "       OR  B.FKCLIENT_T = :clientId)\n"
         + "      AND (A.FKCHLD_CLT = B.FKCLIENT_T\n"
@@ -140,6 +139,7 @@ public class CountyDeterminationDao extends CrudsDaoImpl<CmsPersistentObject> {
     return executeNativeQueryAndReturnCountyList(namedQuery, clientId);
   }
 
+  @SuppressWarnings("unchecked")
   private List<Short> executeNativeQueryAndReturnCountyList(String namedQuery, String clientId) {
     final Session session = getCurrentSession();
     Transaction txn = session.getTransaction();
