@@ -5,8 +5,13 @@ project.ext {
 dependencies {
     compile project(':api-core-cms')
 
+    // MAIN:
 //    compile group: 'org.kie', name: 'kie-api', version: droolsVersion
 //    compile group: 'org.drools', name: 'drools-compiler', version: droolsVersion
+
+    // TEST:
+    testCompile 'org.mockito:mockito-core:2.0.54-beta'
+    testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version: '2.0.0.0'
 }
 
 publishing {
