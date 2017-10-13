@@ -56,7 +56,9 @@ node ('tpt2-slave'){
    }
    stage('Unit Tests') {
        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test jacocoTestReport', switches: '--stacktrace'
-	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test', reportFiles: 'index.html', reportName: 'JUnit Report', reportTitles: 'JUnit tests summary'])
+	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'api-core-common/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report Common', reportTitles: 'JUnit Report Common'])
+	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'api-core-rest/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report REST', reportTitles: 'JUnit Report REST'])
+	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'api-core-cms/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report CMS', reportTitles: 'JUnit Report CMS'])
    }
    stage('License Report') {
       		buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'libLicenseReport'
@@ -69,8 +71,8 @@ node ('tpt2-slave'){
     }
 
 	stage ('Push to artifactory'){
-    //rtGradle.deployer repo:'libs-snapshot', server: serverArti
-	  rtGradle.deployer repo:'libs-release', server: serverArti
+    rtGradle.deployer repo:'libs-snapshot', server: serverArti
+	  //  rtGradle.deployer repo:'libs-release', server: serverArti
 	  rtGradle.deployer.deployArtifacts = true
 		buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'artifactoryPublish'
 		rtGradle.deployer.deployArtifacts = false
@@ -81,9 +83,7 @@ node ('tpt2-slave'){
   	   notifyBuild(currentBuild.result,errorcode)
   	   throw e;
  }finally {
-	   publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test', reportFiles: 'index.html', reportName: 'JUnitReports', reportTitles: 'JUnit tests summary'])
-	   publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/dependency-license', reportFiles: 'licenses.html', reportName: 'License Report', reportTitles: 'License summary'])
-     cleanWs()
+	   cleanWs()
  }
 }
 
