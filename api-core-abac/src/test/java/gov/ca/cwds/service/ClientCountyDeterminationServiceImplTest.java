@@ -1,15 +1,22 @@
 package gov.ca.cwds.service;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.doReturn;
 
 import gov.ca.cwds.data.dao.cms.CountyDeterminationDao;
+import java.util.ArrayList;
+import java.util.List;
 import org.hamcrest.junit.ExpectedException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.internal.util.reflection.Whitebox;
@@ -44,15 +51,22 @@ public class ClientCountyDeterminationServiceImplTest {
     assertThat(countyDeterminationService, notNullValue());
   }
 
+  //test default no-arg constructor.
+  @Test
+  public void testDefaultConstructor() throws Exception {
+    ClientCountyDeterminationService service = new ClientCountyDeterminationServiceImpl();
+    assertThat(service, notNullValue());
+  }
+
   @Test
   public void testHandleRequest() throws Exception {
-    Whitebox.setInternalState(countyDeterminationService, "countyDeterminationDao", countyDeterminationDao);
+    final List<Short> list = new ArrayList<>();
+    list.add((short) 1);
+    doReturn(list).when(countyDeterminationDao).getClientByClientAnyActiveCase(Mockito.anyString());
+    Whitebox.setInternalState(countyDeterminationService, "countyDeterminationDao",
+        countyDeterminationDao);
 
-//    Whitebox.setInternalState(target, "esConfig", esConfig);
-//    doReturn("fred").when(target).executionResult(Mockito.anyString(), Mockito.anyString());
-//    final IndexQueryResponse actual = target.handleRequest(req);
-//    final IndexQueryResponse expected = new IndexQueryResponse("fred");
-//
-//    assertThat(actual, is(equalTo(expected)));
+    assertThat(countyDeterminationService.getClientCountyById("testClientId"), is(equalTo((short)1)));
+
   }
 }
