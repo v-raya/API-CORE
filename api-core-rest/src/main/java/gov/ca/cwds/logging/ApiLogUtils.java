@@ -15,7 +15,7 @@ import gov.ca.cwds.rest.api.ApiException;
  * @author CWDS API Team
  * @param <E> runtime exception type
  */
-public class ApiLogUtils<E extends RuntimeException> {
+public class ApiLogUtils<E extends ApiException> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ApiLogUtils.class);
 

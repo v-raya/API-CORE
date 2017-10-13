@@ -1,15 +1,19 @@
 package gov.ca.cwds.rest.resources;
 
+import gov.ca.cwds.rest.api.ApiException;
+
 /**
- * Runtime exception indicating a problem client system error not recoverable by the enduser.
+ * Runtime exception indicating a problem client system error, which is not recoverable by the end
+ * user.
  *
  * @author CWDS API Team
  */
-public class ClientException extends RuntimeException {
+public class ClientException extends ApiException {
 
   public ClientException() {
     super();
   }
+
   public ClientException(String message) {
     super(message);
   }

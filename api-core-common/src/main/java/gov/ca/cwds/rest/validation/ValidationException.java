@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.validation;
 
+import gov.ca.cwds.rest.api.ApiException;
+
 /**
  * Runtime exception indicating a problem when performing a validation
  * 
@@ -9,7 +11,7 @@ package gov.ca.cwds.rest.validation;
 @Deprecated
 @SuppressWarnings("serial")
 
-public class ValidationException extends RuntimeException {
+public class ValidationException extends ApiException {
 
   public ValidationException() {
     super();
