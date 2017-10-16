@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Type;
 
@@ -36,6 +37,7 @@ public abstract class CmsPersistentObject extends ApiObjectIdentity implements P
   protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
 
   @Column(name = "LST_UPD_ID")
+  @NotNull
   private String lastUpdatedId;
 
   @Type(type = "timestamp")

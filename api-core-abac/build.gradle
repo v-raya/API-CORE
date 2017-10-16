@@ -1,0 +1,32 @@
+project.ext {
+    droolsVersion = '7.1.0.Final'
+}
+
+dependencies {
+    compile project(':api-core-cms')
+
+    // MAIN:
+//    compile group: 'org.kie', name: 'kie-api', version: droolsVersion
+//    compile group: 'org.drools', name: 'drools-compiler', version: droolsVersion
+
+    // TEST:
+    testCompile 'org.mockito:mockito-core:2.0.54-beta'
+    testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version: '2.0.0.0'
+}
+
+publishing {
+    publications {
+        library(MavenPublication) {
+            from components.java
+            groupId commonGroupId
+            artifactId 'api-core-abac'
+            version version + ((System.properties.getProperty('build') != null) ? '.' + System.properties.getProperty('build') : '')
+        }
+    }
+    repositories {
+        maven {
+            // THOUGHT: set to http url or network share.
+            url "file:///usr/share/nginx/html/maven2"
+        }
+    }
+}

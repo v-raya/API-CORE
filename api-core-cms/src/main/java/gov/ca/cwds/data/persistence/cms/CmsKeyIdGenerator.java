@@ -290,7 +290,7 @@ public final class CmsKeyIdGenerator {
     ret += (double) cal.get(Calendar.MILLISECOND) / 10 * nSHIFT_HSECOND;
     ret += (double) cal.get(Calendar.SECOND) * nSHIFT_SECOND;
     ret += (double) cal.get(Calendar.MINUTE) * nSHIFT_MINUTE;
-    ret += (double) cal.get(Calendar.HOUR) * nSHIFT_HOUR;
+    ret += (double) cal.get(Calendar.HOUR_OF_DAY) * nSHIFT_HOUR;
     ret += (double) cal.get(Calendar.DATE) * nSHIFT_DAY;
     ret += (double) (cal.get(Calendar.MONTH)) * nSHIFT_MONTH;
     ret += (double) (cal.get(Calendar.YEAR) - 1900) * nSHIFT_YEAR;
@@ -310,7 +310,6 @@ public final class CmsKeyIdGenerator {
     final char[] dest = new char[20];
 
     final BigDecimal bdSrc = BigDecimal.valueOf(src);
-    // BigDecimal bdRaw;
 
     // Determine the largest power of the number.
     for (i = 0; bdSrc.doubleValue() >= powers[i].doubleValue(); i++, p++); // NOSONAR
@@ -327,24 +326,15 @@ public final class CmsKeyIdGenerator {
 
       for (i = 0; i < p; i++) {
         raw = src / powers[p - i - 1].doubleValue();
-        // bdRaw = bdSrc.divide(powers[p - i - 1], RoundingMode.DOWN);
 
         // Break down the number and convert the integer portion to a character.
         integral = (int) raw;
-
-        // LOGGER.debug("raw={}, integral={}", raw, integral);
-        // integral = (int) bdRaw.doubleValue();
-        // fractional = raw - integral;
-
-        // integral = bdRaw.toBigInteger().intValue();
-        // final double d = Math.floor(integral); // wrong??
-
         dest[i + pad] = ALPHABET[(int) Math.abs(integral)];
         src -= (integral * powers[p - i - 1].doubleValue()); // NOSONAR
       }
     }
 
-    StringBuilder buf = new StringBuilder();
+    final StringBuilder buf = new StringBuilder();
     for (final char c : dest) {
       if (c > 0) {
         buf.append(c);

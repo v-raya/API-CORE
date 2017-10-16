@@ -6,11 +6,11 @@ import gov.ca.cwds.data.ApiTypedIdentifier;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
 
 /**
- * Client county
+ * System code
  * 
  * @author CWDS API Team
  */
-public class ElasticSearchCounty extends ApiObjectIdentity
+public class ElasticSearchSystemCode extends ApiObjectIdentity
     implements ApiTypedIdentifier<String> {
 
   private static final long serialVersionUID = 4396490810924002909L;
@@ -18,18 +18,18 @@ public class ElasticSearchCounty extends ApiObjectIdentity
   @JsonProperty("id")
   private String id;
 
-  @JsonProperty("name")
-  private String name;
+  @JsonProperty("description")
+  private String description;
 
   /**
    * Default no-arg constructor
    */
-  public ElasticSearchCounty() {}
+  public ElasticSearchSystemCode() {}
 
   /**
-   * Get county id
+   * Get id
    * 
-   * @return The county id
+   * @return The id
    */
   @Override
   public String getId() {
@@ -37,9 +37,9 @@ public class ElasticSearchCounty extends ApiObjectIdentity
   }
 
   /**
-   * Set county id
+   * Set id
    * 
-   * @param id The county id
+   * @param id The id
    */
   @Override
   public void setId(String id) {
@@ -47,20 +47,20 @@ public class ElasticSearchCounty extends ApiObjectIdentity
   }
 
   /**
-   * Get county name
+   * Get description
    * 
-   * @return The county name
+   * @return The code description
    */
-  public String getName() {
-    return name;
+  public String getDescription() {
+    return description;
   }
 
   /**
-   * Set county name
+   * Set description
    * 
-   * @param name The county name
+   * @param description The code description
    */
-  public void setName(String name) {
-    this.name = name;
+  public void setDescription(String description) {
+    this.description = description;
   }
 }
