@@ -306,7 +306,8 @@ public final class CmsKeyIdGenerator {
   public String doubleToStrN(int dstLen, double src, final BigDecimal[] powers) {
     int i;
     int p = 0;
-    double integral, raw;
+    double integral;
+    double raw;
     final char[] dest = new char[20];
 
     final BigDecimal bdSrc = BigDecimal.valueOf(src);
