@@ -292,7 +292,7 @@ public final class CmsKeyIdGenerator {
     ret += (double) cal.get(Calendar.MINUTE) * nSHIFT_MINUTE;
     ret += (double) cal.get(Calendar.HOUR_OF_DAY) * nSHIFT_HOUR;
     ret += (double) cal.get(Calendar.DATE) * nSHIFT_DAY;
-    ret += (double) (cal.get(Calendar.MONTH)) * nSHIFT_MONTH;
+    ret += (double) (cal.get(Calendar.MONTH + 1)) * nSHIFT_MONTH;
     ret += (double) (cal.get(Calendar.YEAR) - 1900) * nSHIFT_YEAR;
     return ret;
   }
