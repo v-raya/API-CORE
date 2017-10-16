@@ -28,11 +28,11 @@ public class ElasticSearchPersonReferral extends ApiObjectIdentity
   private String id;
 
   @JsonProperty("legacy_referral_id")
-  @Deprecated
+  // @Deprecated
   private String legacyId;
 
   @JsonProperty("legacy_last_updated")
-  @Deprecated
+  // @Deprecated
   private String legacyLastUpdated;
 
   @JsonProperty("start_date")
@@ -82,22 +82,22 @@ public class ElasticSearchPersonReferral extends ApiObjectIdentity
   }
 
   @JsonIgnore
-  @Deprecated
+  // @Deprecated
   public String getLegacyId() {
     return legacyId;
   }
 
-  @Deprecated
+  // @Deprecated
   public void setLegacyId(String legacyId) {
     this.legacyId = legacyId;
   }
 
-  @Deprecated
+  // @Deprecated
   public String getLegacyLastUpdated() {
     return legacyLastUpdated;
   }
 
-  @Deprecated
+  // @Deprecated
   public void setLegacyLastUpdated(String legacyLastUpdated) {
     this.legacyLastUpdated = legacyLastUpdated;
   }

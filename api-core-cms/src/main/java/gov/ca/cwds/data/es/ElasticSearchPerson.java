@@ -203,14 +203,14 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
     @Override
     @JsonProperty("legacy_assigned_social_worker_id")
-    @Deprecated
+//    @Deprecated
     public String getLegacyClientId() {
       return legacyPersonId;
     }
 
     @Override
     @JsonProperty("legacy_assigned_social_worker_last_updated")
-    @Deprecated
+//    @Deprecated
     public String getLegacyLastUpdated() {
       return legacyLastUpdated;
     }
@@ -226,7 +226,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
     @Override
     @JsonProperty("legacy_staff_id")
-    @Deprecated
+//    @Deprecated
     public String getLegacyClientId() {
       return legacyPersonId;
     }
@@ -399,11 +399,11 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
 
-  @Deprecated
+//  @Deprecated
   @JsonProperty("legacy_source_table")
   private String legacySourceTable;
 
-  @Deprecated
+//  @Deprecated
   @JsonProperty("legacy_id")
   private String legacyId;
 
@@ -1267,22 +1267,22 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     this.safetyAlerts = safetyAlerts;
   }
 
-  @Deprecated
+//  @Deprecated
   public String getLegacySourceTable() {
     return legacySourceTable;
   }
 
-  @Deprecated
+//  @Deprecated
   public void setLegacySourceTable(String legacySourceTable) {
     this.legacySourceTable = legacySourceTable;
   }
 
-  @Deprecated
+//  @Deprecated
   public String getLegacyId() {
     return legacyId;
   }
 
-  @Deprecated
+//  @Deprecated
   public void setLegacyId(String legacyId) {
     this.legacyId = legacyId;
   }

@@ -22,7 +22,7 @@ public class ElasticSearchPersonAllegation extends ApiObjectIdentity
   private String id;
 
   @JsonProperty("legacy_allegation_id")
-  @Deprecated
+  // @Deprecated
   private String legacyId;
 
   @JsonProperty("allegation_description")
@@ -35,35 +35,35 @@ public class ElasticSearchPersonAllegation extends ApiObjectIdentity
   private String dispositionId;
 
   @JsonProperty("perpetrator_id")
-  @Deprecated
+  // @Deprecated
   private String perpetratorId;
 
   @JsonProperty("perpetrator_first_name")
-  @Deprecated
+  // @Deprecated
   private String perpetratorFirstName;
 
   @JsonProperty("perpetrator_last_name")
-  @Deprecated
+  // @Deprecated
   private String perpetratorLastName;
 
   @JsonProperty("perpetrator_legacy_client_id")
-  @Deprecated
+  // @Deprecated
   private String perpetratorLegacyClientId;
 
   @JsonProperty("victim_id")
-  @Deprecated
+  // @Deprecated
   private String victimId;
 
   @JsonProperty("victim_first_name")
-  @Deprecated
+  // @Deprecated
   private String victimFirstName;
 
   @JsonProperty("victim_last_name")
-  @Deprecated
+  // @Deprecated
   private String victimLastName;
 
   @JsonProperty("victim_legacy_client_id")
-  @Deprecated
+  // @Deprecated
   private String victimLegacyClientId;
 
   @JsonProperty("legacy_descriptor")
@@ -106,13 +106,13 @@ public class ElasticSearchPersonAllegation extends ApiObjectIdentity
     this.id = id;
   }
 
-  @Deprecated
+  // @Deprecated
   @SuppressWarnings("javadoc")
   public String getLegacyId() {
     return legacyId;
   }
 
-  @Deprecated
+  // @Deprecated
   @SuppressWarnings("javadoc")
   public void setLegacyId(String legacyId) {
     this.legacyId = legacyId;
@@ -148,96 +148,96 @@ public class ElasticSearchPersonAllegation extends ApiObjectIdentity
     this.dispositionId = dispositionId;
   }
 
-  @Deprecated
+  // @Deprecated
   @SuppressWarnings("javadoc")
   public String getPerpetratorId() {
     return perpetratorId;
   }
 
-  @Deprecated
+  // @Deprecated
   @SuppressWarnings("javadoc")
   public void setPerpetratorId(String perpetratorId) {
     this.perpetratorId = perpetratorId;
   }
 
-  @Deprecated
+  // @Deprecated
   @SuppressWarnings("javadoc")
   public String getPerpetratorFirstName() {
     return perpetratorFirstName;
   }
 
-  @Deprecated
+  // @Deprecated
   @SuppressWarnings("javadoc")
   public void setPerpetratorFirstName(String perpetratorFirstName) {
     this.perpetratorFirstName = perpetratorFirstName;
   }
 
-  @Deprecated
+  // @Deprecated
   @SuppressWarnings("javadoc")
   public String getPerpetratorLastName() {
     return perpetratorLastName;
   }
 
-  @Deprecated
+  // @Deprecated
   @SuppressWarnings("javadoc")
   public void setPerpetratorLastName(String perpetratorLastName) {
     this.perpetratorLastName = perpetratorLastName;
   }
 
-  @Deprecated
+  // @Deprecated
   public String getPerpetratorLegacyClientId() {
     return perpetratorLegacyClientId;
   }
 
-  @Deprecated
+  // @Deprecated
   @SuppressWarnings("javadoc")
   public void setPerpetratorLegacyClientId(String perpetratorLegacyClientId) {
     this.perpetratorLegacyClientId = perpetratorLegacyClientId;
   }
 
-  @Deprecated
+  // @Deprecated
   @SuppressWarnings("javadoc")
   public String getVictimId() {
     return victimId;
   }
 
-  @Deprecated
+  // @Deprecated
   @SuppressWarnings("javadoc")
   public void setVictimId(String victimId) {
     this.victimId = victimId;
   }
 
-  @Deprecated
+  // @Deprecated
   @SuppressWarnings("javadoc")
   public String getVictimFirstName() {
     return victimFirstName;
   }
 
-  @Deprecated
+  // @Deprecated
   @SuppressWarnings("javadoc")
   public void setVictimFirstName(String victimFirstName) {
     this.victimFirstName = victimFirstName;
   }
 
-  @Deprecated
+  // @Deprecated
   @SuppressWarnings("javadoc")
   public String getVictimLastName() {
     return victimLastName;
   }
 
-  @Deprecated
+  // @Deprecated
   @SuppressWarnings("javadoc")
   public void setVictimLastName(String victimLastName) {
     this.victimLastName = victimLastName;
   }
 
-  @Deprecated
+  // @Deprecated
   @SuppressWarnings("javadoc")
   public String getVictimLegacyClientId() {
     return victimLegacyClientId;
   }
 
-  @Deprecated
+  // @Deprecated
   @SuppressWarnings("javadoc")
   public void setVictimLegacyClientId(String victimLegacyClientId) {
     this.victimLegacyClientId = victimLegacyClientId;
