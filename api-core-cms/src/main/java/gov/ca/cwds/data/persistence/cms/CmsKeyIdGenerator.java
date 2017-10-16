@@ -1,6 +1,8 @@
 package gov.ca.cwds.data.persistence.cms;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
@@ -287,13 +289,29 @@ public final class CmsKeyIdGenerator {
    */
   public double timestampToDouble(final Calendar cal) {
     double ret = 0;
+    final NumberFormat fmt = new DecimalFormat("###,###.000");
+
     ret += (double) cal.get(Calendar.MILLISECOND) / 10 * nSHIFT_HSECOND;
+    LOGGER.info("MILLISECOND: {}", fmt.format(ret));
+
     ret += (double) cal.get(Calendar.SECOND) * nSHIFT_SECOND;
+    LOGGER.info("SECOND:      {}", fmt.format(ret));
+
     ret += (double) cal.get(Calendar.MINUTE) * nSHIFT_MINUTE;
+    LOGGER.info("MINUTE:      {}", fmt.format(ret));
+
     ret += (double) cal.get(Calendar.HOUR_OF_DAY) * nSHIFT_HOUR;
+    LOGGER.info("HOUR_OF_DAY: {}", fmt.format(ret));
+
     ret += (double) cal.get(Calendar.DATE) * nSHIFT_DAY;
-    ret += (double) (cal.get(Calendar.MONTH + 1)) * nSHIFT_MONTH;
+    LOGGER.info("DATE:        {}", fmt.format(ret));
+
+    ret += (double) (cal.get(Calendar.MONTH)) * nSHIFT_MONTH;
+    LOGGER.info("MONTH:       {}", fmt.format(ret));
+
     ret += (double) (cal.get(Calendar.YEAR) - 1900) * nSHIFT_YEAR;
+    LOGGER.info("YEAR:        {}", fmt.format(ret));
+
     return ret;
   }
 
