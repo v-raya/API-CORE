@@ -292,25 +292,25 @@ public final class CmsKeyIdGenerator {
     final NumberFormat fmt = new DecimalFormat("###,###.000");
 
     ret += (double) cal.get(Calendar.MILLISECOND) / 10 * nSHIFT_HSECOND;
-    LOGGER.info("MILLISECOND: {}", fmt.format(ret));
+    LOGGER.debug("MILLISECOND: {}", fmt.format(ret));
 
     ret += (double) cal.get(Calendar.SECOND) * nSHIFT_SECOND;
-    LOGGER.info("SECOND:      {}", fmt.format(ret));
+    LOGGER.debug("SECOND:      {}", fmt.format(ret));
 
     ret += (double) cal.get(Calendar.MINUTE) * nSHIFT_MINUTE;
-    LOGGER.info("MINUTE:      {}", fmt.format(ret));
+    LOGGER.debug("MINUTE:      {}", fmt.format(ret));
 
     ret += (double) cal.get(Calendar.HOUR_OF_DAY) * nSHIFT_HOUR;
-    LOGGER.info("HOUR_OF_DAY: {}", fmt.format(ret));
+    LOGGER.debug("HOUR_OF_DAY: {}", fmt.format(ret));
 
     ret += (double) cal.get(Calendar.DATE) * nSHIFT_DAY;
-    LOGGER.info("DATE:        {}", fmt.format(ret));
+    LOGGER.debug("DATE:        {}", fmt.format(ret));
 
     ret += (double) (cal.get(Calendar.MONTH)) * nSHIFT_MONTH;
-    LOGGER.info("MONTH:       {}", fmt.format(ret));
+    LOGGER.debug("MONTH:       {}", fmt.format(ret));
 
     ret += (double) (cal.get(Calendar.YEAR) - 1900) * nSHIFT_YEAR;
-    LOGGER.info("YEAR:        {}", fmt.format(ret));
+    LOGGER.debug("YEAR:        {}", fmt.format(ret));
 
     return ret;
   }

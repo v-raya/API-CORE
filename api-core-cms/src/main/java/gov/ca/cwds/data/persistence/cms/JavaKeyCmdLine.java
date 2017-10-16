@@ -5,21 +5,14 @@ import java.util.Date;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 
 /**
- * Command line tool to call the native CWDS key generation library.
+ * Command line tool to call the <strong>Java</strong> CWDS key generation class,
+ * {@link CmsKeyIdGenerator}.
  * 
  * <h3>Command line arguments:</h3>
  * <h4>Compose/generate a key:</h4> <blockquote>
  * 
  * <pre>
- * {@code java -cp bin gov.ca.cwds.rest.util.jni.KeyCmdLine -c 0X5}.
- * </pre>
- * 
- * </blockquote>
- * 
- * <h4>Decompose a key:</h4> <blockquote>
- * 
- * <pre>
- * {@code java -cp bin gov.ca.cwds.rest.util.jni.KeyCmdLine -d OpHh4Kr0X5}.
+ * {@code java -cp bin gov.ca.cwds.rest.util.jni.JavaKeyCmdLine 0x5 "2017-06-30T04:13:51.720Z"}.
  * </pre>
  * 
  * </blockquote>
