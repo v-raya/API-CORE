@@ -113,6 +113,29 @@ public class CountyDeterminationDaoTest {
   }
 
   @Test
+  public void testTransactionNotExist() throws Exception {
+    Session session = mock(Session.class);
+    Transaction transaction = mock(Transaction.class);
+    NativeQuery query = mock(NativeQuery.class);
+
+    doReturn(null).when(query).getResultList();
+    doReturn(false).when(transaction).isActive();
+    doThrow(Exception.class).when(transaction).commit();
+
+    doReturn(transaction).when(session).getTransaction();
+    doReturn(query).when(session).createNativeQuery(Mockito.anyString());
+    doReturn(session).when(sessionFactory).getCurrentSession();
+    doReturn(query).when(query).setParameter(Mockito.anyString(), Mockito.anyString());
+    doReturn(transaction).when(session).beginTransaction();
+
+    Whitebox.setInternalState(countyDeterminationDao, "sessionFactory",
+        sessionFactory);
+
+    thrown.expect(Exception.class);
+    countyDeterminationDao.getClientCountyByActiveCase("testClientId");
+  }
+
+  @Test
   public void testExecuteNativeQueryAndReturnCountyListException() throws Exception {
     Session session = mock(Session.class);
     Transaction transaction = mock(Transaction.class);
