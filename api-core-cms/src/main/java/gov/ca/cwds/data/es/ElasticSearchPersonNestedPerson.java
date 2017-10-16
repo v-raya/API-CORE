@@ -39,15 +39,15 @@ public class ElasticSearchPersonNestedPerson extends ApiObjectIdentity
   private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
 
   @JsonIgnore
-  @Deprecated
+  // @Deprecated
   protected String legacyPersonId;
 
   @JsonIgnore
-  @Deprecated
+  // @Deprecated
   protected String legacyLastUpdated;
 
   @JsonIgnore
-  @Deprecated
+  // @Deprecated
   private String legacySourceTable;
 
   /**
@@ -56,7 +56,7 @@ public class ElasticSearchPersonNestedPerson extends ApiObjectIdentity
    * 
    * @return legacy person id
    */
-  @Deprecated
+  // @Deprecated
   public String getLegacyClientId() {
     return legacyPersonId;
   }
@@ -87,27 +87,27 @@ public class ElasticSearchPersonNestedPerson extends ApiObjectIdentity
     this.lastName = lastName;
   }
 
-  @Deprecated
+  // @Deprecated
   public void setLegacyClientId(String legacyClientId) {
     this.legacyPersonId = legacyClientId;
   }
 
-  @Deprecated
+  // @Deprecated
   public String getLegacyLastUpdated() {
     return legacyLastUpdated;
   }
 
-  @Deprecated
+  // @Deprecated
   public void setLegacyLastUpdated(String legacyLastUpdated) {
     this.legacyLastUpdated = legacyLastUpdated;
   }
 
-  @Deprecated
+  // @Deprecated
   public String getLegacySourceTable() {
     return legacySourceTable;
   }
 
-  @Deprecated
+  // @Deprecated
   public void setLegacySourceTable(String legacySourceTable) {
     this.legacySourceTable = legacySourceTable;
   }
