@@ -18,6 +18,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.NativeQuery;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -120,7 +121,6 @@ public class CountyDeterminationDaoTest {
 
     doReturn(null).when(query).getResultList();
     doReturn(false).when(transaction).isActive();
-    doThrow(Exception.class).when(transaction).commit();
 
     doReturn(transaction).when(session).getTransaction();
     doReturn(query).when(session).createNativeQuery(Mockito.anyString());
@@ -131,8 +131,14 @@ public class CountyDeterminationDaoTest {
     Whitebox.setInternalState(countyDeterminationDao, "sessionFactory",
         sessionFactory);
 
-    thrown.expect(Exception.class);
-    countyDeterminationDao.getClientCountyByActiveCase("testClientId");
+    Assert.assertNull(countyDeterminationDao.getClientCountyByActiveCase("testClientId"));
+
+    doReturn(null).when(session).getTransaction();
+
+    Whitebox.setInternalState(countyDeterminationDao, "sessionFactory",
+        sessionFactory);
+
+    Assert.assertNull(countyDeterminationDao.getClientCountyByActiveCase("testClientId"));
   }
 
   @Test
