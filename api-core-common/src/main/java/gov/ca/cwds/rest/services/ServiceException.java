@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.services;
 
+import gov.ca.cwds.rest.api.ApiException;
+
 /**
  * Base exception class for CWDS API service exceptions.
  * 
@@ -11,7 +13,7 @@ package gov.ca.cwds.rest.services;
  * @author CWDS API Team
  */
 @SuppressWarnings("serial")
-public class ServiceException extends RuntimeException {
+public class ServiceException extends ApiException {
 
   /**
    * Construct an API service exception.

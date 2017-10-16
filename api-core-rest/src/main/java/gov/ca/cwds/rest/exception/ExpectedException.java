@@ -2,11 +2,12 @@ package gov.ca.cwds.rest.exception;
 
 import javax.ws.rs.core.Response.Status;
 
+import gov.ca.cwds.rest.api.ApiException;
+
 /**
  * @author CWDS CALS API Team
  */
-
-public class ExpectedException extends RuntimeException {
+public class ExpectedException extends ApiException {
 
   private final String message;
 
@@ -14,7 +15,7 @@ public class ExpectedException extends RuntimeException {
 
   public ExpectedException(String message, Status responseStatus) {
     this.message = message;
-        this.responseStatus = responseStatus;
+    this.responseStatus = responseStatus;
   }
 
   @Override
@@ -23,6 +24,7 @@ public class ExpectedException extends RuntimeException {
   }
 
   public Status getResponseStatus() {
-        return responseStatus;
-    }
+    return responseStatus;
+  }
+
 }

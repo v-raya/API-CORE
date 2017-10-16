@@ -13,7 +13,7 @@
           "type": "text",
           "store": true
         },
-        "name": {
+        "description": {
           "type": "text",
           "store": true
         }
@@ -300,27 +300,43 @@
         }
       }
     },
-    "races": {
+    "race_ethnicity": {
       "properties": {
-        "race": {
+        "unable_to_determine_code": {
           "type": "text",
           "store": true
         },
-        "race_detail": {
+        "hispanic_origin_code": {
           "type": "text",
           "store": true
-        }
-      }
-    },
-    "ethnicity": {
-      "properties": {
-        "hispanic_latino_origin": {
+        },        
+        "hispanic_unable_to_determine_code": {
           "type": "text",
           "store": true
         },
-        "ethnicity_detail": {
-          "type": "text",
-          "store": true
+        "race_codes": {
+          "properties": {
+            "id": {
+              "type": "text",
+              "store": true
+            },
+            "description": {
+              "type": "text",
+              "store": true
+            }
+          } 
+        },
+        "hispanic_codes": {
+          "properties": {
+            "id": {
+              "type": "text",
+              "store": true
+            },
+            "description": {
+              "type": "text",
+              "store": true
+            }
+          } 
         }
       }
     },
@@ -421,7 +437,7 @@
                   "type": "text",
                   "store": true
                 },
-                "name": {
+                "description": {
                   "type": "text",
                   "store": true
                 }
@@ -446,7 +462,7 @@
                   "type": "text",
                   "store": true
                 },
-                "name": {
+                "description": {
                   "type": "text",
                   "store": true
                 }
