@@ -9,6 +9,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
+import gov.ca.cwds.data.DaoException;
 import java.util.ArrayList;
 import java.util.List;
 import org.hamcrest.junit.ExpectedException;
@@ -80,6 +81,20 @@ public class CountyDeterminationDaoTest {
     assertThat(countyDeterminationDao.getClientCountyByActiveCase("testClientId").get(0),
         is(equalTo((short) 11)));
 
+    assertThat(countyDeterminationDao.getCountyByActiveReferrals("testClientId").get(0),
+        is(equalTo((short) 11)));
+
+    assertThat(countyDeterminationDao.getClientCountyByClosedCase("testClientId").get(0),
+        is(equalTo((short) 11)));
+
+    assertThat(countyDeterminationDao.getClientCountyByClosedReferral("testClientId").get(0),
+        is(equalTo((short) 11)));
+
+    assertThat(countyDeterminationDao.getClientByClientAnyActiveCase("testClientId").get(0),
+        is(equalTo((short) 11)));
+
+    assertThat(countyDeterminationDao.getClientByClientAnyClosedCase("testClientId").get(0),
+        is(equalTo((short) 11)));
   }
 
   @Test
@@ -94,6 +109,24 @@ public class CountyDeterminationDaoTest {
         sessionFactory);
 
     thrown.expect(Exception.class);
+    countyDeterminationDao.getClientCountyByActiveCase("testClientId");
+  }
+
+  @Test
+  public void testExecuteNativeQueryAndReturnCountyListException() throws Exception {
+    Session session = mock(Session.class);
+    Transaction transaction = mock(Transaction.class);
+
+    doThrow(HibernateException.class).when(session).createNativeQuery(Mockito.anyString());
+    doNothing().when(transaction).rollback();
+    doReturn(true).when(transaction).isActive();
+    doReturn(transaction).when(session).getTransaction();
+    doReturn(session).when(sessionFactory).getCurrentSession();
+
+    Whitebox.setInternalState(countyDeterminationDao, "sessionFactory",
+        sessionFactory);
+
+    thrown.expect(DaoException.class);
     countyDeterminationDao.getClientCountyByActiveCase("testClientId");
   }
 }
