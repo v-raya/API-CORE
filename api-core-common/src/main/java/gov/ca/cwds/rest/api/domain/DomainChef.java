@@ -248,6 +248,18 @@ public class DomainChef {
     }
     return null;
   }
+  
+  /**
+   * @param date date to cook
+   * @return String in TIME_FORMAT
+   */
+  public static String cookISO8601Timestamp(Date date) {
+    if (date != null) {
+      DateFormat df = new SimpleDateFormat(TIMESTAMP_ISO8601_FORMAT);
+      return df.format(date);
+    }
+    return null;
+  }
 
   /**
    * @param zipcodeNumber zip to cook
