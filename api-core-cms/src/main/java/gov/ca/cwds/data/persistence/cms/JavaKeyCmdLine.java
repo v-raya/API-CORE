@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.stream.Stream;
 
@@ -12,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.data.std.ApiObjectIdentity;
+import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.services.ServiceException;
 import joptsimple.OptionParser;
@@ -36,6 +39,8 @@ public final class JavaKeyCmdLine {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(JavaKeyCmdLine.class);
 
+  public static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
+
   private static final class RipCKey extends ApiObjectIdentity {
 
     private final String key;
@@ -48,7 +53,7 @@ public final class JavaKeyCmdLine {
       final String[] tokens = line.split("\t");
       this.key = tokens[0];
       this.staffId = tokens[1];
-      this.date = DomainChef.uncookTimestampString(tokens[2]);
+      this.date = DomainChef.uncookISO8601Timestamp(tokens[2]);
       this.ui19Digit = tokens[3];
     }
 
@@ -76,11 +81,12 @@ public final class JavaKeyCmdLine {
       }
     }
 
-    public void validate() {
-      if (!regenerate().equals(key)) {
+    public boolean validate() {
+      final boolean answer = regenerate().equals(key);
+      if (!answer) {
         LOGGER.error("INVALID REGENERATION! staff: {}, timestamp: {}, key: {}", staffId, date, key);
-        throw new ServiceException("INVALID REGENERATION: " + this);
       }
+      return answer;
     }
 
   }
@@ -93,6 +99,19 @@ public final class JavaKeyCmdLine {
     } finally {
       // Close stream.
     }
+  }
+
+  public static Date uncookTimestampString(String timestamp) {
+    String trimTimestamp = StringUtils.trim(timestamp);
+    if (StringUtils.isNotEmpty(trimTimestamp)) {
+      try {
+        DateFormat df = new SimpleDateFormat(TIMESTAMP_FORMAT);
+        return df.parse(trimTimestamp);
+      } catch (Exception e) {
+        throw new ApiException(e);
+      }
+    }
+    return null;
   }
 
   protected static String generateKey(String staffId, Date ts) throws IOException {
