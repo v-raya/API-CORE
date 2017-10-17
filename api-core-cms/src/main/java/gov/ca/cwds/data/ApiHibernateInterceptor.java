@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 import org.apache.commons.collections.IteratorUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.EntityMode;
 import org.hibernate.Transaction;
@@ -15,6 +16,7 @@ import org.hibernate.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.ca.cwds.data.persistence.AccessLimitationAware;
 import gov.ca.cwds.data.persistence.PersistentObject;
 
 /**
@@ -83,6 +85,8 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     } else {
       LOGGER.debug("onDelete -> id={}, entityClass={}", id, entity.getClass().getName());
     }
+
+    logLimitedAccessRecord(entity, "onDelete");
   }
 
   /**
@@ -96,6 +100,8 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     } else {
       LOGGER.info("onFlushDirty -> id={}, entityClass={}", id, entity.getClass().getName());
     }
+
+    logLimitedAccessRecord(entity, "onFlushDirty");
     return false;
   }
 
@@ -110,6 +116,8 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     } else {
       LOGGER.debug("onLoad -> id={}, entityClass={}", id, entity.getClass().getName());
     }
+
+    logLimitedAccessRecord(entity, "onLoad");
     return false;
   }
 
@@ -121,6 +129,8 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     } else {
       LOGGER.info("onSave -> id={}, entityClass={}", id, entity.getClass().getName());
     }
+
+    logLimitedAccessRecord(entity, "onSave");
     return false;
   }
 
@@ -148,6 +158,8 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
           LOGGER.info("preFlush -> id={}, entityClass={}", entity.getPrimaryKey(),
               entity.getClass().getName());
         }
+
+        logLimitedAccessRecord(obj, "preFlush");
 
         final Class<?> klazz = entity.getClass();
         if (handlers.containsKey(klazz)) {
@@ -193,6 +205,20 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
 
   private synchronized List<?> iterToList(@SuppressWarnings("rawtypes") Iterator iter) {
     return IteratorUtils.toList(iter);
+  }
+
+  private static void logLimitedAccessRecord(Object obj, String operation) {
+    if (obj instanceof PersistentObject) {
+      if (obj instanceof AccessLimitationAware) {
+        String limitedAccessCode = ((AccessLimitationAware) obj).getLimitedAccessCode();
+        if (StringUtils.isNotBlank(limitedAccessCode)
+            && !"N".equals(limitedAccessCode.toUpperCase())) {
+
+          LOGGER.warn(operation + " -> Sealed/Sensitive record encounterd, id={}, entityClass={}",
+              ((PersistentObject) obj).getPrimaryKey(), obj.getClass().getName());
+        }
+      }
+    }
   }
 
 }
