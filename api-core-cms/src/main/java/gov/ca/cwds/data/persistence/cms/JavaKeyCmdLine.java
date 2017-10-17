@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.stream.Stream;
 
@@ -14,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.data.std.ApiObjectIdentity;
-import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.services.ServiceException;
 import joptsimple.OptionParser;
@@ -39,22 +36,22 @@ public final class JavaKeyCmdLine {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(JavaKeyCmdLine.class);
 
-  public static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
-
   private static final class RipCKey extends ApiObjectIdentity {
 
     private final String key;
     private final String staffId;
     private final Date date;
     private final String ui19Digit;
+    private final String newKey;
 
-    // key, staff id, Timestamp (hr.min.sec.1/100 sec), UI Timestamp, UI 19-digit
+    // key, staff id, ISO 8601 date, Timestamp (hr.min.sec.1/100 sec), UI Timestamp, UI 19-digit
     public RipCKey(String line) {
       final String[] tokens = line.split("\t");
       this.key = tokens[0];
       this.staffId = tokens[1];
       this.date = DomainChef.uncookISO8601Timestamp(tokens[2]);
-      this.ui19Digit = tokens[3];
+      this.ui19Digit = tokens[4];
+      this.newKey = tokens[5];
     }
 
     public String getKey() {
@@ -82,11 +79,16 @@ public final class JavaKeyCmdLine {
     }
 
     public boolean validate() {
-      final boolean answer = regenerate().equals(key);
-      if (!answer) {
-        LOGGER.error("INVALID REGENERATION! staff: {}, timestamp: {}, key: {}", staffId, date, key);
+      final String javaKey = regenerate();
+      if (!javaKey.equals(key)) {
+        LOGGER.warn("QUESTIONABLE KEY! staff: {}, timestamp: {}, key: {}", staffId, date, key);
       }
-      return answer;
+
+      return javaKey.equals(newKey);
+    }
+
+    public String getNewKey() {
+      return newKey;
     }
 
   }
@@ -99,19 +101,6 @@ public final class JavaKeyCmdLine {
     } finally {
       // Close stream.
     }
-  }
-
-  public static Date uncookTimestampString(String timestamp) {
-    String trimTimestamp = StringUtils.trim(timestamp);
-    if (StringUtils.isNotEmpty(trimTimestamp)) {
-      try {
-        DateFormat df = new SimpleDateFormat(TIMESTAMP_FORMAT);
-        return df.parse(trimTimestamp);
-      } catch (Exception e) {
-        throw new ApiException(e);
-      }
-    }
-    return null;
   }
 
   protected static String generateKey(String staffId, Date ts) throws IOException {
