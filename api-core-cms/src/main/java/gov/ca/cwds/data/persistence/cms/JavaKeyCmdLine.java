@@ -30,6 +30,10 @@ import joptsimple.OptionSet;
  * 
  * </blockquote>
  * 
+ * <p>
+ * See test file, /api-core-cms/src/test/resources/java_key_gen.txt.
+ * </p>
+ * 
  * @author CWDS API Team
  */
 public final class JavaKeyCmdLine {
