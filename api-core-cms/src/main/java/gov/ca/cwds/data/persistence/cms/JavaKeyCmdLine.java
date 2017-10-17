@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gov.ca.cwds.data.std.ApiMarker;
+import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.services.ServiceException;
 import joptsimple.OptionParser;
@@ -25,7 +25,7 @@ import joptsimple.OptionSet;
  * <h4>Compose/generate a key:</h4> <blockquote>
  * 
  * <pre>
- * {@code java -cp bin gov.ca.cwds.rest.util.jni.JavaKeyCmdLine 0x5 "2017-06-30T04:13:51.720Z"}.
+ * {@code java -cp bin gov.ca.cwds.rest.util.jni.JavaKeyCmdLine -s 0x5 -t "2017-06-30T04:13:51.720Z"}.
  * </pre>
  * 
  * </blockquote>
@@ -36,11 +36,11 @@ public final class JavaKeyCmdLine {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(JavaKeyCmdLine.class);
 
-  private static final class RipCKey implements ApiMarker {
+  private static final class RipCKey extends ApiObjectIdentity {
 
     private final String key;
     private final String staffId;
-    private final Date dateIso8601;
+    private final Date date;
     private final String ui19Digit;
 
     // key, staff id, Timestamp (hr.min.sec.1/100 sec), UI Timestamp, UI 19-digit
@@ -48,7 +48,7 @@ public final class JavaKeyCmdLine {
       final String[] tokens = line.split("\t");
       this.key = tokens[0];
       this.staffId = tokens[1];
-      this.dateIso8601 = DomainChef.uncookTimestampString(tokens[2]);
+      this.date = DomainChef.uncookTimestampString(tokens[2]);
       this.ui19Digit = tokens[3];
     }
 
@@ -60,8 +60,8 @@ public final class JavaKeyCmdLine {
       return staffId;
     }
 
-    public Date getDateIso8601() {
-      return dateIso8601;
+    public Date getDate() {
+      return date;
     }
 
     public String getUi19Digit() {
@@ -70,9 +70,16 @@ public final class JavaKeyCmdLine {
 
     public String regenerate() {
       try {
-        return generateKey(staffId, dateIso8601);
-      } catch (Exception e) {
-        throw new ServiceException("Oops!", e);
+        return generateKey(staffId, date);
+      } catch (IOException e) {
+        throw new ServiceException("REGENERATE FAILED! staffId: " + staffId + ", date: " + date, e);
+      }
+    }
+
+    public void validate() {
+      if (!regenerate().equals(key)) {
+        LOGGER.error("INVALID REGENERATION! staff: {}, timestamp: {}, key: {}", staffId, date, key);
+        throw new ServiceException("INVALID REGENERATION: " + this);
       }
     }
 
@@ -82,21 +89,18 @@ public final class JavaKeyCmdLine {
     final Path pathIn = Paths.get(fileNm);
 
     try (Stream<String> lines = Files.lines(pathIn)) {
-      lines.map(RipCKey::new).forEach(RipCKey::regenerate);
+      lines.map(RipCKey::new).forEach(RipCKey::validate);
     } finally {
       // Close stream.
     }
   }
 
   protected static String generateKey(String staffId, Date ts) throws IOException {
-    final String key = CmsKeyIdGenerator.generate(staffId, ts);
-    LOGGER.info("gen: staff: {}, timestamp: {}, key: {}", staffId, ts, key);
-    return key;
+    return CmsKeyIdGenerator.generate(staffId, ts);
   }
 
   protected static String generateKey(String staffId, String strTs) {
-    final Date ts = DomainChef.uncookISO8601Timestamp(strTs);
-    return CmsKeyIdGenerator.generate(staffId, ts);
+    return CmsKeyIdGenerator.generate(staffId, DomainChef.uncookISO8601Timestamp(strTs));
   }
 
   /**
@@ -118,7 +122,8 @@ public final class JavaKeyCmdLine {
       if (StringUtils.isNotBlank(fileNm)) {
         run.massTest(fileNm);
       } else {
-        run.generateKey(staffId, ts);
+        final String key = run.generateKey(staffId, ts);
+        LOGGER.info("gen: staff: {}, timestamp: {}, key: {}", staffId, ts, key);
       }
     } catch (Exception e) {
       LOGGER.error("OOPS!", e);
