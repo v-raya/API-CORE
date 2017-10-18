@@ -1,7 +1,7 @@
 package gov.ca.cwds.rest.services;
 
 /**
- * Marker for Business Services
+ * Marker for Business Services.
  * 
  * @author CWDS API Team
  */
