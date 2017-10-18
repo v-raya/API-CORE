@@ -52,6 +52,19 @@ public class CountyDeterminationDao extends CrudsDaoImpl<CmsPersistentObject> {
 
   /**
    * @param clientId Client ID
+   * @return List of counties for Client by clientID from CLIENT_CNTY table
+   */
+  public List<Short> getClientCountyFromClientCountyTable(String clientId) {
+
+    String namedQuery = "SELECT GVR_ENTC\n"
+        + "  FROM CLIENT_CNTY A\n"
+        + "  WHERE A.CLIENT_ID = :clientId";
+
+    return executeNativeQueryAndReturnCountyList(namedQuery, clientId);
+  }
+
+  /**
+   * @param clientId Client ID
    * @return List of counties for Client by Active Cases with whom this Client is related
    */
   public List<Short> getClientCountyByActiveCase(String clientId) {

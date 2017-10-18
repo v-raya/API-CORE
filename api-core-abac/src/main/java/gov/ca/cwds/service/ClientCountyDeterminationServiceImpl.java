@@ -31,6 +31,13 @@ public class ClientCountyDeterminationServiceImpl implements ClientCountyDetermi
   @Override
   public Short getClientCountyById(String clientId) {
 
+    //check CLIENT_CNTY table first
+    List<Short> countyFromClientCountyTableList = countyDeterminationDao
+        .getClientCountyFromClientCountyTable(clientId);
+    if (!countyFromClientCountyTableList.isEmpty()) {
+      return countyFromClientCountyTableList.get(0);
+    }
+
     //I. Active Case for the Client (only one active Case should exist for a Client via CHILD_CLIENT)
     List<Short> countyByActiveCaseList = countyDeterminationDao
         .getClientCountyByActiveCase(clientId);

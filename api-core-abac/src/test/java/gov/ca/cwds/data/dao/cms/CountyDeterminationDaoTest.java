@@ -79,6 +79,9 @@ public class CountyDeterminationDaoTest {
     Whitebox.setInternalState(countyDeterminationDao, "sessionFactory",
         sessionFactory);
 
+    assertThat(countyDeterminationDao.getClientCountyFromClientCountyTable("testClientId").get(0),
+        is(equalTo((short) 11)));
+
     assertThat(countyDeterminationDao.getClientCountyByActiveCase("testClientId").get(0),
         is(equalTo((short) 11)));
 

@@ -59,6 +59,18 @@ public class ClientCountyDeterminationServiceImplTest {
   }
 
   @Test
+  public void testGetClientCountyFromClientCountyTable() throws Exception {
+    final List<Short> list = new ArrayList<>();
+    list.add((short) 0);
+    doReturn(list).when(countyDeterminationDao).getClientCountyFromClientCountyTable(Mockito.anyString());
+    Whitebox.setInternalState(countyDeterminationService, "countyDeterminationDao",
+        countyDeterminationDao);
+
+    assertThat(countyDeterminationService.getClientCountyById("testClientId"),
+        is(equalTo((short) 0)));
+  }
+
+  @Test
   public void testGetClientByClientAnyActiveCase() throws Exception {
     final List<Short> list = new ArrayList<>();
     list.add((short) 1);
