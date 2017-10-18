@@ -207,18 +207,21 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     return IteratorUtils.toList(iter);
   }
 
-  private static void logLimitedAccessRecord(Object obj, String operation) {
+  private static boolean logLimitedAccessRecord(Object obj, String operation) {
+    boolean logged = false;
     if (obj instanceof PersistentObject) {
       if (obj instanceof AccessLimitationAware) {
         String limitedAccessCode = ((AccessLimitationAware) obj).getLimitedAccessCode();
         if (StringUtils.isNotBlank(limitedAccessCode)
             && !"N".equals(limitedAccessCode.toUpperCase())) {
-
-          LOGGER.warn(operation + " -> Sealed/Sensitive record encounterd, id={}, entityClass={}",
-              ((PersistentObject) obj).getPrimaryKey(), obj.getClass().getName());
+          LOGGER.warn(operation + " -> id={}, entityClass={}, sealed/sensitive={}",
+              ((PersistentObject) obj).getPrimaryKey(), obj.getClass().getName(),
+              limitedAccessCode);
+          logged = true;
         }
       }
     }
+    return logged;
   }
 
 }
