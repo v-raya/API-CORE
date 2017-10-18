@@ -81,10 +81,10 @@ public class SystemCodeDaoFileImpl implements ApiSystemCodeDao {
    */
   protected List<CmsSystemCode> produce() throws ServiceException {
     final String pkg = SystemCodeDaoFileImpl.class.getPackage().getName();
-    LOGGER.info("package: " + pkg);
+    LOGGER.info("package: {}", pkg);
 
     final String fileName =
-        "/" + SystemCodeDaoFileImpl.class.getPackage().getName().replace('.', '/') + '/'
+        '/' + SystemCodeDaoFileImpl.class.getPackage().getName().replace('.', '/') + '/'
             + "system_codes.tsv";
 
     // Find file from api-core.jar or from a file on the file system.

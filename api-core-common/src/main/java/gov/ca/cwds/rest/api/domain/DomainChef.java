@@ -106,7 +106,7 @@ public class DomainChef {
     } else if ("Y".equalsIgnoreCase(cookedBoolean)) {
       return Boolean.TRUE;
     } else if (StringUtils.trimToNull(cookedBoolean) == null) {
-      return null;
+      return Boolean.valueOf(null);
     }
     throw new ApiException(new ParseException("Unable to generate boolean", 0));
   }
@@ -248,7 +248,7 @@ public class DomainChef {
     }
     return null;
   }
-  
+
   /**
    * @param date date to cook
    * @return String in TIME_FORMAT
@@ -285,13 +285,14 @@ public class DomainChef {
     Matcher matcher = ZIPCODE_PATTERN.matcher(zipcode);
     if (matcher.matches()) {
       try {
-        return Integer.parseInt(matcher.group(1));
+        return Integer.valueOf(matcher.group(1));
       } catch (NumberFormatException e) {
         throw new ApiException(
-            MessageFormat.format("Unable to convert zipcode to Integer - {1}", zipcode), e);
+            MessageFormat.format("Unable to convert zipcode to Integer '{0}' = {0}", zipcode), e);
       }
     } else {
-      throw new ApiException(MessageFormat.format("Unable to uncook zipcode string {1}", zipcode));
+      throw new ApiException(
+          MessageFormat.format("Unable to uncook zipcode string '{0}' = {0}", zipcode));
     }
   }
 }

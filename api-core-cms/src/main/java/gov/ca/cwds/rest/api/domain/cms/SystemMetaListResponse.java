@@ -46,7 +46,7 @@ public class SystemMetaListResponse extends ReportingDomain implements Response 
   /**
    * Get system meta set.
    * 
-   * @return Sustem meta set
+   * @return System meta set
    */
   public Set<SystemMeta> getSystemMetas() {
     return systemMetas;
