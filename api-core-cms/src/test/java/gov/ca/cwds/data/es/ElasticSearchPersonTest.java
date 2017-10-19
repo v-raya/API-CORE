@@ -72,11 +72,11 @@ public class ElasticSearchPersonTest {
     assertThat(actual, is(equalTo(expected)));
   }
 
-  @Test
-  public void getSystemCodes_Args__() throws Exception {
-    gov.ca.cwds.rest.api.domain.cms.SystemCodeCache actual = ElasticSearchPerson.getSystemCodes();
-    assertThat(actual, notNullValue());
-  }
+  // @Test
+  // public void getSystemCodes_Args__() throws Exception {
+  // gov.ca.cwds.rest.api.domain.cms.SystemCodeCache actual = ElasticSearchPerson.getSystemCodes();
+  // assertThat(actual, notNullValue());
+  // }
 
   @Test
   public void makeESPerson_Args__SearchHit() throws Exception {
