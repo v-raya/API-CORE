@@ -473,7 +473,7 @@ public class ElasticsearchDao implements Closeable {
     checkArgument(!Strings.isNullOrEmpty(query), "query cannot be Null or empty");
     checkArgument(!Strings.isNullOrEmpty(index), "index name cannot be Null or empty");
 
-    StringBuilder buf = new StringBuilder();
+    final StringBuilder buf = new StringBuilder();
     buf.append(protocol.trim()).append(config.getElasticsearchHost().trim()).append(':')
         .append(port).append('/').append(index).append('/').append(docType.trim())
         .append("/_search");
@@ -526,7 +526,7 @@ public class ElasticsearchDao implements Closeable {
    */
   public BoolQueryBuilder buildBoolQueryFromSearchTerms(String searchTerm) {
     final String s = searchTerm.trim().toLowerCase();
-    String[] searchTerms = s.split("\\s+");
+    final String[] searchTerms = s.split("\\s+");
     BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
     for (String term : searchTerms) {
       term = term.trim();
@@ -621,7 +621,7 @@ public class ElasticsearchDao implements Closeable {
         jsonString.append(line);
       }
     } catch (Exception e) {
-      // TODO: log the *context*. Payload?
+      // SUGGESTION: log the context or payload.
       final String msg = "Error in ElasticSearch : " + e.getMessage();
       LOGGER.error(msg, e);
       throw new ApiElasticSearchException(msg, e);
