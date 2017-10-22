@@ -24,6 +24,7 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.client.Requests;
 import org.elasticsearch.cluster.metadata.MetaData;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -36,6 +37,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
 
+import gov.ca.cwds.common.ApiFileAssistant;
 import gov.ca.cwds.rest.ElasticsearchConfiguration;
 
 /**
@@ -121,7 +123,12 @@ public class ElasticsearchDao implements Closeable {
   public boolean doesIndexExist(final String indexOrAlias) {
     final MetaData clusterMeta = getClient().admin().cluster().state(Requests.clusterStateRequest())
         .actionGet().getState().getMetaData();
-    return clusterMeta.hasIndex(indexOrAlias) || clusterMeta.hasAlias(indexOrAlias);
+    final boolean answer = clusterMeta.hasIndex(indexOrAlias) || clusterMeta.hasAlias(indexOrAlias);
+
+    if (answer) {
+      LOGGER.warn("ES INDEX {} DOES NOT EXIST!", indexOrAlias);
+    }
+    return answer;
   }
 
   /**
@@ -140,14 +147,12 @@ public class ElasticsearchDao implements Closeable {
 
     final String settingsSource = readFile(settingsJsonFile);
     final String mappingSource = readFile(mappingJsonFile);
+    final CreateIndexRequestBuilder builder = getClient().admin().indices().prepareCreate(index);
 
-    CreateIndexRequestBuilder createIndexRequestBuilder =
-        getClient().admin().indices().prepareCreate(index);
+    builder.setSettings(settingsSource, XContentType.JSON);
+    builder.addMapping(type, mappingSource, XContentType.JSON);
 
-    createIndexRequestBuilder.setSettings(settingsSource, XContentType.JSON);
-    createIndexRequestBuilder.addMapping(type, mappingSource, XContentType.JSON);
-
-    CreateIndexRequest indexRequest = createIndexRequestBuilder.request();
+    CreateIndexRequest indexRequest = builder.request();
     getClient().admin().indices().create(indexRequest).actionGet();
   }
 
@@ -167,20 +172,25 @@ public class ElasticsearchDao implements Closeable {
    */
   public synchronized void createIndexIfNeeded(final String index, final String type,
       final String settingsJsonFile, final String mappingJsonFile) throws IOException {
-
     if (!doesIndexExist(index)) {
-      LOGGER.warn("ES INDEX {} DOES NOT EXIST!", index);
       createIndex(index, type, settingsJsonFile, mappingJsonFile);
 
       // Let Elasticsearch catch its breath.
       try {
-        Thread.sleep(2000); // NOSONAR
+        Thread.sleep(1500); // NOSONAR
       } catch (InterruptedException e) {
         Thread.currentThread().interrupt();
         LOGGER.warn("Interrupted!");
       }
     } else {
-      LOGGER.warn("INDEX {} already exists!", index);
+      LOGGER.warn("Delete index INDEX {} already exists!", index);
+    }
+  }
+
+  public synchronized void deleteIndex(final String index) throws IOException {
+    if (doesIndexExist(index) && getClient().admin().indices().prepareDelete(index)
+        .get(TimeValue.timeValueMillis(1500)).isAcknowledged()) {
+      LOGGER.warn("\n\n\t>>>>>> DELETE INDEX {}! <<<<<<\n\n", index);
     }
   }
 
@@ -598,9 +608,7 @@ public class ElasticsearchDao implements Closeable {
    */
   protected String executionResult(String targetURL, String payload) {
     String line;
-    StringBuilder jsonString = new StringBuilder();
-    BufferedReader reader = null;
-    OutputStreamWriter writer = null;
+    final StringBuilder jsonBuf = new StringBuilder();
     HttpURLConnection connection = null;
 
     try {
@@ -610,42 +618,42 @@ public class ElasticsearchDao implements Closeable {
       connection.setDoOutput(true);
       connection.setRequestMethod("GET");
       connection.setRequestProperty("Content-Type", "application/json");
+
+      // Send payload.
       if (StringUtils.isNotEmpty(payload)) {
-        String query = payload.trim();
-        writer = new OutputStreamWriter(connection.getOutputStream(), "UTF8");
-        writer.write(query);
-        writer.close();
+        try (OutputStreamWriter writer =
+            new OutputStreamWriter(connection.getOutputStream(), "UTF8")) {
+          writer.write(payload.trim());
+        } finally {
+          // auto-close.
+        }
       }
-      reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-      while ((line = reader.readLine()) != null) {
-        jsonString.append(line);
+
+      // Fetch response.
+      try (BufferedReader reader =
+          new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+        while ((line = reader.readLine()) != null) {
+          jsonBuf.append(line);
+        }
+      } finally {
+        // auto-close.
       }
+
     } catch (Exception e) {
       // SUGGESTION: log the context or payload.
-      final String msg = "Error in ElasticSearch : " + e.getMessage();
+      final String msg = "ElasticSearch ERROR: " + e.getMessage();
       LOGGER.error(msg, e);
       throw new ApiElasticSearchException(msg, e);
     } finally {
-      if (reader != null) {
-        try {
-          reader.close();
-        } catch (Exception e) {
-          final String msg = "Error in ElasticSearch : " + e.getMessage();
-          LOGGER.error(msg, e);
-        }
-      }
       if (connection != null) {
         connection.disconnect();
       }
     }
-    return jsonString.toString();
+    return jsonBuf.toString();
   }
 
   private String readFile(String sourceFile) throws IOException {
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    IOUtils.copy(this.getClass().getResourceAsStream(sourceFile), out);
-    out.flush();
-    return out.toString();
+    return new ApiFileAssistant().readFile(sourceFile);
   }
 
 }
