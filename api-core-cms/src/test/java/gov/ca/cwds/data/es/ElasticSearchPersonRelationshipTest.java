@@ -148,9 +148,8 @@ public class ElasticSearchPersonRelationshipTest {
 
   @Test
   public void deserialize() throws Exception {
-    ApiFileAssistant fileAssist = new ApiFileAssistant();
-    final ElasticSearchPerson rels = ElasticSearchPerson.MAPPER.readValue(
-        fileAssist.readFile("/fixtures/data/es/multiple_relations.json"),
+    final ElasticSearchPerson person = ElasticSearchPerson.MAPPER.readValue(
+        new ApiFileAssistant().readFile("/fixtures/data/es/multiple_relations.json"),
         ElasticSearchPerson.class);
   }
 
