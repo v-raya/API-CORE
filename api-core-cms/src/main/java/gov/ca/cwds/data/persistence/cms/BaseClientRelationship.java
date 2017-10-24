@@ -18,7 +18,7 @@ import gov.ca.cwds.data.SystemCodeSerializer;
 import gov.ca.cwds.data.persistence.PersistentObject;
 
 /**
- * {@link PersistentObject} representing a Client Relationship
+ * {@link PersistentObject} representing a Client Relationship.
  * 
  * @author CWDS API Team
  */
@@ -178,4 +178,5 @@ public abstract class BaseClientRelationship extends CmsPersistentObject {
   public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
+
 }
