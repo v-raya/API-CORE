@@ -343,8 +343,11 @@ public class ElasticsearchDao implements Closeable {
   public ActionRequest bulkAdd(final ObjectMapper mapper, final String id, final Object obj,
       final String alias, final String docType, boolean upsert) throws JsonProcessingException {
     final String json = mapper.writeValueAsString(obj);
-    final IndexRequest idxReq = new IndexRequest(alias, docType, id).source(json);
-    return upsert ? new UpdateRequest(alias, docType, id).doc(json).upsert(idxReq) : idxReq;
+    final IndexRequest idxReq =
+        new IndexRequest(alias, docType, id).source(json, XContentType.JSON);
+    return upsert
+        ? new UpdateRequest(alias, docType, id).doc(json, XContentType.JSON).upsert(idxReq)
+        : idxReq;
   }
 
   /**
@@ -381,8 +384,8 @@ public class ElasticsearchDao implements Closeable {
    */
   public ActionRequest bulkUpsert(final String id, final String alias, final String docType,
       final String insertJson, final String updateJson) throws JsonProcessingException {
-    return new UpdateRequest(alias, docType, id).doc(updateJson)
-        .upsert(new IndexRequest(alias, docType, id).source(insertJson));
+    return new UpdateRequest(alias, docType, id).doc(updateJson, XContentType.JSON)
+        .upsert(new IndexRequest(alias, docType, id).source(insertJson, XContentType.JSON));
   }
 
   /**
