@@ -106,7 +106,7 @@ public class DomainChef {
     } else if ("Y".equalsIgnoreCase(cookedBoolean)) {
       return Boolean.TRUE;
     } else if (StringUtils.trimToNull(cookedBoolean) == null) {
-      return Boolean.valueOf(null);
+      return null;
     }
     throw new ApiException(new ParseException("Unable to generate boolean", 0));
   }
