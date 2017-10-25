@@ -199,26 +199,35 @@ public class ElasticSearchPersonTest {
   }
 
   @Test
-  public void setSensitivityIndicator_Args__String() throws Exception {
+  public void setSensitivityIndicator__not_sensitive() throws Exception {
     // not sensitive:
-    String sensitivityIndicator = null;
+    final String sensitivityIndicator = null;
     target.setSensitivityIndicator(sensitivityIndicator);
-    String actual = target.getSensitivityIndicator();
-    String expected = "N";
-    assertThat(actual, is(equalTo(expected)));
 
+    final String actual = target.getSensitivityIndicator();
+    final String expected = "N";
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setSensitivityIndicator__sensitive() throws Exception {
     // sensitive:
-    sensitivityIndicator = "S";
+    final String sensitivityIndicator = "S";
     target.setSensitivityIndicator(sensitivityIndicator);
-    actual = target.getSensitivityIndicator();
-    expected = "S";
-    assertThat(actual, is(equalTo(expected)));
 
+    final String actual = target.getSensitivityIndicator();
+    final String expected = "S";
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setSensitivityIndicator_Args__sealed() throws Exception {
     // sealed:
-    sensitivityIndicator = "R";
+    final String sensitivityIndicator = "R";
     target.setSensitivityIndicator(sensitivityIndicator);
-    actual = target.getSensitivityIndicator();
-    expected = "R";
+
+    final String actual = target.getSensitivityIndicator();
+    final String expected = "R";
     assertThat(actual, is(equalTo(expected)));
   }
 

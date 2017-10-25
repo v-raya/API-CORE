@@ -151,6 +151,7 @@ public class ElasticSearchPersonRelationshipTest {
     final ElasticSearchPerson person = ElasticSearchPerson.MAPPER.readValue(
         new ApiFileAssistant().readFile("/fixtures/data/es/multiple_relations.json"),
         ElasticSearchPerson.class);
+    assertThat(person, notNullValue());
   }
 
 }
