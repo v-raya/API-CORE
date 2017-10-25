@@ -98,7 +98,7 @@ public class DomainChef {
 
   /**
    * @param cookedBoolean "Y" or "N"
-   * @return Boolean true, false, or null
+   * @return Boolean true, false, if they provided value is null returns false
    */
   public static Boolean uncookBooleanString(String cookedBoolean) {
     if ("N".equalsIgnoreCase(cookedBoolean)) {
@@ -106,7 +106,7 @@ public class DomainChef {
     } else if ("Y".equalsIgnoreCase(cookedBoolean)) {
       return Boolean.TRUE;
     } else if (StringUtils.trimToNull(cookedBoolean) == null) {
-      return null;
+      return Boolean.FALSE;
     }
     throw new ApiException(new ParseException("Unable to generate boolean", 0));
   }

@@ -71,12 +71,12 @@ public class DomainChefTest {
 
   @Test
   public void uncookBooleanStringReturnsNullOnNull() throws Exception {
-    assertThat(DomainChef.uncookBooleanString(null), is(nullValue()));
+    assertThat(DomainChef.uncookBooleanString(null), is(Boolean.FALSE));
   }
 
   @Test
   public void uncookBooleanStringReturnsNullOnEmpty() throws Exception {
-    assertThat(DomainChef.uncookBooleanString(" "), is(nullValue()));
+    assertThat(DomainChef.uncookBooleanString(" "), is(Boolean.FALSE));
   }
 
   @Test
@@ -88,7 +88,7 @@ public class DomainChefTest {
 
   @Test
   public void uncookBooleanStringThrowsExceptionOnBlank() throws Exception {
-    assertThat(DomainChef.uncookBooleanString(""), is(nullValue()));
+    assertThat(DomainChef.uncookBooleanString(""), is(Boolean.FALSE));
   }
 
   // cookDate tests
