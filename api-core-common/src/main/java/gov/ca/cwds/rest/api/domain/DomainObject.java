@@ -15,6 +15,7 @@ public abstract class DomainObject implements Serializable {
   private static final long serialVersionUID = 1L;
   public static final String DATE_FORMAT = DomainChef.DATE_FORMAT;
   public static final String TIME_FORMAT = DomainChef.TIME_FORMAT;
+  public static final String TIMESTAMP_ISO8601_FORMAT = DomainChef.TIMESTAMP_ISO8601_FORMAT;
 
   /**
    * 
