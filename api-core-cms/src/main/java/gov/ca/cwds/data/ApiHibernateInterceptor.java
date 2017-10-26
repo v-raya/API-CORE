@@ -176,7 +176,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
    */
   @Override
   public void postFlush(@SuppressWarnings("rawtypes") Iterator iterator) {
-    LOGGER.info("postFlush -> after commit");
+    LOGGER.debug("postFlush -> after commit");
   }
 
   @Override
@@ -187,13 +187,13 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
 
   @Override
   public void beforeTransactionCompletion(Transaction tx) {
-    LOGGER.info("beforeTransactionCompletion -> txt status={}", tx.getStatus());
+    LOGGER.debug("beforeTransactionCompletion -> txt status={}", tx.getStatus());
     super.beforeTransactionCompletion(tx);
   }
 
   @Override
   public void afterTransactionCompletion(Transaction tx) {
-    LOGGER.info("afterTransactionCompletion -> txt status={}", tx.getStatus());
+    LOGGER.debug("afterTransactionCompletion -> txt status={}", tx.getStatus());
     super.afterTransactionCompletion(tx);
   }
 
