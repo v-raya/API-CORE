@@ -7,9 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.commons.lang3.StringUtils;
-
+import org.joda.time.DateTime;
 import gov.ca.cwds.rest.api.ApiException;
 
 /**
@@ -294,5 +293,23 @@ public class DomainChef {
       throw new ApiException(
           MessageFormat.format("Unable to uncook zipcode string '{0}' = {0}", zipcode));
     }
+  }
+
+  /**
+   * concatenate date and time into single object
+   * 
+   * @param date - date object
+   * @param time - time object
+   * @return Date object which comibes both date and time
+   */
+  public static Date concatenateDateAndTime(Date date, Date time) {
+    assert date != null;
+    assert time != null;
+    DateTime srcDate = new DateTime(date);
+    DateTime srcTime = new DateTime(time);
+    return new DateTime(srcDate.getYear(), srcDate.getMonthOfYear(), srcDate.getDayOfMonth(),
+        srcTime.getHourOfDay(), srcTime.getMinuteOfHour(), srcTime.getSecondOfMinute(),
+        srcTime.getMillisOfSecond()).toDate();
+
   }
 }
