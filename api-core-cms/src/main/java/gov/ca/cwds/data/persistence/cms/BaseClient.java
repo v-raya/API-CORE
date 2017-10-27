@@ -253,8 +253,8 @@ public abstract class BaseClient extends CmsPersistentObject
   protected String sensitiveHlthInfoOnFileIndicator;
 
   /**
-   * WARNING: despite the name "indicator", usually referring to Y/N, production holds holds N/R/S.
-   * I guess that S = sensitive and R = restricted.
+   * NOTE: despite the name "indicator", usually referring to Y/N, production holds holds N/R/S. I
+   * guess that S = sensitive and R = restricted.
    */
   @Column(name = "SENSTV_IND")
   protected String sensitivityIndicator;
