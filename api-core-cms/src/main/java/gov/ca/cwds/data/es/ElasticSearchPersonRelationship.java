@@ -31,11 +31,11 @@ public class ElasticSearchPersonRelationship extends ApiObjectIdentity {
   private String indexedPersonRelationship;
 
   @JsonProperty("related_person_legacy_id")
-  @Deprecated
+  // @Deprecated
   private String relatedPersonLegacyId;
 
   @JsonProperty("related_person_legacy_source_table")
-  @Deprecated
+  // @Deprecated
   private String relatedPersonLegacySourceTable;
 
   @JsonProperty("related_person_relationship")
@@ -92,23 +92,23 @@ public class ElasticSearchPersonRelationship extends ApiObjectIdentity {
     this.indexedPersonRelationship = indexedPersonRelationship;
   }
 
-  @Deprecated
+  // @Deprecated
   @SuppressWarnings("javadoc")
   public String getRelatedPersonLegacyId() {
     return relatedPersonLegacyId;
   }
 
-  @Deprecated
+  // @Deprecated
   public void setRelatedPersonLegacyId(String relatedPersonLegacyId) {
     this.relatedPersonLegacyId = relatedPersonLegacyId;
   }
 
-  @Deprecated
+  // @Deprecated
   public String getRelatedPersonLegacySourceTable() {
     return relatedPersonLegacySourceTable;
   }
 
-  @Deprecated
+  // @Deprecated
   public void setRelatedPersonLegacySourceTable(String relatedPersonLegacySourceTable) {
     this.relatedPersonLegacySourceTable = relatedPersonLegacySourceTable;
   }

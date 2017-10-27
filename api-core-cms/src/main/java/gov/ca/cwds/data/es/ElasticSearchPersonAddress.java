@@ -163,7 +163,6 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
     this.streetAddress = streetAddress;
   }
 
-  // @JsonIgnore
   @Override
   public String getCity() {
     return city;

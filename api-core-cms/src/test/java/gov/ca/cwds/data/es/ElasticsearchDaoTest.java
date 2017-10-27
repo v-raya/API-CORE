@@ -27,6 +27,7 @@ import org.elasticsearch.search.SearchHits;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -151,12 +152,12 @@ public final class ElasticsearchDaoTest {
   // assertThat("index doc", cut.index("some_index", "some_document_type", "fred", "1234"));
   // }
 
-  // @Test
+  @Test
   public void type() throws Exception {
     assertThat(ElasticsearchDao.class, notNullValue());
   }
 
-  // @Test
+  @Test
   public void instantiation() throws Exception {
     assertThat(target, notNullValue());
   }
@@ -173,14 +174,14 @@ public final class ElasticsearchDaoTest {
     fail("Expected exception was not thrown!");
   }
 
-  // @Test
+  @Test
   public void autoCompletePerson_Args$String_mock_client() throws Exception {
     String searchTerm = "junk";
     final ElasticSearchPerson[] actual = target.searchPerson(searchTerm);
     assertThat("nothing returned", actual != null);
   }
 
-  // @Test
+  @Test
   public void buildBoolQueryFromSearchTermsBuildsExpectedQuery() {
     BoolQueryBuilder actualQuery =
         target.buildBoolQueryFromSearchTerms("john smith 9/1/1990 123456789   ");
@@ -194,31 +195,31 @@ public final class ElasticsearchDaoTest {
     assertThat(actualQuery.toString(), is(equalTo(expectedQuery.toString())));
   }
 
-  // @Test
+  @Test
   public void buildBoolQueryFromMalformedSearchTermsBuildsQueryWithNoClauses() {
     BoolQueryBuilder actualQuery = target.buildBoolQueryFromSearchTerms("a-#4 df$ jk-/+ ");
     assertThat(actualQuery.hasClauses(), is(equalTo(false)));
   }
 
-  // @Test
+  @Test
   public void buildBoolQueryFromMalformedDateBuildsQueryWithNoClauses() {
     BoolQueryBuilder actualQuery = target.buildBoolQueryFromSearchTerms("9/8-9000");
     assertThat(actualQuery.hasClauses(), is(equalTo(false)));
   }
 
-  // @Test
+  @Test
   public void buildBoolQueryFromMalformedSsnBuildsQueryWithNoClauses() {
     BoolQueryBuilder actualQuery = target.buildBoolQueryFromSearchTerms("111-1090/0905 ");
     assertThat(actualQuery.hasClauses(), is(equalTo(false)));
   }
 
-  // @Test
+  @Test
   public void buildBoolQueryFromMoreThanNineDigitSsnBuildsQueryWithNoClauses() {
     BoolQueryBuilder actualQuery = target.buildBoolQueryFromSearchTerms("111223333111 ");
     assertThat(actualQuery.hasClauses(), is(equalTo(false)));
   }
 
-  // @Test
+  @Test
   public void buildBoolQueryFromTwoDateBuildsQueryWithTwoDateClauses() {
     BoolQueryBuilder actualQuery = target.buildBoolQueryFromSearchTerms("1989-01-01 9/1/1990   ");
     QueryBuilder expectedQuery = QueryBuilders.boolQuery()
@@ -227,7 +228,7 @@ public final class ElasticsearchDaoTest {
     assertThat(actualQuery.toString(), is(equalTo(expectedQuery.toString())));
   }
 
-  // @Test
+  @Test
   public void buildBoolQueryFromTwoSsnBuildsQueryWithTwoSsnClauses() {
     BoolQueryBuilder actualQuery = target.buildBoolQueryFromSearchTerms("123456789   111223333 ");
     QueryBuilder expectedQuery = QueryBuilders.boolQuery()
@@ -236,7 +237,7 @@ public final class ElasticsearchDaoTest {
     assertThat(actualQuery.toString(), is(equalTo(expectedQuery.toString())));
   }
 
-  // @Test
+  @Test
   public void buildBoolQueryWithSsnAndBirthYear() {
     BoolQueryBuilder actualQuery = target.buildBoolQueryFromSearchTerms("123456789   1998 ");
     QueryBuilder expectedQuery = QueryBuilders.boolQuery()

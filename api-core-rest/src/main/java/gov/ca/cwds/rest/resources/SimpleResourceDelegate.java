@@ -37,11 +37,8 @@ import gov.ca.cwds.rest.services.ServiceException;
  * </p>
  *
  * @param <K> Key type
- * @param
- *        <Q>reQuest type
- * @param
- *        <P>
- *        resPonse type
+ * @param <Q>reQuest type
+ * @param <P> resPonse type
  * @param <S> Service type
  *
  * @author CWDS API Team
@@ -53,7 +50,7 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
   /**
    * Logger for this class.
    */
-  private static final Logger LOGGER = LoggerFactory.getLogger(ApiSimpleResourceDelegate.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimpleResourceDelegate.class);
 
   /**
    * The wrapped CRUD service.

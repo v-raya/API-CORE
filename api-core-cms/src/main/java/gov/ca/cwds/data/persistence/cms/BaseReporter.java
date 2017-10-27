@@ -13,8 +13,6 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Type;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -38,8 +36,6 @@ public abstract class BaseReporter extends CmsPersistentObject
    * Default serialization version
    */
   private static final long serialVersionUID = 1L;
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(BaseReporter.class);
 
   @Id
   @NotNull
@@ -464,11 +460,10 @@ public abstract class BaseReporter extends CmsPersistentObject
     }
 
     if (this.messagePhoneNumber != null && !BigDecimal.ZERO.equals(this.messagePhoneNumber)) {
-      phones
-          .add(new ReadablePhone(null,
-              this.messagePhoneNumber.toPlainString(), this.messagePhoneExtensionNumber != null
-                  ? this.messagePhoneExtensionNumber.toString() : null,
-              ApiPhoneAware.PhoneType.Cell));
+      phones.add(new ReadablePhone(null, this.messagePhoneNumber.toPlainString(),
+          this.messagePhoneExtensionNumber != null ? this.messagePhoneExtensionNumber.toString()
+              : null,
+          ApiPhoneAware.PhoneType.Cell));
     }
 
     return phones.toArray(new ApiPhoneAware[0]);

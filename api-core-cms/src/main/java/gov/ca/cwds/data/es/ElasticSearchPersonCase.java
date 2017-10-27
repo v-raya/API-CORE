@@ -26,11 +26,11 @@ public class ElasticSearchPersonCase extends ApiObjectIdentity
   private String id;
 
   @JsonProperty("legacy_case_id")
-  @Deprecated
+  // @Deprecated
   private String legacyId;
 
   @JsonProperty("legacy_last_updated")
-  @Deprecated
+  // @Deprecated
   private String legacyLastUpdated;
 
   @JsonProperty("start_date")
@@ -79,22 +79,22 @@ public class ElasticSearchPersonCase extends ApiObjectIdentity
     this.id = id;
   }
 
-  @Deprecated
+  // @Deprecated
   public String getLegacyId() {
     return legacyId;
   }
 
-  @Deprecated
+  // @Deprecated
   public void setLegacyId(String legacyId) {
     this.legacyId = legacyId;
   }
 
-  @Deprecated
+  // @Deprecated
   public String getLegacyLastUpdated() {
     return legacyLastUpdated;
   }
 
-  @Deprecated
+  // @Deprecated
   public void setLegacyLastUpdated(String legacyLastUpdated) {
     this.legacyLastUpdated = legacyLastUpdated;
   }

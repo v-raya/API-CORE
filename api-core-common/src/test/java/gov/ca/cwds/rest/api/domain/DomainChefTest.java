@@ -6,15 +6,17 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.startsWith;
 
-import gov.ca.cwds.rest.api.ApiException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import org.hamcrest.core.Is;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import gov.ca.cwds.rest.api.ApiException;
 
 /**
  * @author CWDS API Team
@@ -69,12 +71,12 @@ public class DomainChefTest {
 
   @Test
   public void uncookBooleanStringReturnsNullOnNull() throws Exception {
-    assertThat(DomainChef.uncookBooleanString(null), is(nullValue()));
+    assertThat(DomainChef.uncookBooleanString(null), is(Boolean.FALSE));
   }
 
   @Test
   public void uncookBooleanStringReturnsNullOnEmpty() throws Exception {
-    assertThat(DomainChef.uncookBooleanString(" "), is(nullValue()));
+    assertThat(DomainChef.uncookBooleanString(" "), is(Boolean.FALSE));
   }
 
   @Test
@@ -86,7 +88,7 @@ public class DomainChefTest {
 
   @Test
   public void uncookBooleanStringThrowsExceptionOnBlank() throws Exception {
-    assertThat(DomainChef.uncookBooleanString(""), is(nullValue()));
+    assertThat(DomainChef.uncookBooleanString(""), is(Boolean.FALSE));
   }
 
   // cookDate tests

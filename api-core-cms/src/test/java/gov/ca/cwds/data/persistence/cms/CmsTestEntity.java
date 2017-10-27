@@ -75,7 +75,6 @@ public class CmsTestEntity extends CmsPersistentObject implements Serializable {
     this.lastName = lastName;
   }
 
-  // @JsonIgnore
   @SystemCodeSerializer(logical = true, description = true)
   public Short getStateId() {
     return stateId;

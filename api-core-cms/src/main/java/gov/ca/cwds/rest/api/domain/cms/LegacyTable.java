@@ -17,6 +17,8 @@ public enum LegacyTable {
 
   COLLATERAL_INDIVIDUAL("COLTRL_T", "Collateral individual"),
 
+  DELIVERED_SERVICE("DL_SVC_T", "Delivered Service"),
+
   EDUCATION_PROVIDER("EDPRVCNT", "Education provider"),
 
   ATTORNEY("ATTRNY_T", "Attorney"),

@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import gov.ca.cwds.data.CmsSystemCodeDeserializer;
 import gov.ca.cwds.data.SystemCodeSerializer;
+import gov.ca.cwds.data.persistence.AccessLimitationAware;
 import gov.ca.cwds.data.std.ApiLanguageAware;
 import gov.ca.cwds.data.std.ApiMultipleLanguagesAware;
 import gov.ca.cwds.data.std.ApiPersonAware;
@@ -31,7 +32,7 @@ import gov.ca.cwds.data.std.ApiPersonAware;
 @SuppressWarnings("javadoc")
 @MappedSuperclass
 public abstract class BaseClient extends CmsPersistentObject
-    implements ApiPersonAware, ApiMultipleLanguagesAware {
+    implements ApiPersonAware, ApiMultipleLanguagesAware, AccessLimitationAware {
 
   /**
    * Base serialization version. Increment by class version.
@@ -1152,4 +1153,8 @@ public abstract class BaseClient extends CmsPersistentObject
     this.zippyCreatedIndicator = zippyCreatedIndicator;
   }
 
+  @Override
+  public String getLimitedAccessCode() {
+    return getSensitivityIndicator();
+  }
 }
