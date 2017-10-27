@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.es;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.MessageFormat;
@@ -588,6 +589,17 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @SafeVarargs
   public static <V extends Enum<V>> Set<V> setOf(Class<V> enumClass, V... elem) {
     return Arrays.stream(elem).collect(Collectors.toCollection(() -> EnumSet.noneOf(enumClass)));
+  }
+
+  /**
+   * Read an ElasticSearch document into our ES person object.
+   * 
+   * @param json document String
+   * @return populated ES person object
+   * @throws IOException if unable to read
+   */
+  public static ElasticSearchPerson readPerson(String json) throws IOException {
+    return ElasticSearchPerson.MAPPER.readValue(json, ElasticSearchPerson.class);
   }
 
   /**
