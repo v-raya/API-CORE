@@ -1,11 +1,11 @@
 package gov.ca.cwds.rest.exception;
 
-import java.io.Serializable;
-
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import java.io.Serializable;
+import javax.validation.constraints.NotNull;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * @author CWDS CALS API Team
@@ -104,4 +104,31 @@ public class IssueDetails implements Serializable {
   public void setInvalidValue(Object invalidValue) {
     this.invalidValue = invalidValue;
   }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(17, 37)
+        .append(getCode()).append(getCode()).append(getType()).append(getUserMessage())
+        .toHashCode();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null) {
+      return false;
+    }
+    if (obj == this) {
+      return true;
+    }
+    if (obj.getClass() != getClass()) {
+      return false;
+    }
+    IssueDetails issueDetails = (IssueDetails) obj;
+    EqualsBuilder equalsBuilder = new EqualsBuilder();
+    equalsBuilder.append(getCode(), issueDetails.code);
+    equalsBuilder.append(getType(), issueDetails.getType());
+    equalsBuilder.append(getUserMessage(), issueDetails.getUserMessage());
+    return equalsBuilder.isEquals();
+  }
+
 }
