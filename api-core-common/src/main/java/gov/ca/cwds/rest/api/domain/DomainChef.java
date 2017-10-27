@@ -304,12 +304,18 @@ public class DomainChef {
    */
   public static Date concatenateDateAndTime(Date date, Date time) {
     assert date != null;
-    assert time != null;
+    DateTime combinedDateTime = null;
     DateTime srcDate = new DateTime(date);
-    DateTime srcTime = new DateTime(time);
-    return new DateTime(srcDate.getYear(), srcDate.getMonthOfYear(), srcDate.getDayOfMonth(),
-        srcTime.getHourOfDay(), srcTime.getMinuteOfHour(), srcTime.getSecondOfMinute(),
-        srcTime.getMillisOfSecond()).toDate();
+
+    if (time == null) {
+      return srcDate.toDate();
+    } else {
+      DateTime srcTime = new DateTime(time);
+      combinedDateTime = new DateTime(srcDate.getYear(), srcDate.getMonthOfYear(),
+          srcDate.getDayOfMonth(), srcTime.getHourOfDay(), srcTime.getMinuteOfHour(),
+          srcTime.getSecondOfMinute(), srcTime.getMillisOfSecond());
+    }
+    return combinedDateTime.toDate();
 
   }
 }
