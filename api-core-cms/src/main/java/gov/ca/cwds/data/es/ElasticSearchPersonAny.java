@@ -12,27 +12,28 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @SuppressWarnings("serial")
 public class ElasticSearchPersonAny extends ElasticSearchPersonNestedPerson {
+  
   @JsonProperty("legacy_source_table")
-  @Deprecated
+  // @Deprecated
   private String legacySourceTable;
 
   private List<String> roles = new ArrayList<>();
 
   @Override
   @JsonProperty("legacy_id")
-  @Deprecated
+  // @Deprecated
   public String getLegacyClientId() {
     return legacyPersonId;
   }
 
   @Override
-  @Deprecated
+  // @Deprecated
   public String getLegacySourceTable() {
     return legacySourceTable;
   }
 
   @Override
-  @Deprecated
+  // @Deprecated
   public void setLegacySourceTable(String legacySourceTable) {
     this.legacySourceTable = legacySourceTable;
   }

@@ -12,7 +12,7 @@ public class ElasticSearchPersonReporter extends ElasticSearchPersonNestedPerson
 
   @Override
   @JsonProperty("legacy_reporter_id")
-  @Deprecated
+  // @Deprecated
   public String getLegacyClientId() {
     return legacyPersonId;
   }

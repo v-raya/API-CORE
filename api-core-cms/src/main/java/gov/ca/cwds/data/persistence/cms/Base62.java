@@ -25,7 +25,7 @@ public final class Base62 {
    * @return base-62 String
    */
   public static String toBase62(long i) {
-    StringBuilder sb = new StringBuilder("");
+    final StringBuilder sb = new StringBuilder();
     if (i == 0) {
       return "a";
     }

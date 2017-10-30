@@ -47,7 +47,7 @@ public class SystemCodeDaoFileImpl implements ApiSystemCodeDao {
       if (line.startsWith("SYS_ID")) {
         continue;
       }
-      LOGGER.trace("line: {}", line);
+
       codes.add(CmsSystemCode.produce(line));
     }
 
@@ -74,20 +74,20 @@ public class SystemCodeDaoFileImpl implements ApiSystemCodeDao {
   }
 
   /**
-   * Convenience method. Produce the system cache facility from a file stored in this package.
+   * Convenience method. Produce the system cache facility from a file stored in this package. Finds
+   * the file from api-core.jar or from a file on the file system.
    * 
    * @return initialized system cache
    * @throws ServiceException if unable to read the default system code file
    */
   protected List<CmsSystemCode> produce() throws ServiceException {
     final String pkg = SystemCodeDaoFileImpl.class.getPackage().getName();
-    LOGGER.info("package: " + pkg);
+    LOGGER.info("package: {}", pkg);
 
     final String fileName =
-        "/" + SystemCodeDaoFileImpl.class.getPackage().getName().replace('.', '/') + '/'
+        '/' + SystemCodeDaoFileImpl.class.getPackage().getName().replace('.', '/') + '/'
             + "system_codes.tsv";
 
-    // Find file from api-core.jar or from a file on the file system.
     return produce(this.getClass().getResourceAsStream(fileName));
   }
 

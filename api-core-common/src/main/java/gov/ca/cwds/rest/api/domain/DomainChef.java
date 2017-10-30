@@ -7,9 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.commons.lang3.StringUtils;
-
+import org.joda.time.DateTime;
 import gov.ca.cwds.rest.api.ApiException;
 
 /**
@@ -98,7 +97,7 @@ public class DomainChef {
 
   /**
    * @param cookedBoolean "Y" or "N"
-   * @return Boolean true, false, or null
+   * @return Boolean true, false, if they provided value is null returns false
    */
   public static Boolean uncookBooleanString(String cookedBoolean) {
     if ("N".equalsIgnoreCase(cookedBoolean)) {
@@ -106,7 +105,7 @@ public class DomainChef {
     } else if ("Y".equalsIgnoreCase(cookedBoolean)) {
       return Boolean.TRUE;
     } else if (StringUtils.trimToNull(cookedBoolean) == null) {
-      return null;
+      return Boolean.FALSE;
     }
     throw new ApiException(new ParseException("Unable to generate boolean", 0));
   }
@@ -250,6 +249,18 @@ public class DomainChef {
   }
 
   /**
+   * @param date date to cook
+   * @return String in TIME_FORMAT
+   */
+  public static String cookISO8601Timestamp(Date date) {
+    if (date != null) {
+      DateFormat df = new SimpleDateFormat(TIMESTAMP_ISO8601_FORMAT);
+      return df.format(date);
+    }
+    return null;
+  }
+
+  /**
    * @param zipcodeNumber zip to cook
    * @return String
    */
@@ -273,13 +284,32 @@ public class DomainChef {
     Matcher matcher = ZIPCODE_PATTERN.matcher(zipcode);
     if (matcher.matches()) {
       try {
-        return Integer.parseInt(matcher.group(1));
+        return Integer.valueOf(matcher.group(1));
       } catch (NumberFormatException e) {
         throw new ApiException(
-            MessageFormat.format("Unable to convert zipcode to Integer - {1}", zipcode), e);
+            MessageFormat.format("Unable to convert zipcode to Integer '{0}' = {0}", zipcode), e);
       }
     } else {
-      throw new ApiException(MessageFormat.format("Unable to uncook zipcode string {1}", zipcode));
+      throw new ApiException(
+          MessageFormat.format("Unable to uncook zipcode string '{0}' = {0}", zipcode));
     }
+  }
+
+  /**
+   * concatenate date and time into single object
+   * 
+   * @param date - date object
+   * @param time - time object
+   * @return Date object which comibes both date and time
+   */
+  public static Date concatenateDateAndTime(Date date, Date time) {
+    assert date != null;
+    assert time != null;
+    DateTime srcDate = new DateTime(date);
+    DateTime srcTime = new DateTime(time);
+    return new DateTime(srcDate.getYear(), srcDate.getMonthOfYear(), srcDate.getDayOfMonth(),
+        srcTime.getHourOfDay(), srcTime.getMinuteOfHour(), srcTime.getSecondOfMinute(),
+        srcTime.getMillisOfSecond()).toDate();
+
   }
 }

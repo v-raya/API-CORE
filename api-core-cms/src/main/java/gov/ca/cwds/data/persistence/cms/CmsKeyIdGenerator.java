@@ -1,6 +1,8 @@
 package gov.ca.cwds.data.persistence.cms;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
@@ -287,13 +289,29 @@ public final class CmsKeyIdGenerator {
    */
   public double timestampToDouble(final Calendar cal) {
     double ret = 0;
+    final NumberFormat fmt = new DecimalFormat("###,###.000");
+
     ret += (double) cal.get(Calendar.MILLISECOND) / 10 * nSHIFT_HSECOND;
+    LOGGER.debug("MILLISECOND: {}", fmt.format(ret));
+
     ret += (double) cal.get(Calendar.SECOND) * nSHIFT_SECOND;
+    LOGGER.debug("SECOND:      {}", fmt.format(ret));
+
     ret += (double) cal.get(Calendar.MINUTE) * nSHIFT_MINUTE;
+    LOGGER.debug("MINUTE:      {}", fmt.format(ret));
+
     ret += (double) cal.get(Calendar.HOUR_OF_DAY) * nSHIFT_HOUR;
+    LOGGER.debug("HOUR_OF_DAY: {}", fmt.format(ret));
+
     ret += (double) cal.get(Calendar.DATE) * nSHIFT_DAY;
+    LOGGER.debug("DATE:        {}", fmt.format(ret));
+
     ret += (double) (cal.get(Calendar.MONTH)) * nSHIFT_MONTH;
+    LOGGER.debug("MONTH:       {}", fmt.format(ret));
+
     ret += (double) (cal.get(Calendar.YEAR) - 1900) * nSHIFT_YEAR;
+    LOGGER.debug("YEAR:        {}", fmt.format(ret));
+
     return ret;
   }
 
@@ -306,7 +324,8 @@ public final class CmsKeyIdGenerator {
   public String doubleToStrN(int dstLen, double src, final BigDecimal[] powers) {
     int i;
     int p = 0;
-    double integral, raw;
+    double integral;
+    double raw;
     final char[] dest = new char[20];
 
     final BigDecimal bdSrc = BigDecimal.valueOf(src);

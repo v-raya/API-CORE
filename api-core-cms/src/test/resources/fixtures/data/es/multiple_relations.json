@@ -1,0 +1,55 @@
+{
+"relationships": [
+		{
+			"related_person_first_name": "R3.28.16 C1",
+			"indexed_person_relationship": "Daughter",
+			"related_person_id": null,
+			"relationship_context": "Birth",
+			"related_person_legacy_id": "QkaLLuc00I",
+			"related_person_legacy_source_table": null,
+			"legacy_descriptor": {
+				"legacy_last_updated": "1998-03-20T16:34:51.000-0800",
+				"legacy_id": "QkaLLuc00I",
+				"legacy_ui_id": "1519-4852-7267-4000018",
+				"legacy_table_name": "CLIENT_T",
+				"legacy_table_description": "Client"
+			},
+			"related_person_last_name": "Allderidge",
+			"related_person_relationship": "Father"
+		},
+		{
+			"related_person_first_name": "R3.28.16 C1",
+			"indexed_person_relationship": "Sister",
+			"related_person_id": null,
+			"relationship_context": "",
+			"related_person_legacy_id": "QQLQjrO00I",
+			"related_person_legacy_source_table": null,
+			"legacy_descriptor": {
+				"legacy_last_updated": "1999-01-22T13:55:44.000-0800",
+				"legacy_id": "QQLQjrO00I",
+				"legacy_ui_id": "1500-9422-5469-0000018",
+				"legacy_table_name": "CLIENT_T",
+				"legacy_table_description": "Client"
+			},
+			"related_person_last_name": "Striker",
+			"related_person_relationship": "Sister"
+		},
+		{
+			"related_person_first_name": "R3.28.16 C1",
+			"indexed_person_relationship": "Daughter",
+			"related_person_id": null,
+			"relationship_context": "Birth",
+			"related_person_legacy_id": "AoGC1hK00I",
+			"related_person_legacy_source_table": null,
+			"legacy_descriptor": {
+				"legacy_last_updated": "1998-03-20T16:34:51.000-0800",
+				"legacy_id": "AoGC1hK00I",
+				"legacy_ui_id": "0614-0482-8528-2000018",
+				"legacy_table_name": "CLIENT_T",
+				"legacy_table_description": "Client"
+			},
+			"related_person_last_name": "Whisker",
+			"related_person_relationship": "Mother"
+		}
+	]
+}

@@ -15,21 +15,21 @@ public class ElasticSearchPersonParent extends ElasticSearchPersonNestedPerson {
 
   @Override
   @JsonProperty("legacy_id")
-  @Deprecated
+  // @Deprecated
   public String getLegacyClientId() {
     return super.legacyPersonId;
   }
 
   @Override
   @JsonProperty("legacy_last_updated")
-  @Deprecated
+  // @Deprecated
   public String getLegacyLastUpdated() {
     return super.legacyLastUpdated;
   }
 
   @Override
   @JsonProperty("legacy_source_table")
-  @Deprecated
+  // @Deprecated
   public String getLegacySourceTable() {
     return super.getLegacySourceTable();
   }

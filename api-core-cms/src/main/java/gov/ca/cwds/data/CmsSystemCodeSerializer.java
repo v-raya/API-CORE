@@ -96,7 +96,7 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short>implements Con
   /**
    * Build a {@link BitSet} from variable array of boolean flags (as arguments as
    * CmsSystemCodeSerializer constructor). BitSet is used by our serializer factory to produce
-   * unique settings combinations per serializer as needed.
+   * unique settings combinations per serializer, as needed.
    * 
    * @param flags variable array of boolean flags (as arguments as CmsSystemCodeSerializer
    *        constructor)

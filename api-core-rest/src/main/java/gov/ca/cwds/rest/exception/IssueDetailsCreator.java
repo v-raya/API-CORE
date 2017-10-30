@@ -13,6 +13,10 @@ import javax.validation.Path;
  */
 public class IssueDetailsCreator {
 
+  private IssueDetailsCreator() {
+    // no-opt
+  }
+
   public static Set<IssueDetails> create(ConstraintViolationException exception,
       String incidentId) {
     Set<IssueDetails> issueDetailsSet = new HashSet<>();
@@ -27,12 +31,12 @@ public class IssueDetailsCreator {
 
   public static IssueDetails create(ConstraintViolation<?> violation, String incidentId) {
     Path propertyPath = violation.getPropertyPath();
-    StringBuffer propertyBuf = new StringBuffer();
+    StringBuilder propertyBuf = new StringBuilder();
 
     for (Path.Node node : propertyPath) {
-      if (ElementKind.PROPERTY.equals(node.getKind())) {
+      if (ElementKind.PROPERTY == node.getKind()) {
         propertyBuf.append(node.getName());
-        propertyBuf.append(".");
+        propertyBuf.append('.');
       }
     }
 

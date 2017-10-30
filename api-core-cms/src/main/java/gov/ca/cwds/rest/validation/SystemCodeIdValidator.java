@@ -55,7 +55,7 @@ public class SystemCodeIdValidator
   private boolean validateCollection(Collection<?> param, ConstraintValidatorContext context) {
 
     if (param.isEmpty()) {
-      return (!required && ignoreable);
+      return !required && ignoreable;
     }
     for (Object value : param) {
       if (!validateString(value.toString(), context)) {

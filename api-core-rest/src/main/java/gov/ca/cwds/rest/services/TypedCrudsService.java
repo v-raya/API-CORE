@@ -8,14 +8,14 @@ import gov.ca.cwds.rest.api.domain.DomainObject;
 
 /**
  * Interface for business {@link Service} which perform CRUDS operations. This interface strongly
- * types a service's primary key, request, and response.
+ * types a service's primary key, request (input), and response (output).
  * 
  * @author CWDS API Team
- * @param <P> primary key type
- * @param <Q> request (input) type
- * @param <S> response (output) type
+ * @param <K> key type
+ * @param <I> (input) request type
+ * @param <O> (output) response type
  */
-public interface TypedCrudsService<P extends Serializable, Q extends Request, S extends Response>
+public interface TypedCrudsService<K extends Serializable, I extends Request, O extends Response>
     extends Service {
 
   /**
@@ -25,7 +25,7 @@ public interface TypedCrudsService<P extends Serializable, Q extends Request, S 
    * 
    * @return The {@link Response} containing the found object, null if not found.
    */
-  public S find(P primaryKey);
+  public O find(K primaryKey);
 
   /**
    * Delete object by id
@@ -34,7 +34,7 @@ public interface TypedCrudsService<P extends Serializable, Q extends Request, S 
    * 
    * @return The {@link Response} containing the deleted object, null if not found.
    */
-  public S delete(P primaryKey);
+  public O delete(K primaryKey);
 
   /**
    * Create object
@@ -43,7 +43,7 @@ public interface TypedCrudsService<P extends Serializable, Q extends Request, S 
    * 
    * @return The {@link Response}
    */
-  public S create(Q request);
+  public O create(I request);
 
   /**
    * Update object
@@ -53,5 +53,6 @@ public interface TypedCrudsService<P extends Serializable, Q extends Request, S 
    * 
    * @return The {@link Response}
    */
-  public S update(P primaryKey, Q request);
+  public O update(K primaryKey, I request);
+
 }

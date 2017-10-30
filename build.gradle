@@ -41,6 +41,7 @@ allprojects {
     }
 
     version = apiVersion
+    group = commonGroupId
 
     repositories {
         mavenLocal()

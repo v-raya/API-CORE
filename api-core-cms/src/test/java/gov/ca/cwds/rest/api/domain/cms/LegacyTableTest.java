@@ -38,4 +38,20 @@ public class LegacyTableTest {
     assertThat(actual, is(equalTo(expected)));
   }
 
+  @Test
+  public void lookupByName_Args__SafetyAlert() throws Exception {
+    String tableName = "SAF_ALRT";
+    LegacyTable actual = LegacyTable.lookupByName(tableName);
+    LegacyTable expected = LegacyTable.SAFETY_ALERT;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void lookupByName_Args__DeliveredService() throws Exception {
+    String tableName = "DL_SVC_T";
+    LegacyTable actual = LegacyTable.lookupByName(tableName);
+    LegacyTable expected = LegacyTable.DELIVERED_SERVICE;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
 }

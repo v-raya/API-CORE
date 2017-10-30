@@ -60,7 +60,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
     }
 
     try {
-      Query query = session.getNamedQuery(namedQueryName);
+      final Query query = session.getNamedQuery(namedQueryName);
       ImmutableList.Builder<T> entities = new ImmutableList.Builder<>();
       entities.addAll(query.list());
       txn.commit();
