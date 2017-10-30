@@ -34,10 +34,18 @@
   <script type="text/javascript">
     $(function () {
       var url = "{{jsonUrl}}";
-	  
-	  var token = window.location.search.match(/token=([^&]+)/);
-	  if (token && token.length > 1) {
-        token = decodeURIComponent(token[1]);
+
+	  var token;
+
+	  var accessCode = window.location.search.match(/accessCode=([^&]+)/);
+	  if (accessCode && accessCode.length > 1) {
+        accessCode = decodeURIComponent(accessCode[1]);
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", {{tokenUrl}} + '/?accessCode=' + accessCode, false);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.send();
+        token = JSON.parse(xhttp.responseText);
       }
 
       hljs.configure({

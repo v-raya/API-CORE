@@ -32,10 +32,8 @@ public class SwaggerResource implements Resource {
 
   @GET
   public SwaggerView get() {
-    String callbackUrl = swaggerConfiguration.getCallbackUrl();
     if (swaggerConfiguration.isShowSwagger()) {
-      String swaggerjsonUrl = swaggerConfiguration.getJsonUrl();
-      return new SwaggerView(swaggerConfiguration, swaggerjsonUrl, callbackUrl);
+      return new SwaggerView(swaggerConfiguration);
     } else {
       throw new WebApplicationException(404);
     }
