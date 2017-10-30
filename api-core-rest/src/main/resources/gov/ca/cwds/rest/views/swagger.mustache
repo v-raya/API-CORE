@@ -42,7 +42,7 @@
         accessCode = decodeURIComponent(accessCode[1]);
 
         var xhttp = new XMLHttpRequest();
-        xhttp.open("GET", {{tokenUrl}} + '/?accessCode=' + accessCode, false);
+        xhttp.open("GET", "{{tokenUrl}}/?accessCode=" + accessCode, false);
         xhttp.setRequestHeader("Content-type", "application/json");
         xhttp.send();
         token = JSON.parse(xhttp.responseText);
