@@ -26,7 +26,6 @@ public class SwaggerResource implements Resource {
 
   @Inject
   public SwaggerResource(SwaggerConfiguration swaggerConfiguration) {
-    super();
     this.swaggerConfiguration = swaggerConfiguration;
   }
 

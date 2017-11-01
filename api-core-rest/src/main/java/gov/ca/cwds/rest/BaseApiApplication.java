@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 
+import gov.ca.cwds.rest.resources.TokenResource;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.secnod.dropwizard.shiro.ShiroBundle;
@@ -162,24 +163,27 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
     filter.setInitParameter("allowCredentials", "true");
   }
 
-  private final void configureSwagger(final T apiConfiguration, final Environment environment) {
+  private void configureSwagger(final T apiConfiguration, final Environment environment) {
     BeanConfig config = new BeanConfig();
-    config.setTitle(apiConfiguration.getSwaggerConfiguration().getTitle());
-    config.setDescription(apiConfiguration.getSwaggerConfiguration().getDescription());
-    config.setResourcePackage(apiConfiguration.getSwaggerConfiguration().getResourcePackage());
+    SwaggerConfiguration swaggerConfiguration = apiConfiguration.getSwaggerConfiguration();
+    config.setTitle(swaggerConfiguration.getTitle());
+    config.setDescription(swaggerConfiguration.getDescription());
+    config.setResourcePackage(swaggerConfiguration.getResourcePackage());
     config.setScan(true);
 
-    new AssetsBundle(apiConfiguration.getSwaggerConfiguration().getAssetsPath(),
-        apiConfiguration.getSwaggerConfiguration().getAssetsPath(), null, "swagger")
+    new AssetsBundle(swaggerConfiguration.getAssetsPath(),
+        swaggerConfiguration.getAssetsPath(), null, "swagger")
             .run(environment);
 
     LOGGER.info("Registering ApiListingResource");
     environment.jersey().register(new ApiListingResource());
 
     LOGGER.info("Registering SwaggerResource");
-    final SwaggerResource swaggerResource =
-        new SwaggerResource(apiConfiguration.getSwaggerConfiguration());
+    SwaggerResource swaggerResource = new SwaggerResource(swaggerConfiguration);
     environment.jersey().register(swaggerResource);
+
+    TokenResource tokenResource = new TokenResource(swaggerConfiguration);
+    environment.jersey().register(tokenResource);
   }
 
   @SuppressWarnings("javadoc")

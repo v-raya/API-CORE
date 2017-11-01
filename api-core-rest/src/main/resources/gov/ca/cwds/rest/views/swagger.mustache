@@ -41,11 +41,21 @@
 	  if (accessCode && accessCode.length > 1) {
         accessCode = decodeURIComponent(accessCode[1]);
 
+        var baseUri = url.match(/.*\/\/(.*?)\//);
+        var backendTokenUrl = baseUri[0] + "token?accessCode=" + accessCode;
+
         var xhttp = new XMLHttpRequest();
-        xhttp.open("GET", "{{tokenUrl}}/?accessCode=" + accessCode, false);
-        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.open("GET", backendTokenUrl, false);
+        xhttp.setRequestHeader("Content-type", "text/plain");
         xhttp.send();
-        token = JSON.parse(xhttp.responseText);
+        token = xhttp.responseText;
+        var redirectUrl = window.location.href.split("?")[0] + "?token=" + token;
+        window.location.assign(redirectUrl);
+      }
+
+      token = window.location.search.match(/token=([^&]+)/);
+      if (token && token.length > 1) {
+          token = decodeURIComponent(token[1]);
       }
 
       hljs.configure({
