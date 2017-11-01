@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +60,7 @@ public abstract class BaseAttorney extends CmsPersistentObject
   protected BigDecimal faxNumber;
 
   @Column(name = "FIRST_NM")
+  @ColumnTransformer(read = ("trim(FIRST_NM)"))
   protected String firstName;
 
   @SystemCodeSerializer(logical = true, description = true)
@@ -78,6 +80,7 @@ public abstract class BaseAttorney extends CmsPersistentObject
   protected Short languageType;
 
   @Column(name = "LAST_NM")
+  @ColumnTransformer(read = ("trim(LAST_NM)"))
   protected String lastName;
 
   @Type(type = "integer")
@@ -88,9 +91,11 @@ public abstract class BaseAttorney extends CmsPersistentObject
   protected BigDecimal messagePhoneNumber;
 
   @Column(name = "MID_INI_NM")
+  @ColumnTransformer(read = ("trim(MID_INI_NM)"))
   protected String middleInitialName;
 
   @Column(name = "NMPRFX_DSC")
+  @ColumnTransformer(read = ("trim(NMPRFX_DSC)"))
   protected String namePrefixDescription;
 
   @Column(name = "POSTIL_DSC")
@@ -116,6 +121,7 @@ public abstract class BaseAttorney extends CmsPersistentObject
   protected String streetNumber;
 
   @Column(name = "SUFX_TLDSC")
+  @ColumnTransformer(read = ("trim(SUFX_TLDSC)"))
   protected String suffixTitleDescription;
 
   @Type(type = "integer")
@@ -382,11 +388,10 @@ public abstract class BaseAttorney extends CmsPersistentObject
 
     if (this.messagePhoneNumber != null && !BigDecimal.ZERO.equals(this.messagePhoneNumber)) {
       LOGGER.debug("add message phone");
-      phones
-          .add(new ReadablePhone(null,
-              this.messagePhoneNumber.toPlainString(), this.messagePhoneExtensionNumber != null
-                  ? this.messagePhoneExtensionNumber.toString() : null,
-              ApiPhoneAware.PhoneType.Cell));
+      phones.add(new ReadablePhone(null, this.messagePhoneNumber.toPlainString(),
+          this.messagePhoneExtensionNumber != null ? this.messagePhoneExtensionNumber.toString()
+              : null,
+          ApiPhoneAware.PhoneType.Cell));
     }
 
     return phones.toArray(new ApiPhoneAware[0]);
