@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,12 +86,15 @@ public abstract class BaseClient extends CmsPersistentObject
   protected String commentDescription;
 
   @Column(name = "COM_FST_NM")
+  @ColumnTransformer(read = ("trim(COM_FST_NM)"))
   protected String commonFirstName;
 
   @Column(name = "COM_LST_NM")
+  @ColumnTransformer(read = ("trim(COM_LST_NM)"))
   protected String commonLastName;
 
   @Column(name = "COM_MID_NM")
+  @ColumnTransformer(read = ("trim(COM_MID_NM)"))
   protected String commonMiddleName;
 
   @Type(type = "date")
@@ -205,6 +209,7 @@ public abstract class BaseClient extends CmsPersistentObject
   protected Date motherParentalRightTermDate;
 
   @Column(name = "NMPRFX_DSC")
+  @ColumnTransformer(read = ("trim(NMPRFX_DSC)"))
   protected String namePrefixDescription;
 
   @SystemCodeSerializer(logical = true, description = true)
@@ -272,6 +277,7 @@ public abstract class BaseClient extends CmsPersistentObject
   protected String socialSecurityNumber;
 
   @Column(name = "SUFX_TLDSC")
+  @ColumnTransformer(read = ("trim(SUFX_TLDSC)"))
   protected String suffixTitleDescription;
 
   @Column(name = "TRBA_CLT_B")
