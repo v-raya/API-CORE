@@ -182,8 +182,10 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
     SwaggerResource swaggerResource = new SwaggerResource(swaggerConfiguration);
     environment.jersey().register(swaggerResource);
 
-    TokenResource tokenResource = new TokenResource(swaggerConfiguration);
-    environment.jersey().register(tokenResource);
+    if (swaggerConfiguration.isShowSwagger()) {
+      TokenResource tokenResource = new TokenResource(swaggerConfiguration);
+      environment.jersey().register(tokenResource);
+    }
   }
 
   @SuppressWarnings("javadoc")

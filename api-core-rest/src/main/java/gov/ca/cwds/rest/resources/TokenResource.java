@@ -30,15 +30,10 @@ public class TokenResource {
 
     @GET
     public String getToken(@QueryParam("accessCode") String accessCode) {
-        if (swaggerConfiguration.isShowSwagger()) {
-            URI uri = UriBuilder.fromUri(swaggerConfiguration.getTokenUrl())
-                    .queryParam("accessCode", accessCode)
-                    .build();
-            String token = getClient().target(uri).request().get(String.class);
-            return token;
-        } else {
-            throw new UnsupportedOperationException("The API is for Swagger usage only");
-        }
+        URI uri = UriBuilder.fromUri(swaggerConfiguration.getTokenUrl())
+                .queryParam("accessCode", accessCode)
+                .build();
+        return getClient().target(uri).request().get(String.class);
     }
 
     private synchronized Client getClient() {
