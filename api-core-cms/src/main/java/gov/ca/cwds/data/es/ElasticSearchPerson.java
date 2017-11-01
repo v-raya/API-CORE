@@ -1185,9 +1185,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     String ret = "";
 
     try {
-      ret = ElasticSearchPerson.MAPPER
-          // .writerWithDefaultPrettyPrinter()
-          .writeValueAsString(this);
+      ret = ElasticSearchPerson.MAPPER.writeValueAsString(this);
     } catch (JsonProcessingException e) {
       final String msg = MessageFormat.format("UNABLE TO SERIALIZE JSON!! {}", e.getMessage());
       LOGGER.error(msg, e);
