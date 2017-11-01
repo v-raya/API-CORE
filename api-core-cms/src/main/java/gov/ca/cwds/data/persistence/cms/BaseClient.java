@@ -35,9 +35,6 @@ import gov.ca.cwds.data.std.ApiPersonAware;
 public abstract class BaseClient extends CmsPersistentObject
     implements ApiPersonAware, ApiMultipleLanguagesAware, AccessLimitationAware {
 
-  /**
-   * Base serialization version. Increment by class version.
-   */
   private static final long serialVersionUID = 1L;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BaseClient.class);
