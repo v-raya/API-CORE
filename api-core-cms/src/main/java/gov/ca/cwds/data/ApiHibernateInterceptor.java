@@ -146,12 +146,11 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   @Override
   @SuppressWarnings("rawtypes")
   public void preFlush(Iterator iter) {
-
     final List list = iterToList(iter);
     for (Object obj : list) {
-      if (obj instanceof PersistentObject) {
 
-        PersistentObject entity = (PersistentObject) obj;
+      if (obj instanceof PersistentObject) { // our object type
+        final PersistentObject entity = (PersistentObject) obj;
         if (LOGGER.isTraceEnabled()) {
           LOGGER.trace("preFlush -> id={}, entity={}", entity.getPrimaryKey(), entity);
         } else {
@@ -160,8 +159,8 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
         }
 
         logLimitedAccessRecord(obj, "preFlush");
-
         final Class<?> klazz = entity.getClass();
+
         if (handlers.containsKey(klazz)) {
           LOGGER.info("handler for class {}", klazz);
           handlers.get(klazz).accept(entity);
