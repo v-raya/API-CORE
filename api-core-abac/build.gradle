@@ -25,8 +25,7 @@ publishing {
     }
     repositories {
         maven {
-            // THOUGHT: set to http url or network share.
-            url "file:///usr/share/nginx/html/maven2"
+            url "http://sonar.dev.cwds.io:8081/artifactory/repo"
         }
     }
 }
