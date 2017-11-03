@@ -46,6 +46,9 @@ public class SwaggerConfiguration {
   private String loginUrl;
 
   @JsonProperty
+  private String tokenUrl;
+
+  @JsonProperty
   private String logoutUrl;
 
   @JsonProperty
@@ -129,6 +132,17 @@ public class SwaggerConfiguration {
    */
   public boolean isShowSwagger() {
     return showSwagger;
+  }
+
+  /**
+   * @return the token
+   */
+  public String getTokenUrl() {
+    return tokenUrl;
+  }
+
+  public void setTokenUrl(String tokenUrl) {
+    this.tokenUrl = tokenUrl;
   }
 
   @SuppressWarnings("javadoc")
