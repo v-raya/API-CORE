@@ -48,8 +48,9 @@ public class Case extends CmsPersistentObject {
   @Column(name = "CLS_RSNC")
   private Short caseClosureReasonType;
 
+  @Type(type = "yes_no")
   @Column(name = "CSPL_DET_B")
-  private String caseplanChildrenDetailIndVar;
+  private Boolean caseplanChildrenDetailIndVar;
 
   @Column(name = "CL_STM_TXT")
   private String closureStatementText;
@@ -70,8 +71,10 @@ public class Case extends CmsPersistentObject {
   @Column(name = "END_DT")
   private LocalDate endDate;
 
-  @Column(name = "FKCHLD_CLT")
-  private String childClientId;
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne
+  @JoinColumn(name = "FKCHLD_CLT", referencedColumnName = "FKCLIENT_T")
+  private ChildClient childClient;
 
   @Column(name = "FKREFERL_T")
   private String referralId;
@@ -85,11 +88,13 @@ public class Case extends CmsPersistentObject {
   @Column(name = "GVR_ENTC")
   private Short governmentEntityType;
 
+  @Type(type = "yes_no")
   @Column(name = "ICPCSTAT_B")
-  private String icpcOutgngPlcmtStatusIndVar;
+  private Boolean icpcOutgngPlcmtStatusIndVar;
 
+  @Type(type = "yes_no")
   @Column(name = "ICPC_RQT_B")
-  private String icpcOutgoingRequestIndVar;
+  private Boolean icpcOutgoingRequestIndVar;
 
   @Column(name = "LMT_ACSSCD")
   private String limitedAccessCode;
@@ -116,8 +121,9 @@ public class Case extends CmsPersistentObject {
   @Column(name = "RSP_AGY_CD")
   private String responsibleAgencyCode;
 
+  @Type(type = "yes_no")
   @Column(name = "SPRJ_CST_B")
-  private String specialProjectCaseIndVar;
+  private Boolean specialProjectCaseIndVar;
 
   @Column(name = "START_DT")
   private LocalDate startDate;
@@ -133,8 +139,9 @@ public class Case extends CmsPersistentObject {
   @Column(name = "SRV_CMPDT")
   private LocalDate activeSvcComponentStartDate;
 
+  @Type(type = "yes_no")
   @Column(name = "TICKLE_T_B")
-  private String tickleIndVar;
+  private Boolean tickleIndVar;
 
   @Override
   public Serializable getPrimaryKey() {
@@ -181,11 +188,11 @@ public class Case extends CmsPersistentObject {
     this.caseClosureReasonType = caseClosureReasonType;
   }
 
-  public String getCaseplanChildrenDetailIndVar() {
+  public Boolean getCaseplanChildrenDetailIndVar() {
     return caseplanChildrenDetailIndVar;
   }
 
-  public void setCaseplanChildrenDetailIndVar(String caseplanChildrenDetailIndVar) {
+  public void setCaseplanChildrenDetailIndVar(Boolean caseplanChildrenDetailIndVar) {
     this.caseplanChildrenDetailIndVar = caseplanChildrenDetailIndVar;
   }
 
@@ -237,12 +244,12 @@ public class Case extends CmsPersistentObject {
     this.endDate = endDate;
   }
 
-  public String getChildClientId() {
-    return childClientId;
+  public ChildClient getChildClient() {
+    return childClient;
   }
 
-  public void setChildClientId(String childClientId) {
-    this.childClientId = childClientId;
+  public void setChildClientId(ChildClient childClient) {
+    this.childClient = childClient;
   }
 
   public String getReferralId() {
@@ -269,19 +276,19 @@ public class Case extends CmsPersistentObject {
     this.governmentEntityType = governmentEntityType;
   }
 
-  public String getIcpcOutgngPlcmtStatusIndVar() {
+  public Boolean getIcpcOutgngPlcmtStatusIndVar() {
     return icpcOutgngPlcmtStatusIndVar;
   }
 
-  public void setIcpcOutgngPlcmtStatusIndVar(String icpcOutgngPlcmtStatusIndVar) {
+  public void setIcpcOutgngPlcmtStatusIndVar(Boolean icpcOutgngPlcmtStatusIndVar) {
     this.icpcOutgngPlcmtStatusIndVar = icpcOutgngPlcmtStatusIndVar;
   }
 
-  public String getIcpcOutgoingRequestIndVar() {
+  public Boolean getIcpcOutgoingRequestIndVar() {
     return icpcOutgoingRequestIndVar;
   }
 
-  public void setIcpcOutgoingRequestIndVar(String icpcOutgoingRequestIndVar) {
+  public void setIcpcOutgoingRequestIndVar(Boolean icpcOutgoingRequestIndVar) {
     this.icpcOutgoingRequestIndVar = icpcOutgoingRequestIndVar;
   }
 
@@ -349,11 +356,11 @@ public class Case extends CmsPersistentObject {
     this.responsibleAgencyCode = responsibleAgencyCode;
   }
 
-  public String getSpecialProjectCaseIndVar() {
+  public Boolean getSpecialProjectCaseIndVar() {
     return specialProjectCaseIndVar;
   }
 
-  public void setSpecialProjectCaseIndVar(String specialProjectCaseIndVar) {
+  public void setSpecialProjectCaseIndVar(Boolean specialProjectCaseIndVar) {
     this.specialProjectCaseIndVar = specialProjectCaseIndVar;
   }
 
@@ -389,11 +396,11 @@ public class Case extends CmsPersistentObject {
     this.activeSvcComponentStartDate = activeSvcComponentStartDate;
   }
 
-  public String getTickleIndVar() {
+  public Boolean getTickleIndVar() {
     return tickleIndVar;
   }
 
-  public void setTickleIndVar(String tickleIndVar) {
+  public void setTickleIndVar(Boolean tickleIndVar) {
     this.tickleIndVar = tickleIndVar;
   }
 
@@ -406,11 +413,13 @@ public class Case extends CmsPersistentObject {
       return false;
     }
     Case aCase = (Case) o;
-    return Objects.equals(childClientId, aCase.childClientId) && Objects.equals(startDate, aCase.startDate);
+    return
+        Objects.equals(childClient.getVictimClientId(), aCase.getChildClient().getVictimClientId())
+            && Objects.equals(startDate, aCase.startDate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(childClientId, startDate);
+    return Objects.hash(childClient.getVictimClientId(), startDate);
   }
 }
