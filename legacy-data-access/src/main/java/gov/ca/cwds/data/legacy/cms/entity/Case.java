@@ -71,10 +71,10 @@ public class Case extends CmsPersistentObject {
   private LocalDate endDate;
 
   @Column(name = "FKCHLD_CLT")
-  private String fkchldClt;
+  private String childClientId;
 
   @Column(name = "FKREFERL_T")
-  private String fkreferlt;
+  private String referralId;
 
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
@@ -237,20 +237,20 @@ public class Case extends CmsPersistentObject {
     this.endDate = endDate;
   }
 
-  public String getFkchldClt() {
-    return fkchldClt;
+  public String getChildClientId() {
+    return childClientId;
   }
 
-  public void setFkchldClt(String fkchldClt) {
-    this.fkchldClt = fkchldClt;
+  public void setChildClientId(String childClientId) {
+    this.childClientId = childClientId;
   }
 
-  public String getFkreferlt() {
-    return fkreferlt;
+  public String getReferralId() {
+    return referralId;
   }
 
-  public void setFkreferlt(String fkreferlt) {
-    this.fkreferlt = fkreferlt;
+  public void setReferralId(String referralId) {
+    this.referralId = referralId;
   }
 
   public StaffPerson getStaffPerson() {
@@ -406,11 +406,11 @@ public class Case extends CmsPersistentObject {
       return false;
     }
     Case aCase = (Case) o;
-    return Objects.equals(fkchldClt, aCase.fkchldClt) && Objects.equals(startDate, aCase.startDate);
+    return Objects.equals(childClientId, aCase.childClientId) && Objects.equals(startDate, aCase.startDate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fkchldClt, startDate);
+    return Objects.hash(childClientId, startDate);
   }
 }
