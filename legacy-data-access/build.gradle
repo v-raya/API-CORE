@@ -1,0 +1,23 @@
+
+dependencies {
+    compile project(':api-core-common')
+    
+    compile group: "io.dropwizard", name: "dropwizard-hibernate", version: dropwizardVersion
+}
+
+publishing {
+    publications {
+        library(MavenPublication) {
+            from components.java
+            groupId commonGroupId
+            artifactId 'legacy-data-access'
+            version version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
+        }
+    }
+    repositories {
+        mavenLocal()
+        maven {
+            url "http://sonar.dev.cwds.io:8081/artifactory/repo"
+        }
+    }
+}

@@ -1,6 +1,7 @@
 dependencies {
     compile project(':api-core-common')
-
+    compile project(':legacy-data-access')
+    
 	// MAIN:
     compile group: "io.dropwizard", name: "dropwizard-hibernate", version: dropwizardVersion
     compile group: "io.dropwizard", name: "dropwizard-views-mustache", version: dropwizardVersion
@@ -47,6 +48,7 @@ publishing {
     }
   }
   repositories {
+      mavenLocal()
       maven {
           url "http://sonar.dev.cwds.io:8081/artifactory/repo"
       }
