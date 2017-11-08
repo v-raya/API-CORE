@@ -1,5 +1,6 @@
-package gov.ca.cwds.data.persistence;
+package gov.ca.cwds.data.legacy.cms;
 
+import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
