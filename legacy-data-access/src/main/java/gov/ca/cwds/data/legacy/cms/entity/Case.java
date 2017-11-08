@@ -1,9 +1,9 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
+import gov.ca.cwds.data.persistence.CmsPersistentObject;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,7 +18,7 @@ import org.hibernate.annotations.Type;
  */
 @Entity
 @Table(name = "CASE_T")
-public class Case implements PersistentObject {
+public class Case extends CmsPersistentObject {
 
   /**
    * Default serialization.
@@ -26,14 +26,8 @@ public class Case implements PersistentObject {
   private static final long serialVersionUID = 1L;
 
   @Id
-  @Column(name = "IDENTIFIER", nullable = false, length = 10)
+  @Column(name = "IDENTIFIER", nullable = false, length = CMS_ID_LEN)
   private String identifier;
-
-  @Column(name = "LST_UPD_ID", nullable = false, length = 3)
-  private String lstUpdId;
-
-  @Column(name = "LST_UPD_TS", nullable = false)
-  private Timestamp lstUpdTs;
 
   @Column(name = "ALERT_TXT")
   private String alertText;
@@ -65,13 +59,11 @@ public class Case implements PersistentObject {
   @Column(name = "NOTES_DOC")
   private String drmsNotesDoc;
 
-  @Type(type = "date")
   @Column(name = "EMANCPN_DT")
-  private String emancipationDate;
+  private LocalDate emancipationDate;
 
-  @Type(type = "date")
   @Column(name = "END_DT")
-  private Date endDate;
+  private LocalDate endDate;
 
   @Column(name = "FKCHLD_CLT")
   private String fkchldClt;
@@ -95,9 +87,8 @@ public class Case implements PersistentObject {
   @Column(name = "LMT_ACSSCD")
   private String limitedAccessCode;
 
-  @Type(type = "date")
   @Column(name = "LMT_ACS_DT")
-  private Date limitedAccessDate;
+  private LocalDate limitedAccessDate;
 
   @Column(name = "LMT_ACSDSC")
   private String limitedAccessDesc;
@@ -109,13 +100,11 @@ public class Case implements PersistentObject {
   @Column(name = "CASE_NM")
   private String caseName;
 
-  @Type(type = "date")
   @Column(name = "NXT_TILPDT")
-  private Date nextTilpDueDate;
+  private LocalDate nextTilpDueDate;
 
-  @Type(type = "date")
   @Column(name = "PRJ_END_DT")
-  private Date projectedEndDate;
+  private LocalDate projectedEndDate;
 
   @Column(name = "RSP_AGY_CD")
   private String responsibleAgencyCode;
@@ -123,9 +112,8 @@ public class Case implements PersistentObject {
   @Column(name = "SPRJ_CST_B")
   private String specialProjectCaseIndVar;
 
-  @Type(type = "date")
   @Column(name = "START_DT")
-  private Date startDate;
+  private LocalDate startDate;
 
   @Type(type = "short")
   @Column(name = "STATE_C")
@@ -135,9 +123,8 @@ public class Case implements PersistentObject {
   @Column(name = "SRV_CMPC")
   private Short activeServiceComponentType;
 
-  @Type(type = "date")
   @Column(name = "SRV_CMPDT")
-  private Date activeSvcComponentStartDate;
+  private LocalDate activeSvcComponentStartDate;
 
   @Column(name = "TICKLE_T_B")
   private String tickleIndVar;
@@ -153,22 +140,6 @@ public class Case implements PersistentObject {
 
   public void setIdentifier(String identifier) {
     this.identifier = identifier;
-  }
-
-  public String getLstUpdId() {
-    return lstUpdId;
-  }
-
-  public void setLstUpdId(String lstUpdId) {
-    this.lstUpdId = lstUpdId;
-  }
-
-  public Timestamp getLstUpdTs() {
-    return lstUpdTs;
-  }
-
-  public void setLstUpdTs(Timestamp lstUpdTs) {
-    this.lstUpdTs = lstUpdTs;
   }
 
   public String getAlertText() {
@@ -243,19 +214,19 @@ public class Case implements PersistentObject {
     this.drmsNotesDoc = drmsNotesDoc;
   }
 
-  public String getEmancipationDate() {
+  public LocalDate getEmancipationDate() {
     return emancipationDate;
   }
 
-  public void setEmancipationDate(String emancipationDate) {
+  public void setEmancipationDate(LocalDate emancipationDate) {
     this.emancipationDate = emancipationDate;
   }
 
-  public Date getEndDate() {
+  public LocalDate getEndDate() {
     return endDate;
   }
 
-  public void setEndDate(Date endDate) {
+  public void setEndDate(LocalDate endDate) {
     this.endDate = endDate;
   }
 
@@ -315,11 +286,11 @@ public class Case implements PersistentObject {
     this.limitedAccessCode = limitedAccessCode;
   }
 
-  public Date getLimitedAccessDate() {
+  public LocalDate getLimitedAccessDate() {
     return limitedAccessDate;
   }
 
-  public void setLimitedAccessDate(Date limitedAccessDate) {
+  public void setLimitedAccessDate(LocalDate limitedAccessDate) {
     this.limitedAccessDate = limitedAccessDate;
   }
 
@@ -347,19 +318,19 @@ public class Case implements PersistentObject {
     this.caseName = caseName;
   }
 
-  public Date getNextTilpDueDate() {
+  public LocalDate getNextTilpDueDate() {
     return nextTilpDueDate;
   }
 
-  public void setNextTilpDueDate(Date nextTilpDueDate) {
+  public void setNextTilpDueDate(LocalDate nextTilpDueDate) {
     this.nextTilpDueDate = nextTilpDueDate;
   }
 
-  public Date getProjectedEndDate() {
+  public LocalDate getProjectedEndDate() {
     return projectedEndDate;
   }
 
-  public void setProjectedEndDate(Date projectedEndDate) {
+  public void setProjectedEndDate(LocalDate projectedEndDate) {
     this.projectedEndDate = projectedEndDate;
   }
 
@@ -379,11 +350,11 @@ public class Case implements PersistentObject {
     this.specialProjectCaseIndVar = specialProjectCaseIndVar;
   }
 
-  public Date getStartDate() {
+  public LocalDate getStartDate() {
     return startDate;
   }
 
-  public void setStartDate(Date startDate) {
+  public void setStartDate(LocalDate startDate) {
     this.startDate = startDate;
   }
 
@@ -403,11 +374,11 @@ public class Case implements PersistentObject {
     this.activeServiceComponentType = activeServiceComponentType;
   }
 
-  public Date getActiveSvcComponentStartDate() {
+  public LocalDate getActiveSvcComponentStartDate() {
     return activeSvcComponentStartDate;
   }
 
-  public void setActiveSvcComponentStartDate(Date activeSvcComponentStartDate) {
+  public void setActiveSvcComponentStartDate(LocalDate activeSvcComponentStartDate) {
     this.activeSvcComponentStartDate = activeSvcComponentStartDate;
   }
 
