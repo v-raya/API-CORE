@@ -7,13 +7,18 @@ import java.time.LocalDate;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
 
 /**
  * {@link PersistentObject} Class representing a Case.
- * 
+ *
  * @author CWDS API Team
  */
 @Entity
@@ -71,8 +76,10 @@ public class Case extends CmsPersistentObject {
   @Column(name = "FKREFERL_T")
   private String fkreferlt;
 
-  @Column(name = "FKSTFPERST")
-  private String fkstfperst;
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "FKSTFPERST", referencedColumnName = "IDENTIFIER")
+  private StaffPerson staffPerson;
 
   @Type(type = "short")
   @Column(name = "GVR_ENTC")
@@ -246,12 +253,12 @@ public class Case extends CmsPersistentObject {
     this.fkreferlt = fkreferlt;
   }
 
-  public String getFkstfperst() {
-    return fkstfperst;
+  public StaffPerson getStaffPerson() {
+    return staffPerson;
   }
 
-  public void setFkstfperst(String fkstfperst) {
-    this.fkstfperst = fkstfperst;
+  public void setStaffPerson(StaffPerson staffPerson) {
+    this.staffPerson = staffPerson;
   }
 
   public Short getGovernmentEntityType() {
