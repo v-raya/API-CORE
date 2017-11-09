@@ -2,6 +2,7 @@ package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ActiveServiceComponentType;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.ApprovalStatusType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.County;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
@@ -46,9 +47,11 @@ public class Case extends CmsPersistentObject {
   @Column(name = "APRVL_NO")
   private String approvalNumber;
 
-  @Type(type = "short")
-  @Column(name = "APV_STC")
-  private Short approvalStatusType;
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "APV_STC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private ApprovalStatusType approvalStatusType;
 
   @Type(type = "short")
   @Column(name = "CLS_RSNC")
@@ -189,11 +192,11 @@ public class Case extends CmsPersistentObject {
     this.approvalNumber = approvalNumber;
   }
 
-  public Short getApprovalStatusType() {
+  public ApprovalStatusType getApprovalStatusType() {
     return approvalStatusType;
   }
 
-  public void setApprovalStatusType(Short approvalStatusType) {
+  public void setApprovalStatusType(ApprovalStatusType approvalStatusType) {
     this.approvalStatusType = approvalStatusType;
   }
 
