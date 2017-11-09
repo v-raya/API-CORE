@@ -112,9 +112,11 @@ public class Case extends CmsPersistentObject {
   @Column(name = "LMT_ACSDSC")
   private String limitedAccessDesc;
 
-  @Type(type = "short")
-  @Column(name = "L_GVR_ENTC")
-  private Short limitedAccessGovernmentEntityType;
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "L_GVR_ENTC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private County limitedAccessCounty;
 
   @Column(name = "CASE_NM")
   private String caseName;
@@ -324,12 +326,12 @@ public class Case extends CmsPersistentObject {
     this.limitedAccessDesc = limitedAccessDesc;
   }
 
-  public Short getLimitedAccessGovernmentEntityType() {
-    return limitedAccessGovernmentEntityType;
+  public County getLimitedAccessCounty() {
+    return limitedAccessCounty;
   }
 
-  public void setLimitedAccessGovernmentEntityType(Short limitedAccessGovernmentEntityType) {
-    this.limitedAccessGovernmentEntityType = limitedAccessGovernmentEntityType;
+  public void setLimitedAccessCounty(County limitedAccessCounty) {
+    this.limitedAccessCounty = limitedAccessCounty;
   }
 
   public String getCaseName() {
