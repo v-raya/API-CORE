@@ -117,7 +117,7 @@ public class Case extends CmsPersistentObject {
   private Boolean icpcOutgoingRequestIndVar;
 
   @Column(name = "LMT_ACSSCD")
-  @Convert( converter = LimitedAccessConverter.class )
+  @Convert(converter = LimitedAccessConverter.class)
   private LimitedAccess limitedAccess;
 
   @Column(name = "LMT_ACS_DT")
