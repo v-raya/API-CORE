@@ -1,6 +1,7 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.County;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
@@ -13,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
@@ -82,12 +85,15 @@ public class Case extends CmsPersistentObject {
 
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
   @JoinColumn(name = "FKSTFPERST", referencedColumnName = "IDENTIFIER")
   private StaffPerson staffPerson;
 
-  @Type(type = "short")
-  @Column(name = "GVR_ENTC")
-  private Short governmentEntityType;
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "GVR_ENTC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private County county;
 
   @Type(type = "yes_no")
   @Column(name = "ICPCSTAT_B")
@@ -270,12 +276,12 @@ public class Case extends CmsPersistentObject {
     this.staffPerson = staffPerson;
   }
 
-  public Short getGovernmentEntityType() {
-    return governmentEntityType;
+  public County getCounty() {
+    return county;
   }
 
-  public void setGovernmentEntityType(Short governmentEntityType) {
-    this.governmentEntityType = governmentEntityType;
+  public void setCounty(County county) {
+    this.county = county;
   }
 
   public Boolean getIcpcOutgngPlcmtStatusIndVar() {
