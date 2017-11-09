@@ -13,16 +13,18 @@ import org.hibernate.annotations.Type;
 
 /**
  * {@link CmsPersistentObject} Class representing a Child Client.
- * 
+ *
  * @author CWDS API Team
  */
-@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.ChildClient.findVictimClients",
+@NamedQuery(name = ChildClient.FIND_VICTIM_CLIENTS,
     query = "SELECT C" + " FROM ChildClient C, ReferralClient R, Allegation A"
         + " WHERE C.victimClientId = R.clientId " + " AND A.victimClientId = R.clientId"
         + " AND R.referralId = :referralId")
 @Entity
 @Table(name = "CHLD_CLT")
 public class ChildClient extends CmsPersistentObject {
+
+  public static final String FIND_VICTIM_CLIENTS = "ChildClient.findVictimClients";
 
   /**
    * Serialization version
@@ -40,15 +42,15 @@ public class ChildClient extends CmsPersistentObject {
   @Column(name = "ADPT_AGE")
   private Short adoptedAge;
 
-  @Type(type="yes_no")
+  @Type(type = "yes_no")
   @Column(name = "FC_ELIGT_B")
   private Boolean afdcFcEligibilityIndicatorVar;
 
-  @Type(type="yes_no")
+  @Type(type = "yes_no")
   @Column(name = "EDONFL_IND")
   private Boolean allEducationInfoOnFileIndicator;
 
-  @Type(type="yes_no")
+  @Type(type = "yes_no")
   @Column(name = "HLONFL_IND")
   private Boolean allHealthInfoOnFileIndicator;
 
@@ -61,15 +63,15 @@ public class ChildClient extends CmsPersistentObject {
   @Column(name = "AWOL_AB_CD")
   private String awolAbductedCode;
 
-  @Type(type="yes_no")
+  @Type(type = "yes_no")
   @Column(name = "BHIST_IND")
   private Boolean birthHistoryIndicatorVar;
 
-  @Type(type="yes_no")
+  @Type(type = "yes_no")
   @Column(name = "INDIAN_IND")
   private Boolean childIndianAncestryIndicator;
 
-  @Type(type="yes_no")
+  @Type(type = "yes_no")
   @Column(name = "CLG_IND")
   private Boolean collegeIndicator;
 
@@ -92,60 +94,60 @@ public class ChildClient extends CmsPersistentObject {
   @Column(name = "VOL_PLCDOC")
   private String drmsVoluntaryPlcmntAgrmntDoc;
 
-  @Type(type="yes_no")
+  @Type(type = "yes_no")
   @Column(name = "FC2_APLT_B")
   private Boolean fc2EligApplicationIndicatorVar;
 
   @Column(name = "FSTAMP_DT")
   private LocalDate foodStampsApplicationDate;
 
-  @Type(type="yes_no")
+  @Type(type = "yes_no")
   @Column(name = "FSTAMP_IND")
   private Boolean foodStampsApplicationIndicator;
 
   @Column(name = "ICWA_ELGCD")
   private String icwaEligibilityCode;
 
-  @Type(type="yes_no")
+  @Type(type = "yes_no")
   @Column(name = "ICADSR_IND")
   private Boolean intercountryAdoptDisruptedIndicator;
 
-  @Type(type="yes_no")
+  @Type(type = "yes_no")
   @Column(name = "ICADSL_IND")
   private Boolean intercountryAdoptDissolvedIndicator;
 
-  @Type(type="yes_no")
+  @Type(type = "yes_no")
   @Column(name = "MEDELIGT_B")
   private Boolean medEligibilityApplicationIndicatorVar;
 
-  @Type(type="yes_no")
+  @Type(type = "yes_no")
   @Column(name = "MNRMOM_IND")
   private Boolean minorNmdParentIndicator;
 
-  @Type(type="yes_no")
+  @Type(type = "yes_no")
   @Column(name = "PRTLIM_IND")
   private Boolean parentalRightsLimitedIndicator;
 
-  @Type(type="yes_no")
+  @Type(type = "yes_no")
   @Column(name = "PRG_TRMT_B")
   private Boolean parentalRightsTermintnIndicatorVar;
 
-  @Type(type="yes_no")
+  @Type(type = "yes_no")
   @Column(name = "PTRN_INT_B")
   private Boolean paternityIndividualIndicatorVar;
 
-  @Type(type="yes_no")
+  @Type(type = "yes_no")
   @Column(name = "PSVOC_IND")
   private Boolean postsecVocIndicator;
 
   @Column(name = "PREADPT_CD")
   private String previouslyAdoptedCode;
 
-  @Type(type="yes_no")
+  @Type(type = "yes_no")
   @Column(name = "SFSURB_IND")
   private Boolean safelySurrendedBabiesIndicatorVar;
 
-  @Type(type="yes_no")
+  @Type(type = "yes_no")
   @Column(name = "SAW1APLT_B")
   private Boolean saw1EligApplicationIndicatorVar;
 
@@ -159,26 +161,24 @@ public class ChildClient extends CmsPersistentObject {
   @Column(name = "SSI_SCR_DT")
   private LocalDate siiNextScreeningDueDate;
 
-  @Type(type="yes_no")
+  @Type(type = "yes_no")
   @Column(name = "SSI_SSPIND")
   private Boolean ssiSspApplicationIndicator;
 
-  @Type(type="yes_no")
+  @Type(type = "yes_no")
   @Column(name = "TRBA_NOT_B")
   private Boolean tribalAncestryNotifctnIndicatorVar;
 
   @Column(name = "TCADPT_DT")
   private LocalDate tribalCustomaryAdoptionDate;
 
-  @Type(type="yes_no")
+  @Type(type = "yes_no")
   @Column(name = "TCADPT_IND")
   private Boolean tribalCustomaryAdoptionIndicator;
 
   /**
-   * referential integrity check.
-   * <p>
-   * Doesn't actually load the data. Just checks the existence of the parent client record.
-   * </p>
+   * referential integrity check. <p> Doesn't actually load the data. Just checks the existence of
+   * the parent client record. </p>
    */
   @OneToOne(optional = false)
   @JoinColumn(name = "FKCLIENT_T", nullable = false, updatable = false, insertable = false)
