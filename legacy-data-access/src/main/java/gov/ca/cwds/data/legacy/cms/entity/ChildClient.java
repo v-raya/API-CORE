@@ -1,14 +1,21 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.DeathCircumstancesType;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NamedQuery;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
 
 /**
@@ -78,9 +85,11 @@ public class ChildClient extends CmsPersistentObject {
   @Column(name = "CURNT_CSID")
   private String currentCaseId;
 
-  @Type(type = "short")
-  @Column(name = "DTH_CIRC")
-  private Short deathCircumstancesType;
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "DTH_CIRC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private DeathCircumstancesType deathCircumstancesType;
 
   @Column(name = "DISABLD_CD")
   private String disabilityDiagnosedCode;
@@ -236,7 +245,7 @@ public class ChildClient extends CmsPersistentObject {
     this.currentCaseId = currentCaseId;
   }
 
-  public void setDeathCircumstancesType(Short deathCircumstancesType) {
+  public void setDeathCircumstancesType(DeathCircumstancesType deathCircumstancesType) {
     this.deathCircumstancesType = deathCircumstancesType;
   }
 
@@ -451,7 +460,7 @@ public class ChildClient extends CmsPersistentObject {
   /**
    * @return the deathCircumstancesType
    */
-  public Short getDeathCircumstancesType() {
+  public DeathCircumstancesType getDeathCircumstancesType() {
     return deathCircumstancesType;
   }
 
