@@ -3,6 +3,7 @@ package gov.ca.cwds.data.legacy.cms.entity;
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ActiveServiceComponentType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ApprovalStatusType;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.CaseClosureReasonType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.County;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
@@ -53,9 +54,11 @@ public class Case extends CmsPersistentObject {
   @JoinColumn(name = "APV_STC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
   private ApprovalStatusType approvalStatusType;
 
-  @Type(type = "short")
-  @Column(name = "CLS_RSNC")
-  private Short caseClosureReasonType;
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "CLS_RSNC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private CaseClosureReasonType caseClosureReasonType;
 
   @Type(type = "yes_no")
   @Column(name = "CSPL_DET_B")
@@ -200,11 +203,11 @@ public class Case extends CmsPersistentObject {
     this.approvalStatusType = approvalStatusType;
   }
 
-  public Short getCaseClosureReasonType() {
+  public CaseClosureReasonType getCaseClosureReasonType() {
     return caseClosureReasonType;
   }
 
-  public void setCaseClosureReasonType(Short caseClosureReasonType) {
+  public void setCaseClosureReasonType(CaseClosureReasonType caseClosureReasonType) {
     this.caseClosureReasonType = caseClosureReasonType;
   }
 
