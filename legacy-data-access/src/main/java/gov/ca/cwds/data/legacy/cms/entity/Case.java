@@ -1,6 +1,7 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.County;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
 import gov.ca.cwds.data.persistence.PersistentObject;
@@ -59,9 +60,11 @@ public class Case extends CmsPersistentObject {
   @Column(name = "CL_STM_TXT")
   private String closureStatementText;
 
-  @Type(type = "short")
-  @Column(name = "CNTRY_C")
-  private Short countryCodeType;
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "CNTRY_C", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private Country country;
 
   @Column(name = "CNTY_SPFCD")
   private String countySpecificCode;
@@ -214,12 +217,12 @@ public class Case extends CmsPersistentObject {
     this.closureStatementText = closureStatementText;
   }
 
-  public Short getCountryCodeType() {
-    return countryCodeType;
+  public Country getCountry() {
+    return country;
   }
 
-  public void setCountryCodeType(Short countryCodeType) {
-    this.countryCodeType = countryCodeType;
+  public void setCountry(Country country) {
+    this.country = country;
   }
 
   public String getCountySpecificCode() {
