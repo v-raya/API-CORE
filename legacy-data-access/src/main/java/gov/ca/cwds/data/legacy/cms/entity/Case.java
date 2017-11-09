@@ -1,6 +1,7 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -128,9 +129,10 @@ public class Case extends CmsPersistentObject {
   @Column(name = "START_DT")
   private LocalDate startDate;
 
-  @Type(type = "short")
-  @Column(name = "STATE_C")
-  private Short stateCodeType;
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "STATE_C", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private State state;
 
   @Type(type = "short")
   @Column(name = "SRV_CMPC")
@@ -372,12 +374,12 @@ public class Case extends CmsPersistentObject {
     this.startDate = startDate;
   }
 
-  public Short getStateCodeType() {
-    return stateCodeType;
+  public State getState() {
+    return state;
   }
 
-  public void setStateCodeType(Short stateCodeType) {
-    this.stateCodeType = stateCodeType;
+  public void setState(State state) {
+    this.state = state;
   }
 
   public Short getActiveServiceComponentType() {
