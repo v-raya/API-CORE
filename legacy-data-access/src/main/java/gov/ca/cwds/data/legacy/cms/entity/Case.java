@@ -1,6 +1,8 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.legacy.cms.entity.enums.LimitedAccess;
+import gov.ca.cwds.data.legacy.cms.entity.enums.LimitedAccessConverter;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ActiveServiceComponentType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ApprovalStatusType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.CaseClosureReasonType;
@@ -12,6 +14,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -114,7 +117,8 @@ public class Case extends CmsPersistentObject {
   private Boolean icpcOutgoingRequestIndVar;
 
   @Column(name = "LMT_ACSSCD")
-  private String limitedAccessCode;
+  @Convert( converter = LimitedAccessConverter.class )
+  private LimitedAccess limitedAccess;
 
   @Column(name = "LMT_ACS_DT")
   private LocalDate limitedAccessDate;
@@ -315,12 +319,12 @@ public class Case extends CmsPersistentObject {
     this.icpcOutgoingRequestIndVar = icpcOutgoingRequestIndVar;
   }
 
-  public String getLimitedAccessCode() {
-    return limitedAccessCode;
+  public LimitedAccess getLimitedAccess() {
+    return limitedAccess;
   }
 
-  public void setLimitedAccessCode(String limitedAccessCode) {
-    this.limitedAccessCode = limitedAccessCode;
+  public void setLimitedAccess(LimitedAccess limitedAccess) {
+    this.limitedAccess = limitedAccess;
   }
 
   public LocalDate getLimitedAccessDate() {
