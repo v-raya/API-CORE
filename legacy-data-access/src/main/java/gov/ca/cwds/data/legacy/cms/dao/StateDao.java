@@ -2,7 +2,7 @@ package gov.ca.cwds.data.legacy.cms.dao;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
-import gov.ca.cwds.data.legacy.cms.entity.State;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
 import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.inject.CmsSessionFactory;
 import java.util.List;

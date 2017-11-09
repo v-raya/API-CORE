@@ -1,4 +1,4 @@
-package gov.ca.cwds.data.legacy.cms.entity;
+package gov.ca.cwds.data.legacy.cms.entity.syscodes;
 
 import javax.persistence.Cacheable;
 import javax.persistence.DiscriminatorValue;

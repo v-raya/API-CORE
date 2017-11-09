@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.VisitType;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
 import java.sql.Timestamp;

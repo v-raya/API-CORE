@@ -1,4 +1,4 @@
-package gov.ca.cwds.data.legacy.cms.entity;
+package gov.ca.cwds.data.legacy.cms.entity.syscodes;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
 import org.apache.commons.lang3.builder.EqualsBuilder;
