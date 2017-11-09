@@ -1,6 +1,7 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.ActiveServiceComponentType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.County;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
@@ -142,12 +143,15 @@ public class Case extends CmsPersistentObject {
 
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
   @JoinColumn(name = "STATE_C", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
   private State state;
 
-  @Type(type = "short")
-  @Column(name = "SRV_CMPC")
-  private Short activeServiceComponentType;
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "SRV_CMPC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private ActiveServiceComponentType activeServiceComponentType;
 
   @Column(name = "SRV_CMPDT")
   private LocalDate activeSvcComponentStartDate;
@@ -393,11 +397,11 @@ public class Case extends CmsPersistentObject {
     this.state = state;
   }
 
-  public Short getActiveServiceComponentType() {
+  public ActiveServiceComponentType getActiveServiceComponentType() {
     return activeServiceComponentType;
   }
 
-  public void setActiveServiceComponentType(Short activeServiceComponentType) {
+  public void setActiveServiceComponentType(ActiveServiceComponentType activeServiceComponentType) {
     this.activeServiceComponentType = activeServiceComponentType;
   }
 
