@@ -1,19 +1,16 @@
 package gov.ca.cwds.data.legacy.cms.entity.enums;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
+import javax.persistence.Converter;
 
 /**
  * @author CWDS CASE API Team
  */
-public enum LimitedAccess {
+public enum LimitedAccess implements EntityEnum<String> {
   NO_RESTRICTION("N/A",  " N/A"),
   SEALED("R", "Sealed"),
   SENSITIVE("S", "Sensitive");
-
-  private static final Map<String, LimitedAccess> codeMap =
-      Collections.unmodifiableMap(initializeMapping());
 
   private final String code;
   private final String description;
@@ -23,29 +20,26 @@ public enum LimitedAccess {
     this.description = description;
   }
 
-  public static LimitedAccess fromCode(String code) {
-    LimitedAccess result = codeMap.get(code);
-
-    if (result == null) {
-      throw new UnsupportedOperationException("The code " + code + " is not supported!");
-    }
-    return result;
-  }
-
-  private static Map<String, LimitedAccess> initializeMapping() {
-    Map result = new HashMap<String, LimitedAccess>();
-    for (LimitedAccess limitedAccess : LimitedAccess.values()) {
-      result.put(limitedAccess.code, limitedAccess);
-    }
-    return result;
-  }
-
+  @Override
   public String getCode() {
     return code;
   }
 
+  @Override
   public String getDescription() {
     return description;
+  }
+
+  @Converter
+  public static class LimitedAccessConverter extends EntityEnumConvertor<LimitedAccess,String> {
+
+    private static final Map<String, LimitedAccess> codeMap =
+        Collections.unmodifiableMap(initializeMapping(LimitedAccess.values()));
+
+    @Override
+    Map<String, LimitedAccess> getCodeMap() {
+      return codeMap;
+    }
   }
 }
 

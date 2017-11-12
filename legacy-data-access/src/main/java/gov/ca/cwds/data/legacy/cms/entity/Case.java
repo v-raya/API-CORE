@@ -2,7 +2,6 @@ package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.enums.LimitedAccess;
-import gov.ca.cwds.data.legacy.cms.entity.enums.LimitedAccessConverter;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ActiveServiceComponentType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ApprovalStatusType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.CaseClosureReasonType;
@@ -117,7 +116,7 @@ public class Case extends CmsPersistentObject {
   private Boolean icpcOutgoingRequestIndVar;
 
   @Column(name = "LMT_ACSSCD")
-  @Convert(converter = LimitedAccessConverter.class)
+  @Convert(converter = LimitedAccess.LimitedAccessConverter.class)
   private LimitedAccess limitedAccess;
 
   @Column(name = "LMT_ACS_DT")

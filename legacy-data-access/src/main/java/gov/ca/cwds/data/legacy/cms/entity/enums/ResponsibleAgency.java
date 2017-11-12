@@ -1,13 +1,13 @@
 package gov.ca.cwds.data.legacy.cms.entity.enums;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
+import javax.persistence.Converter;
 
 /**
  * @author CWDS CASE API Team
  */
-public enum ResponsibleAgency {
+public enum ResponsibleAgency implements EntityEnum<Character> {
   PRIVATE_ADOPTION_AGENCY('A', "Private Adoption Agency"),
   COUNTY_WELFARE_DEPARTMENT('C', "County Welfare Department"),
   INDIAN_CHILD_WELFARE('I', "Indian Child Welfare"),
@@ -17,9 +17,6 @@ public enum ResponsibleAgency {
   PROBATION('P', " Probation"),
   STATE_ADOPTION_DISTRICT_OFFICE('S', "State Adoption District Office");
 
-  private static final Map<Character, ResponsibleAgency> codeMap =
-      Collections.unmodifiableMap(initializeMapping());
-
   private final Character code;
   private final String description;
 
@@ -28,29 +25,27 @@ public enum ResponsibleAgency {
     this.description = description;
   }
 
-  public static ResponsibleAgency fromCode(Character code) {
-    ResponsibleAgency result = codeMap.get(code);
-
-    if (result == null) {
-      throw new UnsupportedOperationException("The code " + code + " is not supported!");
-    }
-    return result;
-  }
-
-  private static Map<Character, ResponsibleAgency> initializeMapping() {
-    Map result = new HashMap<Character, ResponsibleAgency>();
-    for (ResponsibleAgency responsibleAgency : ResponsibleAgency.values()) {
-      result.put(responsibleAgency.code, responsibleAgency);
-    }
-    return result;
-  }
-
+  @Override
   public Character getCode() {
     return code;
   }
 
+  @Override
   public String getDescription() {
     return description;
+  }
+
+  @Converter
+  public static class ResponsibleAgencyConverter extends
+      EntityEnumConvertor<ResponsibleAgency, Character> {
+
+    private static final Map<Character, ResponsibleAgency> codeMap =
+        Collections.unmodifiableMap(initializeMapping(ResponsibleAgency.values()));
+
+    @Override
+    Map<Character, ResponsibleAgency> getCodeMap() {
+      return codeMap;
+    }
   }
 }
 
