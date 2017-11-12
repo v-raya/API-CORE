@@ -23,7 +23,7 @@ public enum ResponsibleAgency {
   private final Character code;
   private final String description;
 
-  ResponsibleAgency(char code, String description) {
+  ResponsibleAgency(Character code, String description) {
     this.code = code;
     this.description = description;
   }
@@ -45,7 +45,7 @@ public enum ResponsibleAgency {
     return result;
   }
 
-  public char getCode() {
+  public Character getCode() {
     return code;
   }
 
