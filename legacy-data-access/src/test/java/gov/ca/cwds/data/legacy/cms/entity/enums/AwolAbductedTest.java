@@ -14,7 +14,7 @@ import org.junit.Test;
 
 public class AwolAbductedTest {
 
-  AwolAbductedConverter converter;
+  private AwolAbductedConverter converter;
 
   @Before
   public void before() {

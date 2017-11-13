@@ -9,7 +9,7 @@ import static org.junit.Assert.assertNull;
 
 public class ResponsibleAgencyTest {
 
-  ResponsibleAgencyConverter converter;
+  private ResponsibleAgencyConverter converter;
 
   @Before
   public void before() {

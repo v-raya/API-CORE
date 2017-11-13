@@ -13,7 +13,7 @@ import org.junit.Test;
 
 public class IcwaEligibilityTest {
 
-  IcwaEligibilityConverter converter;
+  private IcwaEligibilityConverter converter;
 
   @Before
   public void before() {

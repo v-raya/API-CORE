@@ -12,7 +12,7 @@ import org.junit.Test;
 
 public class AdoptableTest {
 
-  AdoptableConverter converter;
+  private AdoptableConverter converter;
 
   @Before
   public void before() {

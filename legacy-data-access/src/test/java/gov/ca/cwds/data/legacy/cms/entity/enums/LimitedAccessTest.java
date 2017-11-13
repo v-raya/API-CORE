@@ -12,7 +12,7 @@ import org.junit.Test;
 
 public class LimitedAccessTest {
 
-  LimitedAccessConverter converter;
+  private LimitedAccessConverter converter;
 
   @Before
   public void before() {
