@@ -2,6 +2,7 @@ package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Adoptable;
+import gov.ca.cwds.data.legacy.cms.entity.enums.AwolAbducted;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.DeathCircumstancesType;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -71,7 +72,8 @@ public class ChildClient extends CmsPersistentObject {
   private String attemptToAcquireHlthInfoDesc;
 
   @Column(name = "AWOL_AB_CD")
-  private String awolAbductedCode;
+  @Convert(converter = AwolAbducted.AwolAbductedConverter.class)
+  private AwolAbducted awolAbducted;
 
   @Type(type = "yes_no")
   @Column(name = "BHIST_IND")
@@ -228,8 +230,8 @@ public class ChildClient extends CmsPersistentObject {
     this.attemptToAcquireHlthInfoDesc = attemptToAcquireHlthInfoDesc;
   }
 
-  public void setAwolAbductedCode(String awolAbductedCode) {
-    this.awolAbductedCode = awolAbductedCode;
+  public void setAwolAbductedCode(AwolAbducted awolAbducted) {
+    this.awolAbducted = awolAbducted;
   }
 
   public void setBirthHistoryIndicatorVar(Boolean birthHistoryIndicatorVar) {
@@ -428,8 +430,8 @@ public class ChildClient extends CmsPersistentObject {
   /**
    * @return the awolAbductedCode
    */
-  public String getAwolAbductedCode() {
-    return awolAbductedCode;
+  public AwolAbducted getAwolAbducted() {
+    return awolAbducted;
   }
 
   /**
