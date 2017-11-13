@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.AttributeConverter;
 
-public abstract class EntityEnumConvertor<E extends EntityEnum<K>, K> implements
+public abstract class BaseEntityEnumConvertor<E extends EntityEnum<K>, K> implements
     AttributeConverter<E, K> {
 
   static <K, E> Map<K, E> initializeMapping(EntityEnum<K>[] values) {

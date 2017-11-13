@@ -14,7 +14,7 @@ public enum ResponsibleAgency implements EntityEnum<Character> {
   KIN_GAP('K', "Kin-Gap"),
   MENTAL_HEALTH('M', "Mental Health"),
   OUT_OF_STATE_AGENCY('O', "Out of State Agency"),
-  PROBATION('P', " Probation"),
+  PROBATION('P', "Probation"),
   STATE_ADOPTION_DISTRICT_OFFICE('S', "State Adoption District Office");
 
   private final Character code;
@@ -37,7 +37,7 @@ public enum ResponsibleAgency implements EntityEnum<Character> {
 
   @Converter
   public static class ResponsibleAgencyConverter extends
-      EntityEnumConvertor<ResponsibleAgency, Character> {
+      BaseEntityEnumConvertor<ResponsibleAgency, Character> {
 
     private static final Map<Character, ResponsibleAgency> codeMap =
         Collections.unmodifiableMap(initializeMapping(ResponsibleAgency.values()));
