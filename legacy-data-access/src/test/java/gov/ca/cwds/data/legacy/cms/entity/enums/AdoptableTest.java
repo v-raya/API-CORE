@@ -51,6 +51,6 @@ public class AdoptableTest {
 
   @Test(expected = UnsupportedOperationException.class)
   public void testInvalidCode() {
-    converter.convertToEntityAttribute("X");
+    converter.convertToEntityAttribute(" ");
   }
 }

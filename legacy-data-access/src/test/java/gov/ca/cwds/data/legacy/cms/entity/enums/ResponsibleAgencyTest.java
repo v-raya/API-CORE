@@ -68,6 +68,6 @@ public class ResponsibleAgencyTest {
 
   @Test(expected = UnsupportedOperationException.class)
   public void testInvalidCode() {
-    converter.convertToEntityAttribute('X');
+    converter.convertToEntityAttribute(' ');
   }
 }

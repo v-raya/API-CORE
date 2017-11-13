@@ -51,6 +51,6 @@ public class LimitedAccessTest {
 
   @Test(expected = UnsupportedOperationException.class)
   public void testInvalidCode() {
-    converter.convertToEntityAttribute("X");
+    converter.convertToEntityAttribute(" ");
   }
 }
