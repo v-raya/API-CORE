@@ -286,8 +286,8 @@ public class ChildClient extends CmsPersistentObject {
     this.foodStampsApplicationIndicator = foodStampsApplicationIndicator;
   }
 
-  public void setIcwaEligibilityCode(IcwaEligibility IcwaEligibility) {
-    this.icwaEligibility = IcwaEligibility;
+  public void setIcwaEligibilityCode(IcwaEligibility icwaEligibility) {
+    this.icwaEligibility = icwaEligibility;
   }
 
   public void setIntercountryAdoptDisruptedIndicator(Boolean intercountryAdoptDisruptedIndicator) {
