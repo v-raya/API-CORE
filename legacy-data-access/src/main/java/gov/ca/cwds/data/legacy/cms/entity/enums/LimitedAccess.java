@@ -8,7 +8,7 @@ import javax.persistence.Converter;
  * @author CWDS CASE API Team
  */
 public enum LimitedAccess implements EntityEnum<String> {
-  NO_RESTRICTION("N/A",  " N/A"),
+  NO_RESTRICTION("N/A",  "N/A"),
   SEALED("R", "Sealed"),
   SENSITIVE("S", "Sensitive");
 
