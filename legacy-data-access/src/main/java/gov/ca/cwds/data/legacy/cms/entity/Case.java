@@ -2,6 +2,7 @@ package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.enums.LimitedAccess;
+import gov.ca.cwds.data.legacy.cms.entity.enums.ResponsibleAgency;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ActiveServiceComponentType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ApprovalStatusType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.CaseClosureReasonType;
@@ -141,7 +142,8 @@ public class Case extends CmsPersistentObject {
   private LocalDate projectedEndDate;
 
   @Column(name = "RSP_AGY_CD")
-  private String responsibleAgencyCode;
+  @Convert(converter = ResponsibleAgency.ResponsibleAgencyConverter.class)
+  private ResponsibleAgency responsibleAgency;
 
   @Type(type = "yes_no")
   @Column(name = "SPRJ_CST_B")
@@ -374,12 +376,12 @@ public class Case extends CmsPersistentObject {
     this.projectedEndDate = projectedEndDate;
   }
 
-  public String getResponsibleAgencyCode() {
-    return responsibleAgencyCode;
+  public ResponsibleAgency getResponsibleAgency() {
+    return responsibleAgency;
   }
 
-  public void setResponsibleAgencyCode(String responsibleAgencyCode) {
-    this.responsibleAgencyCode = responsibleAgencyCode;
+  public void setResponsibleAgency(ResponsibleAgency responsibleAgency) {
+    this.responsibleAgency = responsibleAgency;
   }
 
   public Boolean getSpecialProjectCaseIndVar() {
