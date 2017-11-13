@@ -1,9 +1,11 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.legacy.cms.entity.enums.Adoptable;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.DeathCircumstancesType;
 import java.time.LocalDate;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -43,7 +45,8 @@ public class ChildClient extends CmsPersistentObject {
   private String victimClientId;
 
   @Column(name = "ADOPTBL_CD")
-  private String adoptableCode;
+  @Convert(converter = Adoptable.AdoptableConverter.class)
+  private Adoptable adoptable;
 
   @Type(type = "short")
   @Column(name = "ADPT_AGE")
@@ -197,8 +200,8 @@ public class ChildClient extends CmsPersistentObject {
     this.victimClientId = victimClientId;
   }
 
-  public void setAdoptableCode(String adoptableCode) {
-    this.adoptableCode = adoptableCode;
+  public void setAdoptable(Adoptable adoptable) {
+    this.adoptable = adoptable;
   }
 
   public void setAdoptedAge(Short adoptedAge) {
@@ -376,8 +379,8 @@ public class ChildClient extends CmsPersistentObject {
   /**
    * @return the adoptableCode
    */
-  public String getAdoptableCode() {
-    return adoptableCode;
+  public Adoptable getAdoptable() {
+    return adoptable;
   }
 
   /**
