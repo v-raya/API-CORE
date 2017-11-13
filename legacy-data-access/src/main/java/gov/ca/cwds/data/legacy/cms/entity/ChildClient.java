@@ -3,6 +3,7 @@ package gov.ca.cwds.data.legacy.cms.entity;
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Adoptable;
 import gov.ca.cwds.data.legacy.cms.entity.enums.AwolAbducted;
+import gov.ca.cwds.data.legacy.cms.entity.enums.Disability;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.DeathCircumstancesType;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -97,7 +98,8 @@ public class ChildClient extends CmsPersistentObject {
   private DeathCircumstancesType deathCircumstancesType;
 
   @Column(name = "DISABLD_CD")
-  private String disabilityDiagnosedCode;
+  @Convert(converter = Disability.DisabilityConverter.class)
+  private Disability disabilityDiagnosed;
 
   @Column(name = "HEPDOC_OLD")
   private String drmsHePassportDocOld;
@@ -254,8 +256,8 @@ public class ChildClient extends CmsPersistentObject {
     this.deathCircumstancesType = deathCircumstancesType;
   }
 
-  public void setDisabilityDiagnosedCode(String disabilityDiagnosedCode) {
-    this.disabilityDiagnosedCode = disabilityDiagnosedCode;
+  public void setDisabilityDiagnosed(Disability disabilityDiagnosed) {
+    this.disabilityDiagnosed = disabilityDiagnosed;
   }
 
   public void setDrmsHePassportDocOld(String drmsHePassportDocOld) {
@@ -472,8 +474,8 @@ public class ChildClient extends CmsPersistentObject {
   /**
    * @return the disabilityDiagnosedCode
    */
-  public String getDisabilityDiagnosedCode() {
-    return disabilityDiagnosedCode;
+  public Disability getDisabilityDiagnosed() {
+    return disabilityDiagnosed;
   }
 
   /**
