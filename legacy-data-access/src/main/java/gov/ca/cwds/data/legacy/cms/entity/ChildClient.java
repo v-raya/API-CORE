@@ -4,6 +4,7 @@ import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Adoptable;
 import gov.ca.cwds.data.legacy.cms.entity.enums.AwolAbducted;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Disability;
+import gov.ca.cwds.data.legacy.cms.entity.enums.IcwaEligibility;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.DeathCircumstancesType;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -122,7 +123,8 @@ public class ChildClient extends CmsPersistentObject {
   private Boolean foodStampsApplicationIndicator;
 
   @Column(name = "ICWA_ELGCD")
-  private String icwaEligibilityCode;
+  @Convert(converter = IcwaEligibility.IcwaEligibilityConverter.class)
+  private IcwaEligibility icwaEligibility;
 
   @Type(type = "yes_no")
   @Column(name = "ICADSR_IND")
@@ -284,8 +286,8 @@ public class ChildClient extends CmsPersistentObject {
     this.foodStampsApplicationIndicator = foodStampsApplicationIndicator;
   }
 
-  public void setIcwaEligibilityCode(String icwaEligibilityCode) {
-    this.icwaEligibilityCode = icwaEligibilityCode;
+  public void setIcwaEligibilityCode(IcwaEligibility IcwaEligibility) {
+    this.icwaEligibility = IcwaEligibility;
   }
 
   public void setIntercountryAdoptDisruptedIndicator(Boolean intercountryAdoptDisruptedIndicator) {
@@ -523,8 +525,8 @@ public class ChildClient extends CmsPersistentObject {
   /**
    * @return the icwaEligibilityCode
    */
-  public String getIcwaEligibilityCode() {
-    return icwaEligibilityCode;
+  public IcwaEligibility getIcwaEligibility() {
+    return icwaEligibility;
   }
 
   /**
