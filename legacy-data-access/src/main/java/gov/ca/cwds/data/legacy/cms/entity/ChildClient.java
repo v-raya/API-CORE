@@ -5,6 +5,7 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.Adoptable;
 import gov.ca.cwds.data.legacy.cms.entity.enums.AwolAbducted;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Disability;
 import gov.ca.cwds.data.legacy.cms.entity.enums.IcwaEligibility;
+import gov.ca.cwds.data.legacy.cms.entity.enums.PreviouslyAdopted;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.DeathCircumstancesType;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -159,7 +160,8 @@ public class ChildClient extends CmsPersistentObject {
   private Boolean postsecVocIndicator;
 
   @Column(name = "PREADPT_CD")
-  private String previouslyAdoptedCode;
+  @Convert(converter = PreviouslyAdopted.PreviouslyAdoptedConverter.class)
+  private PreviouslyAdopted previouslyAdopted;
 
   @Type(type = "yes_no")
   @Column(name = "SFSURB_IND")
@@ -323,8 +325,8 @@ public class ChildClient extends CmsPersistentObject {
     this.postsecVocIndicator = postsecVocIndicator;
   }
 
-  public void setPreviouslyAdoptedCode(String previouslyAdoptedCode) {
-    this.previouslyAdoptedCode = previouslyAdoptedCode;
+  public void setPreviouslyAdoptedCode(PreviouslyAdopted previouslyAdopted) {
+    this.previouslyAdopted = previouslyAdopted;
   }
 
   public void setSafelySurrendedBabiesIndicatorVar(Boolean safelySurrendedBabiesIndicatorVar) {
@@ -588,8 +590,8 @@ public class ChildClient extends CmsPersistentObject {
   /**
    * @return the previouslyAdoptedCode
    */
-  public String getPreviouslyAdoptedCode() {
-    return previouslyAdoptedCode;
+  public PreviouslyAdopted getPreviouslyAdopted() {
+    return previouslyAdopted;
   }
 
   /**
