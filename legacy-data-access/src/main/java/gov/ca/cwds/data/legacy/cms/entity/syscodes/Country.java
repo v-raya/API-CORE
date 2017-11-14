@@ -1,6 +1,6 @@
 package gov.ca.cwds.data.legacy.cms.entity.syscodes;
 
-import static gov.ca.cwds.data.legacy.cms.entity.syscodes.County.NQ_ALL;
+import static gov.ca.cwds.data.legacy.cms.entity.syscodes.Country.NQ_ALL;
 
 import javax.persistence.Cacheable;
 import javax.persistence.DiscriminatorValue;
