@@ -29,16 +29,9 @@ import org.hibernate.annotations.Type;
  *
  * @author CWDS API Team
  */
-@NamedQuery(name = ChildClient.FIND_VICTIM_CLIENTS,
-    query = "SELECT C" + " FROM ChildClient C, ReferralClient R, Allegation A"
-        + " WHERE C.victimClientId = R.clientId " + " AND A.victimClientId = R.clientId"
-        + " AND R.referralId = :referralId")
 @Entity
 @Table(name = "CHLD_CLT")
 public class ChildClient extends CmsPersistentObject {
-
-  public static final String FIND_VICTIM_CLIENTS = "ChildClient.findVictimClients";
-
   /**
    * Serialization version
    */

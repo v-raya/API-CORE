@@ -25,20 +25,4 @@ public class ChildClientDao extends CrudsDaoImpl<ChildClient> {
   public ChildClientDao(@CmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
-
-  /**
-   * Find the victim Child Clients associated with a referral
-   *
-   * @param referralId the referral identifier
-   * @return the Child Clients
-   */
-  @SuppressWarnings("unchecked")
-  public ChildClient[] findVictimClients(String referralId) {
-    Session session = this.getSessionFactory().getCurrentSession();
-    Query<ChildClient> query = session
-        .createNamedQuery(ChildClient.FIND_VICTIM_CLIENTS,
-            ChildClient.class);
-    query.setParameter("referralId", referralId);
-    return query.list().toArray(new ChildClient[0]);
-  }
 }
