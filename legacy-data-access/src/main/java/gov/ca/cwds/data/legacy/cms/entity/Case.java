@@ -30,7 +30,7 @@ import org.hibernate.annotations.Type;
 /**
  * {@link PersistentObject} Class representing a Case.
  *
- * @author CWDS API Team
+ * @author CASE API Team
  */
 @Entity
 @Table(name = "CASE_T")
@@ -45,8 +45,11 @@ public class Case extends CmsPersistentObject {
   @Column(name = "IDENTIFIER", nullable = false, length = CMS_ID_LEN)
   private String identifier;
 
-  @Column(name = "ALERT_TXT")
-  private String alertText;
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "ALERT_TXT", referencedColumnName = "IDENTIFIER")
+  private LongText alertText;
 
   @Column(name = "APRVL_NO")
   private String approvalNumber;
@@ -184,11 +187,11 @@ public class Case extends CmsPersistentObject {
     this.identifier = identifier;
   }
 
-  public String getAlertText() {
+  public LongText getAlertText() {
     return alertText;
   }
 
-  public void setAlertText(String alertText) {
+  public void setAlertText(LongText alertText) {
     this.alertText = alertText;
   }
 
