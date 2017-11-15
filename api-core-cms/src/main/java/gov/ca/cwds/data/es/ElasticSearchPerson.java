@@ -381,6 +381,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonProperty("ssn")
   private String ssn;
 
+  @JsonProperty("index_number")
+  private String indexNumber;
+
   @JsonProperty("type")
   private transient String type;
 
@@ -1061,6 +1064,24 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     } else {
       this.sensitivityIndicator = sensitivityIndicator;
     }
+  }
+
+  /**
+   * Get client index number
+   * 
+   * @return The client index number
+   */
+  public String getIndexNumber() {
+    return indexNumber;
+  }
+
+  /**
+   * Set the clien index number
+   * 
+   * @param indexNumber The client index number
+   */
+  public void setIndexNumber(String indexNumber) {
+    this.indexNumber = indexNumber;
   }
 
   /**

@@ -68,7 +68,7 @@
       "type": "text",
       "store": true
     },
-    "cin": {
+    "index_number": {
       "type": "text",
       "store": true
     },
@@ -255,6 +255,10 @@
     },
     "akas": {
       "properties": {
+        "id": {
+          "type": "text",
+          "store": true
+        },
         "first_name": {
           "type": "text",
           "store": true,

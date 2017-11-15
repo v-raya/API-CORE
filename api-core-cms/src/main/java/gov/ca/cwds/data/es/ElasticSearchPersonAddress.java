@@ -8,6 +8,7 @@ import gov.ca.cwds.data.ApiTypedIdentifier;
 import gov.ca.cwds.data.std.ApiAddressAware;
 import gov.ca.cwds.data.std.ApiAddressAwareWritable;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.cms.SystemCode;
 
 /**
@@ -71,6 +72,12 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
   @JsonProperty("street_name")
   private String streetName;
 
+  @JsonProperty("effective_start_date")
+  private String effectiveStartDate;
+
+  @JsonProperty("effective_end_date")
+  private String effectiveEndDate;
+
   @JsonProperty("legacy_descriptor")
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
@@ -118,6 +125,9 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
     this.streetName = address.getStreetName();
     this.streetNumber = address.getStreetNumber();
     this.unitNumber = address.getApiAdrUnitNumber();
+
+    this.effectiveStartDate = DomainChef.cookDate(address.getClientAddressEffectiveStartDate());
+    this.effectiveEndDate = DomainChef.cookDate(address.getClientAddressEffectiveEndDate());
 
     if (ElasticSearchPerson.systemCodes != null) {
       if (address.getStateCd() != null && address.getStateCd().intValue() != 0) {
@@ -335,5 +345,21 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
   @SuppressWarnings("javadoc")
   public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
     this.legacyDescriptor = legacyDescriptor;
+  }
+
+  public String getEffectiveStartDate() {
+    return effectiveStartDate;
+  }
+
+  public void setEffectiveStartDate(String effectiveStartDate) {
+    this.effectiveStartDate = effectiveStartDate;
+  }
+
+  public String getEffectiveEndDate() {
+    return effectiveEndDate;
+  }
+
+  public void setEffectiveEndDate(String effectiveEndDate) {
+    this.effectiveEndDate = effectiveEndDate;
   }
 }
