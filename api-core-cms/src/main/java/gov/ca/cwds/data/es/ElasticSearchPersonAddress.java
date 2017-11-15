@@ -1,5 +1,8 @@
 package gov.ca.cwds.data.es;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,6 +22,8 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCode;
 @SuppressWarnings("serial")
 public class ElasticSearchPersonAddress extends ApiObjectIdentity
     implements ApiTypedIdentifier<String>, ApiAddressAwareWritable {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchPersonAddress.class);
 
   private String id;
 
@@ -148,7 +153,7 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
             .getShortDescription();
       }
     } else {
-      ElasticSearchPerson.LOGGER.error("SYSCODE TRANSLATOR NOT SET!!!");
+      LOGGER.error("SYSCODE TRANSLATOR NOT SET!!!");
     }
   }
 

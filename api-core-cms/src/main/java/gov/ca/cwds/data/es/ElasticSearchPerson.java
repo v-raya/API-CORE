@@ -330,7 +330,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
   }
 
-  static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchPerson.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchPerson.class);
 
   static gov.ca.cwds.rest.api.domain.cms.SystemCodeCache systemCodes =
       gov.ca.cwds.rest.api.domain.cms.SystemCodeCache.global();
