@@ -32,7 +32,9 @@ public class ElasticSearchSafetyAlert extends ApiObjectIdentity
   /**
    * No-argument constructor.
    */
-  public ElasticSearchSafetyAlert() {}
+  public ElasticSearchSafetyAlert() {
+    // default ctor
+  }
 
   @Override
   public String getId() {

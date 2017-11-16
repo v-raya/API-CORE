@@ -755,7 +755,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
       } catch (ClassNotFoundException ce) {
         throw new ServiceException("ElasticSearch Person error: Failed to instantiate class "
-            + ret.getSourceType() + ", ES person id=" + ret.getId(), ce);
+            + ret.getSourceType() + ", person id=" + ret.getId(), ce);
       } catch (Exception e) {
         throw new ServiceException(
             "ElasticSearch Person error: " + e.getMessage() + ", ES person id=" + ret.getId(), e);
@@ -788,7 +788,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       highLights = MAPPER.writeValueAsString(highlightValues);
     } catch (JsonProcessingException e) {
       throw new ServiceException("ElasticSearch Person error: Failed serialize map to JSON "
-          + ret.getSourceType() + ", ES person id=" + ret.getId(), e);
+          + ret.getSourceType() + ", doc id=" + ret.getId(), e);
     }
     ret.setHighlightFields(highLights);
     ret.setHighlights(highlightValues);

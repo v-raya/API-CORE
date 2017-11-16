@@ -176,14 +176,14 @@ public final class CmsKeyIdGenerator {
   private static final int LEN_KEY = 10;
   private static final int LEN_KEYSTAFFID = 3;
   private static final int LEN_KEYTIMESTAMP = 7;
-  private static final int nSZ_UISTAFFID = 6;
-  private static final int nSZ_UITIMESTAMP = 26;
-  private static final int nSZ_UIIDENTIFIER = 22;
-  private static final int nSZ_PTIMESTAMP = 11;
+  private static final int SZ_UISTAFFID = 6;
+  private static final int SZ_UITIMESTAMP = 26;
+  private static final int SZ_UIIDENTIFIER = 22;
+  private static final int SZ_PTIMESTAMP = 11;
 
-  private static final int nSZ_USERID = 8;
+  private static final int SZ_USERID = 8;
 
-  private static final int nSZ_POWVEC = 19;
+  private static final int SZ_POWVEC = 19;
 
   private static final int LEN_UIIDSTAFFID = 6; // for converting a key to a UI identifier
   private static final int LEN_UIIDTIMESTAMP = 13;

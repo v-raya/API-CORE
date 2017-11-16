@@ -7,8 +7,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+
 import gov.ca.cwds.rest.api.ApiException;
 
 /**
@@ -90,8 +92,8 @@ public class DomainChef {
    * @return purified, JSON suitable key name
    */
   public static String camelCaseToLowerUnderscore(String in) {
-    final String regex = "([A-Z])";
-    final String replacement = "_$1";
+    String regex = "([A-Z])";
+    String replacement = "_$1";
     return in.replaceAll(regex, replacement).toLowerCase().replaceAll("_$", "");
   }
 
