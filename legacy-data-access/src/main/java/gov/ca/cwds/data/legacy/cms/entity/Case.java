@@ -70,8 +70,11 @@ public class Case extends CmsPersistentObject {
   @Column(name = "CSPL_DET_B")
   private Boolean caseplanChildrenDetailIndVar;
 
-  @Column(name = "CL_STM_TXT")
-  private String closureStatementText;
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "CL_STM_TXT", referencedColumnName = "IDENTIFIER")
+  private LongText closureStatementText;
 
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
@@ -227,11 +230,11 @@ public class Case extends CmsPersistentObject {
     this.caseplanChildrenDetailIndVar = caseplanChildrenDetailIndVar;
   }
 
-  public String getClosureStatementText() {
+  public LongText getClosureStatementText() {
     return closureStatementText;
   }
 
-  public void setClosureStatementText(String closureStatementText) {
+  public void setClosureStatementText(LongText closureStatementText) {
     this.closureStatementText = closureStatementText;
   }
 
