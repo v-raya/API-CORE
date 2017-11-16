@@ -55,7 +55,7 @@ public class MutuallyExclusiveValidator
 
   @Override
   public boolean isValid(final Object bean, ConstraintValidatorContext context) {
-    boolean valid = true;
+    boolean valid;
 
     if (String.class.equals(type)) {
       valid = handleStringType(bean, context);
@@ -72,6 +72,7 @@ public class MutuallyExclusiveValidator
     ImmutableList.Builder<String> messages = new ImmutableList.Builder<>();
     int countTrue = 0;
     int countSet = 0;
+
     for (String property : properties) {
       String value = readBeanValue(bean, property);
       if (value != null) {
@@ -81,6 +82,7 @@ public class MutuallyExclusiveValidator
         }
       }
     }
+
     if (required) {
       if (countTrue != 1) {
         valid = false;
