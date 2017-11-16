@@ -265,7 +265,7 @@ public final class CmsKeyIdGenerator {
     double nTimestamp = 0;
     double nPreviousTimestamp = 0; // previous value - used for UNIQUENESS!
 
-    // TODO: #145948067: make previous timestamp thread-safe.
+    // NEXT: #145948067: make previous timestamp thread-safe.
     while (true) { // NOSONAR
       nTimestamp = timestampToDouble(getTimestampSeed(null));
 

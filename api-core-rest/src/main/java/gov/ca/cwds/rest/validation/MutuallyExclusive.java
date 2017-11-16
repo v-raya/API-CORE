@@ -26,6 +26,7 @@ import javax.validation.Payload;
 @Documented
 @Constraint(validatedBy = MutuallyExclusiveValidator.class)
 public @interface MutuallyExclusive {
+
   String message() default "The following properties are mutually exclusive {properties}";
 
   Class<?>[] groups() default {};
@@ -38,4 +39,5 @@ public @interface MutuallyExclusive {
 
   @SuppressWarnings("rawtypes")
   Class type() default String.class;
+
 }
