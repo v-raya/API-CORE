@@ -39,8 +39,13 @@ public class IfThenNotValidator
   public boolean isValid(final Object bean, ConstraintValidatorContext context) {
     boolean valid = true;
 
-    boolean ifPropertyValue = (Boolean) readBeanPropertyValue(bean, ifProperty);
-    short thenPropertyValue = (Short) readBeanPropertyValue(bean, thenProperty);
+    boolean ifPropertyValue = readBeanPropertyValue(bean, ifProperty) != null
+        ? (Boolean) readBeanPropertyValue(bean, ifProperty)
+        : false;
+
+    short thenPropertyValue = readBeanPropertyValue(bean, thenProperty) != null
+        ? (Short) readBeanPropertyValue(bean, thenProperty)
+        : 0;
 
     if (ifPropertyValue == ifValue && thenNotValue == thenPropertyValue) {
       valid = false;
