@@ -9,72 +9,17 @@ import static org.junit.Assert.assertTrue;
 import gov.ca.cwds.data.legacy.cms.entity.Case;
 import gov.ca.cwds.data.legacy.cms.entity.enums.LimitedAccess;
 import gov.ca.cwds.data.legacy.cms.entity.enums.ResponsibleAgency;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.function.Consumer;
-import liquibase.Liquibase;
-import liquibase.database.Database;
-import liquibase.database.DatabaseFactory;
-import liquibase.database.jvm.JdbcConnection;
-import liquibase.exception.DatabaseException;
-import liquibase.exception.LiquibaseException;
-import liquibase.resource.ClassLoaderResourceAccessor;
+import gov.ca.cwds.data.legacy.cms.persistence.BaseCwsCmsInMemoryPersistenceTest;
 import org.dbunit.Assertion;
-import org.dbunit.JdbcDatabaseTester;
-import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
-import org.dbunit.dataset.ReplacementDataSet;
-import org.dbunit.operation.DatabaseOperation;
-import org.dbunit.util.fileloader.DataFileLoader;
-import org.dbunit.util.fileloader.FlatXmlDataFileLoader;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class CaseDaoTest {
-
-  public static final String URL = "jdbc:h2:mem:cwscms;INIT=create schema if not exists CWSCMS\\;set schema CWSCMS;DB_CLOSE_DELAY=-1";
-  public static final String USER = "sa";
-  public static final String PASSWORD = "";
-  public static final String SCHEMA = "CWSCMS";
-  public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
-  public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter
-      .ofPattern("yyyy-MM-dd HH:mm:ss");
-
-  protected static SessionFactory sessionFactory = null;
-  protected static JdbcDatabaseTester dbUnitTester;
-  protected static IDatabaseConnection dbUnitConnection;
+public class CaseDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
 
   private CaseDao caseDao = null;
-
-  @BeforeClass
-  public static void beforeClass() throws Exception {
-    setUpCms();
-    sessionFactory = createHibrtnateSessionFactory();
-    dbUnitTester = new JdbcDatabaseTester("org.h2.Driver", URL, USER, PASSWORD, SCHEMA);
-    dbUnitConnection = dbUnitTester.getConnection();
-  }
-
-  @AfterClass
-  public static void afterClass() throws Exception {
-    if (sessionFactory != null) {
-      sessionFactory.close();
-    }
-    if (dbUnitConnection != null) {
-      dbUnitConnection.close();
-    }
-  }
 
   @Before
   public void before() throws Exception {
@@ -147,91 +92,9 @@ public class CaseDaoTest {
     IDataSet expectedDataSet = readXmlDataSet("/dbunit/Case.xml");
     ITable expectedTable = expectedDataSet.getTable("CASE_T");
 
-    IDataSet actualDataSet = dbUnitConnection.createDataSet();
+    IDataSet actualDataSet = dbUnitConnection.createDataSet(new String[]{"CASE_T"});
     ITable actualTable = actualDataSet.getTable("CASE_T");
 
     Assertion.assertEquals(expectedTable, actualTable);
-  }
-
-  private static void setUpCms() throws Exception {
-    runLiquibaseScript("liquibase/cwscms_database_master.xml");
-  }
-
-  private static void runLiquibaseScript(String script) throws LiquibaseException {
-    try {
-      Liquibase liquibase = new Liquibase(script, new ClassLoaderResourceAccessor(), getDatabase());
-      liquibase.update((String) null);
-    } catch (Exception e) {
-      throw new LiquibaseException(e);
-    }
-  }
-
-  private static Database getDatabase() throws SQLException, DatabaseException {
-    Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-    return DatabaseFactory.getInstance()
-        .findCorrectDatabaseImplementation(new JdbcConnection(connection));
-  }
-
-  private static SessionFactory createHibrtnateSessionFactory() {
-    Configuration configuration = new Configuration();
-    configuration.configure();
-    configuration.setProperty("hibernate.connection.url", URL);
-    configuration.setProperty("hibernate.connection.username", USER);
-    configuration.setProperty("hibernate.connection.password", PASSWORD);
-    configuration.setProperty("hibernate.default_schema", SCHEMA);
-    return configuration.buildSessionFactory();
-  }
-
-  private void executeInTransaction(SessionFactory sessionFactory,
-      Consumer<SessionFactory> consumer) {
-
-    Session session = sessionFactory.getCurrentSession();
-    Transaction transaction = session.beginTransaction();
-
-    try {
-      consumer.accept(sessionFactory);
-      transaction.commit();
-    } catch (Exception e) {
-      transaction.rollback();
-      throw e;
-    } finally {
-      session.close();
-    }
-  }
-
-  private IDataSet readXmlDataSet(String dataSetFilePath) throws Exception {
-    DataFileLoader loader = new FlatXmlDataFileLoader();
-    IDataSet dataSet = loader.load(dataSetFilePath);
-    ReplacementDataSet replacementDataSet = new ReplacementDataSet(dataSet);
-    replacementDataSet.addReplacementObject("[NULL]", null);
-    return replacementDataSet;
-  }
-
-  private void cleanAllAndInsert(IDataSet dataSet) throws Exception {
-    DatabaseOperation.CLEAN_INSERT.execute(dbUnitConnection, dataSet);
-  }
-
-  //Cleans and populates tables mentioned in XML dataset
-  private void cleanAllAndInsert(String dataSetFilePath) throws Exception {
-    IDataSet dataSet = readXmlDataSet(dataSetFilePath);
-    cleanAllAndInsert(dataSet);
-  }
-
-  private void cleanAll(IDataSet dataSet) throws Exception {
-    DatabaseOperation.DELETE_ALL.execute(dbUnitConnection, dataSet);
-  }
-
-  //Cleans tables mentioned in XML dataset
-  private void cleanAll(String dataSetFilePath) throws Exception {
-    IDataSet dataSet = readXmlDataSet(dataSetFilePath);
-    cleanAll(dataSet);
-  }
-
-  private static LocalDate toDate(String dateStr) {
-    return LocalDate.parse(dateStr, DATE_FORMATTER);
-  }
-
-  private static LocalDateTime toDateTime(String dateStr) {
-    return LocalDateTime.parse(dateStr, DATE_TIME_FORMATTER);
   }
 }
