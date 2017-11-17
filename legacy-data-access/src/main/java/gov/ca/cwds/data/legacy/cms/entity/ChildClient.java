@@ -197,6 +197,10 @@ public class ChildClient extends CmsPersistentObject {
   @JoinColumn(name = "FKCLIENT_T", nullable = false, updatable = false, insertable = false)
   private Client client;
 
+  public Client getClient() {
+    return client;
+  }
+
   public void setVictimClientId(String victimClientId) {
     this.victimClientId = victimClientId;
   }
