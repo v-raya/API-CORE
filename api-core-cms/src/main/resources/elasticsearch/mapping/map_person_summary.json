@@ -68,7 +68,7 @@
       "type": "text",
       "store": true
     },
-    "index_number": {
+    "client_index_number": {
       "type": "text",
       "store": true
     },
