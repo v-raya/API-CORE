@@ -34,6 +34,7 @@ allprojects {
         glassfishJerseyExtVersion = "2.23.2"
         jacksonVersion = "2.8.2"
         postgresqlVersion = "9.4.1208.jre7"
+        calsModelVersion = '0.4.4'
     }
 
     licenseReport {
