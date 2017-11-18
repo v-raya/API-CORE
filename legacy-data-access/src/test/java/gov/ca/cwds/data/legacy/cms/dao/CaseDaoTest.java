@@ -47,9 +47,7 @@ public class CaseDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
           assertNull(c.getDrmsNotesDoc());//NOTES_DOC
           assertNull(c.getEmancipationDate());//EMANCPN_DT
           assertEquals(toDate("2002-11-08"), c.getEndDate());//END_DT
-          //c.getChildClient()//FKCHLD_CLT
           assertNull(c.getReferralId());//FKREFERL_T
-          //c.getStaffPerson()//FKSTFPERST
           assertEquals("Yolo", c.getCounty().getShortDsc());//GVR_ENTC
           assertFalse(c.getIcpcOutgngPlcmtStatusIndVar());//ICPCSTAT_B
           assertTrue(c.getIcpcOutgoingRequestIndVar());//ICPC_RQT_B

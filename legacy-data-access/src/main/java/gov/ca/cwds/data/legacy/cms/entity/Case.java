@@ -32,6 +32,7 @@ import org.hibernate.annotations.Type;
  *
  * @author CASE API Team
  */
+@SuppressWarnings("squid:S3437")
 @Entity
 @Table(name = "CASE_T")
 public class Case extends CmsPersistentObject {
