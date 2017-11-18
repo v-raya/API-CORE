@@ -19,7 +19,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
@@ -29,6 +28,7 @@ import org.hibernate.annotations.Type;
  *
  * @author CWDS API Team
  */
+@SuppressWarnings({"squid:S3437", "squid:S2160"})
 @Entity
 @Table(name = "CHLD_CLT")
 public class ChildClient extends CmsPersistentObject {

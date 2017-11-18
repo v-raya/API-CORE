@@ -1,8 +1,11 @@
-
 dependencies {
     compile project(':api-core-common')
-    
     compile group: "io.dropwizard", name: "dropwizard-hibernate", version: dropwizardVersion
+
+    testCompile group: 'gov.ca.cwds.cals', name: 'cws-cms-data-model', version: calsModelVersion, changing: true
+    testCompile group: 'org.liquibase', name: 'liquibase-core', version: '3.5.3'
+    testCompile group: 'com.h2database', name: 'h2', version: '1.4.194'
+    testCompile group: 'org.dbunit', name: 'dbunit', version: '2.5.0'
 }
 
 publishing {
