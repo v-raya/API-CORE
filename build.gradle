@@ -30,6 +30,7 @@ allprojects {
         apacheCommonsVersion = "1.3.2"
         commonsBeanutilsVersion = "1.8.3"
         guavaVersion = "22.0"
+        guiceVersion = "4.0"
         glassfishJerseyCoreVersion = "2.25.1"
         glassfishJerseyExtVersion = "2.23.2"
         jacksonVersion = "2.8.2"
@@ -52,20 +53,10 @@ allprojects {
     }
 
     dependencies {
-        compile group: 'org.apache.commons', name: 'commons-lang3', version: apacheCommonsVersion
-        compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-guice', version: jacksonVersion
-        compile group: 'org.apache.commons', name: 'commons-io', version: apacheCommonsVersion
-        compile group: 'commons-beanutils', name: 'commons-beanutils', version: commonsBeanutilsVersion
-
-
         // LOGGING:
         compile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
         compile group: 'org.slf4j', name: 'slf4j-ext', version: slf4jVersion
         compile group: 'org.slf4j', name: 'slf4j-simple', version: slf4jVersion
-
-        // TEST:
-        testCompile group: 'org.mockito', name: 'mockito-core', version: mockitoVersion
-        testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version: hamcrestVersion
     }
 
     tasks.withType(Test) {

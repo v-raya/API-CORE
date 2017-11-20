@@ -4,5 +4,6 @@ include 'api-core-rest'
 include 'api-core-cms'
 include 'api-core-abac'
 include 'legacy-data-access'
+include 'drools-engine'
 
 
