@@ -1,14 +1,10 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
-import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.ColumnTransformer;
 
 /**
@@ -16,7 +12,7 @@ import org.hibernate.annotations.ColumnTransformer;
  */
 
 @MappedSuperclass
-public abstract class BaseAddress implements PersistentObject {
+public abstract class BaseAddress extends CmsPersistentObject {
 
   private static final long serialVersionUID = 6031778171242179644L;
 
@@ -71,12 +67,6 @@ public abstract class BaseAddress implements PersistentObject {
   @ColumnTransformer(read = "trim(ZIP_NO)")
   private long zip;
 
-  @Column(name = "LST_UPD_ID", nullable = false, length = 3)
-  private String lastUpdatedId;
-
-  @Column(name = "LST_UPD_TS", nullable = false)
-  private LocalDateTime lastUpdatedTime;
-
   @Column(name = "ADDR_DSC", nullable = false, length = 120)
   @ColumnTransformer(read = "trim(ADDR_DSC)")
   private String description;
@@ -101,6 +91,11 @@ public abstract class BaseAddress implements PersistentObject {
   @Column(name = "UNIT_NO", nullable = false, length = 8)
   @ColumnTransformer(read = "trim(UNIT_NO)")
   private String unitNumber;
+
+  @Override
+  public Serializable getPrimaryKey() {
+    return getId();
+  }
 
   public String getId() {
     return id;
@@ -222,22 +217,6 @@ public abstract class BaseAddress implements PersistentObject {
     this.zip = zipNo;
   }
 
-  public String getLastUpdatedId() {
-    return lastUpdatedId;
-  }
-
-  public void setLastUpdatedId(String lstUpdId) {
-    this.lastUpdatedId = lstUpdId;
-  }
-
-  public LocalDateTime getLastUpdatedTime() {
-    return lastUpdatedTime;
-  }
-
-  public void setLastUpdatedTime(LocalDateTime lstUpdTs) {
-    this.lastUpdatedTime = lstUpdTs;
-  }
-
   public String getDescription() {
     return description;
   }
@@ -295,19 +274,4 @@ public abstract class BaseAddress implements PersistentObject {
     this.unitNumber = unitNo;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    return EqualsBuilder.reflectionEquals(this, o);
-  }
-
-  @Override
-  public int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this);
-  }
-
-  @Override
-  @Transient
-  public Serializable getPrimaryKey() {
-    return getId();
-  }
 }

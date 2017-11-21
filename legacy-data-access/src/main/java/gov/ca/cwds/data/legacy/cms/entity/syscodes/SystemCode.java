@@ -1,16 +1,12 @@
 package gov.ca.cwds.data.legacy.cms.entity.syscodes;
 
-import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import java.io.Serializable;
-import java.sql.Timestamp;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.NamedQuery;
 
@@ -26,7 +22,7 @@ import org.hibernate.annotations.NamedQuery;
     query = "FROM gov.ca.cwds.data.legacy.cms.entity.syscodes.SystemCode sc WHERE sc.fkMeta = :"
         + SystemCode.NQ_PARAM_META
 )
-public class SystemCode implements PersistentObject {
+public class SystemCode extends CmsPersistentObject {
 
   private static final long serialVersionUID = 9161550814720816097L;
 
@@ -55,12 +51,6 @@ public class SystemCode implements PersistentObject {
   @ColumnTransformer(read = "trim(LGC_ID)")
   private String logicalId;
 
-  @Column(name = "LST_UPD_ID")
-  private String lastUpdatedId;
-
-  @Column(name = "LST_UPD_TS")
-  private Timestamp lastUpdatedTime;
-
   @Column(name = "THIRD_ID")
   private String thirdId;
 
@@ -70,6 +60,11 @@ public class SystemCode implements PersistentObject {
 
   @Column(name = "FKS_META_T", insertable = false, updatable = false)
   private String fkMeta;
+
+  @Override
+  public Serializable getPrimaryKey() {
+    return getSystemId();
+  }
 
   public Short getSystemId() {
     return systemId;
@@ -119,22 +114,6 @@ public class SystemCode implements PersistentObject {
     this.logicalId = lgcId;
   }
 
-  public String getLastUpdatedId() {
-    return lastUpdatedId;
-  }
-
-  public void setLastUpdatedId(String lstUpdId) {
-    this.lastUpdatedId = lstUpdId;
-  }
-
-  public Timestamp getLastUpdatedTime() {
-    return lastUpdatedTime;
-  }
-
-  public void setLastUpdatedTime(Timestamp lstUpdTs) {
-    this.lastUpdatedTime = lstUpdTs;
-  }
-
   public String getThirdId() {
     return thirdId;
   }
@@ -157,22 +136,6 @@ public class SystemCode implements PersistentObject {
 
   public void setLongDescription(String longDsc) {
     this.longDescription = longDsc;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    return EqualsBuilder.reflectionEquals(this, o);
-  }
-
-  @Override
-  public int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this);
-  }
-
-  @Override
-  @Transient
-  public Serializable getPrimaryKey() {
-    return getSystemId();
   }
 
 }

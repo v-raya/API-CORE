@@ -1,15 +1,11 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
-import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.ColumnTransformer;
 
 /**
@@ -18,7 +14,7 @@ import org.hibernate.annotations.ColumnTransformer;
 
 @MappedSuperclass
 @SuppressWarnings("squid:S3437") //LocalDate is serializable
-public abstract class BaseClientAddress implements PersistentObject {
+public abstract class BaseClientAddress extends CmsPersistentObject {
 
   private static final long serialVersionUID = -3656767136797373958L;
 
@@ -42,12 +38,6 @@ public abstract class BaseClientAddress implements PersistentObject {
   @Column(name = "HOMLES_IND", nullable = false, length = 1)
   private String homelessIndicator;
 
-  @Column(name = "LST_UPD_ID", nullable = false, length = 3)
-  private String lastUpdatedId;
-
-  @Column(name = "LST_UPD_TS", nullable = false)
-  private LocalDateTime lastUpdatedTime;
-
   @Column(name = "FKADDRS_T", nullable = false, length = 10)
   private String fkAddress;
 
@@ -57,6 +47,11 @@ public abstract class BaseClientAddress implements PersistentObject {
   @Column(name = "FKREFERL_T", nullable = true, length = 10)
   @ColumnTransformer(read = "trim(FKREFERL_T)")
   private String fkReferral;
+
+  @Override
+  public Serializable getPrimaryKey() {
+    return getId();
+  }
 
   public String getId() {
     return id;
@@ -98,22 +93,6 @@ public abstract class BaseClientAddress implements PersistentObject {
     this.effectiveStartDate = effStrtdt;
   }
 
-  public String getLastUpdatedId() {
-    return lastUpdatedId;
-  }
-
-  public void setLastUpdatedId(String lstUpdId) {
-    this.lastUpdatedId = lstUpdId;
-  }
-
-  public LocalDateTime getLastUpdatedTime() {
-    return lastUpdatedTime;
-  }
-
-  public void setLastUpdatedTime(LocalDateTime lstUpdTs) {
-    this.lastUpdatedTime = lstUpdTs;
-  }
-
   public String getFkAddress() {
     return fkAddress;
   }
@@ -146,19 +125,4 @@ public abstract class BaseClientAddress implements PersistentObject {
     this.fkReferral = fkreferlT;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    return EqualsBuilder.reflectionEquals(this, o);
-  }
-
-  @Override
-  public int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this);
-  }
-
-  @Override
-  @Transient
-  public Serializable getPrimaryKey() {
-    return getId();
-  }
 }
