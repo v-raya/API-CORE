@@ -1,5 +1,9 @@
 dependencies {
-    
+    compile project(':api-core-common')
+
+    compile group: 'org.kie', name: 'kie-api', version: droolsVersion
+    compile group: 'org.drools', name: 'drools-compiler', version: droolsVersion
+
 }
 
     publishing {

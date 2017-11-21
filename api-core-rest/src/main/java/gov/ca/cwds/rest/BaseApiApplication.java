@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest;
 
+import gov.ca.cwds.inject.InjectorHolder;
 import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
@@ -122,6 +123,11 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
     registerFilters(environment, guiceBundle);
 
     LOGGER.info("Registering SystemCodeCache");
+
+    LOGGER.info("Setting up Guice injector");
+    // Providing access to the guice injector from external classes such as custom validators
+    InjectorHolder.INSTANCE.setInjector(injector);
+
     runInternal(configuration, environment);
   }
 

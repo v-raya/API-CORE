@@ -12,7 +12,7 @@ allprojects {
     compileJava {options.encoding = "UTF-8"}
 
     project.ext {
-        apiVersion = "0.4.4-SNAPSHOT"
+        apiVersion = "0.5.1-SNAPSHOT"
         commonGroupId = "gov.ca.cwds.api"
         shiroSecurityVersion = "0.4.3"
         configPath = "$rootProject.projectDir/config/"
@@ -35,6 +35,7 @@ allprojects {
         glassfishJerseyExtVersion = "2.23.2"
         jacksonVersion = "2.8.2"
         postgresqlVersion = "9.4.1208.jre7"
+        droolsVersion = "7.1.0.Final"
     }
 
     licenseReport {
