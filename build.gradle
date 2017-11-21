@@ -12,7 +12,7 @@ allprojects {
     compileJava {options.encoding = "UTF-8"}
 
     project.ext {
-        apiVersion = "0.5.1-SNAPSHOT"
+        apiVersion = "0.5.1_38"
         commonGroupId = "gov.ca.cwds.api"
         shiroSecurityVersion = "0.4.3"
         configPath = "$rootProject.projectDir/config/"
