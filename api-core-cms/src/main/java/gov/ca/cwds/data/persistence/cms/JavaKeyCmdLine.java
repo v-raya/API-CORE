@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.rest.api.domain.DomainChef;
-import gov.ca.cwds.rest.services.ServiceException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
@@ -77,11 +76,7 @@ public final class JavaKeyCmdLine {
     }
 
     public String regenerate() {
-      try {
-        return generateKey(staffId, date);
-      } catch (IOException e) {
-        throw new ServiceException("REGENERATE FAILED! staffId: " + staffId + ", date: " + date, e);
-      }
+      return generateKey(staffId, date);
     }
 
     public boolean validate() {
@@ -119,7 +114,7 @@ public final class JavaKeyCmdLine {
     }
   }
 
-  protected static String generateKey(String staffId, Date ts) throws IOException {
+  protected static String generateKey(String staffId, Date ts) {
     return CmsKeyIdGenerator.generate(staffId, ts);
   }
 

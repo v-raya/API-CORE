@@ -1,11 +1,15 @@
 package gov.ca.cwds.rest.serializer;
 
+import static org.junit.Assert.assertEquals;
+
+import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
+import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -52,18 +56,18 @@ public class ErrorMessageSerializerTest {
   // jsonWriter.toString());
   // }
 
-  // @Test
-  // public void serializeSingleErrorMessage() throws IOException {
-  // messages.remove(businessError);
-  //
-  // writer.serialize(messages,jsonGenerator, serializerProvider);
-  // jsonGenerator.flush();
-  //
-  // String expectedJson = "{\"messages\":[\"not valid\"]}";
-  // assertEquals("expected json to contain a single error messages",expectedJson,
-  // jsonWriter.toString());
-  // }
-  //
+  @Test
+  public void serializeSingleErrorMessage() throws IOException {
+    messages.remove(businessError);
+
+    writer.serialize(validationError, jsonGenerator, serializerProvider);
+    jsonGenerator.flush();
+
+    String expectedJson = "\"not valid\"";
+    assertEquals("expected json to contain a single error messages", expectedJson,
+        jsonWriter.toString());
+  }
+
   // @Test
   // public void serializeEmptyErrorMessage() throws IOException {
   // messages.clear();

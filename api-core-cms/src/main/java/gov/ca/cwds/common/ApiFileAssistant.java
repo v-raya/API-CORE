@@ -47,7 +47,7 @@ public class ApiFileAssistant implements ApiMarker {
     if (StringUtils.isNotBlank(loc)) {
       final String cleanLoc = loc.trim();
       if (cleanLoc.equals(FilenameUtils.normalize(cleanLoc))) {
-        ret = new File(cleanLoc);
+        ret = new File(cleanLoc); // NOSONAR
         if (ret.exists()) {
           return ret;
         }
