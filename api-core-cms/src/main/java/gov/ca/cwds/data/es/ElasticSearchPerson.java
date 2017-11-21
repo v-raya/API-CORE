@@ -551,7 +551,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       }
     }
 
-    setDateOfBirth(birthDate);
+    this.dateOfBirth = trim(dateOfBirth);
     this.ssn = trim(ssn);
 
     if (addresses != null && !addresses.isEmpty()) {

@@ -12,6 +12,8 @@ import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Type;
 
@@ -33,9 +35,6 @@ import gov.ca.cwds.data.std.ApiPhoneAware;
 public abstract class BaseReporter extends CmsPersistentObject
     implements ApiPersonAware, ApiAddressAware, ApiMultiplePhonesAware {
 
-  /**
-   * Default serialization version
-   */
   private static final long serialVersionUID = 1L;
 
   @Id
@@ -458,18 +457,21 @@ public abstract class BaseReporter extends CmsPersistentObject
   @Transient
   public ApiPhoneAware[] getPhones() {
     List<ApiPhoneAware> phones = new ArrayList<>();
-    if (this.primaryPhoneNumber != null && !BigDecimal.ZERO.equals(this.primaryPhoneNumber)) {
+    if (this.primaryPhoneNumber != null
+        && BigDecimal.ZERO.compareTo(this.primaryPhoneNumber) != 0) {
       phones.add(new ReadablePhone(null, this.primaryPhoneNumber.toPlainString(),
           this.primaryPhoneExtensionNumber != null ? this.primaryPhoneExtensionNumber.toString()
               : null,
           null));
     }
 
-    if (this.messagePhoneNumber != null && !BigDecimal.ZERO.equals(this.messagePhoneNumber)) {
-      phones.add(new ReadablePhone(null, this.messagePhoneNumber.toPlainString(),
-          this.messagePhoneExtensionNumber != null ? this.messagePhoneExtensionNumber.toString()
-              : null,
-          ApiPhoneAware.PhoneType.Cell));
+    if (this.messagePhoneNumber != null
+        && BigDecimal.ZERO.compareTo(this.messagePhoneNumber) != 0) {
+      phones
+          .add(new ReadablePhone(null,
+              this.messagePhoneNumber.toPlainString(), this.messagePhoneExtensionNumber != null
+                  ? this.messagePhoneExtensionNumber.toString() : null,
+              ApiPhoneAware.PhoneType.Cell));
     }
 
     return phones.toArray(new ApiPhoneAware[0]);
@@ -483,6 +485,16 @@ public abstract class BaseReporter extends CmsPersistentObject
   @Override
   public Short getStateCd() {
     return stateCodeType;
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

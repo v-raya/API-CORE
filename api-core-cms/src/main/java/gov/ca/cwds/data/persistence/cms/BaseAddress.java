@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Type;
 
@@ -32,9 +34,6 @@ import gov.ca.cwds.data.std.ApiPhoneAware;
 public abstract class BaseAddress extends CmsPersistentObject
     implements ApiAddressAware, ApiMultiplePhonesAware {
 
-  /**
-   * Base serialization version. Increment by class version.
-   */
   private static final long serialVersionUID = 1L;
 
   // ====================
@@ -386,18 +385,18 @@ public abstract class BaseAddress extends CmsPersistentObject
   @Override
   public ApiPhoneAware[] getPhones() {
     final List<ApiPhoneAware> phones = new ArrayList<>();
-    if (this.primaryNumber != null && !BigDecimal.ZERO.equals(this.primaryNumber)) {
+    if (this.primaryNumber != null && BigDecimal.ZERO.compareTo(this.primaryNumber) != 0) {
       phones.add(new ReadablePhone(null, this.primaryNumber.toPlainString(),
           this.primaryExtension != null ? this.primaryExtension.toString() : null, null));
     }
 
-    if (this.messageNumber != null && !BigDecimal.ZERO.equals(this.messageNumber)) {
+    if (this.messageNumber != null && BigDecimal.ZERO.compareTo(this.messageNumber) != 0) {
       phones.add(new ReadablePhone(null, this.messageNumber.toPlainString(),
           this.messageExtension != null ? this.messageExtension.toString() : null,
           ApiPhoneAware.PhoneType.Cell));
     }
 
-    if (this.emergencyNumber != null && !BigDecimal.ZERO.equals(this.emergencyNumber)) {
+    if (this.emergencyNumber != null && BigDecimal.ZERO.compareTo(this.emergencyNumber) != 0) {
       phones.add(new ReadablePhone(null, this.emergencyNumber.toPlainString(),
           this.emergencyNumber != null ? this.emergencyNumber.toString() : null,
           ApiPhoneAware.PhoneType.Other));
@@ -410,7 +409,7 @@ public abstract class BaseAddress extends CmsPersistentObject
   public String getStreetAddress() {
     final StringBuilder buf = new StringBuilder();
     if (StringUtils.isNoneBlank(this.streetNumber)) {
-      buf.append(this.streetNumber).append(" ");
+      buf.append(this.streetNumber).append(' ');
     }
 
     if (StringUtils.isNoneBlank(this.streetName)) {
@@ -472,6 +471,16 @@ public abstract class BaseAddress extends CmsPersistentObject
 
   public void setContextAddressType(Short contextAddressType) {
     this.contextAddressType = contextAddressType;
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

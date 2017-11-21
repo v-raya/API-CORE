@@ -9,7 +9,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.BeanProperty;
@@ -174,8 +173,7 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements Co
   }
 
   @Override
-  public void serialize(Short s, JsonGenerator jgen, SerializerProvider sp)
-      throws IOException, JsonGenerationException {
+  public void serialize(Short s, JsonGenerator jgen, SerializerProvider sp) throws IOException {
     if (s == null) {
       jgen.writeNull();
     } else if (s.intValue() == 0 || (cache == null || !(showLogicalId && showShortDescription))) {

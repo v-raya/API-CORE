@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,6 +97,16 @@ public final class JavaKeyCmdLine {
       return newKey;
     }
 
+    @Override
+    public int hashCode() {
+      return HashCodeBuilder.reflectionHashCode(this, false);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      return EqualsBuilder.reflectionEquals(this, obj, false);
+    }
+
   }
 
   private void massTest(String fileNm) throws IOException {
@@ -134,8 +146,8 @@ public final class JavaKeyCmdLine {
       if (StringUtils.isNotBlank(fileNm)) {
         run.massTest(fileNm);
       } else {
-        final String key = run.generateKey(staffId, ts);
-        LOGGER.info("gen: staff: {}, timestamp: {}, key: {}", staffId, ts, key);
+        LOGGER.info("gen: staff: {}, timestamp: {}, key: {}", staffId, ts,
+            run.generateKey(staffId, ts));
       }
     } catch (Exception e) {
       LOGGER.error("OOPS!", e);

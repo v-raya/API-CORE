@@ -401,7 +401,7 @@ public final class CmsKeyIdGenerator {
    * @return Calendar set to preferred timestamp
    * @throws ParseException on date/time parsing error
    */
-  protected final Calendar getTimestampSeed(final Date ts) throws ParseException {
+  protected final Calendar getTimestampSeed(final Date ts) {
     Calendar cal = Calendar.getInstance();
 
     if (ts != null) {
