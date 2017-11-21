@@ -399,7 +399,6 @@ public final class CmsKeyIdGenerator {
    * 
    * @param ts timestamp to use or null for current date/time
    * @return Calendar set to preferred timestamp
-   * @throws ParseException on date/time parsing error
    */
   protected final Calendar getTimestampSeed(final Date ts) {
     Calendar cal = Calendar.getInstance();
