@@ -330,7 +330,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
   }
 
-  static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchPerson.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchPerson.class);
 
   static gov.ca.cwds.rest.api.domain.cms.SystemCodeCache systemCodes =
       gov.ca.cwds.rest.api.domain.cms.SystemCodeCache.global();
@@ -554,7 +554,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       }
     }
 
-    setDateOfBirth(birthDate);
+    this.dateOfBirth = trim(dateOfBirth);
     this.ssn = trim(ssn);
 
     if (addresses != null && !addresses.isEmpty()) {
@@ -758,7 +758,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
       } catch (ClassNotFoundException ce) {
         throw new ServiceException("ElasticSearch Person error: Failed to instantiate class "
-            + ret.getSourceType() + ", ES person id=" + ret.getId(), ce);
+            + ret.getSourceType() + ", person id=" + ret.getId(), ce);
       } catch (Exception e) {
         throw new ServiceException(
             "ElasticSearch Person error: " + e.getMessage() + ", ES person id=" + ret.getId(), e);
@@ -791,7 +791,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       highLights = MAPPER.writeValueAsString(highlightValues);
     } catch (JsonProcessingException e) {
       throw new ServiceException("ElasticSearch Person error: Failed serialize map to JSON "
-          + ret.getSourceType() + ", ES person id=" + ret.getId(), e);
+          + ret.getSourceType() + ", doc id=" + ret.getId(), e);
     }
     ret.setHighlightFields(highLights);
     ret.setHighlights(highlightValues);
@@ -1206,9 +1206,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     String ret = "";
 
     try {
-      ret = ElasticSearchPerson.MAPPER
-          // .writerWithDefaultPrettyPrinter()
-          .writeValueAsString(this);
+      ret = ElasticSearchPerson.MAPPER.writeValueAsString(this);
     } catch (JsonProcessingException e) {
       final String msg = MessageFormat.format("UNABLE TO SERIALIZE JSON!! {}", e.getMessage());
       LOGGER.error(msg, e);

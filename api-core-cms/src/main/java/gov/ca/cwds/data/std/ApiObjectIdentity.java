@@ -13,9 +13,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public abstract class ApiObjectIdentity implements ApiMarker {
 
-  /**
-   * Default serialization.
-   */
   private static final long serialVersionUID = 1L;
 
   @Override

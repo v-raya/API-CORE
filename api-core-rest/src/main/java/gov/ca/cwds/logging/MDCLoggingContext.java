@@ -11,7 +11,9 @@ import org.slf4j.MDC;
  */
 public class MDCLoggingContext implements LoggingContext {
 
-  public MDCLoggingContext() {}
+  public MDCLoggingContext() {
+    // default ctor
+  }
 
   @Override
   public String initialize() {

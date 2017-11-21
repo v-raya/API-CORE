@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Type;
 import org.slf4j.Logger;
@@ -32,9 +34,6 @@ public abstract class BaseAttorney extends CmsPersistentObject
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BaseAttorney.class);
 
-  /**
-   * Base serialization value. Increment by version.
-   */
   protected static final long serialVersionUID = 1L;
 
   @Column(name = "ARCASS_IND")
@@ -379,19 +378,22 @@ public abstract class BaseAttorney extends CmsPersistentObject
   @Transient
   public ApiPhoneAware[] getPhones() {
     List<ApiPhoneAware> phones = new ArrayList<>();
-    if (this.primaryPhoneNumber != null && !BigDecimal.ZERO.equals(this.primaryPhoneNumber)) {
+    if (this.primaryPhoneNumber != null
+        && BigDecimal.ZERO.compareTo(this.primaryPhoneNumber) != 0) {
       phones.add(new ReadablePhone(null, this.primaryPhoneNumber.toPlainString(),
           this.primaryPhoneExtensionNumber != null ? this.primaryPhoneExtensionNumber.toString()
               : null,
           null));
     }
 
-    if (this.messagePhoneNumber != null && !BigDecimal.ZERO.equals(this.messagePhoneNumber)) {
+    if (this.messagePhoneNumber != null
+        && BigDecimal.ZERO.compareTo(this.messagePhoneNumber) != 0) {
       LOGGER.debug("add message phone");
-      phones.add(new ReadablePhone(null, this.messagePhoneNumber.toPlainString(),
-          this.messagePhoneExtensionNumber != null ? this.messagePhoneExtensionNumber.toString()
-              : null,
-          ApiPhoneAware.PhoneType.Cell));
+      phones
+          .add(new ReadablePhone(null,
+              this.messagePhoneNumber.toPlainString(), this.messagePhoneExtensionNumber != null
+                  ? this.messagePhoneExtensionNumber.toString() : null,
+              ApiPhoneAware.PhoneType.Cell));
     }
 
     return phones.toArray(new ApiPhoneAware[0]);
@@ -495,6 +497,16 @@ public abstract class BaseAttorney extends CmsPersistentObject
 
   public void setZipSuffixNumber(Short zipSuffixNumber) {
     this.zipSuffixNumber = zipSuffixNumber;
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

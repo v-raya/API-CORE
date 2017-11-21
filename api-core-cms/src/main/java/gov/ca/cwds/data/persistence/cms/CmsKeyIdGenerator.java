@@ -176,14 +176,14 @@ public final class CmsKeyIdGenerator {
   private static final int LEN_KEY = 10;
   private static final int LEN_KEYSTAFFID = 3;
   private static final int LEN_KEYTIMESTAMP = 7;
-  private static final int nSZ_UISTAFFID = 6;
-  private static final int nSZ_UITIMESTAMP = 26;
-  private static final int nSZ_UIIDENTIFIER = 22;
-  private static final int nSZ_PTIMESTAMP = 11;
+  private static final int SZ_UISTAFFID = 6;
+  private static final int SZ_UITIMESTAMP = 26;
+  private static final int SZ_UIIDENTIFIER = 22;
+  private static final int SZ_PTIMESTAMP = 11;
 
-  private static final int nSZ_USERID = 8;
+  private static final int SZ_USERID = 8;
 
-  private static final int nSZ_POWVEC = 19;
+  private static final int SZ_POWVEC = 19;
 
   private static final int LEN_UIIDSTAFFID = 6; // for converting a key to a UI identifier
   private static final int LEN_UIIDTIMESTAMP = 13;
@@ -265,7 +265,7 @@ public final class CmsKeyIdGenerator {
     double nTimestamp = 0;
     double nPreviousTimestamp = 0; // previous value - used for UNIQUENESS!
 
-    // TODO: #145948067: make previous timestamp thread-safe.
+    // NEXT: #145948067: make previous timestamp thread-safe.
     while (true) { // NOSONAR
       nTimestamp = timestampToDouble(getTimestampSeed(null));
 
@@ -399,9 +399,8 @@ public final class CmsKeyIdGenerator {
    * 
    * @param ts timestamp to use or null for current date/time
    * @return Calendar set to preferred timestamp
-   * @throws ParseException on date/time parsing error
    */
-  protected final Calendar getTimestampSeed(final Date ts) throws ParseException {
+  protected final Calendar getTimestampSeed(final Date ts) {
     Calendar cal = Calendar.getInstance();
 
     if (ts != null) {
@@ -481,7 +480,6 @@ public final class CmsKeyIdGenerator {
         StringUtils.leftPad(String.valueOf(Base62.toBase10(tsB62)), LEN_UIIDTIMESTAMP, '0');
     final String staffB10 =
         StringUtils.leftPad(String.valueOf(Base62.toBase10(staffB62)), LEN_UIIDSTAFFID, '0');
-
     LOGGER.trace("tsB10={}, staffB10={}", tsB10, staffB10);
 
     final StringBuilder buf = new StringBuilder();

@@ -1,16 +1,22 @@
 package gov.ca.cwds.rest.serializer;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
+import static org.junit.Assert.assertEquals;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.junit.Before;
+import org.junit.Test;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
+
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 
 public class ErrorMessageSerializerTest {
 
@@ -24,7 +30,7 @@ public class ErrorMessageSerializerTest {
   ErrorMessageSerializer writer;
 
   @Before
-  public void setup() throws IOException {
+  public void setup() throws Exception {
     jsonWriter = new StringWriter();
     jsonGenerator = new JsonFactory().createGenerator(jsonWriter);
     serializerProvider = new ObjectMapper().getSerializerProvider();
@@ -49,19 +55,19 @@ public class ErrorMessageSerializerTest {
   // assertEquals("expected json to contain both error messages",expectedJson,
   // jsonWriter.toString());
   // }
-  //
-  // @Test
-  // public void serializeSingleErrorMessage() throws IOException {
-  // messages.remove(businessError);
-  //
-  // writer.serialize(messages,jsonGenerator, serializerProvider);
-  // jsonGenerator.flush();
-  //
-  // String expectedJson = "{\"messages\":[\"not valid\"]}";
-  // assertEquals("expected json to contain a single error messages",expectedJson,
-  // jsonWriter.toString());
-  // }
-  //
+
+  @Test
+  public void serializeSingleErrorMessage() throws IOException {
+    messages.remove(businessError);
+
+    writer.serialize(validationError, jsonGenerator, serializerProvider);
+    jsonGenerator.flush();
+
+    String expectedJson = "\"not valid\"";
+    assertEquals("expected json to contain a single error messages", expectedJson,
+        jsonWriter.toString());
+  }
+
   // @Test
   // public void serializeEmptyErrorMessage() throws IOException {
   // messages.clear();

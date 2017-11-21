@@ -48,9 +48,7 @@ public class IfThenValidator implements AbstractBeanValidator, ConstraintValidat
       messages.add();
     }
 
-    if (ifValueNotBlank)
-
-    {
+    if (ifValueNotBlank) {
       String thenValue = readBeanValue(bean, thenProperty);
       if (StringUtils.isBlank(thenValue)) {
         valid = false;
