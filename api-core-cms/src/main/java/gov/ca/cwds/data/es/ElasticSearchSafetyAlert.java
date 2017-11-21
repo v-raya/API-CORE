@@ -1,5 +1,8 @@
 package gov.ca.cwds.data.es;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -140,6 +143,17 @@ public class ElasticSearchSafetyAlert extends ApiObjectIdentity
     public void setActivationExplanation(String activationExplanation) {
       this.activationExplanation = activationExplanation;
     }
+
+    @Override
+    public int hashCode() {
+      return HashCodeBuilder.reflectionHashCode(this, false);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      return EqualsBuilder.reflectionEquals(this, obj, false);
+    }
+
   }
 
   /**
@@ -190,5 +204,17 @@ public class ElasticSearchSafetyAlert extends ApiObjectIdentity
     public void setDeactivationExplanation(String deactivationExplanation) {
       this.deactivationExplanation = deactivationExplanation;
     }
+
+    @Override
+    public int hashCode() {
+      return HashCodeBuilder.reflectionHashCode(this, false);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      return EqualsBuilder.reflectionEquals(this, obj, false);
+    }
+
   }
+
 }

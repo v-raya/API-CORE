@@ -14,12 +14,12 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Strings;
 
 /**
- * test if value is a valid future date
+ * Test if value is a valid, future date.
  * 
  * @author CWDS API Team
- *
  */
 public class PastDateValidator implements ConstraintValidator<PastDate, String> {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(PastDateValidator.class);
 
   private String format;
@@ -29,39 +29,34 @@ public class PastDateValidator implements ConstraintValidator<PastDate, String> 
   public void initialize(PastDate constraintAnnotation) {
     this.format = constraintAnnotation.format();
     this.required = constraintAnnotation.required();
-
   }
 
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
-
-    Date currentDate = new Date();
-
-    DateFormat df = new SimpleDateFormat(format);
+    final Date currentDate = new Date();
+    final DateFormat df = new SimpleDateFormat(format);
     df.setLenient(false);
+
     if (required || !Strings.isNullOrEmpty(value)) {
       try {
         df.parse(value);
       } catch (ParseException e) {
-        LOGGER.info("Unable to validate date string {} with format {}", value, format);
+        LOGGER.warn("Unable to validate date string {} with format {}", value, format);
         return false;
       } catch (NullPointerException npe) {
-        LOGGER.info("Unable to validate null date string with format {}", format, npe);
+        LOGGER.warn("Unable to validate null date string with format {}", format, npe);
         return false;
       }
-      Date testDate;
+
       try {
-        testDate = df.parse(value);
-        if (testDate.after(currentDate)) {
-          return false;
-        } else {
-          return true;
-        }
+        return !df.parse(value).after(currentDate);
       } catch (ParseException e) {
-        LOGGER.info("Unable parse date string {} with format {}", value, format);
+        LOGGER.warn("Unable parse date string {} with format {}", value, format);
         return false;
       }
     }
+
     return true;
   }
+
 }
