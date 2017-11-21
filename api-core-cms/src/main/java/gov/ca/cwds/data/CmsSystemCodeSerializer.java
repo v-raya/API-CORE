@@ -2,7 +2,6 @@ package gov.ca.cwds.data;
 
 import java.io.IOException;
 import java.util.BitSet;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -41,9 +40,17 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
  * 
  * @author CWDS API Team
  */
-public class CmsSystemCodeSerializer extends JsonSerializer<Short>implements ContextualSerializer {
+public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements ContextualSerializer {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsSystemCodeSerializer.class);
+
+  /**
+   * Factory map for this contextual serializer. Saves thread-safe serializer instances by
+   * combination of settings.
+   * 
+   * @see #buildSerializer(SystemCodeCache, boolean, boolean, boolean)
+   */
+  private static final ApiBitSetMap<CmsSystemCodeSerializer> styles = new ApiBitSetMap<>();
 
   private final SystemCodeCache cache;
   private final boolean showShortDescription;
@@ -85,15 +92,6 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short>implements Con
   }
 
   /**
-   * Factory map for this contextual serializer. Saves thread-safe serializer instances by
-   * combination of settings.
-   * 
-   * @see #buildSerializer(SystemCodeCache, boolean, boolean, boolean)
-   */
-  protected static Map<BitSet, CmsSystemCodeSerializer> serializerStyles =
-      new ConcurrentHashMap<>();
-
-  /**
    * Build a {@link BitSet} from variable array of boolean flags (as arguments as
    * CmsSystemCodeSerializer constructor). BitSet is used by our serializer factory to produce
    * unique settings combinations per serializer, as needed.
@@ -131,14 +129,14 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short>implements Con
       boolean showShortDescription, boolean showLogicalId, boolean showMetaCategory) {
     final BitSet bs =
         buildBits(cache != null, showShortDescription, showLogicalId, showMetaCategory);
-    if (!serializerStyles.containsKey(bs)) {
+    if (!styles.containsKey(bs)) {
       LOGGER.debug("new CmsSystemCodeSerializer: {}, {}, {}, {}", cache != null,
           showShortDescription, showLogicalId, showMetaCategory);
-      serializerStyles.put(bs, new CmsSystemCodeSerializer(cache, showShortDescription,
-          showLogicalId, showMetaCategory));
+      styles.put(bs, new CmsSystemCodeSerializer(cache, showShortDescription, showLogicalId,
+          showMetaCategory));
     }
 
-    return serializerStyles.get(bs);
+    return styles.get(bs);
   }
 
   /**
@@ -206,16 +204,6 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short>implements Con
     }
   }
 
-  @Override
-  public final int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this, false);
-  }
-
-  @Override
-  public final boolean equals(Object obj) {
-    return EqualsBuilder.reflectionEquals(this, obj, false);
-  }
-
   /**
    * Getter for show short description.
    * 
@@ -241,6 +229,16 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short>implements Con
    */
   public boolean isShowMetaCategory() {
     return showMetaCategory;
+  }
+
+  @Override
+  public final int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public final boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }
