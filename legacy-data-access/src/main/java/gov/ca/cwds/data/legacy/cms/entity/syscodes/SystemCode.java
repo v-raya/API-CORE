@@ -3,8 +3,8 @@ package gov.ca.cwds.data.legacy.cms.entity.syscodes;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -12,16 +12,26 @@ import javax.persistence.Transient;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.ColumnTransformer;
+import org.hibernate.annotations.NamedQuery;
 
 /**
- * @author CWDS CALS API Team
+ * @author CWDS TPT-3 Team
  */
-@Entity
-@DiscriminatorColumn(name = "FKS_META_T")
-@Table(name = "SYS_CD_C")
-public abstract class SystemCodeTable implements PersistentObject {
 
-  private static final long serialVersionUID = -3979949426929339075L;
+@Entity
+@Cacheable
+@Table(name = "SYS_CD_C")
+@NamedQuery(
+    name = SystemCode.NQ_FIND_BY_META,
+    query = "FROM gov.ca.cwds.data.legacy.cms.entity.syscodes.SystemCode sc WHERE sc.fkMeta = :"
+        + SystemCode.NQ_PARAM_META
+)
+public class SystemCode implements PersistentObject {
+
+  private static final long serialVersionUID = 9161550814720816097L;
+
+  public static final String NQ_FIND_BY_META = "gov.ca.cwds.data.legacy.cms.entity.syscodes.SystemCode.findByFkMeta";
+  public static final String NQ_PARAM_META = "fkMeta";
 
   @Id
   @Column(name = "SYS_ID")
@@ -164,4 +174,5 @@ public abstract class SystemCodeTable implements PersistentObject {
   public Serializable getPrimaryKey() {
     return getSystemId();
   }
+
 }
