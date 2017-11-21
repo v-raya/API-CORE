@@ -7,12 +7,7 @@
       "type": "text",
       "store": true
     },
-    "index_creation_time": {
-      "format": "strict_date_time",
-      "type": "date",
-      "store": true
-    },
-    "index_updation_time": {
+    "index_update_time": {
       "format": "strict_date_time",
       "type": "date",
       "store": true

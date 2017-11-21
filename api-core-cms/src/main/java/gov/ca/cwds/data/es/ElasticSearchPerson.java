@@ -360,6 +360,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonIgnore
   private transient boolean upsert = false;
 
+  @JsonProperty("index_update_time")
+  private String indexUpdateTime;
+
   @JsonProperty("first_name")
   private String firstName;
 
@@ -840,6 +843,24 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonIgnore
   public Object getSourceObj() {
     return sourceObj;
+  }
+
+  /**
+   * Get time stamp of last update to this document
+   * 
+   * @return Time stamp of last update to this document
+   */
+  public String getIndexUpdateTime() {
+    return indexUpdateTime;
+  }
+
+  /**
+   * Set time stamp of last update to this document
+   * 
+   * @param indexUpdateTime Time stamp of last update to this document
+   */
+  public void setIndexUpdateTime(String indexUpdateTime) {
+    this.indexUpdateTime = indexUpdateTime;
   }
 
   /**
