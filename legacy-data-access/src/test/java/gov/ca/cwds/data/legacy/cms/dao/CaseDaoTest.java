@@ -37,18 +37,18 @@ public class CaseDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
           assertEquals("AadfKnG07n", c.getIdentifier());//IDENTIFIER
           assertNull(c.getAlertText());//ALERT_TXT
           assertEquals("R8TQDh807n", c.getApprovalNumber());//APRVL_NO
-          assertEquals("Approved", c.getApprovalStatusType().getShortDsc());//APV_STC
-          assertEquals("Child Runaway", c.getCaseClosureReasonType().getShortDsc());//CLS_RSNC
+          assertEquals("Approved", c.getApprovalStatusType().getShortDescription());//APV_STC
+          assertEquals("Child Runaway", c.getCaseClosureReasonType().getShortDescription());//CLS_RSNC
           assertFalse(c.getCaseplanChildrenDetailIndVar());//CSPL_DET_B
           assertEquals("Very Long text",
               c.getClosureStatementText().getTextDescription());//CL_STM_TXT
-          assertEquals("United States", c.getCountry().getShortDsc());//CNTRY_C
+          assertEquals("United States", c.getCountry().getShortDescription());//CNTRY_C
           assertEquals("57", c.getCountySpecificCode());//CNTY_SPFCD
           assertNull(c.getDrmsNotesDoc());//NOTES_DOC
           assertNull(c.getEmancipationDate());//EMANCPN_DT
           assertEquals(toDate("2002-11-08"), c.getEndDate());//END_DT
           assertNull(c.getReferralId());//FKREFERL_T
-          assertEquals("Yolo", c.getCounty().getShortDsc());//GVR_ENTC
+          assertEquals("Yolo", c.getCounty().getShortDescription());//GVR_ENTC
           assertFalse(c.getIcpcOutgngPlcmtStatusIndVar());//ICPCSTAT_B
           assertTrue(c.getIcpcOutgoingRequestIndVar());//ICPC_RQT_B
           assertEquals(LimitedAccess.NO_RESTRICTION, c.getLimitedAccess());//LMT_ACSSCD
@@ -56,7 +56,7 @@ public class CaseDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
           assertEquals(
               "County determined by primary assignment as of Release 7.1 implementation date of May 2014",
               c.getLimitedAccessDesc());//LMT_ACSDSC
-          assertEquals("Lake", c.getLimitedAccessCounty().getShortDsc());//L_GVR_ENTC
+          assertEquals("Lake", c.getLimitedAccessCounty().getShortDescription());//L_GVR_ENTC
           assertEquals("pts 20414", c.getCaseName());//CASE_NM
           assertNull(c.getNextTilpDueDate());//NXT_TILPDT
           assertNull(c.getProjectedEndDate());//PRJ_END_DT
@@ -64,9 +64,9 @@ public class CaseDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
               c.getResponsibleAgency());//RSP_AGY_CD
           assertFalse(c.getSpecialProjectCaseIndVar());//SPRJ_CST_B
           assertEquals(toDate("2002-11-08"), c.getStartDate());//START_DT
-          assertEquals("California", c.getState().getShortDsc());//STATE_C
+          assertEquals("California", c.getState().getShortDescription());//STATE_C
           assertEquals("Emergency Response",
-              c.getActiveServiceComponentType().getShortDsc());//SRV_CMPC
+              c.getActiveServiceComponentType().getShortDescription());//SRV_CMPC
           assertEquals(toDate("2002-11-08"), c.getActiveSvcComponentStartDate());//SRV_CMPDT
           assertFalse(c.getTickleIndVar());//TICKLE_T_B
           assertEquals("07n", c.getLastUpdateId());//LST_UPD_ID
