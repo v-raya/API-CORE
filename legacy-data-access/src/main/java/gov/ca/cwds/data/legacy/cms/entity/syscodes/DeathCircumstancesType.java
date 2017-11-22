@@ -12,7 +12,7 @@ import org.hibernate.annotations.NamedQuery;
 @Entity
 @Cacheable
 @DiscriminatorValue(value = "DTH_CIRC")
-@NamedQuery(name = DeathCircumstancesType.NQ_ALL, query = "FROM DeathCircumstancesType ORDER BY lgcId ASC")
+@NamedQuery(name = DeathCircumstancesType.NQ_ALL, query = "FROM DeathCircumstancesType ORDER BY logicalId ASC")
 public class DeathCircumstancesType extends SystemCodeTable {
 
     public static final String NQ_ALL = "DeathCircumstancesType.all";
