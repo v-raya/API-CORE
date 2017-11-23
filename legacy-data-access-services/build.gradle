@@ -1,17 +1,15 @@
 dependencies {
-    compile project(':api-core-common')
-
-    compile group: 'org.kie', name: 'kie-api', version: droolsVersion
-    compile group: 'org.drools', name: 'drools-compiler', version: droolsVersion
+    compile project(':legacy-data-access')
+    compile project(':drools-engine')
 
 }
 
-    publishing {
+publishing {
     publications {
         library(MavenPublication) {
             from components.java
             groupId commonGroupId
-            artifactId 'drools-engine'
+            artifactId 'legacy-data-access-services'
             version version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
         }
     }
