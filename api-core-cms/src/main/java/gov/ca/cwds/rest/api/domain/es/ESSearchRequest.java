@@ -27,9 +27,6 @@ import io.dropwizard.jackson.JsonSnakeCase;
 @JsonSnakeCase
 public final class ESSearchRequest extends DomainObject implements Request {
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = 1L;
 
   // ================
@@ -254,7 +251,7 @@ public final class ESSearchRequest extends DomainObject implements Request {
 
     @Override
     public int hashCode() {
-      final int prime = 31;
+      int prime = 31;
       int result = 1;
       result = prime * result + ((elems == null) ? 0 : elems.hashCode());
       result = prime * result + ((logic == null) ? 0 : logic.hashCode());
@@ -348,7 +345,7 @@ public final class ESSearchRequest extends DomainObject implements Request {
 
     @Override
     public int hashCode() {
-      final int prime = 31;
+      int prime = 31;
       int result = 1;
       result = prime * result + ((field == null) ? 0 : field.hashCode());
       result = prime * result + ((queryType == null) ? 0 : queryType.hashCode());

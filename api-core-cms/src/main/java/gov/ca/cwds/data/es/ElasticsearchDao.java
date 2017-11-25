@@ -199,6 +199,7 @@ public class ElasticsearchDao implements Closeable {
    * @param numShards number of shards
    * @param numReplicas number of replicas
    * @throws IOException on disconnect, hang, etc.
+   * @deprecated call {@link #createIndexIfNeeded(String)} instead
    */
   @Deprecated
   private void createIndex(final String index, int numShards, int numReplicas) throws IOException {
@@ -242,6 +243,7 @@ public class ElasticsearchDao implements Closeable {
    * @param optShards optional number of shards. Defaults to 5.
    * @param optReplicas optional number of replicas. Defaults to 1.
    * @throws IOException on disconnect, hang, etc.
+   * @deprecated call {@link #createIndexIfNeeded(String)} instead
    */
   @Deprecated
   private synchronized void createIndexIfNeeded(final String index,
@@ -274,6 +276,7 @@ public class ElasticsearchDao implements Closeable {
    * @param index index name or alias
    * @throws IOException on disconnect, hang, etc.
    * @see #createIndexIfNeeded(String, Optional, Optional)
+   * @deprecated call {@link #createIndexIfNeeded(String)} instead
    */
   @Deprecated
   public synchronized void createIndexIfNeeded(final String index) throws IOException {
@@ -379,6 +382,7 @@ public class ElasticsearchDao implements Closeable {
    * @param docType document type
    * @return array of ElasticSearchPerson
    * @throws ApiElasticSearchException unable to connect, disconnect, bad hair day, etc.
+   * @deprecated obsolete API, scheduled for removal
    */
   @Deprecated
   public ElasticSearchPerson[] searchPerson(final String searchTerm, final String alias,
@@ -409,6 +413,7 @@ public class ElasticsearchDao implements Closeable {
    * @param searchTerm ES search String
    * @return array of ElasticSearchPerson
    * @throws ApiElasticSearchException unable to connect, disconnect, bad hair day, etc.
+   * @deprecated obsolete API, scheduled for removal
    */
   @Deprecated
   public ElasticSearchPerson[] searchPerson(final String searchTerm)

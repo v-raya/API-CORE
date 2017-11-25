@@ -171,19 +171,7 @@ public final class CmsKeyIdGenerator {
     public String PTimestamp; // NOSONAR
   }
 
-  private static final int BASE_62_SIZE = 62;
-
-  private static final int LEN_KEY = 10;
-  private static final int LEN_KEYSTAFFID = 3;
   private static final int LEN_KEYTIMESTAMP = 7;
-  private static final int SZ_UISTAFFID = 6;
-  private static final int SZ_UITIMESTAMP = 26;
-  private static final int SZ_UIIDENTIFIER = 22;
-  private static final int SZ_PTIMESTAMP = 11;
-
-  private static final int SZ_USERID = 8;
-
-  private static final int SZ_POWVEC = 19;
 
   private static final int LEN_UIIDSTAFFID = 6; // for converting a key to a UI identifier
   private static final int LEN_UIIDTIMESTAMP = 13;
@@ -201,17 +189,6 @@ public final class CmsKeyIdGenerator {
   private static final float nSHIFT_MONTH = 256; // NOSONAR 8 bit shift (2 ^ 8)
 
   private static final float nSHIFT_YEAR = 1; // NOSONAR 0 bit shift (2 ^ 0)
-
-  private static final BigDecimal[] POWER_BASE10 = {BigDecimal.valueOf(1.000000000000000e+000f),
-      BigDecimal.valueOf(1.000000000000000e+001f), BigDecimal.valueOf(1.000000000000000e+002f),
-      BigDecimal.valueOf(1.000000000000000e+003f), BigDecimal.valueOf(1.000000000000000e+004f),
-      BigDecimal.valueOf(1.000000000000000e+005f), BigDecimal.valueOf(1.000000000000000e+006f),
-      BigDecimal.valueOf(1.000000000000000e+007f), BigDecimal.valueOf(1.000000000000000e+008f),
-      BigDecimal.valueOf(1.000000000000000e+009f), BigDecimal.valueOf(1.000000000000000e+010f),
-      BigDecimal.valueOf(1.000000000000000e+011f), BigDecimal.valueOf(1.000000000000000e+012f),
-      BigDecimal.valueOf(1.000000000000000e+013f), BigDecimal.valueOf(1.000000000000000e+014f),
-      BigDecimal.valueOf(1.000000000000000e+015f), BigDecimal.valueOf(1.000000000000000e+016f),
-      BigDecimal.valueOf(1.000000000000000e+017f), BigDecimal.valueOf(1.000000000000000e+018f)};
 
   private static final BigDecimal[] POWER_BASE62 = {BigDecimal.valueOf(1.000000000000000e+000),
       BigDecimal.valueOf(6.200000000000000e+001), BigDecimal.valueOf(3.844000000000000e+003),

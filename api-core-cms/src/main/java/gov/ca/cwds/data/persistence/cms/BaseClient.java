@@ -407,6 +407,7 @@ public abstract class BaseClient extends CmsPersistentObject
   /**
    * @return the clientIndexNumber
    */
+  @Override
   public String getClientIndexNumber() {
     return StringUtils.trimToEmpty(clientIndexNumber);
   }
@@ -1160,4 +1161,5 @@ public abstract class BaseClient extends CmsPersistentObject
   public String getLimitedAccessCode() {
     return getSensitivityIndicator();
   }
+
 }

@@ -78,7 +78,7 @@ public class ElasticSearchSafetyAlert extends ApiObjectIdentity
    */
 
   /**
-   * Safety alert activation
+   * Safety alert activation.
    */
   public static final class Activation extends ApiObjectIdentity {
 
@@ -100,9 +100,11 @@ public class ElasticSearchSafetyAlert extends ApiObjectIdentity
     private String activationExplanation;
 
     /**
-     * No argument constructor
+     * Default, no-argument constructor.
      */
-    public Activation() {}
+    public Activation() {
+      // default ctor
+    }
 
     public String getActivationReasonDescription() {
       return activationReasonDescription;
