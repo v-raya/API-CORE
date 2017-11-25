@@ -192,58 +192,45 @@ public class SimpleResourceDelegate<K extends Serializable, Q extends Request, P
   protected Response handleException(Exception e) throws ServiceException {
     Response ret;
 
-    // TODO: #136701343: Tech debt: exception handling in service layer.
+    // ALREADY DONE? #136701343: Tech debt: exception handling in service layer.
     // Gold plating. Waiting for further requirements.
     if (e != null) {
       if (e.getCause() != null) {
         if (e.getCause() instanceof EntityNotFoundException) {
           throw new ServiceException("EntityNotFoundException", e.getCause());
-          // ret = Response.status(Response.Status.NOT_FOUND).entity(null).build();
         } else if (e.getCause() instanceof EntityExistsException) {
           throw new ServiceException("EntityExistsException", e.getCause());
-          // ret = Response.status(Response.Status.CONFLICT).entity(null).build();
         } else if (e.getCause() instanceof NullPointerException) {
           throw new ServiceException("NullPointerException", e.getCause());
-          // ret = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(null).build();
         } else if (e.getCause() instanceof ClassNotFoundException) {
           LOGGER.error("Class not found! {}", e.getMessage(), e);
           throw new ServiceException("ClassNotFoundException", e.getCause());
-          // ret = Response.status(Response.Status.EXPECTATION_FAILED).entity(null).build();
         } else if (e.getCause() instanceof NotImplementedException) {
           LOGGER.error("Not implemented", e);
           throw new ServiceException("NotImplementedException", e.getCause());
-          // ret = Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
         } else {
           LOGGER.error("Unable to handle request", e);
           throw new ServiceException("Unable to handle request", e.getCause());
-          // ret = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
         }
       } else if (e instanceof ServiceException) {
         final ServiceException svcEx = (ServiceException) e;
         LOGGER.error("ServiceException without attached cause: {}", svcEx.getMessage(), e);
         throw new ServiceException("ServiceException without attached cause", e);
-        // ret = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
       } else if (e instanceof IllegalArgumentException) {
         final IllegalArgumentException lae = (IllegalArgumentException) e;
         LOGGER.error("Argument cannot be null: {}", lae.getMessage(), e);
         throw new ServiceException("Argument cannot be null", e);
-        // ret = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
       } else if (e instanceof ConstraintViolationException) {
         final ConstraintViolationException cve = (ConstraintViolationException) e;
         LOGGER.error("ConstraintViolationException: {}", cve.getMessage(), e);
         throw new ServiceException("ConstraintViolationException: " + cve.getMessage(), e);
-        // ret = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
       } else {
         LOGGER.error("Unhandled error condition: {}", e.getMessage(), e);
         throw new ServiceException("Unhandled error condition", e);
-        // ret = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
       }
     } else {
       throw new ServiceException("No exception to handle");
-      // ret = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
     }
-
-    // return ret;
   }
 
   /**

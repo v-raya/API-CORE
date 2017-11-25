@@ -14,7 +14,7 @@ public class ApiBitSetMap<T extends Serializable> implements ApiMarker {
   private final Map<BitSet, T> map = new ConcurrentHashMap<>();
 
   public ApiBitSetMap() {
-    // nichts, nada, нічого
+    // nichts, nada
   }
 
   public boolean containsKey(Object key) {
