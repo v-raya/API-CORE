@@ -10,6 +10,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @SuppressWarnings("serial")
 public class ElasticSearchPersonChild extends ElasticSearchPersonNestedPerson {
 
+  /**
+   * Legacy CMS client id.
+   * 
+   * @deprecated use legacy descriptor
+   */
   @Override
   @JsonProperty("legacy_client_id")
   @Deprecated
@@ -17,6 +22,11 @@ public class ElasticSearchPersonChild extends ElasticSearchPersonNestedPerson {
     return legacyPersonId;
   }
 
+  /**
+   * Legacy CMS last updated staff id.
+   * 
+   * @deprecated use legacy descriptor
+   */
   @Override
   @JsonProperty("legacy_last_updated")
   @Deprecated

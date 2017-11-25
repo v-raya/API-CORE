@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ser.ContextualSerializer;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.persistence.cms.CmsSystemCode;
+import gov.ca.cwds.data.std.ApiMarker;
 import gov.ca.cwds.rest.api.domain.cms.SystemCode;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 
@@ -34,12 +35,14 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
  *     new CmsSystemCodeSerializer(injector.getInstance(ISystemCodeCache.class)));
  * environment.getObjectMapper().registerModule(module);
  * Guice.createInjector().getInstance(ObjectMapper.class).registerModule(module);
- * 
  * </pre>
  * 
  * @author CWDS API Team
  */
-public class CmsSystemCodeSerializer extends JsonSerializer<Short> implements ContextualSerializer {
+public class CmsSystemCodeSerializer extends JsonSerializer<Short>
+    implements ContextualSerializer, ApiMarker {
+
+  private static final long serialVersionUID = 1L;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsSystemCodeSerializer.class);
 
