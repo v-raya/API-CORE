@@ -698,6 +698,39 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     return ElasticSearchPerson.systemCodes;
   }
 
+  protected static void handleHighlights(final SearchHit hit, final ElasticSearchPerson ret) {
+    // ElasticSearch Java API returns map of highlighted fields
+    final Map<String, HighlightField> h = hit.getHighlightFields();
+    final Map<String, String> highlightValues = new LinkedHashMap<>();
+
+    // Go through the HighlightFields returned from ES deal with fragments and create map.
+    for (final Map.Entry<String, HighlightField> entry : h.entrySet()) {
+      String highlightValue;
+      final HighlightField highlightField = entry.getValue();
+      final Text[] fragments = highlightField.fragments();
+      if (fragments != null && fragments.length != 0) {
+        final String[] texts = new String[fragments.length];
+        for (int i = 0; i < fragments.length; i++) {
+          texts[i] = fragments[i].string().trim();
+        }
+        highlightValue = StringUtils.join(texts, "...");
+        highlightValues.put(DomainChef.camelCaseToLowerUnderscore(highlightField.getName()),
+            highlightValue);
+      }
+    }
+
+    // Update this ElasticSearchPerson property with the highlighted text.
+    String highLights = "";
+    try {
+      highLights = MAPPER.writeValueAsString(highlightValues);
+    } catch (JsonProcessingException e) {
+      throw new ServiceException("ElasticSearch Person error: Failed serialize map to JSON "
+          + ret.getSourceType() + ", doc id=" + ret.getId(), e);
+    }
+    ret.setHighlightFields(highLights);
+    ret.setHighlights(highlightValues);
+  }
+
   /**
    * Produce an ElasticSearchPerson domain instance from native ElasticSearch {@link SearchHit}.
    * Parse JSON results and populate associated fields. ElasticSearch Java API returns an overly
@@ -738,63 +771,26 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
         // DELIVERED: STORY #137216799:
         // Tech debt: reverse compatibility with existing ElasticSearch documents.
         if (ret.getSourceType().startsWith("gov.ca.cwds.rest.api.")) {
-          LOGGER.warn("LEGACY CLASS IN ELASTICSEARCH! class={}, id={}", ret.getSourceType(),
-              ret.getId());
+          LOGGER.warn("LEGACY CLASS IN ES! class={}, id={}", ret.getSourceType(), ret.getId());
         }
 
-        if (!StringUtils.isBlank(ret.getSourceJson())) {
-          // Remove excess whitespace.
-          // No job should store excess whitespace in ElasticSearch!
-          final String json = ret.getSourceJson().replaceAll("\\s+\",", "\",");
+        // Remove excess whitespace.
+        // No job should store excess whitespace in ElasticSearch!
+        final String json = ret.getSourceJson().replaceAll("\\s+\",", "\",");
 
-          // Dynamically instantiate the domain class specified by "type" and load from JSON.
-          // Note: When running in an application server, the app server's root classloader may not
-          // know of our domain/persistence class, but the current thread's classloader should.
-          final Object obj = MAPPER.readValue(json, Class.forName(ret.getSourceType(), false,
-              Thread.currentThread().getContextClassLoader()));
-
-          ret.sourceObj = obj;
-        }
-
-      } catch (ClassNotFoundException ce) {
-        throw new ServiceException("ElasticSearch Person error: Failed to instantiate class "
-            + ret.getSourceType() + ", person id=" + ret.getId(), ce);
+        // Dynamically instantiate the domain class specified by "type" and load from JSON.
+        // Note: When running in an application server, the app server's root classloader may not
+        // know of our domain/persistence class, but the current thread's classloader should.
+        final Object obj = MAPPER.readValue(json, Class.forName(ret.getSourceType(), false,
+            Thread.currentThread().getContextClassLoader()));
+        ret.sourceObj = obj;
+        handleHighlights(hit, ret);
       } catch (Exception e) {
         throw new ServiceException(
             "ElasticSearch Person error: " + e.getMessage() + ", ES person id=" + ret.getId(), e);
       }
     }
 
-    // ElasticSearch Java API returns map of highlighted fields
-    final Map<String, HighlightField> h = hit.getHighlightFields();
-    final Map<String, String> highlightValues = new LinkedHashMap<>();
-
-    // Go through the HighlightFields returned from ES deal with fragments and create map.
-    for (final Map.Entry<String, HighlightField> entry : h.entrySet()) {
-      String highlightValue;
-      final HighlightField highlightField = entry.getValue();
-      final Text[] fragments = highlightField.fragments();
-      if (fragments != null && fragments.length != 0) {
-        final String[] texts = new String[fragments.length];
-        for (int i = 0; i < fragments.length; i++) {
-          texts[i] = fragments[i].string().trim();
-        }
-        highlightValue = StringUtils.join(texts, "...");
-        highlightValues.put(DomainChef.camelCaseToLowerUnderscore(highlightField.getName()),
-            highlightValue);
-      }
-    }
-
-    // Update this ElasticSearchPerson property with the highlighted text.
-    String highLights = "";
-    try {
-      highLights = MAPPER.writeValueAsString(highlightValues);
-    } catch (JsonProcessingException e) {
-      throw new ServiceException("ElasticSearch Person error: Failed serialize map to JSON "
-          + ret.getSourceType() + ", doc id=" + ret.getId(), e);
-    }
-    ret.setHighlightFields(highLights);
-    ret.setHighlights(highlightValues);
     return ret;
   }
 

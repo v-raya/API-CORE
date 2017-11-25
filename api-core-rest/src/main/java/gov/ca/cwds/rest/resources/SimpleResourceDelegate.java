@@ -37,7 +37,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * </p>
  *
  * @param <K> Key type
- * @param <Q>reQuest type
+ * @param <Q> reQuest type
  * @param <P> resPonse type
  * @param <S> Service type
  *

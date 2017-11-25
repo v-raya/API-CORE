@@ -181,7 +181,9 @@ public class ElasticSearchSafetyAlert extends ApiObjectIdentity
     /**
      * No argument constructor
      */
-    public Deactivation() {}
+    public Deactivation() {
+      // default ctor.
+    }
 
     public String getDeactivationDate() {
       return deactivationDate;
