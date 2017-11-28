@@ -9,12 +9,13 @@ import gov.ca.cwds.cms.data.access.dao.placementhome.EmergencyContactDetailDao;
 import gov.ca.cwds.cms.data.access.dao.placementhome.ExternalInterfaceDao;
 import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeDao;
 import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeProfileDao;
-import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeUcDao;
 import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeSsaName3Dao;
+import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeUcDao;
 import gov.ca.cwds.cms.data.access.mapper.BackgroundCheckMapper;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.mapper.EmergencyContactDetailMapper;
 import gov.ca.cwds.cms.data.access.mapper.ExternalInterfaceMapper;
+import gov.ca.cwds.cms.data.access.parameter.PlacementHomeParameterObject;
 import gov.ca.cwds.cms.data.access.utils.IdGenerator;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
 import gov.ca.cwds.data.legacy.cms.entity.BackgroundCheck;
@@ -27,14 +28,13 @@ import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeUc;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author CWDS CALS API Team
  */
 
-public class PlacementHomeService implements DataAccessService<PlacementHome> {
+public class PlacementHomeService implements DataAccessService<PlacementHome, PlacementHomeParameterObject> {
 
   @Inject
   private PlacementHomeDao placementHomeDao;
@@ -72,16 +72,16 @@ public class PlacementHomeService implements DataAccessService<PlacementHome> {
   @Inject
   private PlacementHomeSsaName3Dao ssaName3Dao;
 
-  public PlacementHome create(PlacementHome placementHome, Set<CWSIdentifier> homeLanguages,
-      String staffPersonId) {
+  @Override
+  public PlacementHome create(PlacementHome placementHome, PlacementHomeParameterObject parameterObject) {
     runBusinessRules(placementHome);
     PlacementHome storedPlacementHome = placementHomeDao.create(placementHome);
-    storePlacementHomeUc(storedPlacementHome, staffPersonId);
+    storePlacementHomeUc(storedPlacementHome, parameterObject.getStaffPersonId());
     storeCountyOwnership(storedPlacementHome.getIdentifier());
     storeExternalInterface();
-    storeEmergencyContactDetail(storedPlacementHome.getIdentifier(), staffPersonId);
-    storeBackgroundCheck(staffPersonId);
-    storePlacementHomeProfile(homeLanguages, storedPlacementHome.getIdentifier(), staffPersonId);
+    storeEmergencyContactDetail(storedPlacementHome.getIdentifier(), parameterObject.getStaffPersonId());
+    storeBackgroundCheck(parameterObject.getStaffPersonId());
+    storePlacementHomeProfile(parameterObject, storedPlacementHome.getIdentifier());
     prepareAddressPhoneticSearchKeywords(storedPlacementHome);
     return storedPlacementHome;
   }
@@ -125,14 +125,14 @@ public class PlacementHomeService implements DataAccessService<PlacementHome> {
     backgroundCheckDao.create(backgroundCheck);
   }
 
-  private void storePlacementHomeProfile(Set<CWSIdentifier> homeLanguages, String placementHomeId,
-      String staffPersonId) {
-    for (CWSIdentifier homeLanguage : homeLanguages) {
+  private void storePlacementHomeProfile(PlacementHomeParameterObject parameterObject,
+      String placementHomeId) {
+    for (CWSIdentifier homeLanguage : parameterObject.getHomeLanguages()) {
       PlacementHomeProfile placementHomeProfile = new PlacementHomeProfile();
-      placementHomeProfile.setThirdId(IdGenerator.generateId(staffPersonId));
-      placementHomeProfile.setChrctrC((short)homeLanguage.getCwsId());
+      placementHomeProfile.setThirdId(IdGenerator.generateId(parameterObject.getStaffPersonId()));
+      placementHomeProfile.setChrctrC((short) homeLanguage.getCwsId());
       placementHomeProfile.setChrctrCd("L");
-      placementHomeProfile.setLstUpdId(staffPersonId);
+      placementHomeProfile.setLstUpdId(parameterObject.getStaffPersonId());
       placementHomeProfile.setLstUpdTs(LocalDateTime.now());
       placementHomeProfile.setFkplcHmT(placementHomeId);
       placementHomeProfileDao.create(placementHomeProfile);
@@ -152,6 +152,5 @@ public class PlacementHomeService implements DataAccessService<PlacementHome> {
     parameterObject.setUpdateId(placementHome.getLastUpdateId());
     ssaName3Dao.callStoredProc(parameterObject);
   }
-
 
 }
