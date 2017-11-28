@@ -29,7 +29,7 @@ public @interface AfterDateValid {
   @Target({TYPE_USE})
   @Retention(RUNTIME)
   @interface List {
-    IfThen[] value();
+    AfterDateValid[] value();
   }
 
 }
