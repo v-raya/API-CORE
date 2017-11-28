@@ -8,8 +8,6 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 
 public interface DataAccessService<T extends PersistentObject> {
 
-  T create(T entity, String staffPersonId);
-
   default void runBusinessRules(T entity) {
     //Empty by default
   }

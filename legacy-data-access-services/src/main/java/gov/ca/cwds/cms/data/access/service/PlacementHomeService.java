@@ -1,15 +1,33 @@
 package gov.ca.cwds.cms.data.access.service;
 
 import com.google.inject.Inject;
-import gov.ca.cwds.cms.data.access.dao.CountyOwnershipForPlacementHomeDao;
-import gov.ca.cwds.cms.data.access.dao.PlacementHomeDao;
-import gov.ca.cwds.cms.data.access.dao.PlacementHomeUcDao;
+import gov.ca.cwds.cms.data.access.CWSIdentifier;
+import gov.ca.cwds.cms.data.access.Constants.PhoneticSearchTables;
+import gov.ca.cwds.cms.data.access.dao.placementhome.BackgroundCheckDao;
+import gov.ca.cwds.cms.data.access.dao.placementhome.CountyOwnershipDao;
+import gov.ca.cwds.cms.data.access.dao.placementhome.EmergencyContactDetailDao;
+import gov.ca.cwds.cms.data.access.dao.placementhome.ExternalInterfaceDao;
+import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeDao;
+import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeProfileDao;
+import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeUcDao;
+import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeSsaName3Dao;
+import gov.ca.cwds.cms.data.access.mapper.BackgroundCheckMapper;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
+import gov.ca.cwds.cms.data.access.mapper.EmergencyContactDetailMapper;
+import gov.ca.cwds.cms.data.access.mapper.ExternalInterfaceMapper;
+import gov.ca.cwds.cms.data.access.utils.IdGenerator;
+import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
+import gov.ca.cwds.data.legacy.cms.entity.BackgroundCheck;
 import gov.ca.cwds.data.legacy.cms.entity.CountyOwnership;
+import gov.ca.cwds.data.legacy.cms.entity.EmergencyContactDetail;
+import gov.ca.cwds.data.legacy.cms.entity.ExternalInterface;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeProfile;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeUc;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Date;
+import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -28,26 +46,54 @@ public class PlacementHomeService implements DataAccessService<PlacementHome> {
   private CountyOwnershipMapper countyOwnershipMapper;
 
   @Inject
-  private CountyOwnershipForPlacementHomeDao countyOwnershipDao;
+  private CountyOwnershipDao countyOwnershipDao;
 
-  @Override
-  public PlacementHome create(PlacementHome placementHome, String staffPersonId) {
+  @Inject
+  private ExternalInterfaceDao externalInterfaceDao;
+
+  @Inject
+  private ExternalInterfaceMapper externalInterfaceMapper;
+
+  @Inject
+  private EmergencyContactDetailMapper emergencyContactDetailMapper;
+
+  @Inject
+  private EmergencyContactDetailDao emergencyContactDetailDao;
+
+  @Inject
+  private BackgroundCheckMapper backgroundCheckMapper;
+
+  @Inject
+  private BackgroundCheckDao backgroundCheckDao;
+
+  @Inject
+  private PlacementHomeProfileDao placementHomeProfileDao;
+
+  @Inject
+  private PlacementHomeSsaName3Dao ssaName3Dao;
+
+  public PlacementHome create(PlacementHome placementHome, Set<CWSIdentifier> homeLanguages,
+      String staffPersonId) {
     runBusinessRules(placementHome);
     PlacementHome storedPlacementHome = placementHomeDao.create(placementHome);
     storePlacementHomeUc(storedPlacementHome, staffPersonId);
-    storeCountyOwnership(storedPlacementHome);
-
+    storeCountyOwnership(storedPlacementHome.getIdentifier());
+    storeExternalInterface();
+    storeEmergencyContactDetail(storedPlacementHome.getIdentifier(), staffPersonId);
+    storeBackgroundCheck(staffPersonId);
+    storePlacementHomeProfile(homeLanguages, storedPlacementHome.getIdentifier(), staffPersonId);
+    prepareAddressPhoneticSearchKeywords(storedPlacementHome);
     return storedPlacementHome;
   }
 
-  private void storeCountyOwnership(PlacementHome storedPlacementHome) {
+  private void storeCountyOwnership(String placementHomeId) {
     CountyOwnership countyOwnership =
-        countyOwnershipMapper.toCountyOwnership(storedPlacementHome.getIdentifier(),
+        countyOwnershipMapper.toCountyOwnership(placementHomeId,
             "P", Collections.emptyList());
     countyOwnershipDao.create(countyOwnership);
   }
 
-  private PlacementHomeUc storePlacementHomeUc(PlacementHome placementHome,
+  private void storePlacementHomeUc(PlacementHome placementHome,
       String staffPersonId) {
     PlacementHomeUc placementHomeUc = new PlacementHomeUc();
     placementHomeUc.setCityNm(StringUtils.upperCase(placementHome.getCityNm()));
@@ -60,7 +106,52 @@ public class PlacementHomeService implements DataAccessService<PlacementHome> {
     placementHomeUc.setPkplcHmt(placementHome.getIdentifier());
     placementHomeUc.setLstUpdId(staffPersonId);
     placementHomeUc.setLstUpdTs(LocalDateTime.now());
-    return placementHomeUcDao.create(placementHomeUc);
+    placementHomeUcDao.create(placementHomeUc);
   }
+
+  private void storeExternalInterface() {
+    ExternalInterface externalInterface = externalInterfaceMapper.toExternalInterface("");
+    externalInterfaceDao.create(externalInterface);
+  }
+
+  private void storeEmergencyContactDetail(String placementHomeId, String staffPersonId) {
+    EmergencyContactDetail emergencyContactDetail = emergencyContactDetailMapper
+            .toEmergencyContactDetail(placementHomeId, staffPersonId);
+    emergencyContactDetailDao.create(emergencyContactDetail);
+  }
+
+  private void storeBackgroundCheck(String staffPersonId) {
+    BackgroundCheck backgroundCheck = backgroundCheckMapper.toBackgroundCheck("", staffPersonId);
+    backgroundCheckDao.create(backgroundCheck);
+  }
+
+  private void storePlacementHomeProfile(Set<CWSIdentifier> homeLanguages, String placementHomeId,
+      String staffPersonId) {
+    for (CWSIdentifier homeLanguage : homeLanguages) {
+      PlacementHomeProfile placementHomeProfile = new PlacementHomeProfile();
+      placementHomeProfile.setThirdId(IdGenerator.generateId(staffPersonId));
+      placementHomeProfile.setChrctrC((short)homeLanguage.getCwsId());
+      placementHomeProfile.setChrctrCd("L");
+      placementHomeProfile.setLstUpdId(staffPersonId);
+      placementHomeProfile.setLstUpdTs(LocalDateTime.now());
+      placementHomeProfile.setFkplcHmT(placementHomeId);
+      placementHomeProfileDao.create(placementHomeProfile);
+    }
+  }
+
+  private void prepareAddressPhoneticSearchKeywords(PlacementHome placementHome) {
+    SsaName3ParameterObject parameterObject = new SsaName3ParameterObject();
+    parameterObject.setTableName(PhoneticSearchTables.ADR_PHTT);
+    parameterObject.setCrudOper("I");
+    parameterObject.setIdentifier(placementHome.getIdentifier());
+    parameterObject.setNameCd("P");
+    parameterObject.setStreetNumber(placementHome.getStreetNo());
+    parameterObject.setStreetName(placementHome.getStreetNm());
+    parameterObject.setGvrEntc(placementHome.getGvrEntc());
+    parameterObject.setUpdateTimeStamp(new Date());
+    parameterObject.setUpdateId(placementHome.getLastUpdateId());
+    ssaName3Dao.callStoredProc(parameterObject);
+  }
+
 
 }

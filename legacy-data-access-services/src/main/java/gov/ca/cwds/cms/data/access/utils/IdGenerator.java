@@ -18,7 +18,7 @@ public class IdGenerator {
   private IdGenerator() {
   }
 
-  public static String generate(String staffPersonId) {
+  public static String generateId(String staffPersonId) {
     synchronized (monitor) {
       String generated = null;
       do {

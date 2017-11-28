@@ -1,4 +1,4 @@
-package gov.ca.cwds.cms.data.access.dao;
+package gov.ca.cwds.cms.data.access.dao.placementhome;
 
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.inject.PlacementHomeSessionFactory;
