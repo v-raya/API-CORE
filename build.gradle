@@ -12,7 +12,7 @@ allprojects {
     compileJava {options.encoding = "UTF-8"}
 
     project.ext {
-        apiVersion = "0.5.1-SNAPSHOT"
+        apiVersion = "0.5.1.local-SNAPSHOT"
         commonGroupId = "gov.ca.cwds.api"
         shiroSecurityVersion = "0.4.3"
         configPath = "$rootProject.projectDir/config/"
@@ -38,6 +38,7 @@ allprojects {
         dataModelVersion = '0.4.4'
         droolsVersion = "7.1.0.Final"
         artifactoryRepo = "http://sonar.dev.cwds.io:8081/artifactory/repo"
+        mapstructVersion = '1.1.0.Final'
     }
 
     licenseReport {

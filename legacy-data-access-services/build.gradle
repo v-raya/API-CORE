@@ -1,7 +1,15 @@
+plugins {
+    id 'net.ltgt.apt' version '0.9'
+}
+
 dependencies {
     compile project(':legacy-data-access')
     compile project(':drools-engine')
+    compile project (':api-core-cms')
 
+    //mapstruct
+    compile 'org.mapstruct:mapstruct-jdk8:' + mapstructVersion
+    apt 'org.mapstruct:mapstruct-processor:' + mapstructVersion
 }
 
 publishing {
