@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
+import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -16,7 +17,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 @MappedSuperclass
 @SuppressWarnings("squid:S3437") //LocalDate is serializable
-public abstract class BaseClient implements IClient, PersistentObject {
+public abstract class BaseClient extends CmsPersistentObject implements IClient, PersistentObject {
     private static final long serialVersionUID = -1570433180700848830L;
 
     private String identifier;

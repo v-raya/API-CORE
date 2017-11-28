@@ -3,6 +3,8 @@ package gov.ca.cwds.data.legacy.cms.entity;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -37,6 +39,7 @@ import org.hibernate.annotations.NamedQuery;
         " WHERE ph.id = :facilityId"
 )
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @javax.persistence.Table(name = "CLIENT_T")
 public class Client extends BaseClient {
 

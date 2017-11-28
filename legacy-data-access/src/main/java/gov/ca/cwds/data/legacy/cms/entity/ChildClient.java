@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -30,8 +31,9 @@ import org.hibernate.annotations.Type;
  * @author CWDS API Team
  */
 @Entity
+@PrimaryKeyJoinColumn(name = "FKCLIENT_T")
 @Table(name = "CHLD_CLT")
-public class ChildClient extends CmsPersistentObject {
+public class ChildClient extends Client {
   /**
    * Serialization version
    */
@@ -193,13 +195,13 @@ public class ChildClient extends CmsPersistentObject {
    * referential integrity check. <p> Doesn't actually load the data. Just checks the existence of
    * the parent client record. </p>
    */
-  @OneToOne(optional = false)
-  @JoinColumn(name = "FKCLIENT_T", nullable = false, updatable = false, insertable = false)
-  private Client client;
+//  @OneToOne(optional = false)
+//  @JoinColumn(name = "FKCLIENT_T", nullable = false, updatable = false, insertable = false)
+//  private Client client;
 
-  public Client getClient() {
-    return client;
-  }
+//  public Client getClient() {
+//    return client;
+//  }
 
   public void setVictimClientId(String victimClientId) {
     this.victimClientId = victimClientId;
@@ -362,9 +364,9 @@ public class ChildClient extends CmsPersistentObject {
     this.tribalCustomaryAdoptionIndicator = tribalCustomaryAdoptionIndicator;
   }
 
-  public void setClient(Client client) {
-    this.client = client;
-  }
+//  public void setClient(Client client) {
+//    this.client = client;
+//  }
 
   /*
      * (non-Javadoc)
