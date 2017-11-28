@@ -938,7 +938,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   /**
    * Getter for searchable date of birth.
    *
-   * @return Searchable date of birth
+   * @return searchable date of birth
    */
   @JsonProperty("searchable_date_of_birth")
   public String[] getSearchableDateOfBirth() {
@@ -947,38 +947,38 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       List<String> dobValues = new ArrayList<>();
       Date date = DomainChef.uncookDateString(this.dateOfBirth);
 
-      // With zeros, e.g) 01/09/1995
+      // With zeros, e.g. 01/09/1995
       DateFormat df = new SimpleDateFormat("MMddyyyy");
       String mmddyyyyDob = df.format(date);
       dobValues.add(mmddyyyyDob);
 
-      // Month and Year only, e.g) 09/1995
+      // Month and Year only, e.g. 09/1995
       df = new SimpleDateFormat("MMyyyy");
       String mmyyyyDob = df.format(date);
       dobValues.add(mmyyyyDob);
 
-      // Year only, e.g) 1995
+      // Year only, e.g. 1995
       df = new SimpleDateFormat("yyyy");
       String yyyyDob = df.format(date);
       dobValues.add(yyyyDob);
 
-      // Month and Day, e.g) 01/09
+      // Month and Day, e.g. 01/09
       df = new SimpleDateFormat("MMdd");
       String mmddDob = df.format(date);
       dobValues.add(mmddDob);
 
-      // Remove leading zeros, e.g) 1/9/1995
+      // Remove leading zeros, e.g. 1/9/1995
       df = new SimpleDateFormat("Mdyyyy");
       String mdyyyyDob = df.format(date);
       if (!mmddyyyyDob.equals(mdyyyyDob)) {
         dobValues.add(mdyyyyDob);
 
-        // Month and year only without zeros, e.g) 9/1995
+        // Month and year only without zeros, e.g. 9/1995
         df = new SimpleDateFormat("Myyyy");
         String myyyyDob = df.format(date);
         dobValues.add(myyyyDob);
 
-        // Month and Day without zeros, e.g) 1/9
+        // Month and Day without zeros, e.g. 1/9
         df = new SimpleDateFormat("Md");
         String mdDob = df.format(date);
         dobValues.add(mdDob);
