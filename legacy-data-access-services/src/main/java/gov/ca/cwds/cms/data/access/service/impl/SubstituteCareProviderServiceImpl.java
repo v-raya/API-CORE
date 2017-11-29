@@ -3,13 +3,17 @@ package gov.ca.cwds.cms.data.access.service.impl;
 import static org.apache.commons.lang3.StringUtils.upperCase;
 
 import com.google.inject.Inject;
+import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.CountyOwnershipDao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.SubstituteCareProviderDao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.SubstituteCareProviderUcDao;
+import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.parameter.SCPParameterObject;
 import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
+import gov.ca.cwds.data.legacy.cms.entity.CountyOwnership;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProviderUc;
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 /**
  * @author CWDS CALS API Team
@@ -23,6 +27,12 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   @Inject
   private SubstituteCareProviderUcDao substituteCareProviderUcDao;
 
+  @Inject
+  private CountyOwnershipDao countyOwnershipDao;
+
+  @Inject
+  private CountyOwnershipMapper countyOwnershipMapper;
+
   @Override
   public SubstituteCareProvider create(SubstituteCareProvider substituteCareProvider,
       SCPParameterObject parameterObject) {
@@ -30,7 +40,15 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
     SubstituteCareProvider storedSubstituteCareProvider = substituteCareProviderDao
         .create(substituteCareProvider);
     storeSubstituteCareProviderUc(substituteCareProvider, parameterObject);
+    storeCountyOwnership(substituteCareProvider.getIdentifier());
     return storedSubstituteCareProvider;
+  }
+
+  private void storeCountyOwnership(String scpIdentifier) {
+    CountyOwnership countyOwnership =
+        countyOwnershipMapper.toCountyOwnership(scpIdentifier,
+            "S", Collections.emptyList());
+    countyOwnershipDao.create(countyOwnership);
   }
 
   private void storeSubstituteCareProviderUc(SubstituteCareProvider substituteCareProvider,
