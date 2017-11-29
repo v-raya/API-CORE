@@ -943,7 +943,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonProperty("searchable_date_of_birth")
   public String[] getSearchableDateOfBirth() {
     String[] searchableDob = null;
-    if (!StringUtils.isBlank(this.dateOfBirth)) {
+    if (StringUtils.isNotBlank(this.dateOfBirth)) {
       List<String> dobValues = new ArrayList<>();
       Date date = DomainChef.uncookDateString(this.dateOfBirth);
 
