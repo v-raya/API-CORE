@@ -14,15 +14,13 @@ import gov.ca.cwds.cms.data.access.parameter.SCPParameterObject;
 import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
 import gov.ca.cwds.cms.data.access.utils.IdGenerator;
 import gov.ca.cwds.data.legacy.cms.entity.CountyOwnership;
-import gov.ca.cwds.data.legacy.cms.entity.PhoneContactDetail;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeInformation;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProviderUc;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Optional;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 /**
  * @author CWDS CALS API Team
@@ -63,24 +61,13 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
 
   private void storePhoneContactDetails(SubstituteCareProvider substituteCareProvider,
       SCPParameterObject parameterObject) {
-
-    Optional.ofNullable(parameterObject.getPhoneNumbers()).ifPresent(
-        phoneNumbers -> phoneNumbers.forEach(phoneNumber -> {
-          PhoneContactDetail phoneContactDetail = new PhoneContactDetail();
-          phoneContactDetail.setPhoneNo(Long.valueOf(phoneNumber.getNumber()));
-          if (StringUtils.isNotEmpty(phoneNumber.getExtension())) {
-            phoneContactDetail.setPhextNo(Integer.valueOf(phoneNumber.getExtension()));
-          }
-          phoneContactDetail.setPhnTypCd(phoneNumber.getTypeCode());
-          phoneContactDetail.setEstblshCd("S");
-          phoneContactDetail.setEstblshId(substituteCareProvider.getIdentifier());
-          phoneContactDetail.setThirdId(IdGenerator.generateId(parameterObject.getStaffPersonId()));
-          phoneContactDetail.setLstUpdId(parameterObject.getStaffPersonId());
-          phoneContactDetail.setLstUpdTs(LocalDateTime.now());
-          phoneContactDetailDao.create(phoneContactDetail);
-        })
-    );
-
+    if (CollectionUtils.isNotEmpty(parameterObject.getPhoneNumbers())) {
+      parameterObject.getPhoneNumbers()
+          .forEach(phoneNumber -> {
+            phoneNumber.setEstblshId(substituteCareProvider.getIdentifier());
+            phoneContactDetailDao.create(phoneNumber);
+          });
+    }
   }
 
   private void storePlacementHomeInformation(SubstituteCareProvider substituteCareProvider,
