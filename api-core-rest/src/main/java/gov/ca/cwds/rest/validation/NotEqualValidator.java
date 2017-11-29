@@ -5,6 +5,7 @@ import java.text.MessageFormat;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,14 +35,12 @@ public class NotEqualValidator
   public boolean isValid(final Object bean, ConstraintValidatorContext context) {
     boolean valid = true;
 
-    short ifValue = readBeanPropertyValue(bean, ifProperty) != null
-        ? (short) readBeanPropertyValue(bean, ifProperty)
-        : 0;
-    short thenValue = readBeanPropertyValue(bean, thenProperty) != null
-        ? (short) readBeanPropertyValue(bean, thenProperty)
-        : 0;
+    String ifValue = readBeanValue(bean, ifProperty);
+    String thenValue = readBeanValue(bean, thenProperty);
+    boolean ifValueBlank = StringUtils.isNotBlank(ifValue);
+    boolean thenValueBlank = StringUtils.isNotBlank(thenValue);
 
-    if (ifValue == thenValue) {
+    if (ifValueBlank && thenValueBlank && ifValue.equals(thenValue)) {
       context.disableDefaultConstraintViolation();
       context
           .buildConstraintViolationWithTemplate(
