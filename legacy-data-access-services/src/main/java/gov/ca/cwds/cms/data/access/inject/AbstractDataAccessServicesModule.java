@@ -10,6 +10,7 @@ import gov.ca.cwds.cms.data.access.dao.placementhome.EmergencyContactDetailDao;
 import gov.ca.cwds.cms.data.access.dao.placementhome.ExternalInterfaceDao;
 import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeDao;
 import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeProfileDao;
+import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.PlacementHomeInformationDao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.SubstituteCareProviderDao;
 import gov.ca.cwds.cms.data.access.mapper.BackgroundCheckMapper;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
@@ -65,6 +66,7 @@ public abstract class AbstractDataAccessServicesModule extends AbstractModule {
     bind(EmergencyContactDetailDao.class);
     bind(PlacementHomeProfileDao.class);
     bind(SubstituteCareProviderDao.class);
+    bind(PlacementHomeInformationDao.class);
   }
 
   private void configureMappers() {

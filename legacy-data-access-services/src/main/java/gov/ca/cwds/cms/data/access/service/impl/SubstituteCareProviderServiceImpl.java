@@ -3,15 +3,20 @@ package gov.ca.cwds.cms.data.access.service.impl;
 import static org.apache.commons.lang3.StringUtils.upperCase;
 
 import com.google.inject.Inject;
+import gov.ca.cwds.cms.data.access.Constants;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.CountyOwnershipDao;
+import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.PlacementHomeInformationDao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.SubstituteCareProviderDao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.SubstituteCareProviderUcDao;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.parameter.SCPParameterObject;
 import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
+import gov.ca.cwds.cms.data.access.utils.IdGenerator;
 import gov.ca.cwds.data.legacy.cms.entity.CountyOwnership;
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeInformation;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProviderUc;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
@@ -33,6 +38,9 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   @Inject
   private CountyOwnershipMapper countyOwnershipMapper;
 
+  @Inject
+  private PlacementHomeInformationDao placementHomeInformationDao;
+
   @Override
   public SubstituteCareProvider create(SubstituteCareProvider substituteCareProvider,
       SCPParameterObject parameterObject) {
@@ -41,7 +49,27 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
         .create(substituteCareProvider);
     storeSubstituteCareProviderUc(substituteCareProvider, parameterObject);
     storeCountyOwnership(substituteCareProvider.getIdentifier());
+    storePlacementHomeInformation(substituteCareProvider, parameterObject);
     return storedSubstituteCareProvider;
+  }
+
+  private void storePlacementHomeInformation(SubstituteCareProvider substituteCareProvider,
+      SCPParameterObject parameterObject) {
+    PlacementHomeInformation placementHomeInformation = new PlacementHomeInformation();
+    placementHomeInformation.setThirdId(IdGenerator.generateId(parameterObject.getStaffPersonId()));
+    placementHomeInformation.setStartDt(LocalDate.now());
+    placementHomeInformation.setLicnseeCd("U");
+    placementHomeInformation.setCrprvdrCd("Y");
+    placementHomeInformation.setLstUpdId(parameterObject.getStaffPersonId());
+    placementHomeInformation.setLstUpdTs(LocalDateTime.now());
+    placementHomeInformation.setFksbPvdrt(substituteCareProvider.getIdentifier());
+    placementHomeInformation.setFkplcHmT(parameterObject.getPlacementHomeId());
+    placementHomeInformation
+        .setPrprvdrCd(parameterObject.isPrimaryApplicant() ? Constants.Y : Constants.N);
+    placementHomeInformation.setCdsPrsn(Constants.SPACE);
+    placementHomeInformation
+        .setScprvdInd(parameterObject.isPrimaryApplicant() ? Constants.N : Constants.Y);
+    placementHomeInformationDao.create(placementHomeInformation);
   }
 
   private void storeCountyOwnership(String scpIdentifier) {

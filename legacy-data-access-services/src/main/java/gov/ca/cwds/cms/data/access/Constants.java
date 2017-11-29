@@ -10,6 +10,7 @@ public final class Constants {
 
   public static final String Y = "Y";
   public static final String N = "N";
+  public static final String SPACE = " ";
 
   public static class PhoneticSearchTables {
 
