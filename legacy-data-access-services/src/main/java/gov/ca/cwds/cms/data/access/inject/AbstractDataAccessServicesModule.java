@@ -10,6 +10,7 @@ import gov.ca.cwds.cms.data.access.dao.placementhome.EmergencyContactDetailDao;
 import gov.ca.cwds.cms.data.access.dao.placementhome.ExternalInterfaceDao;
 import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeDao;
 import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeProfileDao;
+import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.OutOfStateCheckDao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.PlacementHomeInformationDao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.ScpSsaName3Dao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.SubstituteCareProviderDao;
@@ -69,6 +70,7 @@ public abstract class AbstractDataAccessServicesModule extends AbstractModule {
     bind(SubstituteCareProviderDao.class);
     bind(PlacementHomeInformationDao.class);
     bind(ScpSsaName3Dao.class);
+    bind(OutOfStateCheckDao.class);
   }
 
   private void configureMappers() {

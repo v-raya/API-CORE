@@ -16,6 +16,8 @@ public class SCPParameterObject extends BaseParameterObject {
 
   private CWSIdentifier ethnicity;
 
+  private List<? extends CWSIdentifier> otherStatesOfLiving;
+
   private List<PhoneContactDetail> phoneNumbers;
 
   public String getPlacementHomeId() {
@@ -50,4 +52,14 @@ public class SCPParameterObject extends BaseParameterObject {
   public void setEthnicity(CWSIdentifier ethnicity) {
     this.ethnicity = ethnicity;
   }
+
+  public List<? extends CWSIdentifier> getOtherStatesOfLiving() {
+    return otherStatesOfLiving;
+  }
+
+  public void setOtherStatesOfLiving(
+      List<? extends CWSIdentifier> otherStatesOfLiving) {
+    this.otherStatesOfLiving = otherStatesOfLiving;
+  }
+
 }

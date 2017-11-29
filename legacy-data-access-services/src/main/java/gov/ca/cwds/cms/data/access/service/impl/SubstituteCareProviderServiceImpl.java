@@ -3,10 +3,12 @@ package gov.ca.cwds.cms.data.access.service.impl;
 import static org.apache.commons.lang3.StringUtils.upperCase;
 
 import com.google.inject.Inject;
+import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.cms.data.access.Constants;
 import gov.ca.cwds.cms.data.access.Constants.PhoneticSearchTables;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.ClientScpEthnicityDao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.CountyOwnershipDao;
+import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.OutOfStateCheckDao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.PhoneContactDetailDao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.PlacementHomeInformationDao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.ScpSsaName3Dao;
@@ -19,6 +21,7 @@ import gov.ca.cwds.cms.data.access.utils.IdGenerator;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
 import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
 import gov.ca.cwds.data.legacy.cms.entity.CountyOwnership;
+import gov.ca.cwds.data.legacy.cms.entity.OutOfStateCheck;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeInformation;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProviderUc;
@@ -58,6 +61,9 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   @Inject
   private ClientScpEthnicityDao clientScpEthnicityDao;
 
+  @Inject
+  private OutOfStateCheckDao outOfStateCheckDao;
+
   @Override
   public SubstituteCareProvider create(SubstituteCareProvider substituteCareProvider,
       SCPParameterObject parameterObject) {
@@ -69,8 +75,25 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
     storePlacementHomeInformation(substituteCareProvider, parameterObject);
     storePhoneContactDetails(storedSubstituteCareProvider, parameterObject);
     storeEthnicity(storedSubstituteCareProvider, parameterObject);
+    storeOutOfStateChecks(storedSubstituteCareProvider, parameterObject);
     prepareSubstituteCareProviderPhoneticSearchKeywords(substituteCareProvider);
     return storedSubstituteCareProvider;
+  }
+
+  private void storeOutOfStateChecks(SubstituteCareProvider storedSubstituteCareProvider,
+      SCPParameterObject parameterObject) {
+    if (CollectionUtils.isNotEmpty(parameterObject.getOtherStatesOfLiving())) {
+      for (CWSIdentifier stateId : parameterObject.getOtherStatesOfLiving()) {
+        OutOfStateCheck outOfStateCheck = new OutOfStateCheck();
+        outOfStateCheck.setStateC((short)(stateId.getCwsId()));
+        outOfStateCheck.setRcpntId(storedSubstituteCareProvider.getIdentifier());
+        outOfStateCheck.setRcpntCd("S");
+        outOfStateCheck.setIdentifier(IdGenerator.generateId(parameterObject.getStaffPersonId()));
+        outOfStateCheck.setLstUpdId(parameterObject.getStaffPersonId());
+        outOfStateCheck.setLstUpdTs(LocalDateTime.now());
+        outOfStateCheckDao.create(outOfStateCheck);
+      }
+    }
   }
 
   private void storeEthnicity(SubstituteCareProvider storedSubstituteCareProvider,
