@@ -37,10 +37,10 @@ public class NotEqualValidator
 
     String ifValue = readBeanValue(bean, ifProperty);
     String thenValue = readBeanValue(bean, thenProperty);
-    boolean ifValueBlank = StringUtils.isNotBlank(ifValue);
-    boolean thenValueBlank = StringUtils.isNotBlank(thenValue);
+    boolean ifValueNotBlank = StringUtils.isNotBlank(ifValue);
+    boolean thenValueNotBlank = StringUtils.isNotBlank(thenValue);
 
-    if (ifValueBlank && thenValueBlank && ifValue.equals(thenValue)) {
+    if (ifValueNotBlank && thenValueNotBlank && ifValue.equals(thenValue)) {
       context.disableDefaultConstraintViolation();
       context
           .buildConstraintViolationWithTemplate(
