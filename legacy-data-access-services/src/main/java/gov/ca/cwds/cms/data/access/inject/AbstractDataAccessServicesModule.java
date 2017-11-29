@@ -10,11 +10,15 @@ import gov.ca.cwds.cms.data.access.dao.placementhome.EmergencyContactDetailDao;
 import gov.ca.cwds.cms.data.access.dao.placementhome.ExternalInterfaceDao;
 import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeDao;
 import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeProfileDao;
+import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.SubstituteCareProviderDao;
 import gov.ca.cwds.cms.data.access.mapper.BackgroundCheckMapper;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.mapper.EmergencyContactDetailMapper;
 import gov.ca.cwds.cms.data.access.mapper.ExternalInterfaceMapper;
 import gov.ca.cwds.cms.data.access.service.PlacementHomeService;
+import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
+import gov.ca.cwds.cms.data.access.service.impl.PlacementHomeServiceImpl;
+import gov.ca.cwds.cms.data.access.service.impl.SubstituteCareProviderServiceImpl;
 import org.hibernate.SessionFactory;
 
 /**
@@ -37,10 +41,19 @@ public abstract class AbstractDataAccessServicesModule extends AbstractModule {
     return getPlacementHomeSessionFactory(injector);
   }
 
+  @Provides
+  @SubstituteCareProviderSessionFactory
+  @Inject
+  protected SessionFactory substituteCareProviderSessionFactory(Injector injector) {
+    return getSubstituteCareProviderSessionFactory(injector);
+  }
+
   protected abstract SessionFactory getPlacementHomeSessionFactory(Injector injector);
+  protected abstract SessionFactory getSubstituteCareProviderSessionFactory(Injector injector);
 
   private void configureDataAccessServices() {
-    bind(PlacementHomeService.class);
+    bind(PlacementHomeService.class).to(PlacementHomeServiceImpl.class);
+    bind(SubstituteCareProviderService.class).to(SubstituteCareProviderServiceImpl.class);
   }
 
   private void configureDAOs() {
@@ -51,6 +64,7 @@ public abstract class AbstractDataAccessServicesModule extends AbstractModule {
     bind(BackgroundCheckDao.class);
     bind(EmergencyContactDetailDao.class);
     bind(PlacementHomeProfileDao.class);
+    bind(SubstituteCareProviderDao.class);
   }
 
   private void configureMappers() {
