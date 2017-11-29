@@ -1,10 +1,10 @@
 package gov.ca.cwds.data.legacy.cms.dao;
 
 import com.google.inject.Inject;
+import gov.ca.cwds.data.BaseDaoImpl;
+import gov.ca.cwds.data.legacy.cms.entity.BaseClient;
 import gov.ca.cwds.data.stream.QueryCreator;
 import gov.ca.cwds.data.stream.ScalarResultsStreamer;
-import gov.ca.cwds.data.legacy.cms.entity.Client;
-import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.inject.CmsSessionFactory;
 import java.util.stream.Stream;
 import javax.persistence.NoResultException;
@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author CWDS CALS API Team
  */
-public class ClientDao extends BaseDaoImpl<Client> {
+public class ClientDao extends BaseDaoImpl<BaseClient> {
 
   private static final Logger LOG = LoggerFactory.getLogger(ClientDao.class);
 
@@ -26,17 +26,17 @@ public class ClientDao extends BaseDaoImpl<Client> {
     super(sessionFactory);
   }
 
-  public Client findByLicNumAndChildId(String licenseNumber, String childId) {
+  public BaseClient findByLicNumAndChildId(String licenseNumber, String childId) {
     Session session = getSessionFactory().getCurrentSession();
-    Class<Client> entityClass = getEntityClass();
-    Query<Client> query =
+    Class<BaseClient> entityClass = getEntityClass();
+    Query<BaseClient> query =
         session.createNamedQuery(entityClass.getSimpleName() + ".find", entityClass);
 
     query.setParameter("licenseNumber", licenseNumber);
     query.setParameter("childId", childId);
     query.setMaxResults(1);
 
-    Client client = null;
+    BaseClient client = null;
     try {
       client = query.getSingleResult();
     } catch (NoResultException e) {
@@ -48,19 +48,19 @@ public class ClientDao extends BaseDaoImpl<Client> {
     return client;
   }
 
-  public Stream<Client> streamByLicenseNumber(String licenseNumber) {
-    QueryCreator<Client> queryCreator = (session, entityClass) -> session
+  public Stream<BaseClient> streamByLicenseNumber(String licenseNumber) {
+    QueryCreator<BaseClient> queryCreator = (session, entityClass) -> session
         .createNamedQuery(entityClass.getSimpleName() + ".findAll", entityClass)
         .setParameter("licenseNumber", licenseNumber);
     return new ScalarResultsStreamer<>(this, queryCreator).createStream();
   }
 
-  public Stream<Client> streamByLicenseNumber(Integer licenseNumber) {
+  public Stream<BaseClient> streamByLicenseNumber(Integer licenseNumber) {
     return streamByLicenseNumber(String.valueOf(licenseNumber));
   }
 
-  public Stream<Client> streamByFacilityId(String facilityId) {
-    QueryCreator<Client> queryCreator = (session, entityClass) -> session
+  public Stream<BaseClient> streamByFacilityId(String facilityId) {
+    QueryCreator<BaseClient> queryCreator = (session, entityClass) -> session
         .createNamedQuery(entityClass.getSimpleName() + ".findByFacilityId", entityClass)
         .setParameter("facilityId", facilityId);
     return new ScalarResultsStreamer<>(this, queryCreator).createStream();
