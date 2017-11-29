@@ -5,6 +5,7 @@ import static org.apache.commons.lang3.StringUtils.upperCase;
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.Constants;
 import gov.ca.cwds.cms.data.access.Constants.PhoneticSearchTables;
+import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.ClientScpEthnicityDao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.CountyOwnershipDao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.PhoneContactDetailDao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.PlacementHomeInformationDao;
@@ -16,6 +17,7 @@ import gov.ca.cwds.cms.data.access.parameter.SCPParameterObject;
 import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
 import gov.ca.cwds.cms.data.access.utils.IdGenerator;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
+import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
 import gov.ca.cwds.data.legacy.cms.entity.CountyOwnership;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeInformation;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
@@ -53,6 +55,9 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   @Inject
   private ScpSsaName3Dao scpSsaName3Dao;
 
+  @Inject
+  private ClientScpEthnicityDao clientScpEthnicityDao;
+
   @Override
   public SubstituteCareProvider create(SubstituteCareProvider substituteCareProvider,
       SCPParameterObject parameterObject) {
@@ -63,8 +68,21 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
     storeCountyOwnership(substituteCareProvider.getIdentifier());
     storePlacementHomeInformation(substituteCareProvider, parameterObject);
     storePhoneContactDetails(storedSubstituteCareProvider, parameterObject);
+    storeEthnicity(storedSubstituteCareProvider, parameterObject);
     prepareSubstituteCareProviderPhoneticSearchKeywords(substituteCareProvider);
     return storedSubstituteCareProvider;
+  }
+
+  private void storeEthnicity(SubstituteCareProvider storedSubstituteCareProvider,
+      SCPParameterObject parameterObject) {
+    ClientScpEthnicity clientScpEthnicity = new ClientScpEthnicity();
+    clientScpEthnicity.setEthnctyc((short)parameterObject.getEthnicity().getCwsId());
+    clientScpEthnicity.setEstblshId(storedSubstituteCareProvider.getIdentifier());
+    clientScpEthnicity.setEstblshCd("S");
+    clientScpEthnicity.setIdentifier(IdGenerator.generateId(parameterObject.getStaffPersonId()));
+    clientScpEthnicity.setLstUpdId(parameterObject.getStaffPersonId());
+    clientScpEthnicity.setLstUpdTs(LocalDateTime.now());
+    clientScpEthnicityDao.create(clientScpEthnicity);
   }
 
   private void prepareSubstituteCareProviderPhoneticSearchKeywords(

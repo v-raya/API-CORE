@@ -1,5 +1,6 @@
 package gov.ca.cwds.cms.data.access.parameter;
 
+import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.data.legacy.cms.entity.PhoneContactDetail;
 import java.util.List;
 
@@ -12,6 +13,8 @@ public class SCPParameterObject extends BaseParameterObject {
   private String placementHomeId;
 
   private boolean primaryApplicant;
+
+  private CWSIdentifier ethnicity;
 
   private List<PhoneContactDetail> phoneNumbers;
 
@@ -38,5 +41,13 @@ public class SCPParameterObject extends BaseParameterObject {
   public void setPhoneNumbers(
       List<PhoneContactDetail> phoneNumbers) {
     this.phoneNumbers = phoneNumbers;
+  }
+
+  public CWSIdentifier getEthnicity() {
+    return ethnicity;
+  }
+
+  public void setEthnicity(CWSIdentifier ethnicity) {
+    this.ethnicity = ethnicity;
   }
 }
