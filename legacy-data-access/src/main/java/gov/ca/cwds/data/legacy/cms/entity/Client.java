@@ -38,19 +38,16 @@ import org.hibernate.annotations.NamedQuery;
         " JOIN ohp.placementHome ph" +
         " WHERE ph.id = :facilityId"
 )
-@Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-@javax.persistence.Table(name = "CLIENT_T")
-public class Client extends BaseClient {
+public class Client extends BaseClient implements IClient {
 
   private static final long serialVersionUID = -1570433180700848831L;
 
-  private Set<PlacementEpisode> placementEpisodes = new HashSet<>();
-
-  @Override
   @OneToMany
   @JoinColumn(name = "FKCLIENT_T", referencedColumnName = "IDENTIFIER")
   @OrderBy("removalDt DESC")
+  private Set<PlacementEpisode> placementEpisodes = new HashSet<>();
+
+  @Override
   public Set<PlacementEpisode> getPlacementEpisodes() {
     return placementEpisodes;
   }

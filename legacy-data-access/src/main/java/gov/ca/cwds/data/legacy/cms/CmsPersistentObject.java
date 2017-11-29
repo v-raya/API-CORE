@@ -55,12 +55,12 @@ public abstract class CmsPersistentObject extends ApiObjectIdentity implements P
   }
 
   @SuppressWarnings("javadoc")
-  public void setLastUpdatedId(String lastUpdatedId) {
+  public void setLastUpdateId(String lastUpdatedId) {
     this.lastUpdatedId = lastUpdatedId;
   }
 
   @SuppressWarnings("javadoc")
-  public void setLastUpdatedTime(LocalDateTime lastUpdatedTime) {
+  public void setLastUpdateTime(LocalDateTime lastUpdatedTime) {
     this.lastUpdatedTime = lastUpdatedTime;
   }
 }
