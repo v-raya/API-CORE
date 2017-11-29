@@ -5,6 +5,7 @@ import static org.apache.commons.lang3.StringUtils.upperCase;
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.Constants;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.CountyOwnershipDao;
+import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.PhoneContactDetailDao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.PlacementHomeInformationDao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.SubstituteCareProviderDao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.SubstituteCareProviderUcDao;
@@ -13,12 +14,15 @@ import gov.ca.cwds.cms.data.access.parameter.SCPParameterObject;
 import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
 import gov.ca.cwds.cms.data.access.utils.IdGenerator;
 import gov.ca.cwds.data.legacy.cms.entity.CountyOwnership;
+import gov.ca.cwds.data.legacy.cms.entity.PhoneContactDetail;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeInformation;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProviderUc;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author CWDS CALS API Team
@@ -41,6 +45,9 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   @Inject
   private PlacementHomeInformationDao placementHomeInformationDao;
 
+  @Inject
+  private PhoneContactDetailDao phoneContactDetailDao;
+
   @Override
   public SubstituteCareProvider create(SubstituteCareProvider substituteCareProvider,
       SCPParameterObject parameterObject) {
@@ -50,7 +57,30 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
     storeSubstituteCareProviderUc(substituteCareProvider, parameterObject);
     storeCountyOwnership(substituteCareProvider.getIdentifier());
     storePlacementHomeInformation(substituteCareProvider, parameterObject);
+    storePhoneContactDetails(storedSubstituteCareProvider, parameterObject);
     return storedSubstituteCareProvider;
+  }
+
+  private void storePhoneContactDetails(SubstituteCareProvider substituteCareProvider,
+      SCPParameterObject parameterObject) {
+
+    Optional.ofNullable(parameterObject.getPhoneNumbers()).ifPresent(
+        phoneNumbers -> phoneNumbers.forEach(phoneNumber -> {
+          PhoneContactDetail phoneContactDetail = new PhoneContactDetail();
+          phoneContactDetail.setPhoneNo(Long.valueOf(phoneNumber.getNumber()));
+          if (StringUtils.isNotEmpty(phoneNumber.getExtension())) {
+            phoneContactDetail.setPhextNo(Integer.valueOf(phoneNumber.getExtension()));
+          }
+          phoneContactDetail.setPhnTypCd(phoneNumber.getTypeCode());
+          phoneContactDetail.setEstblshCd("S");
+          phoneContactDetail.setEstblshId(substituteCareProvider.getIdentifier());
+          phoneContactDetail.setThirdId(IdGenerator.generateId(parameterObject.getStaffPersonId()));
+          phoneContactDetail.setLstUpdId(parameterObject.getStaffPersonId());
+          phoneContactDetail.setLstUpdTs(LocalDateTime.now());
+          phoneContactDetailDao.create(phoneContactDetail);
+        })
+    );
+
   }
 
   private void storePlacementHomeInformation(SubstituteCareProvider substituteCareProvider,
