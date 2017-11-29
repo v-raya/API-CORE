@@ -1,0 +1,32 @@
+plugins {
+    id 'net.ltgt.apt' version '0.9'
+}
+
+dependencies {
+    compile project(':legacy-data-access')
+    compile project(':drools-engine')
+    compile project (':api-core-cms')
+
+    compile group: 'org.apache.commons', name: 'commons-collections4', version: commonsCollectionsVersion
+    //mapstruct
+    compile 'org.mapstruct:mapstruct-jdk8:' + mapstructVersion
+    apt 'org.mapstruct:mapstruct-processor:' + mapstructVersion
+}
+
+publishing {
+    publications {
+        library(MavenPublication) {
+            from components.java
+            groupId commonGroupId
+            artifactId 'legacy-data-access-services'
+            version version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
+        }
+    }
+    repositories {
+        mavenLocal()
+        maven {
+            url artifactoryRepo
+        }
+    }
+}
+
