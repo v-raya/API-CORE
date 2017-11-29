@@ -4,15 +4,18 @@ import static org.apache.commons.lang3.StringUtils.upperCase;
 
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.Constants;
+import gov.ca.cwds.cms.data.access.Constants.PhoneticSearchTables;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.CountyOwnershipDao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.PhoneContactDetailDao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.PlacementHomeInformationDao;
+import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.ScpSsaName3Dao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.SubstituteCareProviderDao;
 import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.SubstituteCareProviderUcDao;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.parameter.SCPParameterObject;
 import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
 import gov.ca.cwds.cms.data.access.utils.IdGenerator;
+import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
 import gov.ca.cwds.data.legacy.cms.entity.CountyOwnership;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeInformation;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
@@ -20,6 +23,7 @@ import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProviderUc;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Date;
 import org.apache.commons.collections4.CollectionUtils;
 
 /**
@@ -46,6 +50,9 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   @Inject
   private PhoneContactDetailDao phoneContactDetailDao;
 
+  @Inject
+  private ScpSsaName3Dao scpSsaName3Dao;
+
   @Override
   public SubstituteCareProvider create(SubstituteCareProvider substituteCareProvider,
       SCPParameterObject parameterObject) {
@@ -56,7 +63,25 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
     storeCountyOwnership(substituteCareProvider.getIdentifier());
     storePlacementHomeInformation(substituteCareProvider, parameterObject);
     storePhoneContactDetails(storedSubstituteCareProvider, parameterObject);
+    prepareSubstituteCareProviderPhoneticSearchKeywords(substituteCareProvider);
     return storedSubstituteCareProvider;
+  }
+
+  private void prepareSubstituteCareProviderPhoneticSearchKeywords(
+      SubstituteCareProvider substituteCareProvider) {
+    SsaName3ParameterObject parameterObject = new SsaName3ParameterObject();
+    parameterObject.setTableName(PhoneticSearchTables.SCP_PHTT);
+    parameterObject.setCrudOper("I");
+    parameterObject.setIdentifier(substituteCareProvider.getIdentifier());
+    parameterObject.setFirstName(substituteCareProvider.getFirstNm());
+    parameterObject.setMiddleName(substituteCareProvider.getMidIniNm());
+    parameterObject.setLastName(substituteCareProvider.getLastNm());
+    parameterObject.setStreetNumber("");
+    parameterObject.setStreetName("");
+    parameterObject.setGvrEntc((short) 0);
+    parameterObject.setUpdateTimeStamp(new Date());
+    parameterObject.setUpdateId(substituteCareProvider.getLstUpdId());
+    scpSsaName3Dao.callStoredProc(parameterObject);
   }
 
   private void storePhoneContactDetails(SubstituteCareProvider substituteCareProvider,
