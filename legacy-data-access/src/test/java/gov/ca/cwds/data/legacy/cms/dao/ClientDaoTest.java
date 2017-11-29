@@ -3,8 +3,8 @@ package gov.ca.cwds.data.legacy.cms.dao;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import gov.ca.cwds.data.legacy.cms.entity.BaseClient;
 import gov.ca.cwds.data.legacy.cms.entity.ChildClient;
+import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.persistence.BaseCwsCmsInMemoryPersistenceTest;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,11 +24,11 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
 
     executeInTransaction(sessionFactory,
         (sessionFactory) -> {
-          BaseClient client_1 = dao.find("AaiU7IW0Rt");
+          Client client_1 = dao.find("AaiU7IW0Rt");
           assertNotNull(client_1);
-          assertTrue(client_1 instanceof BaseClient);
+          assertTrue(client_1 instanceof Client);
 
-          BaseClient client_2 = dao.find("AapJGAU04Z");
+          Client client_2 = dao.find("AapJGAU04Z");
           assertNotNull(client_2);
           assertTrue(client_2 instanceof ChildClient);
         });

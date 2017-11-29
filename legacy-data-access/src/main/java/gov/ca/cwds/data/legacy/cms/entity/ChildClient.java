@@ -32,7 +32,7 @@ import org.hibernate.annotations.Type;
 @Entity
 @PrimaryKeyJoinColumn(name = "FKCLIENT_T")
 @Table(name = "CHLD_CLT")
-public class ChildClient extends BaseClient {
+public class ChildClient extends Client {
 
   /**
    * Serialization version
