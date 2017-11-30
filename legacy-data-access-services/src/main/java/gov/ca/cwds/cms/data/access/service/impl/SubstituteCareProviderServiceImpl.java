@@ -6,14 +6,14 @@ import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.cms.data.access.Constants;
 import gov.ca.cwds.cms.data.access.Constants.PhoneticSearchTables;
-import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.ClientScpEthnicityDao;
-import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.CountyOwnershipDao;
-import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.OutOfStateCheckDao;
-import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.PhoneContactDetailDao;
-import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.PlacementHomeInformationDao;
-import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.ScpSsaName3Dao;
-import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.SubstituteCareProviderDao;
-import gov.ca.cwds.cms.data.access.dao.substitutecareprovider.SubstituteCareProviderUcDao;
+import gov.ca.cwds.cms.data.access.dao.ClientScpEthnicityDao;
+import gov.ca.cwds.cms.data.access.dao.CountyOwnershipDao;
+import gov.ca.cwds.cms.data.access.dao.OutOfStateCheckDao;
+import gov.ca.cwds.cms.data.access.dao.PhoneContactDetailDao;
+import gov.ca.cwds.cms.data.access.dao.PlacementHomeInformationDao;
+import gov.ca.cwds.cms.data.access.dao.SsaName3Dao;
+import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderDao;
+import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderUcDao;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.parameter.SCPParameterObject;
 import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
@@ -56,7 +56,7 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   private PhoneContactDetailDao phoneContactDetailDao;
 
   @Inject
-  private ScpSsaName3Dao scpSsaName3Dao;
+  private SsaName3Dao scpSsaName3Dao;
 
   @Inject
   private ClientScpEthnicityDao clientScpEthnicityDao;
@@ -67,7 +67,7 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   @Override
   public SubstituteCareProvider create(SubstituteCareProvider substituteCareProvider,
       SCPParameterObject parameterObject) {
-    runBusinessRules(substituteCareProvider);
+    runBusinessValidation(substituteCareProvider);
     SubstituteCareProvider storedSubstituteCareProvider = substituteCareProviderDao
         .create(substituteCareProvider);
     storeSubstituteCareProviderUc(substituteCareProvider, parameterObject);
