@@ -53,206 +53,206 @@ import org.hibernate.annotations.NamedQuery;
 @Table(name = "CLIENT_T")
 public class Client extends CmsPersistentObject implements IClient, PersistentObject {
 
-  private static final long serialVersionUID = -1570433180700848831L;
+  private static final long serialVersionUID = 783532074047017463L;
 
   @Id
   @Column(name = "IDENTIFIER", nullable = false, length = 10)
   private String identifier;
 
+  @Column(name = "ADJDEL_IND", nullable = true, length = 1)
+  private String adjudicatedDelinquentIndicator;
+
   @Column(name = "ADPTN_STCD", nullable = false, length = 1)
-  private String adptnStcd;
+  private String adoptionStatusCode;
 
   @Column(name = "ALN_REG_NO", nullable = false, length = 12)
-  private String alnRegNo;
-
-  @Column(name = "BIRTH_DT", nullable = true)
-  private LocalDate birthDt;
-
-  @Column(name = "BR_FAC_NM", nullable = false, length = 35)
-  private String brFacNm;
-
-  @Column(name = "B_STATE_C", nullable = false)
-  private Short bStateC;
+  private String alienRegistrationNumber;
 
   @Column(name = "B_CNTRY_C", nullable = false)
-  private Short bCntryC;
+  private Short birthCountryCodeType;
 
-  @Column(name = "CHLD_CLT_B", nullable = false, length = 1)
-  private String chldCltB;
-
-  @Column(name = "COM_FST_NM", nullable = false, length = 20)
-  private String comFstNm;
-
-  @Column(name = "COM_LST_NM", nullable = false, length = 25)
-  private String comLstNm;
-
-  @Column(name = "COM_MID_NM", nullable = false, length = 20)
-  private String comMidNm;
-
-  @Column(name = "CONF_EFIND", nullable = false, length = 1)
-  private String confEfind;
-
-  @Column(name = "CONF_ACTDT", nullable = true)
-  private LocalDate confActdt;
-
-  @Column(name = "CREATN_DT", nullable = false)
-  private LocalDate creatnDt;
-
-  @Column(name = "DEATH_DT", nullable = true)
-  private LocalDate deathDt;
-
-  @Column(name = "DTH_RN_TXT", nullable = true, length = 10)
-  private String dthRnTxt;
-
-  @Column(name = "DRV_LIC_NO", nullable = false, length = 20)
-  private String drvLicNo;
-
-  @Column(name = "D_STATE_C", nullable = false)
-  private Short dStateC;
-
-  @Column(name = "GENDER_CD", nullable = false, length = 1)
-  private String genderCd;
-
-  @Column(name = "I_CNTRY_C", nullable = false)
-  private Short iCntryC;
-
-  @Column(name = "IMGT_STC", nullable = false)
-  private Short imgtStc;
-
-  @Column(name = "INCAPC_CD", nullable = false, length = 2)
-  private String incapcCd;
-
-  @Column(name = "LITRATE_CD", nullable = false, length = 1)
-  private String litrateCd;
-
-  @Column(name = "MAR_HIST_B", nullable = false, length = 1)
-  private String marHistB;
-
-  @Column(name = "MRTL_STC", nullable = false)
-  private Short mrtlStc;
-
-  @Column(name = "MILT_STACD", nullable = false, length = 1)
-  private String miltStacd;
-
-  @Column(name = "NMPRFX_DSC", nullable = false, length = 6)
-  private String nmprfxDsc;
-
-  @Column(name = "NAME_TPC", nullable = false)
-  private Short nameTpc;
-
-  @Column(name = "OUTWRT_IND", nullable = false, length = 1)
-  private String outwrtInd;
-
-  @Column(name = "P_ETHNCTYC", nullable = false)
-  private Short pEthnctyc;
-
-  @Column(name = "P_LANG_TPC", nullable = false)
-  private Short pLangTpc;
-
-  @Column(name = "RLGN_TPC", nullable = false)
-  private Short rlgnTpc;
-
-  @Column(name = "S_LANG_TC", nullable = false)
-  private Short sLangTc;
-
-  @Column(name = "SENSTV_IND", nullable = false, length = 1)
-  private String senstvInd;
-
-  @Column(name = "SNTV_HLIND", nullable = false, length = 1)
-  private String sntvHlind;
-
-  @Column(name = "SS_NO", nullable = false, length = 9)
-  private String ssNo;
-
-  @Column(name = "SSN_CHG_CD", nullable = false, length = 1)
-  private String ssnChgCd;
-
-  @Column(name = "SUFX_TLDSC", nullable = false, length = 4)
-  private String sufxTldsc;
-
-  @Column(name = "UNEMPLY_CD", nullable = false, length = 2)
-  private String unemplyCd;
-
-  @Column(name = "COMMNT_DSC", nullable = false, length = 120)
-  private String commntDsc;
-
-  @Column(name = "EST_DOB_CD", nullable = false, length = 1)
-  private String estDobCd;
-
-  @Column(name = "BP_VER_IND", nullable = false, length = 1)
-  private String bpVerInd;
-
-  @Column(name = "HISP_CD", nullable = false, length = 1)
-  private String hispCd;
-
-  @Column(name = "CURRCA_IND", nullable = false, length = 1)
-  private String currcaInd;
-
-  @Column(name = "CURREG_IND", nullable = false, length = 1)
-  private String curregInd;
-
-  @Column(name = "COTH_DESC", nullable = false, length = 25)
-  private String cothDesc;
-
-  @Column(name = "PREVCA_IND", nullable = false, length = 1)
-  private String prevcaInd;
-
-  @Column(name = "PREREG_IND", nullable = false, length = 1)
-  private String preregInd;
-
-  @Column(name = "POTH_DESC", nullable = false, length = 25)
-  private String pothDesc;
-
-  @Column(name = "HCARE_IND", nullable = false, length = 1)
-  private String hcareInd;
-
-  @Column(name = "LIMIT_IND", nullable = false, length = 1)
-  private String limitInd;
+  @Column(name = "B_STATE_C", nullable = false)
+  private Short birthStateCodeType;
 
   @Column(name = "BIRTH_CITY", nullable = false, length = 35)
   private String birthCity;
 
-  @Column(name = "HEALTH_TXT", nullable = true, length = 10)
-  private String healthTxt;
+  @Column(name = "BIRTH_DT", nullable = true)
+  private LocalDate birthDate;
 
-  @Column(name = "MTERM_DT", nullable = true)
-  private LocalDate mtermDt;
+  @Column(name = "BP_VER_IND", nullable = false, length = 1)
+  private String birthplaceVerifiedIndicator;
 
-  @Column(name = "FTERM_DT", nullable = true)
-  private LocalDate ftermDt;
+  @Column(name = "BR_FAC_NM", nullable = false, length = 35)
+  private String birthFacilityName;
 
-  @Column(name = "ZIPPY_IND", nullable = false, length = 1)
-  private String zippyInd;
+  @Column(name = "CHLD_CLT_B", nullable = false, length = 1)
+  private String childClientIndicator;
+
+  @Column(name = "COM_FST_NM", nullable = false, length = 20)
+  private String commonFirstName;
+
+  @Column(name = "COM_LST_NM", nullable = false, length = 25)
+  private String commonLastName;
+
+  @Column(name = "COM_MID_NM", nullable = false, length = 20)
+  private String commonMiddleName;
+
+  @Column(name = "COMMNT_DSC", nullable = false, length = 120)
+  private String commentDescription;
+
+  @Column(name = "CONF_ACTDT", nullable = true)
+  private LocalDate confidentialityActionDate;
+
+  @Column(name = "CONF_EFIND", nullable = false, length = 1)
+  private String confidentialityInEffectIndicator;
+
+  @Column(name = "COTH_DESC", nullable = false, length = 25)
+  private String currentlyOtherDescription;
+
+  @Column(name = "CREATN_DT", nullable = false)
+  private LocalDate creationDate;
+
+  @Column(name = "CURRCA_IND", nullable = false, length = 1)
+  private String currentCaChildrenServiceIndicator;
+
+  @Column(name = "CURREG_IND", nullable = false, length = 1)
+  private String currentlyRegionalCenterIndicator;
+
+  @Column(name = "D_STATE_C", nullable = false)
+  private Short driverLicenseStateCodeType;
+
+  @Column(name = "DEATH_DT", nullable = true)
+  private LocalDate deathDate;
 
   @Column(name = "DEATH_PLC", nullable = true, length = 35)
-  private String deathPlc;
+  private String deathPlace;
 
-  @Column(name = "TR_MBVRT_B", nullable = false, length = 1)
-  private String trMbvrtB;
-
-  @Column(name = "TRBA_CLT_B", nullable = false, length = 1)
-  private String trbaCltB;
-
-  @Column(name = "SOC158_IND", nullable = false, length = 1)
-  private String soc158Ind;
+  @Column(name = "DRV_LIC_NO", nullable = false, length = 20)
+  private String driverLicenseNumber;
 
   @Column(name = "DTH_DT_IND", nullable = false, length = 1)
-  private String dthDtInd;
+  private String deathDateVerifiedIndicator;
+
+  @Column(name = "DTH_RN_TXT", nullable = true, length = 10)
+  private String deathReasonText;
 
   @Column(name = "EMAIL_ADDR", nullable = true, length = 50)
-  private String emailAddr;
+  private String emailAddress;
 
-  @Column(name = "ADJDEL_IND", nullable = true, length = 1)
-  private String adjdelInd;
+  @Column(name = "EST_DOB_CD", nullable = false, length = 1)
+  private String estimatedDobCode;
 
   @Column(name = "ETH_UD_CD", nullable = true, length = 1)
-  private String ethUdCd;
+  private String ethnicityUnableToDetermineReasonCode;
+
+  @Column(name = "FTERM_DT", nullable = true)
+  private LocalDate fatherParentalRightTermDate;
+
+  @Column(name = "GENDER_CD", nullable = false, length = 1)
+  private String genderCode;
+
+  @Column(name = "HCARE_IND", nullable = false, length = 1)
+  private String individualHealthCarePlanIndicator;
+
+  @Column(name = "HEALTH_TXT", nullable = true, length = 10)
+  private String healthSummaryText;
+
+  @Column(name = "HISP_CD", nullable = false, length = 1)
+  private String hispanicOriginCode;
 
   @Column(name = "HISP_UD_CD", nullable = true, length = 1)
-  private String hispUdCd;
+  private String hispanicUnableToDetermineReasonCode;
+
+  @Column(name = "I_CNTRY_C", nullable = false)
+  private Short immigrationCountryCodeType;
+
+  @Column(name = "IMGT_STC", nullable = false)
+  private Short immigrationStatusType;
+
+  @Column(name = "INCAPC_CD", nullable = false, length = 2)
+  private String incapacitatedParentCode;
+
+  @Column(name = "LIMIT_IND", nullable = false, length = 1)
+  private String limitationOnScpHealthIndicator;
+
+  @Column(name = "LITRATE_CD", nullable = false, length = 1)
+  private String literateCode;
+
+  @Column(name = "MAR_HIST_B", nullable = false, length = 1)
+  private String maritalCohabitatnHistoryIndicator;
+
+  @Column(name = "MILT_STACD", nullable = false, length = 1)
+  private String militaryStatusCode;
+
+  @Column(name = "MRTL_STC", nullable = false)
+  private Short maritalStatusType;
+
+  @Column(name = "MTERM_DT", nullable = true)
+  private LocalDate motherParentalRightTermDate;
+
+  @Column(name = "NAME_TPC", nullable = false)
+  private Short nameType;
+
+  @Column(name = "NMPRFX_DSC", nullable = false, length = 6)
+  private String namePrefixDescription;
+
+  @Column(name = "OUTWRT_IND", nullable = false, length = 1)
+  private String outstandingWarrantIndicator;
+
+  @Column(name = "P_ETHNCTYC", nullable = false)
+  private Short primaryEthnicityType;
+
+  @Column(name = "P_LANG_TPC", nullable = false)
+  private Short primaryLanguageType;
+
+  @Column(name = "POTH_DESC", nullable = false, length = 25)
+  private String previousOtherDescription;
+
+  @Column(name = "PREREG_IND", nullable = false, length = 1)
+  private String previousRegionalCenterIndicator;
+
+  @Column(name = "PREVCA_IND", nullable = false, length = 1)
+  private String previousCaChildrenServiceIndicator;
+
+  @Column(name = "RLGN_TPC", nullable = false)
+  private Short religionType;
+
+  @Column(name = "S_LANG_TC", nullable = false)
+  private Short secondaryLanguageType;
+
+  @Column(name = "SENSTV_IND", nullable = false, length = 1)
+  private String sensitivityIndicator;
+
+  @Column(name = "SNTV_HLIND", nullable = false, length = 1)
+  private String sensitiveHealthInfoOnFileIndicator;
+
+  @Column(name = "SOC158_IND", nullable = false, length = 1)
+  private String soc158SealedClientIndicator;
 
   @Column(name = "SOCPLC_CD", nullable = false, length = 1)
-  private String socplcCd;
+  private String soc158PlacementCode;
+
+  @Column(name = "SS_NO", nullable = false, length = 9)
+  private String socialSecurityNumber;
+
+  @Column(name = "SSN_CHG_CD", nullable = false, length = 1)
+  private String socialSecurityNumberChangedCode;
+
+  @Column(name = "SUFX_TLDSC", nullable = false, length = 4)
+  private String suffixTitleDescription;
+
+  @Column(name = "TR_MBVRT_B", nullable = false, length = 1)
+  private String tribalMembershipVerifcationIndicator;
+
+  @Column(name = "TRBA_CLT_B", nullable = false, length = 1)
+  private String tribalAncestryClientIndicator;
+
+  @Column(name = "UNEMPLY_CD", nullable = false, length = 2)
+  private String unemployedParentCode;
+
+  @Column(name = "ZIPPY_IND", nullable = false, length = 1)
+  private String zippyCreatedIndicator;
 
   @Column(name = "CL_INDX_NO", nullable = true, length = 12)
   private String clIndxNo;
@@ -271,430 +271,430 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   }
 
 
-  public String getAdptnStcd() {
-    return adptnStcd;
+  public String getAdoptionStatusCode() {
+    return adoptionStatusCode;
   }
 
-  public void setAdptnStcd(String adptnStcd) {
-    this.adptnStcd = adptnStcd;
+  public void setAdoptionStatusCode(String adoptionStatusCode) {
+    this.adoptionStatusCode = adoptionStatusCode;
   }
 
 
-  public String getAlnRegNo() {
-    return alnRegNo;
+  public String getAlienRegistrationNumber() {
+    return alienRegistrationNumber;
   }
 
-  public void setAlnRegNo(String alnRegNo) {
-    this.alnRegNo = alnRegNo;
+  public void setAlienRegistrationNumber(String alienRegistrationNumber) {
+    this.alienRegistrationNumber = alienRegistrationNumber;
   }
 
-  public LocalDate getBirthDt() {
-    return birthDt;
+  public LocalDate getBirthDate() {
+    return birthDate;
   }
 
-  public void setBirthDt(LocalDate birthDt) {
-    this.birthDt = birthDt;
+  public void setBirthDate(LocalDate birthDate) {
+    this.birthDate = birthDate;
   }
 
 
-  public String getBrFacNm() {
-    return brFacNm;
+  public String getBirthFacilityName() {
+    return birthFacilityName;
   }
 
-  public void setBrFacNm(String brFacNm) {
-    this.brFacNm = brFacNm;
+  public void setBirthFacilityName(String birthFacilityName) {
+    this.birthFacilityName = birthFacilityName;
   }
 
-  public Short getbStateC() {
-    return bStateC;
+  public Short getBirthStateCodeType() {
+    return birthStateCodeType;
   }
 
-  public void setbStateC(Short bStateC) {
-    this.bStateC = bStateC;
+  public void setBirthStateCodeType(Short birthStateCodeType) {
+    this.birthStateCodeType = birthStateCodeType;
   }
 
 
-  public Short getbCntryC() {
-    return bCntryC;
+  public Short getBirthCountryCodeType() {
+    return birthCountryCodeType;
   }
 
-  public void setbCntryC(Short bCntryC) {
-    this.bCntryC = bCntryC;
+  public void setBirthCountryCodeType(Short birthCountryCodeType) {
+    this.birthCountryCodeType = birthCountryCodeType;
   }
 
 
-  public String getChldCltB() {
-    return chldCltB;
+  public String getChildClientIndicator() {
+    return childClientIndicator;
   }
 
-  public void setChldCltB(String chldCltB) {
-    this.chldCltB = chldCltB;
+  public void setChildClientIndicator(String childClientIndicator) {
+    this.childClientIndicator = childClientIndicator;
   }
 
 
-  public String getComFstNm() {
-    return comFstNm;
+  public String getCommonFirstName() {
+    return commonFirstName;
   }
 
-  public void setComFstNm(String comFstNm) {
-    this.comFstNm = comFstNm;
+  public void setCommonFirstName(String commonFirstName) {
+    this.commonFirstName = commonFirstName;
   }
 
 
-  public String getComLstNm() {
-    return comLstNm;
+  public String getCommonLastName() {
+    return commonLastName;
   }
 
-  public void setComLstNm(String comLstNm) {
-    this.comLstNm = comLstNm;
+  public void setCommonLastName(String commonLastName) {
+    this.commonLastName = commonLastName;
   }
 
 
-  public String getComMidNm() {
-    return comMidNm;
+  public String getCommonMiddleName() {
+    return commonMiddleName;
   }
 
-  public void setComMidNm(String comMidNm) {
-    this.comMidNm = comMidNm;
+  public void setCommonMiddleName(String commonMiddleName) {
+    this.commonMiddleName = commonMiddleName;
   }
 
 
-  public String getConfEfind() {
-    return confEfind;
+  public String getConfidentialityInEffectIndicator() {
+    return confidentialityInEffectIndicator;
   }
 
-  public void setConfEfind(String confEfind) {
-    this.confEfind = confEfind;
+  public void setConfidentialityInEffectIndicator(String confidentialityInEffectIndicator) {
+    this.confidentialityInEffectIndicator = confidentialityInEffectIndicator;
   }
 
 
-  public LocalDate getConfActdt() {
-    return confActdt;
+  public LocalDate getConfidentialityActionDate() {
+    return confidentialityActionDate;
   }
 
-  public void setConfActdt(LocalDate confActdt) {
-    this.confActdt = confActdt;
+  public void setConfidentialityActionDate(LocalDate confidentialityActionDate) {
+    this.confidentialityActionDate = confidentialityActionDate;
   }
 
 
-  public LocalDate getCreatnDt() {
-    return creatnDt;
+  public LocalDate getCreationDate() {
+    return creationDate;
   }
 
-  public void setCreatnDt(LocalDate creatnDt) {
-    this.creatnDt = creatnDt;
+  public void setCreationDate(LocalDate creationDate) {
+    this.creationDate = creationDate;
   }
 
 
-  public LocalDate getDeathDt() {
-    return deathDt;
+  public LocalDate getDeathDate() {
+    return deathDate;
   }
 
-  public void setDeathDt(LocalDate deathDt) {
-    this.deathDt = deathDt;
+  public void setDeathDate(LocalDate deathDate) {
+    this.deathDate = deathDate;
   }
 
 
-  public String getDthRnTxt() {
-    return dthRnTxt;
+  public String getDeathReasonText() {
+    return deathReasonText;
   }
 
-  public void setDthRnTxt(String dthRnTxt) {
-    this.dthRnTxt = dthRnTxt;
+  public void setDeathReasonText(String deathReasonText) {
+    this.deathReasonText = deathReasonText;
   }
 
 
-  public String getDrvLicNo() {
-    return drvLicNo;
+  public String getDriverLicenseNumber() {
+    return driverLicenseNumber;
   }
 
-  public void setDrvLicNo(String drvLicNo) {
-    this.drvLicNo = drvLicNo;
+  public void setDriverLicenseNumber(String driverLicenseNumber) {
+    this.driverLicenseNumber = driverLicenseNumber;
   }
 
 
-  public Short getdStateC() {
-    return dStateC;
+  public Short getDriverLicenseStateCodeType() {
+    return driverLicenseStateCodeType;
   }
 
-  public void setdStateC(Short dStateC) {
-    this.dStateC = dStateC;
+  public void setDriverLicenseStateCodeType(Short driverLicenseStateCodeType) {
+    this.driverLicenseStateCodeType = driverLicenseStateCodeType;
   }
 
 
-  public String getGenderCd() {
-    return genderCd;
+  public String getGenderCode() {
+    return genderCode;
   }
 
-  public void setGenderCd(String genderCd) {
-    this.genderCd = genderCd;
+  public void setGenderCode(String genderCode) {
+    this.genderCode = genderCode;
   }
 
 
-  public Short getiCntryC() {
-    return iCntryC;
+  public Short getImmigrationCountryCodeType() {
+    return immigrationCountryCodeType;
   }
 
-  public void setiCntryC(Short iCntryC) {
-    this.iCntryC = iCntryC;
+  public void setImmigrationCountryCodeType(Short immigrationCountryCodeType) {
+    this.immigrationCountryCodeType = immigrationCountryCodeType;
   }
 
-  public Short getImgtStc() {
-    return imgtStc;
+  public Short getImmigrationStatusType() {
+    return immigrationStatusType;
   }
 
-  public void setImgtStc(Short imgtStc) {
-    this.imgtStc = imgtStc;
+  public void setImmigrationStatusType(Short immigrationStatusType) {
+    this.immigrationStatusType = immigrationStatusType;
   }
 
-  public String getIncapcCd() {
-    return incapcCd;
+  public String getIncapacitatedParentCode() {
+    return incapacitatedParentCode;
   }
 
-  public void setIncapcCd(String incapcCd) {
-    this.incapcCd = incapcCd;
+  public void setIncapacitatedParentCode(String incapacitatedParentCode) {
+    this.incapacitatedParentCode = incapacitatedParentCode;
   }
 
 
-  public String getLitrateCd() {
-    return litrateCd;
+  public String getLiterateCode() {
+    return literateCode;
   }
 
-  public void setLitrateCd(String litrateCd) {
-    this.litrateCd = litrateCd;
+  public void setLiterateCode(String literateCode) {
+    this.literateCode = literateCode;
   }
 
 
-  public String getMarHistB() {
-    return marHistB;
+  public String getMaritalCohabitatnHistoryIndicator() {
+    return maritalCohabitatnHistoryIndicator;
   }
 
-  public void setMarHistB(String marHistB) {
-    this.marHistB = marHistB;
+  public void setMaritalCohabitatnHistoryIndicator(String maritalCohabitatnHistoryIndicator) {
+    this.maritalCohabitatnHistoryIndicator = maritalCohabitatnHistoryIndicator;
   }
 
-  public Short getMrtlStc() {
-    return mrtlStc;
+  public Short getMaritalStatusType() {
+    return maritalStatusType;
   }
 
-  public void setMrtlStc(Short mrtlStc) {
-    this.mrtlStc = mrtlStc;
+  public void setMaritalStatusType(Short maritalStatusType) {
+    this.maritalStatusType = maritalStatusType;
   }
 
-  public String getMiltStacd() {
-    return miltStacd;
+  public String getMilitaryStatusCode() {
+    return militaryStatusCode;
   }
 
-  public void setMiltStacd(String miltStacd) {
-    this.miltStacd = miltStacd;
+  public void setMilitaryStatusCode(String militaryStatusCode) {
+    this.militaryStatusCode = militaryStatusCode;
   }
 
-  public String getNmprfxDsc() {
-    return nmprfxDsc;
+  public String getNamePrefixDescription() {
+    return namePrefixDescription;
   }
 
-  public void setNmprfxDsc(String nmprfxDsc) {
-    this.nmprfxDsc = nmprfxDsc;
+  public void setNamePrefixDescription(String namePrefixDescription) {
+    this.namePrefixDescription = namePrefixDescription;
   }
 
 
-  public Short getNameTpc() {
-    return nameTpc;
+  public Short getNameType() {
+    return nameType;
   }
 
-  public void setNameTpc(Short nameTpc) {
-    this.nameTpc = nameTpc;
+  public void setNameType(Short nameType) {
+    this.nameType = nameType;
   }
 
-  public String getOutwrtInd() {
-    return outwrtInd;
+  public String getOutstandingWarrantIndicator() {
+    return outstandingWarrantIndicator;
   }
 
-  public void setOutwrtInd(String outwrtInd) {
-    this.outwrtInd = outwrtInd;
+  public void setOutstandingWarrantIndicator(String outstandingWarrantIndicator) {
+    this.outstandingWarrantIndicator = outstandingWarrantIndicator;
   }
 
-  public Short getpEthnctyc() {
-    return pEthnctyc;
+  public Short getPrimaryEthnicityType() {
+    return primaryEthnicityType;
   }
 
-  public void setpEthnctyc(Short pEthnctyc) {
-    this.pEthnctyc = pEthnctyc;
+  public void setPrimaryEthnicityType(Short primaryEthnicityType) {
+    this.primaryEthnicityType = primaryEthnicityType;
   }
 
 
-  public Short getpLangTpc() {
-    return pLangTpc;
+  public Short getPrimaryLanguageType() {
+    return primaryLanguageType;
   }
 
-  public void setpLangTpc(Short pLangTpc) {
-    this.pLangTpc = pLangTpc;
+  public void setPrimaryLanguageType(Short primaryLanguageType) {
+    this.primaryLanguageType = primaryLanguageType;
   }
 
 
-  public Short getRlgnTpc() {
-    return rlgnTpc;
+  public Short getReligionType() {
+    return religionType;
   }
 
-  public void setRlgnTpc(Short rlgnTpc) {
-    this.rlgnTpc = rlgnTpc;
+  public void setReligionType(Short religionType) {
+    this.religionType = religionType;
   }
 
 
-  public Short getsLangTc() {
-    return sLangTc;
+  public Short getSecondaryLanguageType() {
+    return secondaryLanguageType;
   }
 
-  public void setsLangTc(Short sLangTc) {
-    this.sLangTc = sLangTc;
+  public void setSecondaryLanguageType(Short secondaryLanguageType) {
+    this.secondaryLanguageType = secondaryLanguageType;
   }
 
-  public String getSenstvInd() {
-    return senstvInd;
+  public String getSensitivityIndicator() {
+    return sensitivityIndicator;
   }
 
-  public void setSenstvInd(String senstvInd) {
-    this.senstvInd = senstvInd;
+  public void setSensitivityIndicator(String sensitivityIndicator) {
+    this.sensitivityIndicator = sensitivityIndicator;
   }
 
 
-  public String getSntvHlind() {
-    return sntvHlind;
+  public String getSensitiveHealthInfoOnFileIndicator() {
+    return sensitiveHealthInfoOnFileIndicator;
   }
 
-  public void setSntvHlind(String sntvHlind) {
-    this.sntvHlind = sntvHlind;
+  public void setSensitiveHealthInfoOnFileIndicator(String sensitiveHealthInfoOnFileIndicator) {
+    this.sensitiveHealthInfoOnFileIndicator = sensitiveHealthInfoOnFileIndicator;
   }
 
 
-  public String getSsNo() {
-    return ssNo;
+  public String getSocialSecurityNumber() {
+    return socialSecurityNumber;
   }
 
-  public void setSsNo(String ssNo) {
-    this.ssNo = ssNo;
+  public void setSocialSecurityNumber(String socialSecurityNumber) {
+    this.socialSecurityNumber = socialSecurityNumber;
   }
 
 
-  public String getSsnChgCd() {
-    return ssnChgCd;
+  public String getSocialSecurityNumberChangedCode() {
+    return socialSecurityNumberChangedCode;
   }
 
-  public void setSsnChgCd(String ssnChgCd) {
-    this.ssnChgCd = ssnChgCd;
+  public void setSocialSecurityNumberChangedCode(String socialSecurityNumberChangedCode) {
+    this.socialSecurityNumberChangedCode = socialSecurityNumberChangedCode;
   }
 
-  public String getSufxTldsc() {
-    return sufxTldsc;
+  public String getSuffixTitleDescription() {
+    return suffixTitleDescription;
   }
 
-  public void setSufxTldsc(String sufxTldsc) {
-    this.sufxTldsc = sufxTldsc;
+  public void setSuffixTitleDescription(String suffixTitleDescription) {
+    this.suffixTitleDescription = suffixTitleDescription;
   }
 
 
-  public String getUnemplyCd() {
-    return unemplyCd;
+  public String getUnemployedParentCode() {
+    return unemployedParentCode;
   }
 
-  public void setUnemplyCd(String unemplyCd) {
-    this.unemplyCd = unemplyCd;
+  public void setUnemployedParentCode(String unemployedParentCode) {
+    this.unemployedParentCode = unemployedParentCode;
   }
 
-  public String getCommntDsc() {
-    return commntDsc;
+  public String getCommentDescription() {
+    return commentDescription;
   }
 
-  public void setCommntDsc(String commntDsc) {
-    this.commntDsc = commntDsc;
+  public void setCommentDescription(String commentDescription) {
+    this.commentDescription = commentDescription;
   }
 
-  public String getEstDobCd() {
-    return estDobCd;
+  public String getEstimatedDobCode() {
+    return estimatedDobCode;
   }
 
-  public void setEstDobCd(String estDobCd) {
-    this.estDobCd = estDobCd;
+  public void setEstimatedDobCode(String estimatedDobCode) {
+    this.estimatedDobCode = estimatedDobCode;
   }
 
-  public String getBpVerInd() {
-    return bpVerInd;
+  public String getBirthplaceVerifiedIndicator() {
+    return birthplaceVerifiedIndicator;
   }
 
-  public void setBpVerInd(String bpVerInd) {
-    this.bpVerInd = bpVerInd;
+  public void setBirthplaceVerifiedIndicator(String birthplaceVerifiedIndicator) {
+    this.birthplaceVerifiedIndicator = birthplaceVerifiedIndicator;
   }
 
-  public String getHispCd() {
-    return hispCd;
+  public String getHispanicOriginCode() {
+    return hispanicOriginCode;
   }
 
-  public void setHispCd(String hispCd) {
-    this.hispCd = hispCd;
+  public void setHispanicOriginCode(String hispanicOriginCode) {
+    this.hispanicOriginCode = hispanicOriginCode;
   }
 
-  public String getCurrcaInd() {
-    return currcaInd;
+  public String getCurrentCaChildrenServiceIndicator() {
+    return currentCaChildrenServiceIndicator;
   }
 
-  public void setCurrcaInd(String currcaInd) {
-    this.currcaInd = currcaInd;
+  public void setCurrentCaChildrenServiceIndicator(String currentCaChildrenServiceIndicator) {
+    this.currentCaChildrenServiceIndicator = currentCaChildrenServiceIndicator;
   }
 
-  public String getCurregInd() {
-    return curregInd;
+  public String getCurrentlyRegionalCenterIndicator() {
+    return currentlyRegionalCenterIndicator;
   }
 
-  public void setCurregInd(String curregInd) {
-    this.curregInd = curregInd;
+  public void setCurrentlyRegionalCenterIndicator(String currentlyRegionalCenterIndicator) {
+    this.currentlyRegionalCenterIndicator = currentlyRegionalCenterIndicator;
   }
 
-  public String getCothDesc() {
-    return cothDesc;
+  public String getCurrentlyOtherDescription() {
+    return currentlyOtherDescription;
   }
 
-  public void setCothDesc(String cothDesc) {
-    this.cothDesc = cothDesc;
+  public void setCurrentlyOtherDescription(String currentlyOtherDescription) {
+    this.currentlyOtherDescription = currentlyOtherDescription;
   }
 
-  public String getPrevcaInd() {
-    return prevcaInd;
+  public String getPreviousCaChildrenServiceIndicator() {
+    return previousCaChildrenServiceIndicator;
   }
 
-  public void setPrevcaInd(String prevcaInd) {
-    this.prevcaInd = prevcaInd;
+  public void setPreviousCaChildrenServiceIndicator(String previousCaChildrenServiceIndicator) {
+    this.previousCaChildrenServiceIndicator = previousCaChildrenServiceIndicator;
   }
 
-  public String getPreregInd() {
-    return preregInd;
+  public String getPreviousRegionalCenterIndicator() {
+    return previousRegionalCenterIndicator;
   }
 
-  public void setPreregInd(String preregInd) {
-    this.preregInd = preregInd;
+  public void setPreviousRegionalCenterIndicator(String previousRegionalCenterIndicator) {
+    this.previousRegionalCenterIndicator = previousRegionalCenterIndicator;
   }
 
-  public String getPothDesc() {
-    return pothDesc;
+  public String getPreviousOtherDescription() {
+    return previousOtherDescription;
   }
 
-  public void setPothDesc(String pothDesc) {
-    this.pothDesc = pothDesc;
+  public void setPreviousOtherDescription(String previousOtherDescription) {
+    this.previousOtherDescription = previousOtherDescription;
   }
 
-  public String getHcareInd() {
-    return hcareInd;
+  public String getIndividualHealthCarePlanIndicator() {
+    return individualHealthCarePlanIndicator;
   }
 
-  public void setHcareInd(String hcareInd) {
-    this.hcareInd = hcareInd;
+  public void setIndividualHealthCarePlanIndicator(String individualHealthCarePlanIndicator) {
+    this.individualHealthCarePlanIndicator = individualHealthCarePlanIndicator;
   }
 
-  public String getLimitInd() {
-    return limitInd;
+  public String getLimitationOnScpHealthIndicator() {
+    return limitationOnScpHealthIndicator;
   }
 
-  public void setLimitInd(String limitInd) {
-    this.limitInd = limitInd;
+  public void setLimitationOnScpHealthIndicator(String limitationOnScpHealthIndicator) {
+    this.limitationOnScpHealthIndicator = limitationOnScpHealthIndicator;
   }
 
   public String getBirthCity() {
@@ -706,124 +706,124 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   }
 
 
-  public String getHealthTxt() {
-    return healthTxt;
+  public String getHealthSummaryText() {
+    return healthSummaryText;
   }
 
-  public void setHealthTxt(String healthTxt) {
-    this.healthTxt = healthTxt;
+  public void setHealthSummaryText(String healthSummaryText) {
+    this.healthSummaryText = healthSummaryText;
   }
 
-  public LocalDate getMtermDt() {
-    return mtermDt;
+  public LocalDate getMotherParentalRightTermDate() {
+    return motherParentalRightTermDate;
   }
 
-  public void setMtermDt(LocalDate mtermDt) {
-    this.mtermDt = mtermDt;
-  }
-
-
-  public LocalDate getFtermDt() {
-    return ftermDt;
-  }
-
-  public void setFtermDt(LocalDate ftermDt) {
-    this.ftermDt = ftermDt;
+  public void setMotherParentalRightTermDate(LocalDate motherParentalRightTermDate) {
+    this.motherParentalRightTermDate = motherParentalRightTermDate;
   }
 
 
-  public String getZippyInd() {
-    return zippyInd;
+  public LocalDate getFatherParentalRightTermDate() {
+    return fatherParentalRightTermDate;
   }
 
-  public void setZippyInd(String zippyInd) {
-    this.zippyInd = zippyInd;
-  }
-
-  public String getDeathPlc() {
-    return deathPlc;
-  }
-
-  public void setDeathPlc(String deathPlc) {
-    this.deathPlc = deathPlc;
+  public void setFatherParentalRightTermDate(LocalDate fatherParentalRightTermDate) {
+    this.fatherParentalRightTermDate = fatherParentalRightTermDate;
   }
 
 
-  public String getTrMbvrtB() {
-    return trMbvrtB;
+  public String getZippyCreatedIndicator() {
+    return zippyCreatedIndicator;
   }
 
-  public void setTrMbvrtB(String trMbvrtB) {
-    this.trMbvrtB = trMbvrtB;
+  public void setZippyCreatedIndicator(String zippyCreatedIndicator) {
+    this.zippyCreatedIndicator = zippyCreatedIndicator;
   }
 
-  public String getTrbaCltB() {
-    return trbaCltB;
+  public String getDeathPlace() {
+    return deathPlace;
   }
 
-  public void setTrbaCltB(String trbaCltB) {
-    this.trbaCltB = trbaCltB;
-  }
-
-
-  public String getSoc158Ind() {
-    return soc158Ind;
-  }
-
-  public void setSoc158Ind(String soc158Ind) {
-    this.soc158Ind = soc158Ind;
+  public void setDeathPlace(String deathPlace) {
+    this.deathPlace = deathPlace;
   }
 
 
-  public String getDthDtInd() {
-    return dthDtInd;
+  public String getTribalMembershipVerifcationIndicator() {
+    return tribalMembershipVerifcationIndicator;
   }
 
-  public void setDthDtInd(String dthDtInd) {
-    this.dthDtInd = dthDtInd;
+  public void setTribalMembershipVerifcationIndicator(String tribalMembershipVerifcationIndicator) {
+    this.tribalMembershipVerifcationIndicator = tribalMembershipVerifcationIndicator;
   }
 
-
-  public String getEmailAddr() {
-    return emailAddr;
+  public String getTribalAncestryClientIndicator() {
+    return tribalAncestryClientIndicator;
   }
 
-  public void setEmailAddr(String emailAddr) {
-    this.emailAddr = emailAddr;
-  }
-
-  public String getAdjdelInd() {
-    return adjdelInd;
-  }
-
-  public void setAdjdelInd(String adjdelInd) {
-    this.adjdelInd = adjdelInd;
-  }
-
-  public String getEthUdCd() {
-    return ethUdCd;
-  }
-
-  public void setEthUdCd(String ethUdCd) {
-    this.ethUdCd = ethUdCd;
+  public void setTribalAncestryClientIndicator(String tribalAncestryClientIndicator) {
+    this.tribalAncestryClientIndicator = tribalAncestryClientIndicator;
   }
 
 
-  public String getHispUdCd() {
-    return hispUdCd;
+  public String getSoc158SealedClientIndicator() {
+    return soc158SealedClientIndicator;
   }
 
-  public void setHispUdCd(String hispUdCd) {
-    this.hispUdCd = hispUdCd;
+  public void setSoc158SealedClientIndicator(String soc158SealedClientIndicator) {
+    this.soc158SealedClientIndicator = soc158SealedClientIndicator;
   }
 
 
-  public String getSocplcCd() {
-    return socplcCd;
+  public String getDeathDateVerifiedIndicator() {
+    return deathDateVerifiedIndicator;
   }
 
-  public void setSocplcCd(String socplcCd) {
-    this.socplcCd = socplcCd;
+  public void setDeathDateVerifiedIndicator(String deathDateVerifiedIndicator) {
+    this.deathDateVerifiedIndicator = deathDateVerifiedIndicator;
+  }
+
+
+  public String getEmailAddress() {
+    return emailAddress;
+  }
+
+  public void setEmailAddress(String emailAddress) {
+    this.emailAddress = emailAddress;
+  }
+
+  public String getAdjudicatedDelinquentIndicator() {
+    return adjudicatedDelinquentIndicator;
+  }
+
+  public void setAdjudicatedDelinquentIndicator(String adjudicatedDelinquentIndicator) {
+    this.adjudicatedDelinquentIndicator = adjudicatedDelinquentIndicator;
+  }
+
+  public String getEthnicityUnableToDetermineReasonCode() {
+    return ethnicityUnableToDetermineReasonCode;
+  }
+
+  public void setEthnicityUnableToDetermineReasonCode(String ethnicityUnableToDetermineReasonCode) {
+    this.ethnicityUnableToDetermineReasonCode = ethnicityUnableToDetermineReasonCode;
+  }
+
+
+  public String getHispanicUnableToDetermineReasonCode() {
+    return hispanicUnableToDetermineReasonCode;
+  }
+
+  public void setHispanicUnableToDetermineReasonCode(String hispanicUnableToDetermineReasonCode) {
+    this.hispanicUnableToDetermineReasonCode = hispanicUnableToDetermineReasonCode;
+  }
+
+
+  public String getSoc158PlacementCode() {
+    return soc158PlacementCode;
+  }
+
+  public void setSoc158PlacementCode(String soc158PlacementCode) {
+    this.soc158PlacementCode = soc158PlacementCode;
   }
 
   public String getClIndxNo() {
