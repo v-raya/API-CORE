@@ -11,7 +11,7 @@ public interface DataAccessService<T extends PersistentObject, P extends BasePar
 
   T create(T entity, P parameterObject);
 
-  default void runBusinessRules(T entity) {
+  default void runBusinessValidation(T entity) {
     //Empty by default
   }
 
