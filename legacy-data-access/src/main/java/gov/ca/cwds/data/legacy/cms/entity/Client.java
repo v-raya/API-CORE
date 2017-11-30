@@ -47,7 +47,7 @@ import org.hibernate.annotations.NamedQuery;
         " JOIN ohp.placementHome ph" +
         " WHERE ph.id = :facilityId"
 )
-@SuppressWarnings("squid:S3437") //LocalDate is serializable
+@SuppressWarnings({"squid:S3437", "squid:S2160"})
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "CLIENT_T")
@@ -58,6 +58,11 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Id
   @Column(name = "IDENTIFIER", nullable = false, length = 10)
   private String identifier;
+
+  @OneToMany(fetch = FetchType.LAZY)
+  @JoinColumn(name = "FKCLIENT_T", referencedColumnName = "IDENTIFIER")
+  @OrderBy("removalDt DESC")
+  private Set<PlacementEpisode> placementEpisodes = new HashSet<>();
 
   @Column(name = "ADJDEL_IND", nullable = true, length = 1)
   private String adjudicatedDelinquentIndicator;
@@ -256,11 +261,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
 
   @Column(name = "CL_INDX_NO", nullable = true, length = 12)
   private String clIndxNo;
-
-  @OneToMany(fetch = FetchType.LAZY)
-  @JoinColumn(name = "FKCLIENT_T", referencedColumnName = "IDENTIFIER")
-  @OrderBy("removalDt DESC")
-  private Set<PlacementEpisode> placementEpisodes = new HashSet<>();
 
   public String getIdentifier() {
     return identifier;
