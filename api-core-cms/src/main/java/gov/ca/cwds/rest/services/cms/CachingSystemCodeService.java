@@ -22,6 +22,7 @@ import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.SystemCode;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeListResponse;
 import gov.ca.cwds.rest.api.domain.cms.SystemMeta;
 import gov.ca.cwds.rest.api.domain.cms.SystemMetaListResponse;
@@ -133,6 +134,16 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
       shortDescription = systemCode.getShortDescription();
     }
     return shortDescription;
+  }
+
+  @Override
+  public SystemCodeDescriptor getSystemCodeDescriptor(Number systemCodeId) {
+    SystemCodeDescriptor systemCodeDescriptor = null;
+    SystemCode systemCode = getSystemCode(systemCodeId);
+    if (systemCode != null) {
+      systemCodeDescriptor = systemCode.getSystemCodeDescriptor();
+    }
+    return systemCodeDescriptor;
   }
 
   @Override

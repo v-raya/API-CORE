@@ -1,9 +1,9 @@
 package gov.ca.cwds.rest.api.domain.cms;
 
+import java.util.Set;
+
 import gov.ca.cwds.data.persistence.cms.DeferredRegistry;
 import gov.ca.cwds.data.std.ApiMarker;
-
-import java.util.Set;
 
 /**
  * Interface for the CMS system code cache facility.
@@ -67,6 +67,14 @@ public interface SystemCodeCache extends ApiMarker {
    *         system code not found.
    */
   String getSystemCodeShortDescription(final Number systemCodeId);
+
+  /**
+   * Get system code descriptor for given system code id.
+   * 
+   * @param systemCodeId System code ID
+   * @return System code descriptor for given system code id.
+   */
+  SystemCodeDescriptor getSystemCodeDescriptor(final Number systemCodeId);
 
   /**
    * Verify that given active system code ID exists for given meta ID. For some fields the
