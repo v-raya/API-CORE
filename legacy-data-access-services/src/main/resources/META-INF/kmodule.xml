@@ -1,0 +1,5 @@
+<kmodule xmlns="http://www.drools.org/xsd/kmodule">
+    <kbase name="placementHome" packages="rules.placement_home">
+        <ksession name="placement-home-session"/>
+    </kbase>
+</kmodule>
