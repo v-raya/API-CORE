@@ -7,19 +7,34 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.data.persistence.cms.SystemCode;
 
 /**
  * @author CWDS API Team
- *
  */
 public class ApiHibernateInterceptorTest {
 
-  /**
-   * @throws Exception - exception
-   */
+  ApiHibernateInterceptor target;
+  // Consumer<PersistentObject> check = c -> apply((TestPersistentObject) c);
+
+  @Before
+  public void setup() throws Exception {
+    target = new ApiHibernateInterceptor();
+  }
+
+  public void consume(PersistentObject obj) {
+    // nuttin
+  }
+
+  @Test
+  public void testAddHandler() throws Exception {
+    ApiHibernateInterceptor.addHandler(TestPersistentObject.class, this::consume);
+  }
+
   @SuppressWarnings("unused")
   @Test
   public void testForSynchronizedPreFlush() throws Exception {
