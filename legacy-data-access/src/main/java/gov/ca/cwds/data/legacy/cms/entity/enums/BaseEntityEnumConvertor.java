@@ -31,10 +31,12 @@ public abstract class BaseEntityEnumConvertor<E extends EntityEnum<K>, K> implem
       return null;
     }
 
-    if (code instanceof String) {
-      if (StringUtils.isBlank((String) code)) {
+    if ((code instanceof String) && StringUtils.isBlank((String) code)) {
         return null;
-      }
+    }
+
+    if ((code instanceof Character) && code.equals(' ')) {
+        return null;
     }
 
     E result = getCodeMap().get(code);
