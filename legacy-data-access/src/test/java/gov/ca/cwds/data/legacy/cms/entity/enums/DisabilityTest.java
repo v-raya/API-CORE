@@ -44,6 +44,7 @@ public class DisabilityTest {
   @Test
   public void testConvertToEntityAttribute() {
     assertNull(converter.convertToEntityAttribute(null));
+    assertNull(converter.convertToEntityAttribute(' '));
     assertEquals(NOT_YET_DETERMINED, converter.convertToEntityAttribute('D'));
     assertEquals(NO, converter.convertToEntityAttribute('N'));
     assertEquals(YES, converter.convertToEntityAttribute('Y'));
@@ -51,6 +52,6 @@ public class DisabilityTest {
 
   @Test(expected = UnsupportedOperationException.class)
   public void testInvalidCode() {
-    converter.convertToEntityAttribute(' ');
+    converter.convertToEntityAttribute('@');
   }
 }

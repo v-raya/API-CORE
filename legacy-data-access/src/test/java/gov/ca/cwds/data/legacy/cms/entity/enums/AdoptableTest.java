@@ -44,6 +44,9 @@ public class AdoptableTest {
   @Test
   public void testConvertToEntityAttribute() {
     assertNull(converter.convertToEntityAttribute(null));
+    assertNull(converter.convertToEntityAttribute(""));
+    assertNull(converter.convertToEntityAttribute(" "));
+    assertNull(converter.convertToEntityAttribute("  "));
     assertEquals(NOT_ADOPTABLE, converter.convertToEntityAttribute("N"));
     assertEquals(NOT_ASSESSED, converter.convertToEntityAttribute("NA"));
     assertEquals(ADOPTABLE, converter.convertToEntityAttribute("Y"));
@@ -51,6 +54,6 @@ public class AdoptableTest {
 
   @Test(expected = UnsupportedOperationException.class)
   public void testInvalidCode() {
-    converter.convertToEntityAttribute(" ");
+    converter.convertToEntityAttribute("@");
   }
 }
