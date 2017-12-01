@@ -1,8 +1,10 @@
 package gov.ca.cwds.data;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -30,6 +32,34 @@ public class ApiHibernateInterceptorTest {
     // nuttin
   }
 
+
+  // afterTransactionBegin(Transaction)
+  // afterTransactionCompletion(Transaction)
+  // beforeTransactionCompletion(Transaction)
+  // instantiate(String, EntityMode, Serializable)
+  // iterToList(Iterator)
+  // onDelete(Object, Serializable, Object[], String[], Type[])
+  // onFlushDirty(Object, Serializable, Object[], Object[], String[], Type[])
+  // onLoad(Object, Serializable, Object[], String[], Type[])
+  // onSave(Object, Serializable, Object[], String[], Type[])
+
+
+  @Test
+  public void testPostFlush() throws Exception {
+    List<PersistentObject> list = new ArrayList<>();
+    list.add(new TestPersistentObject());
+    Iterator<PersistentObject> iter = list.iterator();
+    target.postFlush(iter);
+  }
+
+  @Test
+  public void testPreFlush() throws Exception {
+    List<PersistentObject> list = new ArrayList<>();
+    list.add(new TestPersistentObject());
+    Iterator<PersistentObject> iter = list.iterator();
+    target.preFlush(iter);
+  }
+
   @Test
   public void testAddHandler() throws Exception {
     ApiHibernateInterceptor.addHandler(TestPersistentObject.class, this::consume);
@@ -40,7 +70,7 @@ public class ApiHibernateInterceptorTest {
   public void testForSynchronizedPreFlush() throws Exception {
     ExecutorService service = Executors.newFixedThreadPool(4);
     ApiHibernateInterceptor interceptor = new ApiHibernateInterceptor();
-    HashMap<Integer, Object> map = new HashMap<>();
+    final HashMap<Integer, Object> map = new HashMap<>();
     SystemCode code1 = new SystemCode();
     SystemCode code2 = new SystemCode();
     SystemCode code3 = new SystemCode();
