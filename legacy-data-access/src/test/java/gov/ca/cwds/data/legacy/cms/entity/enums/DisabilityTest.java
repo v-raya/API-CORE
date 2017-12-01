@@ -51,6 +51,6 @@ public class DisabilityTest {
 
   @Test(expected = UnsupportedOperationException.class)
   public void testInvalidCode() {
-    converter.convertToEntityAttribute(' ');
+    converter.convertToEntityAttribute('@');
   }
 }
