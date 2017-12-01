@@ -1,10 +1,10 @@
 package gov.ca.cwds.data.legacy.cms.dao;
 
 import com.google.inject.Inject;
+import gov.ca.cwds.data.BaseDaoImpl;
+import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.stream.QueryCreator;
 import gov.ca.cwds.data.stream.ScalarResultsStreamer;
-import gov.ca.cwds.data.legacy.cms.entity.Client;
-import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.inject.CmsSessionFactory;
 import java.util.stream.Stream;
 import javax.persistence.NoResultException;
