@@ -191,10 +191,10 @@ public class ChildClient extends Client {
   private Boolean tribalCustomaryAdoptionIndicator;
 
   @Column(name = "LST_UPD_ID", nullable = false, length = 3)
-  private String lastUpdatedId;
+  private String childClientLastUpdateId;
 
   @Column(name = "LST_UPD_TS", nullable = false)
-  private LocalDateTime lastUpdatedTime;
+  private LocalDateTime childClientLastUpdateTime;
 
 
   public void setVictimClientId(String victimClientId) {
@@ -643,23 +643,23 @@ public class ChildClient extends Client {
    * PERSON or batch program which made the last update to an occurrence of this entity type.
    */
   public String getChildClientLastUpdateId() {
-    return lastUpdatedId;
+    return childClientLastUpdateId;
   }
 
   /**
    * @return the time and date of the most recent update to an occurrence of this entity type.
    */
   public LocalDateTime getChildClientLastUpdateTime() {
-    return lastUpdatedTime;
+    return childClientLastUpdateTime;
   }
 
   @SuppressWarnings("javadoc")
   public void setChildClientLastUpdateId(String lastUpdatedId) {
-    this.lastUpdatedId = lastUpdatedId;
+    this.childClientLastUpdateId = lastUpdatedId;
   }
 
   @SuppressWarnings("javadoc")
   public void setChildClientLastUpdateTime(LocalDateTime lastUpdatedTime) {
-    this.lastUpdatedTime = lastUpdatedTime;
+    this.childClientLastUpdateTime = lastUpdatedTime;
   }
 }

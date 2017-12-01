@@ -3,14 +3,14 @@ package gov.ca.cwds.cms.data.access.service.impl;
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.cms.data.access.Constants.PhoneticSearchTables;
-import gov.ca.cwds.cms.data.access.dao.placementhome.BackgroundCheckDao;
-import gov.ca.cwds.cms.data.access.dao.placementhome.CountyOwnershipDao;
-import gov.ca.cwds.cms.data.access.dao.placementhome.EmergencyContactDetailDao;
-import gov.ca.cwds.cms.data.access.dao.placementhome.ExternalInterfaceDao;
-import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeDao;
-import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeProfileDao;
-import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeSsaName3Dao;
-import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeUcDao;
+import gov.ca.cwds.cms.data.access.dao.BackgroundCheckDao;
+import gov.ca.cwds.cms.data.access.dao.CountyOwnershipDao;
+import gov.ca.cwds.cms.data.access.dao.EmergencyContactDetailDao;
+import gov.ca.cwds.cms.data.access.dao.ExternalInterfaceDao;
+import gov.ca.cwds.cms.data.access.dao.PlacementHomeDao;
+import gov.ca.cwds.cms.data.access.dao.PlacementHomeProfileDao;
+import gov.ca.cwds.cms.data.access.dao.PlacementHomeUcDao;
+import gov.ca.cwds.cms.data.access.dao.SsaName3Dao;
 import gov.ca.cwds.cms.data.access.mapper.BackgroundCheckMapper;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.mapper.EmergencyContactDetailMapper;
@@ -29,6 +29,12 @@ import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeUc;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Set;
+
+import gov.ca.cwds.drools.DroolsConfiguration;
+import gov.ca.cwds.drools.DroolsService;
+import gov.ca.cwds.rest.exception.BusinessValidationException;
+import gov.ca.cwds.rest.exception.IssueDetails;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -36,6 +42,11 @@ import org.apache.commons.lang3.StringUtils;
  */
 
 public class PlacementHomeServiceImpl implements PlacementHomeService {
+  private String RULES_SESSION = "placement-home-session";
+  private String RULES_AGENDA = "placement-home-agenda";
+
+  @Inject
+  protected DroolsService droolsService;
 
   @Inject
   private PlacementHomeDao placementHomeDao;
@@ -71,11 +82,30 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
   private PlacementHomeProfileDao placementHomeProfileDao;
 
   @Inject
-  private PlacementHomeSsaName3Dao ssaName3Dao;
+  private SsaName3Dao ssaName3Dao;
+
+  @Override
+  public void runBusinessValidation(PlacementHome entity) {
+    DroolsConfiguration configuration = new DroolsConfiguration<PlacementHome>() {
+      @Override
+      public String getAgendaGroup() {
+        return RULES_AGENDA;
+      }
+
+      @Override
+      public String getDroolsSessionName() {
+        return RULES_SESSION;
+      }
+    };
+    Set<IssueDetails> detailsList = droolsService.validate(entity, configuration);
+    if (!detailsList.isEmpty()) {
+      throw new BusinessValidationException(detailsList);
+    }
+  }
 
   @Override
   public PlacementHome create(PlacementHome placementHome, PlacementHomeParameterObject parameterObject) {
-    runBusinessRules(placementHome);
+    runBusinessValidation(placementHome);
     PlacementHome storedPlacementHome = placementHomeDao.create(placementHome);
     storePlacementHomeUc(storedPlacementHome, parameterObject.getStaffPersonId());
     storeCountyOwnership(storedPlacementHome.getIdentifier());
@@ -152,6 +182,10 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
     parameterObject.setUpdateTimeStamp(new Date());
     parameterObject.setUpdateId(placementHome.getLastUpdateId());
     ssaName3Dao.callStoredProc(parameterObject);
+  }
+
+  void setDroolsService(DroolsService droolsService) {
+    this.droolsService = droolsService;
   }
 
 }
