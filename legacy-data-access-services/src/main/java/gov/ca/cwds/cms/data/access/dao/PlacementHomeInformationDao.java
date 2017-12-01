@@ -1,7 +1,7 @@
-package gov.ca.cwds.cms.data.access.dao.substitutecareprovider;
+package gov.ca.cwds.cms.data.access.dao;
 
 import com.google.inject.Inject;
-import gov.ca.cwds.cms.data.access.inject.SubstituteCareProviderSessionFactory;
+import gov.ca.cwds.cms.data.access.inject.DataAccessServicesSessionFactory;
 import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeInformation;
 import org.hibernate.SessionFactory;
@@ -14,7 +14,7 @@ public class PlacementHomeInformationDao extends BaseDaoImpl<PlacementHomeInform
 
   @Inject
   public PlacementHomeInformationDao(
-      @SubstituteCareProviderSessionFactory SessionFactory sessionFactory) {
+      @DataAccessServicesSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

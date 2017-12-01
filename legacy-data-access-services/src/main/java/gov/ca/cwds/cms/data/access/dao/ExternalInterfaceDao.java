@@ -1,7 +1,7 @@
-package gov.ca.cwds.cms.data.access.dao.placementhome;
+package gov.ca.cwds.cms.data.access.dao;
 
 import com.google.inject.Inject;
-import gov.ca.cwds.cms.data.access.inject.PlacementHomeSessionFactory;
+import gov.ca.cwds.cms.data.access.inject.DataAccessServicesSessionFactory;
 import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.legacy.cms.entity.ExternalInterface;
 import org.hibernate.SessionFactory;
@@ -13,7 +13,7 @@ import org.hibernate.SessionFactory;
 public class ExternalInterfaceDao extends BaseDaoImpl<ExternalInterface> {
 
   @Inject
-  public ExternalInterfaceDao(@PlacementHomeSessionFactory SessionFactory sessionFactory) {
+  public ExternalInterfaceDao(@DataAccessServicesSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

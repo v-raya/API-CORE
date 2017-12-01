@@ -3,14 +3,14 @@ package gov.ca.cwds.cms.data.access.service.impl;
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.cms.data.access.Constants.PhoneticSearchTables;
-import gov.ca.cwds.cms.data.access.dao.placementhome.BackgroundCheckDao;
-import gov.ca.cwds.cms.data.access.dao.placementhome.CountyOwnershipDao;
-import gov.ca.cwds.cms.data.access.dao.placementhome.EmergencyContactDetailDao;
-import gov.ca.cwds.cms.data.access.dao.placementhome.ExternalInterfaceDao;
-import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeDao;
-import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeProfileDao;
-import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeSsaName3Dao;
-import gov.ca.cwds.cms.data.access.dao.placementhome.PlacementHomeUcDao;
+import gov.ca.cwds.cms.data.access.dao.BackgroundCheckDao;
+import gov.ca.cwds.cms.data.access.dao.CountyOwnershipDao;
+import gov.ca.cwds.cms.data.access.dao.EmergencyContactDetailDao;
+import gov.ca.cwds.cms.data.access.dao.ExternalInterfaceDao;
+import gov.ca.cwds.cms.data.access.dao.PlacementHomeDao;
+import gov.ca.cwds.cms.data.access.dao.PlacementHomeProfileDao;
+import gov.ca.cwds.cms.data.access.dao.PlacementHomeUcDao;
+import gov.ca.cwds.cms.data.access.dao.SsaName3Dao;
 import gov.ca.cwds.cms.data.access.mapper.BackgroundCheckMapper;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.mapper.EmergencyContactDetailMapper;
@@ -71,11 +71,11 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
   private PlacementHomeProfileDao placementHomeProfileDao;
 
   @Inject
-  private PlacementHomeSsaName3Dao ssaName3Dao;
+  private SsaName3Dao ssaName3Dao;
 
   @Override
   public PlacementHome create(PlacementHome placementHome, PlacementHomeParameterObject parameterObject) {
-    runBusinessRules(placementHome);
+    runBusinessValidation(placementHome);
     PlacementHome storedPlacementHome = placementHomeDao.create(placementHome);
     storePlacementHomeUc(storedPlacementHome, parameterObject.getStaffPersonId());
     storeCountyOwnership(storedPlacementHome.getIdentifier());
