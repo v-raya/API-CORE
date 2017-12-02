@@ -1,5 +1,6 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
+import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
 import static org.apache.commons.lang3.StringUtils.upperCase;
 
 import com.google.inject.Inject;
@@ -18,6 +19,7 @@ import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.parameter.SCPParameterObject;
 import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
 import gov.ca.cwds.cms.data.access.utils.IdGenerator;
+import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
 import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
 import gov.ca.cwds.data.legacy.cms.entity.CountyOwnership;
@@ -65,8 +67,11 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   private OutOfStateCheckDao outOfStateCheckDao;
 
   @Override
-  public SubstituteCareProvider create(SubstituteCareProvider substituteCareProvider,
-      SCPParameterObject parameterObject) {
+  public SubstituteCareProvider create(SCPParameterObject parameterObject) {
+    final SubstituteCareProvider substituteCareProvider = parameterObject.getEntity();
+    validateParameters(substituteCareProvider, parameterObject);
+    substituteCareProvider
+        .setIdentifier(IdGenerator.generateId(parameterObject.getStaffPersonId()));
     runBusinessValidation(substituteCareProvider);
     SubstituteCareProvider storedSubstituteCareProvider = substituteCareProviderDao
         .create(substituteCareProvider);
@@ -78,6 +83,14 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
     storeOutOfStateChecks(storedSubstituteCareProvider, parameterObject);
     prepareSubstituteCareProviderPhoneticSearchKeywords(substituteCareProvider);
     return storedSubstituteCareProvider;
+  }
+
+  private void validateParameters(SubstituteCareProvider substituteCareProvider,
+      SCPParameterObject parameterObject) {
+    checkNotPersisted(substituteCareProvider);
+    if (CollectionUtils.isNotEmpty(parameterObject.getPhoneNumbers())) {
+      parameterObject.getPhoneNumbers().forEach(ParametersValidator::checkNotPersisted);
+    }
   }
 
   private void storeOutOfStateChecks(SubstituteCareProvider storedSubstituteCareProvider,
@@ -131,6 +144,7 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
       parameterObject.getPhoneNumbers()
           .forEach(phoneNumber -> {
             phoneNumber.setEstblshId(substituteCareProvider.getIdentifier());
+            phoneNumber.setThirdId(IdGenerator.generateId(parameterObject.getStaffPersonId()));
             phoneContactDetailDao.create(phoneNumber);
           });
     }

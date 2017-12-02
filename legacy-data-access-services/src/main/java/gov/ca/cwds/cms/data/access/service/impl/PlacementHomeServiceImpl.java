@@ -16,8 +16,11 @@ import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.mapper.EmergencyContactDetailMapper;
 import gov.ca.cwds.cms.data.access.mapper.ExternalInterfaceMapper;
 import gov.ca.cwds.cms.data.access.parameter.PlacementHomeParameterObject;
+import gov.ca.cwds.cms.data.access.parameter.SCPParameterObject;
 import gov.ca.cwds.cms.data.access.service.PlacementHomeService;
+import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
 import gov.ca.cwds.cms.data.access.utils.IdGenerator;
+import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
 import gov.ca.cwds.data.legacy.cms.entity.BackgroundCheck;
 import gov.ca.cwds.data.legacy.cms.entity.CountyOwnership;
@@ -26,9 +29,11 @@ import gov.ca.cwds.data.legacy.cms.entity.ExternalInterface;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeProfile;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeUc;
+import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -73,9 +78,15 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
   @Inject
   private SsaName3Dao ssaName3Dao;
 
+  @Inject
+  private SubstituteCareProviderService substituteCareProviderService;
+
   @Override
-  public PlacementHome create(PlacementHome placementHome, PlacementHomeParameterObject parameterObject) {
+  public PlacementHome create(PlacementHomeParameterObject parameterObject) {
+    final PlacementHome placementHome = parameterObject.getEntity();
+    validateParameters(placementHome, parameterObject);
     runBusinessValidation(placementHome);
+    placementHome.setIdentifier(IdGenerator.generateId(parameterObject.getStaffPersonId()));
     PlacementHome storedPlacementHome = placementHomeDao.create(placementHome);
     storePlacementHomeUc(storedPlacementHome, parameterObject.getStaffPersonId());
     storeCountyOwnership(storedPlacementHome.getIdentifier());
@@ -84,7 +95,28 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
     storeBackgroundCheck(parameterObject.getStaffPersonId());
     storePlacementHomeProfile(parameterObject, storedPlacementHome.getIdentifier());
     prepareAddressPhoneticSearchKeywords(storedPlacementHome);
+    createSubstituteCareProviders(parameterObject, storedPlacementHome);
     return storedPlacementHome;
+  }
+
+  private void createSubstituteCareProviders(PlacementHomeParameterObject parameterObject,
+      PlacementHome storedPlacementHome) {
+    for (SCPParameterObject scpParameterObject: parameterObject.getScpParameterObjects()) {
+      scpParameterObject.setPlacementHomeId(storedPlacementHome.getIdentifier());
+      SubstituteCareProvider substituteCareProvider = substituteCareProviderService.create(scpParameterObject);
+      if (scpParameterObject.isPrimaryApplicant()) {
+        storedPlacementHome.setPrimarySubstituteCareProvider(substituteCareProvider);
+      }
+    }
+  }
+
+  private void validateParameters(PlacementHome placementHome,
+      PlacementHomeParameterObject placementHomeParameterObject) {
+    ParametersValidator.checkNotPersisted(placementHome);
+    if (CollectionUtils.isNotEmpty(placementHomeParameterObject.getScpParameterObjects())) {
+      placementHomeParameterObject.getScpParameterObjects()
+          .forEach(o -> ParametersValidator.checkNotPersisted(o.getEntity()));
+    }
   }
 
   private void storeCountyOwnership(String placementHomeId) {

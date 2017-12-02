@@ -2,13 +2,15 @@ package gov.ca.cwds.cms.data.access.parameter;
 
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.data.legacy.cms.entity.PhoneContactDetail;
+import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author CWDS CALS API Team
  */
 
-public class SCPParameterObject extends BaseParameterObject {
+public class SCPParameterObject extends BaseParameterObject<SubstituteCareProvider> {
 
   private String placementHomeId;
 
@@ -16,9 +18,9 @@ public class SCPParameterObject extends BaseParameterObject {
 
   private CWSIdentifier ethnicity;
 
-  private List<? extends CWSIdentifier> otherStatesOfLiving;
+  private List<? extends CWSIdentifier> otherStatesOfLiving = new ArrayList<>();
 
-  private List<PhoneContactDetail> phoneNumbers;
+  private List<PhoneContactDetail> phoneNumbers = new ArrayList<>();
 
   public String getPlacementHomeId() {
     return placementHomeId;

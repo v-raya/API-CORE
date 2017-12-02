@@ -7,9 +7,9 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * @author CWDS CALS API Team
  */
 
-public interface DataAccessService<T extends PersistentObject, P extends BaseParameterObject> {
+public interface DataAccessService<T extends PersistentObject, P extends BaseParameterObject<T>> {
 
-  T create(T entity, P parameterObject);
+  T create(P parameterObject);
 
   default void runBusinessValidation(T entity) {
     //Empty by default
