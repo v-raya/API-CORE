@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.domain.cms;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.data.ApiTypedIdentifier;
@@ -15,6 +16,7 @@ public class SystemCodeDescriptor extends ApiObjectIdentity implements ApiTypedI
   private static final long serialVersionUID = 6361276510378082085L;
 
   @JsonProperty("id")
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private Short id;
 
   @JsonProperty("description")
