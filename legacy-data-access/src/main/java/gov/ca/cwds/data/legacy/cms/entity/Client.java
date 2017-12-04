@@ -260,7 +260,7 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private String zippyCreatedIndicator;
 
   @Column(name = "CL_INDX_NO", nullable = true, length = 12)
-  private String clIndxNo;
+  private String clientIndexNumber;
 
   public String getIdentifier() {
     return identifier;
@@ -826,12 +826,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.soc158PlacementCode = soc158PlacementCode;
   }
 
-  public String getClIndxNo() {
-    return clIndxNo;
+  public String getClientIndexNumber() {
+    return clientIndexNumber;
   }
 
-  public void setClIndxNo(String clIndxNo) {
-    this.clIndxNo = clIndxNo;
+  public void setClientIndexNumber(String clientIndexNumber) {
+    this.clientIndexNumber = clientIndexNumber;
   }
 
   @Override
