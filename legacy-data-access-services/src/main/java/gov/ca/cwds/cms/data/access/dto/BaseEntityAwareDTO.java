@@ -1,4 +1,4 @@
-package gov.ca.cwds.cms.data.access.parameter;
+package gov.ca.cwds.cms.data.access.dto;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
 
@@ -6,13 +6,13 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * @author CWDS CALS API Team
  */
 
-public class BaseParameterObject<T extends PersistentObject> {
+public class BaseEntityAwareDTO<T extends PersistentObject> {
 
   private T entity;
 
   private String staffPersonId;
 
-  public BaseParameterObject(String staffPersonId) {
+  public BaseEntityAwareDTO(String staffPersonId) {
     this.staffPersonId = staffPersonId;
   }
 
