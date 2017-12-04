@@ -188,7 +188,7 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private String literateCode;
 
   @Column(name = "MAR_HIST_B", nullable = false, length = 1)
-  private String maritalCohabitatnHistoryIndicator;
+  private String maritalCohabitationHistoryIndicator;
 
   @Column(name = "MILT_STACD", nullable = false, length = 1)
   private String militaryStatusCode;
@@ -465,12 +465,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   }
 
 
-  public String getMaritalCohabitatnHistoryIndicator() {
-    return maritalCohabitatnHistoryIndicator;
+  public String getMaritalCohabitationHistoryIndicator() {
+    return maritalCohabitationHistoryIndicator;
   }
 
-  public void setMaritalCohabitatnHistoryIndicator(String maritalCohabitatnHistoryIndicator) {
-    this.maritalCohabitatnHistoryIndicator = maritalCohabitatnHistoryIndicator;
+  public void setMaritalCohabitationHistoryIndicator(String maritalCohabitationHistoryIndicator) {
+    this.maritalCohabitationHistoryIndicator = maritalCohabitationHistoryIndicator;
   }
 
   public Short getMaritalStatusType() {
