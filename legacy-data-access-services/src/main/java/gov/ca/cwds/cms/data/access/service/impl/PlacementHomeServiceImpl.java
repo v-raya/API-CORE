@@ -109,6 +109,8 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
   @Inject
   private SsaName3Dao ssaName3Dao;
 
+// Commented coz currently does not work properly
+/*
   @Override
   public void runBusinessValidation(PlacementHome entity) {
     DroolsConfiguration configuration = new DroolsConfiguration<PlacementHome>() {
@@ -127,6 +129,7 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
       throw new BusinessValidationException(detailsList);
     }
   }
+*/
 
   @Override
   public PlacementHome create(PlacementHomeParameterObject parameterObject) {
