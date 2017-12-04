@@ -11,8 +11,12 @@ allprojects {
     sourceCompatibility = 1.8
     compileJava {options.encoding = "UTF-8"}
 
+    
     project.ext {
-        apiVersion = "0.5.1-SNAPSHOT"
+        versionPropertyValue = System.properties.getProperty('version')
+        releaseVersion = "0.5.1"
+        snapshotVersion = releaseVersion + '-SNAPSHOT'
+        currentVersion = ((versionPropertyValue != null ) ? versionPropertyValue : snapshotVersion)
         commonGroupId = "gov.ca.cwds.api"
         shiroSecurityVersion = "0.4.3"
         configPath = "$rootProject.projectDir/config/"
@@ -46,8 +50,8 @@ allprojects {
       renderer = new CWDSReportRenderer()
     }
 
-    version = apiVersion
-    group = commonGroupId
+    project.group = commonGroupId
+    project.version = currentVersion
 
     repositories {
         mavenLocal()
@@ -125,11 +129,9 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
-            groupId commonGroupId
-            artifactId 'api-core'
-            version version + ((System.properties.getProperty('build') != null) ? '.' + System.properties.getProperty('build') : '')
         }
     }
+
     repositories {
         mavenLocal()
         maven {
