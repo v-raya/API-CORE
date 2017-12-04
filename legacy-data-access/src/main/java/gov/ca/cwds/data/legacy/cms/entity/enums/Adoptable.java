@@ -31,7 +31,7 @@ public enum Adoptable implements EntityEnum<String> {
   }
 
   @Converter
-  public static class AdoptableConverter extends BaseEntityEnumConvertor<Adoptable,String> {
+  public static class AdoptableConverter extends BaseEntityEnumConverter<Adoptable,String> {
 
     private static final Map<String, Adoptable> codeMap =
         Collections.unmodifiableMap(initializeMapping(Adoptable.values()));

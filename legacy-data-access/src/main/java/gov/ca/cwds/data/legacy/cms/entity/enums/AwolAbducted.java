@@ -33,7 +33,8 @@ public enum AwolAbducted implements EntityEnum<Character> {
   }
 
   @Converter
-  public static class AwolAbductedConverter extends BaseEntityEnumConvertor<AwolAbducted, Character> {
+  public static class AwolAbductedConverter extends
+      BaseEntityEnumConverter<AwolAbducted, Character> {
 
     private static final Map<Character, AwolAbducted> codeMap =
         Collections.unmodifiableMap(initializeMapping(AwolAbducted.values()));
