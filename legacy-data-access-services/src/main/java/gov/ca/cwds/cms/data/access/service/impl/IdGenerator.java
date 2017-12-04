@@ -1,4 +1,4 @@
-package gov.ca.cwds.cms.data.access.utils;
+package gov.ca.cwds.cms.data.access.service.impl;
 
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import org.slf4j.Logger;
@@ -7,8 +7,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author CWDS CALS API Team
  */
-
-public class IdGenerator {
+class IdGenerator {
 
   private static final Logger LOG = LoggerFactory.getLogger(IdGenerator.class);
 
