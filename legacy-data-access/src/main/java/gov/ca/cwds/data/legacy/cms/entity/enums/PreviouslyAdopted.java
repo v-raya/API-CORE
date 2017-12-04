@@ -33,7 +33,7 @@ public enum PreviouslyAdopted implements EntityEnum<Character> {
 
   @Converter
   public static class PreviouslyAdoptedConverter extends
-      BaseEntityEnumConvertor<PreviouslyAdopted, Character> {
+      BaseEntityEnumConverter<PreviouslyAdopted, Character> {
 
     private static final Map<Character, PreviouslyAdopted> codeMap =
         Collections.unmodifiableMap(initializeMapping(PreviouslyAdopted.values()));

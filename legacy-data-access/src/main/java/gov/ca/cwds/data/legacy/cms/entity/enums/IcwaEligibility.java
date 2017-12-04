@@ -33,7 +33,7 @@ public enum IcwaEligibility implements EntityEnum<Character> {
 
   @Converter
   public static class IcwaEligibilityConverter extends
-      BaseEntityEnumConvertor<IcwaEligibility, Character> {
+      BaseEntityEnumConverter<IcwaEligibility, Character> {
 
     private static final Map<Character, IcwaEligibility> codeMap =
         Collections.unmodifiableMap(initializeMapping(IcwaEligibility.values()));

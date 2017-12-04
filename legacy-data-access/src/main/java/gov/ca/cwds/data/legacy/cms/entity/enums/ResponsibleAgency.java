@@ -37,7 +37,7 @@ public enum ResponsibleAgency implements EntityEnum<Character> {
 
   @Converter
   public static class ResponsibleAgencyConverter extends
-      BaseEntityEnumConvertor<ResponsibleAgency, Character> {
+      BaseEntityEnumConverter<ResponsibleAgency, Character> {
 
     private static final Map<Character, ResponsibleAgency> codeMap =
         Collections.unmodifiableMap(initializeMapping(ResponsibleAgency.values()));
