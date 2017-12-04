@@ -49,12 +49,6 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
-
-import gov.ca.cwds.drools.DroolsConfiguration;
-import gov.ca.cwds.drools.DroolsService;
-import gov.ca.cwds.rest.exception.BusinessValidationException;
-import gov.ca.cwds.rest.exception.IssueDetails;
-import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -62,6 +56,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 
 public class PlacementHomeServiceImpl implements PlacementHomeService {
+
   private String RULES_SESSION = "placement-home-session";
   private String RULES_AGENDA = "placement-home-agenda";
 
@@ -155,8 +150,8 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
   private void createPlacementHome(PlacementHomeParameterObject parameterObject) {
     final PlacementHome placementHome = parameterObject.getEntity() ;
     placementHome.setIdentifier(generateId(parameterObject.getStaffPersonId()));
-    placementHome.setLastUpdatedId(parameterObject.getStaffPersonId());
-    placementHome.setLastUpdatedTime(LocalDateTime.now());
+    placementHome.setLastUpdateId(parameterObject.getStaffPersonId());
+    placementHome.setLastUpdateTime(LocalDateTime.now());
     placementHomeDao.create(placementHome);
   }
 
