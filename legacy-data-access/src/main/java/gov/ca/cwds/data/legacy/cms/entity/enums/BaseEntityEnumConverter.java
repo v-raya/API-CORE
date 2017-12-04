@@ -27,12 +27,12 @@ public abstract class BaseEntityEnumConverter<E extends EntityEnum<K>, K> implem
 
   @Override
   public E convertToEntityAttribute(K code) {
-    if (code == null || isEmptyString(code) || isEmptyCharacter(code)) {
+    if (code == null || isBlankString(code) || isSpaceCharacter(code)) {
         return null;
     }
 
-    K normalizedCode = normalizeCode(code);
-    E result = getCodeMap().get(normalizedCode);
+    K trimmed = trimCode(code);
+    E result = getCodeMap().get(trimmed);
 
     if (result == null) {
       Class<?> enumClass = Generics.getTypeParameter(getClass(), EntityEnum.class);
@@ -43,15 +43,15 @@ public abstract class BaseEntityEnumConverter<E extends EntityEnum<K>, K> implem
     return result;
   }
 
-  private boolean isEmptyString(K code) {
+  private boolean isBlankString(K code) {
     return (code instanceof String) && StringUtils.isBlank((String) code);
   }
 
-  private boolean isEmptyCharacter(K code) {
+  private boolean isSpaceCharacter(K code) {
     return (code instanceof Character) && code.equals(' ');
   }
 
-  private K normalizeCode(K code) {
+  private K trimCode(K code) {
     return code instanceof String
         ? (K) ((String) code).trim()
         : code;
