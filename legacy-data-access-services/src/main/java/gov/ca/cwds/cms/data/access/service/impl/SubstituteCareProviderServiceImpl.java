@@ -18,7 +18,6 @@ import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderUcDao;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.parameter.SCPParameterObject;
 import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
-import gov.ca.cwds.cms.data.access.utils.IdGenerator;
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
 import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
@@ -69,7 +68,7 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   @Override
   public SubstituteCareProvider create(SCPParameterObject parameterObject) {
     final SubstituteCareProvider substituteCareProvider = parameterObject.getEntity();
-    validateParameters(substituteCareProvider, parameterObject);
+    validateParameters(parameterObject);
     substituteCareProvider
         .setIdentifier(IdGenerator.generateId(parameterObject.getStaffPersonId()));
     runBusinessValidation(substituteCareProvider);
@@ -85,12 +84,9 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
     return storedSubstituteCareProvider;
   }
 
-  private void validateParameters(SubstituteCareProvider substituteCareProvider,
-      SCPParameterObject parameterObject) {
-    checkNotPersisted(substituteCareProvider);
-    if (CollectionUtils.isNotEmpty(parameterObject.getPhoneNumbers())) {
-      parameterObject.getPhoneNumbers().forEach(ParametersValidator::checkNotPersisted);
-    }
+  private void validateParameters(SCPParameterObject parameterObject) {
+    checkNotPersisted(parameterObject.getEntity());
+    ParametersValidator.validatePersistentObjects(parameterObject.getPhoneNumbers());
   }
 
   private void storeOutOfStateChecks(SubstituteCareProvider storedSubstituteCareProvider,

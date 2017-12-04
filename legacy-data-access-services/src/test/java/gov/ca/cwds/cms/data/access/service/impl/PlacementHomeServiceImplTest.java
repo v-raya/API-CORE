@@ -25,7 +25,7 @@ public class PlacementHomeServiceImplTest {
       PlacementHomeService placementHomeService = new PlacementHomeServiceImpl();
       PlacementHome placementHome = new PlacementHome();
       placementHome.setIdentifier("1");
-      PlacementHomeParameterObject parameterObject = new PlacementHomeParameterObject();
+      PlacementHomeParameterObject parameterObject = new PlacementHomeParameterObject("1");
       parameterObject.setEntity(placementHome);
       placementHomeService.create(parameterObject);
       fail();
@@ -40,10 +40,10 @@ public class PlacementHomeServiceImplTest {
     try {
       PlacementHomeService service = new PlacementHomeServiceImpl();
       PlacementHome placementHome = new PlacementHome();
-      SCPParameterObject scpParameterObject = new SCPParameterObject();
+      SCPParameterObject scpParameterObject = new SCPParameterObject("1");
       SubstituteCareProvider scp = new SubstituteCareProvider();
       scpParameterObject.setEntity(scp);
-      PlacementHomeParameterObject parameterObject = new PlacementHomeParameterObject();
+      PlacementHomeParameterObject parameterObject = new PlacementHomeParameterObject("1");
       scp.setIdentifier("1");
       List<SCPParameterObject> scpList = new ArrayList<>();
       scpList.add(scpParameterObject);

@@ -12,6 +12,10 @@ public class BaseParameterObject<T extends PersistentObject> {
 
   private String staffPersonId;
 
+  public BaseParameterObject(String staffPersonId) {
+    this.staffPersonId = staffPersonId;
+  }
+
   public String getStaffPersonId() {
     return staffPersonId;
   }

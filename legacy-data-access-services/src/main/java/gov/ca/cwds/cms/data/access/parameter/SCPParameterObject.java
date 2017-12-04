@@ -13,14 +13,14 @@ import java.util.List;
 public class SCPParameterObject extends BaseParameterObject<SubstituteCareProvider> {
 
   private String placementHomeId;
-
   private boolean primaryApplicant;
-
   private CWSIdentifier ethnicity;
-
   private List<? extends CWSIdentifier> otherStatesOfLiving = new ArrayList<>();
-
   private List<PhoneContactDetail> phoneNumbers = new ArrayList<>();
+
+  public SCPParameterObject(String staffPersonId) {
+    super(staffPersonId);
+  }
 
   public String getPlacementHomeId() {
     return placementHomeId;

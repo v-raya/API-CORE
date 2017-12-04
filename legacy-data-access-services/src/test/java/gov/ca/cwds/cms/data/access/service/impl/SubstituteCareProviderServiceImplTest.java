@@ -24,7 +24,7 @@ public class SubstituteCareProviderServiceImplTest {
       SubstituteCareProviderService service = new SubstituteCareProviderServiceImpl();
       SubstituteCareProvider scp = new SubstituteCareProvider();
       scp.setIdentifier("1");
-      SCPParameterObject parameterObject = new SCPParameterObject();
+      SCPParameterObject parameterObject = new SCPParameterObject("1");
       parameterObject.setEntity(scp);
       service.create(parameterObject);
       fail();
@@ -39,7 +39,7 @@ public class SubstituteCareProviderServiceImplTest {
     try {
       SubstituteCareProviderService service = new SubstituteCareProviderServiceImpl();
       SubstituteCareProvider scp = new SubstituteCareProvider();
-      SCPParameterObject parameterObject = new SCPParameterObject();
+      SCPParameterObject parameterObject = new SCPParameterObject("1");
       parameterObject.setEntity(scp);
       List<PhoneContactDetail> phoneNumbers = new ArrayList<>();
       PhoneContactDetail phoneContactDetail = new PhoneContactDetail();
