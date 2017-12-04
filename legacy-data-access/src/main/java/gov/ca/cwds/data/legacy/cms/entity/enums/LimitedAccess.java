@@ -31,7 +31,8 @@ public enum LimitedAccess implements EntityEnum<Character> {
   }
 
   @Converter
-  public static class LimitedAccessConverter extends BaseEntityEnumConvertor<LimitedAccess, Character> {
+  public static class LimitedAccessConverter extends
+      BaseEntityEnumConverter<LimitedAccess, Character> {
 
     private static final Map<Character, LimitedAccess> codeMap =
         Collections.unmodifiableMap(initializeMapping(LimitedAccess.values()));

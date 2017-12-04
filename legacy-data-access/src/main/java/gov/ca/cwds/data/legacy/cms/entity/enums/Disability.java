@@ -31,7 +31,7 @@ public enum Disability implements EntityEnum<Character> {
   }
 
   @Converter
-  public static class DisabilityConverter extends BaseEntityEnumConvertor<Disability, Character> {
+  public static class DisabilityConverter extends BaseEntityEnumConverter<Disability, Character> {
 
     private static final Map<Character, Disability> codeMap =
         Collections.unmodifiableMap(initializeMapping(Disability.values()));
