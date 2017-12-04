@@ -50,7 +50,7 @@ node ('tpt2-slave'){
 		  rtGradle.useWrapper = true
    }
    stage('Build'){
-     if (params.APP_VERSION != 'SNAPSHOT' ) {
+     if (params.APP_VERSION != "SNAPSHOT" ) {
          def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jar -Dversion=${APP_VERSION}'
      } else {
          def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jar'
@@ -73,7 +73,7 @@ node ('tpt2-slave'){
     }
 
 	stage ('Push to artifactory'){
-	  if (params.APP_VERSION == 'SNAPSHOT') {
+	  if (params.APP_VERSION == "SNAPSHOT") {
         rtGradle.deployer repo:'libs-snapshot', server: serverArti
 	  } else {
         rtGradle.deployer repo:'libs-release', server: serverArti
