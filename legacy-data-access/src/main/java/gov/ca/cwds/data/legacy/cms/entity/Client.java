@@ -154,6 +154,9 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Column(name = "FTERM_DT", nullable = true)
   private LocalDate fatherParentalRightTermDate;
 
+  @Column(name = "CL_INDX_NO", nullable = true, length = 12)
+  private String clientIndexNumber;
+
   @Column(name = "GENDER_CD", nullable = false, length = 1)
   private String genderCode;
 
@@ -258,9 +261,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
 
   @Column(name = "ZIPPY_IND", nullable = false, length = 1)
   private String zippyCreatedIndicator;
-
-  @Column(name = "CL_INDX_NO", nullable = true, length = 12)
-  private String clientIndexNumber;
 
   public String getIdentifier() {
     return identifier;
