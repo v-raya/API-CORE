@@ -61,6 +61,6 @@ public class AwolAbductedTest {
 
   @Test(expected = UnsupportedOperationException.class)
   public void testInvalidCode() {
-    converter.convertToEntityAttribute(' ');
+    converter.convertToEntityAttribute('@');
   }
 }

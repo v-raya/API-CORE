@@ -56,6 +56,6 @@ public class PreviouslyAdoptedTest {
 
   @Test(expected = UnsupportedOperationException.class)
   public void testInvalidCode() {
-    converter.convertToEntityAttribute(' ');
+    converter.convertToEntityAttribute('@');
   }
 }

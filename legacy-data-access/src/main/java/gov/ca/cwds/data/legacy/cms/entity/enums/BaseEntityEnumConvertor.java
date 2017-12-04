@@ -1,8 +1,10 @@
 package gov.ca.cwds.data.legacy.cms.entity.enums;
 
+import io.dropwizard.util.Generics;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.AttributeConverter;
+import org.apache.commons.lang3.StringUtils;
 
 public abstract class BaseEntityEnumConvertor<E extends EntityEnum<K>, K> implements
     AttributeConverter<E, K> {
@@ -28,10 +30,22 @@ public abstract class BaseEntityEnumConvertor<E extends EntityEnum<K>, K> implem
     if (code == null) {
       return null;
     }
+
+    if ((code instanceof String) && StringUtils.isBlank((String) code)) {
+        return null;
+    }
+
+    if ((code instanceof Character) && code.equals(' ')) {
+        return null;
+    }
+
     E result = getCodeMap().get(code);
 
     if (result == null) {
-      throw new UnsupportedOperationException("The code " + code + " is not supported!");
+      Class<?> enumClass = Generics.getTypeParameter(getClass(), EntityEnum.class);
+      String enumClassName = enumClass.getSimpleName();
+      throw new UnsupportedOperationException(
+          enumClassName + " enum : the code '" + code + "' is not supported!");
     }
     return result;
   }

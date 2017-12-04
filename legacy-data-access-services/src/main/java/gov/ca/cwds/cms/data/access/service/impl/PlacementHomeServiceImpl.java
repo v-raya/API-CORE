@@ -40,10 +40,21 @@ import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeProfile;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeUc;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
+import gov.ca.cwds.drools.DroolsConfiguration;
+import gov.ca.cwds.drools.DroolsService;
+import gov.ca.cwds.rest.exception.BusinessValidationException;
+import gov.ca.cwds.rest.exception.IssueDetails;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Set;
+
+import gov.ca.cwds.drools.DroolsConfiguration;
+import gov.ca.cwds.drools.DroolsService;
+import gov.ca.cwds.rest.exception.BusinessValidationException;
+import gov.ca.cwds.rest.exception.IssueDetails;
+import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -51,6 +62,11 @@ import org.apache.commons.lang3.StringUtils;
  */
 
 public class PlacementHomeServiceImpl implements PlacementHomeService {
+  private String RULES_SESSION = "placement-home-session";
+  private String RULES_AGENDA = "placement-home-agenda";
+
+  @Inject
+  protected DroolsService droolsService;
 
   @Inject
   private PlacementHomeDao placementHomeDao;
@@ -77,9 +93,6 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
   private PlacementHomeProfileDao placementHomeProfileDao;
 
   @Inject
-  private SsaName3Dao ssaName3Dao;
-
-  @Inject
   private SubstituteCareProviderService substituteCareProviderService;
 
   @Inject
@@ -96,6 +109,29 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
 
   @Inject
   private BackgroundCheckDao backgroundCheckDao;
+
+
+  @Inject
+  private SsaName3Dao ssaName3Dao;
+
+  @Override
+  public void runBusinessValidation(PlacementHome entity) {
+    DroolsConfiguration configuration = new DroolsConfiguration<PlacementHome>() {
+      @Override
+      public String getAgendaGroup() {
+        return RULES_AGENDA;
+      }
+
+      @Override
+      public String getDroolsSessionName() {
+        return RULES_SESSION;
+      }
+    };
+    Set<IssueDetails> detailsList = droolsService.validate(entity, configuration);
+    if (!detailsList.isEmpty()) {
+      throw new BusinessValidationException(detailsList);
+    }
+  }
 
   @Override
   public PlacementHome create(PlacementHomeParameterObject parameterObject) {
@@ -296,6 +332,10 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
     parameterObject.setUpdateTimeStamp(new Date());
     parameterObject.setUpdateId(placementHome.getLastUpdateId());
     ssaName3Dao.callStoredProc(parameterObject);
+  }
+
+  void setDroolsService(DroolsService droolsService) {
+    this.droolsService = droolsService;
   }
 
 }
