@@ -16,7 +16,7 @@ import gov.ca.cwds.cms.data.access.dao.SsaName3Dao;
 import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderDao;
 import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderUcDao;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
-import gov.ca.cwds.cms.data.access.parameter.SCPParameterObject;
+import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
@@ -66,7 +66,7 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   private OutOfStateCheckDao outOfStateCheckDao;
 
   @Override
-  public SubstituteCareProvider create(SCPParameterObject parameterObject) {
+  public SubstituteCareProvider create(SCPEntityAwareDTO parameterObject) {
     final SubstituteCareProvider substituteCareProvider = parameterObject.getEntity();
     validateParameters(parameterObject);
     substituteCareProvider
@@ -84,13 +84,13 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
     return storedSubstituteCareProvider;
   }
 
-  private void validateParameters(SCPParameterObject parameterObject) {
+  private void validateParameters(SCPEntityAwareDTO parameterObject) {
     checkNotPersisted(parameterObject.getEntity());
     ParametersValidator.validatePersistentObjects(parameterObject.getPhoneNumbers());
   }
 
   private void storeOutOfStateChecks(SubstituteCareProvider storedSubstituteCareProvider,
-      SCPParameterObject parameterObject) {
+      SCPEntityAwareDTO parameterObject) {
     if (CollectionUtils.isNotEmpty(parameterObject.getOtherStatesOfLiving())) {
       for (CWSIdentifier stateId : parameterObject.getOtherStatesOfLiving()) {
         OutOfStateCheck outOfStateCheck = new OutOfStateCheck();
@@ -106,7 +106,7 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   }
 
   private void storeEthnicity(SubstituteCareProvider storedSubstituteCareProvider,
-      SCPParameterObject parameterObject) {
+      SCPEntityAwareDTO parameterObject) {
     ClientScpEthnicity clientScpEthnicity = new ClientScpEthnicity();
     clientScpEthnicity.setEthnctyc((short)parameterObject.getEthnicity().getCwsId());
     clientScpEthnicity.setEstblshId(storedSubstituteCareProvider.getIdentifier());
@@ -135,7 +135,7 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   }
 
   private void storePhoneContactDetails(SubstituteCareProvider substituteCareProvider,
-      SCPParameterObject parameterObject) {
+      SCPEntityAwareDTO parameterObject) {
     if (CollectionUtils.isNotEmpty(parameterObject.getPhoneNumbers())) {
       parameterObject.getPhoneNumbers()
           .forEach(phoneNumber -> {
@@ -147,7 +147,7 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   }
 
   private void storePlacementHomeInformation(SubstituteCareProvider substituteCareProvider,
-      SCPParameterObject parameterObject) {
+      SCPEntityAwareDTO parameterObject) {
     PlacementHomeInformation placementHomeInformation = new PlacementHomeInformation();
     placementHomeInformation.setThirdId(IdGenerator.generateId(parameterObject.getStaffPersonId()));
     placementHomeInformation.setStartDt(LocalDate.now());
@@ -173,7 +173,7 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   }
 
   private void storeSubstituteCareProviderUc(SubstituteCareProvider substituteCareProvider,
-      SCPParameterObject parameterObject) {
+      SCPEntityAwareDTO parameterObject) {
     SubstituteCareProviderUc substituteCareProviderUc = new SubstituteCareProviderUc();
     substituteCareProviderUc.setPksbPvdrt(substituteCareProvider.getIdentifier());
     substituteCareProviderUc.setCaDlicNo(upperCase(substituteCareProvider.getCaDlicNo()));

@@ -3,7 +3,7 @@ package gov.ca.cwds.cms.data.access.service.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import gov.ca.cwds.cms.data.access.parameter.SCPParameterObject;
+import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
 import gov.ca.cwds.data.legacy.cms.entity.PhoneContactDetail;
@@ -24,7 +24,7 @@ public class SubstituteCareProviderServiceImplTest {
       SubstituteCareProviderService service = new SubstituteCareProviderServiceImpl();
       SubstituteCareProvider scp = new SubstituteCareProvider();
       scp.setIdentifier("1");
-      SCPParameterObject parameterObject = new SCPParameterObject("1");
+      SCPEntityAwareDTO parameterObject = new SCPEntityAwareDTO("1");
       parameterObject.setEntity(scp);
       service.create(parameterObject);
       fail();
@@ -39,7 +39,7 @@ public class SubstituteCareProviderServiceImplTest {
     try {
       SubstituteCareProviderService service = new SubstituteCareProviderServiceImpl();
       SubstituteCareProvider scp = new SubstituteCareProvider();
-      SCPParameterObject parameterObject = new SCPParameterObject("1");
+      SCPEntityAwareDTO parameterObject = new SCPEntityAwareDTO("1");
       parameterObject.setEntity(scp);
       List<PhoneContactDetail> phoneNumbers = new ArrayList<>();
       PhoneContactDetail phoneContactDetail = new PhoneContactDetail();

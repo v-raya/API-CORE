@@ -1,4 +1,4 @@
-package gov.ca.cwds.cms.data.access.parameter;
+package gov.ca.cwds.cms.data.access.dto;
 
 import gov.ca.cwds.data.legacy.cms.entity.OtherChildrenInPlacementHome;
 import gov.ca.cwds.data.legacy.cms.entity.OtherPeopleScpRelationship;
@@ -9,12 +9,12 @@ import java.util.List;
  * @author CWDS CALS API Team
  */
 
-public class OtherChildInHomeParameterObject extends
-    BaseParameterObject<OtherChildrenInPlacementHome> {
+public class OtherChildInHomeEntityAwareDTO extends
+    BaseEntityAwareDTO<OtherChildrenInPlacementHome> {
 
   private List<OtherPeopleScpRelationship> relationships = new ArrayList<>();
 
-  public OtherChildInHomeParameterObject(String staffPersonId) {
+  public OtherChildInHomeEntityAwareDTO(String staffPersonId) {
     super(staffPersonId);
   }
 
