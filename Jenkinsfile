@@ -73,14 +73,15 @@ node ('tpt2-slave'){
     }
 
 	stage ('Push to artifactory'){
+	  rtGradle.deployer.deployArtifacts = true
 	  if (params.APP_VERSION == "SNAPSHOT") {
         rtGradle.deployer repo:'libs-snapshot', server: serverArti
+        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publish'
 	  } else {
         rtGradle.deployer repo:'libs-release', server: serverArti
+        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publish -Dversion=${APP_VERSION}'
 	  }
-	  rtGradle.deployer.deployArtifacts = true
-	  buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publish'
-		rtGradle.deployer.deployArtifacts = false
+	  rtGradle.deployer.deployArtifacts = false
 	}
  } catch (Exception e)    {
  	   errorcode = e
