@@ -140,12 +140,6 @@ publishing {
     }
 }
 
-artifactory {
-   publish {
-       publishPom = true
-   }
-}
-
 //==================================================================================================
 // Custom Groovy classes for Licence Reports.
 // Move to own classes outside of build.
