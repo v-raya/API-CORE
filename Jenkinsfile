@@ -79,7 +79,8 @@ node ('tpt2-slave'){
 	  rtGradle.deployer.deployArtifacts = true
 	  if (params.APP_VERSION != "SNAPSHOT") {
 	      echo "!!!! PUSH RELEASE VERSION ${params.APP_VERSION}"
-        rtGradle.deployer repo:'libs-release', server: serverArti
+        //rtGradle.deployer repo:'libs-release', server: serverArti
+        rtGradle.deployer repo:'libs-snapshot', server: serverArti
         buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publish -Dversion=${APP_VERSION}'
         //buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'artifactoryPublish -Dversion=${APP_VERSION}'
 	  } else {
