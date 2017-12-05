@@ -1,6 +1,6 @@
 package gov.ca.cwds.cms.data.access.utils;
 
-import gov.ca.cwds.cms.data.access.parameter.BaseParameterObject;
+import gov.ca.cwds.cms.data.access.dto.BaseEntityAwareDTO;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
@@ -17,7 +17,7 @@ public final class ParametersValidator {
 
   private ParametersValidator() {}
 
-  public static <T extends BaseParameterObject> void  validateParameterObjects(List<T> parameters) {
+  public static <T extends BaseEntityAwareDTO> void  validateParameterObjects(List<T> parameters) {
     if (CollectionUtils.isNotEmpty(parameters)) {
       parameters.forEach(parameter -> ParametersValidator.checkNotPersisted(parameter.getEntity()));
     }

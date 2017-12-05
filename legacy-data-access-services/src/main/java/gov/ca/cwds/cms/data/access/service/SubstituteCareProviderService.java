@@ -1,6 +1,6 @@
 package gov.ca.cwds.cms.data.access.service;
 
-import gov.ca.cwds.cms.data.access.parameter.SCPParameterObject;
+import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 
 /**
@@ -8,6 +8,6 @@ import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
  */
 
 public interface SubstituteCareProviderService extends
-    DataAccessService<SubstituteCareProvider, SCPParameterObject> {
+    DataAccessService<SubstituteCareProvider, SCPEntityAwareDTO> {
 
 }

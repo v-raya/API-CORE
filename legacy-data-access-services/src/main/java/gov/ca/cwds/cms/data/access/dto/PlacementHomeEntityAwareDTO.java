@@ -1,4 +1,4 @@
-package gov.ca.cwds.cms.data.access.parameter;
+package gov.ca.cwds.cms.data.access.dto;
 
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.data.legacy.cms.entity.EmergencyContactDetail;
@@ -12,16 +12,16 @@ import java.util.Set;
  * @author CWDS CALS API Team
  */
 
-public class PlacementHomeParameterObject extends BaseParameterObject<PlacementHome> {
+public class PlacementHomeEntityAwareDTO extends BaseEntityAwareDTO<PlacementHome> {
 
-  private List<SCPParameterObject> scpParameterObjects = new ArrayList<>();
-  private List<OtherChildInHomeParameterObject> otherChildrenInHomeParameterObjects = new ArrayList<>();
-  private List<OtherAdultInHomeParameterObject> otherAdultInHomeParameterObjects = new ArrayList<>();
+  private List<SCPEntityAwareDTO> scpParameterObjects = new ArrayList<>();
+  private List<OtherChildInHomeEntityAwareDTO> otherChildrenInHomeParameterObjects = new ArrayList<>();
+  private List<OtherAdultInHomeEntityAwareDTO> otherAdultInHomeParameterObjects = new ArrayList<>();
   private EmergencyContactDetail emergencyContactDetail;
 
   private Set<? extends CWSIdentifier> homeLanguages = new HashSet<>();
 
-  public PlacementHomeParameterObject(String staffPersonId) {
+  public PlacementHomeEntityAwareDTO(String staffPersonId) {
     super(staffPersonId);
   }
 
@@ -33,46 +33,46 @@ public class PlacementHomeParameterObject extends BaseParameterObject<PlacementH
     this.homeLanguages = homeLanguages;
   }
 
-  public List<SCPParameterObject> getScpParameterObjects() {
+  public List<SCPEntityAwareDTO> getScpParameterObjects() {
     return scpParameterObjects;
   }
 
   public void setScpParameterObjects(
-      List<SCPParameterObject> parameterObjects) {
+      List<SCPEntityAwareDTO> parameterObjects) {
     this.scpParameterObjects = parameterObjects;
   }
 
-  public void addSCPParameterObject(SCPParameterObject parameterObject) {
+  public void addSCPParameterObject(SCPEntityAwareDTO parameterObject) {
     scpParameterObjects.add(parameterObject);
   }
 
-  public List<OtherChildInHomeParameterObject> getOtherChildrenInHomeParameterObjects() {
+  public List<OtherChildInHomeEntityAwareDTO> getOtherChildrenInHomeParameterObjects() {
     return otherChildrenInHomeParameterObjects;
   }
 
   public void setOtherChildrenInHomeParameterObjects(
-      List<OtherChildInHomeParameterObject> parameterObjects) {
+      List<OtherChildInHomeEntityAwareDTO> parameterObjects) {
     this.otherChildrenInHomeParameterObjects = parameterObjects;
   }
 
-  public void addOtherChildrenInHomeParameterObject(OtherChildInHomeParameterObject parameterObject) {
+  public void addOtherChildrenInHomeParameterObject(OtherChildInHomeEntityAwareDTO parameterObject) {
     otherChildrenInHomeParameterObjects.add(parameterObject);
   }
 
-  public List<OtherAdultInHomeParameterObject> getOtherAdultInHomeParameterObjects() {
+  public List<OtherAdultInHomeEntityAwareDTO> getOtherAdultInHomeParameterObjects() {
     return otherAdultInHomeParameterObjects;
   }
 
   public void setOtherAdultInHomeParameterObjects(
-      List<OtherAdultInHomeParameterObject> parameterObjects) {
+      List<OtherAdultInHomeEntityAwareDTO> parameterObjects) {
     this.otherAdultInHomeParameterObjects = parameterObjects;
   }
 
-  public void addOtherAdultInHomeParameterObject(OtherAdultInHomeParameterObject parameterObject) {
+  public void addOtherAdultInHomeParameterObject(OtherAdultInHomeEntityAwareDTO parameterObject) {
     this.otherAdultInHomeParameterObjects.add(parameterObject);
   }
 
-  public void addOtherChildInHomeParameterObject(OtherChildInHomeParameterObject parameterObject) {
+  public void addOtherChildInHomeParameterObject(OtherChildInHomeEntityAwareDTO parameterObject) {
     this.otherChildrenInHomeParameterObjects.add(parameterObject);
   }
 
