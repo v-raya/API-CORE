@@ -51,8 +51,11 @@ node ('tpt2-slave'){
    }
    stage('Build'){
      if (params.APP_VERSION != "SNAPSHOT" ) {
+         echo "!!!! BUILD RELEASE VERSION ${params.APP_VERSION}"
          def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jar -Dversion=${APP_VERSION}'
+
      } else {
+         echo "!!!! BUILD SNAPSHOT VERSION"
          def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jar'
      }
    }
@@ -74,12 +77,14 @@ node ('tpt2-slave'){
 
 	stage ('Push to artifactory'){
 	  rtGradle.deployer.deployArtifacts = true
-	  if (params.APP_VERSION == "SNAPSHOT") {
-        rtGradle.deployer repo:'libs-snapshot', server: serverArti
-        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publish'
-	  } else {
+	  if (params.APP_VERSION != "SNAPSHOT") {
+	      echo "!!!! PUSH RELEASE VERSION ${params.APP_VERSION}"
         rtGradle.deployer repo:'libs-release', server: serverArti
         buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publish -Dversion=${APP_VERSION}'
+	  } else {
+	      echo "!!!! PUSH SNAPSHOT VERSION"
+	      rtGradle.deployer repo:'libs-snapshot', server: serverArti
+        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publish'
 	  }
 	  rtGradle.deployer.deployArtifacts = false
 	}
@@ -88,7 +93,7 @@ node ('tpt2-slave'){
   	   currentBuild.result = "FAIL"
   	   notifyBuild(currentBuild.result,errorcode)
   	   throw e;
- }finally {
+ } finally {
 	   cleanWs()
  }
 }
