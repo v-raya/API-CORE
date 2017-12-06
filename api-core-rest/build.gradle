@@ -39,9 +39,6 @@ publishing {
   publications {
     library(MavenPublication) {
       from components.java
-      groupId commonGroupId
-      artifactId 'api-core-rest'
-        version version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
     }
   }
   repositories {
