@@ -1,24 +1,26 @@
-package gov.ca.cwds.cms.data.access.parameter;
+package gov.ca.cwds.cms.data.access.dto;
 
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.data.legacy.cms.entity.PhoneContactDetail;
+import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author CWDS CALS API Team
  */
 
-public class SCPParameterObject extends BaseParameterObject {
+public class SCPEntityAwareDTO extends BaseEntityAwareDTO<SubstituteCareProvider> {
 
   private String placementHomeId;
-
   private boolean primaryApplicant;
-
   private CWSIdentifier ethnicity;
+  private List<? extends CWSIdentifier> otherStatesOfLiving = new ArrayList<>();
+  private List<PhoneContactDetail> phoneNumbers = new ArrayList<>();
 
-  private List<? extends CWSIdentifier> otherStatesOfLiving;
-
-  private List<PhoneContactDetail> phoneNumbers;
+  public SCPEntityAwareDTO(String staffPersonId) {
+    super(staffPersonId);
+  }
 
   public String getPlacementHomeId() {
     return placementHomeId;

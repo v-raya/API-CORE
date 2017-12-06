@@ -1,6 +1,6 @@
 package gov.ca.cwds.cms.data.access.service;
 
-import gov.ca.cwds.cms.data.access.parameter.PlacementHomeParameterObject;
+import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 
 /**
@@ -8,6 +8,6 @@ import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
  */
 
 public interface PlacementHomeService extends
-    DataAccessService<PlacementHome, PlacementHomeParameterObject> {
+    DataAccessService<PlacementHome, PlacementHomeEntityAwareDTO> {
 
 }
