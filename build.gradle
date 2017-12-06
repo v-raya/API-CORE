@@ -131,12 +131,12 @@ publishing {
             from components.java
         }
     }
-    repositories {
-        mavenLocal()
-        maven {
-            url artifactoryRepo
-        }
-    }
+//    repositories {
+//        mavenLocal()
+//        maven {
+//            url artifactoryRepo
+//        }
+//    }
 }
 
 //==================================================================================================
