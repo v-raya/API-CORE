@@ -1,12 +1,14 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.legacy.cms.entity.enums.AdoptionStatus;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -71,7 +73,8 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private String adjudicatedDelinquentIndicator;
 
   @Column(name = "ADPTN_STCD", nullable = false, length = 1)
-  private String adoptionStatusCode;
+  @Convert(converter = AdoptionStatus.AdoptionStatusConverter.class)
+  private AdoptionStatus adoptionStatus;
 
   @Column(name = "ALN_REG_NO", nullable = false, length = 12)
   @ColumnTransformer(read = "trim(ALN_REG_NO)")
@@ -311,12 +314,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.identifier = identifier;
   }
 
-  public String getAdoptionStatusCode() {
-    return adoptionStatusCode;
+  public AdoptionStatus getAdoptionStatus() {
+    return adoptionStatus;
   }
 
-  public void setAdoptionStatusCode(String adoptionStatusCode) {
-    this.adoptionStatusCode = adoptionStatusCode;
+  public void setAdoptionStatus(AdoptionStatus adoptionStatus) {
+    this.adoptionStatus = adoptionStatus;
   }
 
   public String getAlienRegistrationNumber() {
