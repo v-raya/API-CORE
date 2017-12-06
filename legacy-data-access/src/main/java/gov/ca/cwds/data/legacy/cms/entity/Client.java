@@ -3,6 +3,7 @@ package gov.ca.cwds.data.legacy.cms.entity;
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.converter.NullableBooleanConverter;
 import gov.ca.cwds.data.legacy.cms.entity.enums.AdoptionStatus;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -16,12 +17,17 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import org.hibernate.annotations.ColumnTransformer;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NamedQuery;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
 
 /**
@@ -81,8 +87,11 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @ColumnTransformer(read = "trim(ALN_REG_NO)")
   private String alienRegistrationNumber;
 
-  @Column(name = "B_CNTRY_C", nullable = false)
-  private Short birthCountryCodeType;
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "B_CNTRY_C", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private Country birthCountry;
 
   @Column(name = "B_STATE_C", nullable = false)
   private Short birthStateCodeType;
@@ -357,12 +366,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   }
 
 
-  public Short getBirthCountryCodeType() {
-    return birthCountryCodeType;
+  public Country getBirthCountry() {
+    return birthCountry;
   }
 
-  public void setBirthCountryCodeType(Short birthCountryCodeType) {
-    this.birthCountryCodeType = birthCountryCodeType;
+  public void setBirthCountry(Country birthCountry) {
+    this.birthCountry = birthCountry;
   }
 
   public boolean getChildClientIndicator() {
