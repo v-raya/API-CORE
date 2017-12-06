@@ -125,13 +125,6 @@ dependencies {
     compile project(':api-core-abac')
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
-}
 //publishing {
 //    publications {
 //        mavenJava(MavenPublication) {

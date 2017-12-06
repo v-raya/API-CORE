@@ -52,10 +52,10 @@ node ('tpt2-slave'){
    stage('Build'){
      if (params.APP_VERSION != "SNAPSHOT" ) {
          echo "!!!! BUILD RELEASE VERSION ${params.APP_VERSION}"
-         def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jar -Dversion=${APP_VERSION}'
+         def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'clean jar -Dversion=${APP_VERSION}'
      } else {
          echo "!!!! BUILD SNAPSHOT VERSION"
-         def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jar'
+         def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'clean jar'
      }
    }
    stage('Unit Tests') {
