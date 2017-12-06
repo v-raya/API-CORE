@@ -1,6 +1,7 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.legacy.cms.entity.converter.NullableBooleanConverter;
 import gov.ca.cwds.data.legacy.cms.entity.enums.AdoptionStatus;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
@@ -19,7 +20,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
@@ -70,7 +70,8 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private Set<PlacementEpisode> placementEpisodes = new HashSet<>();
 
   @Column(name = "ADJDEL_IND", length = 1)
-  private String adjudicatedDelinquentIndicator;
+  @Convert(converter = NullableBooleanConverter.class)
+  private Boolean adjudicatedDelinquentIndicator;
 
   @Column(name = "ADPTN_STCD", nullable = false, length = 1)
   @Convert(converter = AdoptionStatus.AdoptionStatusConverter.class)
@@ -808,21 +809,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.emailAddress = emailAddress;
   }
 
-  @SuppressWarnings("squid:S2447")
   public Boolean getAdjudicatedDelinquentIndicator() {
-    if (StringUtils.isBlank(adjudicatedDelinquentIndicator)) {
-      return null;
-    }
-    return "Y".equalsIgnoreCase(adjudicatedDelinquentIndicator.trim()) ? Boolean.TRUE
-        : Boolean.FALSE;
+    return adjudicatedDelinquentIndicator;
   }
 
   public void setAdjudicatedDelinquentIndicator(Boolean adjudicatedDelinquentIndicator) {
-    if (adjudicatedDelinquentIndicator == null) {
-      this.adjudicatedDelinquentIndicator = null;
-    } else {
-      this.adjudicatedDelinquentIndicator = (adjudicatedDelinquentIndicator ? "Y" : "N");
-    }
+    this.adjudicatedDelinquentIndicator = adjudicatedDelinquentIndicator;
   }
 
   public String getEthnicityUnableToDetermineReasonCode() {
