@@ -42,19 +42,19 @@ dependencies {
     testCompile group: 'com.fasterxml.jackson.module', name: 'jackson-module-guice', version: jacksonVersion
 }
 
-publishing {
-  publications {
-    library(MavenPublication) {
-      from components.java
-      groupId commonGroupId
-      artifactId 'api-core-cms'
-        version version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
-    }
-  }
-  repositories {
-      mavenLocal()
-      maven {
-          url artifactoryRepo
-      }
-  }
-}
+//publishing {
+//  publications {
+//    library(MavenPublication) {
+//      from components.java
+//      groupId commonGroupId
+//      artifactId 'api-core-cms'
+//        version version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
+//    }
+//  }
+//  repositories {
+//      mavenLocal()
+//      maven {
+//          url artifactoryRepo
+//      }
+//  }
+//}
