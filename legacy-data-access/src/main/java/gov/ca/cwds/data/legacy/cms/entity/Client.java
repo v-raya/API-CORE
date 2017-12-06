@@ -89,15 +89,15 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @ColumnTransformer(read = "trim(ALN_REG_NO)")
   private String alienRegistrationNumber;
 
-  @NotFound(action = NotFoundAction.IGNORE)
   @NotNull
+  @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
   @JoinColumn(name = "B_CNTRY_C", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
   private Country birthCountry;
 
-  @NotFound(action = NotFoundAction.IGNORE)
   @NotNull
+  @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
   @JoinColumn(name = "B_STATE_C", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
@@ -160,8 +160,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Column(name = "CURREG_IND", nullable = false, length = 1)
   private boolean currentlyRegionalCenterIndicator;
 
-  @Column(name = "D_STATE_C", nullable = false)
-  private Short driverLicenseStateCodeType;
+  @NotNull
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "D_STATE_C", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private State driverLicenseState;
 
   @Column(name = "DEATH_DT")
   private LocalDate deathDate;
@@ -463,12 +467,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.driverLicenseNumber = driverLicenseNumber;
   }
 
-  public Short getDriverLicenseStateCodeType() {
-    return driverLicenseStateCodeType;
+  public State getDriverLicenseState() {
+    return driverLicenseState;
   }
 
-  public void setDriverLicenseStateCodeType(Short driverLicenseStateCodeType) {
-    this.driverLicenseStateCodeType = driverLicenseStateCodeType;
+  public void setDriverLicenseState(State driverLicenseState) {
+    this.driverLicenseState = driverLicenseState;
   }
 
   public String getGenderCode() {
