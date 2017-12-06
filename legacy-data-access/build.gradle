@@ -10,19 +10,19 @@ dependencies {
     testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version: hamcrestVersion
 }
 
-//publishing {
-//    publications {
-//        library(MavenPublication) {
-//            from components.java
-//            groupId commonGroupId
-//            artifactId 'legacy-data-access'
-//            version version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
-//        }
-//    }
-//    repositories {
-//        mavenLocal()
-//        maven {
-//            url artifactoryRepo
-//        }
-//    }
-//}
+publishing {
+    publications {
+        library(MavenPublication) {
+            from components.java
+            groupId commonGroupId
+            artifactId 'legacy-data-access'
+            version version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
+        }
+    }
+    repositories {
+        mavenLocal()
+        maven {
+            url artifactoryRepo
+        }
+    }
+}
