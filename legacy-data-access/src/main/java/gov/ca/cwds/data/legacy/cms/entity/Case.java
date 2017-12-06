@@ -43,8 +43,8 @@ import org.hibernate.annotations.Type;
     query = "select assignment.theCase from gov.ca.cwds.data.legacy.cms.entity.CaseLoad cl"
         + " left join cl.caseAssignments assignment"
         + " where cl.caseLoadWeighting.fkstfperst = :" + Case.NQ_PARAM_STAFF_ID
-        + " and assignment.startDate > :" + Case.NQ_PARAM_ACTIVE_DATE
-        + " and (assignment.endDate is null or assignment.endDate < :" + Case.NQ_PARAM_ACTIVE_DATE + ")"
+        + " and assignment.startDate < :" + Case.NQ_PARAM_ACTIVE_DATE
+        + " and (assignment.endDate is null or assignment.endDate > :" + Case.NQ_PARAM_ACTIVE_DATE + ")"
 )
 @SuppressWarnings("squid:S3437")
 public class Case extends CmsPersistentObject {
