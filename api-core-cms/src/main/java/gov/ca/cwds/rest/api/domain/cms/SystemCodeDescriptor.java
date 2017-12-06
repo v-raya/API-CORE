@@ -30,6 +30,16 @@ public class SystemCodeDescriptor extends ApiObjectIdentity implements ApiTypedI
   }
 
   /**
+   * @param id - id
+   * @param description - description
+   */
+  public SystemCodeDescriptor(Short id, String description) {
+    super();
+    this.id = id;
+    this.description = description;
+  }
+
+  /**
    * Get id
    * 
    * @return The id
