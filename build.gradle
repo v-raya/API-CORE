@@ -125,19 +125,19 @@ dependencies {
     compile project(':api-core-abac')
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
+//publishing {
+//    publications {
+//        mavenJava(MavenPublication) {
+//            from components.java
+//        }
+//    }
 //    repositories {
 //        mavenLocal()
 //        maven {
 //            url artifactoryRepo
 //        }
 //    }
-}
+//}
 
 //==================================================================================================
 // Custom Groovy classes for Licence Reports.

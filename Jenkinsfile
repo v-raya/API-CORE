@@ -80,12 +80,12 @@ node ('tpt2-slave'){
 	      echo "!!!! PUSH RELEASE VERSION ${params.APP_VERSION}"
         rtGradle.deployer repo:'libs-release', server: serverArti
         rtGradle.deployer.deployArtifacts = true
-        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publish -Dversion=${APP_VERSION}'
+        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'clear publish -Dversion=${APP_VERSION}'
 	  } else {
 	      echo "!!!! PUSH SNAPSHOT VERSION"
 	      rtGradle.deployer repo:'libs-snapshot', server: serverArti
 	      rtGradle.deployer.deployArtifacts = true
-        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publish'
+        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'clear publish'
 	  }
 	  rtGradle.deployer.deployArtifacts = false
 	}
