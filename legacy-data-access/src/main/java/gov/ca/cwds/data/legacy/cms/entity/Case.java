@@ -12,6 +12,7 @@ import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -20,7 +21,10 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NotFound;
@@ -32,15 +36,27 @@ import org.hibernate.annotations.Type;
  *
  * @author CASE API Team
  */
-@SuppressWarnings("squid:S3437")
 @Entity
 @Table(name = "CASE_T")
+@NamedQuery(
+    name = Case.NQ_FIND_ACTIVE_BY_STAFF_ID,
+    query = "select assignment.theCase from gov.ca.cwds.data.legacy.cms.entity.CaseLoad cl"
+        + " left join cl.caseAssignments assignment"
+        + " where cl.caseLoadWeighting.fkstfperst = :" + Case.NQ_PARAM_STAFF_ID
+        + " and assignment.startDate > :" + Case.NQ_PARAM_ACTIVE_DATE
+        + " and (assignment.endDate is null or assignment.endDate < :" + Case.NQ_PARAM_ACTIVE_DATE + ")"
+)
+@SuppressWarnings("squid:S3437")
 public class Case extends CmsPersistentObject {
+
+  public static final String NQ_FIND_ACTIVE_BY_STAFF_ID = "gov.ca.cwds.data.legacy.cms.entity.Case.findByStaffIdAndActiveDate";
+  public static final String NQ_PARAM_STAFF_ID = "staffId";
+  public static final String NQ_PARAM_ACTIVE_DATE = "activeDate";
 
   /**
    * Default serialization.
    */
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 3310114537014283818L;
 
   @Id
   @Column(name = "IDENTIFIER", nullable = false, length = CMS_ID_LEN)
@@ -87,6 +103,7 @@ public class Case extends CmsPersistentObject {
   private String countySpecificCode;
 
   @Column(name = "NOTES_DOC")
+  @ColumnTransformer(read = "trim(NOTES_DOC)")
   private String drmsNotesDoc;
 
   @Column(name = "EMANCPN_DT")
@@ -140,6 +157,7 @@ public class Case extends CmsPersistentObject {
   private County limitedAccessCounty;
 
   @Column(name = "CASE_NM")
+  @ColumnTransformer(read = "trim(CASE_NM)")
   private String caseName;
 
   @Column(name = "NXT_TILPDT")
@@ -177,6 +195,11 @@ public class Case extends CmsPersistentObject {
   @Type(type = "yes_no")
   @Column(name = "TICKLE_T_B")
   private Boolean tickleIndVar;
+
+  @NotFound(action = NotFoundAction.IGNORE)
+  @OneToMany
+  @JoinColumn(name = "ESTBLSH_ID", referencedColumnName = "IDENTIFIER")
+  private List<CaseAssignment> assignments;
 
   @Override
   public Serializable getPrimaryKey() {
@@ -437,6 +460,18 @@ public class Case extends CmsPersistentObject {
 
   public void setTickleIndVar(Boolean tickleIndVar) {
     this.tickleIndVar = tickleIndVar;
+  }
+
+  public void setChildClient(ChildClient childClient) {
+    this.childClient = childClient;
+  }
+
+  public List<CaseAssignment> getAssignments() {
+    return assignments;
+  }
+
+  public void setAssignments(List<CaseAssignment> assignment) {
+    this.assignments = assignment;
   }
 
   @Override
