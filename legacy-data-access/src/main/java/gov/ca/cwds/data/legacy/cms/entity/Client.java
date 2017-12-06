@@ -4,6 +4,7 @@ import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.converter.NullableBooleanConverter;
 import gov.ca.cwds.data.legacy.cms.entity.enums.AdoptionStatus;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -22,6 +23,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -88,13 +90,18 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private String alienRegistrationNumber;
 
   @NotFound(action = NotFoundAction.IGNORE)
+  @NotNull
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
   @JoinColumn(name = "B_CNTRY_C", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
   private Country birthCountry;
 
-  @Column(name = "B_STATE_C", nullable = false)
-  private Short birthStateCodeType;
+  @NotFound(action = NotFoundAction.IGNORE)
+  @NotNull
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "B_STATE_C", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private State birthState;
 
   @Column(name = "BIRTH_CITY", nullable = false, length = 35)
   @ColumnTransformer(read = "trim(BIRTH_CITY)")
@@ -357,12 +364,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.birthFacilityName = birthFacilityName;
   }
 
-  public Short getBirthStateCodeType() {
-    return birthStateCodeType;
+  public State getBirthState() {
+    return birthState;
   }
 
-  public void setBirthStateCodeType(Short birthStateCodeType) {
-    this.birthStateCodeType = birthStateCodeType;
+  public void setBirthState(State birthState) {
+    this.birthState = birthState;
   }
 
 
