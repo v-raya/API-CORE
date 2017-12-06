@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.NamedQuery;
 
 /**
@@ -95,12 +96,15 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private String childClientIndicator;
 
   @Column(name = "COM_FST_NM", nullable = false, length = 20)
+  @ColumnTransformer(read = "trim(COM_FST_NM)")
   private String commonFirstName;
 
   @Column(name = "COM_LST_NM", nullable = false, length = 25)
+  @ColumnTransformer(read = "trim(COM_LST_NM)")
   private String commonLastName;
 
   @Column(name = "COM_MID_NM", nullable = false, length = 20)
+  @ColumnTransformer(read = "trim(COM_MID_NM)")
   private String commonMiddleName;
 
   @Column(name = "COMMNT_DSC", nullable = false, length = 120)
