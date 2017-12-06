@@ -20,33 +20,34 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.NamedQuery;
 
-/**
- * @author CWDS CALS API Team
- */
+/** @author CWDS CALS API Team */
 @NamedQuery(
-    name = "Client.find",
-    query = "SELECT c FROM Client c"
-        + " JOIN c.placementEpisodes pe"
-        + " JOIN pe.outOfHomePlacements ohp"
-        + " JOIN ohp.placementHome ph"
-        + " WHERE ph.licenseNo = :licenseNumber AND c.identifier = :childId"
+  name = "Client.find",
+  query =
+      "SELECT c FROM Client c"
+          + " JOIN c.placementEpisodes pe"
+          + " JOIN pe.outOfHomePlacements ohp"
+          + " JOIN ohp.placementHome ph"
+          + " WHERE ph.licenseNo = :licenseNumber AND c.identifier = :childId"
 )
 @NamedQuery(
-    name = "Client.findAll",
-    query = "SELECT c FROM Client c" +
-        " JOIN c.placementEpisodes pe" +
-        " JOIN pe.outOfHomePlacements ohp" +
-        " JOIN ohp.placementHome ph" +
-        " WHERE ph.licenseNo = :licenseNumber" +
-        " ORDER BY c.identifier "
+  name = "Client.findAll",
+  query =
+      "SELECT c FROM Client c"
+          + " JOIN c.placementEpisodes pe"
+          + " JOIN pe.outOfHomePlacements ohp"
+          + " JOIN ohp.placementHome ph"
+          + " WHERE ph.licenseNo = :licenseNumber"
+          + " ORDER BY c.identifier "
 )
 @NamedQuery(
-    name = "Client.findByFacilityId",
-    query = "SELECT c FROM Client c" +
-        " JOIN c.placementEpisodes pe" +
-        " JOIN pe.outOfHomePlacements ohp" +
-        " JOIN ohp.placementHome ph" +
-        " WHERE ph.id = :facilityId"
+  name = "Client.findByFacilityId",
+  query =
+      "SELECT c FROM Client c"
+          + " JOIN c.placementEpisodes pe"
+          + " JOIN pe.outOfHomePlacements ohp"
+          + " JOIN ohp.placementHome ph"
+          + " WHERE ph.id = :facilityId"
 )
 @SuppressWarnings({"squid:S3437", "squid:S2160"})
 @Entity
@@ -274,7 +275,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.identifier = identifier;
   }
 
-
   public String getAdoptionStatusCode() {
     return adoptionStatusCode;
   }
@@ -282,7 +282,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setAdoptionStatusCode(String adoptionStatusCode) {
     this.adoptionStatusCode = adoptionStatusCode;
   }
-
 
   public String getAlienRegistrationNumber() {
     return alienRegistrationNumber;
@@ -300,7 +299,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.birthDate = birthDate;
   }
 
-
   public String getBirthFacilityName() {
     return birthFacilityName;
   }
@@ -317,7 +315,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.birthStateCodeType = birthStateCodeType;
   }
 
-
   public Short getBirthCountryCodeType() {
     return birthCountryCodeType;
   }
@@ -325,7 +322,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setBirthCountryCodeType(Short birthCountryCodeType) {
     this.birthCountryCodeType = birthCountryCodeType;
   }
-
 
   public String getChildClientIndicator() {
     return childClientIndicator;
@@ -335,7 +331,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.childClientIndicator = childClientIndicator;
   }
 
-
   public String getCommonFirstName() {
     return commonFirstName;
   }
@@ -343,7 +338,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setCommonFirstName(String commonFirstName) {
     this.commonFirstName = commonFirstName;
   }
-
 
   public String getCommonLastName() {
     return commonLastName;
@@ -353,7 +347,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.commonLastName = commonLastName;
   }
 
-
   public String getCommonMiddleName() {
     return commonMiddleName;
   }
@@ -361,7 +354,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setCommonMiddleName(String commonMiddleName) {
     this.commonMiddleName = commonMiddleName;
   }
-
 
   public String getConfidentialityInEffectIndicator() {
     return confidentialityInEffectIndicator;
@@ -371,7 +363,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.confidentialityInEffectIndicator = confidentialityInEffectIndicator;
   }
 
-
   public LocalDate getConfidentialityActionDate() {
     return confidentialityActionDate;
   }
@@ -379,7 +370,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setConfidentialityActionDate(LocalDate confidentialityActionDate) {
     this.confidentialityActionDate = confidentialityActionDate;
   }
-
 
   public LocalDate getCreationDate() {
     return creationDate;
@@ -389,7 +379,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.creationDate = creationDate;
   }
 
-
   public LocalDate getDeathDate() {
     return deathDate;
   }
@@ -397,7 +386,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setDeathDate(LocalDate deathDate) {
     this.deathDate = deathDate;
   }
-
 
   public String getDeathReasonText() {
     return deathReasonText;
@@ -407,7 +395,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.deathReasonText = deathReasonText;
   }
 
-
   public String getDriverLicenseNumber() {
     return driverLicenseNumber;
   }
@@ -415,7 +402,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setDriverLicenseNumber(String driverLicenseNumber) {
     this.driverLicenseNumber = driverLicenseNumber;
   }
-
 
   public Short getDriverLicenseStateCodeType() {
     return driverLicenseStateCodeType;
@@ -425,7 +411,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.driverLicenseStateCodeType = driverLicenseStateCodeType;
   }
 
-
   public String getGenderCode() {
     return genderCode;
   }
@@ -433,7 +418,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setGenderCode(String genderCode) {
     this.genderCode = genderCode;
   }
-
 
   public Short getImmigrationCountryCodeType() {
     return immigrationCountryCodeType;
@@ -459,7 +443,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.incapacitatedParentCode = incapacitatedParentCode;
   }
 
-
   public String getLiterateCode() {
     return literateCode;
   }
@@ -467,7 +450,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setLiterateCode(String literateCode) {
     this.literateCode = literateCode;
   }
-
 
   public String getMaritalCohabitationHistoryIndicator() {
     return maritalCohabitationHistoryIndicator;
@@ -501,7 +483,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.namePrefixDescription = namePrefixDescription;
   }
 
-
   public Short getNameType() {
     return nameType;
   }
@@ -526,7 +507,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.primaryEthnicityType = primaryEthnicityType;
   }
 
-
   public Short getPrimaryLanguageType() {
     return primaryLanguageType;
   }
@@ -535,7 +515,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.primaryLanguageType = primaryLanguageType;
   }
 
-
   public Short getReligionType() {
     return religionType;
   }
@@ -543,7 +522,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setReligionType(Short religionType) {
     this.religionType = religionType;
   }
-
 
   public Short getSecondaryLanguageType() {
     return secondaryLanguageType;
@@ -561,7 +539,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.sensitivityIndicator = sensitivityIndicator;
   }
 
-
   public String getSensitiveHealthInfoOnFileIndicator() {
     return sensitiveHealthInfoOnFileIndicator;
   }
@@ -570,7 +547,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.sensitiveHealthInfoOnFileIndicator = sensitiveHealthInfoOnFileIndicator;
   }
 
-
   public String getSocialSecurityNumber() {
     return socialSecurityNumber;
   }
@@ -578,7 +554,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setSocialSecurityNumber(String socialSecurityNumber) {
     this.socialSecurityNumber = socialSecurityNumber;
   }
-
 
   public String getSocialSecurityNumberChangedCode() {
     return socialSecurityNumberChangedCode;
@@ -595,7 +570,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setSuffixTitleDescription(String suffixTitleDescription) {
     this.suffixTitleDescription = suffixTitleDescription;
   }
-
 
   public String getUnemployedParentCode() {
     return unemployedParentCode;
@@ -709,7 +683,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.birthCity = birthCity;
   }
 
-
   public String getHealthSummaryText() {
     return healthSummaryText;
   }
@@ -726,7 +699,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.motherParentalRightTermDate = motherParentalRightTermDate;
   }
 
-
   public LocalDate getFatherParentalRightTermDate() {
     return fatherParentalRightTermDate;
   }
@@ -734,7 +706,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setFatherParentalRightTermDate(LocalDate fatherParentalRightTermDate) {
     this.fatherParentalRightTermDate = fatherParentalRightTermDate;
   }
-
 
   public String getZippyCreatedIndicator() {
     return zippyCreatedIndicator;
@@ -752,7 +723,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.deathPlace = deathPlace;
   }
 
-
   public String getTribalMembershipVerifcationIndicator() {
     return tribalMembershipVerifcationIndicator;
   }
@@ -769,7 +739,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.tribalAncestryClientIndicator = tribalAncestryClientIndicator;
   }
 
-
   public String getSoc158SealedClientIndicator() {
     return soc158SealedClientIndicator;
   }
@@ -778,7 +747,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.soc158SealedClientIndicator = soc158SealedClientIndicator;
   }
 
-
   public String getDeathDateVerifiedIndicator() {
     return deathDateVerifiedIndicator;
   }
@@ -786,7 +754,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setDeathDateVerifiedIndicator(String deathDateVerifiedIndicator) {
     this.deathDateVerifiedIndicator = deathDateVerifiedIndicator;
   }
-
 
   public String getEmailAddress() {
     return emailAddress;
@@ -812,7 +779,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.ethnicityUnableToDetermineReasonCode = ethnicityUnableToDetermineReasonCode;
   }
 
-
   public String getHispanicUnableToDetermineReasonCode() {
     return hispanicUnableToDetermineReasonCode;
   }
@@ -820,7 +786,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setHispanicUnableToDetermineReasonCode(String hispanicUnableToDetermineReasonCode) {
     this.hispanicUnableToDetermineReasonCode = hispanicUnableToDetermineReasonCode;
   }
-
 
   public String getSoc158PlacementCode() {
     return soc158PlacementCode;
@@ -844,8 +809,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     return getIdentifier();
   }
 
-
-
   @Override
   public Set<PlacementEpisode> getPlacementEpisodes() {
     return placementEpisodes;
@@ -854,5 +817,4 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setPlacementEpisodes(Set<PlacementEpisode> placementEpisodes) {
     this.placementEpisodes = placementEpisodes;
   }
-
 }

@@ -15,11 +15,20 @@ import org.hibernate.annotations.Type;
  */
 @Entity
 @Table(name = "REFERL_T")
-
+@NamedQuery(
+    name = Referral.FIND_ACTIVE_BY_STAFF_ID,
+    query = "select assignment.referral from gov.ca.cwds.data.legacy.cms.entity.CaseLoad cl"
+        + " left join cl.referralAssignments assignment"
+        + " where cl.caseLoadWeighting.fkstfperst = :" + Referral.PARAM_STAFF_ID
+        + " and assignment.startDate > :" + Referral.PARAM_ACTIVE_DATE
+        + " and (assignment.endDate is null or assignment.endDate < :" + Referral.PARAM_ACTIVE_DATE + ")"
+)
+@SuppressWarnings("squid:S3437")
 public class Referral extends CmsPersistentObject {
 
-  public static final String FIND_ACTIVE_BY_STAFF_ID = "findActiveReferralsByStaffId";
-  //public static final String
+  public static final String FIND_ACTIVE_BY_STAFF_ID = "Referral.findActiveReferralsByStaffId";
+  public static final String PARAM_STAFF_ID = "staffId";
+  public static final String PARAM_ACTIVE_DATE = "activeDate";
 
   @Id
   @Column(name = "IDENTIFIER", length = CMS_ID_LEN)

@@ -27,6 +27,10 @@ public class CaseLoad extends BaseCaseLoad {
   @JoinColumn(name = "FKCASE_LDT")
   private List<CaseAssignment> caseAssignments;
 
+  @OneToMany(fetch = FetchType.LAZY)
+  @JoinColumn(name = "FKCASE_LDT")
+  private List<ReferralAssignment> referralAssignments;
+
   @NotFound(action = NotFoundAction.IGNORE)
   @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "IDENTIFIER", referencedColumnName = "FKCASE_LDT")
@@ -56,5 +60,14 @@ public class CaseLoad extends BaseCaseLoad {
   public void setCaseLoadWeighting(
       CaseLoadWeighting caseLoadWeightings) {
     this.caseLoadWeighting = caseLoadWeightings;
+  }
+
+  public List<ReferralAssignment> getReferralAssignments() {
+    return referralAssignments;
+  }
+
+  public void setReferralAssignments(
+      List<ReferralAssignment> referralAssignments) {
+    this.referralAssignments = referralAssignments;
   }
 }

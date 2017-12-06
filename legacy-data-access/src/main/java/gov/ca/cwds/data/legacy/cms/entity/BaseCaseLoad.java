@@ -181,7 +181,6 @@ public abstract class BaseCaseLoad extends CmsPersistentObject {
 
     return new EqualsBuilder()
         .appendSuper(super.equals(o))
-        .append(id, that.id)
         .append(assignmentDeskCaseLoad, that.assignmentDeskCaseLoad)
         .append(ceilingNumber, that.ceilingNumber)
         .append(endDate, that.endDate)
@@ -199,7 +198,6 @@ public abstract class BaseCaseLoad extends CmsPersistentObject {
   public int hashCode() {
     return new HashCodeBuilder(17, 37)
         .appendSuper(super.hashCode())
-        .append(id)
         .append(assignmentDeskCaseLoad)
         .append(ceilingNumber)
         .append(endDate)
