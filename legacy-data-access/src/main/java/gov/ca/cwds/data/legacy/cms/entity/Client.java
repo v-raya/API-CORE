@@ -331,8 +331,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @JoinColumn(name = "RLGN_TPC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
   private Religion religionType;
 
-  @Column(name = "S_LANG_TC", nullable = false)
-  private Short secondaryLanguageType;
+  @NotNull
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "S_LANG_TC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private Language secondaryLanguage;
 
   @Column(name = "SENSTV_IND", nullable = false, length = 1)
   private String sensitivityIndicator;
@@ -635,12 +639,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.religionType = religionType;
   }
 
-  public Short getSecondaryLanguageType() {
-    return secondaryLanguageType;
+  public Language getSecondaryLanguage() {
+    return secondaryLanguage;
   }
 
-  public void setSecondaryLanguageType(Short secondaryLanguageType) {
-    this.secondaryLanguageType = secondaryLanguageType;
+  public void setSecondaryLanguage(Language secondaryLanguage) {
+    this.secondaryLanguage = secondaryLanguage;
   }
 
   public String getSensitivityIndicator() {
