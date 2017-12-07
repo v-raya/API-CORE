@@ -12,6 +12,7 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.MilitaryStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.UnableToDetermineReason;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ImmigrationStatus;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.MaritalStatus;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
@@ -266,10 +267,14 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
 
   @Column(name = "MILT_STACD", nullable = false, length = 1)
   @Convert(converter = MilitaryStatus.MilitaryStatusConverter.class)
-  private MilitaryStatus militaryStatusCode;
+  private MilitaryStatus militaryStatus;
 
-  @Column(name = "MRTL_STC", nullable = false)
-  private Short maritalStatusType;
+  @NotNull
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "MRTL_STC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private MaritalStatus maritalStatus;
 
   @Column(name = "MTERM_DT")
   private LocalDate motherParentalRightTermDate;
@@ -546,20 +551,20 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.maritalCohabitationHistoryIndicator = maritalCohabitationHistoryIndicator;
   }
 
-  public Short getMaritalStatusType() {
-    return maritalStatusType;
+  public MaritalStatus getMaritalStatus() {
+    return maritalStatus;
   }
 
-  public void setMaritalStatusType(Short maritalStatusType) {
-    this.maritalStatusType = maritalStatusType;
+  public void setMaritalStatus(MaritalStatus maritalStatus) {
+    this.maritalStatus = maritalStatus;
   }
 
-  public MilitaryStatus getMilitaryStatusCode() {
-    return militaryStatusCode;
+  public MilitaryStatus getMilitaryStatus() {
+    return militaryStatus;
   }
 
-  public void setMilitaryStatusCode(MilitaryStatus militaryStatusCode) {
-    this.militaryStatusCode = militaryStatusCode;
+  public void setMilitaryStatus(MilitaryStatus militaryStatus) {
+    this.militaryStatus = militaryStatus;
   }
 
   public String getNamePrefixDescription() {
