@@ -18,14 +18,16 @@ import gov.ca.cwds.cms.data.access.dao.PlacementHomeDao;
 import gov.ca.cwds.cms.data.access.dao.PlacementHomeProfileDao;
 import gov.ca.cwds.cms.data.access.dao.PlacementHomeUcDao;
 import gov.ca.cwds.cms.data.access.dao.SsaName3Dao;
-import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
-import gov.ca.cwds.cms.data.access.mapper.ExternalInterfaceMapper;
 import gov.ca.cwds.cms.data.access.dto.OtherAdultInHomeEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.OtherChildInHomeEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
+import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
+import gov.ca.cwds.cms.data.access.mapper.ExternalInterfaceMapper;
+import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.PlacementHomeService;
 import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
+import gov.ca.cwds.cms.data.access.service.rules.PlacementHomeDroolsConfiguration;
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
 import gov.ca.cwds.data.legacy.cms.entity.BackgroundCheck;
@@ -40,11 +42,15 @@ import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeProfile;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeUc;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
+import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.drools.DroolsService;
+import gov.ca.cwds.rest.exception.BusinessValidationException;
+import gov.ca.cwds.rest.exception.IssueDetails;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -52,9 +58,6 @@ import org.apache.commons.lang3.StringUtils;
  */
 
 public class PlacementHomeServiceImpl implements PlacementHomeService {
-
-  private String RULES_SESSION = "placement-home-session";
-  private String RULES_AGENDA = "placement-home-agenda";
 
   @Inject
   protected DroolsService droolsService;
@@ -105,45 +108,38 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
   @Inject
   private SsaName3Dao ssaName3Dao;
 
-// Commented coz currently does not work properly
-/*
   @Override
-  public void runBusinessValidation(PlacementHome entity) {
-    DroolsConfiguration configuration = new DroolsConfiguration<PlacementHome>() {
-      @Override
-      public String getAgendaGroup() {
-        return RULES_AGENDA;
-      }
+  public void runBusinessValidation(PlacementHome entity) throws DroolsException {
 
-      @Override
-      public String getDroolsSessionName() {
-        return RULES_SESSION;
-      }
-    };
-    Set<IssueDetails> detailsList = droolsService.validate(entity, configuration);
+    Set<IssueDetails> detailsList = droolsService
+        .validate(entity, PlacementHomeDroolsConfiguration.INSTANCE);
     if (!detailsList.isEmpty()) {
       throw new BusinessValidationException(detailsList);
     }
   }
-*/
 
   @Override
-  public PlacementHome create(PlacementHomeEntityAwareDTO parameterObject) {
-    final PlacementHome placementHome = parameterObject.getEntity();
-    validateParameters(parameterObject);
-    runBusinessValidation(placementHome);
-    createPlacementHome(parameterObject);
-    createPlacementHomeUc(parameterObject);
-    createCountyOwnership(parameterObject);
-    createExternalInterface();
-    createBackgroundCheck(parameterObject);
-    createEmergencyContactDetail(parameterObject);
-    createPlacementHomeProfile(parameterObject);
-    createSubstituteCareProviders(parameterObject);
-    createOtherAdultsInHome(parameterObject);
-    createOtherChildrenInHome(parameterObject);
-    prepareAddressPhoneticSearchKeywords(parameterObject.getEntity());
-    return parameterObject.getEntity();
+  public PlacementHome create(PlacementHomeEntityAwareDTO parameterObject)
+      throws DataAccessServicesException {
+    try {
+      final PlacementHome placementHome = parameterObject.getEntity();
+      validateParameters(parameterObject);
+      runBusinessValidation(placementHome);
+      createPlacementHome(parameterObject);
+      createPlacementHomeUc(parameterObject);
+      createCountyOwnership(parameterObject);
+      createExternalInterface();
+      createBackgroundCheck(parameterObject);
+      createEmergencyContactDetail(parameterObject);
+      createPlacementHomeProfile(parameterObject);
+      createSubstituteCareProviders(parameterObject);
+      createOtherAdultsInHome(parameterObject);
+      createOtherChildrenInHome(parameterObject);
+      prepareAddressPhoneticSearchKeywords(parameterObject.getEntity());
+      return parameterObject.getEntity();
+    } catch (DroolsException e) {
+      throw new DataAccessServicesException(e);
+    }
   }
 
   private void createPlacementHome(PlacementHomeEntityAwareDTO parameterObject) {
@@ -239,7 +235,8 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
     }
   }
 
-  private void createSubstituteCareProviders(PlacementHomeEntityAwareDTO parameterObject) {
+  private void createSubstituteCareProviders(PlacementHomeEntityAwareDTO parameterObject)
+      throws DataAccessServicesException {
     final PlacementHome placementHome = parameterObject.getEntity();
     for (SCPEntityAwareDTO scpParameterObject: parameterObject.getScpParameterObjects()) {
       scpParameterObject.setPlacementHomeId(placementHome.getIdentifier());

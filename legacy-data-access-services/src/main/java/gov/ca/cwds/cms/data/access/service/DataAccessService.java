@@ -2,6 +2,7 @@ package gov.ca.cwds.cms.data.access.service;
 
 import gov.ca.cwds.cms.data.access.dto.BaseEntityAwareDTO;
 import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.drools.DroolsException;
 
 /**
  * @author CWDS CALS API Team
@@ -9,9 +10,9 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 
 public interface DataAccessService<T extends PersistentObject, P extends BaseEntityAwareDTO<T>> {
 
-  T create(P entityAwareDTO);
+  T create(P entityAwareDTO) throws DataAccessServicesException;
 
-  default void runBusinessValidation(T entity) {
+  default void runBusinessValidation(T entity) throws DroolsException {
     //Empty by default
   }
 
