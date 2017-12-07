@@ -4,6 +4,7 @@ import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.converter.NullableBooleanConverter;
 import gov.ca.cwds.data.legacy.cms.entity.enums.AdoptionStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.DateOfBirthStatus;
+import gov.ca.cwds.data.legacy.cms.entity.enums.Gender;
 import gov.ca.cwds.data.legacy.cms.entity.enums.UnableToDetermineReason;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
@@ -208,7 +209,8 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private String clientIndexNumber;
 
   @Column(name = "GENDER_CD", nullable = false, length = 1)
-  private String genderCode;
+  @Convert(converter = Gender.GenderConverter.class)
+  private Gender gender;
 
   @Type(type = "yes_no")
   @Column(name = "HCARE_IND", nullable = false, length = 1)
@@ -480,12 +482,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.driverLicenseState = driverLicenseState;
   }
 
-  public String getGenderCode() {
-    return genderCode;
+  public Gender getGender() {
+    return gender;
   }
 
-  public void setGenderCode(String genderCode) {
-    this.genderCode = genderCode;
+  public void setGender(Gender gender) {
+    this.gender = gender;
   }
 
   public Short getImmigrationCountryCodeType() {
