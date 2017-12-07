@@ -16,6 +16,7 @@ import gov.ca.cwds.data.legacy.cms.entity.syscodes.ImmigrationStatus;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Language;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.MaritalStatus;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.Religion;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
@@ -323,8 +324,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Column(name = "PREVCA_IND", nullable = false, length = 1)
   private boolean previousCaChildrenServiceIndicator;
 
-  @Column(name = "RLGN_TPC", nullable = false)
-  private Short religionType;
+  @NotNull
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "RLGN_TPC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private Religion religionType;
 
   @Column(name = "S_LANG_TC", nullable = false)
   private Short secondaryLanguageType;
@@ -622,11 +627,11 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.primaryLanguage = primaryLanguage;
   }
 
-  public Short getReligionType() {
+  public Religion getReligionType() {
     return religionType;
   }
 
-  public void setReligionType(Short religionType) {
+  public void setReligionType(Religion religionType) {
     this.religionType = religionType;
   }
 
