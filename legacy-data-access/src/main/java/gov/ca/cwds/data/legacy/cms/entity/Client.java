@@ -17,7 +17,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.NamedQuery;
+import org.hibernate.annotations.Type;
 
 /**
  * @author CWDS CALS API Team
@@ -64,13 +67,14 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @OrderBy("removalDt DESC")
   private Set<PlacementEpisode> placementEpisodes = new HashSet<>();
 
-  @Column(name = "ADJDEL_IND", nullable = true, length = 1)
+  @Column(name = "ADJDEL_IND", length = 1)
   private String adjudicatedDelinquentIndicator;
 
   @Column(name = "ADPTN_STCD", nullable = false, length = 1)
   private String adoptionStatusCode;
 
   @Column(name = "ALN_REG_NO", nullable = false, length = 12)
+  @ColumnTransformer(read = "trim(ALN_REG_NO)")
   private String alienRegistrationNumber;
 
   @Column(name = "B_CNTRY_C", nullable = false)
@@ -80,96 +84,116 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private Short birthStateCodeType;
 
   @Column(name = "BIRTH_CITY", nullable = false, length = 35)
+  @ColumnTransformer(read = "trim(BIRTH_CITY)")
   private String birthCity;
 
-  @Column(name = "BIRTH_DT", nullable = true)
+  @Column(name = "BIRTH_DT")
   private LocalDate birthDate;
 
+  @Type(type = "yes_no")
   @Column(name = "BP_VER_IND", nullable = false, length = 1)
-  private String birthplaceVerifiedIndicator;
+  private Boolean birthplaceVerifiedIndicator;
 
   @Column(name = "BR_FAC_NM", nullable = false, length = 35)
+  @ColumnTransformer(read = "trim(BR_FAC_NM)")
   private String birthFacilityName;
 
+  @Type(type = "yes_no")
   @Column(name = "CHLD_CLT_B", nullable = false, length = 1)
-  private String childClientIndicator;
+  private Boolean childClientIndicator;
 
   @Column(name = "COM_FST_NM", nullable = false, length = 20)
+  @ColumnTransformer(read = "trim(COM_FST_NM)")
   private String commonFirstName;
 
   @Column(name = "COM_LST_NM", nullable = false, length = 25)
+  @ColumnTransformer(read = "trim(COM_LST_NM)")
   private String commonLastName;
 
   @Column(name = "COM_MID_NM", nullable = false, length = 20)
+  @ColumnTransformer(read = "trim(COM_MID_NM)")
   private String commonMiddleName;
 
   @Column(name = "COMMNT_DSC", nullable = false, length = 120)
+  @ColumnTransformer(read = "trim(COMMNT_DSC)")
   private String commentDescription;
 
-  @Column(name = "CONF_ACTDT", nullable = true)
+  @Column(name = "CONF_ACTDT")
   private LocalDate confidentialityActionDate;
 
+  @Type(type = "yes_no")
   @Column(name = "CONF_EFIND", nullable = false, length = 1)
-  private String confidentialityInEffectIndicator;
+  private Boolean confidentialityInEffectIndicator;
 
   @Column(name = "COTH_DESC", nullable = false, length = 25)
+  @ColumnTransformer(read = "trim(COTH_DESC)")
   private String currentlyOtherDescription;
 
   @Column(name = "CREATN_DT", nullable = false)
   private LocalDate creationDate;
 
+  @Type(type = "yes_no")
   @Column(name = "CURRCA_IND", nullable = false, length = 1)
-  private String currentCaChildrenServiceIndicator;
+  private Boolean currentCaChildrenServiceIndicator;
 
+  @Type(type = "yes_no")
   @Column(name = "CURREG_IND", nullable = false, length = 1)
-  private String currentlyRegionalCenterIndicator;
+  private Boolean currentlyRegionalCenterIndicator;
 
   @Column(name = "D_STATE_C", nullable = false)
   private Short driverLicenseStateCodeType;
 
-  @Column(name = "DEATH_DT", nullable = true)
+  @Column(name = "DEATH_DT")
   private LocalDate deathDate;
 
-  @Column(name = "DEATH_PLC", nullable = true, length = 35)
+  @Column(name = "DEATH_PLC", length = 35)
+  @ColumnTransformer(read = "trim(DEATH_PLC)")
   private String deathPlace;
 
   @Column(name = "DRV_LIC_NO", nullable = false, length = 20)
+  @ColumnTransformer(read = "trim(DRV_LIC_NO)")
   private String driverLicenseNumber;
 
+  @Type(type = "yes_no")
   @Column(name = "DTH_DT_IND", nullable = false, length = 1)
-  private String deathDateVerifiedIndicator;
+  private Boolean deathDateVerifiedIndicator;
 
-  @Column(name = "DTH_RN_TXT", nullable = true, length = 10)
+  @Column(name = "DTH_RN_TXT", length = 10)
+  @ColumnTransformer(read = "trim(DTH_RN_TXT)")
   private String deathReasonText;
 
-  @Column(name = "EMAIL_ADDR", nullable = true, length = 50)
+  @Column(name = "EMAIL_ADDR", length = 50)
+  @ColumnTransformer(read = "trim(EMAIL_ADDR)")
   private String emailAddress;
 
   @Column(name = "EST_DOB_CD", nullable = false, length = 1)
   private String estimatedDobCode;
 
-  @Column(name = "ETH_UD_CD", nullable = true, length = 1)
+  @Column(name = "ETH_UD_CD", length = 1)
   private String ethnicityUnableToDetermineReasonCode;
 
-  @Column(name = "FTERM_DT", nullable = true)
+  @Column(name = "FTERM_DT")
   private LocalDate fatherParentalRightTermDate;
 
-  @Column(name = "CL_INDX_NO", nullable = true, length = 12)
+  @Column(name = "CL_INDX_NO", length = 12)
+  @ColumnTransformer(read = "trim(CL_INDX_NO)")
   private String clientIndexNumber;
 
   @Column(name = "GENDER_CD", nullable = false, length = 1)
   private String genderCode;
 
+  @Type(type = "yes_no")
   @Column(name = "HCARE_IND", nullable = false, length = 1)
-  private String individualHealthCarePlanIndicator;
+  private Boolean individualHealthCarePlanIndicator;
 
-  @Column(name = "HEALTH_TXT", nullable = true, length = 10)
+  @Column(name = "HEALTH_TXT", length = 10)
+  @ColumnTransformer(read = "trim(HEALTH_TXT)")
   private String healthSummaryText;
 
   @Column(name = "HISP_CD", nullable = false, length = 1)
   private String hispanicOriginCode;
 
-  @Column(name = "HISP_UD_CD", nullable = true, length = 1)
+  @Column(name = "HISP_UD_CD", length = 1)
   private String hispanicUnableToDetermineReasonCode;
 
   @Column(name = "I_CNTRY_C", nullable = false)
@@ -179,16 +203,20 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private Short immigrationStatusType;
 
   @Column(name = "INCAPC_CD", nullable = false, length = 2)
+  @ColumnTransformer(read = "trim(INCAPC_CD)")
   private String incapacitatedParentCode;
 
+  @Type(type = "yes_no")
   @Column(name = "LIMIT_IND", nullable = false, length = 1)
-  private String limitationOnScpHealthIndicator;
+  private Boolean limitationOnScpHealthIndicator;
 
   @Column(name = "LITRATE_CD", nullable = false, length = 1)
+  @ColumnTransformer(read = "trim(LITRATE_CD)")
   private String literateCode;
 
+  @Type(type = "yes_no")
   @Column(name = "MAR_HIST_B", nullable = false, length = 1)
-  private String maritalCohabitationHistoryIndicator;
+  private Boolean maritalCohabitationHistoryIndicator;
 
   @Column(name = "MILT_STACD", nullable = false, length = 1)
   private String militaryStatusCode;
@@ -196,17 +224,19 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Column(name = "MRTL_STC", nullable = false)
   private Short maritalStatusType;
 
-  @Column(name = "MTERM_DT", nullable = true)
+  @Column(name = "MTERM_DT")
   private LocalDate motherParentalRightTermDate;
 
   @Column(name = "NAME_TPC", nullable = false)
   private Short nameType;
 
   @Column(name = "NMPRFX_DSC", nullable = false, length = 6)
+  @ColumnTransformer(read = "trim(NMPRFX_DSC)")
   private String namePrefixDescription;
 
+  @Type(type = "yes_no")
   @Column(name = "OUTWRT_IND", nullable = false, length = 1)
-  private String outstandingWarrantIndicator;
+  private Boolean outstandingWarrantIndicator;
 
   @Column(name = "P_ETHNCTYC", nullable = false)
   private Short primaryEthnicityType;
@@ -215,13 +245,16 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private Short primaryLanguageType;
 
   @Column(name = "POTH_DESC", nullable = false, length = 25)
+  @ColumnTransformer(read = "trim(POTH_DESC)")
   private String previousOtherDescription;
 
+  @Type(type = "yes_no")
   @Column(name = "PREREG_IND", nullable = false, length = 1)
-  private String previousRegionalCenterIndicator;
+  private Boolean previousRegionalCenterIndicator;
 
+  @Type(type = "yes_no")
   @Column(name = "PREVCA_IND", nullable = false, length = 1)
-  private String previousCaChildrenServiceIndicator;
+  private Boolean previousCaChildrenServiceIndicator;
 
   @Column(name = "RLGN_TPC", nullable = false)
   private Short religionType;
@@ -232,35 +265,43 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Column(name = "SENSTV_IND", nullable = false, length = 1)
   private String sensitivityIndicator;
 
+  @Type(type = "yes_no")
   @Column(name = "SNTV_HLIND", nullable = false, length = 1)
-  private String sensitiveHealthInfoOnFileIndicator;
+  private Boolean sensitiveHealthInfoOnFileIndicator;
 
+  @Type(type = "yes_no")
   @Column(name = "SOC158_IND", nullable = false, length = 1)
-  private String soc158SealedClientIndicator;
+  private Boolean soc158SealedClientIndicator;
 
   @Column(name = "SOCPLC_CD", nullable = false, length = 1)
   private String soc158PlacementCode;
 
   @Column(name = "SS_NO", nullable = false, length = 9)
+  @ColumnTransformer(read = "trim(SS_NO)")
   private String socialSecurityNumber;
 
   @Column(name = "SSN_CHG_CD", nullable = false, length = 1)
   private String socialSecurityNumberChangedCode;
 
   @Column(name = "SUFX_TLDSC", nullable = false, length = 4)
+  @ColumnTransformer(read = "trim(SUFX_TLDSC)")
   private String suffixTitleDescription;
 
+  @Type(type = "yes_no")
   @Column(name = "TR_MBVRT_B", nullable = false, length = 1)
-  private String tribalMembershipVerifcationIndicator;
+  private Boolean tribalMembershipVerifcationIndicator;
 
+  @Type(type = "yes_no")
   @Column(name = "TRBA_CLT_B", nullable = false, length = 1)
-  private String tribalAncestryClientIndicator;
+  private Boolean tribalAncestryClientIndicator;
 
   @Column(name = "UNEMPLY_CD", nullable = false, length = 2)
+  @ColumnTransformer(read = "trim(UNEMPLY_CD)")
   private String unemployedParentCode;
 
+  @Type(type = "yes_no")
   @Column(name = "ZIPPY_IND", nullable = false, length = 1)
-  private String zippyCreatedIndicator;
+  private Boolean zippyCreatedIndicator;
 
   public String getIdentifier() {
     return identifier;
@@ -270,7 +311,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.identifier = identifier;
   }
 
-
   public String getAdoptionStatusCode() {
     return adoptionStatusCode;
   }
@@ -278,7 +318,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setAdoptionStatusCode(String adoptionStatusCode) {
     this.adoptionStatusCode = adoptionStatusCode;
   }
-
 
   public String getAlienRegistrationNumber() {
     return alienRegistrationNumber;
@@ -322,15 +361,13 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.birthCountryCodeType = birthCountryCodeType;
   }
 
-
-  public String getChildClientIndicator() {
+  public Boolean getChildClientIndicator() {
     return childClientIndicator;
   }
 
-  public void setChildClientIndicator(String childClientIndicator) {
+  public void setChildClientIndicator(Boolean childClientIndicator) {
     this.childClientIndicator = childClientIndicator;
   }
-
 
   public String getCommonFirstName() {
     return commonFirstName;
@@ -349,7 +386,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.commonLastName = commonLastName;
   }
 
-
   public String getCommonMiddleName() {
     return commonMiddleName;
   }
@@ -358,15 +394,13 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.commonMiddleName = commonMiddleName;
   }
 
-
-  public String getConfidentialityInEffectIndicator() {
+  public Boolean getConfidentialityInEffectIndicator() {
     return confidentialityInEffectIndicator;
   }
 
-  public void setConfidentialityInEffectIndicator(String confidentialityInEffectIndicator) {
+  public void setConfidentialityInEffectIndicator(Boolean confidentialityInEffectIndicator) {
     this.confidentialityInEffectIndicator = confidentialityInEffectIndicator;
   }
-
 
   public LocalDate getConfidentialityActionDate() {
     return confidentialityActionDate;
@@ -376,7 +410,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.confidentialityActionDate = confidentialityActionDate;
   }
 
-
   public LocalDate getCreationDate() {
     return creationDate;
   }
@@ -384,7 +417,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setCreationDate(LocalDate creationDate) {
     this.creationDate = creationDate;
   }
-
 
   public LocalDate getDeathDate() {
     return deathDate;
@@ -403,7 +435,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.deathReasonText = deathReasonText;
   }
 
-
   public String getDriverLicenseNumber() {
     return driverLicenseNumber;
   }
@@ -411,7 +442,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setDriverLicenseNumber(String driverLicenseNumber) {
     this.driverLicenseNumber = driverLicenseNumber;
   }
-
 
   public Short getDriverLicenseStateCodeType() {
     return driverLicenseStateCodeType;
@@ -421,7 +451,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.driverLicenseStateCodeType = driverLicenseStateCodeType;
   }
 
-
   public String getGenderCode() {
     return genderCode;
   }
@@ -429,7 +458,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setGenderCode(String genderCode) {
     this.genderCode = genderCode;
   }
-
 
   public Short getImmigrationCountryCodeType() {
     return immigrationCountryCodeType;
@@ -455,7 +483,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.incapacitatedParentCode = incapacitatedParentCode;
   }
 
-
   public String getLiterateCode() {
     return literateCode;
   }
@@ -464,12 +491,11 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.literateCode = literateCode;
   }
 
-
-  public String getMaritalCohabitationHistoryIndicator() {
+  public Boolean getMaritalCohabitationHistoryIndicator() {
     return maritalCohabitationHistoryIndicator;
   }
 
-  public void setMaritalCohabitationHistoryIndicator(String maritalCohabitationHistoryIndicator) {
+  public void setMaritalCohabitationHistoryIndicator(Boolean maritalCohabitationHistoryIndicator) {
     this.maritalCohabitationHistoryIndicator = maritalCohabitationHistoryIndicator;
   }
 
@@ -497,7 +523,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.namePrefixDescription = namePrefixDescription;
   }
 
-
   public Short getNameType() {
     return nameType;
   }
@@ -506,11 +531,11 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.nameType = nameType;
   }
 
-  public String getOutstandingWarrantIndicator() {
+  public Boolean getOutstandingWarrantIndicator() {
     return outstandingWarrantIndicator;
   }
 
-  public void setOutstandingWarrantIndicator(String outstandingWarrantIndicator) {
+  public void setOutstandingWarrantIndicator(Boolean outstandingWarrantIndicator) {
     this.outstandingWarrantIndicator = outstandingWarrantIndicator;
   }
 
@@ -522,7 +547,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.primaryEthnicityType = primaryEthnicityType;
   }
 
-
   public Short getPrimaryLanguageType() {
     return primaryLanguageType;
   }
@@ -531,7 +555,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.primaryLanguageType = primaryLanguageType;
   }
 
-
   public Short getReligionType() {
     return religionType;
   }
@@ -539,7 +562,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setReligionType(Short religionType) {
     this.religionType = religionType;
   }
-
 
   public Short getSecondaryLanguageType() {
     return secondaryLanguageType;
@@ -557,15 +579,13 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.sensitivityIndicator = sensitivityIndicator;
   }
 
-
-  public String getSensitiveHealthInfoOnFileIndicator() {
+  public Boolean getSensitiveHealthInfoOnFileIndicator() {
     return sensitiveHealthInfoOnFileIndicator;
   }
 
-  public void setSensitiveHealthInfoOnFileIndicator(String sensitiveHealthInfoOnFileIndicator) {
+  public void setSensitiveHealthInfoOnFileIndicator(Boolean sensitiveHealthInfoOnFileIndicator) {
     this.sensitiveHealthInfoOnFileIndicator = sensitiveHealthInfoOnFileIndicator;
   }
-
 
   public String getSocialSecurityNumber() {
     return socialSecurityNumber;
@@ -574,7 +594,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setSocialSecurityNumber(String socialSecurityNumber) {
     this.socialSecurityNumber = socialSecurityNumber;
   }
-
 
   public String getSocialSecurityNumberChangedCode() {
     return socialSecurityNumberChangedCode;
@@ -591,7 +610,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setSuffixTitleDescription(String suffixTitleDescription) {
     this.suffixTitleDescription = suffixTitleDescription;
   }
-
 
   public String getUnemployedParentCode() {
     return unemployedParentCode;
@@ -617,11 +635,11 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.estimatedDobCode = estimatedDobCode;
   }
 
-  public String getBirthplaceVerifiedIndicator() {
+  public Boolean getBirthplaceVerifiedIndicator() {
     return birthplaceVerifiedIndicator;
   }
 
-  public void setBirthplaceVerifiedIndicator(String birthplaceVerifiedIndicator) {
+  public void setBirthplaceVerifiedIndicator(Boolean birthplaceVerifiedIndicator) {
     this.birthplaceVerifiedIndicator = birthplaceVerifiedIndicator;
   }
 
@@ -633,19 +651,19 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.hispanicOriginCode = hispanicOriginCode;
   }
 
-  public String getCurrentCaChildrenServiceIndicator() {
+  public Boolean getCurrentCaChildrenServiceIndicator() {
     return currentCaChildrenServiceIndicator;
   }
 
-  public void setCurrentCaChildrenServiceIndicator(String currentCaChildrenServiceIndicator) {
+  public void setCurrentCaChildrenServiceIndicator(Boolean currentCaChildrenServiceIndicator) {
     this.currentCaChildrenServiceIndicator = currentCaChildrenServiceIndicator;
   }
 
-  public String getCurrentlyRegionalCenterIndicator() {
+  public Boolean getCurrentlyRegionalCenterIndicator() {
     return currentlyRegionalCenterIndicator;
   }
 
-  public void setCurrentlyRegionalCenterIndicator(String currentlyRegionalCenterIndicator) {
+  public void setCurrentlyRegionalCenterIndicator(Boolean currentlyRegionalCenterIndicator) {
     this.currentlyRegionalCenterIndicator = currentlyRegionalCenterIndicator;
   }
 
@@ -657,19 +675,19 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.currentlyOtherDescription = currentlyOtherDescription;
   }
 
-  public String getPreviousCaChildrenServiceIndicator() {
+  public Boolean getPreviousCaChildrenServiceIndicator() {
     return previousCaChildrenServiceIndicator;
   }
 
-  public void setPreviousCaChildrenServiceIndicator(String previousCaChildrenServiceIndicator) {
+  public void setPreviousCaChildrenServiceIndicator(Boolean previousCaChildrenServiceIndicator) {
     this.previousCaChildrenServiceIndicator = previousCaChildrenServiceIndicator;
   }
 
-  public String getPreviousRegionalCenterIndicator() {
+  public Boolean getPreviousRegionalCenterIndicator() {
     return previousRegionalCenterIndicator;
   }
 
-  public void setPreviousRegionalCenterIndicator(String previousRegionalCenterIndicator) {
+  public void setPreviousRegionalCenterIndicator(Boolean previousRegionalCenterIndicator) {
     this.previousRegionalCenterIndicator = previousRegionalCenterIndicator;
   }
 
@@ -681,19 +699,19 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.previousOtherDescription = previousOtherDescription;
   }
 
-  public String getIndividualHealthCarePlanIndicator() {
+  public Boolean getIndividualHealthCarePlanIndicator() {
     return individualHealthCarePlanIndicator;
   }
 
-  public void setIndividualHealthCarePlanIndicator(String individualHealthCarePlanIndicator) {
+  public void setIndividualHealthCarePlanIndicator(Boolean individualHealthCarePlanIndicator) {
     this.individualHealthCarePlanIndicator = individualHealthCarePlanIndicator;
   }
 
-  public String getLimitationOnScpHealthIndicator() {
+  public Boolean getLimitationOnScpHealthIndicator() {
     return limitationOnScpHealthIndicator;
   }
 
-  public void setLimitationOnScpHealthIndicator(String limitationOnScpHealthIndicator) {
+  public void setLimitationOnScpHealthIndicator(Boolean limitationOnScpHealthIndicator) {
     this.limitationOnScpHealthIndicator = limitationOnScpHealthIndicator;
   }
 
@@ -722,7 +740,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.motherParentalRightTermDate = motherParentalRightTermDate;
   }
 
-
   public LocalDate getFatherParentalRightTermDate() {
     return fatherParentalRightTermDate;
   }
@@ -731,12 +748,11 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.fatherParentalRightTermDate = fatherParentalRightTermDate;
   }
 
-
-  public String getZippyCreatedIndicator() {
+  public Boolean getZippyCreatedIndicator() {
     return zippyCreatedIndicator;
   }
 
-  public void setZippyCreatedIndicator(String zippyCreatedIndicator) {
+  public void setZippyCreatedIndicator(Boolean zippyCreatedIndicator) {
     this.zippyCreatedIndicator = zippyCreatedIndicator;
   }
 
@@ -748,41 +764,38 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.deathPlace = deathPlace;
   }
 
-
-  public String getTribalMembershipVerifcationIndicator() {
+  public Boolean getTribalMembershipVerifcationIndicator() {
     return tribalMembershipVerifcationIndicator;
   }
 
-  public void setTribalMembershipVerifcationIndicator(String tribalMembershipVerifcationIndicator) {
+  public void setTribalMembershipVerifcationIndicator(
+      Boolean tribalMembershipVerifcationIndicator) {
     this.tribalMembershipVerifcationIndicator = tribalMembershipVerifcationIndicator;
   }
 
-  public String getTribalAncestryClientIndicator() {
+  public Boolean getTribalAncestryClientIndicator() {
     return tribalAncestryClientIndicator;
   }
 
-  public void setTribalAncestryClientIndicator(String tribalAncestryClientIndicator) {
+  public void setTribalAncestryClientIndicator(Boolean tribalAncestryClientIndicator) {
     this.tribalAncestryClientIndicator = tribalAncestryClientIndicator;
   }
 
-
-  public String getSoc158SealedClientIndicator() {
+  public Boolean getSoc158SealedClientIndicator() {
     return soc158SealedClientIndicator;
   }
 
-  public void setSoc158SealedClientIndicator(String soc158SealedClientIndicator) {
+  public void setSoc158SealedClientIndicator(Boolean soc158SealedClientIndicator) {
     this.soc158SealedClientIndicator = soc158SealedClientIndicator;
   }
 
-
-  public String getDeathDateVerifiedIndicator() {
+  public Boolean getDeathDateVerifiedIndicator() {
     return deathDateVerifiedIndicator;
   }
 
-  public void setDeathDateVerifiedIndicator(String deathDateVerifiedIndicator) {
+  public void setDeathDateVerifiedIndicator(Boolean deathDateVerifiedIndicator) {
     this.deathDateVerifiedIndicator = deathDateVerifiedIndicator;
   }
-
 
   public String getEmailAddress() {
     return emailAddress;
@@ -792,12 +805,21 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.emailAddress = emailAddress;
   }
 
-  public String getAdjudicatedDelinquentIndicator() {
-    return adjudicatedDelinquentIndicator;
+  @SuppressWarnings("squid:S2447")
+  public Boolean getAdjudicatedDelinquentIndicator() {
+    if (StringUtils.isBlank(adjudicatedDelinquentIndicator)) {
+      return null;
+    }
+    return "Y".equalsIgnoreCase(adjudicatedDelinquentIndicator.trim()) ? Boolean.TRUE
+        : Boolean.FALSE;
   }
 
-  public void setAdjudicatedDelinquentIndicator(String adjudicatedDelinquentIndicator) {
-    this.adjudicatedDelinquentIndicator = adjudicatedDelinquentIndicator;
+  public void setAdjudicatedDelinquentIndicator(Boolean adjudicatedDelinquentIndicator) {
+    if (adjudicatedDelinquentIndicator == null) {
+      this.adjudicatedDelinquentIndicator = null;
+    } else {
+      this.adjudicatedDelinquentIndicator = (adjudicatedDelinquentIndicator ? "Y" : "N");
+    }
   }
 
   public String getEthnicityUnableToDetermineReasonCode() {
@@ -808,7 +830,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.ethnicityUnableToDetermineReasonCode = ethnicityUnableToDetermineReasonCode;
   }
 
-
   public String getHispanicUnableToDetermineReasonCode() {
     return hispanicUnableToDetermineReasonCode;
   }
@@ -816,7 +837,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setHispanicUnableToDetermineReasonCode(String hispanicUnableToDetermineReasonCode) {
     this.hispanicUnableToDetermineReasonCode = hispanicUnableToDetermineReasonCode;
   }
-
 
   public String getSoc158PlacementCode() {
     return soc158PlacementCode;
@@ -840,8 +860,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     return getIdentifier();
   }
 
-
-
   @Override
   public Set<PlacementEpisode> getPlacementEpisodes() {
     return placementEpisodes;
@@ -850,5 +868,4 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setPlacementEpisodes(Set<PlacementEpisode> placementEpisodes) {
     this.placementEpisodes = placementEpisodes;
   }
-
 }
