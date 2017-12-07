@@ -1,0 +1,42 @@
+package gov.ca.cwds.data.legacy.cms.entity.enums;
+
+import java.util.Collections;
+import java.util.Map;
+import javax.persistence.Converter;
+
+public enum DateOfBirthStatus implements EntityEnum<Character> {
+  ACTUALLY_ENTERED('N', "Actually Entered"),
+  NOT_PROVIDED('U', "Not Provided"),
+  ESTIMATED('Y', "Estimated");
+
+  private final Character code;
+  private final String description;
+
+  DateOfBirthStatus(Character code, String description) {
+    this.code = code;
+    this.description = description;
+  }
+
+  @Override
+  public Character getCode() {
+    return code;
+  }
+
+  @Override
+  public String getDescription() {
+    return description;
+  }
+
+  @Converter
+  public static class DateOfBirthStatusConverter
+      extends BaseEntityEnumConverter<DateOfBirthStatus, Character> {
+
+    private static final Map<Character, DateOfBirthStatus> codeMap =
+        Collections.unmodifiableMap(initializeMapping(DateOfBirthStatus.values()));
+
+    @Override
+    Map<Character, DateOfBirthStatus> getCodeMap() {
+      return codeMap;
+    }
+  }
+}

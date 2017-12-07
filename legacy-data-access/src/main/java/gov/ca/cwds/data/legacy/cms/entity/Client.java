@@ -3,6 +3,7 @@ package gov.ca.cwds.data.legacy.cms.entity;
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.converter.NullableBooleanConverter;
 import gov.ca.cwds.data.legacy.cms.entity.enums.AdoptionStatus;
+import gov.ca.cwds.data.legacy.cms.entity.enums.DateOfBirthStatus;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
 import gov.ca.cwds.data.persistence.PersistentObject;
@@ -191,7 +192,7 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private String emailAddress;
 
   @Column(name = "EST_DOB_CD", nullable = false, length = 1)
-  private String estimatedDobCode;
+  private DateOfBirthStatus dateOfBirthStatus;
 
   @Column(name = "ETH_UD_CD", length = 1)
   private String ethnicityUnableToDetermineReasonCode;
@@ -651,12 +652,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.commentDescription = commentDescription;
   }
 
-  public String getEstimatedDobCode() {
-    return estimatedDobCode;
+  public DateOfBirthStatus getDateOfBirthStatus() {
+    return dateOfBirthStatus;
   }
 
-  public void setEstimatedDobCode(String estimatedDobCode) {
-    this.estimatedDobCode = estimatedDobCode;
+  public void setDateOfBirthStatus(DateOfBirthStatus dateOfBirthStatus) {
+    this.dateOfBirthStatus = dateOfBirthStatus;
   }
 
   public boolean getBirthplaceVerifiedIndicator() {
