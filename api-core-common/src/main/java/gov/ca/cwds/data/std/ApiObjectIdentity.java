@@ -13,7 +13,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public abstract class ApiObjectIdentity implements ApiMarker {
 
-  private static final String[] EXCLUDED_FIELDS = new String[] {"IDENTIFIER"};
+  private static final String[] EXCLUDED_FIELDS = new String[] {"identifier"};
 
   /** Default serialization. */
   private static final long serialVersionUID = 1L;
@@ -26,7 +26,7 @@ public abstract class ApiObjectIdentity implements ApiMarker {
   @Override
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(
-        1, 37, this, false, ApiObjectIdentity.class, EXCLUDED_FIELDS);
+        17, 37, this, false, ApiObjectIdentity.class, EXCLUDED_FIELDS);
   }
 
   @Override
