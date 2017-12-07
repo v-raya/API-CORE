@@ -29,6 +29,4 @@ public class LicenseStatusDao extends BaseDaoImpl<LicenseStatus> {
     entities.addAll(query.list());
     return entities.build();
   }
-
-
 }

@@ -8,6 +8,7 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.Gender;
 import gov.ca.cwds.data.legacy.cms.entity.enums.HispanicOrigin;
 import gov.ca.cwds.data.legacy.cms.entity.enums.UnableToDetermineReason;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.ImmigrationStatus;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
@@ -236,8 +237,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @JoinColumn(name = "I_CNTRY_C", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
   private Country immigrationCountry;
 
-  @Column(name = "IMGT_STC", nullable = false)
-  private Short immigrationStatusType;
+  @NotNull
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "IMGT_STC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private ImmigrationStatus immigrationStatusType;
 
   @Column(name = "INCAPC_CD", nullable = false, length = 2)
   @ColumnTransformer(read = "trim(INCAPC_CD)")
@@ -504,11 +509,11 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.immigrationCountry = immigrationCountry;
   }
 
-  public Short getImmigrationStatusType() {
+  public ImmigrationStatus getImmigrationStatusType() {
     return immigrationStatusType;
   }
 
-  public void setImmigrationStatusType(Short immigrationStatusType) {
+  public void setImmigrationStatusType(ImmigrationStatus immigrationStatusType) {
     this.immigrationStatusType = immigrationStatusType;
   }
 

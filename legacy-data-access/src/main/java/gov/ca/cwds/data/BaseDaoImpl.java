@@ -1,5 +1,6 @@
 package gov.ca.cwds.data;
 
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.ImmigrationStatus;
 import java.util.Date;
 import java.util.List;
 
@@ -70,6 +71,14 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
       String message = h.getMessage() + ". Transaction Status: " + txn.getStatus();
       throw new DaoException(message, h);
     }
+  }
+
+  public List<T> queryImmutableList(String queryName) {
+    Session session = this.getSessionFactory().getCurrentSession();
+    org.hibernate.query.Query<T> query = session.createNamedQuery(queryName, getEntityClass());
+    ImmutableList.Builder<T> entities = new ImmutableList.Builder<>();
+    entities.addAll(query.list());
+    return entities.build();
   }
 
   /**
