@@ -192,6 +192,7 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private String emailAddress;
 
   @Column(name = "EST_DOB_CD", nullable = false, length = 1)
+  @Convert(converter = DateOfBirthStatus.DateOfBirthStatusConverter.class)
   private DateOfBirthStatus dateOfBirthStatus;
 
   @Column(name = "ETH_UD_CD", length = 1)
