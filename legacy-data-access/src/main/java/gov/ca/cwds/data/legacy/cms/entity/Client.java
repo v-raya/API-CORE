@@ -229,8 +229,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Convert(converter = UnableToDetermineReason.UnableToDetermineReasonConverter.class)
   private UnableToDetermineReason hispanicUnableToDetermineReason;
 
-  @Column(name = "I_CNTRY_C", nullable = false)
-  private Short immigrationCountryCodeType;
+  @NotNull
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "I_CNTRY_C", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private Country immigrationCountry;
 
   @Column(name = "IMGT_STC", nullable = false)
   private Short immigrationStatusType;
@@ -492,12 +496,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.gender = gender;
   }
 
-  public Short getImmigrationCountryCodeType() {
-    return immigrationCountryCodeType;
+  public Country getImmigrationCountry() {
+    return immigrationCountry;
   }
 
-  public void setImmigrationCountryCodeType(Short immigrationCountryCodeType) {
-    this.immigrationCountryCodeType = immigrationCountryCodeType;
+  public void setImmigrationCountry(Country immigrationCountry) {
+    this.immigrationCountry = immigrationCountry;
   }
 
   public Short getImmigrationStatusType() {
