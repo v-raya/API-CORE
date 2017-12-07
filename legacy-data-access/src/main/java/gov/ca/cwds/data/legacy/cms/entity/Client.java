@@ -4,6 +4,7 @@ import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.converter.NullableBooleanConverter;
 import gov.ca.cwds.data.legacy.cms.entity.enums.AdoptionStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.DateOfBirthStatus;
+import gov.ca.cwds.data.legacy.cms.entity.enums.UnableToDetermineReason;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
 import gov.ca.cwds.data.persistence.PersistentObject;
@@ -196,7 +197,8 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private DateOfBirthStatus dateOfBirthStatus;
 
   @Column(name = "ETH_UD_CD", length = 1)
-  private String ethnicityUnableToDetermineReasonCode;
+  @Convert(converter = UnableToDetermineReason.UnableToDetermineReasonConverter.class)
+  private UnableToDetermineReason ethnicityUnableToDetermineReason;
 
   @Column(name = "FTERM_DT")
   private LocalDate fatherParentalRightTermDate;
@@ -220,7 +222,8 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private String hispanicOriginCode;
 
   @Column(name = "HISP_UD_CD", length = 1)
-  private String hispanicUnableToDetermineReasonCode;
+  @Convert(converter = UnableToDetermineReason.UnableToDetermineReasonConverter.class)
+  private UnableToDetermineReason hispanicUnableToDetermineReason;
 
   @Column(name = "I_CNTRY_C", nullable = false)
   private Short immigrationCountryCodeType;
@@ -847,20 +850,20 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.adjudicatedDelinquentIndicator = adjudicatedDelinquentIndicator;
   }
 
-  public String getEthnicityUnableToDetermineReasonCode() {
-    return ethnicityUnableToDetermineReasonCode;
+  public UnableToDetermineReason getEthnicityUnableToDetermineReason() {
+    return ethnicityUnableToDetermineReason;
   }
 
-  public void setEthnicityUnableToDetermineReasonCode(String ethnicityUnableToDetermineReasonCode) {
-    this.ethnicityUnableToDetermineReasonCode = ethnicityUnableToDetermineReasonCode;
+  public void setEthnicityUnableToDetermineReason(UnableToDetermineReason ethnicityUnableToDetermineReason) {
+    this.ethnicityUnableToDetermineReason = ethnicityUnableToDetermineReason;
   }
 
-  public String getHispanicUnableToDetermineReasonCode() {
-    return hispanicUnableToDetermineReasonCode;
+  public UnableToDetermineReason getHispanicUnableToDetermineReason() {
+    return hispanicUnableToDetermineReason;
   }
 
-  public void setHispanicUnableToDetermineReasonCode(String hispanicUnableToDetermineReasonCode) {
-    this.hispanicUnableToDetermineReasonCode = hispanicUnableToDetermineReasonCode;
+  public void setHispanicUnableToDetermineReason(UnableToDetermineReason hispanicUnableToDetermineReason) {
+    this.hispanicUnableToDetermineReason = hispanicUnableToDetermineReason;
   }
 
   public String getSoc158PlacementCode() {
