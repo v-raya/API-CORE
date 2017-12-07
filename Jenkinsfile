@@ -34,14 +34,12 @@ def notifyBuild(String buildStatus, Exception e) {
     )
 }
 
-
-
 node ('tpt2-slave'){
    def serverArti = Artifactory.server 'CWDS_DEV'
    def rtGradle = Artifactory.newGradleBuild()
    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')), disableConcurrentBuilds(), [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
    parameters([
-      string(defaultValue: 'latest', description: '', name: 'APP_VERSION'),
+      string(defaultValue: 'SNAPSHOT', description: '', name: 'APP_VERSION'),
       string(defaultValue: 'development', description: '', name: 'branch')
       ]), pipelineTriggers([pollSCM('H/5 * * * *')])])
   try {
@@ -52,7 +50,13 @@ node ('tpt2-slave'){
 		  rtGradle.useWrapper = true
    }
    stage('Build'){
-		def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jar'
+     if (params.APP_VERSION != "SNAPSHOT" ) {
+         echo "!!!! BUILD RELEASE VERSION ${params.APP_VERSION}"
+         def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'clean jar -Dversion=${APP_VERSION}'
+     } else {
+         echo "!!!! BUILD SNAPSHOT VERSION"
+         def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'clean jar'
+     }
    }
    stage('Unit Tests') {
        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test jacocoTestReport', switches: '--stacktrace'
@@ -71,19 +75,24 @@ node ('tpt2-slave'){
     }
 
 	stage ('Push to artifactory'){
-    rtGradle.deployer repo:'libs-snapshot', server: serverArti
-	  //rtGradle.deployer repo:'libs-release', server: serverArti
-	  rtGradle.deployer.deployArtifacts = true
-		//buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'artifactoryPublish'
-		buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publish'
-		rtGradle.deployer.deployArtifacts = false
+    rtGradle.deployer.deployArtifacts = true
+	  if (params.APP_VERSION != "SNAPSHOT") {
+	      echo "!!!! PUSH RELEASE VERSION ${params.APP_VERSION}"
+        rtGradle.deployer repo:'libs-release', server: serverArti
+        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publish -Dversion=${APP_VERSION}'
+	  } else {
+	      echo "!!!! PUSH SNAPSHOT VERSION"
+	      rtGradle.deployer repo:'libs-snapshot', server: serverArti
+        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publish'
+	  }
+	  rtGradle.deployer.deployArtifacts = false
 	}
  } catch (Exception e)    {
  	   errorcode = e
   	   currentBuild.result = "FAIL"
   	   notifyBuild(currentBuild.result,errorcode)
   	   throw e;
- }finally {
+ } finally {
 	   cleanWs()
  }
 }
