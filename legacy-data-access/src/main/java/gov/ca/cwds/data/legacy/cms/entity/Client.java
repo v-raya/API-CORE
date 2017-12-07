@@ -13,6 +13,7 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.UnableToDetermineReason;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Ethnicity;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ImmigrationStatus;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.Language;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.MaritalStatus;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
@@ -303,8 +304,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @JoinColumn(name = "P_ETHNCTYC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
   private Ethnicity primaryEthnicity;
 
-  @Column(name = "P_LANG_TPC", nullable = false)
-  private Short primaryLanguageType;
+  @NotNull
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "P_LANG_TPC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private Language primaryLanguage;
 
   @Column(name = "POTH_DESC", nullable = false, length = 25)
   @ColumnTransformer(read = "trim(POTH_DESC)")
@@ -609,12 +614,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.primaryEthnicity = primaryEthnicity;
   }
 
-  public Short getPrimaryLanguageType() {
-    return primaryLanguageType;
+  public Language getPrimaryLanguage() {
+    return primaryLanguage;
   }
 
-  public void setPrimaryLanguageType(Short primaryLanguageType) {
-    this.primaryLanguageType = primaryLanguageType;
+  public void setPrimaryLanguage(Language primaryLanguage) {
+    this.primaryLanguage = primaryLanguage;
   }
 
   public Short getReligionType() {
