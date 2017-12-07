@@ -10,16 +10,16 @@ public class DroolsConfiguration<T> {
 
   private String sessionName;
   private String agendaGroup;
-  private String kieContainerId;
+  private String pathToRulesConfig;
 
-  public DroolsConfiguration(String sessionName, String agendaGroup, String kieContainerId) {
+  public DroolsConfiguration(String sessionName, String agendaGroup, String pathToRulesConfig) {
     this.sessionName = sessionName;
     this.agendaGroup = agendaGroup;
-    this.kieContainerId = kieContainerId;
+    this.pathToRulesConfig = pathToRulesConfig;
   }
 
   public KieContainer getKieContainer() throws DroolsException {
-    return DroolsKieContainerHolder.INSTANCE.getKieContainer(kieContainerId);
+    return DroolsKieContainerHolder.INSTANCE.getKieContainer(pathToRulesConfig);
   }
 
   public Object getValidatedFact(T input) {
