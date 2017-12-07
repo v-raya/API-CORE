@@ -11,6 +11,7 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.LiterateStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.MilitaryStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.UnableToDetermineReason;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.Ethnicity;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ImmigrationStatus;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.MaritalStatus;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType;
@@ -295,8 +296,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Column(name = "OUTWRT_IND", nullable = false, length = 1)
   private boolean outstandingWarrantIndicator;
 
-  @Column(name = "P_ETHNCTYC", nullable = false)
-  private Short primaryEthnicityType;
+  @NotNull
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "P_ETHNCTYC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private Ethnicity primaryEthnicity;
 
   @Column(name = "P_LANG_TPC", nullable = false)
   private Short primaryLanguageType;
@@ -596,12 +601,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.outstandingWarrantIndicator = outstandingWarrantIndicator;
   }
 
-  public Short getPrimaryEthnicityType() {
-    return primaryEthnicityType;
+  public Ethnicity getPrimaryEthnicity() {
+    return primaryEthnicity;
   }
 
-  public void setPrimaryEthnicityType(Short primaryEthnicityType) {
-    this.primaryEthnicityType = primaryEthnicityType;
+  public void setPrimaryEthnicity(Ethnicity primaryEthnicity) {
+    this.primaryEthnicity = primaryEthnicity;
   }
 
   public Short getPrimaryLanguageType() {
