@@ -6,6 +6,7 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.AdoptionStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.DateOfBirthStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Gender;
 import gov.ca.cwds.data.legacy.cms.entity.enums.HispanicOrigin;
+import gov.ca.cwds.data.legacy.cms.entity.enums.IncapacitatedParentStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.UnableToDetermineReason;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ImmigrationStatus;
@@ -246,7 +247,8 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
 
   @Column(name = "INCAPC_CD", nullable = false, length = 2)
   @ColumnTransformer(read = "trim(INCAPC_CD)")
-  private String incapacitatedParentCode;
+  @Convert(converter = IncapacitatedParentStatus.IncapacitatedParentStatusConverter.class)
+  private IncapacitatedParentStatus incapacitatedParentStatus;
 
   @Type(type = "yes_no")
   @Column(name = "LIMIT_IND", nullable = false, length = 1)
@@ -517,12 +519,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.immigrationStatusType = immigrationStatusType;
   }
 
-  public String getIncapacitatedParentCode() {
-    return incapacitatedParentCode;
+  public IncapacitatedParentStatus getIncapacitatedParentStatus() {
+    return incapacitatedParentStatus;
   }
 
-  public void setIncapacitatedParentCode(String incapacitatedParentCode) {
-    this.incapacitatedParentCode = incapacitatedParentCode;
+  public void setIncapacitatedParentStatus(IncapacitatedParentStatus incapacitatedParentStatus) {
+    this.incapacitatedParentStatus = incapacitatedParentStatus;
   }
 
   public String getLiterateCode() {
