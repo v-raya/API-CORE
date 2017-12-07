@@ -5,6 +5,7 @@ import gov.ca.cwds.data.legacy.cms.entity.converter.NullableBooleanConverter;
 import gov.ca.cwds.data.legacy.cms.entity.enums.AdoptionStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.DateOfBirthStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Gender;
+import gov.ca.cwds.data.legacy.cms.entity.enums.HispanicOrigin;
 import gov.ca.cwds.data.legacy.cms.entity.enums.UnableToDetermineReason;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
@@ -221,7 +222,8 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private String healthSummaryText;
 
   @Column(name = "HISP_CD", nullable = false, length = 1)
-  private String hispanicOriginCode;
+  @Convert(converter = HispanicOrigin.HispanicOriginConverter.class)
+  private HispanicOrigin hispanicOrigin;
 
   @Column(name = "HISP_UD_CD", length = 1)
   @Convert(converter = UnableToDetermineReason.UnableToDetermineReasonConverter.class)
@@ -674,12 +676,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.birthplaceVerifiedIndicator = birthplaceVerifiedIndicator;
   }
 
-  public String getHispanicOriginCode() {
-    return hispanicOriginCode;
+  public HispanicOrigin getHispanicOrigin() {
+    return hispanicOrigin;
   }
 
-  public void setHispanicOriginCode(String hispanicOriginCode) {
-    this.hispanicOriginCode = hispanicOriginCode;
+  public void setHispanicOrigin(HispanicOrigin hispanicOrigin) {
+    this.hispanicOrigin = hispanicOrigin;
   }
 
   public boolean getCurrentCaChildrenServiceIndicator() {
