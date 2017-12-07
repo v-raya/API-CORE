@@ -8,6 +8,7 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.Gender;
 import gov.ca.cwds.data.legacy.cms.entity.enums.HispanicOrigin;
 import gov.ca.cwds.data.legacy.cms.entity.enums.IncapacitatedParentStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.LiterateStatus;
+import gov.ca.cwds.data.legacy.cms.entity.enums.MilitaryStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.UnableToDetermineReason;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ImmigrationStatus;
@@ -264,7 +265,8 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private boolean maritalCohabitationHistoryIndicator;
 
   @Column(name = "MILT_STACD", nullable = false, length = 1)
-  private String militaryStatusCode;
+  @Convert(converter = MilitaryStatus.MilitaryStatusConverter.class)
+  private MilitaryStatus militaryStatusCode;
 
   @Column(name = "MRTL_STC", nullable = false)
   private Short maritalStatusType;
@@ -552,11 +554,11 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.maritalStatusType = maritalStatusType;
   }
 
-  public String getMilitaryStatusCode() {
+  public MilitaryStatus getMilitaryStatusCode() {
     return militaryStatusCode;
   }
 
-  public void setMilitaryStatusCode(String militaryStatusCode) {
+  public void setMilitaryStatusCode(MilitaryStatus militaryStatusCode) {
     this.militaryStatusCode = militaryStatusCode;
   }
 
