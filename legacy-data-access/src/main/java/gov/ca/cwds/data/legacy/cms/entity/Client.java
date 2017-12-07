@@ -13,6 +13,7 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.UnableToDetermineReason;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ImmigrationStatus;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.MaritalStatus;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
@@ -279,8 +280,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Column(name = "MTERM_DT")
   private LocalDate motherParentalRightTermDate;
 
-  @Column(name = "NAME_TPC", nullable = false)
-  private Short nameType;
+  @NotNull
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "NAME_TPC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private NameType nameType;
 
   @Column(name = "NMPRFX_DSC", nullable = false, length = 6)
   @ColumnTransformer(read = "trim(NMPRFX_DSC)")
@@ -575,11 +580,11 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.namePrefixDescription = namePrefixDescription;
   }
 
-  public Short getNameType() {
+  public NameType getNameType() {
     return nameType;
   }
 
-  public void setNameType(Short nameType) {
+  public void setNameType(NameType nameType) {
     this.nameType = nameType;
   }
 

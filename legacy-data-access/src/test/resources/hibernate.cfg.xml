@@ -38,5 +38,6 @@
 		<mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.VisitType" />
 		<mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.ImmigrationStatus" />
 		<mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.MaritalStatus" />
+		<mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType" />
 	</session-factory>
 </hibernate-configuration>
