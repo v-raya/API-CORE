@@ -7,6 +7,7 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.DateOfBirthStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Gender;
 import gov.ca.cwds.data.legacy.cms.entity.enums.HispanicOrigin;
 import gov.ca.cwds.data.legacy.cms.entity.enums.IncapacitatedParentStatus;
+import gov.ca.cwds.data.legacy.cms.entity.enums.LiterateStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.UnableToDetermineReason;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ImmigrationStatus;
@@ -255,8 +256,8 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private boolean limitationOnScpHealthIndicator;
 
   @Column(name = "LITRATE_CD", nullable = false, length = 1)
-  @ColumnTransformer(read = "trim(LITRATE_CD)")
-  private String literateCode;
+  @Convert(converter = LiterateStatus.LiterateStatusConverter.class)
+  private LiterateStatus literateStatus;
 
   @Type(type = "yes_no")
   @Column(name = "MAR_HIST_B", nullable = false, length = 1)
@@ -527,12 +528,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.incapacitatedParentStatus = incapacitatedParentStatus;
   }
 
-  public String getLiterateCode() {
-    return literateCode;
+  public LiterateStatus getLiterateStatus() {
+    return literateStatus;
   }
 
-  public void setLiterateCode(String literateCode) {
-    this.literateCode = literateCode;
+  public void setLiterateStatus(LiterateStatus literateStatus) {
+    this.literateStatus = literateStatus;
   }
 
   public boolean getMaritalCohabitationHistoryIndicator() {
