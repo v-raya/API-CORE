@@ -9,6 +9,7 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.HispanicOrigin;
 import gov.ca.cwds.data.legacy.cms.entity.enums.IncapacitatedParentStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.LiterateStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.MilitaryStatus;
+import gov.ca.cwds.data.legacy.cms.entity.enums.ParentUnemployedStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Soc158placementsStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.UnableToDetermineReason;
@@ -377,7 +378,8 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
 
   @Column(name = "UNEMPLY_CD", nullable = false, length = 2)
   @ColumnTransformer(read = "trim(UNEMPLY_CD)")
-  private String unemployedParentCode;
+  @Convert(converter = ParentUnemployedStatus.ParentUnemployedStatusConverter.class)
+  private ParentUnemployedStatus unemployedParentCode;
 
   @Type(type = "yes_no")
   @Column(name = "ZIPPY_IND", nullable = false, length = 1)
@@ -691,11 +693,11 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.suffixTitleDescription = suffixTitleDescription;
   }
 
-  public String getUnemployedParentCode() {
+  public ParentUnemployedStatus getUnemployedParentCode() {
     return unemployedParentCode;
   }
 
-  public void setUnemployedParentCode(String unemployedParentCode) {
+  public void setUnemployedParentCode(ParentUnemployedStatus unemployedParentCode) {
     this.unemployedParentCode = unemployedParentCode;
   }
 
