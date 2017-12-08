@@ -379,7 +379,7 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Column(name = "UNEMPLY_CD", nullable = false, length = 2)
   @ColumnTransformer(read = "trim(UNEMPLY_CD)")
   @Convert(converter = ParentUnemployedStatus.ParentUnemployedStatusConverter.class)
-  private ParentUnemployedStatus unemployedParentCode;
+  private ParentUnemployedStatus parentUnemployedStatus;
 
   @Type(type = "yes_no")
   @Column(name = "ZIPPY_IND", nullable = false, length = 1)
@@ -693,12 +693,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.suffixTitleDescription = suffixTitleDescription;
   }
 
-  public ParentUnemployedStatus getUnemployedParentCode() {
-    return unemployedParentCode;
+  public ParentUnemployedStatus getParentUnemployedStatus() {
+    return parentUnemployedStatus;
   }
 
-  public void setUnemployedParentCode(ParentUnemployedStatus unemployedParentCode) {
-    this.unemployedParentCode = unemployedParentCode;
+  public void setParentUnemployedStatus(ParentUnemployedStatus parentUnemployedStatus) {
+    this.parentUnemployedStatus = parentUnemployedStatus;
   }
 
   public String getCommentDescription() {
