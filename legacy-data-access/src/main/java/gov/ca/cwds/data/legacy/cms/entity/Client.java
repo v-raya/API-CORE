@@ -10,6 +10,7 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.IncapacitatedParentStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.LiterateStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.MilitaryStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
+import gov.ca.cwds.data.legacy.cms.entity.enums.Soc158placementsStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.UnableToDetermineReason;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Ethnicity;
@@ -352,7 +353,8 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private boolean soc158SealedClientIndicator;
 
   @Column(name = "SOCPLC_CD", nullable = false, length = 1)
-  private String soc158PlacementCode;
+  @Convert(converter = Soc158placementsStatus.Soc158placementsStatusConverter.class)
+  private Soc158placementsStatus soc158PlacementCode;
 
   @Column(name = "SS_NO", nullable = false, length = 9)
   @ColumnTransformer(read = "trim(SS_NO)")
@@ -915,11 +917,11 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.hispanicUnableToDetermineReason = hispanicUnableToDetermineReason;
   }
 
-  public String getSoc158PlacementCode() {
+  public Soc158placementsStatus getSoc158PlacementCode() {
     return soc158PlacementCode;
   }
 
-  public void setSoc158PlacementCode(String soc158PlacementCode) {
+  public void setSoc158PlacementCode(Soc158placementsStatus soc158PlacementCode) {
     this.soc158PlacementCode = soc158PlacementCode;
   }
 
