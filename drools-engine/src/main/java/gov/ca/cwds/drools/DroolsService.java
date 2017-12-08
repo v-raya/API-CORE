@@ -12,7 +12,7 @@ import org.kie.api.runtime.KieSession;
 
 public class DroolsService {
 
-  public Set<IssueDetails> validate(Object obj,
+  public Set<IssueDetails> performBusinessRules(Object obj,
       DroolsConfiguration droolsConfiguration) throws DroolsException {
 
     KieSession kSession = null;

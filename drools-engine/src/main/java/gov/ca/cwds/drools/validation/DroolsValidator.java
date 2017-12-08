@@ -31,7 +31,7 @@ public abstract class DroolsValidator<A extends Annotation, T> implements
     DroolsService droolsService = InjectorHolder.INSTANCE.getInstance(DroolsService.class);
     Set<IssueDetails> detailsList = null;
     try {
-      detailsList = droolsService.validate(validatedFact, configuration);
+      detailsList = droolsService.performBusinessRules(validatedFact, configuration);
     } catch (DroolsException e) {
       throw new RuntimeException(
           String.format(DroolsErrorMessages.CANT_PERFORM_BUSINESS_VALIDATION,

@@ -68,22 +68,22 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   private OutOfStateCheckDao outOfStateCheckDao;
 
   @Override
-  public SubstituteCareProvider create(SCPEntityAwareDTO parameterObject)
+  public SubstituteCareProvider create(SCPEntityAwareDTO scpEntityAwareDTO)
       throws DataAccessServicesException {
     try {
-      final SubstituteCareProvider substituteCareProvider = parameterObject.getEntity();
-      validateParameters(parameterObject);
+      final SubstituteCareProvider substituteCareProvider = scpEntityAwareDTO.getEntity();
+      validateParameters(scpEntityAwareDTO);
       substituteCareProvider
-          .setIdentifier(IdGenerator.generateId(parameterObject.getStaffPersonId()));
-        runBusinessValidation(substituteCareProvider);
+          .setIdentifier(IdGenerator.generateId(scpEntityAwareDTO.getStaffPersonId()));
+        runBusinessValidation(scpEntityAwareDTO);
       SubstituteCareProvider storedSubstituteCareProvider = substituteCareProviderDao
           .create(substituteCareProvider);
-      storeSubstituteCareProviderUc(substituteCareProvider, parameterObject);
+      storeSubstituteCareProviderUc(substituteCareProvider, scpEntityAwareDTO);
       storeCountyOwnership(substituteCareProvider.getIdentifier());
-      storePlacementHomeInformation(substituteCareProvider, parameterObject);
-      storePhoneContactDetails(storedSubstituteCareProvider, parameterObject);
-      storeEthnicity(storedSubstituteCareProvider, parameterObject);
-      storeOutOfStateChecks(storedSubstituteCareProvider, parameterObject);
+      storePlacementHomeInformation(substituteCareProvider, scpEntityAwareDTO);
+      storePhoneContactDetails(storedSubstituteCareProvider, scpEntityAwareDTO);
+      storeEthnicity(storedSubstituteCareProvider, scpEntityAwareDTO);
+      storeOutOfStateChecks(storedSubstituteCareProvider, scpEntityAwareDTO);
       prepareSubstituteCareProviderPhoneticSearchKeywords(substituteCareProvider);
       return storedSubstituteCareProvider;
     } catch (DroolsException e) {
