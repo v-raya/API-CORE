@@ -10,8 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -133,43 +131,4 @@ public class CaseLoadWeighting extends CmsPersistentObject {
     this.county = county;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-
-    if (!(o instanceof CaseLoadWeighting)) {
-      return false;
-    }
-
-    CaseLoadWeighting that = (CaseLoadWeighting) o;
-
-    return new EqualsBuilder()
-        .appendSuper(super.equals(o))
-        .append(fkcaseLdt, that.fkcaseLdt)
-        .append(firstName, that.firstName)
-        .append(lastName, that.lastName)
-        .append(middleInitialName, that.middleInitialName)
-        .append(namePrefix, that.namePrefix)
-        .append(suffixTitle, that.suffixTitle)
-        .append(fkstfperst, that.fkstfperst)
-        .append(county, that.county)
-        .isEquals();
-  }
-
-  @Override
-  public int hashCode() {
-    return new HashCodeBuilder(17, 37)
-        .appendSuper(super.hashCode())
-        .append(fkcaseLdt)
-        .append(firstName)
-        .append(lastName)
-        .append(middleInitialName)
-        .append(namePrefix)
-        .append(suffixTitle)
-        .append(fkstfperst)
-        .append(county)
-        .toHashCode();
-  }
 }

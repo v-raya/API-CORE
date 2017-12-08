@@ -12,8 +12,6 @@ import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NotFound;
@@ -123,39 +121,4 @@ public class StaffPersonCaseLoad extends CmsPersistentObject {
     this.staffPerson = staffPerson;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-
-    if (!(o instanceof StaffPersonCaseLoad)) {
-      return false;
-    }
-
-    StaffPersonCaseLoad that = (StaffPersonCaseLoad) o;
-
-    return new EqualsBuilder()
-        .appendSuper(super.equals(o))
-        .append(thirdId, that.thirdId)
-        .append(endDate, that.endDate)
-        .append(startDate, that.startDate)
-        .append(fkcaseLdt, that.fkcaseLdt)
-        .append(fkstfperst, that.fkstfperst)
-        .append(county, that.county)
-        .isEquals();
-  }
-
-  @Override
-  public int hashCode() {
-    return new HashCodeBuilder(17, 37)
-        .appendSuper(super.hashCode())
-        .append(thirdId)
-        .append(endDate)
-        .append(startDate)
-        .append(fkcaseLdt)
-        .append(fkstfperst)
-        .append(county)
-        .toHashCode();
-  }
 }

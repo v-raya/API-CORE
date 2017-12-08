@@ -12,8 +12,8 @@ import javax.persistence.Converter;
  * @author CWDS TPT-3 Team
  */
 public enum AssignmentRecipient implements EntityEnum<Character> {
-  REFERRAL('R', "Referral"),
-  CASE('C', "Case");
+  CASE('C', "Case"),
+  REFERRAL('R', "Referral");
 
   private final Character code;
   private final String description;
