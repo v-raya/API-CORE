@@ -17,6 +17,7 @@ import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderDao;
 import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderUcDao;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
+import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
@@ -26,6 +27,7 @@ import gov.ca.cwds.data.legacy.cms.entity.OutOfStateCheck;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeInformation;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProviderUc;
+import gov.ca.cwds.drools.DroolsException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -66,22 +68,27 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   private OutOfStateCheckDao outOfStateCheckDao;
 
   @Override
-  public SubstituteCareProvider create(SCPEntityAwareDTO parameterObject) {
-    final SubstituteCareProvider substituteCareProvider = parameterObject.getEntity();
-    validateParameters(parameterObject);
-    substituteCareProvider
-        .setIdentifier(IdGenerator.generateId(parameterObject.getStaffPersonId()));
-    runBusinessValidation(substituteCareProvider);
-    SubstituteCareProvider storedSubstituteCareProvider = substituteCareProviderDao
-        .create(substituteCareProvider);
-    storeSubstituteCareProviderUc(substituteCareProvider, parameterObject);
-    storeCountyOwnership(substituteCareProvider.getIdentifier());
-    storePlacementHomeInformation(substituteCareProvider, parameterObject);
-    storePhoneContactDetails(storedSubstituteCareProvider, parameterObject);
-    storeEthnicity(storedSubstituteCareProvider, parameterObject);
-    storeOutOfStateChecks(storedSubstituteCareProvider, parameterObject);
-    prepareSubstituteCareProviderPhoneticSearchKeywords(substituteCareProvider);
-    return storedSubstituteCareProvider;
+  public SubstituteCareProvider create(SCPEntityAwareDTO scpEntityAwareDTO)
+      throws DataAccessServicesException {
+    try {
+      final SubstituteCareProvider substituteCareProvider = scpEntityAwareDTO.getEntity();
+      validateParameters(scpEntityAwareDTO);
+      substituteCareProvider
+          .setIdentifier(IdGenerator.generateId(scpEntityAwareDTO.getStaffPersonId()));
+        runBusinessValidation(scpEntityAwareDTO);
+      SubstituteCareProvider storedSubstituteCareProvider = substituteCareProviderDao
+          .create(substituteCareProvider);
+      storeSubstituteCareProviderUc(substituteCareProvider, scpEntityAwareDTO);
+      storeCountyOwnership(substituteCareProvider.getIdentifier());
+      storePlacementHomeInformation(substituteCareProvider, scpEntityAwareDTO);
+      storePhoneContactDetails(storedSubstituteCareProvider, scpEntityAwareDTO);
+      storeEthnicity(storedSubstituteCareProvider, scpEntityAwareDTO);
+      storeOutOfStateChecks(storedSubstituteCareProvider, scpEntityAwareDTO);
+      prepareSubstituteCareProviderPhoneticSearchKeywords(substituteCareProvider);
+      return storedSubstituteCareProvider;
+    } catch (DroolsException e) {
+      throw new DataAccessServicesException(e);
+    }
   }
 
   private void validateParameters(SCPEntityAwareDTO parameterObject) {

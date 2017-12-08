@@ -11,7 +11,7 @@ dependencies {
     compile group: "org.glassfish.jersey.ext", name: "jersey-declarative-linking", version: glassfishJerseyExtVersion
     compile group: 'com.google.guava', name: 'guava', version: guavaVersion
     compile group: 'org.apache.commons', name: 'commons-collections4', version: commonsCollectionsVersion
-    compile group: 'org.apache.commons', name: 'commons-io', version: apacheCommonsVersion
+    compile group: 'commons-io', name: 'commons-io', version: commonsIOVersion
     
 
     // ES 5.x:
