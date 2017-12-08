@@ -28,6 +28,8 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.PlacementHome" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.PlacementHomeNotes" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.PlacementHomeProfile" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.Referral" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.ReferralAssignment" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.StaffPerson" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.StaffPersonCaseLoad" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider" />

@@ -2,6 +2,7 @@ package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,11 +18,11 @@ import org.hibernate.annotations.Type;
 @Table(name = "REFERL_T")
 @NamedQuery(
     name = Referral.FIND_ACTIVE_BY_STAFF_ID,
-    query = "select assignment.referral from gov.ca.cwds.data.legacy.cms.entity.CaseLoad cl"
+    query = "select distinct assignment.referral from CaseLoad cl"
         + " left join cl.referralAssignments assignment"
         + " where cl.caseLoadWeighting.fkstfperst = :" + Referral.PARAM_STAFF_ID
-        + " and assignment.startDate > :" + Referral.PARAM_ACTIVE_DATE
-        + " and (assignment.endDate is null or assignment.endDate < :" + Referral.PARAM_ACTIVE_DATE + ")"
+        + " and assignment.startDate < :" + Referral.PARAM_ACTIVE_DATE
+        + " and (assignment.endDate is null or assignment.endDate > :" + Referral.PARAM_ACTIVE_DATE + ")"
 )
 @SuppressWarnings("squid:S3437")
 public class Referral extends CmsPersistentObject {
@@ -34,12 +35,15 @@ public class Referral extends CmsPersistentObject {
   @Column(name = "IDENTIFIER", length = CMS_ID_LEN)
   private String id;
 
+  @Type(type = "yes_no")
   @Column(name = "ADD_INF_CD")
   private Boolean additionalInfoIncludedCode;
 
+  @Type(type = "yes_no")
   @Column(name = "ANRPTR_IND")
   private Boolean anonymousReporterIndicator;
 
+  @Type(type = "yes_no")
   @Column(name = "PETAPL_IND")
   private Boolean applicationForPetitionIndicator;
 
@@ -49,6 +53,7 @@ public class Referral extends CmsPersistentObject {
   @Column(name = "APV_STC")
   private Short approvalStatusType;
 
+  @Type(type = "yes_no")
   @Column(name = "CR_PERP_CD")
   private Boolean caretakersPerpetratorCode;
 
@@ -100,9 +105,8 @@ public class Referral extends CmsPersistentObject {
   @Column(name = "REF_RCV_DT")
   private LocalDate receivedDate;
 
-  @Type(type = "time")
   @Column(name = "REF_RCV_TM")
-  private LocalDate receivedTime;
+  private Instant receivedTime;
 
   @Column(name = "RFR_RSPC")
   private Short referralResponseType;
@@ -113,9 +117,8 @@ public class Referral extends CmsPersistentObject {
   @Column(name = "RSP_DTR_DT")
   private LocalDate responseDeterminationDate;
 
-  @Type(type = "time")
   @Column(name = "RSP_DTR_TM")
-  private LocalDate responseDeterminationTime;
+  private Instant responseDeterminationTime;
 
   @Column(name = "RSP_RTNTXT")
   private String responseRationaleText;
@@ -368,11 +371,11 @@ public class Referral extends CmsPersistentObject {
     this.receivedDate = receivedDate;
   }
 
-  public LocalDate getReceivedTime() {
+  public Instant getReceivedTime() {
     return receivedTime;
   }
 
-  public void setReceivedTime(LocalDate receivedTime) {
+  public void setReceivedTime(Instant receivedTime) {
     this.receivedTime = receivedTime;
   }
 
@@ -400,11 +403,11 @@ public class Referral extends CmsPersistentObject {
     this.responseDeterminationDate = responseDeterminationDate;
   }
 
-  public LocalDate getResponseDeterminationTime() {
+  public Instant getResponseDeterminationTime() {
     return responseDeterminationTime;
   }
 
-  public void setResponseDeterminationTime(LocalDate responseDeterminationTime) {
+  public void setResponseDeterminationTime(Instant responseDeterminationTime) {
     this.responseDeterminationTime = responseDeterminationTime;
   }
 
