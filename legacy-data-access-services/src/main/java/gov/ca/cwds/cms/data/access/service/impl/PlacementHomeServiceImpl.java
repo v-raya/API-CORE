@@ -109,34 +109,33 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
   private SsaName3Dao ssaName3Dao;
 
   @Override
-  public void runBusinessValidation(PlacementHome entity) throws DroolsException {
+  public void runBusinessValidation(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO) throws DroolsException {
 
     Set<IssueDetails> detailsList = droolsService
-        .validate(entity, PlacementHomeDroolsConfiguration.INSTANCE);
+        .performBusinessRules(placementHomeEntityAwareDTO, PlacementHomeDroolsConfiguration.INSTANCE);
     if (!detailsList.isEmpty()) {
       throw new BusinessValidationException(detailsList);
     }
   }
 
   @Override
-  public PlacementHome create(PlacementHomeEntityAwareDTO parameterObject)
+  public PlacementHome create(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO)
       throws DataAccessServicesException {
     try {
-      final PlacementHome placementHome = parameterObject.getEntity();
-      validateParameters(parameterObject);
-      runBusinessValidation(placementHome);
-      createPlacementHome(parameterObject);
-      createPlacementHomeUc(parameterObject);
-      createCountyOwnership(parameterObject);
+      validateParameters(placementHomeEntityAwareDTO);
+      runBusinessValidation(placementHomeEntityAwareDTO);
+      createPlacementHome(placementHomeEntityAwareDTO);
+      createPlacementHomeUc(placementHomeEntityAwareDTO);
+      createCountyOwnership(placementHomeEntityAwareDTO);
       createExternalInterface();
-      createBackgroundCheck(parameterObject);
-      createEmergencyContactDetail(parameterObject);
-      createPlacementHomeProfile(parameterObject);
-      createSubstituteCareProviders(parameterObject);
-      createOtherAdultsInHome(parameterObject);
-      createOtherChildrenInHome(parameterObject);
-      prepareAddressPhoneticSearchKeywords(parameterObject.getEntity());
-      return parameterObject.getEntity();
+      createBackgroundCheck(placementHomeEntityAwareDTO);
+      createEmergencyContactDetail(placementHomeEntityAwareDTO);
+      createPlacementHomeProfile(placementHomeEntityAwareDTO);
+      createSubstituteCareProviders(placementHomeEntityAwareDTO);
+      createOtherAdultsInHome(placementHomeEntityAwareDTO);
+      createOtherChildrenInHome(placementHomeEntityAwareDTO);
+      prepareAddressPhoneticSearchKeywords(placementHomeEntityAwareDTO.getEntity());
+      return placementHomeEntityAwareDTO.getEntity();
     } catch (DroolsException e) {
       throw new DataAccessServicesException(e);
     }
