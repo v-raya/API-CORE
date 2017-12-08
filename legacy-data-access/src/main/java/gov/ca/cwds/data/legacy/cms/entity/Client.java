@@ -9,6 +9,7 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.HispanicOrigin;
 import gov.ca.cwds.data.legacy.cms.entity.enums.IncapacitatedParentStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.LiterateStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.MilitaryStatus;
+import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
 import gov.ca.cwds.data.legacy.cms.entity.enums.UnableToDetermineReason;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Ethnicity;
@@ -339,7 +340,8 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private Language secondaryLanguage;
 
   @Column(name = "SENSTV_IND", nullable = false, length = 1)
-  private String sensitivityIndicator;
+  @Convert(converter = Sensitivity.SensitivityConverter.class)
+  private Sensitivity sensitivity;
 
   @Type(type = "yes_no")
   @Column(name = "SNTV_HLIND", nullable = false, length = 1)
@@ -647,12 +649,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.secondaryLanguage = secondaryLanguage;
   }
 
-  public String getSensitivityIndicator() {
-    return sensitivityIndicator;
+  public Sensitivity getSensitivity() {
+    return sensitivity;
   }
 
-  public void setSensitivityIndicator(String sensitivityIndicator) {
-    this.sensitivityIndicator = sensitivityIndicator;
+  public void setSensitivity(Sensitivity sensitivity) {
+    this.sensitivity = sensitivity;
   }
 
   public boolean getSensitiveHealthInfoOnFileIndicator() {
