@@ -6,8 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -35,29 +33,4 @@ public class CaseAssignment extends BaseAssignment {
     this.theCase = theCase;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-
-    if (!(o instanceof CaseAssignment)) {
-      return false;
-    }
-
-    CaseAssignment that = (CaseAssignment) o;
-
-    return new EqualsBuilder()
-        .appendSuper(super.equals(o))
-        .append(theCase, that.theCase)
-        .isEquals();
-  }
-
-  @Override
-  public int hashCode() {
-    return new HashCodeBuilder(17, 37)
-        .appendSuper(super.hashCode())
-        .append(theCase)
-        .toHashCode();
-  }
 }

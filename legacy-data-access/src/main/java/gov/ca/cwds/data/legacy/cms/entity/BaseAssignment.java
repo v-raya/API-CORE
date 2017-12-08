@@ -18,8 +18,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -232,55 +230,4 @@ public abstract class BaseAssignment extends CmsPersistentObject {
     this.caseLoad = caseLoad;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-
-    if (!(o instanceof BaseAssignment)) {
-      return false;
-    }
-
-    BaseAssignment that = (BaseAssignment) o;
-
-    return new EqualsBuilder()
-        .appendSuper(super.equals(o))
-        .append(identifier, that.identifier)
-        .append(startDate, that.startDate)
-        .append(startTime, that.startTime)
-        .append(endDate, that.endDate)
-        .append(endTime, that.endTime)
-        .append(establishedForId, that.establishedForId)
-        .append(establishedFor, that.establishedFor)
-        .append(secondaryAssignmentRoleType, that.secondaryAssignmentRoleType)
-        .append(assignmentType, that.assignmentType)
-        .append(weightingNumber, that.weightingNumber)
-        .append(responsibilityDescription, that.responsibilityDescription)
-        .append(county, that.county)
-        .append(fkCaseLoad, that.fkCaseLoad)
-        .append(fkOutOfStateContactParty, that.fkOutOfStateContactParty)
-        .isEquals();
-  }
-
-  @Override
-  public int hashCode() {
-    return new HashCodeBuilder(17, 37)
-        .appendSuper(super.hashCode())
-        .append(identifier)
-        .append(startDate)
-        .append(startTime)
-        .append(endDate)
-        .append(endTime)
-        .append(establishedForId)
-        .append(establishedFor)
-        .append(secondaryAssignmentRoleType)
-        .append(assignmentType)
-        .append(weightingNumber)
-        .append(responsibilityDescription)
-        .append(county)
-        .append(fkCaseLoad)
-        .append(fkOutOfStateContactParty)
-        .toHashCode();
-  }
 }
