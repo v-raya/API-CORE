@@ -15,10 +15,20 @@ public class ApiFileAssistant implements ApiMarker {
 
   private static final long serialVersionUID = 1L;
 
+  /**
+   * Default constructor.
+   */
   public ApiFileAssistant() {
     // no-op
   }
 
+  /**
+   * Convenient method to read a file into a String.
+   * 
+   * @param sourceFile source file
+   * @return result String
+   * @throws IOException on file read error
+   */
   public String readFile(String sourceFile) throws IOException {
     final ByteArrayOutputStream out = new ByteArrayOutputStream();
     IOUtils.copy(this.getClass().getResourceAsStream(sourceFile), out);
@@ -27,29 +37,24 @@ public class ApiFileAssistant implements ApiMarker {
   }
 
   /**
-   * Deter path traversal vulnerabilities.
+   * Avoid path traversal vulnerabilities.
    * 
    * @param loc proposed file location
    * @return file to proposed location
    */
   public File validateFileLocation(String loc) {
-    File ret = null;
+    File ret;
     if (StringUtils.isNotBlank(loc)) {
-      final String cleanLoc =
-          loc.lastIndexOf('/') > -1 ? loc.substring(0, loc.lastIndexOf('/')) : loc;
+      final String cleanLoc = loc.trim();
       if (cleanLoc.equals(FilenameUtils.normalize(cleanLoc))) {
-        ret = new File(cleanLoc);
+        ret = new File(cleanLoc); // NOSONAR
         if (ret.exists()) {
           return ret;
         }
       }
     }
 
-    if (ret != null) {
-      return ret;
-    } else {
-      throw new ApiException("PROHIBITED FILE LOCATION!");
-    }
+    throw new ApiException("PROHIBITED FILE LOCATION!");
   }
 
 }

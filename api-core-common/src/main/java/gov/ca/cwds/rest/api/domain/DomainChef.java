@@ -1,14 +1,15 @@
 package gov.ca.cwds.rest.api.domain;
 
-import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+
 import gov.ca.cwds.rest.api.ApiException;
 
 /**
@@ -90,8 +91,8 @@ public class DomainChef {
    * @return purified, JSON suitable key name
    */
   public static String camelCaseToLowerUnderscore(String in) {
-    final String regex = "([A-Z])";
-    final String replacement = "_$1";
+    String regex = "([A-Z])";
+    String replacement = "_$1";
     return in.replaceAll(regex, replacement).toLowerCase().replaceAll("_$", "");
   }
 
@@ -116,8 +117,7 @@ public class DomainChef {
    */
   public static String cookDate(Date date) {
     if (date != null) {
-      DateFormat df = new SimpleDateFormat(DATE_FORMAT);
-      return df.format(date);
+      return new SimpleDateFormat(DATE_FORMAT).format(date);
     }
     return null;
   }
@@ -128,22 +128,19 @@ public class DomainChef {
    */
   public static String cookTimestamp(Date date) {
     if (date != null) {
-      DateFormat df = new SimpleDateFormat(TIMESTAMP_FORMAT);
-      return df.format(date);
+      return new SimpleDateFormat(TIMESTAMP_FORMAT).format(date);
     }
     return null;
   }
 
   /**
-   * 
    * @param timestamp Timestamp to convert into String.
    * @return Timestamp converted into strict format String
    *         {@link DomainChef#TIMESTAMP_STRICT_FORMAT}
    */
   public static String cookStrictTimestamp(Date timestamp) {
     if (timestamp != null) {
-      DateFormat df = new SimpleDateFormat(TIMESTAMP_STRICT_FORMAT);
-      return df.format(timestamp);
+      return new SimpleDateFormat(TIMESTAMP_STRICT_FORMAT).format(timestamp);
     }
     return null;
   }
@@ -154,8 +151,7 @@ public class DomainChef {
    */
   public static String cookTime(Date date) {
     if (date != null) {
-      DateFormat df = new SimpleDateFormat(TIME_FORMAT);
-      return df.format(date);
+      return new SimpleDateFormat(TIME_FORMAT).format(date);
     }
     return null;
   }
@@ -168,8 +164,7 @@ public class DomainChef {
     String trimDate = StringUtils.trim(date);
     if (StringUtils.isNotEmpty(trimDate)) {
       try {
-        DateFormat df = new SimpleDateFormat(DATE_FORMAT);
-        return df.parse(trimDate);
+        return new SimpleDateFormat(DATE_FORMAT).parse(trimDate);
       } catch (Exception e) {
         throw new ApiException(e);
       }
@@ -185,8 +180,7 @@ public class DomainChef {
     String trimTimestamp = StringUtils.trim(timestamp);
     if (StringUtils.isNotEmpty(trimTimestamp)) {
       try {
-        DateFormat df = new SimpleDateFormat(TIMESTAMP_FORMAT);
-        return df.parse(trimTimestamp);
+        return new SimpleDateFormat(TIMESTAMP_FORMAT).parse(trimTimestamp);
       } catch (Exception e) {
         throw new ApiException(e);
       }
@@ -196,15 +190,14 @@ public class DomainChef {
 
   /**
    * @param timestamp timestamp to convert into Date
-   * @return Date A Date object based on strict timestamot format
+   * @return Date A Date object based on strict timestamp format
    *         {@link DomainChef#TIMESTAMP_STRICT_FORMAT}
    */
   public static Date uncookStrictTimestampString(String timestamp) {
     String trimTimestamp = StringUtils.trim(timestamp);
     if (StringUtils.isNotEmpty(trimTimestamp)) {
       try {
-        DateFormat df = new SimpleDateFormat(TIMESTAMP_STRICT_FORMAT);
-        return df.parse(trimTimestamp);
+        return new SimpleDateFormat(TIMESTAMP_STRICT_FORMAT).parse(trimTimestamp);
       } catch (Exception e) {
         throw new ApiException(e);
       }
@@ -220,8 +213,7 @@ public class DomainChef {
     String trimTimestamp = StringUtils.trim(timestamp);
     if (StringUtils.isNotEmpty(trimTimestamp)) {
       try {
-        DateFormat df = new SimpleDateFormat(TIME_FORMAT);
-        return df.parse(trimTimestamp);
+        return new SimpleDateFormat(TIME_FORMAT).parse(trimTimestamp);
       } catch (Exception e) {
         throw new ApiException(e);
       }
@@ -239,8 +231,7 @@ public class DomainChef {
     String trimTimestamp = StringUtils.trim(timestamp);
     if (StringUtils.isNotEmpty(trimTimestamp)) {
       try {
-        DateFormat df = new SimpleDateFormat(TIMESTAMP_ISO8601_FORMAT);
-        return df.parse(trimTimestamp);
+        return new SimpleDateFormat(TIMESTAMP_ISO8601_FORMAT).parse(trimTimestamp);
       } catch (Exception e) {
         throw new ApiException(e);
       }
@@ -254,8 +245,7 @@ public class DomainChef {
    */
   public static String cookISO8601Timestamp(Date date) {
     if (date != null) {
-      DateFormat df = new SimpleDateFormat(TIMESTAMP_ISO8601_FORMAT);
-      return df.format(date);
+      return new SimpleDateFormat(TIMESTAMP_ISO8601_FORMAT).format(date);
     }
     return null;
   }
@@ -296,20 +286,26 @@ public class DomainChef {
   }
 
   /**
-   * concatenate date and time into single object
+   * Concatenate date and time into single object.
    * 
    * @param date - date object
    * @param time - time object
-   * @return Date object which comibes both date and time
+   * @return Date object which combines both date and time
    */
   public static Date concatenateDateAndTime(Date date, Date time) {
     assert date != null;
-    assert time != null;
+    DateTime combinedDateTime;
     DateTime srcDate = new DateTime(date);
-    DateTime srcTime = new DateTime(time);
-    return new DateTime(srcDate.getYear(), srcDate.getMonthOfYear(), srcDate.getDayOfMonth(),
-        srcTime.getHourOfDay(), srcTime.getMinuteOfHour(), srcTime.getSecondOfMinute(),
-        srcTime.getMillisOfSecond()).toDate();
 
+    if (time == null) {
+      return srcDate.toDate();
+    } else {
+      final DateTime srcTime = new DateTime(time);
+      combinedDateTime = new DateTime(srcDate.getYear(), srcDate.getMonthOfYear(),
+          srcDate.getDayOfMonth(), srcTime.getHourOfDay(), srcTime.getMinuteOfHour(),
+          srcTime.getSecondOfMinute(), srcTime.getMillisOfSecond());
+    }
+    return combinedDateTime.toDate();
   }
+
 }

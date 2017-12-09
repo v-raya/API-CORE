@@ -31,7 +31,7 @@ public class PrimaryKeyResponse implements Response {
 
   @Override
   public ArrayList getMessages() {
-    return null;
+    return new ArrayList<>();
   }
 
 }

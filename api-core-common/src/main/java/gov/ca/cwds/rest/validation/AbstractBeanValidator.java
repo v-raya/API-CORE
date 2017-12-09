@@ -20,21 +20,28 @@ public interface AbstractBeanValidator {
    * @param property object property
    * @return property value
    */
+  @SuppressWarnings("deprecation")
   default String readBeanValue(Object bean, String property) {
     try {
       return BeanUtils.getProperty(bean, property);
     } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       throw new ValidationException(
-          MessageFormat.format("Unable to read '{0}' from bean:{1}", property, bean), e); // NOSONAR
+          MessageFormat.format("Unable to read {0} from bean:{1}", property, bean), e);
     }
   }
 
+  /**
+   * @param bean bean target object
+   * @param property object property
+   * @return property value
+   */
+  @SuppressWarnings("deprecation")
   default Object readBeanPropertyValue(Object bean, String property) {
     try {
       return PropertyUtils.getProperty(bean, property);
     } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       throw new ValidationException(
-          MessageFormat.format("Unable to read '{0}' from bean:{1}", property, bean), e); // NOSONAR
+          MessageFormat.format("Unable to read {0} from bean:{1}", property, bean), e);
     }
   }
 

@@ -5,9 +5,6 @@ import java.lang.annotation.Annotation;
 
 import javax.ws.rs.core.Response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.inject.Inject;
 
 import gov.ca.cwds.rest.api.Request;
@@ -20,18 +17,12 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
  * {@link Annotation} for RESTful resources.
  * 
  * @author CWDS API Team
- * @param
- *        <P>
- *        Primary key type
- * @param
- *        <Q>reQuest type
+ * @param <P> Primary key type
+ * @param <Q> reQuest type
  * @param <S> reSponse type
  */
 public final class TypedServiceBackedResourceDelegate<P extends Serializable, Q extends Request, S extends gov.ca.cwds.rest.api.Response>
     implements TypedResourceDelegate<P, Q> {
-
-  private static final Logger LOGGER =
-      LoggerFactory.getLogger(TypedServiceBackedResourceDelegate.class);
 
   /**
    * The wrapped CRUD service.

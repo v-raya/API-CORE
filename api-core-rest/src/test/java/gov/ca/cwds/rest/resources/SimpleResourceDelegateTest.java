@@ -258,13 +258,8 @@ public class SimpleResourceDelegateTest {
 
   @Test(expected = ServiceException.class)
   public void handleException_Args$Exception() throws Exception {
-    // given
     Exception e = null;
-    // e.g. : given(mocked.called()).willReturn(1);
-    // when
     Response actual = target.handleException(e);
-    // then
-    // e.g. : verify(mocked).called();
     Response expected = Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(null).build();
     // assertThat(actual, is(equalTo(expected)));
   }

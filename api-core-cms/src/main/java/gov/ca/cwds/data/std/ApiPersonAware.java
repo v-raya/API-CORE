@@ -79,4 +79,13 @@ public interface ApiPersonAware extends PersistentObject {
   default String getSoc158SealedClientIndicator() {
     return null;
   }
+
+  /**
+   * Get client index number
+   * 
+   * @return the client index number
+   */
+  default String getClientIndexNumber() {
+    return null;
+  }
 }

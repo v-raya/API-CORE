@@ -12,6 +12,9 @@ import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,9 +35,6 @@ import gov.ca.cwds.data.std.ApiPhoneAware;
 public abstract class BaseReporter extends CmsPersistentObject
     implements ApiPersonAware, ApiAddressAware, ApiMultiplePhonesAware {
 
-  /**
-   * Default serialization version
-   */
   private static final long serialVersionUID = 1L;
 
   @Id
@@ -77,9 +77,11 @@ public abstract class BaseReporter extends CmsPersistentObject
   protected String feedbackRequiredIndicator;
 
   @Column(name = "RPTR_FSTNM")
+  @ColumnTransformer(read = ("trim(RPTR_FSTNM)"))
   protected String firstName;
 
   @Column(name = "RPTR_LSTNM")
+  @ColumnTransformer(read = ("trim(RPTR_LSTNM)"))
   protected String lastName;
 
   @NotNull
@@ -94,9 +96,11 @@ public abstract class BaseReporter extends CmsPersistentObject
   protected BigDecimal messagePhoneNumber;
 
   @Column(name = "MID_INI_NM")
+  @ColumnTransformer(read = ("trim(MID_INI_NM)"))
   protected String middleInitialName;
 
   @Column(name = "NMPRFX_DSC")
+  @ColumnTransformer(read = ("trim(NMPRFX_DSC)"))
   protected String namePrefixDescription;
 
   @Column(name = "PRM_TEL_NO")
@@ -119,6 +123,7 @@ public abstract class BaseReporter extends CmsPersistentObject
   protected String streetNumber;
 
   @Column(name = "SUFX_TLDSC")
+  @ColumnTransformer(read = ("trim(SUFX_TLDSC)"))
   protected String suffixTitleDescription;
 
   @Type(type = "integer")
@@ -452,18 +457,21 @@ public abstract class BaseReporter extends CmsPersistentObject
   @Transient
   public ApiPhoneAware[] getPhones() {
     List<ApiPhoneAware> phones = new ArrayList<>();
-    if (this.primaryPhoneNumber != null && !BigDecimal.ZERO.equals(this.primaryPhoneNumber)) {
+    if (this.primaryPhoneNumber != null
+        && BigDecimal.ZERO.compareTo(this.primaryPhoneNumber) != 0) {
       phones.add(new ReadablePhone(null, this.primaryPhoneNumber.toPlainString(),
           this.primaryPhoneExtensionNumber != null ? this.primaryPhoneExtensionNumber.toString()
               : null,
           null));
     }
 
-    if (this.messagePhoneNumber != null && !BigDecimal.ZERO.equals(this.messagePhoneNumber)) {
-      phones.add(new ReadablePhone(null, this.messagePhoneNumber.toPlainString(),
-          this.messagePhoneExtensionNumber != null ? this.messagePhoneExtensionNumber.toString()
-              : null,
-          ApiPhoneAware.PhoneType.Cell));
+    if (this.messagePhoneNumber != null
+        && BigDecimal.ZERO.compareTo(this.messagePhoneNumber) != 0) {
+      phones
+          .add(new ReadablePhone(null,
+              this.messagePhoneNumber.toPlainString(), this.messagePhoneExtensionNumber != null
+                  ? this.messagePhoneExtensionNumber.toString() : null,
+              ApiPhoneAware.PhoneType.Cell));
     }
 
     return phones.toArray(new ApiPhoneAware[0]);
@@ -477,6 +485,16 @@ public abstract class BaseReporter extends CmsPersistentObject
   @Override
   public Short getStateCd() {
     return stateCodeType;
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

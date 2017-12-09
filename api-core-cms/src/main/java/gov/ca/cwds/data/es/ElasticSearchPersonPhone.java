@@ -13,16 +13,13 @@ import gov.ca.cwds.data.std.ApiPhoneAware;
 import gov.ca.cwds.data.std.ApiPhoneAwareWritable;
 
 /**
- * Simplistic, all String representation of ES person.phone_numbers.
+ * Simplistic, all-String representation of ES person.phone_numbers.
  * 
  * @author CWDS API Team
  */
 public class ElasticSearchPersonPhone extends ApiObjectIdentity
     implements ApiTypedIdentifier<String>, ApiPhoneAwareWritable {
 
-  /**
-   * Default serialization version.
-   */
   private static final long serialVersionUID = 1L;
 
   private String id;
@@ -56,7 +53,7 @@ public class ElasticSearchPersonPhone extends ApiObjectIdentity
   public ElasticSearchPersonPhone(ApiPhoneAware other) {
     if (other != null) {
       if (StringUtils.isNotBlank(other.getPhoneId())) {
-        setId(other.getPhoneId());
+        this.id = other.getPhoneId();
       }
       setPhoneNumber(other.getPhoneNumber());
       setPhoneType(other.getPhoneType());

@@ -1,5 +1,8 @@
 package gov.ca.cwds.data.es;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,6 +11,7 @@ import gov.ca.cwds.data.ApiTypedIdentifier;
 import gov.ca.cwds.data.std.ApiAddressAware;
 import gov.ca.cwds.data.std.ApiAddressAwareWritable;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.cms.SystemCode;
 
 /**
@@ -18,6 +22,8 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCode;
 @SuppressWarnings("serial")
 public class ElasticSearchPersonAddress extends ApiObjectIdentity
     implements ApiTypedIdentifier<String>, ApiAddressAwareWritable {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchPersonAddress.class);
 
   private String id;
 
@@ -71,6 +77,12 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
   @JsonProperty("street_name")
   private String streetName;
 
+  @JsonProperty("effective_start_date")
+  private String effectiveStartDate;
+
+  @JsonProperty("effective_end_date")
+  private String effectiveEndDate;
+
   @JsonProperty("legacy_descriptor")
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
@@ -119,6 +131,9 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
     this.streetNumber = address.getStreetNumber();
     this.unitNumber = address.getApiAdrUnitNumber();
 
+    this.effectiveStartDate = DomainChef.cookDate(address.getClientAddressEffectiveStartDate());
+    this.effectiveEndDate = DomainChef.cookDate(address.getClientAddressEffectiveEndDate());
+
     if (ElasticSearchPerson.systemCodes != null) {
       if (address.getStateCd() != null && address.getStateCd().intValue() != 0) {
         final SystemCode sysCode =
@@ -138,7 +153,7 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
             .getShortDescription();
       }
     } else {
-      ElasticSearchPerson.LOGGER.error("SYSCODE TRANSLATOR NOT SET!!!");
+      LOGGER.error("SYSCODE TRANSLATOR NOT SET!!!");
     }
   }
 
@@ -335,5 +350,21 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
   @SuppressWarnings("javadoc")
   public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
     this.legacyDescriptor = legacyDescriptor;
+  }
+
+  public String getEffectiveStartDate() {
+    return effectiveStartDate;
+  }
+
+  public void setEffectiveStartDate(String effectiveStartDate) {
+    this.effectiveStartDate = effectiveStartDate;
+  }
+
+  public String getEffectiveEndDate() {
+    return effectiveEndDate;
+  }
+
+  public void setEffectiveEndDate(String effectiveEndDate) {
+    this.effectiveEndDate = effectiveEndDate;
   }
 }

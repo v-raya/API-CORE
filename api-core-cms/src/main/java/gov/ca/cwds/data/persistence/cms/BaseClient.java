@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,9 +35,6 @@ import gov.ca.cwds.data.std.ApiPersonAware;
 public abstract class BaseClient extends CmsPersistentObject
     implements ApiPersonAware, ApiMultipleLanguagesAware, AccessLimitationAware {
 
-  /**
-   * Base serialization version. Increment by class version.
-   */
   private static final long serialVersionUID = 1L;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BaseClient.class);
@@ -85,12 +83,15 @@ public abstract class BaseClient extends CmsPersistentObject
   protected String commentDescription;
 
   @Column(name = "COM_FST_NM")
+  @ColumnTransformer(read = ("trim(COM_FST_NM)"))
   protected String commonFirstName;
 
   @Column(name = "COM_LST_NM")
+  @ColumnTransformer(read = ("trim(COM_LST_NM)"))
   protected String commonLastName;
 
   @Column(name = "COM_MID_NM")
+  @ColumnTransformer(read = ("trim(COM_MID_NM)"))
   protected String commonMiddleName;
 
   @Type(type = "date")
@@ -205,6 +206,7 @@ public abstract class BaseClient extends CmsPersistentObject
   protected Date motherParentalRightTermDate;
 
   @Column(name = "NMPRFX_DSC")
+  @ColumnTransformer(read = ("trim(NMPRFX_DSC)"))
   protected String namePrefixDescription;
 
   @SystemCodeSerializer(logical = true, description = true)
@@ -253,8 +255,8 @@ public abstract class BaseClient extends CmsPersistentObject
   protected String sensitiveHlthInfoOnFileIndicator;
 
   /**
-   * WARNING: despite the name "indicator", usually referring to Y/N, production holds holds N/R/S.
-   * I guess that S = sensitive and R = restricted.
+   * NOTE: despite the name "indicator", usually referring to Y/N, production holds holds N/R/S. I
+   * guess that S = sensitive and R = restricted.
    */
   @Column(name = "SENSTV_IND")
   protected String sensitivityIndicator;
@@ -272,6 +274,7 @@ public abstract class BaseClient extends CmsPersistentObject
   protected String socialSecurityNumber;
 
   @Column(name = "SUFX_TLDSC")
+  @ColumnTransformer(read = ("trim(SUFX_TLDSC)"))
   protected String suffixTitleDescription;
 
   @Column(name = "TRBA_CLT_B")
@@ -404,6 +407,7 @@ public abstract class BaseClient extends CmsPersistentObject
   /**
    * @return the clientIndexNumber
    */
+  @Override
   public String getClientIndexNumber() {
     return StringUtils.trimToEmpty(clientIndexNumber);
   }
@@ -1157,4 +1161,5 @@ public abstract class BaseClient extends CmsPersistentObject
   public String getLimitedAccessCode() {
     return getSensitivityIndicator();
   }
+
 }
