@@ -20,6 +20,9 @@ public class ElasticSearchPersonAka extends ApiObjectIdentity {
    */
   private static final long serialVersionUID = 1L;
 
+  @JsonProperty("id")
+  private String id;
+
   @JsonProperty("first_name")
   private String firstName;
 
@@ -113,4 +116,13 @@ public class ElasticSearchPersonAka extends ApiObjectIdentity {
     this.suffix = suffix;
   }
 
+  @SuppressWarnings("javadoc")
+  public String getId() {
+    return id;
+  }
+
+  @SuppressWarnings("javadoc")
+  public void setId(String id) {
+    this.id = id;
+  }
 }

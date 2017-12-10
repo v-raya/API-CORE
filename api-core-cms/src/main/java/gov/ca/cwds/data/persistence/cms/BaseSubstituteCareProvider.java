@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -72,6 +73,7 @@ public abstract class BaseSubstituteCareProvider extends CmsPersistentObject
   protected String ethUnableToDetReasonCode;
 
   @Column(name = "FIRST_NM")
+  @ColumnTransformer(read = ("trim(FIRST_NM)"))
   protected String firstName;
 
   @Column(name = "FRG_ADRT_B")
@@ -93,6 +95,7 @@ public abstract class BaseSubstituteCareProvider extends CmsPersistentObject
   protected Short indianTribeType;
 
   @Column(name = "LAST_NM")
+  @ColumnTransformer(read = ("trim(LAST_NM)"))
   protected String lastName;
 
   @Column(name = "LISOWNIND")
@@ -108,9 +111,11 @@ public abstract class BaseSubstituteCareProvider extends CmsPersistentObject
   protected Short maritalStatusType;
 
   @Column(name = "MID_INI_NM")
+  @ColumnTransformer(read = ("trim(MID_INI_NM)"))
   protected String middleInitialName;
 
   @Column(name = "NMPRFX_DSC")
+  @ColumnTransformer(read = ("trim(NMPRFX_DSC)"))
   protected String namePrefixDescription;
 
   @Column(name = "PASSBC_CD")
@@ -147,6 +152,7 @@ public abstract class BaseSubstituteCareProvider extends CmsPersistentObject
   protected String streetNumber;
 
   @Column(name = "SUFX_TLDSC")
+  @ColumnTransformer(read = ("trim(SUFX_TLDSC)"))
   protected String suffixTitleDescription;
 
   @Type(type = "integer")

@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.es;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.MessageFormat;
@@ -329,7 +330,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
   }
 
-  static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchPerson.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchPerson.class);
 
   static gov.ca.cwds.rest.api.domain.cms.SystemCodeCache systemCodes =
       gov.ca.cwds.rest.api.domain.cms.SystemCodeCache.global();
@@ -359,6 +360,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonIgnore
   private transient boolean upsert = false;
 
+  @JsonProperty("index_update_time")
+  private String indexUpdateTime;
+
   @JsonProperty("first_name")
   private String firstName;
 
@@ -379,6 +383,12 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
   @JsonProperty("ssn")
   private String ssn;
+
+  @JsonProperty("client_index_number")
+  private String indexNumber;
+
+  @JsonProperty("open_case_id")
+  private String openCaseId;
 
   @JsonProperty("type")
   private transient String type;
@@ -544,7 +554,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       }
     }
 
-    setDateOfBirth(birthDate);
+    this.dateOfBirth = trim(birthDate);
     this.ssn = trim(ssn);
 
     if (addresses != null && !addresses.isEmpty()) {
@@ -588,6 +598,17 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @SafeVarargs
   public static <V extends Enum<V>> Set<V> setOf(Class<V> enumClass, V... elem) {
     return Arrays.stream(elem).collect(Collectors.toCollection(() -> EnumSet.noneOf(enumClass)));
+  }
+
+  /**
+   * Read an ElasticSearch document into our ES person object.
+   * 
+   * @param json document String
+   * @return populated ES person object
+   * @throws IOException if unable to read
+   */
+  public static ElasticSearchPerson readPerson(String json) throws IOException {
+    return ElasticSearchPerson.MAPPER.readValue(json, ElasticSearchPerson.class);
   }
 
   /**
@@ -677,6 +698,39 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     return ElasticSearchPerson.systemCodes;
   }
 
+  protected static void handleHighlights(final SearchHit hit, final ElasticSearchPerson ret) {
+    // ElasticSearch Java API returns map of highlighted fields
+    final Map<String, HighlightField> h = hit.getHighlightFields();
+    final Map<String, String> highlightValues = new LinkedHashMap<>();
+
+    // Go through the HighlightFields returned from ES deal with fragments and create map.
+    for (final Map.Entry<String, HighlightField> entry : h.entrySet()) {
+      String highlightValue;
+      final HighlightField highlightField = entry.getValue();
+      final Text[] fragments = highlightField.fragments();
+      if (fragments != null && fragments.length != 0) {
+        final String[] texts = new String[fragments.length];
+        for (int i = 0; i < fragments.length; i++) {
+          texts[i] = fragments[i].string().trim();
+        }
+        highlightValue = StringUtils.join(texts, "...");
+        highlightValues.put(DomainChef.camelCaseToLowerUnderscore(highlightField.getName()),
+            highlightValue);
+      }
+    }
+
+    // Update this ElasticSearchPerson property with the highlighted text.
+    String highLights = "";
+    try {
+      highLights = MAPPER.writeValueAsString(highlightValues);
+    } catch (JsonProcessingException e) {
+      throw new ServiceException("ElasticSearch Person error: Failed serialize map to JSON "
+          + ret.getSourceType() + ", doc id=" + ret.getId(), e);
+    }
+    ret.setHighlightFields(highLights);
+    ret.setHighlights(highlightValues);
+  }
+
   /**
    * Produce an ElasticSearchPerson domain instance from native ElasticSearch {@link SearchHit}.
    * Parse JSON results and populate associated fields. ElasticSearch Java API returns an overly
@@ -717,63 +771,26 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
         // DELIVERED: STORY #137216799:
         // Tech debt: reverse compatibility with existing ElasticSearch documents.
         if (ret.getSourceType().startsWith("gov.ca.cwds.rest.api.")) {
-          LOGGER.warn("LEGACY CLASS IN ELASTICSEARCH! class={}, id={}", ret.getSourceType(),
-              ret.getId());
+          LOGGER.warn("LEGACY CLASS IN ES! class={}, id={}", ret.getSourceType(), ret.getId());
         }
 
-        if (!StringUtils.isBlank(ret.getSourceJson())) {
-          // Remove excess whitespace.
-          // No job should store excess whitespace in ElasticSearch!
-          final String json = ret.getSourceJson().replaceAll("\\s+\",", "\",");
+        // Remove excess whitespace.
+        // No job should store excess whitespace in ElasticSearch!
+        final String json = ret.getSourceJson().replaceAll("\\s+\",", "\",");
 
-          // Dynamically instantiate the domain class specified by "type" and load from JSON.
-          // Note: When running in an application server, the app server's root classloader may not
-          // know of our domain/persistence class, but the current thread's classloader should.
-          final Object obj = MAPPER.readValue(json, Class.forName(ret.getSourceType(), false,
-              Thread.currentThread().getContextClassLoader()));
-
-          ret.sourceObj = obj;
-        }
-
-      } catch (ClassNotFoundException ce) {
-        throw new ServiceException("ElasticSearch Person error: Failed to instantiate class "
-            + ret.getSourceType() + ", ES person id=" + ret.getId(), ce);
+        // Dynamically instantiate the domain class specified by "type" and load from JSON.
+        // Note: When running in an application server, the app server's root classloader may not
+        // know of our domain/persistence class, but the current thread's classloader should.
+        final Object obj = MAPPER.readValue(json, Class.forName(ret.getSourceType(), false,
+            Thread.currentThread().getContextClassLoader()));
+        ret.sourceObj = obj;
+        handleHighlights(hit, ret);
       } catch (Exception e) {
         throw new ServiceException(
             "ElasticSearch Person error: " + e.getMessage() + ", ES person id=" + ret.getId(), e);
       }
     }
 
-    // ElasticSearch Java API returns map of highlighted fields
-    final Map<String, HighlightField> h = hit.getHighlightFields();
-    final Map<String, String> highlightValues = new LinkedHashMap<>();
-
-    // Go through the HighlightFields returned from ES deal with fragments and create map.
-    for (final Map.Entry<String, HighlightField> entry : h.entrySet()) {
-      String highlightValue;
-      final HighlightField highlightField = entry.getValue();
-      final Text[] fragments = highlightField.fragments();
-      if (fragments != null && fragments.length != 0) {
-        final String[] texts = new String[fragments.length];
-        for (int i = 0; i < fragments.length; i++) {
-          texts[i] = fragments[i].string().trim();
-        }
-        highlightValue = StringUtils.join(texts, "...");
-        highlightValues.put(DomainChef.camelCaseToLowerUnderscore(highlightField.getName()),
-            highlightValue);
-      }
-    }
-
-    // Update this ElasticSearchPerson property with the highlighted text.
-    String highLights = "";
-    try {
-      highLights = MAPPER.writeValueAsString(highlightValues);
-    } catch (JsonProcessingException e) {
-      throw new ServiceException("ElasticSearch Person error: Failed serialize map to JSON "
-          + ret.getSourceType() + ", ES person id=" + ret.getId(), e);
-    }
-    ret.setHighlightFields(highLights);
-    ret.setHighlights(highlightValues);
     return ret;
   }
 
@@ -822,6 +839,24 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonIgnore
   public Object getSourceObj() {
     return sourceObj;
+  }
+
+  /**
+   * Get time stamp of last update to this document
+   * 
+   * @return Time stamp of last update to this document
+   */
+  public String getIndexUpdateTime() {
+    return indexUpdateTime;
+  }
+
+  /**
+   * Set time stamp of last update to this document
+   * 
+   * @param indexUpdateTime Time stamp of last update to this document
+   */
+  public void setIndexUpdateTime(String indexUpdateTime) {
+    this.indexUpdateTime = indexUpdateTime;
   }
 
   /**
@@ -903,47 +938,47 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   /**
    * Getter for searchable date of birth.
    *
-   * @return Searchable date of birth
+   * @return searchable date of birth
    */
   @JsonProperty("searchable_date_of_birth")
   public String[] getSearchableDateOfBirth() {
     String[] searchableDob = null;
-    if (!StringUtils.isBlank(this.dateOfBirth)) {
+    if (StringUtils.isNotBlank(this.dateOfBirth)) {
       List<String> dobValues = new ArrayList<>();
       Date date = DomainChef.uncookDateString(this.dateOfBirth);
 
-      // With zeros, e.g) 01/09/1995
+      // With zeros, e.g. 01/09/1995
       DateFormat df = new SimpleDateFormat("MMddyyyy");
       String mmddyyyyDob = df.format(date);
       dobValues.add(mmddyyyyDob);
 
-      // Month and Year only, e.g) 09/1995
+      // Month and Year only, e.g. 09/1995
       df = new SimpleDateFormat("MMyyyy");
       String mmyyyyDob = df.format(date);
       dobValues.add(mmyyyyDob);
 
-      // Year only, e.g) 1995
+      // Year only, e.g. 1995
       df = new SimpleDateFormat("yyyy");
       String yyyyDob = df.format(date);
       dobValues.add(yyyyDob);
 
-      // Month and Day, e.g) 01/09
+      // Month and Day, e.g. 01/09
       df = new SimpleDateFormat("MMdd");
       String mmddDob = df.format(date);
       dobValues.add(mmddDob);
 
-      // Remove leading zeros, e.g) 1/9/1995
+      // Remove leading zeros, e.g. 1/9/1995
       df = new SimpleDateFormat("Mdyyyy");
       String mdyyyyDob = df.format(date);
       if (!mmddyyyyDob.equals(mdyyyyDob)) {
         dobValues.add(mdyyyyDob);
 
-        // Month and year only without zeros, e.g) 9/1995
+        // Month and year only without zeros, e.g. 9/1995
         df = new SimpleDateFormat("Myyyy");
         String myyyyDob = df.format(date);
         dobValues.add(myyyyDob);
 
-        // Month and Day without zeros, e.g) 1/9
+        // Month and Day without zeros, e.g. 1/9
         df = new SimpleDateFormat("Md");
         String mdDob = df.format(date);
         dobValues.add(mdDob);
@@ -1052,6 +1087,42 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   }
 
   /**
+   * Get client index number
+   * 
+   * @return The client index number
+   */
+  public String getIndexNumber() {
+    return indexNumber;
+  }
+
+  /**
+   * Set the clien index number
+   * 
+   * @param indexNumber The client index number
+   */
+  public void setIndexNumber(String indexNumber) {
+    this.indexNumber = indexNumber;
+  }
+
+  /**
+   * Get client's open case id
+   * 
+   * @return Opne case id
+   */
+  public String getOpenCaseId() {
+    return openCaseId;
+  }
+
+  /**
+   * Set client's open case id
+   * 
+   * @param openCaseId Open case id
+   */
+  public void setOpenCaseId(String openCaseId) {
+    this.openCaseId = openCaseId;
+  }
+
+  /**
    * Getter for source.
    * 
    * @return source object JSON
@@ -1131,9 +1202,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     String ret = "";
 
     try {
-      ret = ElasticSearchPerson.MAPPER
-          // .writerWithDefaultPrettyPrinter()
-          .writeValueAsString(this);
+      ret = ElasticSearchPerson.MAPPER.writeValueAsString(this);
     } catch (JsonProcessingException e) {
       final String msg = MessageFormat.format("UNABLE TO SERIALIZE JSON!! {}", e.getMessage());
       LOGGER.error(msg, e);

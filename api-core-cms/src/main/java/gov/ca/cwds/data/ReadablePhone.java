@@ -2,6 +2,9 @@ package gov.ca.cwds.data;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -65,48 +68,12 @@ public final class ReadablePhone implements ApiPhoneAware, Serializable {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((phoneId == null) ? 0 : phoneId.hashCode());
-    result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
-    result =
-        prime * result + ((phoneNumberExtension == null) ? 0 : phoneNumberExtension.hashCode());
-    result = prime * result + ((phoneType == null) ? 0 : phoneType.hashCode());
-    return result;
+    return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    ReadablePhone other = (ReadablePhone) obj;
-
-    if (phoneId == null) {
-      if (other.phoneId != null)
-        return false;
-    } else if (!phoneId.equals(other.phoneId))
-      return false;
-
-    if (phoneNumber == null) {
-      if (other.phoneNumber != null)
-        return false;
-    } else if (!phoneNumber.equals(other.phoneNumber))
-      return false;
-
-    if (phoneNumberExtension == null) {
-      if (other.phoneNumberExtension != null)
-        return false;
-    } else if (!phoneNumberExtension.equals(other.phoneNumberExtension))
-      return false;
-
-    if (phoneType != other.phoneType)
-      return false;
-
-    return true;
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

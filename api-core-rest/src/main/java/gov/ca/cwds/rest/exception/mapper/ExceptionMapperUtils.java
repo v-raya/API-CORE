@@ -22,6 +22,10 @@ import gov.ca.cwds.rest.exception.IssueType;
  */
 public class ExceptionMapperUtils {
 
+  private ExceptionMapperUtils() {
+    // statics only
+  }
+
   /**
    * Create a generic exception response
    * 

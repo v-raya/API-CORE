@@ -188,6 +188,13 @@ public class SystemCode extends ReportingDomain implements Response {
         otherCd, shortDescription, logicalId, thirdId, foreignKeyMetaTable, longDescription);
   }
 
+  public SystemCodeDescriptor getSystemCodeDescriptor() {
+    SystemCodeDescriptor desc = new SystemCodeDescriptor();
+    desc.setId(getSystemId());
+    desc.setDescription(getShortDescription());
+    return desc;
+  }
+
   /*
    * (non-Javadoc)
    * 

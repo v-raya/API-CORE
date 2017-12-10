@@ -35,6 +35,16 @@ public class WebSecurityFilter implements Filter {
     this.webSecurityConfiguration = webSecurityConfiguration;
   }
 
+  protected void handleSecurityHeaders(final HttpServletResponse httpResponse,
+      final Map<String, String> securityHeaders) {
+    for (String headerName : securityHeaders.keySet()) {
+      String headerValue = securityHeaders.get(headerName);
+      if (!Strings.isNullOrEmpty(headerValue)) {
+        httpResponse.setHeader(headerName, headerValue);
+      }
+    }
+  }
+
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
@@ -43,14 +53,8 @@ public class WebSecurityFilter implements Filter {
       HttpServletResponse httpResponse = (HttpServletResponse) response;
       Map<String, String> securityHeaders =
           this.webSecurityConfiguration.getHttpResponseSecurityHeaders();
-
       if (securityHeaders != null) {
-        for (String headerName : securityHeaders.keySet()) {
-          String headerValue = securityHeaders.get(headerName);
-          if (!Strings.isNullOrEmpty(headerValue)) {
-            httpResponse.setHeader(headerName, headerValue);
-          }
-        }
+        handleSecurityHeaders(httpResponse, securityHeaders);
       }
     }
 

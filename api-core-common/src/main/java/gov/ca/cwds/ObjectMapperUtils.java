@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 
 /**
  * Static functions for ObjectMapper creation and configuration.
@@ -66,6 +67,7 @@ public class ObjectMapperUtils {
     objectMapper.getSerializationConfig().with(fmt);
     objectMapper.setTimeZone(tz);
     objectMapper.getSerializationConfig().with(tz);
+    objectMapper.registerModule(new JodaModule());
   }
 
   private ObjectMapperUtils() { // NOSONAR

@@ -3,12 +3,14 @@
  */
 package gov.ca.cwds.rest.resources;
 
-import gov.ca.cwds.rest.api.Request;
 import java.util.Set;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
 import javax.validation.Validator;
+
+import gov.ca.cwds.rest.api.Request;
 
 /**
  * Utility class. Validates parameter keys and API {@link Request} objects.
@@ -20,7 +22,7 @@ import javax.validation.Validator;
  * 
  * @author CWDS API Team
  */
-public final class ResourceParamValidator {
+public class ResourceParamValidator {
 
   /**
    * Utility class. Default constructor intentionally hidden.
@@ -33,12 +35,12 @@ public final class ResourceParamValidator {
    * Validate an incoming object, such as an API {@link Request} or key.
    * 
    * @param <T> Object type, typically extends
-   * @param obj Object to validate
+   * @param t Object to validate
    * @throws ConstraintViolationException if the key fails validation
    */
-  public static final <T> void validate(T obj) throws ConstraintViolationException {
+  public static final <T> void validate(T t) throws ConstraintViolationException {
     final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-    final Set<ConstraintViolation<T>> violations = validator.validate(obj);
+    final Set<ConstraintViolation<T>> violations = validator.validate(t);
     if (!violations.isEmpty()) {
       throw new ConstraintViolationException(violations);
     }
