@@ -13,7 +13,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public abstract class ApiObjectIdentity implements ApiMarker {
 
-  private static final String[] EXCLUDED_FIELDS = new String[] {"identifier"};
+  private static final String[] EXCLUDED_FIELDS = new String[] {"identifier", "lastUpdatedId", "lastUpdatedTime"};
 
   /** Default serialization. */
   private static final long serialVersionUID = 1L;
