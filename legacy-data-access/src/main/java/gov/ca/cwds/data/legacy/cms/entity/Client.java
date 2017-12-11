@@ -25,6 +25,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -48,33 +49,34 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
 
-/**
- * @author CWDS CALS API Team
- */
+/** @author CWDS CALS API Team */
 @NamedQuery(
-    name = "Client.find",
-    query = "SELECT c FROM Client c"
-        + " JOIN c.placementEpisodes pe"
-        + " JOIN pe.outOfHomePlacements ohp"
-        + " JOIN ohp.placementHome ph"
-        + " WHERE ph.licenseNo = :licenseNumber AND c.identifier = :childId"
+  name = "Client.find",
+  query =
+      "SELECT c FROM Client c"
+          + " JOIN c.placementEpisodes pe"
+          + " JOIN pe.outOfHomePlacements ohp"
+          + " JOIN ohp.placementHome ph"
+          + " WHERE ph.licenseNo = :licenseNumber AND c.identifier = :childId"
 )
 @NamedQuery(
-    name = "Client.findAll",
-    query = "SELECT c FROM Client c" +
-        " JOIN c.placementEpisodes pe" +
-        " JOIN pe.outOfHomePlacements ohp" +
-        " JOIN ohp.placementHome ph" +
-        " WHERE ph.licenseNo = :licenseNumber" +
-        " ORDER BY c.identifier "
+  name = "Client.findAll",
+  query =
+      "SELECT c FROM Client c"
+          + " JOIN c.placementEpisodes pe"
+          + " JOIN pe.outOfHomePlacements ohp"
+          + " JOIN ohp.placementHome ph"
+          + " WHERE ph.licenseNo = :licenseNumber"
+          + " ORDER BY c.identifier "
 )
 @NamedQuery(
-    name = "Client.findByFacilityId",
-    query = "SELECT c FROM Client c" +
-        " JOIN c.placementEpisodes pe" +
-        " JOIN pe.outOfHomePlacements ohp" +
-        " JOIN ohp.placementHome ph" +
-        " WHERE ph.id = :facilityId"
+  name = "Client.findByFacilityId",
+  query =
+      "SELECT c FROM Client c"
+          + " JOIN c.placementEpisodes pe"
+          + " JOIN pe.outOfHomePlacements ohp"
+          + " JOIN ohp.placementHome ph"
+          + " WHERE ph.id = :facilityId"
 )
 @SuppressWarnings({"squid:S3437", "squid:S2160"})
 @Entity
@@ -109,14 +111,24 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "B_CNTRY_C", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(
+    name = "B_CNTRY_C",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private Country birthCountry;
 
   @NotNull
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "B_STATE_C", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(
+    name = "B_STATE_C",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private State birthState;
 
   @Column(name = "BIRTH_CITY", nullable = false, length = 35)
@@ -180,7 +192,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "D_STATE_C", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(
+    name = "D_STATE_C",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private State driverLicenseState;
 
   @Column(name = "DEATH_DT")
@@ -245,14 +262,24 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "I_CNTRY_C", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(
+    name = "I_CNTRY_C",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private Country immigrationCountry;
 
   @NotNull
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "IMGT_STC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(
+    name = "IMGT_STC",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private ImmigrationStatus immigrationStatusType;
 
   @Column(name = "INCAPC_CD", nullable = false, length = 2)
@@ -280,7 +307,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "MRTL_STC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(
+    name = "MRTL_STC",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private MaritalStatus maritalStatus;
 
   @Column(name = "MTERM_DT")
@@ -290,7 +322,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "NAME_TPC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(
+    name = "NAME_TPC",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private NameType nameType;
 
   @Column(name = "NMPRFX_DSC", nullable = false, length = 6)
@@ -305,14 +342,24 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "P_ETHNCTYC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(
+    name = "P_ETHNCTYC",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private Ethnicity primaryEthnicity;
 
   @NotNull
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "P_LANG_TPC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(
+    name = "P_LANG_TPC",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private Language primaryLanguage;
 
   @Column(name = "POTH_DESC", nullable = false, length = 25)
@@ -331,14 +378,24 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "RLGN_TPC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(
+    name = "RLGN_TPC",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private Religion religionType;
 
   @NotNull
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "S_LANG_TC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(
+    name = "S_LANG_TC",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private Language secondaryLanguage;
 
   @Column(name = "SENSTV_IND", nullable = false, length = 1)
@@ -385,6 +442,44 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Column(name = "ZIPPY_IND", nullable = false, length = 1)
   private boolean zippyCreatedIndicator;
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    Client client = (Client) o;
+    return Objects.equals(birthCountry, client.birthCountry)
+        && Objects.equals(birthState, client.birthState)
+        && Objects.equals(birthCity, client.birthCity)
+        && Objects.equals(birthDate, client.birthDate)
+        && Objects.equals(birthFacilityName, client.birthFacilityName)
+        && Objects.equals(commonFirstName, client.commonFirstName)
+        && Objects.equals(commonLastName, client.commonLastName)
+        && Objects.equals(commonMiddleName, client.commonMiddleName)
+        && Objects.equals(emailAddress, client.emailAddress);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        super.hashCode(),
+        birthCountry,
+        birthState,
+        birthCity,
+        birthDate,
+        birthFacilityName,
+        commonFirstName,
+        commonLastName,
+        commonMiddleName,
+        emailAddress);
+  }
+
   public String getIdentifier() {
     return identifier;
   }
@@ -417,7 +512,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.birthDate = birthDate;
   }
 
-
   public String getBirthFacilityName() {
     return birthFacilityName;
   }
@@ -433,7 +527,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setBirthState(State birthState) {
     this.birthState = birthState;
   }
-
 
   public Country getBirthCountry() {
     return birthCountry;
@@ -458,7 +551,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setCommonFirstName(String commonFirstName) {
     this.commonFirstName = commonFirstName;
   }
-
 
   public String getCommonLastName() {
     return commonLastName;
@@ -507,7 +599,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setDeathDate(LocalDate deathDate) {
     this.deathDate = deathDate;
   }
-
 
   public String getDeathReasonText() {
     return deathReasonText;
@@ -805,7 +896,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.birthCity = birthCity;
   }
 
-
   public String getHealthSummaryText() {
     return healthSummaryText;
   }
@@ -887,18 +977,13 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.emailAddress = emailAddress;
   }
 
-  /**
-   * @return adjudicatedDelinquentIndicator (Boolean value or null)
-   */
+  /** @return adjudicatedDelinquentIndicator (Boolean value or null) */
   @SuppressWarnings("squid:S2447")
   public Boolean getAdjudicatedDelinquentIndicator() {
     return adjudicatedDelinquentIndicator;
   }
 
-  /**
-   *
-   * @param adjudicatedDelinquentIndicator (may be null)
-   */
+  /** @param adjudicatedDelinquentIndicator (may be null) */
   public void setAdjudicatedDelinquentIndicator(Boolean adjudicatedDelinquentIndicator) {
     this.adjudicatedDelinquentIndicator = adjudicatedDelinquentIndicator;
   }
@@ -907,7 +992,8 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     return ethnicityUnableToDetermineReason;
   }
 
-  public void setEthnicityUnableToDetermineReason(UnableToDetermineReason ethnicityUnableToDetermineReason) {
+  public void setEthnicityUnableToDetermineReason(
+      UnableToDetermineReason ethnicityUnableToDetermineReason) {
     this.ethnicityUnableToDetermineReason = ethnicityUnableToDetermineReason;
   }
 
@@ -915,7 +1001,8 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     return hispanicUnableToDetermineReason;
   }
 
-  public void setHispanicUnableToDetermineReason(UnableToDetermineReason hispanicUnableToDetermineReason) {
+  public void setHispanicUnableToDetermineReason(
+      UnableToDetermineReason hispanicUnableToDetermineReason) {
     this.hispanicUnableToDetermineReason = hispanicUnableToDetermineReason;
   }
 
