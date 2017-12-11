@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.std;
 
+import java.util.Date;
+
 /**
  * Interface defines naming standard methods for persistence classes that represent an Address.
  * Allows DAO and service classes to operate on Address-aware objects without knowledge of their
@@ -110,6 +112,24 @@ public interface ApiAddressAware extends ApiMarker {
    * @return optional unit type
    */
   default Short getApiAdrUnitType() {
+    return null;
+  }
+
+  /**
+   * Getter for optional client address start date.
+   * 
+   * @return optional client address start date
+   */
+  default Date getClientAddressEffectiveStartDate() {
+    return null;
+  }
+
+  /**
+   * Getter for optional client address end date.
+   * 
+   * @return optional client address end date
+   */
+  default Date getClientAddressEffectiveEndDate() {
     return null;
   }
 

@@ -8,12 +8,13 @@ import java.util.Date;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.rest.api.domain.DomainChef;
-import gov.ca.cwds.rest.services.ServiceException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
@@ -75,11 +76,7 @@ public final class JavaKeyCmdLine {
     }
 
     public String regenerate() {
-      try {
-        return generateKey(staffId, date);
-      } catch (IOException e) {
-        throw new ServiceException("REGENERATE FAILED! staffId: " + staffId + ", date: " + date, e);
-      }
+      return generateKey(staffId, date);
     }
 
     public boolean validate() {
@@ -95,6 +92,16 @@ public final class JavaKeyCmdLine {
       return newKey;
     }
 
+    @Override
+    public int hashCode() {
+      return HashCodeBuilder.reflectionHashCode(this, false);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      return EqualsBuilder.reflectionEquals(this, obj, false);
+    }
+
   }
 
   private void massTest(String fileNm) throws IOException {
@@ -107,7 +114,7 @@ public final class JavaKeyCmdLine {
     }
   }
 
-  protected static String generateKey(String staffId, Date ts) throws IOException {
+  protected static String generateKey(String staffId, Date ts) {
     return CmsKeyIdGenerator.generate(staffId, ts);
   }
 
@@ -134,8 +141,8 @@ public final class JavaKeyCmdLine {
       if (StringUtils.isNotBlank(fileNm)) {
         run.massTest(fileNm);
       } else {
-        final String key = run.generateKey(staffId, ts);
-        LOGGER.info("gen: staff: {}, timestamp: {}, key: {}", staffId, ts, key);
+        LOGGER.info("gen: staff: {}, timestamp: {}, key: {}", staffId, ts,
+            run.generateKey(staffId, ts));
       }
     } catch (Exception e) {
       LOGGER.error("OOPS!", e);

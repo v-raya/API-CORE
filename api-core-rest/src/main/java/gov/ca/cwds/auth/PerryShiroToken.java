@@ -43,12 +43,7 @@ public class PerryShiroToken implements AuthenticationToken {
     }
 
     PerryShiroToken that = (PerryShiroToken) o;
-
-    if (!token.equals(that.token)) {
-      return false;
-    }
-
-    return true;
+    return token.equals(that.token);
   }
 
   @Override

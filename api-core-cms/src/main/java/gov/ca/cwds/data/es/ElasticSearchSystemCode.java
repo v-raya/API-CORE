@@ -24,7 +24,9 @@ public class ElasticSearchSystemCode extends ApiObjectIdentity
   /**
    * Default no-arg constructor
    */
-  public ElasticSearchSystemCode() {}
+  public ElasticSearchSystemCode() {
+    // Default ctor
+  }
 
   /**
    * Get id

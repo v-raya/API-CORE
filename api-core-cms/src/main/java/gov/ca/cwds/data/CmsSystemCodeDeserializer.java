@@ -37,9 +37,6 @@ import com.fasterxml.jackson.databind.node.IntNode;
  */
 public class CmsSystemCodeDeserializer extends StdDeserializer<Short> {
 
-  /**
-   * Base serialization version. Increment by class change.
-   */
   private static final long serialVersionUID = 1L;
 
   /**
@@ -76,15 +73,14 @@ public class CmsSystemCodeDeserializer extends StdDeserializer<Short> {
    * <pre>
    * "primaryLanguageType": 1274,
    * </pre>
-   * 
    */
   @Override
   public Short deserialize(final JsonParser jp, final DeserializationContext ctxt)
       throws IOException, JsonProcessingException {
     Short sysId = null;
     final JsonNode node = jp.getCodec().readTree(jp);
-
     final IntNode sn = (IntNode) node.get("sys_id");
+
     if (sn != null) {
       sysId = sn.numberValue().shortValue();
     } else if (node instanceof IntNode) {

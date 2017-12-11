@@ -16,7 +16,7 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- * Checks to see that the value is in a valid date format.
+ * Checks whether the value is a valid date format and in the past.
  */
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)

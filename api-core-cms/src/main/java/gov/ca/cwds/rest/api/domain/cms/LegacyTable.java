@@ -47,7 +47,11 @@ public enum LegacyTable {
 
   ADDRESS("ADDRS_T", "Address"),
 
-  SAFETY_ALERT("SAF_ALRT", "Safety Alert");
+  SAFETY_ALERT("SAF_ALRT", "Safety Alert"),
+
+  REFERRAL_CLIENT("REFR_CLT", "Referral Client"),
+
+  CLIENT_ADDRESS("CL_ADDRT", "Client Address");
 
   //
   // CHECKSTYLE:ON

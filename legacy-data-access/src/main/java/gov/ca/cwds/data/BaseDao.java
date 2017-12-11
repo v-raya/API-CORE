@@ -6,7 +6,7 @@ import java.util.List;
 import gov.ca.cwds.data.persistence.PersistentObject;
 
 /**
- * Interface with some common DAO functions
+ * Interface for common DAO functions.
  * 
  * @author CWDS API Team
  * @param <T> persistence class type

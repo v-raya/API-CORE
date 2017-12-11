@@ -32,7 +32,9 @@ public class SystemMetaListResponse extends ReportingDomain implements Response 
   /**
    * Default no-arg constructor.
    */
-  public SystemMetaListResponse() {}
+  public SystemMetaListResponse() {
+    // nothing doing
+  }
 
   /**
    * Construct with system meta set.
@@ -40,7 +42,7 @@ public class SystemMetaListResponse extends ReportingDomain implements Response 
    * @param systemMetas System meta set
    */
   public SystemMetaListResponse(Set<SystemMeta> systemMetas) {
-    this.setSystemMetas(systemMetas);
+    this.systemMetas = systemMetas;
   }
 
   /**
@@ -61,21 +63,11 @@ public class SystemMetaListResponse extends ReportingDomain implements Response 
     this.systemMetas = systemMetas;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
   @Override
   public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see java.lang.Object#hashCode()
-   */
   @Override
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);
@@ -85,4 +77,5 @@ public class SystemMetaListResponse extends ReportingDomain implements Response 
   public String toString() {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
   }
+
 }

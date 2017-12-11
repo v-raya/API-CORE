@@ -6,7 +6,7 @@ import java.util.Map;
 import gov.ca.cwds.data.persistence.PersistentObject;
 
 /**
- * Object can reduce a denormalized result set of its own type to a normalized, consolidated Map of
+ * Object can reduce a de-normalized result set of its own type to a normalized, consolidated Map of
  * type N.
  * 
  * <p>
@@ -14,7 +14,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * </p>
  * 
  * @author CWDS API Team
- * @param <N> type to reduce to
+ * @param <N> type to normalize to
  */
 public interface ApiGroupNormalizer<N extends PersistentObject> extends ApiMarker {
 
