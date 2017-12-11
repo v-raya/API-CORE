@@ -4,10 +4,13 @@ import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Type;
@@ -197,6 +200,9 @@ public class Referral extends CmsPersistentObject {
 
   @Column(name = "ORIGCLS_DT")
   private LocalDate originalClosureDate;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "referral")
+  private List<ReferralAssignment> baseAssignment;
 
   @Override
   public Serializable getPrimaryKey() {
@@ -587,5 +593,14 @@ public class Referral extends CmsPersistentObject {
 
   public void setOriginalClosureDate(LocalDate originalClosureDate) {
     this.originalClosureDate = originalClosureDate;
+  }
+
+  public List<ReferralAssignment> getBaseAssignment() {
+    return baseAssignment;
+  }
+
+  public void setBaseAssignment(
+      List<ReferralAssignment> baseAssignment) {
+    this.baseAssignment = baseAssignment;
   }
 }
