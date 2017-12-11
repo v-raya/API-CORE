@@ -28,23 +28,3 @@ rule "R-03960"
 end
 
 
-rule "R-03855"
-  dialect "mvel"
-  agenda-group "placement-home-agenda"
-  when
-      /*;
-        Code: R - 03855
-        Rule Txt
-        The maximum age must be less than 26 years old.
-        Logic
-        For a GHO, the GROUP_HOME_ORGANIZATION.ACCEPTED_AGE_RANGE_TO_NUMBER must be < 26. For a Placement Home or FFA, the PLACEMENT_HOME.ACCEPTED_AGE_RANGE_TO_NUMBER must be < 26.
-      */
-      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
-      $placementHome: PlacementHome(ageToNo > 25) from $placementHomeAwareDTO.entity
-  then
-      IssueDetails details = new IssueDetails();
-      details.setCode("R - 03855");
-      details.setUserMessage("The maximum age must be less than 26 years old.");
-      details.setTechnicalMessage("For a GHO, the GROUP_HOME_ORGANIZATION.ACCEPTED_AGE_RANGE_TO_NUMBER must be < 26. For a Placement Home or FFA, the PLACEMENT_HOME.ACCEPTED_AGE_RANGE_TO_NUMBER must be < 26.");
-      validationDetailsList.add(details);
-end
