@@ -26,3 +26,5 @@ rule "R-03960"
       details.setTechnicalMessage("If PLACEMENT_HOME.Placement_Facility_Type = 'Foster Family Home' or 'Resource Family Home' and .Licenser_Code = 'CT', then txtName must <> null.");
       validationDetailsList.add(details);
 end
+
+

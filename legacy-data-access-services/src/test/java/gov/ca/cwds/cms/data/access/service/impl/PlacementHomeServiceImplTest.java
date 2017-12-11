@@ -13,69 +13,69 @@ import org.junit.Test;
  */
 public class PlacementHomeServiceImplTest {
 
-    private PlacementHomeServiceImpl service;
-    private PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO;
+  private PlacementHomeServiceImpl service;
+  private PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO;
 
-    @Before
-    public void setUp() {
-        service = new PlacementHomeServiceImpl();
-        service.setDroolsService(new DroolsService());
-        placementHomeEntityAwareDTO = new PlacementHomeEntityAwareDTO("1");
-    }
+  @Before
+  public void setUp() {
+    service = new PlacementHomeServiceImpl();
+    service.setDroolsService(new DroolsService());
+    placementHomeEntityAwareDTO = new PlacementHomeEntityAwareDTO("1");
+  }
 
-    private PlacementHome getPlacementHome(int facilityType, String licenseCode, String facilityName) {
-        PlacementHome placementHome = new PlacementHome();
-        placementHome.setFacilityType((short)facilityType);
-        placementHome.setLicensrCd(licenseCode);
-        placementHome.setFacltyNm(facilityName);
-        return placementHome;
-    }
+  private PlacementHome getPlacementHome(int facilityType, String licenseCode, String facilityName) {
+    PlacementHome placementHome = new PlacementHome();
+    placementHome.setFacilityType((short) facilityType);
+    placementHome.setLicensrCd(licenseCode);
+    placementHome.setFacltyNm(facilityName);
+    return placementHome;
+  }
 
-    @Test(expected = BusinessValidationException.class)
-    public void testFosterFamilyHome() throws Exception {
+  @Test(expected = BusinessValidationException.class)
+  public void testFosterFamilyHome() throws Exception {
 
-        PlacementHome placementHome = getPlacementHome(1416, "CT", null);
-        runBusinessValidation(placementHome);
-    }
+    PlacementHome placementHome = getPlacementHome(1416, "CT", null);
+    runBusinessValidation(placementHome);
+  }
 
-    private void runBusinessValidation(PlacementHome placementHome) throws DroolsException {
-        placementHomeEntityAwareDTO.setEntity(placementHome);
-        service.runBusinessValidation(placementHomeEntityAwareDTO);
-    }
+  private void runBusinessValidation(PlacementHome placementHome) throws DroolsException {
+    placementHomeEntityAwareDTO.setEntity(placementHome);
+    service.runBusinessValidation(placementHomeEntityAwareDTO);
+  }
 
-    @Test
-    public void testFosterFamilyHomeWithName() throws Exception {
-        PlacementHome placementHome = getPlacementHome(1416, "CT", "name");
-        runBusinessValidation(placementHome);    }
+  @Test
+  public void testFosterFamilyHomeWithName() throws Exception {
+    PlacementHome placementHome = getPlacementHome(1416, "CT", "name");
+    runBusinessValidation(placementHome);
+  }
 
-    @Test
-    public void testFosterFamilyHomeOtherLicenceCode() throws Exception {
-        PlacementHome placementHome = getPlacementHome(1416, "AA", null);
-        runBusinessValidation(placementHome);
-    }
+  @Test
+  public void testFosterFamilyHomeOtherLicenceCode() throws Exception {
+    PlacementHome placementHome = getPlacementHome(1416, "AA", null);
+    runBusinessValidation(placementHome);
+  }
 
-    @Test(expected = BusinessValidationException.class)
-    public void testResourceFamilyHome() throws Exception {
-        PlacementHome placementHome = getPlacementHome(6914, "CT", null);
-        runBusinessValidation(placementHome);
-    }
+  @Test(expected = BusinessValidationException.class)
+  public void testResourceFamilyHome() throws Exception {
+    PlacementHome placementHome = getPlacementHome(6914, "CT", null);
+    runBusinessValidation(placementHome);
+  }
 
-    @Test
-    public void testResourceFamilyHomeWithName() throws Exception {
-        PlacementHome placementHome = getPlacementHome(6914, "CT", "name");
-        runBusinessValidation(placementHome);
-    }
+  @Test
+  public void testResourceFamilyHomeWithName() throws Exception {
+    PlacementHome placementHome = getPlacementHome(6914, "CT", "name");
+    runBusinessValidation(placementHome);
+  }
 
-    @Test
-    public void testResourceFamilyHomeOtherLicenceCode() throws Exception {
-        PlacementHome placementHome = getPlacementHome(6914, "BB", null);
-        runBusinessValidation(placementHome);
-    }
+  @Test
+  public void testResourceFamilyHomeOtherLicenceCode() throws Exception {
+    PlacementHome placementHome = getPlacementHome(6914, "BB", null);
+    runBusinessValidation(placementHome);
+  }
 
-    @Test
-    public void testOtherFamilyHome() throws Exception {
-        PlacementHome placementHome = getPlacementHome(-1, "CT", null);
-        runBusinessValidation(placementHome);
-    }
-
+  @Test
+  public void testOtherFamilyHome() throws Exception {
+    PlacementHome placementHome = getPlacementHome(-1, "CT", null);
+    runBusinessValidation(placementHome);
+  }
 }
