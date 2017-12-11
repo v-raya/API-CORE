@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Type;
 
 /**
@@ -48,6 +49,7 @@ public class Referral extends CmsPersistentObject {
   private Boolean applicationForPetitionIndicator;
 
   @Column(name = "APRVL_NO")
+  @ColumnTransformer(read = "trim(APRVL_NO)")
   private String approvalNumber;
 
   @Column(name = "APV_STC")
@@ -61,18 +63,23 @@ public class Referral extends CmsPersistentObject {
   private LocalDate closureDate;
 
   @Column(name = "CMM_MTHC")
+  @ColumnTransformer(read = "trim(CMM_MTHC)")
   private Short communicationMethodType;
 
   @Column(name = "CHILOC_TXT")
+  @ColumnTransformer(read = "trim(CHILOC_TXT)")
   private String currentLocationOfChildren;
 
   @Column(name = "ALGDSC_DOC")
+  @ColumnTransformer(read = "trim(ALGDSC_DOC)")
   private String drmsAllegationDescriptionDoc;
 
   @Column(name = "ER_REF_DOC")
+  @ColumnTransformer(read = "trim(ER_REF_DOC)")
   private String drmsErReferralDoc;
 
   @Column(name = "INVSTG_DOC")
+  @ColumnTransformer(read = "trim(INVSTG_DOC)")
   private String drmsInvestigationDoc;
 
   @Column(name = "XRPT_LWIND")
@@ -85,18 +92,21 @@ public class Referral extends CmsPersistentObject {
   private Short govtEntityType;
 
   @Column(name = "LGL_DEF_CD")
+  @ColumnTransformer(read = "trim(LGL_DEF_CD)")
   private String legalDefinitionCode;
 
   @Column(name = "LGLRGT_IND")
   private String legalRightsNoticeIndicator;
 
   @Column(name = "LMT_ACSSCD")
+  @ColumnTransformer(read = "trim(LMT_ACSSCD)")
   private String limitedAccessCode;
 
   @Column(name = "XRPT_RCVDT")
   private LocalDate mandatedCrossReportReceivedDate;
 
   @Column(name = "REFERRL_NM")
+  @ColumnTransformer(read = "trim(REFERRL_NM)")
   private String referralName;
 
   @Column(name = "ADQT_CS_CD")
@@ -121,9 +131,11 @@ public class Referral extends CmsPersistentObject {
   private Instant responseDeterminationTime;
 
   @Column(name = "RSP_RTNTXT")
+  @ColumnTransformer(read = "trim(RSP_RTNTXT)")
   private String responseRationaleText;
 
   @Column(name = "SCN_NT_TXT")
+  @ColumnTransformer(read = "trim(SCN_NT_TXT)")
   private String screenerNoteText;
 
   @Column(name = "SP_INCL_CD")
@@ -136,15 +148,19 @@ public class Referral extends CmsPersistentObject {
   private String unfoundedSeriesCode;
 
   @Column(name = "FKREFERL_T", length = CMS_ID_LEN)
+  @ColumnTransformer(read = "trim(FKREFERL_T)")
   private String linkToPrimaryReferralId;
 
   @Column(name = "FKADDRS_T", length = CMS_ID_LEN)
+  @ColumnTransformer(read = "trim(FKADDRS_T)")
   private String allegesAbuseOccurredAtAddressId;
 
   @Column(name = "FKSTFPERS0", length = CMS_ID_LEN)
+  @ColumnTransformer(read = "trim(FKSTFPERS0)")
   private String firstResponseDeterminedByStaffPersonId;
 
   @Column(name = "FKSTFPERST", length = CMS_ID_LEN)
+  @ColumnTransformer(read = "trim(FKSTFPERST)")
   private String primaryContactStaffPersonId;
 
   @Column(name = "CNTY_SPFCD")
@@ -176,6 +192,7 @@ public class Referral extends CmsPersistentObject {
   private LocalDate limitedAccessDate;
 
   @Column(name = "LMT_ACSDSC")
+  @ColumnTransformer(read = "trim(LMT_ACSDSC)")
   private String limitedAccessDesc;
 
   @Column(name = "ORIGCLS_DT")
