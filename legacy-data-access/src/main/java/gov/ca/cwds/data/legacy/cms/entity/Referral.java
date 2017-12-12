@@ -2,6 +2,7 @@ package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.enums.LimitedAccess;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.County;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -11,10 +12,16 @@ import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.hibernate.annotations.ColumnTransformer;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
 
 /**
@@ -194,8 +201,11 @@ public class Referral extends CmsPersistentObject {
   @Column(name = "RSP_AGY_CD")
   private String responsibleAgencyCode;
 
-  @Column(name = "L_GVR_ENTC")
-  private Short limitedAccessGovtAgencyType;
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "L_GVR_ENTC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private County limitedAccessCounty;
 
   @Type(type = "date")
   @Column(name = "LMT_ACS_DT")
@@ -572,12 +582,13 @@ public class Referral extends CmsPersistentObject {
     this.responsibleAgencyCode = responsibleAgencyCode;
   }
 
-  public Short getLimitedAccessGovtAgencyType() {
-    return limitedAccessGovtAgencyType;
+  public County getLimitedAccessCounty() {
+    return limitedAccessCounty;
   }
 
-  public void setLimitedAccessGovtAgencyType(Short limitedAccessGovtAgencyType) {
-    this.limitedAccessGovtAgencyType = limitedAccessGovtAgencyType;
+  public void setLimitedAccessCounty(
+      County limitedAccessCounty) {
+    this.limitedAccessCounty = limitedAccessCounty;
   }
 
   public LocalDate getLimitedAccessDate() {
