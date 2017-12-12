@@ -197,8 +197,7 @@ public class Case extends CmsPersistentObject {
   private Boolean tickleIndVar;
 
   @NotFound(action = NotFoundAction.IGNORE)
-  @OneToMany
-  @JoinColumn(name = "ESTBLSH_ID", referencedColumnName = "IDENTIFIER")
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "theCase")
   private List<CaseAssignment> assignments;
 
   @Override
@@ -304,10 +303,6 @@ public class Case extends CmsPersistentObject {
 
   public ChildClient getChildClient() {
     return childClient;
-  }
-
-  public void setChildClientId(ChildClient childClient) {
-    this.childClient = childClient;
   }
 
   public String getReferralId() {
