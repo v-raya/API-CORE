@@ -412,7 +412,7 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
 
   @Column(name = "SOCPLC_CD", nullable = false, length = 1)
   @Convert(converter = Soc158placementsStatus.Soc158placementsStatusConverter.class)
-  private Soc158placementsStatus soc158PlacementCode;
+  private Soc158placementsStatus soc158placementsStatus;
 
   @Column(name = "SS_NO", nullable = false, length = 9)
   @ColumnTransformer(read = "trim(SS_NO)")
@@ -1006,12 +1006,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.hispanicUnableToDetermineReason = hispanicUnableToDetermineReason;
   }
 
-  public Soc158placementsStatus getSoc158PlacementCode() {
-    return soc158PlacementCode;
+  public Soc158placementsStatus getSoc158placementsStatus() {
+    return soc158placementsStatus;
   }
 
-  public void setSoc158PlacementCode(Soc158placementsStatus soc158PlacementCode) {
-    this.soc158PlacementCode = soc158PlacementCode;
+  public void setSoc158placementsStatus(Soc158placementsStatus soc158placementsStatus) {
+    this.soc158placementsStatus = soc158placementsStatus;
   }
 
   public String getClientIndexNumber() {
