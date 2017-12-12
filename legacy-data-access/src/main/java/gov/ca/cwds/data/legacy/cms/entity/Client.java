@@ -384,7 +384,7 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     insertable = false,
     updatable = false
   )
-  private Religion religionType;
+  private Religion religion;
 
   @NotNull
   @NotFound(action = NotFoundAction.IGNORE)
@@ -728,12 +728,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.primaryLanguage = primaryLanguage;
   }
 
-  public Religion getReligionType() {
-    return religionType;
+  public Religion getReligion() {
+    return religion;
   }
 
-  public void setReligionType(Religion religionType) {
-    this.religionType = religionType;
+  public void setReligion(Religion religion) {
+    this.religion = religion;
   }
 
   public Language getSecondaryLanguage() {
