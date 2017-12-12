@@ -4,6 +4,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
@@ -21,6 +22,12 @@ public class CaseAssignment extends BaseAssignment {
 
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(
+      name = "ESTBLSH_ID",
+      referencedColumnName = "IDENTIFIER",
+      insertable = false,
+      updatable = false
+  )
   private Case theCase;
 
   public Case getTheCase() {

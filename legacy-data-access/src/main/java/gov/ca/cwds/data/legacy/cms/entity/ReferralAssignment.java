@@ -3,6 +3,7 @@ package gov.ca.cwds.data.legacy.cms.entity;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import org.hibernate.annotations.NotFound;
@@ -27,6 +28,12 @@ public class ReferralAssignment extends BaseAssignment {
 
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(
+      name = "ESTBLSH_ID",
+      referencedColumnName = "IDENTIFIER",
+      insertable = false,
+      updatable = false
+  )
   private Referral referral;
 
   public static long getSerialVersionUID() {

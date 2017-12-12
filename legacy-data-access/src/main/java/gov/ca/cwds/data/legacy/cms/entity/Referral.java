@@ -1,11 +1,13 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.legacy.cms.entity.enums.LimitedAccess;
 import java.io.Serializable;
-import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -102,8 +104,8 @@ public class Referral extends CmsPersistentObject {
   private String legalRightsNoticeIndicator;
 
   @Column(name = "LMT_ACSSCD")
-  @ColumnTransformer(read = "trim(LMT_ACSSCD)")
-  private String limitedAccessCode;
+  @Convert(converter = LimitedAccess.LimitedAccessConverter.class)
+  private LimitedAccess limitedAccessCode;
 
   @Column(name = "XRPT_RCVDT")
   private LocalDate mandatedCrossReportReceivedDate;
@@ -113,13 +115,14 @@ public class Referral extends CmsPersistentObject {
   private String referralName;
 
   @Column(name = "ADQT_CS_CD")
-  private String openAdequateCaseCode;
+  @Type(type = "yes_no")
+  private Boolean openAdequateCaseCode;
 
   @Column(name = "REF_RCV_DT")
   private LocalDate receivedDate;
 
   @Column(name = "REF_RCV_TM")
-  private Instant receivedTime;
+  private LocalTime receivedTime;
 
   @Column(name = "RFR_RSPC")
   private Short referralResponseType;
@@ -131,7 +134,7 @@ public class Referral extends CmsPersistentObject {
   private LocalDate responseDeterminationDate;
 
   @Column(name = "RSP_DTR_TM")
-  private Instant responseDeterminationTime;
+  private LocalTime responseDeterminationTime;
 
   @Column(name = "RSP_RTNTXT")
   @ColumnTransformer(read = "trim(RSP_RTNTXT)")
@@ -170,16 +173,20 @@ public class Referral extends CmsPersistentObject {
   private String countySpecificCode;
 
   @Column(name = "SPRJRF_IND")
-  private String specialProjectReferralIndicator;
+  @Type(type = "yes_no")
+  private Boolean specialProjectReferralIndicator;
 
   @Column(name = "ZIPPY_IND")
-  private String zippyCreatedIndicator;
+  @Type(type = "yes_no")
+  private Boolean zippyCreatedIndicator;
 
   @Column(name = "HOMLES_IND")
-  private String homelessIndicator;
+  @Type(type = "yes_no")
+  private Boolean homelessIndicator;
 
   @Column(name = "FAMREF_IND")
-  private String familyRefusedServicesIndicator;
+  @Type(type = "yes_no")
+  private Boolean familyRefusedServicesIndicator;
 
   @Column(name = "FIRST_EODT")
   private LocalDate firstEvaluatedOutApprovalDate;
@@ -354,11 +361,12 @@ public class Referral extends CmsPersistentObject {
     this.legalRightsNoticeIndicator = legalRightsNoticeIndicator;
   }
 
-  public String getLimitedAccessCode() {
+  public LimitedAccess getLimitedAccessCode() {
     return limitedAccessCode;
   }
 
-  public void setLimitedAccessCode(String limitedAccessCode) {
+  public void setLimitedAccessCode(
+      LimitedAccess limitedAccessCode) {
     this.limitedAccessCode = limitedAccessCode;
   }
 
@@ -378,11 +386,11 @@ public class Referral extends CmsPersistentObject {
     this.referralName = referralName;
   }
 
-  public String getOpenAdequateCaseCode() {
+  public Boolean getOpenAdequateCaseCode() {
     return openAdequateCaseCode;
   }
 
-  public void setOpenAdequateCaseCode(String openAdequateCaseCode) {
+  public void setOpenAdequateCaseCode(Boolean openAdequateCaseCode) {
     this.openAdequateCaseCode = openAdequateCaseCode;
   }
 
@@ -394,11 +402,11 @@ public class Referral extends CmsPersistentObject {
     this.receivedDate = receivedDate;
   }
 
-  public Instant getReceivedTime() {
+  public LocalTime getReceivedTime() {
     return receivedTime;
   }
 
-  public void setReceivedTime(Instant receivedTime) {
+  public void setReceivedTime(LocalTime receivedTime) {
     this.receivedTime = receivedTime;
   }
 
@@ -426,11 +434,11 @@ public class Referral extends CmsPersistentObject {
     this.responseDeterminationDate = responseDeterminationDate;
   }
 
-  public Instant getResponseDeterminationTime() {
+  public LocalTime getResponseDeterminationTime() {
     return responseDeterminationTime;
   }
 
-  public void setResponseDeterminationTime(Instant responseDeterminationTime) {
+  public void setResponseDeterminationTime(LocalTime responseDeterminationTime) {
     this.responseDeterminationTime = responseDeterminationTime;
   }
 
@@ -478,7 +486,8 @@ public class Referral extends CmsPersistentObject {
     return linkToPrimaryReferralId;
   }
 
-  public void setLinkToPrimaryReferralId(String linkToPrimaryReferralId) {
+  public void setLinkToPrimaryReferralId(
+      String linkToPrimaryReferralId) {
     this.linkToPrimaryReferralId = linkToPrimaryReferralId;
   }
 
@@ -515,35 +524,35 @@ public class Referral extends CmsPersistentObject {
     this.countySpecificCode = countySpecificCode;
   }
 
-  public String getSpecialProjectReferralIndicator() {
+  public Boolean getSpecialProjectReferralIndicator() {
     return specialProjectReferralIndicator;
   }
 
-  public void setSpecialProjectReferralIndicator(String specialProjectReferralIndicator) {
+  public void setSpecialProjectReferralIndicator(Boolean specialProjectReferralIndicator) {
     this.specialProjectReferralIndicator = specialProjectReferralIndicator;
   }
 
-  public String getZippyCreatedIndicator() {
+  public Boolean getZippyCreatedIndicator() {
     return zippyCreatedIndicator;
   }
 
-  public void setZippyCreatedIndicator(String zippyCreatedIndicator) {
+  public void setZippyCreatedIndicator(Boolean zippyCreatedIndicator) {
     this.zippyCreatedIndicator = zippyCreatedIndicator;
   }
 
-  public String getHomelessIndicator() {
+  public Boolean getHomelessIndicator() {
     return homelessIndicator;
   }
 
-  public void setHomelessIndicator(String homelessIndicator) {
+  public void setHomelessIndicator(Boolean homelessIndicator) {
     this.homelessIndicator = homelessIndicator;
   }
 
-  public String getFamilyRefusedServicesIndicator() {
+  public Boolean getFamilyRefusedServicesIndicator() {
     return familyRefusedServicesIndicator;
   }
 
-  public void setFamilyRefusedServicesIndicator(String familyRefusedServicesIndicator) {
+  public void setFamilyRefusedServicesIndicator(Boolean familyRefusedServicesIndicator) {
     this.familyRefusedServicesIndicator = familyRefusedServicesIndicator;
   }
 
