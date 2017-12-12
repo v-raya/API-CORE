@@ -26,7 +26,6 @@ public class UnexpectedExceptionMapperImpl implements ExceptionMapper<Exception>
   @Override
   public Response toResponse(Exception ex) {
     LOGGER.error("EXCEPTION MAPPER: {}", ex.getMessage(), ex);
-    return ExceptionMapperUtils.createGenericRespponse(ex, IssueType.UNEXPECTED_EXCEPTION, 500,
-        loggingContext.getUniqueId());
+    return ExceptionMapperUtils.createGenericResponse(ex, IssueType.UNEXPECTED_EXCEPTION, loggingContext.getUniqueId());
   }
 }

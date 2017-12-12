@@ -39,7 +39,7 @@ public class ServiceExceptionMapper implements ExceptionMapper<ServiceException>
       }
     }
 
-    return ExceptionMapperUtils.createGenericRespponse(exception, IssueType.UNEXPECTED_EXCEPTION,
-        responseStatus, loggingContext.getUniqueId());
+    return ExceptionMapperUtils.createGenericResponse(exception, IssueType.UNEXPECTED_EXCEPTION,
+        loggingContext.getUniqueId());
   }
 }
