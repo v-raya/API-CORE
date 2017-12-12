@@ -280,7 +280,7 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     insertable = false,
     updatable = false
   )
-  private ImmigrationStatus immigrationStatusType;
+  private ImmigrationStatus immigrationStatus;
 
   @Column(name = "INCAPC_CD", nullable = false, length = 2)
   @ColumnTransformer(read = "trim(INCAPC_CD)")
@@ -640,12 +640,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.immigrationCountry = immigrationCountry;
   }
 
-  public ImmigrationStatus getImmigrationStatusType() {
-    return immigrationStatusType;
+  public ImmigrationStatus getImmigrationStatus() {
+    return immigrationStatus;
   }
 
-  public void setImmigrationStatusType(ImmigrationStatus immigrationStatusType) {
-    this.immigrationStatusType = immigrationStatusType;
+  public void setImmigrationStatus(ImmigrationStatus immigrationStatus) {
+    this.immigrationStatus = immigrationStatus;
   }
 
   public IncapacitatedParentStatus getIncapacitatedParentStatus() {
