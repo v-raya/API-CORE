@@ -286,6 +286,8 @@ public final class ESSearchRequest extends DomainObject implements Request {
   @JsonSnakeCase
   public static final class ESFieldSearchEntry implements ESSearchElement {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Document field to search.
      */
@@ -349,8 +351,7 @@ public final class ESSearchRequest extends DomainObject implements Request {
       int result = 1;
       result = prime * result + ((field == null) ? 0 : field.hashCode());
       result = prime * result + ((queryType == null) ? 0 : queryType.hashCode());
-      result = prime * result + ((value == null) ? 0 : value.hashCode());
-      return result;
+      return prime * result + ((value == null) ? 0 : value.hashCode());
     }
 
     @Override
@@ -399,7 +400,7 @@ public final class ESSearchRequest extends DomainObject implements Request {
 
   @SuppressWarnings("javadoc")
   public ESSearchRequest() {
-    // Defalut no-op
+    // Default constructor.
   }
 
   // ================
