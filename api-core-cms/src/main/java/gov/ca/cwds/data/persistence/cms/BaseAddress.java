@@ -398,7 +398,7 @@ public abstract class BaseAddress extends CmsPersistentObject
 
     if (this.emergencyNumber != null && BigDecimal.ZERO.compareTo(this.emergencyNumber) != 0) {
       phones.add(new ReadablePhone(null, this.emergencyNumber.toPlainString(),
-          this.emergencyNumber != null ? this.emergencyNumber.toString() : null,
+          this.emergencyExtension != null ? this.emergencyExtension.toString() : null,
           ApiPhoneAware.PhoneType.Other));
     }
 
