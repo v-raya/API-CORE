@@ -152,13 +152,16 @@ public class Referral extends CmsPersistentObject {
   private String screenerNoteText;
 
   @Column(name = "SP_INCL_CD")
-  private String specificsIncludedCode;
+  @Type(type = "yes_no")
+  private Boolean specificsIncludedCode;
 
   @Column(name = "SFC_INF_CD")
-  private String sufficientInformationCode;
+  @Type(type = "yes_no")
+  private Boolean sufficientInformationCode;
 
   @Column(name = "UNFD_SR_CD")
-  private String unfoundedSeriesCode;
+  @Type(type = "yes_no")
+  private Boolean unfoundedSeriesCode;
 
   @Column(name = "FKREFERL_T", length = CMS_ID_LEN)
   @ColumnTransformer(read = "trim(FKREFERL_T)")
@@ -472,27 +475,27 @@ public class Referral extends CmsPersistentObject {
     this.screenerNoteText = screenerNoteText;
   }
 
-  public String getSpecificsIncludedCode() {
+  public Boolean getSpecificsIncludedCode() {
     return specificsIncludedCode;
   }
 
-  public void setSpecificsIncludedCode(String specificsIncludedCode) {
+  public void setSpecificsIncludedCode(Boolean specificsIncludedCode) {
     this.specificsIncludedCode = specificsIncludedCode;
   }
 
-  public String getSufficientInformationCode() {
+  public Boolean getSufficientInformationCode() {
     return sufficientInformationCode;
   }
 
-  public void setSufficientInformationCode(String sufficientInformationCode) {
+  public void setSufficientInformationCode(Boolean sufficientInformationCode) {
     this.sufficientInformationCode = sufficientInformationCode;
   }
 
-  public String getUnfoundedSeriesCode() {
+  public Boolean getUnfoundedSeriesCode() {
     return unfoundedSeriesCode;
   }
 
-  public void setUnfoundedSeriesCode(String unfoundedSeriesCode) {
+  public void setUnfoundedSeriesCode(Boolean unfoundedSeriesCode) {
     this.unfoundedSeriesCode = unfoundedSeriesCode;
   }
 
