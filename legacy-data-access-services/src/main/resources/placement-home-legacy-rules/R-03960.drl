@@ -1,5 +1,6 @@
 import gov.ca.cwds.rest.exception.IssueDetails
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
+import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
 
 global java.util.Set validationDetailsList
 
@@ -16,7 +17,8 @@ rule "R-03960"
       *Logic*
       If PLACEMENT_HOME.Placement_Facility_Type = 'Foster Family Home' or 'Resource Family Home' and .Licenser_Code = 'CT', then txtName must <> null.
       */
-      $placementHome: PlacementHome(facilityType == 1416 || facilityType == 6914, licensrCd == "CT", facltyNm == null)
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome: PlacementHome(facilityType == 1416 || facilityType == 6914, licensrCd == "CT", facltyNm == null) from $placementHomeAwareDTO.entity
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R - 03960");
@@ -24,3 +26,5 @@ rule "R-03960"
       details.setTechnicalMessage("If PLACEMENT_HOME.Placement_Facility_Type = 'Foster Family Home' or 'Resource Family Home' and .Licenser_Code = 'CT', then txtName must <> null.");
       validationDetailsList.add(details);
 end
+
+

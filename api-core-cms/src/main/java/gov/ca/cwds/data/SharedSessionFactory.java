@@ -102,41 +102,46 @@ public class SharedSessionFactory implements SessionFactory {
     this(sf, true);
   }
 
+  protected void closerLock() {
+    try {
+      lock.writeLock().lock();
+      held = false;
+      okToClose.signalAll();
+      LOGGER.warn("SHUTTING DOWN SESSION FACTORY!");
+      sf.close();
+      LOGGER.warn("SHUT DOWN SESSION FACTORY!");
+    } finally {
+      lock.writeLock().unlock(); // Always unlock, no matter what!
+    }
+  }
+
+  protected void closerThread() {
+    try {
+      Thread.sleep(DEFAULT_DELAY); // NOSONAR
+      while (true) {
+        LOGGER.debug("Await notification ...");
+        okToClose.await(); // Possible spurious wake-up. Must still evaluate the situation.
+        Thread.sleep(DEFAULT_DELAY); // NOSONAR
+
+        if (!held) {
+          closerLock();
+          break;
+        }
+      }
+
+    } catch (InterruptedException ie) {
+      Thread.currentThread().interrupt();
+    } finally {
+      LOGGER.warn("EXIT SESSION FACTORY CLOSER THREAD");
+    }
+  }
+
   /**
    * Launch the "closer thread" in test mode. Unnecessary in production mode.
    */
   protected void runCloseThread() {
-    new Thread(() -> {
-      try {
-        LOGGER.info("START SESSION FACTORY CLOSER THREAD");
-        Thread.sleep(DEFAULT_DELAY); // NOSONAR
-        while (true) {
-          LOGGER.debug("Await notification ...");
-          okToClose.await(); // Possible spurious wake-up. Must still evaluate the situation.
-          Thread.sleep(DEFAULT_DELAY); // NOSONAR
-
-          if (!held) {
-            try {
-              lock.writeLock().lock();
-              held = false;
-              okToClose.signalAll();
-              LOGGER.warn("SHUTTING DOWN SESSION FACTORY!");
-              sf.close();
-              LOGGER.warn("SHUT DOWN SESSION FACTORY!");
-            } finally {
-              lock.writeLock().unlock(); // Always unlock, no matter what!
-            }
-            break;
-          }
-        }
-
-      } catch (InterruptedException ie) {
-        Thread.currentThread().interrupt();
-      } finally {
-        LOGGER.warn("EXIT SESSION FACTORY CLOSER THREAD");
-      }
-
-    }).start();
+    LOGGER.info("START SESSION FACTORY CLOSER THREAD");
+    new Thread(this::closerThread).start();
   }
 
   @Override

@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -24,9 +27,6 @@ import io.dropwizard.jackson.JsonSnakeCase;
 @JsonSnakeCase
 public final class ESSearchRequest extends DomainObject implements Request {
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = 1L;
 
   // ================
@@ -251,7 +251,7 @@ public final class ESSearchRequest extends DomainObject implements Request {
 
     @Override
     public int hashCode() {
-      final int prime = 31;
+      int prime = 31;
       int result = 1;
       result = prime * result + ((elems == null) ? 0 : elems.hashCode());
       result = prime * result + ((logic == null) ? 0 : logic.hashCode());
@@ -345,7 +345,7 @@ public final class ESSearchRequest extends DomainObject implements Request {
 
     @Override
     public int hashCode() {
-      final int prime = 31;
+      int prime = 31;
       int result = 1;
       result = prime * result + ((field == null) ? 0 : field.hashCode());
       result = prime * result + ((queryType == null) ? 0 : queryType.hashCode());
@@ -428,33 +428,12 @@ public final class ESSearchRequest extends DomainObject implements Request {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((documentType == null) ? 0 : documentType.hashCode());
-    result = prime * result + ((root == null) ? 0 : root.hashCode());
-    return result;
+    return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    ESSearchRequest other = (ESSearchRequest) obj;
-    if (documentType == null) {
-      if (other.documentType != null)
-        return false;
-    } else if (!documentType.equals(other.documentType))
-      return false;
-    if (root == null) {
-      if (other.root != null)
-        return false;
-    } else if (!root.equals(other.root))
-      return false;
-    return true;
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

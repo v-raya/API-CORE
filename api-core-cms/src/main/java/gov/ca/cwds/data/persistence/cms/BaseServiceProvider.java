@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -44,6 +45,7 @@ public abstract class BaseServiceProvider extends CmsPersistentObject
   protected BigDecimal faxNumber;
 
   @Column(name = "FIRST_NM", length = 20, nullable = false)
+  @ColumnTransformer(read = ("trim(FIRST_NM)"))
   protected String firstName;
 
   @Id
@@ -51,9 +53,11 @@ public abstract class BaseServiceProvider extends CmsPersistentObject
   protected String id;
 
   @Column(name = "LAST_NM", length = 20, nullable = false)
+  @ColumnTransformer(read = ("trim(LAST_NM)"))
   protected String lastName;
 
   @Column(name = "NMPRFX_DSC", length = 6, nullable = false)
+  @ColumnTransformer(read = ("trim(NMPRFX_DSC)"))
   protected String namePrefixDescription;
 
   @Type(type = "integer")
@@ -83,6 +87,7 @@ public abstract class BaseServiceProvider extends CmsPersistentObject
   protected String streetNumber;
 
   @Column(name = "SUFX_TLDSC", length = 4, nullable = false)
+  @ColumnTransformer(read = ("trim(SUFX_TLDSC)"))
   protected String suffixTitleDescription;
 
   @Type(type = "integer")

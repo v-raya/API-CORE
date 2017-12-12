@@ -2,6 +2,8 @@ package gov.ca.cwds.drools.validation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import gov.ca.cwds.drools.DroolsConfiguration;
+import gov.ca.cwds.drools.DroolsErrorMessages;
+import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.inject.InjectorHolder;
 import gov.ca.cwds.rest.exception.IssueDetails;
@@ -27,7 +29,14 @@ public abstract class DroolsValidator<A extends Annotation, T> implements
     Object validatedFact = configuration.getValidatedFact(obj);
 
     DroolsService droolsService = InjectorHolder.INSTANCE.getInstance(DroolsService.class);
-    Set<IssueDetails> detailsList = droolsService.validate(validatedFact, configuration);
+    Set<IssueDetails> detailsList = null;
+    try {
+      detailsList = droolsService.performBusinessRules(validatedFact, configuration);
+    } catch (DroolsException e) {
+      throw new RuntimeException(
+          String.format(DroolsErrorMessages.CANT_PERFORM_BUSINESS_VALIDATION,
+              configuration.getAgendaGroup()));
+    }
     if (detailsList.isEmpty()) {
       return true;
     } else {

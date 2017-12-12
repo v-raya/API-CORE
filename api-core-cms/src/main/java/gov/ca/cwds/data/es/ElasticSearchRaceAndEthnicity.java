@@ -25,7 +25,9 @@ public class ElasticSearchRaceAndEthnicity extends ApiObjectIdentity {
   @JsonProperty("hispanic_unable_to_determine_code")
   private String hispanicUnableToDetermineCode;
 
-  public ElasticSearchRaceAndEthnicity() {}
+  public ElasticSearchRaceAndEthnicity() {
+    // default ctor
+  }
 
   public List<ElasticSearchSystemCode> getRaceCodes() {
     return raceCodes;

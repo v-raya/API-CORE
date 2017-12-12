@@ -3,7 +3,7 @@ package gov.ca.cwds.rest.validation;
 import gov.ca.cwds.rest.api.ApiException;
 
 /**
- * Runtime exception indicating a problem when performing a referential integrity check.
+ * Runtime exception indicating a problem with referential integrity.
  * 
  * @author CWDS API Team
  */

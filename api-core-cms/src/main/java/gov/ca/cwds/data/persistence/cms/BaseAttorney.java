@@ -11,6 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +34,6 @@ public abstract class BaseAttorney extends CmsPersistentObject
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BaseAttorney.class);
 
-  /**
-   * Base serialization value. Increment by version.
-   */
   protected static final long serialVersionUID = 1L;
 
   @Column(name = "ARCASS_IND")
@@ -59,6 +59,7 @@ public abstract class BaseAttorney extends CmsPersistentObject
   protected BigDecimal faxNumber;
 
   @Column(name = "FIRST_NM")
+  @ColumnTransformer(read = ("trim(FIRST_NM)"))
   protected String firstName;
 
   @SystemCodeSerializer(logical = true, description = true)
@@ -78,6 +79,7 @@ public abstract class BaseAttorney extends CmsPersistentObject
   protected Short languageType;
 
   @Column(name = "LAST_NM")
+  @ColumnTransformer(read = ("trim(LAST_NM)"))
   protected String lastName;
 
   @Type(type = "integer")
@@ -88,9 +90,11 @@ public abstract class BaseAttorney extends CmsPersistentObject
   protected BigDecimal messagePhoneNumber;
 
   @Column(name = "MID_INI_NM")
+  @ColumnTransformer(read = ("trim(MID_INI_NM)"))
   protected String middleInitialName;
 
   @Column(name = "NMPRFX_DSC")
+  @ColumnTransformer(read = ("trim(NMPRFX_DSC)"))
   protected String namePrefixDescription;
 
   @Column(name = "POSTIL_DSC")
@@ -116,6 +120,7 @@ public abstract class BaseAttorney extends CmsPersistentObject
   protected String streetNumber;
 
   @Column(name = "SUFX_TLDSC")
+  @ColumnTransformer(read = ("trim(SUFX_TLDSC)"))
   protected String suffixTitleDescription;
 
   @Type(type = "integer")
@@ -373,14 +378,16 @@ public abstract class BaseAttorney extends CmsPersistentObject
   @Transient
   public ApiPhoneAware[] getPhones() {
     List<ApiPhoneAware> phones = new ArrayList<>();
-    if (this.primaryPhoneNumber != null && !BigDecimal.ZERO.equals(this.primaryPhoneNumber)) {
+    if (this.primaryPhoneNumber != null
+        && BigDecimal.ZERO.compareTo(this.primaryPhoneNumber) != 0) {
       phones.add(new ReadablePhone(null, this.primaryPhoneNumber.toPlainString(),
           this.primaryPhoneExtensionNumber != null ? this.primaryPhoneExtensionNumber.toString()
               : null,
           null));
     }
 
-    if (this.messagePhoneNumber != null && !BigDecimal.ZERO.equals(this.messagePhoneNumber)) {
+    if (this.messagePhoneNumber != null
+        && BigDecimal.ZERO.compareTo(this.messagePhoneNumber) != 0) {
       LOGGER.debug("add message phone");
       phones
           .add(new ReadablePhone(null,
@@ -490,6 +497,16 @@ public abstract class BaseAttorney extends CmsPersistentObject
 
   public void setZipSuffixNumber(Short zipSuffixNumber) {
     this.zipSuffixNumber = zipSuffixNumber;
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

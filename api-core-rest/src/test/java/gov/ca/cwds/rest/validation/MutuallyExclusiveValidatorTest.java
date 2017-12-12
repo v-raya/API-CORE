@@ -24,6 +24,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 public class MutuallyExclusiveValidatorTest {
+
   private String abc;
   private String def;
   private String ghi;

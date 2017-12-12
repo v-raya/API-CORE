@@ -16,25 +16,33 @@ import com.google.common.collect.ImmutableList;
 /**
  * Validator which confirms exclusivity.
  * 
- * Two types are handled: String and Boolean
+ * <p>
+ * Two types are handled: String and Boolean.
+ * </p>
  * 
+ * <p>
  * If type=String When not required will allow no values being set but ensure that only one value is
  * set When required then one and only one value must be set.
+ * </p>
  * 
+ * <p>
  * If type=Boolean Validates only one of the given boolean properties is set to True When not
  * required allows for null values ( assumes these are false ) - all null values will return valid
  * == true When required at least one of the boolean properties must be set - again there must be
- * one and only one True value
+ * one and only one True value.
+ * </p>
  *
  * @author CWDS API Team
  */
 public class MutuallyExclusiveValidator
     implements AbstractBeanValidator, ConstraintValidator<MutuallyExclusive, Object> {
+
   @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(MutuallyExclusiveValidator.class);
 
   private String[] properties;
   private boolean required;
+
   @SuppressWarnings("rawtypes")
   private Class type;
 
@@ -47,7 +55,7 @@ public class MutuallyExclusiveValidator
 
   @Override
   public boolean isValid(final Object bean, ConstraintValidatorContext context) {
-    boolean valid = true;
+    boolean valid;
 
     if (String.class.equals(type)) {
       valid = handleStringType(bean, context);
@@ -64,6 +72,7 @@ public class MutuallyExclusiveValidator
     ImmutableList.Builder<String> messages = new ImmutableList.Builder<>();
     int countTrue = 0;
     int countSet = 0;
+
     for (String property : properties) {
       String value = readBeanValue(bean, property);
       if (value != null) {
@@ -73,19 +82,17 @@ public class MutuallyExclusiveValidator
         }
       }
     }
+
     if (required) {
       if (countTrue != 1) {
         valid = false;
         messages.add(MessageFormat.format("{0} must have one and only one true value",
             Arrays.toString(properties)));
       }
-    } else {
-      if (countSet > 0 && countTrue != 1) {
-        valid = false;
-        messages
-            .add(MessageFormat.format("{0} must all be null or have one and only one true value",
-                Arrays.toString(properties)));
-      }
+    } else if (countSet > 0 && countTrue != 1) {
+      valid = false;
+      messages.add(MessageFormat.format("{0} must all be null or have one and only one true value",
+          Arrays.toString(properties)));
     }
 
     if (!valid) {
@@ -129,6 +136,5 @@ public class MutuallyExclusiveValidator
     }
     return valid;
   }
-
 
 }

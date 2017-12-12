@@ -33,6 +33,12 @@ public class ElasticsearchConfiguration {
   @JsonProperty("elasticsearch.doctype")
   private String elasticsearchDocType;
 
+  @JsonProperty("elasticsearch.index.setting.file")
+  private String indexSettingFile;
+
+  @JsonProperty("elasticsearch.document.mapping.file")
+  private String documentMappingFile;
+
   @JsonProperty("elasticsearch.xpack.user")
   private String user;
 
@@ -81,11 +87,39 @@ public class ElasticsearchConfiguration {
     return elasticsearchDocType;
   }
 
+  /**
+   * Get the xpack user
+   * 
+   * @return The xpack user
+   */
   public String getUser() {
     return user;
   }
 
+  /**
+   * Get xpack user password
+   * 
+   * @return The xpack user password
+   */
   public String getPassword() {
     return password;
+  }
+
+  /**
+   * Get index setting file
+   * 
+   * @return The index setting file
+   */
+  public String getIndexSettingFile() {
+    return indexSettingFile;
+  }
+
+  /**
+   * Get the index/document mapping file
+   * 
+   * @return The index/document mapping file
+   */
+  public String getDocumentMappingFile() {
+    return documentMappingFile;
   }
 }

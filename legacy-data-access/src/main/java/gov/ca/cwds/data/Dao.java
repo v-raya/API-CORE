@@ -1,7 +1,7 @@
 package gov.ca.cwds.data;
 
 /**
- * Marker for DAOs
+ * Marker for Data Access Objects (DAO).
  * 
  * @author CWDS API Team
  */
