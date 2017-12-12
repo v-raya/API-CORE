@@ -172,12 +172,16 @@ public class Referral extends CmsPersistentObject {
   @ColumnTransformer(read = "trim(FKSTFPERS0)")
   private String firstResponseDeterminedByStaffPersonId;
 
-  @Column(name = "FKSTFPERST", length = CMS_ID_LEN)
-  @ColumnTransformer(read = "trim(FKSTFPERST)")
-  private String primaryContactStaffPersonId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "FKSTFPERST", referencedColumnName = "IDENTIFIER", insertable = false, updatable = false)
+  private StaffPerson primaryContactStaffPerson;
 
-  @Column(name = "CNTY_SPFCD")
-  private String countySpecificCode;
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "CNTY_SPFCD", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private County countySpecificCode;
 
   @Column(name = "SPRJRF_IND")
   @Type(type = "yes_no")
@@ -518,19 +522,20 @@ public class Referral extends CmsPersistentObject {
     this.firstResponseDeterminedByStaffPersonId = firstResponseDeterminedByStaffPersonId;
   }
 
-  public String getPrimaryContactStaffPersonId() {
-    return primaryContactStaffPersonId;
+  public StaffPerson getPrimaryContactStaffPerson() {
+    return primaryContactStaffPerson;
   }
 
-  public void setPrimaryContactStaffPersonId(String primaryContactStaffPersonId) {
-    this.primaryContactStaffPersonId = primaryContactStaffPersonId;
+  public void setPrimaryContactStaffPerson(
+      StaffPerson primaryContactStaffPerson) {
+    this.primaryContactStaffPerson = primaryContactStaffPerson;
   }
 
-  public String getCountySpecificCode() {
+  public County getCountySpecificCode() {
     return countySpecificCode;
   }
 
-  public void setCountySpecificCode(String countySpecificCode) {
+  public void setCountySpecificCode(County countySpecificCode) {
     this.countySpecificCode = countySpecificCode;
   }
 
