@@ -114,7 +114,7 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
     Set<IssueDetails> detailsList = droolsService
         .performBusinessRules(placementHomeEntityAwareDTO, PlacementHomeDroolsConfiguration.INSTANCE);
     if (!detailsList.isEmpty()) {
-      throw new BusinessValidationException(detailsList);
+      throw new BusinessValidationException("Can't create Placement Home", detailsList);
     }
   }
 
