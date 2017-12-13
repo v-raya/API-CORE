@@ -21,7 +21,7 @@ rule "R-03960"
       $placementHome: PlacementHome(facilityType == 1416 || facilityType == 6914, licensrCd == "CT", facltyNm == null) from $placementHomeAwareDTO.entity
   then
       IssueDetails details = new IssueDetails();
-      details.setCode("R - 03960");
+      details.setCode("R-03960");
       details.setUserMessage("Placement home name is required for all county licensed (Non-LIS) foster family homes and resource family homes.");
       details.setTechnicalMessage("If PLACEMENT_HOME.Placement_Facility_Type = 'Foster Family Home' or 'Resource Family Home' and .Licenser_Code = 'CT', then txtName must <> null.");
       validationDetailsList.add(details);
