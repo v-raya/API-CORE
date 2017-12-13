@@ -24,7 +24,7 @@ rule "R-11037"
       PerryAccount(privileges not contains "Resource Mgmt Placement Facility Maint") from $placementHomeAwareDTO.perryAccount
   then
       IssueDetails details = new IssueDetails();
-      details.setCode("R - 11037");
+      details.setCode("R-11037");
       details.setUserMessage("Staff person must have \"Resource Mgmt Placement Facility Maint\" privilege to be able to create Resource Family Home");
       details.setTechnicalMessage("Viloation of rule: Allow Resource Family Home add if (STAFF_PERSON (logged on user) > USER_ID > STAFF_PERSON_PRIVILEGE.Level_Of_Auth_Privilege_Code = 'P' and STAFF_PERSON_PRIVILEGE.Level_Of_Auth_Privilege_Type = 'Resource Mgmt Placement Facility Maint')");
       validationDetailsList.add(details);

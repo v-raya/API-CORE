@@ -1,0 +1,27 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
+import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
+
+global java.util.Set validationDetailsList
+
+rule "R-05761"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+        Rule Txt
+            If the logged on Staff Person has the Staff Person privilege of 'SOC158' the Placement Home Facility Name and Address State are mandatory.
+
+        Logic
+            If logged onSTAFF_PERSON>STAFF_PERSON_PRIVILEGE.LEVEL_OF_AUTH_PRIVILEGE_TYPE = 'SOC158', PLACEMENT_HOME.NAME and PLACEMENT_HOME>ADDRESS.STATE_CODE_TYPE are mandatory.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      PerryAccount(privileges contains "SOC158 Application") from $placementHomeAwareDTO.perryAccount
+      $placementHome: PlacementHome(facltyNm == '' || facltyNm == null || stateCode == 0 || stateCode == null  ) from $placementHomeAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-05761");
+      details.setUserMessage("Placement Home Facility Name and Address State are mandatory.");
+      details.setTechnicalMessage("If logged on STAFF_PERSON>STAFF_PERSON_PRIVILEGE.LEVEL_OF_AUTH_PRIVILEGE_TYPE = 'SOC158', PLACEMENT_HOME.NAME and PLACEMENT_HOME>ADDRESS.STATE_CODE_TYPE are mandatory.");
+      validationDetailsList.add(details);
+end
