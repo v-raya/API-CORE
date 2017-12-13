@@ -296,7 +296,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
     @JsonIgnore
     public String[] getLegacy() {
-      return legacy;
+      return legacy != null ? Arrays.copyOf(legacy, legacy.length) : new String[0];
     }
 
     public ElasticSearchPersonNameSuffix lookupLegacy(String val) {
@@ -336,9 +336,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   static gov.ca.cwds.rest.api.domain.cms.SystemCodeCache systemCodes =
       gov.ca.cwds.rest.api.domain.cms.SystemCodeCache.global();
 
-  /**
-   * Base serialization version. Increment by class version.
-   */
   private static final long serialVersionUID = 1L;
 
   /**
