@@ -17,6 +17,11 @@ public class BusinessValidationException extends ApiException {
     this.validationDetailsList = validationDetailsList;
   }
 
+  public BusinessValidationException(String message, Set<IssueDetails> validationDetailsList) {
+    super(message);
+    this.validationDetailsList = validationDetailsList;
+  }
+
   public Set<IssueDetails> getValidationDetailsList() {
     return validationDetailsList;
   }
