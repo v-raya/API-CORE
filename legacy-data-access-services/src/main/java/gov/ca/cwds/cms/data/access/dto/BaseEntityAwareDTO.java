@@ -1,6 +1,7 @@
 package gov.ca.cwds.cms.data.access.dto;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.security.realm.PerryAccount;
 
 /**
  * @author CWDS CALS API Team
@@ -10,18 +11,14 @@ public class BaseEntityAwareDTO<T extends PersistentObject> {
 
   private T entity;
 
-  private String staffPersonId;
+  private PerryAccount perryAccount;
 
-  public BaseEntityAwareDTO(String staffPersonId) {
-    this.staffPersonId = staffPersonId;
+  public BaseEntityAwareDTO(PerryAccount perryAccount) {
+    this.perryAccount = perryAccount;
   }
 
   public String getStaffPersonId() {
-    return staffPersonId;
-  }
-
-  public void setStaffPersonId(String staffPersonId) {
-    this.staffPersonId = staffPersonId;
+    return perryAccount.getStaffId();
   }
 
   public T getEntity() {
@@ -30,5 +27,9 @@ public class BaseEntityAwareDTO<T extends PersistentObject> {
 
   public void setEntity(T entity) {
     this.entity = entity;
+  }
+
+  public PerryAccount getPerryAccount() {
+    return perryAccount;
   }
 }

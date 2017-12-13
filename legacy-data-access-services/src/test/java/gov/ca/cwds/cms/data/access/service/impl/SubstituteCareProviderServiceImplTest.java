@@ -8,6 +8,7 @@ import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
 import gov.ca.cwds.data.legacy.cms.entity.PhoneContactDetail;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
+import gov.ca.cwds.security.realm.PerryAccount;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
@@ -24,7 +25,8 @@ public class SubstituteCareProviderServiceImplTest {
       SubstituteCareProviderService service = new SubstituteCareProviderServiceImpl();
       SubstituteCareProvider scp = new SubstituteCareProvider();
       scp.setIdentifier("1");
-      SCPEntityAwareDTO parameterObject = new SCPEntityAwareDTO("1");
+      PerryAccount perryAccount = getPerryAccount();
+      SCPEntityAwareDTO parameterObject = new SCPEntityAwareDTO(perryAccount);
       parameterObject.setEntity(scp);
       service.create(parameterObject);
       fail();
@@ -34,12 +36,18 @@ public class SubstituteCareProviderServiceImplTest {
     }
   }
 
+  private PerryAccount getPerryAccount() {
+    PerryAccount perryAccount = new PerryAccount();
+    perryAccount.setStaffId("1");
+    return perryAccount;
+  }
+
   @Test
   public void createValidatePhoneNumberNotPersisted() throws Exception {
     try {
       SubstituteCareProviderService service = new SubstituteCareProviderServiceImpl();
       SubstituteCareProvider scp = new SubstituteCareProvider();
-      SCPEntityAwareDTO parameterObject = new SCPEntityAwareDTO("1");
+      SCPEntityAwareDTO parameterObject = new SCPEntityAwareDTO(getPerryAccount());
       parameterObject.setEntity(scp);
       List<PhoneContactDetail> phoneNumbers = new ArrayList<>();
       PhoneContactDetail phoneContactDetail = new PhoneContactDetail();
