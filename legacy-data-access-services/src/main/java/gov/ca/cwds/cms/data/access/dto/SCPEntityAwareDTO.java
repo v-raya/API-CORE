@@ -3,6 +3,7 @@ package gov.ca.cwds.cms.data.access.dto;
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.data.legacy.cms.entity.PhoneContactDetail;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
+import gov.ca.cwds.security.realm.PerryAccount;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +19,8 @@ public class SCPEntityAwareDTO extends BaseEntityAwareDTO<SubstituteCareProvider
   private List<? extends CWSIdentifier> otherStatesOfLiving = new ArrayList<>();
   private List<PhoneContactDetail> phoneNumbers = new ArrayList<>();
 
-  public SCPEntityAwareDTO(String staffPersonId) {
-    super(staffPersonId);
+  public SCPEntityAwareDTO(PerryAccount perryAccount) {
+    super(perryAccount);
   }
 
   public String getPlacementHomeId() {

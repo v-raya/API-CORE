@@ -2,6 +2,7 @@ package gov.ca.cwds.cms.data.access.dto;
 
 import gov.ca.cwds.data.legacy.cms.entity.OtherChildrenInPlacementHome;
 import gov.ca.cwds.data.legacy.cms.entity.OtherPeopleScpRelationship;
+import gov.ca.cwds.security.realm.PerryAccount;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +15,8 @@ public class OtherChildInHomeEntityAwareDTO extends
 
   private List<OtherPeopleScpRelationship> relationships = new ArrayList<>();
 
-  public OtherChildInHomeEntityAwareDTO(String staffPersonId) {
-    super(staffPersonId);
+  public OtherChildInHomeEntityAwareDTO(PerryAccount perryAccount) {
+    super(perryAccount);
   }
 
   public List<OtherPeopleScpRelationship> getRelationships() {

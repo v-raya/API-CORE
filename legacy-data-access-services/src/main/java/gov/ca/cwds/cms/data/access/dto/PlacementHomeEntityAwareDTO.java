@@ -3,6 +3,7 @@ package gov.ca.cwds.cms.data.access.dto;
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.data.legacy.cms.entity.EmergencyContactDetail;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
+import gov.ca.cwds.security.realm.PerryAccount;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,8 +22,8 @@ public class PlacementHomeEntityAwareDTO extends BaseEntityAwareDTO<PlacementHom
 
   private Set<? extends CWSIdentifier> homeLanguages = new HashSet<>();
 
-  public PlacementHomeEntityAwareDTO(String staffPersonId) {
-    super(staffPersonId);
+  public PlacementHomeEntityAwareDTO(PerryAccount perryAccount) {
+    super(perryAccount);
   }
 
   public Set<? extends CWSIdentifier> getHomeLanguages() {

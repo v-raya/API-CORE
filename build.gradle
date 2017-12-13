@@ -18,7 +18,7 @@ allprojects {
         snapshotVersion = releaseVersion + '-SNAPSHOT'
         currentVersion = ((versionPropertyValue != null ) ? versionPropertyValue : snapshotVersion)
         commonGroupId = "gov.ca.cwds.api"
-        shiroSecurityVersion = "0.4.3"
+        apiSecurityVersion = "0.5.1-SNAPSHOT"
         configPath = "$rootProject.projectDir/config/"
         dropwizardVersion = "1.1.0"
         dropwizardFlywayVersion = "1.0.0-1"
