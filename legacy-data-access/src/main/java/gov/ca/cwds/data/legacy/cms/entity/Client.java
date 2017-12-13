@@ -22,33 +22,34 @@ import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
-/**
- * @author CWDS CALS API Team
- */
+/** @author CWDS CALS API Team */
 @NamedQuery(
-    name = "Client.find",
-    query = "SELECT c FROM Client c"
-        + " JOIN c.placementEpisodes pe"
-        + " JOIN pe.outOfHomePlacements ohp"
-        + " JOIN ohp.placementHome ph"
-        + " WHERE ph.licenseNo = :licenseNumber AND c.identifier = :childId"
+  name = "Client.find",
+  query =
+      "SELECT c FROM Client c"
+          + " JOIN c.placementEpisodes pe"
+          + " JOIN pe.outOfHomePlacements ohp"
+          + " JOIN ohp.placementHome ph"
+          + " WHERE ph.licenseNo = :licenseNumber AND c.identifier = :childId"
 )
 @NamedQuery(
-    name = "Client.findAll",
-    query = "SELECT c FROM Client c" +
-        " JOIN c.placementEpisodes pe" +
-        " JOIN pe.outOfHomePlacements ohp" +
-        " JOIN ohp.placementHome ph" +
-        " WHERE ph.licenseNo = :licenseNumber" +
-        " ORDER BY c.identifier "
+  name = "Client.findAll",
+  query =
+      "SELECT c FROM Client c"
+          + " JOIN c.placementEpisodes pe"
+          + " JOIN pe.outOfHomePlacements ohp"
+          + " JOIN ohp.placementHome ph"
+          + " WHERE ph.licenseNo = :licenseNumber"
+          + " ORDER BY c.identifier "
 )
 @NamedQuery(
-    name = "Client.findByFacilityId",
-    query = "SELECT c FROM Client c" +
-        " JOIN c.placementEpisodes pe" +
-        " JOIN pe.outOfHomePlacements ohp" +
-        " JOIN ohp.placementHome ph" +
-        " WHERE ph.id = :facilityId"
+  name = "Client.findByFacilityId",
+  query =
+      "SELECT c FROM Client c"
+          + " JOIN c.placementEpisodes pe"
+          + " JOIN pe.outOfHomePlacements ohp"
+          + " JOIN ohp.placementHome ph"
+          + " WHERE ph.id = :facilityId"
 )
 @SuppressWarnings({"squid:S3437", "squid:S2160"})
 @Entity
@@ -335,7 +336,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.birthDate = birthDate;
   }
 
-
   public String getBirthFacilityName() {
     return birthFacilityName;
   }
@@ -351,7 +351,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setBirthStateCodeType(Short birthStateCodeType) {
     this.birthStateCodeType = birthStateCodeType;
   }
-
 
   public Short getBirthCountryCodeType() {
     return birthCountryCodeType;
@@ -376,7 +375,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setCommonFirstName(String commonFirstName) {
     this.commonFirstName = commonFirstName;
   }
-
 
   public String getCommonLastName() {
     return commonLastName;
@@ -425,7 +423,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setDeathDate(LocalDate deathDate) {
     this.deathDate = deathDate;
   }
-
 
   public String getDeathReasonText() {
     return deathReasonText;
@@ -722,7 +719,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public void setBirthCity(String birthCity) {
     this.birthCity = birthCity;
   }
-
 
   public String getHealthSummaryText() {
     return healthSummaryText;

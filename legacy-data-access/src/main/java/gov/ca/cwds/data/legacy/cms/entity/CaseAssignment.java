@@ -5,7 +5,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -21,8 +21,13 @@ public class CaseAssignment extends BaseAssignment {
   private static final long serialVersionUID = -2902356846202575651L;
 
   @NotFound(action = NotFoundAction.IGNORE)
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "ESTBLSH_ID", referencedColumnName = "IDENTIFIER", insertable=false, updatable=false)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(
+      name = "ESTBLSH_ID",
+      referencedColumnName = "IDENTIFIER",
+      insertable = false,
+      updatable = false
+  )
   private Case theCase;
 
   public Case getTheCase() {
