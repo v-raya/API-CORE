@@ -85,7 +85,7 @@ public class Case extends CmsPersistentObject {
 
   @Type(type = "yes_no")
   @Column(name = "CSPL_DET_B")
-  private Boolean caseplanChildrenDetailIndVar;
+  private boolean caseplanChildrenDetailIndVar;
 
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
@@ -134,11 +134,11 @@ public class Case extends CmsPersistentObject {
 
   @Type(type = "yes_no")
   @Column(name = "ICPCSTAT_B")
-  private Boolean icpcOutgngPlcmtStatusIndVar;
+  private boolean icpcOutgngPlcmtStatusIndVar;
 
   @Type(type = "yes_no")
   @Column(name = "ICPC_RQT_B")
-  private Boolean icpcOutgoingRequestIndVar;
+  private boolean icpcOutgoingRequestIndVar;
 
   @Column(name = "LMT_ACSSCD")
   @Convert(converter = LimitedAccess.LimitedAccessConverter.class)
@@ -172,7 +172,7 @@ public class Case extends CmsPersistentObject {
 
   @Type(type = "yes_no")
   @Column(name = "SPRJ_CST_B")
-  private Boolean specialProjectCaseIndVar;
+  private boolean specialProjectCaseIndVar;
 
   @Column(name = "START_DT")
   private LocalDate startDate;
@@ -194,7 +194,7 @@ public class Case extends CmsPersistentObject {
 
   @Type(type = "yes_no")
   @Column(name = "TICKLE_T_B")
-  private Boolean tickleIndVar;
+  private boolean tickleIndVar;
 
   @NotFound(action = NotFoundAction.IGNORE)
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "theCase")
@@ -245,11 +245,11 @@ public class Case extends CmsPersistentObject {
     this.caseClosureReasonType = caseClosureReasonType;
   }
 
-  public Boolean getCaseplanChildrenDetailIndVar() {
+  public boolean getCaseplanChildrenDetailIndVar() {
     return caseplanChildrenDetailIndVar;
   }
 
-  public void setCaseplanChildrenDetailIndVar(Boolean caseplanChildrenDetailIndVar) {
+  public void setCaseplanChildrenDetailIndVar(boolean caseplanChildrenDetailIndVar) {
     this.caseplanChildrenDetailIndVar = caseplanChildrenDetailIndVar;
   }
 
@@ -329,19 +329,19 @@ public class Case extends CmsPersistentObject {
     this.county = county;
   }
 
-  public Boolean getIcpcOutgngPlcmtStatusIndVar() {
+  public boolean getIcpcOutgngPlcmtStatusIndVar() {
     return icpcOutgngPlcmtStatusIndVar;
   }
 
-  public void setIcpcOutgngPlcmtStatusIndVar(Boolean icpcOutgngPlcmtStatusIndVar) {
+  public void setIcpcOutgngPlcmtStatusIndVar(boolean icpcOutgngPlcmtStatusIndVar) {
     this.icpcOutgngPlcmtStatusIndVar = icpcOutgngPlcmtStatusIndVar;
   }
 
-  public Boolean getIcpcOutgoingRequestIndVar() {
+  public boolean getIcpcOutgoingRequestIndVar() {
     return icpcOutgoingRequestIndVar;
   }
 
-  public void setIcpcOutgoingRequestIndVar(Boolean icpcOutgoingRequestIndVar) {
+  public void setIcpcOutgoingRequestIndVar(boolean icpcOutgoingRequestIndVar) {
     this.icpcOutgoingRequestIndVar = icpcOutgoingRequestIndVar;
   }
 
@@ -409,11 +409,11 @@ public class Case extends CmsPersistentObject {
     this.responsibleAgency = responsibleAgency;
   }
 
-  public Boolean getSpecialProjectCaseIndVar() {
+  public boolean getSpecialProjectCaseIndVar() {
     return specialProjectCaseIndVar;
   }
 
-  public void setSpecialProjectCaseIndVar(Boolean specialProjectCaseIndVar) {
+  public void setSpecialProjectCaseIndVar(boolean specialProjectCaseIndVar) {
     this.specialProjectCaseIndVar = specialProjectCaseIndVar;
   }
 
@@ -449,11 +449,11 @@ public class Case extends CmsPersistentObject {
     this.activeSvcComponentStartDate = activeSvcComponentStartDate;
   }
 
-  public Boolean getTickleIndVar() {
+  public boolean getTickleIndVar() {
     return tickleIndVar;
   }
 
-  public void setTickleIndVar(Boolean tickleIndVar) {
+  public void setTickleIndVar(boolean tickleIndVar) {
     this.tickleIndVar = tickleIndVar;
   }
 

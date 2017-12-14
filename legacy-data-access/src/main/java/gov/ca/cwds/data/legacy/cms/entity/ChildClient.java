@@ -1,6 +1,7 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.legacy.cms.entity.converter.NullableBooleanConverter;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Adoptable;
 import gov.ca.cwds.data.legacy.cms.entity.enums.AwolAbducted;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Disability;
@@ -52,15 +53,15 @@ public class ChildClient extends Client {
 
   @Type(type = "yes_no")
   @Column(name = "FC_ELIGT_B")
-  private Boolean afdcFcEligibilityIndicatorVar;
+  private boolean afdcFcEligibilityIndicatorVar;
 
   @Type(type = "yes_no")
   @Column(name = "EDONFL_IND")
-  private Boolean allEducationInfoOnFileIndicator;
+  private boolean allEducationInfoOnFileIndicator;
 
   @Type(type = "yes_no")
   @Column(name = "HLONFL_IND")
-  private Boolean allHealthInfoOnFileIndicator;
+  private boolean allHealthInfoOnFileIndicator;
 
   @Column(name = "ACQ_ED_DSC")
   private String attemptToAcquireEducInfoDesc;
@@ -74,14 +75,14 @@ public class ChildClient extends Client {
 
   @Type(type = "yes_no")
   @Column(name = "BHIST_IND")
-  private Boolean birthHistoryIndicatorVar;
+  private boolean birthHistoryIndicatorVar;
 
   @Type(type = "yes_no")
   @Column(name = "INDIAN_IND")
-  private Boolean childIndianAncestryIndicator;
+  private boolean childIndianAncestryIndicator;
 
-  @Type(type = "yes_no")
   @Column(name = "CLG_IND")
+  @Convert(converter = NullableBooleanConverter.class)
   private Boolean collegeIndicator;
 
   @Column(name = "CURNT_CSID")
@@ -108,14 +109,14 @@ public class ChildClient extends Client {
 
   @Type(type = "yes_no")
   @Column(name = "FC2_APLT_B")
-  private Boolean fc2EligApplicationIndicatorVar;
+  private boolean fc2EligApplicationIndicatorVar;
 
   @Column(name = "FSTAMP_DT")
   private LocalDate foodStampsApplicationDate;
 
   @Type(type = "yes_no")
   @Column(name = "FSTAMP_IND")
-  private Boolean foodStampsApplicationIndicator;
+  private boolean foodStampsApplicationIndicator;
 
   @Column(name = "ICWA_ELGCD")
   @Convert(converter = IcwaEligibility.IcwaEligibilityConverter.class)
@@ -123,34 +124,34 @@ public class ChildClient extends Client {
 
   @Type(type = "yes_no")
   @Column(name = "ICADSR_IND")
-  private Boolean intercountryAdoptDisruptedIndicator;
+  private boolean intercountryAdoptDisruptedIndicator;
 
   @Type(type = "yes_no")
   @Column(name = "ICADSL_IND")
-  private Boolean intercountryAdoptDissolvedIndicator;
+  private boolean intercountryAdoptDissolvedIndicator;
 
   @Type(type = "yes_no")
   @Column(name = "MEDELIGT_B")
-  private Boolean medEligibilityApplicationIndicatorVar;
+  private boolean medEligibilityApplicationIndicatorVar;
 
   @Type(type = "yes_no")
   @Column(name = "MNRMOM_IND")
-  private Boolean minorNmdParentIndicator;
+  private boolean minorNmdParentIndicator;
 
   @Type(type = "yes_no")
   @Column(name = "PRTLIM_IND")
-  private Boolean parentalRightsLimitedIndicator;
+  private boolean parentalRightsLimitedIndicator;
 
   @Type(type = "yes_no")
   @Column(name = "PRG_TRMT_B")
-  private Boolean parentalRightsTermintnIndicatorVar;
+  private boolean parentalRightsTermintnIndicatorVar;
 
   @Type(type = "yes_no")
   @Column(name = "PTRN_INT_B")
-  private Boolean paternityIndividualIndicatorVar;
+  private boolean paternityIndividualIndicatorVar;
 
-  @Type(type = "yes_no")
   @Column(name = "PSVOC_IND")
+  @Convert(converter = NullableBooleanConverter.class)
   private Boolean postsecVocIndicator;
 
   @Column(name = "PREADPT_CD")
@@ -159,11 +160,11 @@ public class ChildClient extends Client {
 
   @Type(type = "yes_no")
   @Column(name = "SFSURB_IND")
-  private Boolean safelySurrendedBabiesIndicatorVar;
+  private boolean safelySurrendedBabiesIndicatorVar;
 
   @Type(type = "yes_no")
   @Column(name = "SAW1APLT_B")
-  private Boolean saw1EligApplicationIndicatorVar;
+  private boolean saw1EligApplicationIndicatorVar;
 
   @Type(type = "integer")
   @Column(name = "SAWS_CS_NO")
@@ -177,18 +178,18 @@ public class ChildClient extends Client {
 
   @Type(type = "yes_no")
   @Column(name = "SSI_SSPIND")
-  private Boolean ssiSspApplicationIndicator;
+  private boolean ssiSspApplicationIndicator;
 
   @Type(type = "yes_no")
   @Column(name = "TRBA_NOT_B")
-  private Boolean tribalAncestryNotifctnIndicatorVar;
+  private boolean tribalAncestryNotifctnIndicatorVar;
 
   @Column(name = "TCADPT_DT")
   private LocalDate tribalCustomaryAdoptionDate;
 
   @Type(type = "yes_no")
   @Column(name = "TCADPT_IND")
-  private Boolean tribalCustomaryAdoptionIndicator;
+  private boolean tribalCustomaryAdoptionIndicator;
 
   @Column(name = "LST_UPD_ID", nullable = false, length = 3)
   private String childClientLastUpdateId;
@@ -209,15 +210,15 @@ public class ChildClient extends Client {
     this.adoptedAge = adoptedAge;
   }
 
-  public void setAfdcFcEligibilityIndicatorVar(Boolean afdcFcEligibilityIndicatorVar) {
+  public void setAfdcFcEligibilityIndicatorVar(boolean afdcFcEligibilityIndicatorVar) {
     this.afdcFcEligibilityIndicatorVar = afdcFcEligibilityIndicatorVar;
   }
 
-  public void setAllEducationInfoOnFileIndicator(Boolean allEducationInfoOnFileIndicator) {
+  public void setAllEducationInfoOnFileIndicator(boolean allEducationInfoOnFileIndicator) {
     this.allEducationInfoOnFileIndicator = allEducationInfoOnFileIndicator;
   }
 
-  public void setAllHealthInfoOnFileIndicator(Boolean allHealthInfoOnFileIndicator) {
+  public void setAllHealthInfoOnFileIndicator(boolean allHealthInfoOnFileIndicator) {
     this.allHealthInfoOnFileIndicator = allHealthInfoOnFileIndicator;
   }
 
@@ -233,14 +234,18 @@ public class ChildClient extends Client {
     this.awolAbducted = awolAbducted;
   }
 
-  public void setBirthHistoryIndicatorVar(Boolean birthHistoryIndicatorVar) {
+  public void setBirthHistoryIndicatorVar(boolean birthHistoryIndicatorVar) {
     this.birthHistoryIndicatorVar = birthHistoryIndicatorVar;
   }
 
-  public void setChildIndianAncestryIndicator(Boolean childIndianAncestryIndicator) {
+  public void setChildIndianAncestryIndicator(boolean childIndianAncestryIndicator) {
     this.childIndianAncestryIndicator = childIndianAncestryIndicator;
   }
 
+  /**
+   *
+   * @param collegeIndicator (may be null)
+   */
   public void setCollegeIndicator(Boolean collegeIndicator) {
     this.collegeIndicator = collegeIndicator;
   }
@@ -269,7 +274,7 @@ public class ChildClient extends Client {
     this.drmsVoluntaryPlcmntAgrmntDoc = drmsVoluntaryPlcmntAgrmntDoc;
   }
 
-  public void setFc2EligApplicationIndicatorVar(Boolean fc2EligApplicationIndicatorVar) {
+  public void setFc2EligApplicationIndicatorVar(boolean fc2EligApplicationIndicatorVar) {
     this.fc2EligApplicationIndicatorVar = fc2EligApplicationIndicatorVar;
   }
 
@@ -277,7 +282,7 @@ public class ChildClient extends Client {
     this.foodStampsApplicationDate = foodStampsApplicationDate;
   }
 
-  public void setFoodStampsApplicationIndicator(Boolean foodStampsApplicationIndicator) {
+  public void setFoodStampsApplicationIndicator(boolean foodStampsApplicationIndicator) {
     this.foodStampsApplicationIndicator = foodStampsApplicationIndicator;
   }
 
@@ -285,35 +290,39 @@ public class ChildClient extends Client {
     this.icwaEligibility = icwaEligibility;
   }
 
-  public void setIntercountryAdoptDisruptedIndicator(Boolean intercountryAdoptDisruptedIndicator) {
+  public void setIntercountryAdoptDisruptedIndicator(boolean intercountryAdoptDisruptedIndicator) {
     this.intercountryAdoptDisruptedIndicator = intercountryAdoptDisruptedIndicator;
   }
 
-  public void setIntercountryAdoptDissolvedIndicator(Boolean intercountryAdoptDissolvedIndicator) {
+  public void setIntercountryAdoptDissolvedIndicator(boolean intercountryAdoptDissolvedIndicator) {
     this.intercountryAdoptDissolvedIndicator = intercountryAdoptDissolvedIndicator;
   }
 
   public void setMedEligibilityApplicationIndicatorVar(
-      Boolean medEligibilityApplicationIndicatorVar) {
+      boolean medEligibilityApplicationIndicatorVar) {
     this.medEligibilityApplicationIndicatorVar = medEligibilityApplicationIndicatorVar;
   }
 
-  public void setMinorNmdParentIndicator(Boolean minorNmdParentIndicator) {
+  public void setMinorNmdParentIndicator(boolean minorNmdParentIndicator) {
     this.minorNmdParentIndicator = minorNmdParentIndicator;
   }
 
-  public void setParentalRightsLimitedIndicator(Boolean parentalRightsLimitedIndicator) {
+  public void setParentalRightsLimitedIndicator(boolean parentalRightsLimitedIndicator) {
     this.parentalRightsLimitedIndicator = parentalRightsLimitedIndicator;
   }
 
-  public void setParentalRightsTermintnIndicatorVar(Boolean parentalRightsTermintnIndicatorVar) {
+  public void setParentalRightsTermintnIndicatorVar(boolean parentalRightsTermintnIndicatorVar) {
     this.parentalRightsTermintnIndicatorVar = parentalRightsTermintnIndicatorVar;
   }
 
-  public void setPaternityIndividualIndicatorVar(Boolean paternityIndividualIndicatorVar) {
+  public void setPaternityIndividualIndicatorVar(boolean paternityIndividualIndicatorVar) {
     this.paternityIndividualIndicatorVar = paternityIndividualIndicatorVar;
   }
 
+  /**
+   *
+   * @param postsecVocIndicator (may be null)
+   */
   public void setPostsecVocIndicator(Boolean postsecVocIndicator) {
     this.postsecVocIndicator = postsecVocIndicator;
   }
@@ -322,11 +331,11 @@ public class ChildClient extends Client {
     this.previouslyAdopted = previouslyAdopted;
   }
 
-  public void setSafelySurrendedBabiesIndicatorVar(Boolean safelySurrendedBabiesIndicatorVar) {
+  public void setSafelySurrendedBabiesIndicatorVar(boolean safelySurrendedBabiesIndicatorVar) {
     this.safelySurrendedBabiesIndicatorVar = safelySurrendedBabiesIndicatorVar;
   }
 
-  public void setSaw1EligApplicationIndicatorVar(Boolean saw1EligApplicationIndicatorVar) {
+  public void setSaw1EligApplicationIndicatorVar(boolean saw1EligApplicationIndicatorVar) {
     this.saw1EligApplicationIndicatorVar = saw1EligApplicationIndicatorVar;
   }
 
@@ -342,11 +351,11 @@ public class ChildClient extends Client {
     this.siiNextScreeningDueDate = siiNextScreeningDueDate;
   }
 
-  public void setSsiSspApplicationIndicator(Boolean ssiSspApplicationIndicator) {
+  public void setSsiSspApplicationIndicator(boolean ssiSspApplicationIndicator) {
     this.ssiSspApplicationIndicator = ssiSspApplicationIndicator;
   }
 
-  public void setTribalAncestryNotifctnIndicatorVar(Boolean tribalAncestryNotifctnIndicatorVar) {
+  public void setTribalAncestryNotifctnIndicatorVar(boolean tribalAncestryNotifctnIndicatorVar) {
     this.tribalAncestryNotifctnIndicatorVar = tribalAncestryNotifctnIndicatorVar;
   }
 
@@ -354,7 +363,7 @@ public class ChildClient extends Client {
     this.tribalCustomaryAdoptionDate = tribalCustomaryAdoptionDate;
   }
 
-  public void setTribalCustomaryAdoptionIndicator(Boolean tribalCustomaryAdoptionIndicator) {
+  public void setTribalCustomaryAdoptionIndicator(boolean tribalCustomaryAdoptionIndicator) {
     this.tribalCustomaryAdoptionIndicator = tribalCustomaryAdoptionIndicator;
   }
 
@@ -382,21 +391,21 @@ public class ChildClient extends Client {
   /**
    * @return the afdcFcEligibilityIndicatorVar
    */
-  public Boolean getAfdcFcEligibilityIndicatorVar() {
+  public boolean getAfdcFcEligibilityIndicatorVar() {
     return afdcFcEligibilityIndicatorVar;
   }
 
   /**
    * @return the allEducationInfoOnFileIndicator
    */
-  public Boolean getAllEducationInfoOnFileIndicator() {
+  public boolean getAllEducationInfoOnFileIndicator() {
     return allEducationInfoOnFileIndicator;
   }
 
   /**
    * @return the allHealthInfoOnFileIndicator
    */
-  public Boolean getAllHealthInfoOnFileIndicator() {
+  public boolean getAllHealthInfoOnFileIndicator() {
     return allHealthInfoOnFileIndicator;
   }
 
@@ -424,20 +433,21 @@ public class ChildClient extends Client {
   /**
    * @return the birthHistoryIndicatorVar
    */
-  public Boolean getBirthHistoryIndicatorVar() {
+  public boolean getBirthHistoryIndicatorVar() {
     return birthHistoryIndicatorVar;
   }
 
   /**
    * @return the childIndianAncestryIndicator
    */
-  public Boolean getChildIndianAncestryIndicator() {
+  public boolean getChildIndianAncestryIndicator() {
     return childIndianAncestryIndicator;
   }
 
   /**
-   * @return the collegeIndicator
+   * @return the collegeIndicator (Boolean value or null)
    */
+  @SuppressWarnings("squid:S2447")
   public Boolean getCollegeIndicator() {
     return collegeIndicator;
   }
@@ -487,7 +497,7 @@ public class ChildClient extends Client {
   /**
    * @return the fc2EligApplicationIndicatorVar
    */
-  public Boolean getFc2EligApplicationIndicatorVar() {
+  public boolean getFc2EligApplicationIndicatorVar() {
     return fc2EligApplicationIndicatorVar;
   }
 
@@ -501,7 +511,7 @@ public class ChildClient extends Client {
   /**
    * @return the foodStampsApplicationIndicator
    */
-  public Boolean getFoodStampsApplicationIndicator() {
+  public boolean getFoodStampsApplicationIndicator() {
     return foodStampsApplicationIndicator;
   }
 
@@ -515,55 +525,56 @@ public class ChildClient extends Client {
   /**
    * @return intercountryAdoptDisruptedIndicator
    */
-  public Boolean getIntercountryAdoptDisruptedIndicator() {
+  public boolean getIntercountryAdoptDisruptedIndicator() {
     return intercountryAdoptDisruptedIndicator;
   }
 
   /**
    * @return the intercountryAdoptDissolvedIndicator
    */
-  public Boolean getIntercountryAdoptDissolvedIndicator() {
+  public boolean getIntercountryAdoptDissolvedIndicator() {
     return intercountryAdoptDissolvedIndicator;
   }
 
   /**
    * @return the medEligibilityApplicationIndicatorVar
    */
-  public Boolean getMedEligibilityApplicationIndicatorVar() {
+  public boolean getMedEligibilityApplicationIndicatorVar() {
     return medEligibilityApplicationIndicatorVar;
   }
 
   /**
    * @return the minorNmdParentIndicator
    */
-  public Boolean getMinorNmdParentIndicator() {
+  public boolean getMinorNmdParentIndicator() {
     return minorNmdParentIndicator;
   }
 
   /**
    * @return the parentalRightsLimitedIndicator
    */
-  public Boolean getParentalRightsLimitedIndicator() {
+  public boolean getParentalRightsLimitedIndicator() {
     return parentalRightsLimitedIndicator;
   }
 
   /**
    * @return the parentalRightsTermintnIndicatorVar
    */
-  public Boolean getParentalRightsTermintnIndicatorVar() {
+  public boolean getParentalRightsTermintnIndicatorVar() {
     return parentalRightsTermintnIndicatorVar;
   }
 
   /**
    * @return the paternityIndividualIndicatorVar
    */
-  public Boolean getPaternityIndividualIndicatorVar() {
+  public boolean getPaternityIndividualIndicatorVar() {
     return paternityIndividualIndicatorVar;
   }
 
   /**
-   * @return the postsecVocIndicator
+   * @return the postsecVocIndicator (Boolean value or null)
    */
+  @SuppressWarnings("squid:S2447")
   public Boolean getPostsecVocIndicator() {
     return postsecVocIndicator;
   }
@@ -578,14 +589,14 @@ public class ChildClient extends Client {
   /**
    * @return the safelySurrendedBabiesIndicatorVar
    */
-  public Boolean getSafelySurrendedBabiesIndicatorVar() {
+  public boolean getSafelySurrendedBabiesIndicatorVar() {
     return safelySurrendedBabiesIndicatorVar;
   }
 
   /**
    * @return the saw1EligApplicationIndicatorVar
    */
-  public Boolean getSaw1EligApplicationIndicatorVar() {
+  public boolean getSaw1EligApplicationIndicatorVar() {
     return saw1EligApplicationIndicatorVar;
   }
 
@@ -613,14 +624,14 @@ public class ChildClient extends Client {
   /**
    * @return the ssiSspApplicationIndicator
    */
-  public Boolean getSsiSspApplicationIndicator() {
+  public boolean getSsiSspApplicationIndicator() {
     return ssiSspApplicationIndicator;
   }
 
   /**
    * @return the tribalAncestryNotifctnIndicatorVar
    */
-  public Boolean getTribalAncestryNotifctnIndicatorVar() {
+  public boolean getTribalAncestryNotifctnIndicatorVar() {
     return tribalAncestryNotifctnIndicatorVar;
   }
 
@@ -634,7 +645,7 @@ public class ChildClient extends Client {
   /**
    * @return the tribalCustomaryAdoptionIndicator
    */
-  public Boolean getTribalCustomaryAdoptionIndicator() {
+  public boolean getTribalCustomaryAdoptionIndicator() {
     return tribalCustomaryAdoptionIndicator;
   }
 

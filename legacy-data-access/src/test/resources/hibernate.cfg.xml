@@ -46,5 +46,11 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.State" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.SystemCode" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.VisitType" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.ImmigrationStatus" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.MaritalStatus" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.Ethnicity" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.Language" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.Religion" />
 	</session-factory>
 </hibernate-configuration>
