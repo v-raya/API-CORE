@@ -44,8 +44,7 @@ import org.hibernate.annotations.Type;
         + " left join cl.caseAssignments assignment"
         + " left join assignment.theCase theCase "
         + " where cl.caseLoadWeighting.fkstfperst = :" + Case.NQ_PARAM_STAFF_ID
-        + " and theCase.startDate < :" + Case.NQ_PARAM_ACTIVE_DATE
-        + " and (theCase.endDate is null or theCase.endDate > :" + Case.NQ_PARAM_ACTIVE_DATE + ")"
+        + " and theCase.endDate is null "
         + " and assignment.startDate < :" + Case.NQ_PARAM_ACTIVE_DATE
         + " and (assignment.endDate is null or assignment.endDate > :" + Case.NQ_PARAM_ACTIVE_DATE + ")"
 )
