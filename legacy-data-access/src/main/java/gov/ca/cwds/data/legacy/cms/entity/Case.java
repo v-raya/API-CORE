@@ -40,9 +40,12 @@ import org.hibernate.annotations.Type;
 @Table(name = "CASE_T")
 @NamedQuery(
     name = Case.NQ_FIND_ACTIVE_BY_STAFF_ID,
-    query = "select distinct assignment.theCase from gov.ca.cwds.data.legacy.cms.entity.CaseLoad cl"
+    query = "select distinct theCase from gov.ca.cwds.data.legacy.cms.entity.CaseLoad cl"
         + " left join cl.caseAssignments assignment"
+        + " left join assignment.theCase theCase "
         + " where cl.caseLoadWeighting.fkstfperst = :" + Case.NQ_PARAM_STAFF_ID
+        + " and theCase.startDate < :" + Case.NQ_PARAM_ACTIVE_DATE
+        + " and (theCase.endDate is null or theCase.endDate > :" + Case.NQ_PARAM_ACTIVE_DATE + ")"
         + " and assignment.startDate < :" + Case.NQ_PARAM_ACTIVE_DATE
         + " and (assignment.endDate is null or assignment.endDate > :" + Case.NQ_PARAM_ACTIVE_DATE + ")"
 )
