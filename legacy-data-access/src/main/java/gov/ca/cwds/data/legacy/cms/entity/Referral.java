@@ -36,6 +36,7 @@ import org.hibernate.annotations.Type;
         + " where cl.caseLoadWeighting.fkstfperst = :" + Referral.PARAM_STAFF_ID
         + " and assignment.startDate < :" + Referral.PARAM_ACTIVE_DATE
         + " and (assignment.endDate is null or assignment.endDate > :" + Referral.PARAM_ACTIVE_DATE + ")"
+        + " and assignment.referral.originalClosureDate is null"
 )
 @SuppressWarnings("squid:S3437")
 public class Referral extends CmsPersistentObject {
