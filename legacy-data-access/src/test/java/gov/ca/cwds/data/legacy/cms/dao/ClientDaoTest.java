@@ -29,6 +29,14 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
           Client client_1 = dao.find("AaiU7IW0Rt");
           assertNotNull(client_1);
           assertFalse(client_1.getAdjudicatedDelinquentIndicator());
+          assertNull(client_1.getHispanicUnableToDetermineReason());
+          assertNull(client_1.getBirthState());
+          assertNull(client_1.getBirthCountry());
+          assertNull(client_1.getDriverLicenseState());
+          assertNull(client_1.getImmigrationCountry());
+          assertNull(client_1.getImmigrationStatus());
+          assertNull(client_1.getReligion());
+          assertNull(client_1.getSecondaryLanguage());
 
           Client client_2 = dao.find("AapJGAU04Z");
           assertNotNull(client_2);
