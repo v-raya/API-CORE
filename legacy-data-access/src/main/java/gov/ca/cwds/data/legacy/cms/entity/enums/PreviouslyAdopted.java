@@ -7,22 +7,22 @@ import javax.persistence.Converter;
 /**
  * @author CWDS CASE API Team
  */
-public enum PreviouslyAdopted implements EntityEnum<Character> {
-  NO('N', "No"),
-  UNKNOWN('U', "Unknown"),
-  NO_USER_SELECTION('X', "No User Selection"),
-  YES('Y', "Eligible");
+public enum PreviouslyAdopted implements EntityEnum<String> {
+  NO("N", "No"),
+  UNKNOWN("U", "Unknown"),
+  NO_USER_SELECTION("X", "No User Selection"),
+  YES("Y", "Eligible");
 
-  private final Character code;
+  private final String code;
   private final String description;
 
-  PreviouslyAdopted(Character code, String description) {
+  PreviouslyAdopted(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   @Override
-  public Character getCode() {
+  public String getCode() {
     return code;
   }
 
@@ -33,13 +33,13 @@ public enum PreviouslyAdopted implements EntityEnum<Character> {
 
   @Converter
   public static class PreviouslyAdoptedConverter extends
-      BaseEntityEnumConverter<PreviouslyAdopted, Character> {
+      BaseEntityEnumConverter<PreviouslyAdopted, String> {
 
-    private static final Map<Character, PreviouslyAdopted> codeMap =
+    private static final Map<String, PreviouslyAdopted> codeMap =
         Collections.unmodifiableMap(initializeMapping(PreviouslyAdopted.values()));
 
     @Override
-    Map<Character, PreviouslyAdopted> getCodeMap() {
+    Map<String, PreviouslyAdopted> getCodeMap() {
       return codeMap;
     }
   }

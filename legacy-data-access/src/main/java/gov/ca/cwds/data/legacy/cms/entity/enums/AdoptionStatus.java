@@ -4,22 +4,22 @@ import java.util.Collections;
 import java.util.Map;
 import javax.persistence.Converter;
 
-public enum AdoptionStatus implements EntityEnum<Character> {
-  TOTALLY_FREE('T', "Totally Free"),
-  PARTIALLY_FREE('P', "Partially Free"),
-  NOT_FREE('N', "Not Free"),
-  NOT_APPLICABLE('A', "Not Applicable");
+public enum AdoptionStatus implements EntityEnum<String> {
+  TOTALLY_FREE("T", "Totally Free"),
+  PARTIALLY_FREE("P", "Partially Free"),
+  NOT_FREE("N", "Not Free"),
+  NOT_APPLICABLE("A", "Not Applicable");
 
-  private final Character code;
+  private final String code;
   private final String description;
 
-  AdoptionStatus(Character code, String description) {
+  AdoptionStatus(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   @Override
-  public Character getCode() {
+  public String getCode() {
     return code;
   }
 
@@ -30,13 +30,13 @@ public enum AdoptionStatus implements EntityEnum<Character> {
 
   @Converter
   public static class AdoptionStatusConverter
-      extends BaseEntityEnumConverter<AdoptionStatus, Character> {
+      extends BaseEntityEnumConverter<AdoptionStatus, String> {
 
-    private static final Map<Character, AdoptionStatus> codeMap =
+    private static final Map<String, AdoptionStatus> codeMap =
         Collections.unmodifiableMap(initializeMapping(AdoptionStatus.values()));
 
     @Override
-    Map<Character, AdoptionStatus> getCodeMap() {
+    Map<String, AdoptionStatus> getCodeMap() {
       return codeMap;
     }
   }

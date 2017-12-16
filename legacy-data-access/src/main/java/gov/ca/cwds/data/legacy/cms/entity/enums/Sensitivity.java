@@ -4,21 +4,21 @@ import java.util.Collections;
 import java.util.Map;
 import javax.persistence.Converter;
 
-public enum Sensitivity implements EntityEnum<Character> {
-  NOT_APPLICABLE('N', "Not Applicable"),
-  SEALED('R', "This specifies a SEALED Case"),
-  SENSITIVE('S', "This specifies a SENSITIVE Case");
+public enum Sensitivity implements EntityEnum<String> {
+  NOT_APPLICABLE("N", "Not Applicable"),
+  SEALED("R", "This specifies a SEALED Case"),
+  SENSITIVE("S", "This specifies a SENSITIVE Case");
 
-  private final Character code;
+  private final String code;
   private final String description;
 
-  Sensitivity(Character code, String description) {
+  Sensitivity(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   @Override
-  public Character getCode() {
+  public String getCode() {
     return code;
   }
 
@@ -29,13 +29,13 @@ public enum Sensitivity implements EntityEnum<Character> {
 
   @Converter
   public static class SensitivityConverter
-      extends BaseEntityEnumConverter<Sensitivity, Character> {
+      extends BaseEntityEnumConverter<Sensitivity, String> {
 
-    private static final Map<Character, Sensitivity> codeMap =
+    private static final Map<String, Sensitivity> codeMap =
         Collections.unmodifiableMap(initializeMapping(Sensitivity.values()));
 
     @Override
-    Map<Character, Sensitivity> getCodeMap() {
+    Map<String, Sensitivity> getCodeMap() {
       return codeMap;
     }
   }

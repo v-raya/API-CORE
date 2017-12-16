@@ -21,9 +21,9 @@ public class SensitivityTest {
 
   @Test
   public void testGetCode() {
-    assertEquals('N', NOT_APPLICABLE.getCode().charValue());
-    assertEquals('R', SEALED.getCode().charValue());
-    assertEquals('S', SENSITIVE.getCode().charValue());
+    assertEquals("N", NOT_APPLICABLE.getCode());
+    assertEquals("R", SEALED.getCode());
+    assertEquals("S", SENSITIVE.getCode());
   }
 
   @Test
@@ -36,22 +36,22 @@ public class SensitivityTest {
   @Test
   public void testConvertToDatabaseColumn() {
     assertNull(converter.convertToDatabaseColumn(null));
-    assertEquals('N', converter.convertToDatabaseColumn(NOT_APPLICABLE).charValue());
-    assertEquals('R', converter.convertToDatabaseColumn(SEALED).charValue());
-    assertEquals('S', converter.convertToDatabaseColumn(SENSITIVE).charValue());
+    assertEquals("N", converter.convertToDatabaseColumn(NOT_APPLICABLE));
+    assertEquals("R", converter.convertToDatabaseColumn(SEALED));
+    assertEquals("S", converter.convertToDatabaseColumn(SENSITIVE));
   }
 
   @Test
   public void testConvertToEntityAttribute() {
     assertNull(converter.convertToEntityAttribute(null));
-    assertNull(converter.convertToEntityAttribute(' '));
-    assertEquals(NOT_APPLICABLE, converter.convertToEntityAttribute('N'));
-    assertEquals(SEALED, converter.convertToEntityAttribute('R'));
-    assertEquals(SENSITIVE, converter.convertToEntityAttribute('S'));
+    assertNull(converter.convertToEntityAttribute(" "));
+    assertEquals(NOT_APPLICABLE, converter.convertToEntityAttribute("N"));
+    assertEquals(SEALED, converter.convertToEntityAttribute("R"));
+    assertEquals(SENSITIVE, converter.convertToEntityAttribute("S"));
   }
 
   @Test(expected = UnsupportedOperationException.class)
   public void testInvalidCode() {
-    converter.convertToEntityAttribute('@');
+    converter.convertToEntityAttribute("@");
   }
 }

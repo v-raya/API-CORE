@@ -4,21 +4,21 @@ import java.util.Collections;
 import java.util.Map;
 import javax.persistence.Converter;
 
-public enum Gender implements EntityEnum<Character> {
-  FEMALE('F', "Female"),
-  MALE('M', "Male"),
-  UNKNOWN('U', "Unknown");
+public enum Gender implements EntityEnum<String> {
+  FEMALE("F", "Female"),
+  MALE("M", "Male"),
+  UNKNOWN("U", "Unknown");
 
-  private final Character code;
+  private final String code;
   private final String description;
 
-  Gender(Character code, String description) {
+  Gender(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   @Override
-  public Character getCode() {
+  public String getCode() {
     return code;
   }
 
@@ -29,13 +29,13 @@ public enum Gender implements EntityEnum<Character> {
 
   @Converter
   public static class GenderConverter
-      extends BaseEntityEnumConverter<Gender, Character> {
+      extends BaseEntityEnumConverter<Gender, String> {
 
-    private static final Map<Character, Gender> codeMap =
+    private static final Map<String, Gender> codeMap =
         Collections.unmodifiableMap(initializeMapping(Gender.values()));
 
     @Override
-    Map<Character, Gender> getCodeMap() {
+    Map<String, Gender> getCodeMap() {
       return codeMap;
     }
   }

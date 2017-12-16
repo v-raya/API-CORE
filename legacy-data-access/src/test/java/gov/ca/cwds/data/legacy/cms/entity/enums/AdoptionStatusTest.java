@@ -22,10 +22,10 @@ public class AdoptionStatusTest {
 
   @Test
   public void testGetCode() {
-    assertEquals('T', TOTALLY_FREE.getCode().charValue());
-    assertEquals('P', PARTIALLY_FREE.getCode().charValue());
-    assertEquals('N', NOT_FREE.getCode().charValue());
-    assertEquals('A', NOT_APPLICABLE.getCode().charValue());
+    assertEquals("T", TOTALLY_FREE.getCode());
+    assertEquals("P", PARTIALLY_FREE.getCode());
+    assertEquals("N", NOT_FREE.getCode());
+    assertEquals("A", NOT_APPLICABLE.getCode());
   }
 
   @Test
@@ -39,24 +39,24 @@ public class AdoptionStatusTest {
   @Test
   public void testConvertToDatabaseColumn() {
     assertNull(converter.convertToDatabaseColumn(null));
-    assertEquals('T', converter.convertToDatabaseColumn(TOTALLY_FREE).charValue());
-    assertEquals('P', converter.convertToDatabaseColumn(PARTIALLY_FREE).charValue());
-    assertEquals('N', converter.convertToDatabaseColumn(NOT_FREE).charValue());
-    assertEquals('A', converter.convertToDatabaseColumn(NOT_APPLICABLE).charValue());
+    assertEquals("T", converter.convertToDatabaseColumn(TOTALLY_FREE));
+    assertEquals("P", converter.convertToDatabaseColumn(PARTIALLY_FREE));
+    assertEquals("N", converter.convertToDatabaseColumn(NOT_FREE));
+    assertEquals("A", converter.convertToDatabaseColumn(NOT_APPLICABLE));
   }
 
   @Test
   public void testConvertToEntityAttribute() {
     assertNull(converter.convertToEntityAttribute(null));
-    assertNull(converter.convertToEntityAttribute(' '));
-    assertEquals(TOTALLY_FREE, converter.convertToEntityAttribute('T'));
-    assertEquals(PARTIALLY_FREE, converter.convertToEntityAttribute('P'));
-    assertEquals(NOT_FREE, converter.convertToEntityAttribute('N'));
-    assertEquals(NOT_APPLICABLE, converter.convertToEntityAttribute('A'));
+    assertNull(converter.convertToEntityAttribute(" "));
+    assertEquals(TOTALLY_FREE, converter.convertToEntityAttribute("T"));
+    assertEquals(PARTIALLY_FREE, converter.convertToEntityAttribute("P"));
+    assertEquals(NOT_FREE, converter.convertToEntityAttribute("N"));
+    assertEquals(NOT_APPLICABLE, converter.convertToEntityAttribute("A"));
   }
 
   @Test(expected = UnsupportedOperationException.class)
   public void testInvalidCode() {
-    converter.convertToEntityAttribute('@');
+    converter.convertToEntityAttribute("@");
   }
 }

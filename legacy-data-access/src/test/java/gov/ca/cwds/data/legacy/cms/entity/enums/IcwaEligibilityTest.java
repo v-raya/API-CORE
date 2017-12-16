@@ -22,10 +22,10 @@ public class IcwaEligibilityTest {
 
   @Test
   public void testGetCode() {
-    assertEquals('N', NOT_ELIGIBLE.getCode().charValue());
-    assertEquals('P', PENDING.getCode().charValue());
-    assertEquals('U', UNKNOWN.getCode().charValue());
-    assertEquals('Y', ELIGIBLE.getCode().charValue());
+    assertEquals("N", NOT_ELIGIBLE.getCode());
+    assertEquals("P", PENDING.getCode());
+    assertEquals("U", UNKNOWN.getCode());
+    assertEquals("Y", ELIGIBLE.getCode());
   }
 
   @Test
@@ -39,23 +39,23 @@ public class IcwaEligibilityTest {
   @Test
   public void testConvertToDatabaseColumn() {
     assertNull(converter.convertToDatabaseColumn(null));
-    assertEquals('N', converter.convertToDatabaseColumn(NOT_ELIGIBLE).charValue());
-    assertEquals('P', converter.convertToDatabaseColumn(PENDING).charValue());
-    assertEquals('U', converter.convertToDatabaseColumn(UNKNOWN).charValue());
-    assertEquals('Y', converter.convertToDatabaseColumn(ELIGIBLE).charValue());
+    assertEquals("N", converter.convertToDatabaseColumn(NOT_ELIGIBLE));
+    assertEquals("P", converter.convertToDatabaseColumn(PENDING));
+    assertEquals("U", converter.convertToDatabaseColumn(UNKNOWN));
+    assertEquals("Y", converter.convertToDatabaseColumn(ELIGIBLE));
   }
 
   @Test
   public void testConvertToEntityAttribute() {
     assertNull(converter.convertToEntityAttribute(null));
-    assertEquals(NOT_ELIGIBLE, converter.convertToEntityAttribute('N'));
-    assertEquals(PENDING, converter.convertToEntityAttribute('P'));
-    assertEquals(UNKNOWN, converter.convertToEntityAttribute('U'));
-    assertEquals(ELIGIBLE, converter.convertToEntityAttribute('Y'));
+    assertEquals(NOT_ELIGIBLE, converter.convertToEntityAttribute("N"));
+    assertEquals(PENDING, converter.convertToEntityAttribute("P"));
+    assertEquals(UNKNOWN, converter.convertToEntityAttribute("U"));
+    assertEquals(ELIGIBLE, converter.convertToEntityAttribute("Y"));
   }
 
   @Test(expected = UnsupportedOperationException.class)
   public void testInvalidCode() {
-    converter.convertToEntityAttribute('@');
+    converter.convertToEntityAttribute("@");
   }
 }

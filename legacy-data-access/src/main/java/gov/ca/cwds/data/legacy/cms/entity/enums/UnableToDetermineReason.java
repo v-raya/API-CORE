@@ -4,21 +4,21 @@ import java.util.Collections;
 import java.util.Map;
 import javax.persistence.Converter;
 
-public enum UnableToDetermineReason implements EntityEnum<Character> {
-  ABANDONMENT('A', "Abandonment"),
-  INCAPACITATION('I', "Incapacitation"),
-  INDIVIDUAL_DOES_NOT_KNOW('K', "Individual Does Not Know");
+public enum UnableToDetermineReason implements EntityEnum<String> {
+  ABANDONMENT("A", "Abandonment"),
+  INCAPACITATION("I", "Incapacitation"),
+  INDIVIDUAL_DOES_NOT_KNOW("K", "Individual Does Not Know");
 
-  private final Character code;
+  private final String code;
   private final String description;
 
-  UnableToDetermineReason(Character code, String description) {
+  UnableToDetermineReason(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   @Override
-  public Character getCode() {
+  public String getCode() {
     return code;
   }
 
@@ -29,13 +29,13 @@ public enum UnableToDetermineReason implements EntityEnum<Character> {
 
   @Converter
   public static class UnableToDetermineReasonConverter
-      extends BaseEntityEnumConverter<UnableToDetermineReason, Character> {
+      extends BaseEntityEnumConverter<UnableToDetermineReason, String> {
 
-    private static final Map<Character, UnableToDetermineReason> codeMap =
+    private static final Map<String, UnableToDetermineReason> codeMap =
         Collections.unmodifiableMap(initializeMapping(UnableToDetermineReason.values()));
 
     @Override
-    Map<Character, UnableToDetermineReason> getCodeMap() {
+    Map<String, UnableToDetermineReason> getCodeMap() {
       return codeMap;
     }
   }

@@ -24,12 +24,12 @@ public class HispanicOriginTest {
 
   @Test
   public void testGetCode() {
-    assertEquals('D', DECLINES_TO_STATE.getCode().charValue());
-    assertEquals('N', NO.getCode().charValue());
-    assertEquals('U', UNDETERMINED.getCode().charValue());
-    assertEquals('X', NO_USER_SELECTION.getCode().charValue());
-    assertEquals('Y', YES.getCode().charValue());
-    assertEquals('Z', UNABLE_TO_DETERMINE.getCode().charValue());
+    assertEquals("D", DECLINES_TO_STATE.getCode());
+    assertEquals("N", NO.getCode());
+    assertEquals("U", UNDETERMINED.getCode());
+    assertEquals("X", NO_USER_SELECTION.getCode());
+    assertEquals("Y", YES.getCode());
+    assertEquals("Z", UNABLE_TO_DETERMINE.getCode());
   }
 
   @Test
@@ -45,28 +45,28 @@ public class HispanicOriginTest {
   @Test
   public void testConvertToDatabaseColumn() {
     assertNull(converter.convertToDatabaseColumn(null));
-    assertEquals('D', converter.convertToDatabaseColumn(DECLINES_TO_STATE).charValue());
-    assertEquals('N', converter.convertToDatabaseColumn(NO).charValue());
-    assertEquals('U', converter.convertToDatabaseColumn(UNDETERMINED).charValue());
-    assertEquals('X', converter.convertToDatabaseColumn(NO_USER_SELECTION).charValue());
-    assertEquals('Y', converter.convertToDatabaseColumn(YES).charValue());
-    assertEquals('Z', converter.convertToDatabaseColumn(UNABLE_TO_DETERMINE).charValue());
+    assertEquals("D", converter.convertToDatabaseColumn(DECLINES_TO_STATE));
+    assertEquals("N", converter.convertToDatabaseColumn(NO));
+    assertEquals("U", converter.convertToDatabaseColumn(UNDETERMINED));
+    assertEquals("X", converter.convertToDatabaseColumn(NO_USER_SELECTION));
+    assertEquals("Y", converter.convertToDatabaseColumn(YES));
+    assertEquals("Z", converter.convertToDatabaseColumn(UNABLE_TO_DETERMINE));
   }
 
   @Test
   public void testConvertToEntityAttribute() {
     assertNull(converter.convertToEntityAttribute(null));
-    assertNull(converter.convertToEntityAttribute(' '));
-    assertEquals(DECLINES_TO_STATE, converter.convertToEntityAttribute('D'));
-    assertEquals(NO, converter.convertToEntityAttribute('N'));
-    assertEquals(UNDETERMINED, converter.convertToEntityAttribute('U'));
-    assertEquals(NO_USER_SELECTION, converter.convertToEntityAttribute('X'));
-    assertEquals(YES, converter.convertToEntityAttribute('Y'));
-    assertEquals(UNABLE_TO_DETERMINE, converter.convertToEntityAttribute('Z'));
+    assertNull(converter.convertToEntityAttribute(" "));
+    assertEquals(DECLINES_TO_STATE, converter.convertToEntityAttribute("D"));
+    assertEquals(NO, converter.convertToEntityAttribute("N"));
+    assertEquals(UNDETERMINED, converter.convertToEntityAttribute("U"));
+    assertEquals(NO_USER_SELECTION, converter.convertToEntityAttribute("X"));
+    assertEquals(YES, converter.convertToEntityAttribute("Y"));
+    assertEquals(UNABLE_TO_DETERMINE, converter.convertToEntityAttribute("Z"));
   }
 
   @Test(expected = UnsupportedOperationException.class)
   public void testInvalidCode() {
-    converter.convertToEntityAttribute('@');
+    converter.convertToEntityAttribute("@");
   }
 }

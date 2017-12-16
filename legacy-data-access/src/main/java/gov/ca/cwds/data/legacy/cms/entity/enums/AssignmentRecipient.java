@@ -11,20 +11,20 @@ import javax.persistence.Converter;
  *
  * @author CWDS TPT-3 Team
  */
-public enum AssignmentRecipient implements EntityEnum<Character> {
-  CASE('C', "Case"),
-  REFERRAL('R', "Referral");
+public enum AssignmentRecipient implements EntityEnum<String> {
+  CASE("C", "Case"),
+  REFERRAL("R", "Referral");
 
-  private final Character code;
+  private final String code;
   private final String description;
 
-  AssignmentRecipient(Character code, String description) {
+  AssignmentRecipient(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   @Override
-  public Character getCode() {
+  public String getCode() {
     return code;
   }
 
@@ -34,13 +34,13 @@ public enum AssignmentRecipient implements EntityEnum<Character> {
   }
 
   @Converter
-  public static class AssignmentRecipientConverter extends BaseEntityEnumConverter<AssignmentRecipient, Character> {
+  public static class AssignmentRecipientConverter extends BaseEntityEnumConverter<AssignmentRecipient, String> {
 
-    private static final Map<Character, AssignmentRecipient> codeMap =
+    private static final Map<String, AssignmentRecipient> codeMap =
         Collections.unmodifiableMap(initializeMapping(AssignmentRecipient.values()));
 
     @Override
-    Map<Character, AssignmentRecipient> getCodeMap() {
+    Map<String, AssignmentRecipient> getCodeMap() {
       return codeMap;
     }
   }

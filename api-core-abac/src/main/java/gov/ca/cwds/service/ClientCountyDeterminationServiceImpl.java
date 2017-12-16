@@ -33,7 +33,7 @@ public class ClientCountyDeterminationServiceImpl implements ClientCountyDetermi
 
     //check CLIENT_CNTY table first
     List<Short> countyFromClientCountyTableList = countyDeterminationDao
-        .getClientCountyFromClientCountyTable(clientId);
+            .getClientCountyFromClientCountyTable(clientId);
     if (!countyFromClientCountyTableList.isEmpty()) {
       return countyFromClientCountyTableList.get(0);
     }
