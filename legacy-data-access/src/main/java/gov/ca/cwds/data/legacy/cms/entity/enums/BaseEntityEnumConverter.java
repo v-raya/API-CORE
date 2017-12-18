@@ -27,7 +27,7 @@ public abstract class BaseEntityEnumConverter<E extends EntityEnum<K>, K> implem
 
   @Override
   public E convertToEntityAttribute(K code) {
-    if (code == null || isBlankString(code) || isSpaceCharacter(code)) {
+    if (code == null || isBlankString(code) || isSpaceString(code)) {
         return null;
     }
 
@@ -47,8 +47,8 @@ public abstract class BaseEntityEnumConverter<E extends EntityEnum<K>, K> implem
     return (code instanceof String) && StringUtils.isBlank((String) code);
   }
 
-  private boolean isSpaceCharacter(K code) {
-    return (code instanceof Character) && code.equals(' ');
+  private boolean isSpaceString(K code) {
+    return (code instanceof String) && code.equals(" ");
   }
 
   private K trimCode(K code) {

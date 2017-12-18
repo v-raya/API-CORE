@@ -21,9 +21,9 @@ public class GenderTest {
 
   @Test
   public void testGetCode() {
-    assertEquals('F', FEMALE.getCode().charValue());
-    assertEquals('M', MALE.getCode().charValue());
-    assertEquals('U', UNKNOWN.getCode().charValue());
+    assertEquals("F", FEMALE.getCode());
+    assertEquals("M", MALE.getCode());
+    assertEquals("U", UNKNOWN.getCode());
   }
 
   @Test
@@ -36,22 +36,22 @@ public class GenderTest {
   @Test
   public void testConvertToDatabaseColumn() {
     assertNull(converter.convertToDatabaseColumn(null));
-    assertEquals('F', converter.convertToDatabaseColumn(FEMALE).charValue());
-    assertEquals('M', converter.convertToDatabaseColumn(MALE).charValue());
-    assertEquals('U', converter.convertToDatabaseColumn(UNKNOWN).charValue());
+    assertEquals("F", converter.convertToDatabaseColumn(FEMALE));
+    assertEquals("M", converter.convertToDatabaseColumn(MALE));
+    assertEquals("U", converter.convertToDatabaseColumn(UNKNOWN));
   }
 
   @Test
   public void testConvertToEntityAttribute() {
     assertNull(converter.convertToEntityAttribute(null));
-    assertNull(converter.convertToEntityAttribute(' '));
-    assertEquals(FEMALE, converter.convertToEntityAttribute('F'));
-    assertEquals(MALE, converter.convertToEntityAttribute('M'));
-    assertEquals(UNKNOWN, converter.convertToEntityAttribute('U'));
+    assertNull(converter.convertToEntityAttribute(" "));
+    assertEquals(FEMALE, converter.convertToEntityAttribute("F"));
+    assertEquals(MALE, converter.convertToEntityAttribute("M"));
+    assertEquals(UNKNOWN, converter.convertToEntityAttribute("U"));
   }
 
   @Test(expected = UnsupportedOperationException.class)
   public void testInvalidCode() {
-    converter.convertToEntityAttribute('@');
+    converter.convertToEntityAttribute("@");
   }
 }

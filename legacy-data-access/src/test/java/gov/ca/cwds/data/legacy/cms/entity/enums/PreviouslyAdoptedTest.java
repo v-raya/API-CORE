@@ -22,10 +22,10 @@ public class PreviouslyAdoptedTest {
 
   @Test
   public void testGetCode() {
-    assertEquals('N', NO.getCode().charValue());
-    assertEquals('U', UNKNOWN.getCode().charValue());
-    assertEquals('X', NO_USER_SELECTION.getCode().charValue());
-    assertEquals('Y', YES.getCode().charValue());
+    assertEquals("N", NO.getCode());
+    assertEquals("U", UNKNOWN.getCode());
+    assertEquals("X", NO_USER_SELECTION.getCode());
+    assertEquals("Y", YES.getCode());
   }
 
   @Test
@@ -39,23 +39,23 @@ public class PreviouslyAdoptedTest {
   @Test
   public void testConvertToDatabaseColumn() {
     assertNull(converter.convertToDatabaseColumn(null));
-    assertEquals('N', converter.convertToDatabaseColumn(NO).charValue());
-    assertEquals('U', converter.convertToDatabaseColumn(UNKNOWN).charValue());
-    assertEquals('X', converter.convertToDatabaseColumn(NO_USER_SELECTION).charValue());
-    assertEquals('Y', converter.convertToDatabaseColumn(YES).charValue());
+    assertEquals("N", converter.convertToDatabaseColumn(NO));
+    assertEquals("U", converter.convertToDatabaseColumn(UNKNOWN));
+    assertEquals("X", converter.convertToDatabaseColumn(NO_USER_SELECTION));
+    assertEquals("Y", converter.convertToDatabaseColumn(YES));
   }
 
   @Test
   public void testConvertToEntityAttribute() {
     assertNull(converter.convertToEntityAttribute(null));
-    assertEquals(NO, converter.convertToEntityAttribute('N'));
-    assertEquals(UNKNOWN, converter.convertToEntityAttribute('U'));
-    assertEquals(NO_USER_SELECTION, converter.convertToEntityAttribute('X'));
-    assertEquals(YES, converter.convertToEntityAttribute('Y'));
+    assertEquals(NO, converter.convertToEntityAttribute("N"));
+    assertEquals(UNKNOWN, converter.convertToEntityAttribute("U"));
+    assertEquals(NO_USER_SELECTION, converter.convertToEntityAttribute("X"));
+    assertEquals(YES, converter.convertToEntityAttribute("Y"));
   }
 
   @Test(expected = UnsupportedOperationException.class)
   public void testInvalidCode() {
-    converter.convertToEntityAttribute('@');
+    converter.convertToEntityAttribute("@");
   }
 }

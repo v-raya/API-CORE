@@ -21,9 +21,9 @@ public class UnableToDetermineReasonTest {
 
   @Test
   public void testGetCode() {
-    assertEquals('A', ABANDONMENT.getCode().charValue());
-    assertEquals('I', INCAPACITATION.getCode().charValue());
-    assertEquals('K', INDIVIDUAL_DOES_NOT_KNOW.getCode().charValue());
+    assertEquals("A", ABANDONMENT.getCode());
+    assertEquals("I", INCAPACITATION.getCode());
+    assertEquals("K", INDIVIDUAL_DOES_NOT_KNOW.getCode());
   }
 
   @Test
@@ -36,22 +36,22 @@ public class UnableToDetermineReasonTest {
   @Test
   public void testConvertToDatabaseColumn() {
     assertNull(converter.convertToDatabaseColumn(null));
-    assertEquals('A', converter.convertToDatabaseColumn(ABANDONMENT).charValue());
-    assertEquals('I', converter.convertToDatabaseColumn(INCAPACITATION).charValue());
-    assertEquals('K', converter.convertToDatabaseColumn(INDIVIDUAL_DOES_NOT_KNOW).charValue());
+    assertEquals("A", converter.convertToDatabaseColumn(ABANDONMENT));
+    assertEquals("I", converter.convertToDatabaseColumn(INCAPACITATION));
+    assertEquals("K", converter.convertToDatabaseColumn(INDIVIDUAL_DOES_NOT_KNOW));
   }
 
   @Test
   public void testConvertToEntityAttribute() {
     assertNull(converter.convertToEntityAttribute(null));
-    assertNull(converter.convertToEntityAttribute(' '));
-    assertEquals(ABANDONMENT, converter.convertToEntityAttribute('A'));
-    assertEquals(INCAPACITATION, converter.convertToEntityAttribute('I'));
-    assertEquals(INDIVIDUAL_DOES_NOT_KNOW, converter.convertToEntityAttribute('K'));
+    assertNull(converter.convertToEntityAttribute(" "));
+    assertEquals(ABANDONMENT, converter.convertToEntityAttribute("A"));
+    assertEquals(INCAPACITATION, converter.convertToEntityAttribute("I"));
+    assertEquals(INDIVIDUAL_DOES_NOT_KNOW, converter.convertToEntityAttribute("K"));
   }
 
   @Test(expected = UnsupportedOperationException.class)
   public void testInvalidCode() {
-    converter.convertToEntityAttribute('@');
+    converter.convertToEntityAttribute("@");
   }
 }

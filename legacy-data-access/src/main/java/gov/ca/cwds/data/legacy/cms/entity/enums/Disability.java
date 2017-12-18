@@ -7,21 +7,21 @@ import javax.persistence.Converter;
 /**
  * @author CWDS CASE API Team
  */
-public enum Disability implements EntityEnum<Character> {
-  NOT_YET_DETERMINED('D', "Not Yet Determined"),
-  NO('N', "No"),
-  YES('Y', "Yes");
+public enum Disability implements EntityEnum<String> {
+  NOT_YET_DETERMINED("D", "Not Yet Determined"),
+  NO("N", "No"),
+  YES("Y", "Yes");
 
-  private final Character code;
+  private final String code;
   private final String description;
 
-  Disability(Character code, String description) {
+  Disability(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   @Override
-  public Character getCode() {
+  public String getCode() {
     return code;
   }
 
@@ -31,13 +31,13 @@ public enum Disability implements EntityEnum<Character> {
   }
 
   @Converter
-  public static class DisabilityConverter extends BaseEntityEnumConverter<Disability, Character> {
+  public static class DisabilityConverter extends BaseEntityEnumConverter<Disability, String> {
 
-    private static final Map<Character, Disability> codeMap =
+    private static final Map<String, Disability> codeMap =
         Collections.unmodifiableMap(initializeMapping(Disability.values()));
 
     @Override
-    Map<Character, Disability> getCodeMap() {
+    Map<String, Disability> getCodeMap() {
       return codeMap;
     }
   }

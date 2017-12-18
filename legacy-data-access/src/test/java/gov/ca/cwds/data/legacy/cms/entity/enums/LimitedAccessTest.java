@@ -21,9 +21,9 @@ public class LimitedAccessTest {
 
   @Test
   public void testGetCode() {
-    assertEquals('N', NO_RESTRICTION.getCode().charValue());
-    assertEquals('R', SEALED.getCode().charValue());
-    assertEquals('S', SENSITIVE.getCode().charValue());
+    assertEquals("N", NO_RESTRICTION.getCode());
+    assertEquals("R", SEALED.getCode());
+    assertEquals("S", SENSITIVE.getCode());
   }
 
   @Test
@@ -36,21 +36,21 @@ public class LimitedAccessTest {
   @Test
   public void testConvertToDatabaseColumn() {
     assertNull(converter.convertToDatabaseColumn(null));
-    assertEquals('N', converter.convertToDatabaseColumn(NO_RESTRICTION).charValue());
-    assertEquals('R', converter.convertToDatabaseColumn(SEALED).charValue());
-    assertEquals('S', converter.convertToDatabaseColumn(SENSITIVE).charValue());
+    assertEquals("N", converter.convertToDatabaseColumn(NO_RESTRICTION));
+    assertEquals("R", converter.convertToDatabaseColumn(SEALED));
+    assertEquals("S", converter.convertToDatabaseColumn(SENSITIVE));
   }
 
   @Test
   public void testConvertToEntityAttribute() {
     assertNull(converter.convertToEntityAttribute(null));
-    assertEquals(NO_RESTRICTION, converter.convertToEntityAttribute('N'));
-    assertEquals(SEALED, converter.convertToEntityAttribute('R'));
-    assertEquals(SENSITIVE, converter.convertToEntityAttribute('S'));
+    assertEquals(NO_RESTRICTION, converter.convertToEntityAttribute("N"));
+    assertEquals(SEALED, converter.convertToEntityAttribute("R"));
+    assertEquals(SENSITIVE, converter.convertToEntityAttribute("S"));
   }
 
   @Test(expected = UnsupportedOperationException.class)
   public void testInvalidCode() {
-    converter.convertToEntityAttribute('@');
+    converter.convertToEntityAttribute("@");
   }
 }

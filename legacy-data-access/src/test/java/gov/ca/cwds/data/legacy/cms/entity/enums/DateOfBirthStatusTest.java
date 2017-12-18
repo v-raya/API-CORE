@@ -21,9 +21,9 @@ public class DateOfBirthStatusTest {
 
   @Test
   public void testGetCode() {
-    assertEquals('N', ACTUALLY_ENTERED.getCode().charValue());
-    assertEquals('U', NOT_PROVIDED.getCode().charValue());
-    assertEquals('Y', ESTIMATED.getCode().charValue());
+    assertEquals("N", ACTUALLY_ENTERED.getCode());
+    assertEquals("U", NOT_PROVIDED.getCode());
+    assertEquals("Y", ESTIMATED.getCode());
   }
 
   @Test
@@ -36,22 +36,22 @@ public class DateOfBirthStatusTest {
   @Test
   public void testConvertToDatabaseColumn() {
     assertNull(converter.convertToDatabaseColumn(null));
-    assertEquals('N', converter.convertToDatabaseColumn(ACTUALLY_ENTERED).charValue());
-    assertEquals('U', converter.convertToDatabaseColumn(NOT_PROVIDED).charValue());
-    assertEquals('Y', converter.convertToDatabaseColumn(ESTIMATED).charValue());
+    assertEquals("N", converter.convertToDatabaseColumn(ACTUALLY_ENTERED));
+    assertEquals("U", converter.convertToDatabaseColumn(NOT_PROVIDED));
+    assertEquals("Y", converter.convertToDatabaseColumn(ESTIMATED));
   }
 
   @Test
   public void testConvertToEntityAttribute() {
     assertNull(converter.convertToEntityAttribute(null));
-    assertNull(converter.convertToEntityAttribute(' '));
-    assertEquals(ACTUALLY_ENTERED, converter.convertToEntityAttribute('N'));
-    assertEquals(NOT_PROVIDED, converter.convertToEntityAttribute('U'));
-    assertEquals(ESTIMATED, converter.convertToEntityAttribute('Y'));
+    assertNull(converter.convertToEntityAttribute(" "));
+    assertEquals(ACTUALLY_ENTERED, converter.convertToEntityAttribute("N"));
+    assertEquals(NOT_PROVIDED, converter.convertToEntityAttribute("U"));
+    assertEquals(ESTIMATED, converter.convertToEntityAttribute("Y"));
   }
 
   @Test(expected = UnsupportedOperationException.class)
   public void testInvalidCode() {
-    converter.convertToEntityAttribute('@');
+    converter.convertToEntityAttribute("@");
   }
 }

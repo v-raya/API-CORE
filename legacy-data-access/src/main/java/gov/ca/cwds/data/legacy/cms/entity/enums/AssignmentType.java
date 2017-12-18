@@ -8,7 +8,7 @@ import javax.persistence.Converter;
  * The enum representing ASSIGNMENT.TYPE_OF_ASSIGNMENT_CODE from legacy system.
  * This indicator specifies who has the lead role in carrying out the responsibilities of
  * the CASE or REFERRAL. The primary assignment can be made to either the case working STAFF_PERSON
- * or to an OUT_OF_STATE_CONTACT_PARTY. There may be many ASSIGNMENTs considered to be 'primary'
+ * or to an OUT_OF_STATE_CONTACT_PARTY. There may be many ASSIGNMENTs considered to be "primary"
  * over the life of the CASE or REFERRAL, but only one of them is current at any time. An ASSIGNMENT
  * can be either designated as Primary (P), Secondary (S), or Read Only (R). Primary assigned workers
  * have the capability to retrieve, read, and update any case or referral to which they have direct
@@ -22,21 +22,21 @@ import javax.persistence.Converter;
  *
  * @author CWDS TPT-3 Team
  */
-public enum AssignmentType implements EntityEnum<Character> {
-  PRIMARY('P', "Primary"),
-  SECONDARY('S', "Secondary"),
-  READ_ONLY('R',  "Read Only");
+public enum AssignmentType implements EntityEnum<String> {
+  PRIMARY("P", "Primary"),
+  SECONDARY("S", "Secondary"),
+  READ_ONLY("R",  "Read Only");
 
-  private final Character code;
+  private final String code;
   private final String description;
 
-  AssignmentType(Character code, String description) {
+  AssignmentType(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   @Override
-  public Character getCode() {
+  public String getCode() {
     return code;
   }
 
@@ -46,13 +46,13 @@ public enum AssignmentType implements EntityEnum<Character> {
   }
 
   @Converter
-  public static class AssignmentTypeConverter extends BaseEntityEnumConverter<AssignmentType, Character> {
+  public static class AssignmentTypeConverter extends BaseEntityEnumConverter<AssignmentType, String> {
 
-    private static final Map<Character, AssignmentType> codeMap =
+    private static final Map<String, AssignmentType> codeMap =
         Collections.unmodifiableMap(initializeMapping(AssignmentType.values()));
 
     @Override
-    Map<Character, AssignmentType> getCodeMap() {
+    Map<String, AssignmentType> getCodeMap() {
       return codeMap;
     }
   }

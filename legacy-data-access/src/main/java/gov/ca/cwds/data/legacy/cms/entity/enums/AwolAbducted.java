@@ -7,23 +7,23 @@ import javax.persistence.Converter;
 /**
  * @author CWDS CASE API Team
  */
-public enum AwolAbducted implements EntityEnum<Character> {
-  AWOL_BASED_ON_USER_ENTRY('A', "AWOL - user-entered"),
-  ABDUCTED_BASED_ON_USER_ENTRY('B', "Abducted - user-entered"),
-  ABDUCTED_BASED_ON_SYSTEM_SETTING('D', "Abducted - system-entered"),
-  NOT_APPLICABLE('N', "Not Applicable"),
-  AWOL_BASED_ON_SYSTEM_SETTING('P',  "AWOL - system-entered");
+public enum AwolAbducted implements EntityEnum<String> {
+  AWOL_BASED_ON_USER_ENTRY("A", "AWOL - user-entered"),
+  ABDUCTED_BASED_ON_USER_ENTRY("B", "Abducted - user-entered"),
+  ABDUCTED_BASED_ON_SYSTEM_SETTING("D", "Abducted - system-entered"),
+  NOT_APPLICABLE("N", "Not Applicable"),
+  AWOL_BASED_ON_SYSTEM_SETTING("P",  "AWOL - system-entered");
 
-  private final Character code;
+  private final String code;
   private final String description;
 
-  AwolAbducted(Character code, String description) {
+  AwolAbducted(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   @Override
-  public Character getCode() {
+  public String getCode() {
     return code;
   }
 
@@ -34,13 +34,13 @@ public enum AwolAbducted implements EntityEnum<Character> {
 
   @Converter
   public static class AwolAbductedConverter extends
-      BaseEntityEnumConverter<AwolAbducted, Character> {
+      BaseEntityEnumConverter<AwolAbducted, String> {
 
-    private static final Map<Character, AwolAbducted> codeMap =
+    private static final Map<String, AwolAbducted> codeMap =
         Collections.unmodifiableMap(initializeMapping(AwolAbducted.values()));
 
     @Override
-    Map<Character, AwolAbducted> getCodeMap() {
+    Map<String, AwolAbducted> getCodeMap() {
       return codeMap;
     }
   }

@@ -7,21 +7,21 @@ import javax.persistence.Converter;
 /**
  * @author CWDS CASE API Team
  */
-public enum LimitedAccess implements EntityEnum<Character> {
-  NO_RESTRICTION('N',  "N/A"),
-  SEALED('R', "Sealed"),
-  SENSITIVE('S', "Sensitive");
+public enum LimitedAccess implements EntityEnum<String> {
+  NO_RESTRICTION("N",  "N/A"),
+  SEALED("R", "Sealed"),
+  SENSITIVE("S", "Sensitive");
 
-  private final Character code;
+  private final String code;
   private final String description;
 
-  LimitedAccess(Character code, String description) {
+  LimitedAccess(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   @Override
-  public Character getCode() {
+  public String getCode() {
     return code;
   }
 
@@ -32,13 +32,13 @@ public enum LimitedAccess implements EntityEnum<Character> {
 
   @Converter
   public static class LimitedAccessConverter extends
-      BaseEntityEnumConverter<LimitedAccess, Character> {
+      BaseEntityEnumConverter<LimitedAccess, String> {
 
-    private static final Map<Character, LimitedAccess> codeMap =
+    private static final Map<String, LimitedAccess> codeMap =
         Collections.unmodifiableMap(initializeMapping(LimitedAccess.values()));
 
     @Override
-    Map<Character, LimitedAccess> getCodeMap() {
+    Map<String, LimitedAccess> getCodeMap() {
       return codeMap;
     }
   }

@@ -21,9 +21,9 @@ public class DisabilityTest {
 
   @Test
   public void testGetCode() {
-    assertEquals('D', NOT_YET_DETERMINED.getCode().charValue());
-    assertEquals('N', NO.getCode().charValue());
-    assertEquals('Y', YES.getCode().charValue());
+    assertEquals("D", NOT_YET_DETERMINED.getCode());
+    assertEquals("N", NO.getCode());
+    assertEquals("Y", YES.getCode());
   }
 
   @Test
@@ -36,22 +36,22 @@ public class DisabilityTest {
   @Test
   public void testConvertToDatabaseColumn() {
     assertNull(converter.convertToDatabaseColumn(null));
-    assertEquals('D', converter.convertToDatabaseColumn(NOT_YET_DETERMINED).charValue());
-    assertEquals('N', converter.convertToDatabaseColumn(NO).charValue());
-    assertEquals('Y', converter.convertToDatabaseColumn(YES).charValue());
+    assertEquals("D", converter.convertToDatabaseColumn(NOT_YET_DETERMINED));
+    assertEquals("N", converter.convertToDatabaseColumn(NO));
+    assertEquals("Y", converter.convertToDatabaseColumn(YES));
   }
 
   @Test
   public void testConvertToEntityAttribute() {
     assertNull(converter.convertToEntityAttribute(null));
-    assertNull(converter.convertToEntityAttribute(' '));
-    assertEquals(NOT_YET_DETERMINED, converter.convertToEntityAttribute('D'));
-    assertEquals(NO, converter.convertToEntityAttribute('N'));
-    assertEquals(YES, converter.convertToEntityAttribute('Y'));
+    assertNull(converter.convertToEntityAttribute(" "));
+    assertEquals(NOT_YET_DETERMINED, converter.convertToEntityAttribute("D"));
+    assertEquals(NO, converter.convertToEntityAttribute("N"));
+    assertEquals(YES, converter.convertToEntityAttribute("Y"));
   }
 
   @Test(expected = UnsupportedOperationException.class)
   public void testInvalidCode() {
-    converter.convertToEntityAttribute('@');
+    converter.convertToEntityAttribute("@");
   }
 }

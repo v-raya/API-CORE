@@ -38,14 +38,14 @@ public class BaseEntityEnumConverterTest {
 
   @Test
   public void convertToEntityAttribute_success_forAllCharacterPositiveCases() {
-    assertThat(testSubjectCharacter.convertToEntityAttribute('N'), is(NO));
+    assertThat(testSubjectCharacter.convertToEntityAttribute("N"), is(NO));
     assertThat(testSubjectCharacter.convertToEntityAttribute(null), is(nullValue()));
-    assertThat(testSubjectCharacter.convertToEntityAttribute(' '), is(nullValue()));
+    assertThat(testSubjectCharacter.convertToEntityAttribute(" "), is(nullValue()));
   }
 
   @Test(expected = UnsupportedOperationException.class)
   public void convertToEntityAttribute_exception_whenUnknownCharacterValue() {
-    testSubjectCharacter.convertToEntityAttribute('U');
+    testSubjectCharacter.convertToEntityAttribute("U");
   }
 
   enum TestStringToEntityConverterEntity implements EntityEnum<String> {
@@ -82,19 +82,19 @@ public class BaseEntityEnumConverterTest {
     }
   }
 
-  enum TestCharacterToEntityConverterEntity implements EntityEnum<Character> {
-    NO('N', "No");
+  enum TestCharacterToEntityConverterEntity implements EntityEnum<String> {
+    NO("N", "No");
 
-    private final Character code;
+    private final String code;
     private final String description;
 
-    TestCharacterToEntityConverterEntity(Character code, String description) {
+    TestCharacterToEntityConverterEntity(String code, String description) {
       this.code = code;
       this.description = description;
     }
 
     @Override
-    public Character getCode() {
+    public String getCode() {
       return code;
     }
 
@@ -104,13 +104,13 @@ public class BaseEntityEnumConverterTest {
     }
 
     @Converter
-    public static class TestCharacterToEntityConverter extends BaseEntityEnumConverter<TestCharacterToEntityConverterEntity, Character> {
+    public static class TestCharacterToEntityConverter extends BaseEntityEnumConverter<TestCharacterToEntityConverterEntity, String> {
 
-      private static final Map<Character, TestCharacterToEntityConverterEntity> codeMap =
+      private static final Map<String, TestCharacterToEntityConverterEntity> codeMap =
           Collections.unmodifiableMap(initializeMapping(TestCharacterToEntityConverterEntity.values()));
 
       @Override
-      Map<Character, TestCharacterToEntityConverterEntity> getCodeMap() {
+      Map<String, TestCharacterToEntityConverterEntity> getCodeMap() {
         return codeMap;
       }
     }

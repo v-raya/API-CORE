@@ -21,9 +21,9 @@ public class Soc158placementsStatusTest {
 
   @Test
   public void testGetCode() {
-    assertEquals('M', MIGRATED_TO_CLIENT_SERVICES.getCode().charValue());
-    assertEquals('N', NO_SOC_158_PLACEMENTS.getCode().charValue());
-    assertEquals('Y', NOT_YET_MIGRATED.getCode().charValue());
+    assertEquals("M", MIGRATED_TO_CLIENT_SERVICES.getCode());
+    assertEquals("N", NO_SOC_158_PLACEMENTS.getCode());
+    assertEquals("Y", NOT_YET_MIGRATED.getCode());
   }
 
   @Test
@@ -36,22 +36,22 @@ public class Soc158placementsStatusTest {
   @Test
   public void testConvertToDatabaseColumn() {
     assertNull(converter.convertToDatabaseColumn(null));
-    assertEquals('M', converter.convertToDatabaseColumn(MIGRATED_TO_CLIENT_SERVICES).charValue());
-    assertEquals('N', converter.convertToDatabaseColumn(NO_SOC_158_PLACEMENTS).charValue());
-    assertEquals('Y', converter.convertToDatabaseColumn(NOT_YET_MIGRATED).charValue());
+    assertEquals("M", converter.convertToDatabaseColumn(MIGRATED_TO_CLIENT_SERVICES));
+    assertEquals("N", converter.convertToDatabaseColumn(NO_SOC_158_PLACEMENTS));
+    assertEquals("Y", converter.convertToDatabaseColumn(NOT_YET_MIGRATED));
   }
 
   @Test
   public void testConvertToEntityAttribute() {
     assertNull(converter.convertToEntityAttribute(null));
-    assertNull(converter.convertToEntityAttribute(' '));
-    assertEquals(MIGRATED_TO_CLIENT_SERVICES, converter.convertToEntityAttribute('M'));
-    assertEquals(NO_SOC_158_PLACEMENTS, converter.convertToEntityAttribute('N'));
-    assertEquals(NOT_YET_MIGRATED, converter.convertToEntityAttribute('Y'));
+    assertNull(converter.convertToEntityAttribute(" "));
+    assertEquals(MIGRATED_TO_CLIENT_SERVICES, converter.convertToEntityAttribute("M"));
+    assertEquals(NO_SOC_158_PLACEMENTS, converter.convertToEntityAttribute("N"));
+    assertEquals(NOT_YET_MIGRATED, converter.convertToEntityAttribute("Y"));
   }
 
   @Test(expected = UnsupportedOperationException.class)
   public void testInvalidCode() {
-    converter.convertToEntityAttribute('@');
+    converter.convertToEntityAttribute("@");
   }
 }

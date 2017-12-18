@@ -7,22 +7,22 @@ import javax.persistence.Converter;
 /**
  * @author CWDS CASE API Team
  */
-public enum IcwaEligibility implements EntityEnum<Character> {
-  NOT_ELIGIBLE('N', "Not Eligible"),
-  PENDING('P', "Pending"),
-  UNKNOWN('U', "Not asked, unknown"),
-  ELIGIBLE('Y', "Eligible");
+public enum IcwaEligibility implements EntityEnum<String> {
+  NOT_ELIGIBLE("N", "Not Eligible"),
+  PENDING("P", "Pending"),
+  UNKNOWN("U", "Not asked, unknown"),
+  ELIGIBLE("Y", "Eligible");
 
-  private final Character code;
+  private final String code;
   private final String description;
 
-  IcwaEligibility(Character code, String description) {
+  IcwaEligibility(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   @Override
-  public Character getCode() {
+  public String getCode() {
     return code;
   }
 
@@ -33,13 +33,13 @@ public enum IcwaEligibility implements EntityEnum<Character> {
 
   @Converter
   public static class IcwaEligibilityConverter extends
-      BaseEntityEnumConverter<IcwaEligibility, Character> {
+      BaseEntityEnumConverter<IcwaEligibility, String> {
 
-    private static final Map<Character, IcwaEligibility> codeMap =
+    private static final Map<String, IcwaEligibility> codeMap =
         Collections.unmodifiableMap(initializeMapping(IcwaEligibility.values()));
 
     @Override
-    Map<Character, IcwaEligibility> getCodeMap() {
+    Map<String, IcwaEligibility> getCodeMap() {
       return codeMap;
     }
   }

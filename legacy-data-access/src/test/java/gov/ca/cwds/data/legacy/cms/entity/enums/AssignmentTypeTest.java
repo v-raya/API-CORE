@@ -26,9 +26,9 @@ public class AssignmentTypeTest {
 
   @Test
   public void getCode_success_forAllEnumValues() {
-    assertThat(PRIMARY.getCode(), is(equalTo('P')));
-    assertThat(SECONDARY.getCode(), is(equalTo('S')));
-    assertThat(READ_ONLY.getCode(), is(equalTo('R')));
+    assertThat(PRIMARY.getCode(), is(equalTo("P")));
+    assertThat(SECONDARY.getCode(), is(equalTo("S")));
+    assertThat(READ_ONLY.getCode(), is(equalTo("R")));
   }
 
   @Test
@@ -41,23 +41,23 @@ public class AssignmentTypeTest {
   @Test
   public void convertToDatabaseColumn_success_forAllEnumValues() {
     assertThat(converter.convertToDatabaseColumn(null), is(nullValue()));
-    assertThat(converter.convertToDatabaseColumn(PRIMARY), is(equalTo('P')));
-    assertThat(converter.convertToDatabaseColumn(SECONDARY), is(equalTo('S')));
-    assertThat(converter.convertToDatabaseColumn(READ_ONLY), is(equalTo('R')));
+    assertThat(converter.convertToDatabaseColumn(PRIMARY), is(equalTo("P")));
+    assertThat(converter.convertToDatabaseColumn(SECONDARY), is(equalTo("S")));
+    assertThat(converter.convertToDatabaseColumn(READ_ONLY), is(equalTo("R")));
   }
 
   @Test
   public void convertToEntityAttribute_success_forAllEnumValues() {
     assertThat(converter.convertToEntityAttribute(null), is(nullValue()));
-    assertThat(converter.convertToEntityAttribute(' '), is(nullValue()));
-    assertThat(converter.convertToEntityAttribute('P'), is(equalTo(PRIMARY)));
-    assertThat(converter.convertToEntityAttribute('S'), is(equalTo(SECONDARY)));
-    assertThat(converter.convertToEntityAttribute('R'), is(equalTo(READ_ONLY)));
+    assertThat(converter.convertToEntityAttribute(" "), is(nullValue()));
+    assertThat(converter.convertToEntityAttribute("P"), is(equalTo(PRIMARY)));
+    assertThat(converter.convertToEntityAttribute("S"), is(equalTo(SECONDARY)));
+    assertThat(converter.convertToEntityAttribute("R"), is(equalTo(READ_ONLY)));
   }
 
   @Test(expected = UnsupportedOperationException.class)
   public void convertToEntityAttribute_exception_whenUnknownCode() {
-    converter.convertToEntityAttribute('@');
+    converter.convertToEntityAttribute("@");
   }
 
 }

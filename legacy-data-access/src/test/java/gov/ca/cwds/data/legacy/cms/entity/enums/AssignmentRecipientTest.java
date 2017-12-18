@@ -25,8 +25,8 @@ public class AssignmentRecipientTest {
 
   @Test
   public void getCode_success_forAllEnumValues() {
-    assertThat(CASE.getCode(), is(equalTo('C')));
-    assertThat(REFERRAL.getCode(), is(equalTo('R')));
+    assertThat(CASE.getCode(), is(equalTo("C")));
+    assertThat(REFERRAL.getCode(), is(equalTo("R")));
   }
 
   @Test
@@ -38,21 +38,21 @@ public class AssignmentRecipientTest {
   @Test
   public void convertToDatabaseColumn_success_forAllEnumValues() {
     assertThat(converter.convertToDatabaseColumn(null), is(nullValue()));
-    assertThat(converter.convertToDatabaseColumn(CASE), is(equalTo('C')));
-    assertThat(converter.convertToDatabaseColumn(REFERRAL), is(equalTo('R')));
+    assertThat(converter.convertToDatabaseColumn(CASE), is(equalTo("C")));
+    assertThat(converter.convertToDatabaseColumn(REFERRAL), is(equalTo("R")));
   }
 
   @Test
   public void convertToEntityAttribute_success_forAllEnumValues() {
     assertThat(converter.convertToEntityAttribute(null), is(nullValue()));
-    assertThat(converter.convertToEntityAttribute(' '), is(nullValue()));
-    assertThat(converter.convertToEntityAttribute('C'), is(equalTo(CASE)));
-    assertThat(converter.convertToEntityAttribute('R'), is(equalTo(REFERRAL)));
+    assertThat(converter.convertToEntityAttribute(" "), is(nullValue()));
+    assertThat(converter.convertToEntityAttribute("C"), is(equalTo(CASE)));
+    assertThat(converter.convertToEntityAttribute("R"), is(equalTo(REFERRAL)));
   }
 
   @Test(expected = UnsupportedOperationException.class)
   public void convertToEntityAttribute_exception_whenUnknownCode() {
-    converter.convertToEntityAttribute('@');
+    converter.convertToEntityAttribute("@");
   }
 
 }

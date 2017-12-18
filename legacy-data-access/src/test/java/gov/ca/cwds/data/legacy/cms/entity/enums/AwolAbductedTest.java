@@ -23,11 +23,11 @@ public class AwolAbductedTest {
 
   @Test
   public void testGetCode() {
-    assertEquals('A', AWOL_BASED_ON_USER_ENTRY.getCode().charValue());
-    assertEquals('B', ABDUCTED_BASED_ON_USER_ENTRY.getCode().charValue());
-    assertEquals('D', ABDUCTED_BASED_ON_SYSTEM_SETTING.getCode().charValue());
-    assertEquals('N', NOT_APPLICABLE.getCode().charValue());
-    assertEquals('P', AWOL_BASED_ON_SYSTEM_SETTING.getCode().charValue());
+    assertEquals("A", AWOL_BASED_ON_USER_ENTRY.getCode());
+    assertEquals("B", ABDUCTED_BASED_ON_USER_ENTRY.getCode());
+    assertEquals("D", ABDUCTED_BASED_ON_SYSTEM_SETTING.getCode());
+    assertEquals("N", NOT_APPLICABLE.getCode());
+    assertEquals("P", AWOL_BASED_ON_SYSTEM_SETTING.getCode());
   }
 
   @Test
@@ -42,25 +42,25 @@ public class AwolAbductedTest {
   @Test
   public void testConvertToDatabaseColumn() {
     assertNull(converter.convertToDatabaseColumn(null));
-    assertEquals('A', converter.convertToDatabaseColumn(AWOL_BASED_ON_USER_ENTRY).charValue());
-    assertEquals('B', converter.convertToDatabaseColumn(ABDUCTED_BASED_ON_USER_ENTRY).charValue());
-    assertEquals('D', converter.convertToDatabaseColumn(ABDUCTED_BASED_ON_SYSTEM_SETTING).charValue());
-    assertEquals('N', converter.convertToDatabaseColumn(NOT_APPLICABLE).charValue());
-    assertEquals('P', converter.convertToDatabaseColumn(AWOL_BASED_ON_SYSTEM_SETTING).charValue());
+    assertEquals("A", converter.convertToDatabaseColumn(AWOL_BASED_ON_USER_ENTRY));
+    assertEquals("B", converter.convertToDatabaseColumn(ABDUCTED_BASED_ON_USER_ENTRY));
+    assertEquals("D", converter.convertToDatabaseColumn(ABDUCTED_BASED_ON_SYSTEM_SETTING));
+    assertEquals("N", converter.convertToDatabaseColumn(NOT_APPLICABLE));
+    assertEquals("P", converter.convertToDatabaseColumn(AWOL_BASED_ON_SYSTEM_SETTING));
   }
 
   @Test
   public void testConvertToEntityAttribute() {
     assertNull(converter.convertToEntityAttribute(null));
-    assertEquals(AWOL_BASED_ON_USER_ENTRY, converter.convertToEntityAttribute('A'));
-    assertEquals(ABDUCTED_BASED_ON_USER_ENTRY, converter.convertToEntityAttribute('B'));
-    assertEquals(ABDUCTED_BASED_ON_SYSTEM_SETTING, converter.convertToEntityAttribute('D'));
-    assertEquals(NOT_APPLICABLE, converter.convertToEntityAttribute('N'));
-    assertEquals(AWOL_BASED_ON_SYSTEM_SETTING, converter.convertToEntityAttribute('P'));
+    assertEquals(AWOL_BASED_ON_USER_ENTRY, converter.convertToEntityAttribute("A"));
+    assertEquals(ABDUCTED_BASED_ON_USER_ENTRY, converter.convertToEntityAttribute("B"));
+    assertEquals(ABDUCTED_BASED_ON_SYSTEM_SETTING, converter.convertToEntityAttribute("D"));
+    assertEquals(NOT_APPLICABLE, converter.convertToEntityAttribute("N"));
+    assertEquals(AWOL_BASED_ON_SYSTEM_SETTING, converter.convertToEntityAttribute("P"));
   }
 
   @Test(expected = UnsupportedOperationException.class)
   public void testInvalidCode() {
-    converter.convertToEntityAttribute('@');
+    converter.convertToEntityAttribute("@");
   }
 }

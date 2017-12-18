@@ -23,11 +23,11 @@ public class MilitaryStatusTest {
 
   @Test
   public void testGetCode() {
-    assertEquals('A', MILITARY_ACTIVE.getCode().charValue());
-    assertEquals('D', MILITARY_DEPENDENT.getCode().charValue());
-    assertEquals('N', NO_MILITARY_INVOLVEMENT.getCode().charValue());
-    assertEquals('U', NO_INFORMATION_AVAILABLE.getCode().charValue());
-    assertEquals('V', VETERAN.getCode().charValue());
+    assertEquals("A", MILITARY_ACTIVE.getCode());
+    assertEquals("D", MILITARY_DEPENDENT.getCode());
+    assertEquals("N", NO_MILITARY_INVOLVEMENT.getCode());
+    assertEquals("U", NO_INFORMATION_AVAILABLE.getCode());
+    assertEquals("V", VETERAN.getCode());
   }
 
   @Test
@@ -42,26 +42,26 @@ public class MilitaryStatusTest {
   @Test
   public void testConvertToDatabaseColumn() {
     assertNull(converter.convertToDatabaseColumn(null));
-    assertEquals('A', converter.convertToDatabaseColumn(MILITARY_ACTIVE).charValue());
-    assertEquals('D', converter.convertToDatabaseColumn(MILITARY_DEPENDENT).charValue());
-    assertEquals('N', converter.convertToDatabaseColumn(NO_MILITARY_INVOLVEMENT).charValue());
-    assertEquals('U', converter.convertToDatabaseColumn(NO_INFORMATION_AVAILABLE).charValue());
-    assertEquals('V', converter.convertToDatabaseColumn(VETERAN).charValue());
+    assertEquals("A", converter.convertToDatabaseColumn(MILITARY_ACTIVE));
+    assertEquals("D", converter.convertToDatabaseColumn(MILITARY_DEPENDENT));
+    assertEquals("N", converter.convertToDatabaseColumn(NO_MILITARY_INVOLVEMENT));
+    assertEquals("U", converter.convertToDatabaseColumn(NO_INFORMATION_AVAILABLE));
+    assertEquals("V", converter.convertToDatabaseColumn(VETERAN));
   }
 
   @Test
   public void testConvertToEntityAttribute() {
     assertNull(converter.convertToEntityAttribute(null));
-    assertNull(converter.convertToEntityAttribute(' '));
-    assertEquals(MILITARY_ACTIVE, converter.convertToEntityAttribute('A'));
-    assertEquals(MILITARY_DEPENDENT, converter.convertToEntityAttribute('D'));
-    assertEquals(NO_MILITARY_INVOLVEMENT, converter.convertToEntityAttribute('N'));
-    assertEquals(NO_INFORMATION_AVAILABLE, converter.convertToEntityAttribute('U'));
-    assertEquals(VETERAN, converter.convertToEntityAttribute('V'));
+    assertNull(converter.convertToEntityAttribute(" "));
+    assertEquals(MILITARY_ACTIVE, converter.convertToEntityAttribute("A"));
+    assertEquals(MILITARY_DEPENDENT, converter.convertToEntityAttribute("D"));
+    assertEquals(NO_MILITARY_INVOLVEMENT, converter.convertToEntityAttribute("N"));
+    assertEquals(NO_INFORMATION_AVAILABLE, converter.convertToEntityAttribute("U"));
+    assertEquals(VETERAN, converter.convertToEntityAttribute("V"));
   }
 
   @Test(expected = UnsupportedOperationException.class)
   public void testInvalidCode() {
-    converter.convertToEntityAttribute('@');
+    converter.convertToEntityAttribute("@");
   }
 }

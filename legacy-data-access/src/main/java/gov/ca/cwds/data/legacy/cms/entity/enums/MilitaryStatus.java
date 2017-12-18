@@ -4,23 +4,23 @@ import java.util.Collections;
 import java.util.Map;
 import javax.persistence.Converter;
 
-public enum MilitaryStatus implements EntityEnum<Character> {
-  MILITARY_ACTIVE('A', "Military active"),
-  MILITARY_DEPENDENT('D', "Military dependent"),
-  NO_MILITARY_INVOLVEMENT('N', "No military involvement"),
-  NO_INFORMATION_AVAILABLE('U', "No information available"),
-  VETERAN('V', "Veteran");
+public enum MilitaryStatus implements EntityEnum<String> {
+  MILITARY_ACTIVE("A", "Military active"),
+  MILITARY_DEPENDENT("D", "Military dependent"),
+  NO_MILITARY_INVOLVEMENT("N", "No military involvement"),
+  NO_INFORMATION_AVAILABLE("U", "No information available"),
+  VETERAN("V", "Veteran");
 
-  private final Character code;
+  private final String code;
   private final String description;
 
-  MilitaryStatus(Character code, String description) {
+  MilitaryStatus(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   @Override
-  public Character getCode() {
+  public String getCode() {
     return code;
   }
 
@@ -31,13 +31,13 @@ public enum MilitaryStatus implements EntityEnum<Character> {
 
   @Converter
   public static class MilitaryStatusConverter
-      extends BaseEntityEnumConverter<MilitaryStatus, Character> {
+      extends BaseEntityEnumConverter<MilitaryStatus, String> {
 
-    private static final Map<Character, MilitaryStatus> codeMap =
+    private static final Map<String, MilitaryStatus> codeMap =
         Collections.unmodifiableMap(initializeMapping(MilitaryStatus.values()));
 
     @Override
-    Map<Character, MilitaryStatus> getCodeMap() {
+    Map<String, MilitaryStatus> getCodeMap() {
       return codeMap;
     }
   }
