@@ -14,6 +14,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -24,25 +25,63 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
 
-/**
- * @author CWDS TPT-3 Team
- */
+/** @author CWDS TPT-3 Team */
 @Entity
 @Table(name = "REFERL_T")
-@NamedQuery(
+@NamedQueries({
+  @NamedQuery(
     name = Referral.FIND_ACTIVE_BY_STAFF_ID,
-    query = "select distinct assignment.referral from CaseLoad cl"
-        + " left join cl.referralAssignments assignment"
-        + " where cl.caseLoadWeighting.fkstfperst = :" + Referral.PARAM_STAFF_ID
-        + " and assignment.startDate < :" + Referral.PARAM_ACTIVE_DATE
-        + " and (assignment.endDate is null or assignment.endDate > :" + Referral.PARAM_ACTIVE_DATE + ")"
-        + " and assignment.referral.originalClosureDate is null"
-)
+    query =
+        "select distinct assignment.referral from CaseLoad cl"
+            + " left join cl.referralAssignments assignment"
+            + " where cl.caseLoadWeighting.fkstfperst = :"
+            + Referral.PARAM_STAFF_ID
+            + " and assignment.startDate < :"
+            + Referral.PARAM_ACTIVE_DATE
+            + " and (assignment.endDate is null or assignment.endDate > :"
+            + Referral.PARAM_ACTIVE_DATE
+            + ")"
+            + " and assignment.referral.originalClosureDate is null"
+  ),
+  @NamedQuery(
+    name = Referral.FIND_ACTIVE_BY_CLIENT,
+    query =
+        "SELECT DISTINCT referal from Referral as referal"
+            + "  left join ReferralClient as rclient on rclient.referral = referal.id"
+            + "  left join Client as client on client.identifier = rclient.client "
+            + "where rclient.client = :"
+            + Referral.PARAM_CLIENT_ID
+            + " and referal.closureDate is null"
+  ),
+  @NamedQuery(
+    name = Referral.FIND_CLOSED_BY_CLIENT,
+    query =
+        "SELECT DISTINCT referal from Referral as referal"
+            + "  left join ReferralClient as rclient on rclient.referral = referal.id"
+            + "  left join Client as client on client.identifier = rclient.client "
+            + "where rclient.client = :"
+            + Referral.PARAM_CLIENT_ID
+            + " and referal.closureDate is not null"
+  ),
+  @NamedQuery(
+    name = Referral.FIND_BY_CLIENT,
+    query =
+        "SELECT DISTINCT referal from Referral as referal"
+            + "  left join ReferralClient as rclient on rclient.referral = referal.id"
+            + "  left join Client as client on client.identifier = rclient.client "
+            + "where rclient.client = :"
+            + Referral.PARAM_CLIENT_ID
+  )
+})
 @SuppressWarnings("squid:S3437")
 public class Referral extends CmsPersistentObject {
 
   public static final String FIND_ACTIVE_BY_STAFF_ID = "Referral.findActiveReferralsByStaffId";
+  public static final String FIND_ACTIVE_BY_CLIENT = "Referral.findActiveReferralsByClient";
+  public static final String FIND_CLOSED_BY_CLIENT = "Referral.findClosedReferralsByClient";
+  public static final String FIND_BY_CLIENT = "Referral.findReferralsByClient";
   public static final String PARAM_STAFF_ID = "staffId";
+  public static final String PARAM_CLIENT_ID = "clientId";
   public static final String PARAM_ACTIVE_DATE = "activeDate";
 
   @Id
@@ -178,13 +217,23 @@ public class Referral extends CmsPersistentObject {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "FKSTFPERST", referencedColumnName = "IDENTIFIER", insertable = false, updatable = false)
+  @JoinColumn(
+    name = "FKSTFPERST",
+    referencedColumnName = "IDENTIFIER",
+    insertable = false,
+    updatable = false
+  )
   private StaffPerson primaryContactStaffPerson;
 
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "CNTY_SPFCD", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(
+    name = "CNTY_SPFCD",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private County countySpecificCode;
 
   @Column(name = "SPRJRF_IND")
@@ -212,7 +261,12 @@ public class Referral extends CmsPersistentObject {
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "L_GVR_ENTC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(
+    name = "L_GVR_ENTC",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private County limitedAccessCounty;
 
   @Type(type = "date")
@@ -344,7 +398,8 @@ public class Referral extends CmsPersistentObject {
 
   public void setFiledSuspectedChildAbuseReporttoLawEnforcementIndicator(
       String filedSuspectedChildAbuseReporttoLawEnforcementIndicator) {
-    this.filedSuspectedChildAbuseReporttoLawEnforcementIndicator = filedSuspectedChildAbuseReporttoLawEnforcementIndicator;
+    this.filedSuspectedChildAbuseReporttoLawEnforcementIndicator =
+        filedSuspectedChildAbuseReporttoLawEnforcementIndicator;
   }
 
   public String getFamilyAwarenessIndicator() {
@@ -383,8 +438,7 @@ public class Referral extends CmsPersistentObject {
     return limitedAccessCode;
   }
 
-  public void setLimitedAccessCode(
-      LimitedAccess limitedAccessCode) {
+  public void setLimitedAccessCode(LimitedAccess limitedAccessCode) {
     this.limitedAccessCode = limitedAccessCode;
   }
 
@@ -504,8 +558,7 @@ public class Referral extends CmsPersistentObject {
     return linkToPrimaryReferralId;
   }
 
-  public void setLinkToPrimaryReferralId(
-      String linkToPrimaryReferralId) {
+  public void setLinkToPrimaryReferralId(String linkToPrimaryReferralId) {
     this.linkToPrimaryReferralId = linkToPrimaryReferralId;
   }
 
@@ -530,8 +583,7 @@ public class Referral extends CmsPersistentObject {
     return primaryContactStaffPerson;
   }
 
-  public void setPrimaryContactStaffPerson(
-      StaffPerson primaryContactStaffPerson) {
+  public void setPrimaryContactStaffPerson(StaffPerson primaryContactStaffPerson) {
     this.primaryContactStaffPerson = primaryContactStaffPerson;
   }
 
@@ -595,8 +647,7 @@ public class Referral extends CmsPersistentObject {
     return limitedAccessCounty;
   }
 
-  public void setLimitedAccessCounty(
-      County limitedAccessCounty) {
+  public void setLimitedAccessCounty(County limitedAccessCounty) {
     this.limitedAccessCounty = limitedAccessCounty;
   }
 
@@ -628,8 +679,7 @@ public class Referral extends CmsPersistentObject {
     return baseAssignment;
   }
 
-  public void setBaseAssignment(
-      List<ReferralAssignment> baseAssignment) {
+  public void setBaseAssignment(List<ReferralAssignment> baseAssignment) {
     this.baseAssignment = baseAssignment;
   }
 }
