@@ -110,16 +110,15 @@ public class CaseDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
         });
   }
 
-    @Test
-    public void shouldFindClosedCasesByClient() throws Exception {
-        cleanAllAndInsert("/dbunit/CaseActiveCanceled.xml");
+  @Test
+  public void shouldFindClosedCasesByClient() throws Exception {
+    cleanAllAndInsert("/dbunit/CaseActiveCanceled.xml");
 
-        executeInTransaction(
-                sessionFactory,
-                (sessionFactory) -> {
-                    List<Case> cases = caseDao.findClosedByClient("AaiU7IW999");
-                    assertEquals(2, cases.size());
-                });
-    }
+    executeInTransaction(
+        sessionFactory,
+        (sessionFactory) -> {
+          List<Case> cases = caseDao.findClosedByClient("AaiU7IW999");
+          assertEquals(2, cases.size());
+        });
+  }
 }
-
