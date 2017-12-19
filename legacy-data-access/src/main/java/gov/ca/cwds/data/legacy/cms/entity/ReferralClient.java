@@ -1,12 +1,22 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.ApprovalStatusType;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.County;
+import gov.ca.cwds.data.persistence.CompositeKey;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
 
 /**
@@ -27,9 +37,11 @@ public class ReferralClient extends CmsPersistentObject {
   @Column(name = "APRVL_NO", length = CMS_ID_LEN)
   private String approvalNumber;
 
-  @Type(type = "short")
-  @Column(name = "APV_STC")
-  private Short approvalStatusType;
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "APV_STC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  private ApprovalStatusType approvalStatusType;
 
   @Type(type = "short")
   @Column(name = "DSP_RSNC")
@@ -42,11 +54,13 @@ public class ReferralClient extends CmsPersistentObject {
   @Column(name = "RCL_DISPDT")
   private Date dispositionDate;
 
+  @Type(type = "yes_no")
   @Column(name = "SLFRPT_IND")
-  private String selfReportedIndicator;
+  private Boolean selfReportedIndicator;
 
+  @Type(type = "yes_no")
   @Column(name = "STFADD_IND")
-  private String staffPersonAddedIndicator;
+  private Boolean staffPersonAddedIndicator;
 
   @Column(name = "DSP_CLSDSC")
   private String dispositionClosureDescription;
@@ -58,22 +72,31 @@ public class ReferralClient extends CmsPersistentObject {
   @Column(name = "AGE_PRD_CD")
   private String agePeriodCode;
 
-  @Column(name = "CNTY_SPFCD")
-  private String countySpecificCode;
+  @NotFound(action = NotFoundAction.IGNORE)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(
+      name = "CNTY_SPFCD",
+      referencedColumnName = "SYS_ID",
+      insertable = false,
+      updatable = false
+  )
+  private County countySpecificCode;
 
   @Column(name = "MHLTH_IND")
   private String mentalHealthIssuesIndicator;
 
+  @Type(type = "yes_no")
   @Column(name = "ALCHL_IND")
-  private String alcoholIndicator;
+  private Boolean alcoholIndicator;
 
+  @Type(type = "yes_no")
   @Column(name = "DRUG_IND")
-  private String drugIndicator;
+  private Boolean drugIndicator;
 
   @Override
   public Serializable getPrimaryKey() {
-    //return new EmbeddableCompositeKey2();
-    return null;
+    return new CompositeKey(getReferral(), getClient());
   }
 
   public String getReferral() {
@@ -100,11 +123,12 @@ public class ReferralClient extends CmsPersistentObject {
     this.approvalNumber = approvalNumber;
   }
 
-  public Short getApprovalStatusType() {
+  public ApprovalStatusType getApprovalStatusType() {
     return approvalStatusType;
   }
 
-  public void setApprovalStatusType(Short approvalStatusType) {
+  public void setApprovalStatusType(
+      ApprovalStatusType approvalStatusType) {
     this.approvalStatusType = approvalStatusType;
   }
 
@@ -132,22 +156,6 @@ public class ReferralClient extends CmsPersistentObject {
     this.dispositionDate = dispositionDate;
   }
 
-  public String getSelfReportedIndicator() {
-    return selfReportedIndicator;
-  }
-
-  public void setSelfReportedIndicator(String selfReportedIndicator) {
-    this.selfReportedIndicator = selfReportedIndicator;
-  }
-
-  public String getStaffPersonAddedIndicator() {
-    return staffPersonAddedIndicator;
-  }
-
-  public void setStaffPersonAddedIndicator(String staffPersonAddedIndicator) {
-    this.staffPersonAddedIndicator = staffPersonAddedIndicator;
-  }
-
   public String getDispositionClosureDescription() {
     return dispositionClosureDescription;
   }
@@ -172,11 +180,11 @@ public class ReferralClient extends CmsPersistentObject {
     this.agePeriodCode = agePeriodCode;
   }
 
-  public String getCountySpecificCode() {
+  public County getCountySpecificCode() {
     return countySpecificCode;
   }
 
-  public void setCountySpecificCode(String countySpecificCode) {
+  public void setCountySpecificCode(County countySpecificCode) {
     this.countySpecificCode = countySpecificCode;
   }
 
@@ -188,19 +196,35 @@ public class ReferralClient extends CmsPersistentObject {
     this.mentalHealthIssuesIndicator = mentalHealthIssuesIndicator;
   }
 
-  public String getAlcoholIndicator() {
+  public Boolean getSelfReportedIndicator() {
+    return selfReportedIndicator;
+  }
+
+  public void setSelfReportedIndicator(Boolean selfReportedIndicator) {
+    this.selfReportedIndicator = selfReportedIndicator;
+  }
+
+  public Boolean getStaffPersonAddedIndicator() {
+    return staffPersonAddedIndicator;
+  }
+
+  public void setStaffPersonAddedIndicator(Boolean staffPersonAddedIndicator) {
+    this.staffPersonAddedIndicator = staffPersonAddedIndicator;
+  }
+
+  public Boolean getAlcoholIndicator() {
     return alcoholIndicator;
   }
 
-  public void setAlcoholIndicator(String alcoholIndicator) {
+  public void setAlcoholIndicator(Boolean alcoholIndicator) {
     this.alcoholIndicator = alcoholIndicator;
   }
 
-  public String getDrugIndicator() {
+  public Boolean getDrugIndicator() {
     return drugIndicator;
   }
 
-  public void setDrugIndicator(String drugIndicator) {
+  public void setDrugIndicator(Boolean drugIndicator) {
     this.drugIndicator = drugIndicator;
   }
 }
