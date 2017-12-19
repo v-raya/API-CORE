@@ -14,16 +14,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -38,22 +30,45 @@ import org.hibernate.annotations.Type;
  */
 @Entity
 @Table(name = "CASE_T")
-@NamedQuery(
-    name = Case.NQ_FIND_ACTIVE_BY_STAFF_ID,
-    query = "select distinct theCase from gov.ca.cwds.data.legacy.cms.entity.CaseLoad cl"
-        + " left join cl.caseAssignments assignment"
-        + " left join assignment.theCase theCase "
-        + " where cl.caseLoadWeighting.fkstfperst = :" + Case.NQ_PARAM_STAFF_ID
-        + " and theCase.endDate is null "
-        + " and assignment.startDate < :" + Case.NQ_PARAM_ACTIVE_DATE
-        + " and (assignment.endDate is null or assignment.endDate > :" + Case.NQ_PARAM_ACTIVE_DATE + ")"
-)
+@NamedQueries({
+        @NamedQuery(
+                name = Case.NQ_FIND_ACTIVE_BY_STAFF_ID,
+                query = "select distinct theCase from gov.ca.cwds.data.legacy.cms.entity.CaseLoad cl"
+                        + " left join cl.caseAssignments assignment"
+                        + " left join assignment.theCase theCase "
+                        + " where cl.caseLoadWeighting.fkstfperst = :" + Case.NQ_PARAM_STAFF_ID
+                        + " and theCase.endDate is null "
+                        + " and assignment.startDate < :" + Case.NQ_PARAM_ACTIVE_DATE
+                        + " and (assignment.endDate is null or assignment.endDate > :" + Case.NQ_PARAM_ACTIVE_DATE + ")"
+        ),
+        @NamedQuery(
+                name = Case.NQ_FIND_ACTIVE_BY_CLIENT_ID,
+                query = "select distinct c from Case c"
+                        + " left join c.childClient ch"
+                        + " where ch.victimClientId = :" + Case.NQ_PARAM_CLIENT_ID
+                        + " and c.endDate is null "
+
+        ),
+
+        @NamedQuery(
+                name = Case.NQ_FIND_CLOSED_BY_CLIENT_ID,
+                query = "select distinct c from Case c"
+                        + " left join c.childClient ch"
+                        + " where ch.victimClientId = :" + Case.NQ_PARAM_CLIENT_ID
+                        + " and c.endDate is not null "
+
+        ),
+})
+
 @SuppressWarnings("squid:S3437")
 public class Case extends CmsPersistentObject {
 
   public static final String NQ_FIND_ACTIVE_BY_STAFF_ID = "gov.ca.cwds.data.legacy.cms.entity.Case.findByStaffIdAndActiveDate";
+  public static final String NQ_FIND_ACTIVE_BY_CLIENT_ID = "gov.ca.cwds.data.legacy.cms.entity.Case.findActiveByClient";
+  public static final String NQ_FIND_CLOSED_BY_CLIENT_ID = "gov.ca.cwds.data.legacy.cms.entity.Case.findClosedByClient";
   public static final String NQ_PARAM_STAFF_ID = "staffId";
   public static final String NQ_PARAM_ACTIVE_DATE = "activeDate";
+  public static final String NQ_PARAM_CLIENT_ID = "clientId";
 
   /**
    * Default serialization.
