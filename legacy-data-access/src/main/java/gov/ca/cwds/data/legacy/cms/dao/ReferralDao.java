@@ -1,14 +1,14 @@
 package gov.ca.cwds.data.legacy.cms.dao;
 
-    import com.google.common.collect.ImmutableList;
-    import com.google.inject.Inject;
-    import gov.ca.cwds.data.BaseDaoImpl;
-    import gov.ca.cwds.data.legacy.cms.entity.Referral;
-    import gov.ca.cwds.inject.CmsSessionFactory;
-    import gov.ca.cwds.util.Require;
-    import java.time.LocalDate;
-    import java.util.List;
-    import org.hibernate.SessionFactory;
+import com.google.common.collect.ImmutableList;
+import com.google.inject.Inject;
+import gov.ca.cwds.data.BaseDaoImpl;
+import gov.ca.cwds.data.legacy.cms.entity.Referral;
+import gov.ca.cwds.inject.CmsSessionFactory;
+import gov.ca.cwds.util.Require;
+import java.time.LocalDate;
+import java.util.List;
+import org.hibernate.SessionFactory;
 
 /** @author CWDS TPT-3 Team */
 public class ReferralDao extends BaseDaoImpl {
@@ -44,8 +44,10 @@ public class ReferralDao extends BaseDaoImpl {
   }
 
   private List<Referral> getReferralsByClientId(String clientId, Boolean isActive) {
-    String namedQuery = isActive == null ? Referral.FIND_BY_CLIENT
-        : true ? Referral.FIND_ACTIVE_BY_CLIENT : Referral.FIND_CLOSED_BY_CLIENT;
+    String namedQuery =
+        isActive == null
+            ? Referral.FIND_BY_CLIENT
+            : true ? Referral.FIND_ACTIVE_BY_CLIENT : Referral.FIND_CLOSED_BY_CLIENT;
     List<Referral> referrals =
         currentSession()
             .createNamedQuery(namedQuery, Referral.class)
