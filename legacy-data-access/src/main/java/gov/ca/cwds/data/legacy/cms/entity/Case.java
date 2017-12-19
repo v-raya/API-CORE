@@ -76,13 +76,13 @@ public class Case extends CmsPersistentObject {
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "APV_STC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(name = "APV_STC", referencedColumnName = "SYS_ID")
   private ApprovalStatusType approvalStatusType;
 
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "CLS_RSNC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(name = "CLS_RSNC", referencedColumnName = "SYS_ID")
   private CaseClosureReasonType caseClosureReasonType;
 
   @Type(type = "yes_no")
@@ -98,7 +98,7 @@ public class Case extends CmsPersistentObject {
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "CNTRY_C", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(name = "CNTRY_C", referencedColumnName = "SYS_ID")
   private Country country;
 
   @Column(name = "CNTY_SPFCD")
@@ -131,7 +131,7 @@ public class Case extends CmsPersistentObject {
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "GVR_ENTC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(name = "GVR_ENTC", referencedColumnName = "SYS_ID")
   private County county;
 
   @Type(type = "yes_no")
@@ -155,7 +155,7 @@ public class Case extends CmsPersistentObject {
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "L_GVR_ENTC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(name = "L_GVR_ENTC", referencedColumnName = "SYS_ID")
   private County limitedAccessCounty;
 
   @Column(name = "CASE_NM")
@@ -182,13 +182,13 @@ public class Case extends CmsPersistentObject {
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "STATE_C", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(name = "STATE_C", referencedColumnName = "SYS_ID")
   private State state;
 
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "SRV_CMPC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(name = "SRV_CMPC", referencedColumnName = "SYS_ID")
   private ActiveServiceComponentType activeServiceComponentType;
 
   @Column(name = "SRV_CMPDT")

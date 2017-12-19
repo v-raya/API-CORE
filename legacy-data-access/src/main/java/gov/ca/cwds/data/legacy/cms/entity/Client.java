@@ -107,29 +107,21 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @ColumnTransformer(read = "trim(ALN_REG_NO)")
   private String alienRegistrationNumber;
 
-  @NotNull
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "B_CNTRY_C",
-    referencedColumnName = "SYS_ID",
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = "B_CNTRY_C", referencedColumnName = "SYS_ID")
+  @ColumnTransformer(read = "nullif(B_CNTRY_C, 0)", write = "coalesce(?, 0)")
   private Country birthCountry;
 
-  @NotNull
-  @NotFound(action = NotFoundAction.IGNORE)
-  @ManyToOne(fetch = FetchType.LAZY)
-  @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "B_STATE_C",
-    referencedColumnName = "SYS_ID",
-    insertable = false,
-    updatable = false
-  )
-  private State birthState;
+//  @NotFound(action = NotFoundAction.IGNORE)
+//  @ManyToOne(fetch = FetchType.LAZY)
+//  @Fetch(FetchMode.SELECT)
+//  @JoinColumn(name = "B_STATE_C", referencedColumnName = "SYS_ID")
+  @ColumnTransformer(read = "nullif(B_STATE_C, 0)", write = "coalesce(?, 0)")
+//  private State birthState;
+  @Column(name = "B_STATE_C", nullable = false)
+  private Short birthState;
 
   @Column(name = "BIRTH_CITY", nullable = false, length = 35)
   @ColumnTransformer(read = "trim(BIRTH_CITY)")
@@ -188,16 +180,11 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Column(name = "CURREG_IND", nullable = false, length = 1)
   private boolean currentlyRegionalCenterIndicator;
 
-  @NotNull
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "D_STATE_C",
-    referencedColumnName = "SYS_ID",
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = "D_STATE_C", referencedColumnName = "SYS_ID")
+  @ColumnTransformer(read = "nullif(D_STATE_C, 0)", write = "coalesce(?, 0)")
   private State driverLicenseState;
 
   @Column(name = "DEATH_DT")
@@ -258,28 +245,18 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Convert(converter = UnableToDetermineReason.UnableToDetermineReasonConverter.class)
   private UnableToDetermineReason hispanicUnableToDetermineReason;
 
-  @NotNull
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "I_CNTRY_C",
-    referencedColumnName = "SYS_ID",
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = "I_CNTRY_C", referencedColumnName = "SYS_ID")
+  @ColumnTransformer(read = "nullif(I_CNTRY_C, 0)", write = "coalesce(?, 0)")
   private Country immigrationCountry;
 
-  @NotNull
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "IMGT_STC",
-    referencedColumnName = "SYS_ID",
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = "IMGT_STC", referencedColumnName = "SYS_ID")
+  @ColumnTransformer(read = "nullif(IMGT_STC, 0)", write = "coalesce(?, 0)")
   private ImmigrationStatus immigrationStatus;
 
   @Column(name = "INCAPC_CD", nullable = false, length = 2)
@@ -303,16 +280,11 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Convert(converter = MilitaryStatus.MilitaryStatusConverter.class)
   private MilitaryStatus militaryStatus;
 
-  @NotNull
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "MRTL_STC",
-    referencedColumnName = "SYS_ID",
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = "MRTL_STC", referencedColumnName = "SYS_ID")
+  @ColumnTransformer(read = "nullif(MRTL_STC, 0)", write = "coalesce(?, 0)")
   private MaritalStatus maritalStatus;
 
   @Column(name = "MTERM_DT")
@@ -322,12 +294,7 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "NAME_TPC",
-    referencedColumnName = "SYS_ID",
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = "NAME_TPC", referencedColumnName = "SYS_ID")
   private NameType nameType;
 
   @Column(name = "NMPRFX_DSC", nullable = false, length = 6)
@@ -338,28 +305,18 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Column(name = "OUTWRT_IND", nullable = false, length = 1)
   private boolean outstandingWarrantIndicator;
 
-  @NotNull
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "P_ETHNCTYC",
-    referencedColumnName = "SYS_ID",
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = "P_ETHNCTYC", referencedColumnName = "SYS_ID")
+  @ColumnTransformer(read = "nullif(P_ETHNCTYC, 0)", write = "coalesce(?, 0)")
   private Ethnicity primaryEthnicity;
 
-  @NotNull
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "P_LANG_TPC",
-    referencedColumnName = "SYS_ID",
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = "P_LANG_TPC", referencedColumnName = "SYS_ID")
+  @ColumnTransformer(read = "nullif(P_LANG_TPC, 0)", write = "coalesce(?, 0)")
   private Language primaryLanguage;
 
   @Column(name = "POTH_DESC", nullable = false, length = 25)
@@ -374,28 +331,18 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Column(name = "PREVCA_IND", nullable = false, length = 1)
   private boolean previousCaChildrenServiceIndicator;
 
-  @NotNull
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "RLGN_TPC",
-    referencedColumnName = "SYS_ID",
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = "RLGN_TPC", referencedColumnName = "SYS_ID")
+  @ColumnTransformer(read = "nullif(RLGN_TPC, 0)", write = "coalesce(?, 0)")
   private Religion religion;
 
-  @NotNull
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "S_LANG_TC",
-    referencedColumnName = "SYS_ID",
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = "S_LANG_TC", referencedColumnName = "SYS_ID")
+  @ColumnTransformer(read = "nullif(S_LANG_TC, 0)", write = "coalesce(?, 0)")
   private Language secondaryLanguage;
 
   @Column(name = "SENSTV_IND", nullable = false, length = 1)
@@ -520,11 +467,20 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.birthFacilityName = birthFacilityName;
   }
 
-  public State getBirthState() {
+//  public State getBirthState() {
+//    return birthState;
+//  }
+//
+//  public void setBirthState(State birthState) {
+//    this.birthState = birthState;
+//  }
+
+
+  public Short getBirthState() {
     return birthState;
   }
 
-  public void setBirthState(State birthState) {
+  public void setBirthState(Short birthState) {
     this.birthState = birthState;
   }
 

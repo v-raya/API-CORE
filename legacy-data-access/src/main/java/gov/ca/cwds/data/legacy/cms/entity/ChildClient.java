@@ -91,7 +91,7 @@ public class ChildClient extends Client {
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "DTH_CIRC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(name = "DTH_CIRC", referencedColumnName = "SYS_ID")
   private DeathCircumstancesType deathCircumstancesType;
 
   @Column(name = "DISABLD_CD")
