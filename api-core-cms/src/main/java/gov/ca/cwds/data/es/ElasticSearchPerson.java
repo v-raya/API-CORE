@@ -945,7 +945,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   public String[] getSearchableDateOfBirth() {
     String[] searchableDob = null;
     if (StringUtils.isNotBlank(this.dateOfBirth)) {
-      List<String> dobValues = new ArrayList<>();
+      Set<String> dobValues = new HashSet<>();
       Date date = DomainChef.uncookDateString(this.dateOfBirth);
 
       // With zeros, e.g. 01/09/1995
