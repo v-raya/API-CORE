@@ -40,8 +40,10 @@ public class IssueDetailsCreator {
       }
     }
 
-    // Remove last dot .
-    propertyBuf.deleteCharAt(propertyBuf.lastIndexOf("."));
+    // Remove last dot (.) if present
+    if (propertyBuf.lastIndexOf(".") > -1) {
+      propertyBuf.deleteCharAt(propertyBuf.lastIndexOf("."));
+    }
 
     String property = propertyBuf.toString();
     Object invalidValue = violation.getInvalidValue();
