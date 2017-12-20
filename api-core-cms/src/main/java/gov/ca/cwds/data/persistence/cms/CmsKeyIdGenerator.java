@@ -102,7 +102,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * where:
  *   All timestamp fields include leading zeros.
  *   t... represents convolved time
- *   p... represents the staffperson
+ *   p... represents the staff person
  *   YYYY represents the year
  *   MM   represents the month
  *   DD   represents the day of the month
@@ -229,7 +229,7 @@ public final class CmsKeyIdGenerator {
    * Format the CMS timestamp String, the last 7 characters of the key.
    * 
    * <p>
-   * Code taken from the original C++ algorithm, designed for a fat client Visual Basic application.
+   * Code taken originally from the original C++ algorithm, designed for legacy fat client Visual Basic application.
    * In that world of dial-up modems, the inefficiency of waiting on hundredths of a second for a
    * single user was acceptable. Obviously, this approach makes little sense today in the age of web
    * servers and pervasive, wireless internet connections.
@@ -249,7 +249,7 @@ public final class CmsKeyIdGenerator {
       // If the timestamp value is the same as before, stay in the loop.
       // Otherwise, break out since it is unique.
       if (nTimestamp == nPreviousTimestamp) { // NOSONAR
-        Thread.yield();
+        Thread.yield(); // From original algorithm
         continue;
       } else {
         break;
