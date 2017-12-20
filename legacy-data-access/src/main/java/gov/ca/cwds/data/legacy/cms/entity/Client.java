@@ -13,14 +13,7 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.ParentUnemployedStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Soc158placementsStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.UnableToDetermineReason;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.Ethnicity;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.ImmigrationStatus;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.Language;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.MaritalStatus;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.Religion;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -107,21 +100,11 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @ColumnTransformer(read = "trim(ALN_REG_NO)")
   private String alienRegistrationNumber;
 
-  @NotFound(action = NotFoundAction.IGNORE)
-  @ManyToOne(fetch = FetchType.LAZY)
-  @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "B_CNTRY_C", referencedColumnName = "SYS_ID")
-  @ColumnTransformer(read = "nullif(B_CNTRY_C, 0)", write = "coalesce(?, 0)")
-  private Country birthCountry;
+  @Column(name = "B_CNTRY_C", nullable = false)
+  private short birthCountryCode;
 
-//  @NotFound(action = NotFoundAction.IGNORE)
-//  @ManyToOne(fetch = FetchType.LAZY)
-//  @Fetch(FetchMode.SELECT)
-//  @JoinColumn(name = "B_STATE_C", referencedColumnName = "SYS_ID")
-  @ColumnTransformer(read = "nullif(B_STATE_C, 0)", write = "coalesce(?, 0)")
-//  private State birthState;
   @Column(name = "B_STATE_C", nullable = false)
-  private Short birthState;
+  private short birthStateCode;
 
   @Column(name = "BIRTH_CITY", nullable = false, length = 35)
   @ColumnTransformer(read = "trim(BIRTH_CITY)")
@@ -180,12 +163,8 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Column(name = "CURREG_IND", nullable = false, length = 1)
   private boolean currentlyRegionalCenterIndicator;
 
-  @NotFound(action = NotFoundAction.IGNORE)
-  @ManyToOne(fetch = FetchType.LAZY)
-  @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "D_STATE_C", referencedColumnName = "SYS_ID")
-  @ColumnTransformer(read = "nullif(D_STATE_C, 0)", write = "coalesce(?, 0)")
-  private State driverLicenseState;
+  @Column(name = "D_STATE_C", nullable = false)
+  private short driverLicenseStateCode;
 
   @Column(name = "DEATH_DT")
   private LocalDate deathDate;
@@ -245,19 +224,11 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Convert(converter = UnableToDetermineReason.UnableToDetermineReasonConverter.class)
   private UnableToDetermineReason hispanicUnableToDetermineReason;
 
-  @NotFound(action = NotFoundAction.IGNORE)
-  @ManyToOne(fetch = FetchType.LAZY)
-  @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "I_CNTRY_C", referencedColumnName = "SYS_ID")
-  @ColumnTransformer(read = "nullif(I_CNTRY_C, 0)", write = "coalesce(?, 0)")
-  private Country immigrationCountry;
+  @Column(name = "I_CNTRY_C", nullable = false)
+  private short immigrationCountryCode;
 
-  @NotFound(action = NotFoundAction.IGNORE)
-  @ManyToOne(fetch = FetchType.LAZY)
-  @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "IMGT_STC", referencedColumnName = "SYS_ID")
-  @ColumnTransformer(read = "nullif(IMGT_STC, 0)", write = "coalesce(?, 0)")
-  private ImmigrationStatus immigrationStatus;
+  @Column(name = "IMGT_STC", nullable = false)
+  private short immigrationStatusCode;
 
   @Column(name = "INCAPC_CD", nullable = false, length = 2)
   @ColumnTransformer(read = "trim(INCAPC_CD)")
@@ -280,12 +251,8 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Convert(converter = MilitaryStatus.MilitaryStatusConverter.class)
   private MilitaryStatus militaryStatus;
 
-  @NotFound(action = NotFoundAction.IGNORE)
-  @ManyToOne(fetch = FetchType.LAZY)
-  @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "MRTL_STC", referencedColumnName = "SYS_ID")
-  @ColumnTransformer(read = "nullif(MRTL_STC, 0)", write = "coalesce(?, 0)")
-  private MaritalStatus maritalStatus;
+  @Column(name = "MRTL_STC", nullable = false)
+  private short maritalStatusCode;
 
   @Column(name = "MTERM_DT")
   private LocalDate motherParentalRightTermDate;
@@ -305,19 +272,11 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Column(name = "OUTWRT_IND", nullable = false, length = 1)
   private boolean outstandingWarrantIndicator;
 
-  @NotFound(action = NotFoundAction.IGNORE)
-  @ManyToOne(fetch = FetchType.LAZY)
-  @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "P_ETHNCTYC", referencedColumnName = "SYS_ID")
-  @ColumnTransformer(read = "nullif(P_ETHNCTYC, 0)", write = "coalesce(?, 0)")
-  private Ethnicity primaryEthnicity;
+  @Column(name = "P_ETHNCTYC", nullable = false)
+  private short primaryEthnicityCode;
 
-  @NotFound(action = NotFoundAction.IGNORE)
-  @ManyToOne(fetch = FetchType.LAZY)
-  @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "P_LANG_TPC", referencedColumnName = "SYS_ID")
-  @ColumnTransformer(read = "nullif(P_LANG_TPC, 0)", write = "coalesce(?, 0)")
-  private Language primaryLanguage;
+  @Column(name = "P_LANG_TPC", nullable = false)
+  private short primaryLanguageCode;
 
   @Column(name = "POTH_DESC", nullable = false, length = 25)
   @ColumnTransformer(read = "trim(POTH_DESC)")
@@ -331,19 +290,11 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Column(name = "PREVCA_IND", nullable = false, length = 1)
   private boolean previousCaChildrenServiceIndicator;
 
-  @NotFound(action = NotFoundAction.IGNORE)
-  @ManyToOne(fetch = FetchType.LAZY)
-  @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "RLGN_TPC", referencedColumnName = "SYS_ID")
-  @ColumnTransformer(read = "nullif(RLGN_TPC, 0)", write = "coalesce(?, 0)")
-  private Religion religion;
+  @Column(name = "RLGN_TPC", nullable = false)
+  private short religionCode;
 
-  @NotFound(action = NotFoundAction.IGNORE)
-  @ManyToOne(fetch = FetchType.LAZY)
-  @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "S_LANG_TC", referencedColumnName = "SYS_ID")
-  @ColumnTransformer(read = "nullif(S_LANG_TC, 0)", write = "coalesce(?, 0)")
-  private Language secondaryLanguage;
+  @Column(name = "S_LANG_TC", nullable = false)
+  private short secondaryLanguageCode;
 
   @Column(name = "SENSTV_IND", nullable = false, length = 1)
   @Convert(converter = Sensitivity.SensitivityConverter.class)
@@ -401,8 +352,8 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
       return false;
     }
     Client client = (Client) o;
-    return Objects.equals(birthCountry, client.birthCountry)
-        && Objects.equals(birthState, client.birthState)
+    return Objects.equals(birthCountryCode, client.birthCountryCode)
+        && Objects.equals(birthStateCode, client.birthStateCode)
         && Objects.equals(birthCity, client.birthCity)
         && Objects.equals(birthDate, client.birthDate)
         && Objects.equals(birthFacilityName, client.birthFacilityName)
@@ -416,8 +367,8 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   public int hashCode() {
     return Objects.hash(
         super.hashCode(),
-        birthCountry,
-        birthState,
+        birthCountryCode,
+        birthStateCode,
         birthCity,
         birthDate,
         birthFacilityName,
@@ -467,29 +418,20 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.birthFacilityName = birthFacilityName;
   }
 
-//  public State getBirthState() {
-//    return birthState;
-//  }
-//
-//  public void setBirthState(State birthState) {
-//    this.birthState = birthState;
-//  }
-
-
-  public Short getBirthState() {
-    return birthState;
+  public short getBirthStateCode() {
+    return birthStateCode;
   }
 
-  public void setBirthState(Short birthState) {
-    this.birthState = birthState;
+  public void setBirthStateCode(short birthStateCode) {
+    this.birthStateCode = birthStateCode;
   }
 
-  public Country getBirthCountry() {
-    return birthCountry;
+  public short getBirthCountryCode() {
+    return birthCountryCode;
   }
 
-  public void setBirthCountry(Country birthCountry) {
-    this.birthCountry = birthCountry;
+  public void setBirthCountryCode(short birthCountryCode) {
+    this.birthCountryCode = birthCountryCode;
   }
 
   public boolean getChildClientIndicator() {
@@ -572,12 +514,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.driverLicenseNumber = driverLicenseNumber;
   }
 
-  public State getDriverLicenseState() {
-    return driverLicenseState;
+  public short getDriverLicenseStateCode() {
+    return driverLicenseStateCode;
   }
 
-  public void setDriverLicenseState(State driverLicenseState) {
-    this.driverLicenseState = driverLicenseState;
+  public void setDriverLicenseStateCode(short driverLicenseStateCode) {
+    this.driverLicenseStateCode = driverLicenseStateCode;
   }
 
   public Gender getGender() {
@@ -588,20 +530,20 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.gender = gender;
   }
 
-  public Country getImmigrationCountry() {
-    return immigrationCountry;
+  public short getImmigrationCountryCode() {
+    return immigrationCountryCode;
   }
 
-  public void setImmigrationCountry(Country immigrationCountry) {
-    this.immigrationCountry = immigrationCountry;
+  public void setImmigrationCountryCode(short immigrationCountryCode) {
+    this.immigrationCountryCode = immigrationCountryCode;
   }
 
-  public ImmigrationStatus getImmigrationStatus() {
-    return immigrationStatus;
+  public short getImmigrationStatusCode() {
+    return immigrationStatusCode;
   }
 
-  public void setImmigrationStatus(ImmigrationStatus immigrationStatus) {
-    this.immigrationStatus = immigrationStatus;
+  public void setImmigrationStatusCode(short immigrationStatusCode) {
+    this.immigrationStatusCode = immigrationStatusCode;
   }
 
   public IncapacitatedParentStatus getIncapacitatedParentStatus() {
@@ -628,12 +570,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.maritalCohabitationHistoryIndicator = maritalCohabitationHistoryIndicator;
   }
 
-  public MaritalStatus getMaritalStatus() {
-    return maritalStatus;
+  public short getMaritalStatusCode() {
+    return maritalStatusCode;
   }
 
-  public void setMaritalStatus(MaritalStatus maritalStatus) {
-    this.maritalStatus = maritalStatus;
+  public void setMaritalStatusCode(short maritalStatusCode) {
+    this.maritalStatusCode = maritalStatusCode;
   }
 
   public MilitaryStatus getMilitaryStatus() {
@@ -668,36 +610,36 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.outstandingWarrantIndicator = outstandingWarrantIndicator;
   }
 
-  public Ethnicity getPrimaryEthnicity() {
-    return primaryEthnicity;
+  public short getPrimaryEthnicityCode() {
+    return primaryEthnicityCode;
   }
 
-  public void setPrimaryEthnicity(Ethnicity primaryEthnicity) {
-    this.primaryEthnicity = primaryEthnicity;
+  public void setPrimaryEthnicityCode(short primaryEthnicityCode) {
+    this.primaryEthnicityCode = primaryEthnicityCode;
   }
 
-  public Language getPrimaryLanguage() {
-    return primaryLanguage;
+  public short getPrimaryLanguageCode() {
+    return primaryLanguageCode;
   }
 
-  public void setPrimaryLanguage(Language primaryLanguage) {
-    this.primaryLanguage = primaryLanguage;
+  public void setPrimaryLanguageCode(short primaryLanguageCode) {
+    this.primaryLanguageCode = primaryLanguageCode;
   }
 
-  public Religion getReligion() {
-    return religion;
+  public short getReligionCode() {
+    return religionCode;
   }
 
-  public void setReligion(Religion religion) {
-    this.religion = religion;
+  public void setReligionCode(short religionCode) {
+    this.religionCode = religionCode;
   }
 
-  public Language getSecondaryLanguage() {
-    return secondaryLanguage;
+  public short getSecondaryLanguageCode() {
+    return secondaryLanguageCode;
   }
 
-  public void setSecondaryLanguage(Language secondaryLanguage) {
-    this.secondaryLanguage = secondaryLanguage;
+  public void setSecondaryLanguageCode(short secondaryLanguageCode) {
+    this.secondaryLanguageCode = secondaryLanguageCode;
   }
 
   public Sensitivity getSensitivity() {

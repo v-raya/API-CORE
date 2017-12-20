@@ -36,8 +36,8 @@ public abstract class BasePersistenceTest {
   protected SessionFactory sessionFactory = null;
   protected IDatabaseConnection dbUnitConnection = null;
 
-  private final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
-  private final DateTimeFormatter DATE_TIME_FORMATTER =
+  private final static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
+  private final static DateTimeFormatter DATE_TIME_FORMATTER =
       DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
   private JdbcDatabaseTester dbUnitTester = null;

@@ -38,7 +38,7 @@ public class CaseDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
           assertNull(c.getAlertText());//ALERT_TXT
           assertEquals("R8TQDh807n", c.getApprovalNumber());//APRVL_NO
           assertEquals("Approved", c.getApprovalStatusType().getShortDescription());//APV_STC
-          assertEquals("Child Runaway", c.getCaseClosureReasonType().getShortDescription());//CLS_RSNC
+          assertEquals(310, c.getCaseClosureReasonTypeCode());//CLS_RSNC, Child Runaway
           assertFalse(c.getCaseplanChildrenDetailIndVar());//CSPL_DET_B
           assertEquals("Very Long text",
               c.getClosureStatementText().getTextDescription());//CL_STM_TXT
@@ -64,7 +64,7 @@ public class CaseDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
               c.getResponsibleAgency());//RSP_AGY_CD
           assertFalse(c.getSpecialProjectCaseIndVar());//SPRJ_CST_B
           assertEquals(toDate("2002-11-08"), c.getStartDate());//START_DT
-          assertEquals("California", c.getState().getShortDescription());//STATE_C
+          assertEquals(1828, c.getStateCode());//STATE_C, California
           assertEquals("Emergency Response",
               c.getActiveServiceComponentType().getShortDescription());//SRV_CMPC
           assertEquals(toDate("2002-11-08"), c.getActiveSvcComponentStartDate());//SRV_CMPDT

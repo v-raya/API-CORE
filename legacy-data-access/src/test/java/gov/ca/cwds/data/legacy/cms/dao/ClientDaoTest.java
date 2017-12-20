@@ -19,9 +19,7 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.MilitaryStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.ParentUnemployedStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Soc158placementsStatus;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
 import gov.ca.cwds.data.legacy.cms.persistence.BaseCwsCmsInMemoryPersistenceTest;
 import java.time.LocalDateTime;
 import org.dbunit.dataset.IDataSet;
@@ -51,13 +49,17 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
           assertNotNull(client_1);
           assertFalse(client_1.getAdjudicatedDelinquentIndicator());
           assertNull(client_1.getHispanicUnableToDetermineReason());
-          assertNull(client_1.getBirthState());
-          assertNull(client_1.getBirthCountry());
-          assertNull(client_1.getDriverLicenseState());
-          assertNull(client_1.getImmigrationCountry());
-          assertNull(client_1.getImmigrationStatus());
-          assertNull(client_1.getReligion());
-          assertNull(client_1.getSecondaryLanguage());
+
+          assertTrue(client_1.getBirthStateCode() == 0);
+          assertTrue(client_1.getBirthCountryCode() == 0);
+          assertTrue(client_1.getDriverLicenseStateCode() == 0);
+          assertTrue(client_1.getImmigrationCountryCode() == 0);
+          assertTrue(client_1.getImmigrationStatusCode() == 0);
+          assertTrue(client_1.getReligionCode() == 0);
+          assertTrue(client_1.getPrimaryLanguageCode() == 0);
+          assertTrue(client_1.getSecondaryLanguageCode() == 0);
+          assertTrue(client_1.getMaritalStatusCode() == 0);
+          assertTrue(client_1.getPrimaryEthnicityCode() == 0);
 
           Client client_2 = dao.find("AapJGAU04Z");
           assertNotNull(client_2);
@@ -84,10 +86,10 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
     executeInTransaction(
         sessionFactory,
         (sessionFactory) -> {
-          NameType nameType = nameTypeDao.find(new Short((short) 1313));
+          NameType nameType = nameTypeDao.find((short) 1313);
           assertNotNull(nameType);
           assertEquals("Legal", nameType.getShortDescription().trim());
-          assertEquals((short) 1313, nameType.getSystemId().shortValue());
+          assertTrue(nameType.getSystemId().equals(new Short((short) 1313)));
 
           Client c = new Client();
 
@@ -97,18 +99,6 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
           c.setAlienRegistrationNumber("AlienRegNum"); // ALN_REG_NO
           c.setBirthDate(localDate("1972-08-17")); // BIRTH_DT
           c.setBirthFacilityName("BirthFacilityName");
-
-//          State birthState = new State();
-//          birthState.setSystemId((short) 0);
-//          c.setBirthState(birthState); // B_STATE_C
-//          c.setBirthState(null);
-          c.setBirthState(null);
-
-//          Country birthCountry = new Country();
-//          birthCountry.setSystemId((short) 0);
-//          c.setBirthCountry(birthCountry);
-          c.setBirthCountry(null); // B_CNTRY_C
-
           c.setBirthCity("Sacramento"); // BIRTH_CITY
           c.setChildClientIndicator(false); // CHLD_CLT_B
           c.setCommonFirstName("Tumbling"); // COM_FST_NM
@@ -117,54 +107,10 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
           c.setConfidentialityInEffectIndicator(false); // CONF_EFIND
           c.setCreationDate(localDate("2004-08-17")); // CREATN_DT
           c.setDriverLicenseNumber("license"); // DRV_LIC_NO
-
-
           c.setGender(Gender.MALE); // GENDER_CD
-
-          //          Country immigrationCountry = new Country();
-          //          immigrationCountry.setSystemId((short)0);
-          //          c.setImmigrationCountry(immigrationCountry); // I_CNTRY_C
-          c.setImmigrationCountry(null); // I_CNTRY_C
-
-          //          State driverLicenseState = new State();
-          //          driverLicenseState.setSystemId((short)0);
-          //          c.setDriverLicenseState(driverLicenseState);
-          c.setDriverLicenseState(null); // D_STATE_C
-
-          //          ImmigrationStatus immigrationStatus = new ImmigrationStatus();
-          //          immigrationStatus.setSystemId((short)0);
-          //          c.setImmigrationStatus(immigrationStatus); // IMGT_STC
-          c.setImmigrationStatus(null); // IMGT_STC
-
           c.setIncapacitatedParentStatus(IncapacitatedParentStatus.UNKNOWN); // INCAPC_CD
           c.setLiterateStatus(LiterateStatus.UNKNOWN); // LITRATE_CD
           c.setMaritalCohabitationHistoryIndicator(false); // MAR_HIST_B
-
-          //          MaritalStatus maritalStatus = new MaritalStatus();
-          //          maritalStatus.setSystemId((short)0);
-          //          c.setMaritalStatus(maritalStatus); // MRTL_STC
-          c.setMaritalStatus(null); // MRTL_STC
-
-          //          Ethnicity primaryEthnicity = new Ethnicity();
-          //          primaryEthnicity.setSystemId((short)0);
-          //          c.setPrimaryEthnicity(primaryEthnicity);
-          c.setPrimaryEthnicity(null);//P_ETHNCTYC
-
-          //          Language secondaryLanguage = new Language();
-          //          secondaryLanguage.setSystemId((short)0);
-          //          c.setSecondaryLanguage(secondaryLanguage);
-          c.setSecondaryLanguage(null);//S_LANG_TC
-
-          //          Language primaryLanguage = new Language();
-          //          primaryLanguage.setSystemId((short)0);
-          //          c.setPrimaryLanguage(primaryLanguage);
-          c.setPrimaryLanguage(null);//P_LANG_TPC
-
-          //          Religion religion = new Religion();
-          //          religion.setSystemId((short)0);
-          //          c.setReligion(religion);
-          c.setReligion(null);//RLGN_TPC
-
           c.setMilitaryStatus(MilitaryStatus.NO_INFORMATION_AVAILABLE); // MILT_STACD
           c.setNamePrefixDescription("prefix"); // NMPRFX_DSC
           c.setNameType(nameType); // NAME_TPC
@@ -181,6 +127,17 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
           c.setSoc158placementsStatus(Soc158placementsStatus.NO_SOC_158_PLACEMENTS); // SOCPLC_CD
           c.setLastUpdateId("0Rt"); // LST_UPD_ID
           c.setLastUpdateTime(LocalDateTime.now()); // LST_UPD_TS
+
+          c.setBirthStateCode((short)0);//B_STATE_C
+          c.setBirthCountryCode((short)0); // B_CNTRY_C
+          c.setImmigrationCountryCode((short)0); // I_CNTRY_C
+          c.setDriverLicenseStateCode((short)0); // D_STATE_C
+          c.setImmigrationStatusCode((short)0); // IMGT_STC
+          c.setMaritalStatusCode((short)0); // MRTL_STC
+          c.setPrimaryEthnicityCode((short)0);//P_ETHNCTYC
+          c.setSecondaryLanguageCode((short)0);//S_LANG_TC
+          c.setPrimaryLanguageCode((short)0);//P_LANG_TPC
+          c.setReligionCode((short)0);//RLGN_TPC
 
           dao.create(c);
         });
@@ -202,13 +159,13 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
     executeInTransaction(
         sessionFactory,
         (sessionFactory) -> {
-          NameType nameType = nameTypeDao.find(new Short((short) 1314));
+          NameType nameType = nameTypeDao.find((short) 1314);
           assertNotNull(nameType);
           assertEquals("Maiden", nameType.getShortDescription().trim());
-          assertEquals((short) 1314, nameType.getSystemId().shortValue());
+          assertTrue(nameType.getSystemId().equals((short)1314));
 
           Client c = dao.find("AaiU7IW0Rt");
-          assertNull(c.getBirthState());
+          assertEquals(0, c.getBirthStateCode());
 
           c.setNameType(nameType); // NAME_TPC
           dao.update(c);
