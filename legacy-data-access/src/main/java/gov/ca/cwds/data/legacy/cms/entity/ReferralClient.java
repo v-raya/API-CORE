@@ -1,15 +1,18 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.legacy.cms.entity.converter.NullableBooleanConverter;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ApprovalStatusType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.County;
 import gov.ca.cwds.data.persistence.CompositeKey;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -19,20 +22,30 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
 
-/**
- * @author CWDS TPT-3 Team
- */
+/** @author CWDS TPT-3 Team */
 @Entity
 @Table(name = "REFR_CLT")
 public class ReferralClient extends CmsPersistentObject {
 
-  @Id
-  @Column(name = "FKREFERL_T", length = CMS_ID_LEN)
-  private String referral;
+  @EmbeddedId private ReferralId embeded = new ReferralId();
 
-  @Id
-  @Column(name = "FKCLIENT_T", length = CMS_ID_LEN)
-  private String client;
+  @JoinColumn(
+    name = "FKREFERL_T",
+    insertable = false,
+    updatable = false,
+    referencedColumnName = "IDENTIFIER"
+  )
+  @ManyToOne
+  private Referral referral;
+
+  @JoinColumn(
+    name = "FKCLIENT_T",
+    insertable = false,
+    updatable = false,
+    referencedColumnName = "IDENTIFIER"
+  )
+  @ManyToOne
+  private Client client;
 
   @Column(name = "APRVL_NO", length = CMS_ID_LEN)
   private String approvalNumber;
@@ -40,12 +53,12 @@ public class ReferralClient extends CmsPersistentObject {
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "APV_STC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(name = "APV_STC", referencedColumnName = "SYS_ID")
   private ApprovalStatusType approvalStatusType;
 
   @Type(type = "short")
   @Column(name = "DSP_RSNC")
-  private Short dispositionClosureReasonType;
+  private short dispositionClosureReasonType;
 
   @Column(name = "DISPSTN_CD")
   private String dispositionCode;
@@ -60,7 +73,7 @@ public class ReferralClient extends CmsPersistentObject {
 
   @Type(type = "yes_no")
   @Column(name = "STFADD_IND")
-  private Boolean staffPersonAddedIndicator;
+  private boolean staffPersonAddedIndicator;
 
   @Column(name = "DSP_CLSDSC")
   private String dispositionClosureDescription;
@@ -75,43 +88,38 @@ public class ReferralClient extends CmsPersistentObject {
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-      name = "CNTY_SPFCD",
-      referencedColumnName = "SYS_ID",
-      insertable = false,
-      updatable = false
-  )
+  @JoinColumn(name = "CNTY_SPFCD", referencedColumnName = "SYS_ID")
   private County countySpecificCode;
 
   @Column(name = "MHLTH_IND")
   private String mentalHealthIssuesIndicator;
 
-  @Type(type = "yes_no")
+  @Convert(converter = NullableBooleanConverter.class)
   @Column(name = "ALCHL_IND")
   private Boolean alcoholIndicator;
 
-  @Type(type = "yes_no")
+  @Convert(converter = NullableBooleanConverter.class)
   @Column(name = "DRUG_IND")
   private Boolean drugIndicator;
 
   @Override
   public Serializable getPrimaryKey() {
-    return new CompositeKey(getReferral(), getClient());
+    return new CompositeKey(getReferral().getId(), getClient().getIdentifier());
   }
 
-  public String getReferral() {
+  public Referral getReferral() {
     return referral;
   }
 
-  public void setReferral(String referral) {
+  public void setReferral(Referral referral) {
     this.referral = referral;
   }
 
-  public String getClient() {
+  public Client getClient() {
     return client;
   }
 
-  public void setClient(String client) {
+  public void setClient(Client client) {
     this.client = client;
   }
 
@@ -127,16 +135,15 @@ public class ReferralClient extends CmsPersistentObject {
     return approvalStatusType;
   }
 
-  public void setApprovalStatusType(
-      ApprovalStatusType approvalStatusType) {
+  public void setApprovalStatusType(ApprovalStatusType approvalStatusType) {
     this.approvalStatusType = approvalStatusType;
   }
 
-  public Short getDispositionClosureReasonType() {
+  public short getDispositionClosureReasonType() {
     return dispositionClosureReasonType;
   }
 
-  public void setDispositionClosureReasonType(Short dispositionClosureReasonType) {
+  public void setDispositionClosureReasonType(short dispositionClosureReasonType) {
     this.dispositionClosureReasonType = dispositionClosureReasonType;
   }
 
@@ -154,6 +161,22 @@ public class ReferralClient extends CmsPersistentObject {
 
   public void setDispositionDate(Date dispositionDate) {
     this.dispositionDate = dispositionDate;
+  }
+
+  public Boolean getSelfReportedIndicator() {
+    return selfReportedIndicator;
+  }
+
+  public void setSelfReportedIndicator(Boolean selfReportedIndicator) {
+    this.selfReportedIndicator = selfReportedIndicator;
+  }
+
+  public boolean isStaffPersonAddedIndicator() {
+    return staffPersonAddedIndicator;
+  }
+
+  public void setStaffPersonAddedIndicator(boolean staffPersonAddedIndicator) {
+    this.staffPersonAddedIndicator = staffPersonAddedIndicator;
   }
 
   public String getDispositionClosureDescription() {
@@ -196,22 +219,6 @@ public class ReferralClient extends CmsPersistentObject {
     this.mentalHealthIssuesIndicator = mentalHealthIssuesIndicator;
   }
 
-  public Boolean getSelfReportedIndicator() {
-    return selfReportedIndicator;
-  }
-
-  public void setSelfReportedIndicator(Boolean selfReportedIndicator) {
-    this.selfReportedIndicator = selfReportedIndicator;
-  }
-
-  public Boolean getStaffPersonAddedIndicator() {
-    return staffPersonAddedIndicator;
-  }
-
-  public void setStaffPersonAddedIndicator(Boolean staffPersonAddedIndicator) {
-    this.staffPersonAddedIndicator = staffPersonAddedIndicator;
-  }
-
   public Boolean getAlcoholIndicator() {
     return alcoholIndicator;
   }
@@ -226,5 +233,42 @@ public class ReferralClient extends CmsPersistentObject {
 
   public void setDrugIndicator(Boolean drugIndicator) {
     this.drugIndicator = drugIndicator;
+  }
+
+  public ReferralId getEmbeded() {
+    return embeded;
+  }
+
+  public void setEmbeded(ReferralId embeded) {
+    this.embeded = embeded;
+  }
+
+  @Embeddable
+  public static class ReferralId implements Serializable {
+    @Column(name = "FKREFERL_T")
+    private String referralId;
+
+    @Column(name = "FKCLIENT_T")
+    private String clientId;
+
+    public ReferralId() {}
+
+    public ReferralId(String referralId, String clientId) {
+      this.referralId = referralId;
+      this.clientId = clientId;
+    }
+
+    public boolean equals(Object o) {
+      if (o != null && o instanceof ReferralId) {
+        ReferralId that = (ReferralId) o;
+        return this.referralId.equals(that.referralId) && this.clientId.equals(that.clientId);
+      } else {
+        return false;
+      }
+    }
+
+    public int hashCode() {
+      return clientId.hashCode() + referralId.hashCode();
+    }
   }
 }

@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Convert;
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -46,30 +47,24 @@ import org.hibernate.annotations.Type;
   @NamedQuery(
     name = Referral.FIND_ACTIVE_BY_CLIENT,
     query =
-        "SELECT DISTINCT referal from Referral as referal"
-            + "  left join ReferralClient as rclient on rclient.referral = referal.id"
-            + "  left join Client as client on client.identifier = rclient.client "
-            + "where rclient.client = :"
+        "SELECT DISTINCT rclient.referral from ReferralClient rclient"
+            + "  left join rclient.referral where rclient.client.identifier = :"
             + Referral.PARAM_CLIENT_ID
-            + " and referal.closureDate is null"
+            + " and rclient.referral.closureDate is null"
   ),
   @NamedQuery(
     name = Referral.FIND_CLOSED_BY_CLIENT,
     query =
-        "SELECT DISTINCT referal from Referral as referal"
-            + "  left join ReferralClient as rclient on rclient.referral = referal.id"
-            + "  left join Client as client on client.identifier = rclient.client "
-            + "where rclient.client = :"
+        "SELECT DISTINCT rclient.referral from ReferralClient rclient"
+            + "  left join Referral referral where rclient.client.identifier = :"
             + Referral.PARAM_CLIENT_ID
-            + " and referal.closureDate is not null"
+            + " and rclient.referral.closureDate is not null"
   ),
   @NamedQuery(
     name = Referral.FIND_BY_CLIENT,
     query =
-        "SELECT DISTINCT referal from Referral as referal"
-            + "  left join ReferralClient as rclient on rclient.referral = referal.id"
-            + "  left join Client as client on client.identifier = rclient.client "
-            + "where rclient.client = :"
+        "SELECT DISTINCT rclient.referral from ReferralClient rclient"
+            + "  left join rclient.referral where rclient.client.identifier = :"
             + Referral.PARAM_CLIENT_ID
   )
 })
