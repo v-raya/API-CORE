@@ -212,23 +212,13 @@ public class Referral extends CmsPersistentObject {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "FKSTFPERST",
-    referencedColumnName = "IDENTIFIER",
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = "FKSTFPERST", referencedColumnName = "IDENTIFIER")
   private StaffPerson primaryContactStaffPerson;
 
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "CNTY_SPFCD",
-    referencedColumnName = "SYS_ID",
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = "CNTY_SPFCD", referencedColumnName = "SYS_ID")
   private County countySpecificCode;
 
   @Column(name = "SPRJRF_IND")
@@ -256,12 +246,7 @@ public class Referral extends CmsPersistentObject {
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "L_GVR_ENTC",
-    referencedColumnName = "SYS_ID",
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = "L_GVR_ENTC", referencedColumnName = "SYS_ID")
   private County limitedAccessCounty;
 
   @Type(type = "date")
