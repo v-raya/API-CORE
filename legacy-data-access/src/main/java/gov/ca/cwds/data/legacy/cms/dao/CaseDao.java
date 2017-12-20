@@ -55,4 +55,22 @@ public class CaseDao extends CrudsDaoImpl<Case> {
     return ImmutableList.<Case>builder().addAll(cases).build();
   }
 
+  public List<Case> findActiveByClient(String clientId) {
+
+    List<Case> cases = currentSession()
+            .createNamedQuery(Case.NQ_FIND_ACTIVE_BY_CLIENT_ID, Case.class)
+            .setParameter(Case.NQ_PARAM_CLIENT_ID, clientId)
+            .list();
+
+    return ImmutableList.<Case>builder().addAll(cases).build();
+  }
+
+  public List<Case> findClosedByClient(String clientId) {
+    List<Case> cases = currentSession()
+            .createNamedQuery(Case.NQ_FIND_CLOSED_BY_CLIENT_ID, Case.class)
+            .setParameter(Case.NQ_PARAM_CLIENT_ID, clientId)
+            .list();
+
+    return ImmutableList.<Case>builder().addAll(cases).build();
+  }
 }
