@@ -21,9 +21,11 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -38,26 +40,55 @@ import org.hibernate.annotations.Type;
  */
 @Entity
 @Table(name = "CASE_T")
-@NamedQuery(
+@NamedQueries({
+  @NamedQuery(
     name = Case.NQ_FIND_ACTIVE_BY_STAFF_ID,
-    query = "select distinct theCase from gov.ca.cwds.data.legacy.cms.entity.CaseLoad cl"
-        + " left join cl.caseAssignments assignment"
-        + " left join assignment.theCase theCase "
-        + " where cl.caseLoadWeighting.fkstfperst = :" + Case.NQ_PARAM_STAFF_ID
-        + " and theCase.endDate is null "
-        + " and assignment.startDate < :" + Case.NQ_PARAM_ACTIVE_DATE
-        + " and (assignment.endDate is null or assignment.endDate > :" + Case.NQ_PARAM_ACTIVE_DATE + ")"
-)
+    query =
+        "select distinct theCase from gov.ca.cwds.data.legacy.cms.entity.CaseLoad cl"
+            + " left join cl.caseAssignments assignment"
+            + " left join assignment.theCase theCase "
+            + " where cl.caseLoadWeighting.fkstfperst = :"
+            + Case.NQ_PARAM_STAFF_ID
+            + " and theCase.endDate is null "
+            + " and assignment.startDate < :"
+            + Case.NQ_PARAM_ACTIVE_DATE
+            + " and (assignment.endDate is null or assignment.endDate > :"
+            + Case.NQ_PARAM_ACTIVE_DATE
+            + ")"
+  ),
+  @NamedQuery(
+    name = Case.NQ_FIND_ACTIVE_BY_CLIENT_ID,
+    query =
+        "select distinct c from Case c"
+            + " left join c.childClient ch"
+            + " where ch.victimClientId = :"
+            + Case.NQ_PARAM_CLIENT_ID
+            + " and c.endDate is null "
+  ),
+  @NamedQuery(
+    name = Case.NQ_FIND_CLOSED_BY_CLIENT_ID,
+    query =
+        "select distinct c from Case c"
+            + " left join c.childClient ch"
+            + " where ch.victimClientId = :"
+            + Case.NQ_PARAM_CLIENT_ID
+            + " and c.endDate is not null "
+  ),
+})
 @SuppressWarnings("squid:S3437")
 public class Case extends CmsPersistentObject {
 
-  public static final String NQ_FIND_ACTIVE_BY_STAFF_ID = "gov.ca.cwds.data.legacy.cms.entity.Case.findByStaffIdAndActiveDate";
+  public static final String NQ_FIND_ACTIVE_BY_STAFF_ID =
+      "gov.ca.cwds.data.legacy.cms.entity.Case.findByStaffIdAndActiveDate";
+  public static final String NQ_FIND_ACTIVE_BY_CLIENT_ID =
+      "gov.ca.cwds.data.legacy.cms.entity.Case.findActiveByClient";
+  public static final String NQ_FIND_CLOSED_BY_CLIENT_ID =
+      "gov.ca.cwds.data.legacy.cms.entity.Case.findClosedByClient";
   public static final String NQ_PARAM_STAFF_ID = "staffId";
   public static final String NQ_PARAM_ACTIVE_DATE = "activeDate";
+  public static final String NQ_PARAM_CLIENT_ID = "clientId";
 
-  /**
-   * Default serialization.
-   */
+  /** Default serialization. */
   private static final long serialVersionUID = 3310114537014283818L;
 
   @Id
@@ -76,13 +107,23 @@ public class Case extends CmsPersistentObject {
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "APV_STC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(
+    name = "APV_STC",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private ApprovalStatusType approvalStatusType;
 
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "CLS_RSNC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(
+    name = "CLS_RSNC",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private CaseClosureReasonType caseClosureReasonType;
 
   @Type(type = "yes_no")
@@ -98,7 +139,12 @@ public class Case extends CmsPersistentObject {
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "CNTRY_C", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(
+    name = "CNTRY_C",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private Country country;
 
   @Column(name = "CNTY_SPFCD")
@@ -131,7 +177,12 @@ public class Case extends CmsPersistentObject {
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "GVR_ENTC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(
+    name = "GVR_ENTC",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private County county;
 
   @Type(type = "yes_no")
@@ -155,7 +206,12 @@ public class Case extends CmsPersistentObject {
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "L_GVR_ENTC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(
+    name = "L_GVR_ENTC",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private County limitedAccessCounty;
 
   @Column(name = "CASE_NM")
@@ -182,13 +238,23 @@ public class Case extends CmsPersistentObject {
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "STATE_C", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(
+    name = "STATE_C",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private State state;
 
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "SRV_CMPC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+  @JoinColumn(
+    name = "SRV_CMPC",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private ActiveServiceComponentType activeServiceComponentType;
 
   @Column(name = "SRV_CMPDT")
@@ -480,9 +546,9 @@ public class Case extends CmsPersistentObject {
       return false;
     }
     Case aCase = (Case) o;
-    return
-        Objects.equals(childClient.getVictimClientId(), aCase.getChildClient().getVictimClientId())
-            && Objects.equals(startDate, aCase.startDate);
+    return Objects.equals(
+            childClient.getVictimClientId(), aCase.getChildClient().getVictimClientId())
+        && Objects.equals(startDate, aCase.startDate);
   }
 
   @Override
