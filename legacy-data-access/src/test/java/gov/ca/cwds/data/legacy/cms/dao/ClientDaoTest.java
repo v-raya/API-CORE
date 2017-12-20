@@ -40,7 +40,7 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
 
   @Test
   public void testFind() throws Exception {
-    cleanAllAndInsert("/dbunit/Clients.xml");
+    cleanAllAndInsert("/dbunit/Client/find/Clients.xml");
 
     executeInTransaction(
         sessionFactory,
@@ -79,14 +79,15 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
   @Test
   public void testCreate() throws Exception {
 
-    final String expectedFilePath = "/dbunit/Client_insert.xml";
+    final String expectedFilePath = "/dbunit/Client/insert/Client_after_insert.xml";
 
     cleanAll(expectedFilePath);
+    cleanAllAndInsert("/dbunit/Client/insert/Client_before_insert.xml");
 
     executeInTransaction(
         sessionFactory,
         (sessionFactory) -> {
-          NameType nameType = nameTypeDao.find((short) 1313);
+          NameType nameType = nameTypeDao.find((short)1313);
           assertNotNull(nameType);
           assertEquals("Legal", nameType.getShortDescription().trim());
           assertTrue(nameType.getSystemId().equals(new Short((short) 1313)));
@@ -154,12 +155,12 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
   @Test
   public void testUpdate() throws Exception {
 
-    cleanAllAndInsert("/dbunit/Client_before_update.xml");
+    cleanAllAndInsert("/dbunit/Client/update/Client_before_update.xml");
 
     executeInTransaction(
         sessionFactory,
         (sessionFactory) -> {
-          NameType nameType = nameTypeDao.find((short) 1314);
+          NameType nameType = nameTypeDao.find((short)1314);
           assertNotNull(nameType);
           assertEquals("Maiden", nameType.getShortDescription().trim());
           assertTrue(nameType.getSystemId().equals((short)1314));
@@ -171,7 +172,7 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
           dao.update(c);
         });
 
-    IDataSet expectedDataSet = readXmlDataSet("/dbunit/Client_after_update.xml");
+    IDataSet expectedDataSet = readXmlDataSet("/dbunit/Client/update/Client_after_update.xml");
     ITable expectedTable = expectedDataSet.getTable("CLIENT_T");
 
     IDataSet actualDataSet = dbUnitConnection.createDataSet(new String[] {"CLIENT_T"});
