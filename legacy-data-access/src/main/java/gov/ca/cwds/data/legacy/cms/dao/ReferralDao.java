@@ -30,4 +30,29 @@ public class ReferralDao extends BaseDaoImpl {
             .list();
     return ImmutableList.<Referral>builder().addAll(referrals).build();
   }
+
+  public List<Referral> getActiveReferralsByClientId(String clientId) {
+    return getReferralsByClientId(clientId, true);
+  }
+
+  public List<Referral> getClosedReferralsByClientId(String clientId) {
+    return getReferralsByClientId(clientId, false);
+  }
+
+  public List<Referral> getReferralsByClientId(String clientId) {
+    return getReferralsByClientId(clientId, null);
+  }
+
+  private List<Referral> getReferralsByClientId(String clientId, Boolean isActive) {
+    String namedQuery =
+        isActive == null
+            ? Referral.FIND_BY_CLIENT
+            : true ? Referral.FIND_ACTIVE_BY_CLIENT : Referral.FIND_CLOSED_BY_CLIENT;
+    List<Referral> referrals =
+        currentSession()
+            .createNamedQuery(namedQuery, Referral.class)
+            .setParameter(Referral.PARAM_CLIENT_ID, clientId)
+            .list();
+    return ImmutableList.<Referral>builder().addAll(referrals).build();
+  }
 }
