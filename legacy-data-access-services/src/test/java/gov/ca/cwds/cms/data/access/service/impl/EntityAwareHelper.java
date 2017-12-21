@@ -24,6 +24,9 @@ public final class EntityAwareHelper {
         perryAccount);
     PlacementHome placementHome = new PlacementHome();
     placementHome.setAgeToNo((short) 23);
+    placementHome.setZipNo("11111");
+    placementHome.setLaPZipno("11111");
+    placementHome.setpZipNo("11111");
     placementHomeEntityAwareDTO.setEntity(placementHome);
     return placementHomeEntityAwareDTO;
   }
