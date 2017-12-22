@@ -5,7 +5,7 @@ import javax.persistence.AttributeConverter;
 /**
  * Created by TPT2 on 12/21/2017.
  */
-public abstract class BaseZipConverter<T extends Number> implements AttributeConverter<String, T> {
+public abstract class BaseZipConverter implements AttributeConverter<String, Integer> {
 
   private final int length;
 
@@ -14,18 +14,16 @@ public abstract class BaseZipConverter<T extends Number> implements AttributeCon
   }
 
   @Override
-  public T convertToDatabaseColumn(String s) {
+  public Integer convertToDatabaseColumn(String s) {
     if (s == null) {
       return null;
     }
-    return valueOf(s);
-
+    return Integer.valueOf(s);
   }
-  abstract T valueOf(String s);
 
   @Override
-  public String convertToEntityAttribute(T integer) {
-    if (integer == null || integer.intValue() == 0) {
+  public String convertToEntityAttribute(Integer integer) {
+    if (integer == null || integer == 0) {
       return null;
     }
     String zip = integer.toString();
