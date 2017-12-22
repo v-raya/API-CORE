@@ -3,7 +3,7 @@ package gov.ca.cwds.cms.data.access.service.impl;
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
-import gov.ca.cwds.cms.data.access.service.ClientServiceCore;
+import gov.ca.cwds.cms.data.access.service.ClientCoreService;
 import gov.ca.cwds.cms.data.access.service.rules.ClientDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
@@ -13,7 +13,7 @@ import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.rest.exception.IssueDetails;
 import java.util.Set;
 
-public class ClientServiceCoreImpl implements ClientServiceCore {
+public class ClientCoreServiceImpl implements ClientCoreService {
 
   @Inject
   private DroolsService droolsService;

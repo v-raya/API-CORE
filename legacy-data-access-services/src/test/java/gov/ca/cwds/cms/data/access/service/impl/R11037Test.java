@@ -17,7 +17,7 @@ public class R11037Test extends BaseDocToolRulesTest {
     try {
       placementHomeEntityAwareDTO.getPerryAccount().getPrivileges().remove(
           USR_PRV_RESOURCE_MGMT_PLACEMENT_FACILITY_MAINT);
-      service.runBusinessValidation(placementHomeEntityAwareDTO);
+      placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO);
       fail();
     } catch (BusinessValidationException e) {
       Assert.assertEquals("R-11037", e.getValidationDetailsList().iterator().next().getCode());

@@ -10,7 +10,7 @@ public class HappyPathTest extends BaseDocToolRulesTest {
 
   @Test
   public void testHappyPath() throws Exception {
-    service.runBusinessValidation(placementHomeEntityAwareDTO);
+    placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO);
   }
 
 }

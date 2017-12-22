@@ -16,7 +16,7 @@ rule "R-00741"
         CLIENT.Primary Language Type <> CLIENT.Secondary Language Type
       */
       $clientAwareDTO: ClientEntityAwareDTO()
-      $client: Client(secondaryLanguageCode > 0, primaryLanguageCode == secondaryLanguageCode ) from $clientAwareDTO.entity
+      $client: Client(secondaryLanguageCode > (short)0, primaryLanguageCode == secondaryLanguageCode ) from $clientAwareDTO.entity
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-00741");

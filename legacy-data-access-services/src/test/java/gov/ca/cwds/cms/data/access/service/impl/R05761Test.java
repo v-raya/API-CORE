@@ -46,7 +46,7 @@ public class R05761Test extends BaseDocToolRulesTest {
       placementHomeEntityAwareDTO.getPerryAccount().getPrivileges().add(
           USR_PRV_SOC158_APPLICATION);
       testCase.run();
-      service.runBusinessValidation(placementHomeEntityAwareDTO);
+      placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO);
       fail();
     } catch (BusinessValidationException e) {
       Assert.assertEquals("R-05761", e.getValidationDetailsList().iterator().next().getCode());

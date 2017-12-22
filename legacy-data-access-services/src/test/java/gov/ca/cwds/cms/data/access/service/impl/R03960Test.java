@@ -21,42 +21,42 @@ public class R03960Test extends BaseDocToolRulesTest {
   @Test(expected = BusinessValidationException.class)
   public void testFosterFamilyHome() throws Exception {
     preparePlacementHome(1416, "CT", null);
-    service.runBusinessValidation(placementHomeEntityAwareDTO);
+    placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO);
   }
 
   @Test
   public void testFosterFamilyHomeWithName() throws Exception {
     preparePlacementHome(1416, "CT", "name");
-    service.runBusinessValidation(placementHomeEntityAwareDTO);
+    placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO);
   }
 
   @Test
   public void testFosterFamilyHomeOtherLicenceCode() throws Exception {
     preparePlacementHome(1416, "AA", null);
-    service.runBusinessValidation(placementHomeEntityAwareDTO);
+    placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO);
   }
 
   @Test(expected = BusinessValidationException.class)
   public void testResourceFamilyHome() throws Exception {
     preparePlacementHome(6914, "CT", null);
-    service.runBusinessValidation(placementHomeEntityAwareDTO);
+    placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO);
   }
 
   @Test
   public void testResourceFamilyHomeWithName() throws Exception {
     preparePlacementHome(6914, "CT", "name");
-    service.runBusinessValidation(placementHomeEntityAwareDTO);
+    placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO);
   }
 
   @Test
   public void testResourceFamilyHomeOtherLicenceCode() throws Exception {
     preparePlacementHome(6914, "BB", null);
-    service.runBusinessValidation(placementHomeEntityAwareDTO);
+    placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO);
   }
 
   @Test
   public void testOtherFamilyHome() throws Exception {
     preparePlacementHome(-1, "CT", null);
-    service.runBusinessValidation(placementHomeEntityAwareDTO);
+    placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO);
   }
 }
