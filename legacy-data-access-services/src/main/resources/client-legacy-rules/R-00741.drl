@@ -1,0 +1,26 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
+import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
+
+global java.util.Set validationDetailsList
+
+rule "R-00741"
+  dialect "mvel"
+  agenda-group "client-agenda"
+  when
+      /*
+        Code: R - 00741
+        Rule Txt
+        The primary and secondary languages of a client may not be the same.
+        Logic
+        CLIENT.Primary Language Type <> CLIENT.Secondary Language Type
+      */
+      $clientAwareDTO: ClientEntityAwareDTO()
+//      $client: PlacementHome(ageToNo > 25, primaryLanguageCode secondaryLanguage) from $clientAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-00741");
+      details.setUserMessage("The primary and secondary languages of a client may not be the same.");
+      details.setTechnicalMessage("The primary and secondary languages of a client may not be the same");
+      validationDetailsList.add(details);
+end
