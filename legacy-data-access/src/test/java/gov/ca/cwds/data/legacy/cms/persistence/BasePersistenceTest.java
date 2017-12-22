@@ -14,10 +14,13 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.DatabaseException;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
+import org.dbunit.Assertion;
 import org.dbunit.JdbcDatabaseTester;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.ReplacementDataSet;
+import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.dbunit.operation.DatabaseOperation;
 import org.dbunit.util.fileloader.DataFileLoader;
 import org.dbunit.util.fileloader.FlatXmlDataFileLoader;
@@ -33,11 +36,14 @@ public abstract class BasePersistenceTest {
   protected SessionFactory sessionFactory = null;
   protected IDatabaseConnection dbUnitConnection = null;
 
-  private final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
-  private final DateTimeFormatter DATE_TIME_FORMATTER =
+  private final static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
+  private final static DateTimeFormatter DATE_TIME_FORMATTER =
       DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
   private JdbcDatabaseTester dbUnitTester = null;
+
+  private DefaultColumnFilter columnFilter;
+
 
   @Before
   public void superBefore() throws Exception {
@@ -46,6 +52,8 @@ public abstract class BasePersistenceTest {
     dbUnitTester = new JdbcDatabaseTester(getDriverClassName(), getUrl(), getUser(), getPassword(),
         getSchema());
     dbUnitConnection = dbUnitTester.getConnection();
+    columnFilter = new DefaultColumnFilter();
+    columnFilter.excludeColumn("LST_UPD_TS");
   }
 
   @After
@@ -141,6 +149,16 @@ public abstract class BasePersistenceTest {
 
   protected LocalDateTime toDateTime(String dateStr) {
     return LocalDateTime.parse(dateStr, getDateTimeFormatter());
+  }
+
+  protected DefaultColumnFilter getColumnFilter() {
+    return columnFilter;
+  }
+
+  protected void assertTableEquals(ITable expectedTable, ITable actualTable) throws Exception {
+    ITable filteredTable = columnFilter.includedColumnsTable(actualTable,
+        expectedTable.getTableMetaData().getColumns());
+    Assertion.assertEquals(expectedTable, filteredTable);
   }
 
   private void runLiquibaseScript(String script) throws LiquibaseException {
