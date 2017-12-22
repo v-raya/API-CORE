@@ -16,7 +16,7 @@ public abstract class BaseZipConverter implements AttributeConverter<String, Int
   @Override
   public Integer convertToDatabaseColumn(String s) {
     if (s == null) {
-      return null;
+      return 0;
     }
     return Integer.valueOf(s);
   }
