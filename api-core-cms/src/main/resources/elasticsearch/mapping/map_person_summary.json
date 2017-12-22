@@ -152,6 +152,18 @@
           "type": "text",
           "store": true
         },
+        "county": {
+          "properties": {
+            "id": {
+              "type": "text",
+              "store": true
+            },
+            "description": {
+              "type": "text",
+              "store": true
+            }
+          }
+        },
         "state": {
           "properties": {
             "id": {
@@ -173,6 +185,18 @@
           "store": true
         },
         "type": {
+          "properties": {
+            "id": {
+              "type": "text",
+              "store": true
+            },
+            "description": {
+              "type": "text",
+              "store": true
+            }
+          }
+        },
+        "active": {
           "type": "text",
           "store": true
         },

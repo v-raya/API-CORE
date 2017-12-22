@@ -7,6 +7,11 @@
       "type": "text",
       "store": true
     },    
+    "index_update_time": {
+      "format": "strict_date_time",
+      "type": "date",
+      "store": true
+    },
     "client_county": {
       "properties": {
         "id": {
@@ -122,6 +127,16 @@
           "type": "text",
           "store": true
         },
+        "effective_start_date": {
+          "format": "strict_date_optional_time||epoch_millis",
+          "type": "date",
+          "store": true
+        },
+        "effective_end_date": {
+          "format": "strict_date_optional_time||epoch_millis",
+          "type": "date",
+          "store": true
+        },
         "legacy_address_id": {
           "type": "text",
           "store": true
@@ -151,6 +166,30 @@
           "type": "text",
           "store": true
         },
+        "county": {
+          "properties": {
+            "id": {
+              "type": "text",
+              "store": true
+            },
+            "description": {
+              "type": "text",
+              "store": true
+            }
+          }
+        },
+        "state": {
+          "properties": {
+            "id": {
+              "type": "text",
+              "store": true
+            },
+            "description": {
+              "type": "text",
+              "store": true
+            }
+          }
+        },
         "state_code": {
           "type": "text",
           "store": true
@@ -168,6 +207,18 @@
           "store": true
         },
         "type": {
+          "properties": {
+            "id": {
+              "type": "text",
+              "store": true
+            },
+            "description": {
+              "type": "text",
+              "store": true
+            }
+          }
+        },
+        "active": {
           "type": "text",
           "store": true
         },
