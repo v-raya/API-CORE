@@ -15,7 +15,7 @@ rule "R-03232-zipNo"
        All zip codes entered must be 5 digits.
       */
       $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
-      $placementHome: PlacementHome(zipNo not matches "\\d{5}") from $placementHomeAwareDTO.entity
+      $placementHome: PlacementHome(zipNo != null && zipNo not matches "\\d{5}") from $placementHomeAwareDTO.entity
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-03232");
@@ -35,7 +35,7 @@ rule "R-03232-pZipNo"
           All zip codes entered must be 5 digits.
        */
       $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
-      $placementHome: PlacementHome(pZipNo not matches "\\d{5}") from $placementHomeAwareDTO.entity
+      $placementHome: PlacementHome(pZipNo != null && pZipNo not matches "\\d{5}") from $placementHomeAwareDTO.entity
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-03232");
@@ -55,7 +55,7 @@ rule "R-03232-laPZipno"
           All zip codes entered must be 5 digits.
        */
       $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
-      $placementHome: PlacementHome(laPZipno not matches "\\d{5}") from $placementHomeAwareDTO.entity
+      $placementHome: PlacementHome(laPZipno != null && laPZipno not matches "\\d{5}") from $placementHomeAwareDTO.entity
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-03232");
@@ -76,7 +76,7 @@ rule "R-03232-primarySubstituteCareProvider.zipNo"
        */
       $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
       $placementHome: PlacementHome() from $placementHomeAwareDTO.entity
-      $primarySubstituteCareProvider : SubstituteCareProvider(zipNo not matches "\\d{5}") from $placementHome.primarySubstituteCareProvider
+      $primarySubstituteCareProvider : SubstituteCareProvider(zipNo != null && zipNo not matches "\\d{5}") from $placementHome.primarySubstituteCareProvider
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-03232");

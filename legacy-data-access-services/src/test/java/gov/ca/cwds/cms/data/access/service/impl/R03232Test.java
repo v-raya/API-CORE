@@ -26,12 +26,7 @@ public class R03232Test extends BaseDocToolRulesTest {
     check("R-03232");
   }
 
-  @Test
-  public void testZipNoEmpty() {
-    placementHomeEntityAwareDTO.getEntity().setZipNo(null);
-    check("R-03232");
-  }
-  
+
   //P zip
 
   @Test
@@ -52,13 +47,6 @@ public class R03232Test extends BaseDocToolRulesTest {
     check("R-03232");
   }
 
-  @Test
-  public void testpZipNoEmpty() {
-    placementHomeEntityAwareDTO.getEntity().setpZipNo(null);
-    check("R-03232");
-  }
-
-
   //La P zip
 
   @Test
@@ -76,12 +64,6 @@ public class R03232Test extends BaseDocToolRulesTest {
   @Test
   public void testLaPZipNoFormat() {
     placementHomeEntityAwareDTO.getEntity().setLaPZipno("aa");
-    check("R-03232");
-  }
-
-  @Test
-  public void testLaPZipNoEmpty() {
-    placementHomeEntityAwareDTO.getEntity().setLaPZipno(null);
     check("R-03232");
   }
 
@@ -105,9 +87,4 @@ public class R03232Test extends BaseDocToolRulesTest {
     check("R-03232");
   }
 
-  @Test
-  public void testSCPZipNoEmpty() {
-    placementHomeEntityAwareDTO.getEntity().getPrimarySubstituteCareProvider().setZipNo(null);
-    check("R-03232");
-  }
 }
