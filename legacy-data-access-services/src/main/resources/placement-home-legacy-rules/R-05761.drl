@@ -16,8 +16,8 @@ rule "R-05761"
             If logged onSTAFF_PERSON>STAFF_PERSON_PRIVILEGE.LEVEL_OF_AUTH_PRIVILEGE_TYPE = 'SOC158', PLACEMENT_HOME.NAME and PLACEMENT_HOME>ADDRESS.STATE_CODE_TYPE are mandatory.
       */
       $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
-      PerryAccount(privileges contains "SOC158 Application") from $placementHomeAwareDTO.perryAccount
       $placementHome: PlacementHome(facltyNm == '' || facltyNm == null || stateCode == 0 || stateCode == null  ) from $placementHomeAwareDTO.entity
+      PerryAccount(privileges contains "SOC158 Application")
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-05761");

@@ -3,7 +3,7 @@ package gov.ca.cwds.cms.data.access.dto;
 import gov.ca.cwds.data.legacy.cms.entity.OtherAdultsInPlacementHome;
 import gov.ca.cwds.data.legacy.cms.entity.OtherPeopleScpRelationship;
 import gov.ca.cwds.data.legacy.cms.entity.OutOfStateCheck;
-import gov.ca.cwds.security.realm.PerryAccount;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,10 +16,6 @@ public class OtherAdultInHomeEntityAwareDTO extends
 
   private List<OtherPeopleScpRelationship> relationships = new ArrayList<>();
   private List<OutOfStateCheck> outOfStateChecks = new ArrayList<>();
-
-  public OtherAdultInHomeEntityAwareDTO(PerryAccount perryAccount) {
-    super(perryAccount);
-  }
 
   public List<OtherPeopleScpRelationship> getRelationships() {
     return relationships;
