@@ -141,6 +141,12 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
     }
   }
 
+  @Override
+  public PlacementHome update(PlacementHomeEntityAwareDTO entityAwareDTO)
+      throws DataAccessServicesException {
+    throw new UnsupportedOperationException();
+  }
+
   private void createPlacementHome(PlacementHomeEntityAwareDTO parameterObject) {
     final PlacementHome placementHome = parameterObject.getEntity() ;
     placementHome.setIdentifier(generateId(parameterObject.getStaffPersonId()));
