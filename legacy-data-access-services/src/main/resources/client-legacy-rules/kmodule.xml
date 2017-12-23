@@ -1,5 +1,5 @@
 <kmodule xmlns="http://www.drools.org/xsd/kmodule">
-    <kbase name="placementHome">
+    <kbase name="client">
         <ksession name="client-session"/>
     </kbase>
 </kmodule>
