@@ -44,7 +44,7 @@ public class NotEqualValidator
       context.disableDefaultConstraintViolation();
       context
           .buildConstraintViolationWithTemplate(
-              MessageFormat.format("cant be same as {0}", ifProperty))
+              MessageFormat.format("can not be same as {0}", ifProperty))
           .addPropertyNode(thenProperty).addConstraintViolation();
       valid = false;
     }

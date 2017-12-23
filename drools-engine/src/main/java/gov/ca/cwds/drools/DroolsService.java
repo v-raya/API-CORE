@@ -12,14 +12,15 @@ import org.kie.api.runtime.KieSession;
 
 public class DroolsService {
 
-  public Set<IssueDetails> performBusinessRules(Object obj,
-      DroolsConfiguration droolsConfiguration) throws DroolsException {
+  public Set<IssueDetails> performBusinessRules(DroolsConfiguration droolsConfiguration, Object ... facts) throws DroolsException {
 
     KieSession kSession = null;
     try {
       KieContainer kieContainer = droolsConfiguration.getKieContainer();
       kSession = kieContainer.newKieSession(droolsConfiguration.getSessionName());
-      kSession.insert(obj);
+      for (Object fact: facts) {
+        kSession.insert(fact);
+      }
       Set<IssueDetails> validationDetailsList = new HashSet<>();
       kSession.setGlobal("validationDetailsList", validationDetailsList);
       kSession.getAgenda().getAgendaGroup(droolsConfiguration.getAgendaGroup()).setFocus();

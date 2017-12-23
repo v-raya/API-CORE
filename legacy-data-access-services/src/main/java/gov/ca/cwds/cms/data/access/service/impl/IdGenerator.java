@@ -1,6 +1,7 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
+import gov.ca.cwds.security.utils.PrincipalUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,11 +18,11 @@ class IdGenerator {
   private IdGenerator() {
   }
 
-  public static String generateId(String staffPersonId) {
+  public static String generateId() {
     synchronized (monitor) {
       String generated = null;
       do {
-        generated = CmsKeyIdGenerator.generate(staffPersonId);
+        generated = CmsKeyIdGenerator.generate(PrincipalUtils.getStaffPersonId());
         try {
           monitor.wait(10L);
         } catch (InterruptedException e) {

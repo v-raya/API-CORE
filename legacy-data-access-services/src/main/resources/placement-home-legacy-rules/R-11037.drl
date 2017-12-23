@@ -21,7 +21,7 @@ rule "R-11037"
       Allow Resource Family Home add if (STAFF_PERSON (logged on user) > USER_ID > STAFF_PERSON_PRIVILEGE.Level_Of_Auth_Privilege_Code = 'P' and STAFF_PERSON_PRIVILEGE.Level_Of_Auth_Privilege_Type = 'Resource Mgmt Placement Facility Maint')
       */
       $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
-      PerryAccount(privileges not contains "Resource Mgmt Placement Facility Maint") from $placementHomeAwareDTO.perryAccount
+      PerryAccount(privileges not contains "Resource Mgmt Placement Facility Maint")
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-11037");

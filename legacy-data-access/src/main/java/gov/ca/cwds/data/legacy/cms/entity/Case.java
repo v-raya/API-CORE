@@ -107,24 +107,11 @@ public class Case extends CmsPersistentObject {
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "APV_STC",
-    referencedColumnName = "SYS_ID",
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = "APV_STC", referencedColumnName = "SYS_ID")
   private ApprovalStatusType approvalStatusType;
 
-  @NotFound(action = NotFoundAction.IGNORE)
-  @ManyToOne(fetch = FetchType.LAZY)
-  @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "CLS_RSNC",
-    referencedColumnName = "SYS_ID",
-    insertable = false,
-    updatable = false
-  )
-  private CaseClosureReasonType caseClosureReasonType;
+  @Column(name = "CLS_RSNC", nullable = false)
+  private short caseClosureReasonTypeCode;
 
   @Type(type = "yes_no")
   @Column(name = "CSPL_DET_B")
@@ -139,12 +126,7 @@ public class Case extends CmsPersistentObject {
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "CNTRY_C",
-    referencedColumnName = "SYS_ID",
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = "CNTRY_C", referencedColumnName = "SYS_ID")
   private Country country;
 
   @Column(name = "CNTY_SPFCD")
@@ -177,12 +159,7 @@ public class Case extends CmsPersistentObject {
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "GVR_ENTC",
-    referencedColumnName = "SYS_ID",
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = "GVR_ENTC", referencedColumnName = "SYS_ID")
   private County county;
 
   @Type(type = "yes_no")
@@ -206,12 +183,7 @@ public class Case extends CmsPersistentObject {
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "L_GVR_ENTC",
-    referencedColumnName = "SYS_ID",
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = "L_GVR_ENTC", referencedColumnName = "SYS_ID")
   private County limitedAccessCounty;
 
   @Column(name = "CASE_NM")
@@ -235,26 +207,13 @@ public class Case extends CmsPersistentObject {
   @Column(name = "START_DT")
   private LocalDate startDate;
 
-  @NotFound(action = NotFoundAction.IGNORE)
-  @ManyToOne(fetch = FetchType.LAZY)
-  @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "STATE_C",
-    referencedColumnName = "SYS_ID",
-    insertable = false,
-    updatable = false
-  )
-  private State state;
+  @Column(name = "STATE_C", nullable = false)
+  private short stateCode;
 
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "SRV_CMPC",
-    referencedColumnName = "SYS_ID",
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = "SRV_CMPC", referencedColumnName = "SYS_ID")
   private ActiveServiceComponentType activeServiceComponentType;
 
   @Column(name = "SRV_CMPDT")
@@ -305,12 +264,12 @@ public class Case extends CmsPersistentObject {
     this.approvalStatusType = approvalStatusType;
   }
 
-  public CaseClosureReasonType getCaseClosureReasonType() {
-    return caseClosureReasonType;
+  public short getCaseClosureReasonTypeCode() {
+    return caseClosureReasonTypeCode;
   }
 
-  public void setCaseClosureReasonType(CaseClosureReasonType caseClosureReasonType) {
-    this.caseClosureReasonType = caseClosureReasonType;
+  public void setCaseClosureReasonTypeCode(short caseClosureReasonTypeCode) {
+    this.caseClosureReasonTypeCode = caseClosureReasonTypeCode;
   }
 
   public boolean getCaseplanChildrenDetailIndVar() {
@@ -493,12 +452,12 @@ public class Case extends CmsPersistentObject {
     this.startDate = startDate;
   }
 
-  public State getState() {
-    return state;
+  public short getStateCode() {
+    return stateCode;
   }
 
-  public void setState(State state) {
-    this.state = state;
+  public void setStateCode(short stateCode) {
+    this.stateCode = stateCode;
   }
 
   public ActiveServiceComponentType getActiveServiceComponentType() {

@@ -8,10 +8,11 @@ import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.inject.InjectorHolder;
 import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.utils.JsonUtils;
-import java.lang.annotation.Annotation;
-import java.util.Set;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.lang.annotation.Annotation;
+import java.util.Set;
 
 /**
  * @author CWDS CALS API Team
@@ -31,7 +32,7 @@ public abstract class DroolsValidator<A extends Annotation, T> implements
     DroolsService droolsService = InjectorHolder.INSTANCE.getInstance(DroolsService.class);
     Set<IssueDetails> detailsList = null;
     try {
-      detailsList = droolsService.performBusinessRules(validatedFact, configuration);
+      detailsList = droolsService.performBusinessRules(configuration, validatedFact);
     } catch (DroolsException e) {
       throw new RuntimeException(
           String.format(DroolsErrorMessages.CANT_PERFORM_BUSINESS_VALIDATION,

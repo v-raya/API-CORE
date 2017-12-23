@@ -114,7 +114,7 @@ public class ElasticSearchPersonAddressTest {
   @Test
   public void getType_Args__() throws Exception {
     ElasticSearchPersonAddress target = new ElasticSearchPersonAddress();
-    String actual = target.getType();
+    ElasticSearchSystemCode actual = target.getType();
     String expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
@@ -122,7 +122,7 @@ public class ElasticSearchPersonAddressTest {
   @Test
   public void setType_Args__String() throws Exception {
     ElasticSearchPersonAddress target = new ElasticSearchPersonAddress();
-    String type = null;
+    ElasticSearchSystemCode type = null;
     target.setType(type);
   }
 

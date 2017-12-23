@@ -12,17 +12,12 @@ import java.util.Set;
  * @author CWDS CALS API Team
  */
 
-public final class EntityAwareHelper {
+public final class HappyPathHelper {
 
-  private EntityAwareHelper() {}
+  private HappyPathHelper() {}
 
   public static PlacementHomeEntityAwareDTO prepareSuccessfulPlacementHomeEntityAwareDTO() {
-    PerryAccount perryAccount = new PerryAccount();
-    Set<String> privileges = new HashSet<>();
-    privileges.add(StaffPersonPrivileges.USR_PRV_RESOURCE_MGMT_PLACEMENT_FACILITY_MAINT);
-    perryAccount.setPrivileges(privileges);
-    PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO = new PlacementHomeEntityAwareDTO(
-        perryAccount);
+    PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO = new PlacementHomeEntityAwareDTO();
     PlacementHome placementHome = new PlacementHome();
     placementHome.setAgeToNo((short) 23);
     placementHome.setZipNo("11111");
@@ -33,6 +28,14 @@ public final class EntityAwareHelper {
     placementHome.setPrimarySubstituteCareProvider(substituteCareProvider);
     placementHomeEntityAwareDTO.setEntity(placementHome);
     return placementHomeEntityAwareDTO;
+  }
+
+  public static PerryAccount getHappyPathPrincipal() {
+    PerryAccount perryAccount = new PerryAccount();
+    Set<String> privileges = new HashSet<>();
+    privileges.add(StaffPersonPrivileges.USR_PRV_RESOURCE_MGMT_PLACEMENT_FACILITY_MAINT);
+    perryAccount.setPrivileges(privileges);
+    return perryAccount;
   }
 
 }
