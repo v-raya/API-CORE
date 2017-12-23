@@ -25,21 +25,20 @@ public final class HappyPathHelper {
     return placementHomeEntityAwareDTO;
   }
 
-  public static PerryAccount getHappyPathPrincipal() {
+  public static PerryAccount getPrincipal(String privilege) {
     PerryAccount perryAccount = new PerryAccount();
     Set<String> privileges = new HashSet<>();
-    privileges.add(StaffPersonPrivileges.USR_PRV_RESOURCE_MGMT_PLACEMENT_FACILITY_MAINT);
+    privileges.add(privilege);
     perryAccount.setPrivileges(privileges);
     return perryAccount;
   }
 
-  public static ClientEntityAwareDTO clientEntityAwareDTO(Client client) {
-    PerryAccount perryAccount = new PerryAccount();
-    Set<String> privileges = new HashSet<>();
-    privileges.add("");
-    perryAccount.setPrivileges(privileges);
+  public static PerryAccount getPlacementFacilityHappyPathPrincipal() {
+    return getPrincipal(StaffPersonPrivileges.USR_PRV_RESOURCE_MGMT_PLACEMENT_FACILITY_MAINT);
+  }
 
-    ClientEntityAwareDTO clientEntityAwareDTO = new ClientEntityAwareDTO(perryAccount);
+  public static ClientEntityAwareDTO clientEntityAwareDTO(Client client) {
+    ClientEntityAwareDTO clientEntityAwareDTO = new ClientEntityAwareDTO();
     clientEntityAwareDTO.setEntity(client);
     return clientEntityAwareDTO;
   }

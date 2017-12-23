@@ -11,15 +11,15 @@ import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.rest.exception.IssueDetails;
+import gov.ca.cwds.security.realm.PerryAccount;
+import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.util.Set;
 
 public class ClientCoreServiceImpl implements ClientCoreService {
 
-  @Inject
-  private DroolsService droolsService;
+  @Inject private DroolsService droolsService;
 
-  @Inject
-  private ClientDao clientDao;
+  @Inject private ClientDao clientDao;
 
   @Override
   public Client create(ClientEntityAwareDTO entityAwareDTO) throws DataAccessServicesException {
@@ -30,7 +30,7 @@ public class ClientCoreServiceImpl implements ClientCoreService {
   public Client update(ClientEntityAwareDTO clientEntityAwareDTO)
       throws DataAccessServicesException {
     try {
-      runBusinessValidation(clientEntityAwareDTO);
+      runBusinessValidation(clientEntityAwareDTO, PrincipalUtils.getPrincipal());
       updateClient(clientEntityAwareDTO);
       return clientEntityAwareDTO.getEntity();
     } catch (DroolsException e) {
@@ -39,11 +39,11 @@ public class ClientCoreServiceImpl implements ClientCoreService {
   }
 
   @Override
-  public void runBusinessValidation(ClientEntityAwareDTO clientEntityAwareDTO)
+  public void runBusinessValidation(ClientEntityAwareDTO clientEntityAwareDTO, PerryAccount principal)
       throws DroolsException {
     Set<IssueDetails> detailsList =
         droolsService.performBusinessRules(
-            clientEntityAwareDTO, ClientDroolsConfiguration.INSTANCE);
+            ClientDroolsConfiguration.INSTANCE, clientEntityAwareDTO, principal);
     if (!detailsList.isEmpty()) {
       throw new BusinessValidationException("Can't create Client", detailsList);
     }
