@@ -13,7 +13,7 @@ import javax.validation.Payload;
 @Retention(RUNTIME)
 @Constraint(validatedBy = NotEqualValidator.class)
 public @interface NotEqual {
-  String message() default "{thenProperty} cant be same as {ifProperty}";
+  String message() default "{thenProperty} can not be same as {ifProperty}";
 
   Class<?>[] groups() default {};
 

@@ -1,38 +1,29 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
-import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
-import static org.apache.commons.lang3.StringUtils.upperCase;
-
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.cms.data.access.Constants;
 import gov.ca.cwds.cms.data.access.Constants.PhoneticSearchTables;
-import gov.ca.cwds.cms.data.access.dao.ClientScpEthnicityDao;
-import gov.ca.cwds.cms.data.access.dao.CountyOwnershipDao;
-import gov.ca.cwds.cms.data.access.dao.OutOfStateCheckDao;
-import gov.ca.cwds.cms.data.access.dao.PhoneContactDetailDao;
-import gov.ca.cwds.cms.data.access.dao.PlacementHomeInformationDao;
-import gov.ca.cwds.cms.data.access.dao.SsaName3Dao;
-import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderDao;
-import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderUcDao;
-import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
+import gov.ca.cwds.cms.data.access.dao.*;
 import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
+import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
-import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
-import gov.ca.cwds.data.legacy.cms.entity.CountyOwnership;
-import gov.ca.cwds.data.legacy.cms.entity.OutOfStateCheck;
-import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeInformation;
-import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
-import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProviderUc;
+import gov.ca.cwds.data.legacy.cms.entity.*;
 import gov.ca.cwds.drools.DroolsException;
+import gov.ca.cwds.security.utils.PrincipalUtils;
+import org.apache.commons.collections4.CollectionUtils;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
-import org.apache.commons.collections4.CollectionUtils;
+
+import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
+import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
+import static org.apache.commons.lang3.StringUtils.upperCase;
 
 /**
  * @author CWDS CALS API Team
@@ -74,8 +65,8 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
       final SubstituteCareProvider substituteCareProvider = scpEntityAwareDTO.getEntity();
       validateParameters(scpEntityAwareDTO);
       substituteCareProvider
-          .setIdentifier(IdGenerator.generateId(scpEntityAwareDTO.getStaffPersonId()));
-        runBusinessValidation(scpEntityAwareDTO);
+          .setIdentifier(IdGenerator.generateId());
+      runBusinessValidation(scpEntityAwareDTO, PrincipalUtils.getPrincipal());
       SubstituteCareProvider storedSubstituteCareProvider = substituteCareProviderDao
           .create(substituteCareProvider);
       storeSubstituteCareProviderUc(substituteCareProvider, scpEntityAwareDTO);
@@ -110,8 +101,8 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
         outOfStateCheck.setStateC((short)(stateId.getCwsId()));
         outOfStateCheck.setRcpntId(storedSubstituteCareProvider.getIdentifier());
         outOfStateCheck.setRcpntCd("S");
-        outOfStateCheck.setIdentifier(IdGenerator.generateId(parameterObject.getStaffPersonId()));
-        outOfStateCheck.setLstUpdId(parameterObject.getStaffPersonId());
+        outOfStateCheck.setIdentifier(IdGenerator.generateId());
+        outOfStateCheck.setLstUpdId(getStaffPersonId());
         outOfStateCheck.setLstUpdTs(LocalDateTime.now());
         outOfStateCheckDao.create(outOfStateCheck);
       }
@@ -124,8 +115,8 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
     clientScpEthnicity.setEthnctyc((short)parameterObject.getEthnicity().getCwsId());
     clientScpEthnicity.setEstblshId(storedSubstituteCareProvider.getIdentifier());
     clientScpEthnicity.setEstblshCd("S");
-    clientScpEthnicity.setIdentifier(IdGenerator.generateId(parameterObject.getStaffPersonId()));
-    clientScpEthnicity.setLstUpdId(parameterObject.getStaffPersonId());
+    clientScpEthnicity.setIdentifier(IdGenerator.generateId());
+    clientScpEthnicity.setLstUpdId(getStaffPersonId());
     clientScpEthnicity.setLstUpdTs(LocalDateTime.now());
     clientScpEthnicityDao.create(clientScpEthnicity);
   }
@@ -153,7 +144,7 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
       parameterObject.getPhoneNumbers()
           .forEach(phoneNumber -> {
             phoneNumber.setEstblshId(substituteCareProvider.getIdentifier());
-            phoneNumber.setThirdId(IdGenerator.generateId(parameterObject.getStaffPersonId()));
+            phoneNumber.setThirdId(IdGenerator.generateId());
             phoneContactDetailDao.create(phoneNumber);
           });
     }
@@ -162,11 +153,11 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   private void storePlacementHomeInformation(SubstituteCareProvider substituteCareProvider,
       SCPEntityAwareDTO parameterObject) {
     PlacementHomeInformation placementHomeInformation = new PlacementHomeInformation();
-    placementHomeInformation.setThirdId(IdGenerator.generateId(parameterObject.getStaffPersonId()));
+    placementHomeInformation.setThirdId(IdGenerator.generateId());
     placementHomeInformation.setStartDt(LocalDate.now());
     placementHomeInformation.setLicnseeCd("U");
     placementHomeInformation.setCrprvdrCd("Y");
-    placementHomeInformation.setLstUpdId(parameterObject.getStaffPersonId());
+    placementHomeInformation.setLstUpdId(getStaffPersonId());
     placementHomeInformation.setLstUpdTs(LocalDateTime.now());
     placementHomeInformation.setFksbPvdrt(substituteCareProvider.getIdentifier());
     placementHomeInformation.setFkplcHmT(parameterObject.getPlacementHomeId());
@@ -192,7 +183,7 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
     substituteCareProviderUc.setCaDlicNo(upperCase(substituteCareProvider.getCaDlicNo()));
     substituteCareProviderUc.setFirstNm(upperCase(substituteCareProvider.getFirstNm()));
     substituteCareProviderUc.setLastNm(upperCase(substituteCareProvider.getLastNm()));
-    substituteCareProviderUc.setLstUpdId(parameterObject.getStaffPersonId());
+    substituteCareProviderUc.setLstUpdId(getStaffPersonId());
     substituteCareProviderUc.setLstUpdTs(LocalDateTime.now());
     substituteCareProviderUcDao.create(substituteCareProviderUc);
   }

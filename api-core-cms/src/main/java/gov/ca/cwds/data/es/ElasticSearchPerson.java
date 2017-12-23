@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -944,7 +945,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   public String[] getSearchableDateOfBirth() {
     String[] searchableDob = null;
     if (StringUtils.isNotBlank(this.dateOfBirth)) {
-      List<String> dobValues = new ArrayList<>();
+      Set<String> dobValues = new HashSet<>();
       Date date = DomainChef.uncookDateString(this.dateOfBirth);
 
       // With zeros, e.g. 01/09/1995
@@ -997,7 +998,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonProperty("searchable_name")
   public String[] getSearchableName() {
     String[] searchableName = null;
-    List<String> names = new ArrayList<>();
+    Set<String> names = new HashSet<>();
 
     if (!StringUtils.isBlank(this.firstName)) {
       names.add(this.firstName);

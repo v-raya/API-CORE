@@ -11,16 +11,6 @@ public class BaseEntityAwareDTO<T extends PersistentObject> {
 
   private T entity;
 
-  private PerryAccount perryAccount;
-
-  public BaseEntityAwareDTO(PerryAccount perryAccount) {
-    this.perryAccount = perryAccount;
-  }
-
-  public String getStaffPersonId() {
-    return perryAccount.getStaffId();
-  }
-
   public T getEntity() {
     return entity;
   }
@@ -29,7 +19,4 @@ public class BaseEntityAwareDTO<T extends PersistentObject> {
     this.entity = entity;
   }
 
-  public PerryAccount getPerryAccount() {
-    return perryAccount;
-  }
 }

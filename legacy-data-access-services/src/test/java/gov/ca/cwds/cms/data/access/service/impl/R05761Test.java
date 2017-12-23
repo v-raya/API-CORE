@@ -43,10 +43,9 @@ public class R05761Test extends BaseDocToolRulesTest {
 
   private void checkR05761(Runnable testCase) throws DroolsException {
     try {
-      placementHomeEntityAwareDTO.getPerryAccount().getPrivileges().add(
-          USR_PRV_SOC158_APPLICATION);
+      principal.getPrivileges().add(USR_PRV_SOC158_APPLICATION);
       testCase.run();
-      placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO);
+      placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
       fail();
     } catch (BusinessValidationException e) {
       Assert.assertEquals("R-05761", e.getValidationDetailsList().iterator().next().getCode());

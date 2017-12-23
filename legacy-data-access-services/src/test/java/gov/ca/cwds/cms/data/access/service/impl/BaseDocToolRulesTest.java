@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
 import gov.ca.cwds.drools.DroolsService;
-import gov.ca.cwds.rest.exception.BusinessValidationException;
+import gov.ca.cwds.security.realm.PerryAccount;
 import org.junit.Before;
 
 /** @author CWDS CALS API Team */
@@ -14,6 +14,7 @@ public abstract class BaseDocToolRulesTest {
   protected ClientCoreServiceImpl clientCoreService;
 
   protected PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO;
+  protected PerryAccount principal;
 
   private DroolsService droolsService;
 
@@ -28,6 +29,7 @@ public abstract class BaseDocToolRulesTest {
     clientCoreService.setDroolsService(droolsService);
 
     placementHomeEntityAwareDTO = EntityAwareHelper.prepareSuccessfulPlacementHomeEntityAwareDTO();
+    principal = HappyPathHelper.getHappyPathPrincipal();
   }
 
   public static void assertRuleSatisfied(String ruleName, BusinessValidationException e) {

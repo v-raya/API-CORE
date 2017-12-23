@@ -11,7 +11,6 @@ import gov.ca.cwds.data.ApiTypedIdentifier;
 import gov.ca.cwds.data.std.ApiAddressAware;
 import gov.ca.cwds.data.std.ApiAddressAwareWritable;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
-import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.cms.SystemCode;
 
 /**
@@ -34,8 +33,9 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
   @JsonInclude(JsonInclude.Include.ALWAYS)
   private String city;
 
-  @JsonIgnore
-  private String state;
+  @JsonProperty("state")
+  @JsonInclude(JsonInclude.Include.ALWAYS)
+  private ElasticSearchSystemCode stateSystemCode;
 
   @JsonInclude(JsonInclude.Include.ALWAYS)
   @JsonProperty("state_code")
@@ -46,8 +46,12 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
   private String stateName;
 
   // Bug #141508231: county not in Intake API swagger.yml. Intake JSON parsing error.
+  // @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  // private String county;
+
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  private String county;
+  @JsonProperty("county")
+  private ElasticSearchSystemCode county;
 
   @JsonInclude(JsonInclude.Include.ALWAYS)
   @JsonProperty("zip")
@@ -59,7 +63,7 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   @JsonProperty("type")
-  private String type;
+  private ElasticSearchSystemCode type;
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   @JsonProperty("unit_type")
@@ -82,6 +86,9 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
 
   @JsonProperty("effective_end_date")
   private String effectiveEndDate;
+
+  @JsonProperty("active")
+  private String active;
 
   @JsonProperty("legacy_descriptor")
   @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -109,9 +116,9 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
     this.id = id;
     this.streetAddress = streetAddress;
     this.city = city;
-    this.state = state;
+    // this.state = state;
     this.zip = zip;
-    this.type = type;
+    // this.type = type;
   }
 
   /**
@@ -122,8 +129,7 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
   public ElasticSearchPersonAddress(ApiAddressAware address) {
     this.id = address.getAddressId();
     this.city = address.getCity();
-    this.county = address.getCounty();
-    this.state = address.getState();
+    // this.county = address.getCounty();
 
     this.zip = address.getZip();
     this.zip4 = address.getApiAdrZip4();
@@ -131,21 +137,12 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
     this.streetNumber = address.getStreetNumber();
     this.unitNumber = address.getApiAdrUnitNumber();
 
-    this.effectiveStartDate = DomainChef.cookDate(address.getClientAddressEffectiveStartDate());
-    this.effectiveEndDate = DomainChef.cookDate(address.getClientAddressEffectiveEndDate());
-
     if (ElasticSearchPerson.systemCodes != null) {
       if (address.getStateCd() != null && address.getStateCd().intValue() != 0) {
         final SystemCode sysCode =
             ElasticSearchPerson.systemCodes.getSystemCode(address.getStateCd());
         this.stateName = sysCode.getShortDescription();
         this.stateCode = sysCode.getLogicalId();
-      }
-
-      if (address.getApiAdrAddressType() != null
-          && address.getApiAdrAddressType().intValue() != 0) {
-        this.type = ElasticSearchPerson.systemCodes.getSystemCode(address.getApiAdrAddressType())
-            .getShortDescription();
       }
 
       if (address.getApiAdrUnitType() != null && address.getApiAdrUnitType().intValue() != 0) {
@@ -191,23 +188,24 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
   @JsonIgnore
   @Override
   public String getState() {
-    return state;
+    return null;
   }
 
   @Override
   public void setState(String state) {
-    this.state = state;
+    // no-op
   }
 
   @JsonIgnore
   @Override
   public String getCounty() {
-    return county;
+    // return county;
+    return null;
   }
 
   @Override
   public void setCounty(String county) {
-    this.county = county;
+    // this.county = county;
   }
 
   @JsonIgnore
@@ -227,7 +225,7 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
    * @return address type, per Intake contract, if provided
    */
   @JsonIgnore
-  public String getType() {
+  public ElasticSearchSystemCode getType() {
     return type;
   }
 
@@ -236,7 +234,7 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
    * 
    * @param type address type, per Intake contract
    */
-  public void setType(String type) {
+  public void setType(ElasticSearchSystemCode type) {
     this.type = type;
   }
 
@@ -352,6 +350,7 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
     this.legacyDescriptor = legacyDescriptor;
   }
 
+  @JsonIgnore
   public String getEffectiveStartDate() {
     return effectiveStartDate;
   }
@@ -360,11 +359,47 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
     this.effectiveStartDate = effectiveStartDate;
   }
 
+  @JsonIgnore
   public String getEffectiveEndDate() {
     return effectiveEndDate;
   }
 
   public void setEffectiveEndDate(String effectiveEndDate) {
     this.effectiveEndDate = effectiveEndDate;
+  }
+
+  public String getStateCode() {
+    return stateCode;
+  }
+
+  public void setStateCode(String stateCode) {
+    this.stateCode = stateCode;
+  }
+
+  @JsonIgnore
+  public ElasticSearchSystemCode getStateSystemCode() {
+    return stateSystemCode;
+  }
+
+  public void setStateSystemCode(ElasticSearchSystemCode stateSystemCode) {
+    this.stateSystemCode = stateSystemCode;
+  }
+
+  @JsonIgnore
+  public String getActive() {
+    return active;
+  }
+
+  public void setActive(String active) {
+    this.active = active;
+  }
+
+  @JsonIgnore
+  public ElasticSearchSystemCode getCountySystemCode() {
+    return county;
+  }
+
+  public void setCountySystemCode(ElasticSearchSystemCode countySystemCode) {
+    this.county = countySystemCode;
   }
 }
