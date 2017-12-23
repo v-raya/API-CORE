@@ -38,37 +38,53 @@ import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
 /** @author CWDS CALS API Team */
 public class PlacementHomeServiceImpl implements PlacementHomeService {
 
-  @Inject protected DroolsService droolsService;
+  @Inject
+  protected DroolsService droolsService;
 
-  @Inject private PlacementHomeDao placementHomeDao;
+  @Inject
+  private PlacementHomeDao placementHomeDao;
 
-  @Inject private PlacementHomeUcDao placementHomeUcDao;
+  @Inject
+  private PlacementHomeUcDao placementHomeUcDao;
 
-  @Inject private CountyOwnershipMapper countyOwnershipMapper;
+  @Inject
+  private CountyOwnershipMapper countyOwnershipMapper;
 
-  @Inject private CountyOwnershipDao countyOwnershipDao;
+  @Inject
+  private CountyOwnershipDao countyOwnershipDao;
 
-  @Inject private ExternalInterfaceDao externalInterfaceDao;
+  @Inject
+  private ExternalInterfaceDao externalInterfaceDao;
 
-  @Inject private ExternalInterfaceMapper externalInterfaceMapper;
+  @Inject
+  private ExternalInterfaceMapper externalInterfaceMapper;
 
-  @Inject private EmergencyContactDetailDao emergencyContactDetailDao;
+  @Inject
+  private EmergencyContactDetailDao emergencyContactDetailDao;
 
-  @Inject private PlacementHomeProfileDao placementHomeProfileDao;
+  @Inject
+  private PlacementHomeProfileDao placementHomeProfileDao;
 
-  @Inject private SubstituteCareProviderService substituteCareProviderService;
+  @Inject
+  private SubstituteCareProviderService substituteCareProviderService;
 
-  @Inject private OtherChildrenInPlacementHomeDao otherChildrenInPlacementHomeDao;
+  @Inject
+  private OtherChildrenInPlacementHomeDao otherChildrenInPlacementHomeDao;
 
-  @Inject private OtherPeopleScpRelationshipDao otherPeopleScpRelationshipDao;
+  @Inject
+  private OtherPeopleScpRelationshipDao otherPeopleScpRelationshipDao;
 
-  @Inject private OtherAdultsInPlacementHomeDao otherAdultsInPlacementHomeDao;
+  @Inject
+  private OtherAdultsInPlacementHomeDao otherAdultsInPlacementHomeDao;
 
-  @Inject private OutOfStateCheckDao outOfStateCheckDao;
+  @Inject
+  private OutOfStateCheckDao outOfStateCheckDao;
 
-  @Inject private BackgroundCheckDao backgroundCheckDao;
+  @Inject
+  private BackgroundCheckDao backgroundCheckDao;
 
-  @Inject private SsaName3Dao ssaName3Dao;
+  @Inject
+  private SsaName3Dao ssaName3Dao;
 
   @Override
   public void runBusinessValidation(
