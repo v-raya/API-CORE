@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.legacy.cms.entity.enums;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import javax.persistence.Converter;
@@ -18,6 +19,14 @@ public enum LimitedAccess implements EntityEnum<String> {
   LimitedAccess(String code, String description) {
     this.code = code;
     this.description = description;
+  }
+
+  public static LimitedAccess from(String code) {
+    return Arrays.asList(LimitedAccess.values())
+        .stream()
+        .findFirst()
+        .filter(e -> e.code.equals(code))
+        .orElse(null);
   }
 
   @Override

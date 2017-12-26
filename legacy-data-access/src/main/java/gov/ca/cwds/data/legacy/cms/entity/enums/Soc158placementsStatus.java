@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.legacy.cms.entity.enums;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import javax.persistence.Converter;
@@ -15,6 +16,14 @@ public enum Soc158placementsStatus implements EntityEnum<String> {
   Soc158placementsStatus(String code, String description) {
     this.code = code;
     this.description = description;
+  }
+
+  public static Soc158placementsStatus from(String code) {
+    return Arrays.asList(Soc158placementsStatus.values())
+        .stream()
+        .findFirst()
+        .filter(e -> e.code.equals(code))
+        .orElse(null);
   }
 
   @Override
