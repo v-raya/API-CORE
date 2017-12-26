@@ -34,7 +34,7 @@ public abstract class BaseDocToolRulesTest {
     principal = HappyPathHelper.getPlacementFacilityHappyPathPrincipal();
   }
 
-  protected void check(String ruleCode) {
+  protected void checkPlacementHomeService(String ruleCode) {
     try {
       placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
       fail();
