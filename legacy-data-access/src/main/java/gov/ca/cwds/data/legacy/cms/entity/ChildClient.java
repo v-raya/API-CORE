@@ -219,7 +219,7 @@ public class ChildClient extends Client {
     this.attemptToAcquireHlthInfoDesc = attemptToAcquireHlthInfoDesc;
   }
 
-  public void setAwolAbductedCode(AwolAbducted awolAbducted) {
+  public void setAwolAbducted(AwolAbducted awolAbducted) {
     this.awolAbducted = awolAbducted;
   }
 
@@ -275,7 +275,7 @@ public class ChildClient extends Client {
     this.foodStampsApplicationIndicator = foodStampsApplicationIndicator;
   }
 
-  public void setIcwaEligibilityCode(IcwaEligibility icwaEligibility) {
+  public void setIcwaEligibility(IcwaEligibility icwaEligibility) {
     this.icwaEligibility = icwaEligibility;
   }
 
@@ -316,7 +316,7 @@ public class ChildClient extends Client {
     this.postsecVocIndicator = postsecVocIndicator;
   }
 
-  public void setPreviouslyAdoptedCode(PreviouslyAdopted previouslyAdopted) {
+  public void setPreviouslyAdopted(PreviouslyAdopted previouslyAdopted) {
     this.previouslyAdopted = previouslyAdopted;
   }
 

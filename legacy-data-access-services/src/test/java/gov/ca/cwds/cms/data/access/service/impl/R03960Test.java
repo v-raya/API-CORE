@@ -16,6 +16,9 @@ public class R03960Test extends BaseDocToolRulesTest {
     placementHome.setFacilityType((short) facilityType);
     placementHome.setLicensrCd(licenseCode);
     placementHome.setFacltyNm(facilityName);
+    placementHome.setZipNo("11111");
+    placementHome.setLaPZipno("11111");
+    placementHome.setpZipNo("11111");
     placementHomeEntityAwareDTO.setEntity(placementHome);
   }
 
