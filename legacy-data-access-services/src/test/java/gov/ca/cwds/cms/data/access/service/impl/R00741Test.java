@@ -1,15 +1,14 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
-import static gov.ca.cwds.cms.data.access.service.impl.HappyPathHelper.clientEntityAwareDTO;
 import static org.junit.Assert.fail;
 
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
-import gov.ca.cwds.security.realm.PerryAccount;
 import org.junit.Test;
 
-public class R00741Test extends BaseDocToolRulesTest {
+public class R00741Test extends BaseDocToolRulesClientTest {
+
 
   @Test
   public void testLanguagesAreDifferent() throws Exception {
@@ -47,7 +46,7 @@ public class R00741Test extends BaseDocToolRulesTest {
       runBusinessValidation(client);
       fail();
     } catch (BusinessValidationException e) {
-      assertRuleViolated("R-00741", e);
+      assertRuleViolatedOnce("R-00741", e);
     }
   }
 
@@ -65,7 +64,6 @@ public class R00741Test extends BaseDocToolRulesTest {
   }
 
   private void runBusinessValidation(Client client) throws DroolsException {
-    PerryAccount principal = HappyPathHelper.getPrincipal("");
     clientCoreService.runBusinessValidation(clientEntityAwareDTO(client), principal);
   }
 }

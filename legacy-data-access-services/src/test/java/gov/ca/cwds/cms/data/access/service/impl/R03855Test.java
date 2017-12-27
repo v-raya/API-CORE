@@ -10,7 +10,7 @@ import org.junit.Test;
 /**
  * Created by TPT2 on 12/11/2017.
  */
-public class R03855Test extends BaseDocToolRulesTest {
+public class R03855Test extends BaseDocToolRulesPlacementHomeTest {
 
   @Test
   public void testMaxAgeInvalid() throws Exception {

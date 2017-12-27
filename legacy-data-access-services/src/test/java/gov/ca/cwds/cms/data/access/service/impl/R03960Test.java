@@ -8,7 +8,7 @@ import org.junit.Test;
 /**
  * @author TPT-2
  */
-public class R03960Test extends BaseDocToolRulesTest {
+public class R03960Test extends BaseDocToolRulesPlacementHomeTest {
 
 
   private void preparePlacementHome(int facilityType, String licenseCode, String facilityName) {

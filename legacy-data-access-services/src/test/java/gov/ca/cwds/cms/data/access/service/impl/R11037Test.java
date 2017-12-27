@@ -10,7 +10,7 @@ import org.junit.Test;
 /**
  * Created by TPT2 on 12/12/2017.
  */
-public class R11037Test extends BaseDocToolRulesTest {
+public class R11037Test extends BaseDocToolRulesPlacementHomeTest {
 
   @Test
   public void testDoesNotHavePrivilege() throws Exception {

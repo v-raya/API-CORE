@@ -6,7 +6,7 @@ import org.junit.Test;
  * @author CWDS CALS API Team
  */
 
-public class HappyPathTest extends BaseDocToolRulesTest {
+public class PlacementHomeHappyPathTest extends BaseDocToolRulesPlacementHomeTest {
 
   @Test
   public void testHappyPath() throws Exception {

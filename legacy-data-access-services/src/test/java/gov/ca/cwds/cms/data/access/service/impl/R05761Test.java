@@ -11,7 +11,7 @@ import org.junit.Test;
 /**
  * Created by TPT2 on 12/11/2017.
  */
-public class R05761Test extends BaseDocToolRulesTest {
+public class R05761Test extends BaseDocToolRulesPlacementHomeTest {
 
   @Test
   public void testFacilityNameNull() throws Exception {
