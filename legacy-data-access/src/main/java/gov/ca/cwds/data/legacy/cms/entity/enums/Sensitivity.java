@@ -7,8 +7,8 @@ import javax.persistence.Converter;
 
 public enum Sensitivity implements EntityEnum<String> {
   NOT_APPLICABLE("N", "Not Applicable"),
-  SEALED("R", "This specifies a SEALED Case"),
-  SENSITIVE("S", "This specifies a SENSITIVE Case");
+  SENSITIVE("S", "This specifies a SENSITIVE Case"),
+  SEALED("R", "This specifies a SEALED Case");
 
   private final String code;
   private final String description;

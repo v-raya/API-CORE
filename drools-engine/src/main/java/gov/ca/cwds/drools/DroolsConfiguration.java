@@ -1,5 +1,6 @@
 package gov.ca.cwds.drools;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.kie.api.runtime.KieContainer;
 
 /**
@@ -42,4 +43,12 @@ public class DroolsConfiguration<T> {
     this.agendaGroup = agendaGroup;
   }
 
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("sessionName", sessionName)
+        .append("agendaGroup", agendaGroup)
+        .append("pathToRulesConfig", pathToRulesConfig)
+        .toString();
+  }
 }

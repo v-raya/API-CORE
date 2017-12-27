@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest;
 
 import gov.ca.cwds.inject.InjectorHolder;
+import io.dropwizard.jersey.setup.JerseyEnvironment;
 import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
@@ -132,16 +133,17 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
   }
 
   private void registerExceptionMappers(Environment environment) {
-    LoggingContext loggingContext = guiceBundle.getInjector().getInstance(LoggingContext.class);
-    environment.jersey().register(new ApiSecurityExceptionMapper());
-    environment.jersey().register(new UnexpectedExceptionMapperImpl(loggingContext));
-    environment.jersey().register(new ExpectedExceptionMapperImpl(loggingContext));
-    environment.jersey().register(new ValidationExceptionMapperImpl(loggingContext));
-    environment.jersey().register(new BusinessValidationExceptionMapper());
-    environment.jersey().register(new ReferentialIntegrityExceptionMapper(loggingContext));
-    environment.jersey().register(new DaoExceptionMapper(loggingContext));
-    environment.jersey().register(new ServiceExceptionMapper(loggingContext));
-    environment.jersey().register(new CustomExceptionMapperBinder(loggingContext, true));
+    final LoggingContext loggingContext = guiceBundle.getInjector().getInstance(LoggingContext.class);
+    final JerseyEnvironment jersey = environment.jersey();
+    jersey.register(new ApiSecurityExceptionMapper());
+    jersey.register(new UnexpectedExceptionMapperImpl(loggingContext));
+    jersey.register(new ExpectedExceptionMapperImpl(loggingContext));
+    jersey.register(new ValidationExceptionMapperImpl(loggingContext));
+    jersey.register(new BusinessValidationExceptionMapper());
+    jersey.register(new ReferentialIntegrityExceptionMapper(loggingContext));
+    jersey.register(new DaoExceptionMapper(loggingContext));
+    jersey.register(new ServiceExceptionMapper(loggingContext));
+    jersey.register(new CustomExceptionMapperBinder(loggingContext, true));
   }
 
   /**
