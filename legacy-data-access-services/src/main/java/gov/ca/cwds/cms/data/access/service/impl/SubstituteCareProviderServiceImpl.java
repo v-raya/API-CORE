@@ -82,6 +82,12 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
     }
   }
 
+  @Override
+  public SubstituteCareProvider update(SCPEntityAwareDTO entityAwareDTO)
+      throws DataAccessServicesException {
+    throw new UnsupportedOperationException();
+  }
+
   private void validateParameters(SCPEntityAwareDTO parameterObject) {
     checkNotPersisted(parameterObject.getEntity());
     ParametersValidator.validatePersistentObjects(parameterObject.getPhoneNumbers());

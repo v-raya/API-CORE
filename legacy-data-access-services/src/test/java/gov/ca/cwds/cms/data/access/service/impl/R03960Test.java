@@ -8,7 +8,7 @@ import org.junit.Test;
 /**
  * @author TPT-2
  */
-public class R03960Test extends BaseDocToolRulesTest {
+public class R03960Test extends BaseDocToolRulesPlacementHomeTest {
 
 
   private void preparePlacementHome(int facilityType, String licenseCode, String facilityName) {
@@ -26,10 +26,6 @@ public class R03960Test extends BaseDocToolRulesTest {
   public void testFosterFamilyHome() throws Exception {
     preparePlacementHome(1416, "CT", null);
     runBusinessValidation();
-  }
-
-  private void runBusinessValidation() throws DroolsException {
-    service.runBusinessValidation(placementHomeEntityAwareDTO, principal);
   }
 
   @Test
@@ -66,5 +62,9 @@ public class R03960Test extends BaseDocToolRulesTest {
   public void testOtherFamilyHome() throws Exception {
     preparePlacementHome(-1, "CT", null);
     runBusinessValidation();
+  }
+
+  private void runBusinessValidation() throws DroolsException {
+    placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
   }
 }

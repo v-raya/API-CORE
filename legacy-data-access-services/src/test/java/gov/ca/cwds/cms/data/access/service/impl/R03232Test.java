@@ -5,7 +5,7 @@ import org.junit.Test;
 /**
  * Created by TPT2 on 12/21/2017.
  */
-public class R03232Test extends BaseDocToolRulesTest {
+public class R03232Test extends BaseDocToolRulesPlacementHomeTest {
   
   //zip no
   @Test
