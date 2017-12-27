@@ -11,7 +11,7 @@ import org.junit.Test;
 /**
  * Created by TPT2 on 12/11/2017.
  */
-public class R05761Test extends BaseDocToolRulesTest {
+public class R05761Test extends BaseDocToolRulesPlacementHomeTest {
 
   @Test
   public void testFacilityNameNull() throws Exception {
@@ -45,7 +45,7 @@ public class R05761Test extends BaseDocToolRulesTest {
     try {
       principal.getPrivileges().add(USR_PRV_SOC158_APPLICATION);
       testCase.run();
-      service.runBusinessValidation(placementHomeEntityAwareDTO, principal);
+      placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
       fail();
     } catch (BusinessValidationException e) {
       Assert.assertEquals("R-05761", e.getValidationDetailsList().iterator().next().getCode());

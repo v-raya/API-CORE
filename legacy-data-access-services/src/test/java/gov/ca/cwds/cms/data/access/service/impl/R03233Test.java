@@ -1,12 +1,11 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
-import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import org.junit.Test;
 
 /**
  * Created by TPT2 on 12/21/2017.
  */
-public class R03233Test extends BaseDocToolRulesTest {
+public class R03233Test extends BaseDocToolRulesPlacementHomeTest {
   
   //zip no
   @Test

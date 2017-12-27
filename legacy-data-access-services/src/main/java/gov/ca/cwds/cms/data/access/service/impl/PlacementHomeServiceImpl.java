@@ -35,10 +35,7 @@ import static gov.ca.cwds.cms.data.access.service.impl.IdGenerator.generateId;
 import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
 import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
 
-/**
- * @author CWDS CALS API Team
- */
-
+/** @author CWDS CALS API Team */
 public class PlacementHomeServiceImpl implements PlacementHomeService {
 
   @Inject
@@ -86,15 +83,17 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
   @Inject
   private BackgroundCheckDao backgroundCheckDao;
 
-
   @Inject
   private SsaName3Dao ssaName3Dao;
 
   @Override
-  public void runBusinessValidation(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, PerryAccount principal) throws DroolsException {
+  public void runBusinessValidation(
+      PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, PerryAccount principal)
+      throws DroolsException {
 
-    Set<IssueDetails> detailsList = droolsService
-        .performBusinessRules(PlacementHomeDroolsConfiguration.INSTANCE, placementHomeEntityAwareDTO, principal);
+    Set<IssueDetails> detailsList =
+        droolsService.performBusinessRules(
+            PlacementHomeDroolsConfiguration.INSTANCE, placementHomeEntityAwareDTO, principal);
     if (!detailsList.isEmpty()) {
       throw new BusinessValidationException("Can't create Placement Home", detailsList);
     }
@@ -123,19 +122,24 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
     }
   }
 
+  @Override
+  public PlacementHome update(PlacementHomeEntityAwareDTO entityAwareDTO)
+      throws DataAccessServicesException {
+    throw new UnsupportedOperationException();
+  }
+
   private void createPlacementHome(PlacementHomeEntityAwareDTO parameterObject) {
-    final PlacementHome placementHome = parameterObject.getEntity() ;
+    final PlacementHome placementHome = parameterObject.getEntity();
     placementHome.setIdentifier(generateId());
     placementHome.setLastUpdateId(getStaffPersonId());
     placementHome.setLastUpdateTime(LocalDateTime.now());
     placementHomeDao.create(placementHome);
   }
 
-  private void createBackgroundCheck(
-      PlacementHomeEntityAwareDTO parameterObject) {
+  private void createBackgroundCheck(PlacementHomeEntityAwareDTO parameterObject) {
     BackgroundCheck backgroundCheck = new BackgroundCheck();
     backgroundCheck.setIdentifier(IdGenerator.generateId());
-    backgroundCheck.setBkgrchkc((short)-1);
+    backgroundCheck.setBkgrchkc((short) -1);
     backgroundCheck.setBkgrchkDt(LocalDate.now());
     backgroundCheck.setLstUpdId(getStaffPersonId());
     backgroundCheck.setLstUpdTs(LocalDateTime.now());
@@ -144,27 +148,26 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
 
   private void createOtherChildrenInHome(PlacementHomeEntityAwareDTO parameterObject) {
     PlacementHome placementHome = parameterObject.getEntity();
-    for (OtherChildInHomeEntityAwareDTO otherChildInHomeParameterObject : parameterObject
-        .getOtherChildrenInHomeParameterObjects()) {
+    for (OtherChildInHomeEntityAwareDTO otherChildInHomeParameterObject :
+        parameterObject.getOtherChildrenInHomeParameterObjects()) {
       createOtherChildInHome(placementHome, otherChildInHomeParameterObject);
       createChildRelationshipsToScp(otherChildInHomeParameterObject);
     }
   }
 
-  private void createOtherChildInHome(PlacementHome placementHome,
-      OtherChildInHomeEntityAwareDTO parameterObject) {
+  private void createOtherChildInHome(
+      PlacementHome placementHome, OtherChildInHomeEntityAwareDTO parameterObject) {
     OtherChildrenInPlacementHome otherChildInPlacementHome = parameterObject.getEntity();
     otherChildInPlacementHome.setLstUpdId(getStaffPersonId());
     otherChildInPlacementHome.setLstUpdTs(LocalDateTime.now());
     otherChildInPlacementHome.setFkplcHmT(placementHome.getIdentifier());
-    otherChildInPlacementHome
-        .setIdentifier(generateId());
+    otherChildInPlacementHome.setIdentifier(generateId());
     otherChildrenInPlacementHomeDao.create(otherChildInPlacementHome);
   }
 
   private void createChildRelationshipsToScp(OtherChildInHomeEntityAwareDTO parameterObject) {
     OtherChildrenInPlacementHome otherChildInPlacementHome = parameterObject.getEntity();
-    for (OtherPeopleScpRelationship relationship: parameterObject.getRelationships()) {
+    for (OtherPeopleScpRelationship relationship : parameterObject.getRelationships()) {
       relationship.setIdentifier(generateId());
       relationship.setFkothKidt(otherChildInPlacementHome.getIdentifier());
       relationship.setLstUpdId(getStaffPersonId());
@@ -175,8 +178,8 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
 
   private void createOtherAdultsInHome(PlacementHomeEntityAwareDTO parameterObject) {
     final PlacementHome placementHome = parameterObject.getEntity();
-    for (OtherAdultInHomeEntityAwareDTO adultInHomeParameterObject : parameterObject
-        .getOtherAdultInHomeParameterObjects()) {
+    for (OtherAdultInHomeEntityAwareDTO adultInHomeParameterObject :
+        parameterObject.getOtherAdultInHomeParameterObjects()) {
       createOtherAdultInHome(placementHome, adultInHomeParameterObject);
       createAdultRelationshipsToScp(adultInHomeParameterObject);
       createAdultOutOfStateChecks(adultInHomeParameterObject);
@@ -185,7 +188,7 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
 
   private void createAdultOutOfStateChecks(OtherAdultInHomeEntityAwareDTO parameterObject) {
     OtherAdultsInPlacementHome otherAdultInPlacementHome = parameterObject.getEntity();
-    for (OutOfStateCheck outOfStateCheck: parameterObject.getOutOfStateChecks()) {
+    for (OutOfStateCheck outOfStateCheck : parameterObject.getOutOfStateChecks()) {
       outOfStateCheck.setIdentifier(generateId());
       outOfStateCheck.setRcpntCd("O");
       outOfStateCheck.setRcpntId(otherAdultInPlacementHome.getIdentifier());
@@ -195,8 +198,8 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
     }
   }
 
-  private void createOtherAdultInHome(PlacementHome placementHome,
-      OtherAdultInHomeEntityAwareDTO parameterObject) {
+  private void createOtherAdultInHome(
+      PlacementHome placementHome, OtherAdultInHomeEntityAwareDTO parameterObject) {
     OtherAdultsInPlacementHome otherAdultInPlacementHome = parameterObject.getEntity();
     otherAdultInPlacementHome.setLstUpdId(getStaffPersonId());
     otherAdultInPlacementHome.setLstUpdTs(LocalDateTime.now());
@@ -207,7 +210,7 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
 
   private void createAdultRelationshipsToScp(OtherAdultInHomeEntityAwareDTO parameterObject) {
     OtherAdultsInPlacementHome otherAdultInPlacementHome = parameterObject.getEntity();
-    for (OtherPeopleScpRelationship relationship: parameterObject.getRelationships()) {
+    for (OtherPeopleScpRelationship relationship : parameterObject.getRelationships()) {
       relationship.setIdentifier(generateId());
       relationship.setFkothAdlt(otherAdultInPlacementHome.getIdentifier());
       relationship.setLstUpdId(getStaffPersonId());
@@ -219,9 +222,10 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
   private void createSubstituteCareProviders(PlacementHomeEntityAwareDTO parameterObject)
       throws DataAccessServicesException {
     final PlacementHome placementHome = parameterObject.getEntity();
-    for (SCPEntityAwareDTO scpParameterObject: parameterObject.getScpParameterObjects()) {
+    for (SCPEntityAwareDTO scpParameterObject : parameterObject.getScpParameterObjects()) {
       scpParameterObject.setPlacementHomeId(placementHome.getIdentifier());
-      SubstituteCareProvider substituteCareProvider = substituteCareProviderService.create(scpParameterObject);
+      SubstituteCareProvider substituteCareProvider =
+          substituteCareProviderService.create(scpParameterObject);
       if (scpParameterObject.isPrimaryApplicant()) {
         placementHome.setPrimarySubstituteCareProvider(substituteCareProvider);
       }
@@ -230,16 +234,19 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
 
   private void validateParameters(PlacementHomeEntityAwareDTO placementHomeParameterObject) {
     checkNotPersisted(placementHomeParameterObject.getEntity());
-    ParametersValidator.validateParameterObjects(placementHomeParameterObject.getScpParameterObjects());
-    ParametersValidator.validateParameterObjects(placementHomeParameterObject.getOtherAdultInHomeParameterObjects());
-    ParametersValidator.validateParameterObjects(placementHomeParameterObject.getOtherChildrenInHomeParameterObjects());
+    ParametersValidator.validateParameterObjects(
+        placementHomeParameterObject.getScpParameterObjects());
+    ParametersValidator.validateParameterObjects(
+        placementHomeParameterObject.getOtherAdultInHomeParameterObjects());
+    ParametersValidator.validateParameterObjects(
+        placementHomeParameterObject.getOtherChildrenInHomeParameterObjects());
   }
 
   private void createCountyOwnership(PlacementHomeEntityAwareDTO parameterObject) {
     final PlacementHome placementHome = parameterObject.getEntity();
     CountyOwnership countyOwnership =
-        countyOwnershipMapper.toCountyOwnership(placementHome.getIdentifier(),
-            "P", Collections.emptyList());
+        countyOwnershipMapper.toCountyOwnership(
+            placementHome.getIdentifier(), "P", Collections.emptyList());
     countyOwnershipDao.create(countyOwnership);
   }
 
@@ -268,12 +275,11 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
     final PlacementHome placementHome = parameterObject.getEntity();
     EmergencyContactDetail emergencyContactDetail = parameterObject.getEmergencyContactDetail();
     if (emergencyContactDetail != null) {
-      emergencyContactDetail.setEstblshCd("P");  //P = PLACEMENT HOME
+      emergencyContactDetail.setEstblshCd("P"); // P = PLACEMENT HOME
       emergencyContactDetail.setEstblshId(placementHome.getIdentifier());
       emergencyContactDetail.setLstUpdId(getStaffPersonId());
       emergencyContactDetail.setLstUpdTs(LocalDateTime.now());
-      emergencyContactDetail
-          .setIdentifier(generateId());
+      emergencyContactDetail.setIdentifier(generateId());
       emergencyContactDetailDao.create(emergencyContactDetail);
     }
   }
@@ -309,5 +315,4 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
   void setDroolsService(DroolsService droolsService) {
     this.droolsService = droolsService;
   }
-
 }
