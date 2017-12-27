@@ -33,9 +33,10 @@ public abstract class BaseDocToolRulesTest {
   protected void assertRuleViolatedOnce(String ruleName, BusinessValidationException e) {
     assertTrue(
         e.getValidationDetailsList()
-            .stream()
-//            .anyMatch(issueDetails -> issueDetails.getCode().equals(ruleName)));
-            .filter(issueDetails -> issueDetails.getCode().equals(ruleName)).count() == 1);
+                .stream()
+                .filter(issueDetails -> issueDetails.getCode().equals(ruleName))
+                .count()
+            == 1);
   }
 
   private static PerryAccount getPrincipal(String privilege) {

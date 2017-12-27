@@ -5,13 +5,15 @@ import org.junit.Test;
 
 public class R00741Test extends BaseDocToolRulesClientTest {
 
+  private static final String RULE_NAME = "R-R00741";
+
   @Test
   public void testLanguagesAreDifferent() throws Exception {
     Client client = new Client();
     client.setPrimaryLanguageCode((short) 1);
     client.setSecondaryLanguageCode((short) 2);
 
-    checkRuleSatisfied(client, "R-R00741");
+    checkRuleSatisfied(client, RULE_NAME);
   }
 
   @Test
@@ -20,7 +22,7 @@ public class R00741Test extends BaseDocToolRulesClientTest {
     client.setPrimaryLanguageCode((short) 1);
     client.setSecondaryLanguageCode((short) 0);
 
-    checkRuleSatisfied(client, "R-R00741");
+    checkRuleSatisfied(client, RULE_NAME);
   }
 
   @Test
@@ -29,7 +31,7 @@ public class R00741Test extends BaseDocToolRulesClientTest {
     client.setPrimaryLanguageCode((short) 1);
     client.setSecondaryLanguageCode((short) 1);
 
-    checkRuleViolatedOnce(client, "R-00741");
+    checkRuleViolatedOnce(client, RULE_NAME);
   }
 
   @Test
@@ -38,6 +40,6 @@ public class R00741Test extends BaseDocToolRulesClientTest {
     client.setPrimaryLanguageCode((short) 0);
     client.setSecondaryLanguageCode((short) 0);
 
-    checkRuleSatisfied(client, "R-R00741");
+    checkRuleSatisfied(client, RULE_NAME);
   }
 }
