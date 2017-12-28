@@ -18,8 +18,7 @@ allprojects {
         snapshotVersion = releaseVersion + '-SNAPSHOT'
         currentVersion = ((versionPropertyValue != null ) ? versionPropertyValue : snapshotVersion)
         commonGroupId = "gov.ca.cwds.api"
-        apiSecurityVersion = "0.5.3_318"
-//        apiSecurityVersion = "0.5.3_304-RC"
+        apiSecurityVersion = "0.5.4_328-RC"
         configPath = "$rootProject.projectDir/config/"
         dropwizardVersion = "1.1.0"
         dropwizardFlywayVersion = "1.0.0-1"
