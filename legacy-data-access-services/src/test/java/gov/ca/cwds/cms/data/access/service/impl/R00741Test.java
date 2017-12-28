@@ -5,7 +5,7 @@ import org.junit.Test;
 
 public class R00741Test extends BaseDocToolRulesClientTest {
 
-  private static final String RULE_NAME = "R-R00741";
+  private static final String RULE_NAME = "R-00741";
 
   @Test
   public void testLanguagesAreDifferent() throws Exception {
