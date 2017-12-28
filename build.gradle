@@ -13,10 +13,6 @@ allprojects {
 
 
     project.ext {
-        versionPropertyValue = System.properties.getProperty('version')
-        releaseVersion = "0.5.4"
-        snapshotVersion = releaseVersion + '-SNAPSHOT'
-        currentVersion = ((versionPropertyValue != null ) ? versionPropertyValue : snapshotVersion)
         commonGroupId = "gov.ca.cwds.api"
         apiSecurityVersion = "0.5.3_318"
         configPath = "$rootProject.projectDir/config/"
@@ -48,10 +44,20 @@ allprojects {
         h2Version = "1.4.194"
         liquibaseVersion = "3.5.3"
 
+        projectMajorVersion = "0.5.4"
+
+        isRelease = System.getProperty("Release") == "true"
+        buildNumber = System.getProperty('BuildNumber')
+        customVersion = System.getProperty('CustomVersion')
+
+        projectSnapshotVersion = projectMajorVersion + "-SNAPSHOT"
+        projectReleaseVersion = (customVersion == null || customVersion == "" || customVersion.startsWith('$') ? projectMajorVersion + '_' + buildNumber + '-RC' : customVersion )
+        projectVersion = (isRelease ? projectReleaseVersion : projectSnapshotVersion )
+
         // Publishing configuration
         snapshotMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/repo"
         releaseMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/libs-release"
-        artifactoryRepo = ((versionPropertyValue != null ) ? releaseMavenRepo : snapshotMavenRepo)
+        artifactoryRepo = (isRelease ? releaseMavenRepo : snapshotMavenRepo)
     }
 
     sourceSets {
@@ -65,7 +71,7 @@ allprojects {
     }
 
     project.group = commonGroupId
-    project.version = currentVersion
+    project.version = projectVersion
 
     repositories {
         mavenLocal()

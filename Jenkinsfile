@@ -40,7 +40,9 @@ node ('tpt2-slave'){
    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')), disableConcurrentBuilds(), [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
    parameters([
       string(defaultValue: 'SNAPSHOT', description: '', name: 'APP_VERSION'),
-      string(defaultValue: 'development', description: '', name: 'branch')
+      string(defaultValue: 'development', description: '', name: 'branch'),
+      booleanParam(defaultValue: false, description: 'Default release version template is: <majorVersion>_<buildNumber>-RC', name: 'RELEASE_PROJECT'),
+      string(defaultValue: "", description: 'Fill this field if need to specify custom version ', name: 'OVERRIDE_VERSION'),
       ]), pipelineTriggers([pollSCM('H/5 * * * *')])])
   try {
    stage('Preparation') {
@@ -50,9 +52,9 @@ node ('tpt2-slave'){
 		  rtGradle.useWrapper = true
    }
    stage('Build'){
-     if (params.APP_VERSION != "SNAPSHOT" ) {
-         echo "!!!! BUILD RELEASE VERSION ${params.APP_VERSION}"
-         def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'clean jar -Dversion=${APP_VERSION}'
+     if (params.RELEASE_PROJECT) {
+         echo "!!!! BUILD RELEASE VERSION "
+         def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'clean jar -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
      } else {
          echo "!!!! BUILD SNAPSHOT VERSION"
          def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'clean jar'
@@ -65,7 +67,7 @@ node ('tpt2-slave'){
 	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'api-core-cms/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report CMS', reportTitles: 'JUnit Report CMS'])
    }
    stage('License Report') {
-      		buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'libLicenseReport'
+      		buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'libLicenseReport -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
       		publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/dependency-license', reportFiles: 'licenses.html', reportName: 'License Report', reportTitles: 'License summary'])
       }
    stage('SonarQube analysis'){
@@ -76,10 +78,10 @@ node ('tpt2-slave'){
 
 	stage ('Push to artifactory'){
     rtGradle.deployer.deployArtifacts = true
-	  if (params.APP_VERSION != "SNAPSHOT") {
-	      echo "!!!! PUSH RELEASE VERSION ${params.APP_VERSION}"
+	  if (params.RELEASE_PROJECT) {
+	      echo "!!!! PUSH RELEASE VERSION"
         rtGradle.deployer repo:'libs-release', server: serverArti
-        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publish -Dversion=${APP_VERSION}'
+        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publish -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
 	  } else {
 	      echo "!!!! PUSH SNAPSHOT VERSION"
 	      rtGradle.deployer repo:'libs-snapshot', server: serverArti
