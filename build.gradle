@@ -14,7 +14,7 @@ allprojects {
 
     project.ext {
         versionPropertyValue = System.properties.getProperty('version')
-        releaseVersion = "0.5.2"
+        releaseVersion = "0.5.4"
         snapshotVersion = releaseVersion + '-SNAPSHOT'
         currentVersion = ((versionPropertyValue != null ) ? versionPropertyValue : snapshotVersion)
         commonGroupId = "gov.ca.cwds.api"
