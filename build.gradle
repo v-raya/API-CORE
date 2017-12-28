@@ -29,8 +29,6 @@ allprojects {
         log4jVersion = "2.8.2"
         logbackVersion = "1.2.1"
         slf4jVersion = "1.7.25"
-        mockitoVersion = "2.0.54-beta"
-        hamcrestVersion = "2.0.0.0"
         commonsIOVersion = "2.6"
         commonsBeanutilsVersion = "1.8.3"
         commonsCollectionsVersion = "4.1"
@@ -44,6 +42,11 @@ allprojects {
         droolsVersion = "7.1.0.Final"
         mapstructVersion = '1.1.0.Final'
         junitVersion = '4.12'
+        mockitoVersion = "2.8.9"
+        hamcrestVersion = "2.0.0.0"
+        powerMockVersion = "1.7.3"
+        h2Version = "1.4.194"
+        liquibaseVersion = "3.5.3"
 
         // Publishing configuration
         snapshotMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/repo"
@@ -85,6 +88,9 @@ allprojects {
 
     test {
         exclude '**/*IT*'
+        jacoco {
+            excludes = ["**org/drools/**/*"]
+        }
     }
 
     task integrationTest(type: Test, dependsOn: testClasses) {

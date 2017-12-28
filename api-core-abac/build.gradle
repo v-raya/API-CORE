@@ -1,17 +1,16 @@
-project.ext {
-    droolsVersion = '7.1.0.Final'
-}
-
 dependencies {
-    compile project(':api-core-cms')
+    compile project(':legacy-data-access')
+    compile project(':drools-engine')
+    compile group: 'gov.ca.cwds.api', name:'api-security', version: apiSecurityVersion
 
-    // MAIN:
-//    compile group: 'org.kie', name: 'kie-api', version: droolsVersion
-//    compile group: 'org.drools', name: 'drools-compiler', version: droolsVersion
-
-    // TEST:
-    testCompile 'org.mockito:mockito-core:2.0.54-beta'
-    testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version: '2.0.0.0'
+    testCompile group: 'gov.ca.cwds.cals', name: 'cws-rs1-data-model', version: dataModelVersion
+    testCompile group: 'io.dropwizard', name: 'dropwizard-testing', version: dropwizardVersion
+    testCompile group: 'com.h2database', name: 'h2', version: h2Version
+    testCompile group: 'org.liquibase', name: 'liquibase-core', version: liquibaseVersion
+    testCompile group: 'org.mockito', name: 'mockito-core', version: mockitoVersion
+    testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: powerMockVersion
+    testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: powerMockVersion
+    testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version: hamcrestVersion
 }
 
 publishing {
