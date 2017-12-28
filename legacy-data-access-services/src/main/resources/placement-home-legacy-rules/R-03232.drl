@@ -1,0 +1,86 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
+import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider
+import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
+
+global java.util.Set validationDetailsList
+
+rule "R-03232-zipNo"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*;
+       Code: R - 03232
+       Rule Txt
+       All zip codes entered must be 5 digits.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome: PlacementHome(zipNo != null && zipNo not matches "\\d{5}") from $placementHomeAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-03232");
+      details.setUserMessage("Placement home's zip number must be 5 digits");
+      details.setTechnicalMessage("All zip codes entered must be 5 digits.");
+      validationDetailsList.add(details);
+end
+
+
+rule "R-03232-pZipNo"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*;
+          Code: R - 03232
+          Rule Txt
+          All zip codes entered must be 5 digits.
+       */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome: PlacementHome(pZipNo != null && pZipNo not matches "\\d{5}") from $placementHomeAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-03232");
+      details.setUserMessage("Payee's zip number must be 5 digits");
+      details.setTechnicalMessage("All zip codes entered must be 5 digits.");
+      validationDetailsList.add(details);
+end
+
+
+rule "R-03232-laPZipno"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*;
+          Code: R - 03232
+          Rule Txt
+          All zip codes entered must be 5 digits.
+       */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome: PlacementHome(laPZipno != null && laPZipno not matches "\\d{5}") from $placementHomeAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-03232");
+      details.setUserMessage("LA Payee's zip number must be 5 digits");
+      details.setTechnicalMessage("All zip codes entered must be 5 digits.");
+      validationDetailsList.add(details);
+end
+
+
+rule "R-03232-primarySubstituteCareProvider.zipNo"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*;
+          Code: R - 03232
+          Rule Txt
+          All zip codes entered must be 5 digits.
+       */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome: PlacementHome() from $placementHomeAwareDTO.entity
+      $primarySubstituteCareProvider : SubstituteCareProvider(zipNo != null && zipNo not matches "\\d{5}") from $placementHome.primarySubstituteCareProvider
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-03232");
+      details.setUserMessage("Primary Substitute Care Provider's zip number must be 5 digits");
+      details.setTechnicalMessage("All zip codes entered must be 5 digits.");
+      validationDetailsList.add(details);
+end

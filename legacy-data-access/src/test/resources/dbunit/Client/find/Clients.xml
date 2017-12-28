@@ -57,7 +57,8 @@
     TRBA_CLT_B="N"
     SOC158_IND="N"
     DTH_DT_IND="N"
-    SOCPLC_CD="N"/>
+    SOCPLC_CD="N"
+    HISP_UD_CD=" "/>
 
   <CLIENT_T
     IDENTIFIER="AapJGAU04Z"

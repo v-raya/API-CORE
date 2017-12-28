@@ -1,11 +1,5 @@
 package gov.ca.cwds.data.legacy.cms.dao;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import gov.ca.cwds.data.legacy.cms.entity.Case;
 import gov.ca.cwds.data.legacy.cms.entity.enums.LimitedAccess;
 import gov.ca.cwds.data.legacy.cms.entity.enums.ResponsibleAgency;
@@ -16,6 +10,10 @@ import org.dbunit.dataset.ITable;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class CaseDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
 
@@ -30,7 +28,8 @@ public class CaseDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
   public void testFind() throws Exception {
     cleanAllAndInsert("/dbunit/Case.xml");
 
-    executeInTransaction(sessionFactory,
+    executeInTransaction(
+        sessionFactory,
         (sessionFactory) -> {
           Case c = caseDao.find("AadfKnG07n");
           assertNotNull(c);
@@ -38,7 +37,7 @@ public class CaseDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
           assertNull(c.getAlertText());//ALERT_TXT
           assertEquals("R8TQDh807n", c.getApprovalNumber());//APRVL_NO
           assertEquals("Approved", c.getApprovalStatusType().getShortDescription());//APV_STC
-          assertEquals("Child Runaway", c.getCaseClosureReasonType().getShortDescription());//CLS_RSNC
+          assertEquals(310, c.getCaseClosureReasonTypeCode());//CLS_RSNC, Child Runaway
           assertFalse(c.getCaseplanChildrenDetailIndVar());//CSPL_DET_B
           assertEquals("Very Long text",
               c.getClosureStatementText().getTextDescription());//CL_STM_TXT
@@ -64,7 +63,7 @@ public class CaseDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
               c.getResponsibleAgency());//RSP_AGY_CD
           assertFalse(c.getSpecialProjectCaseIndVar());//SPRJ_CST_B
           assertEquals(toDate("2002-11-08"), c.getStartDate());//START_DT
-          assertEquals("California", c.getState().getShortDescription());//STATE_C
+          assertEquals(1828, c.getStateCode());//STATE_C, California
           assertEquals("Emergency Response",
               c.getActiveServiceComponentType().getShortDescription());//SRV_CMPC
           assertEquals(toDate("2002-11-08"), c.getActiveSvcComponentStartDate());//SRV_CMPDT
@@ -80,19 +79,44 @@ public class CaseDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
 
     cleanAll("/dbunit/Case.xml");
 
-    executeInTransaction(sessionFactory,
+    executeInTransaction(
+        sessionFactory,
         (sessionFactory) -> {
           Case c = new Case();
-          //TODO: populate Case
+          // TODO: populate Case
           caseDao.create(c);
         });
 
     IDataSet expectedDataSet = readXmlDataSet("/dbunit/Case.xml");
     ITable expectedTable = expectedDataSet.getTable("CASE_T");
 
-    IDataSet actualDataSet = dbUnitConnection.createDataSet(new String[]{"CASE_T"});
+    IDataSet actualDataSet = dbUnitConnection.createDataSet(new String[] {"CASE_T"});
     ITable actualTable = actualDataSet.getTable("CASE_T");
 
     Assertion.assertEquals(expectedTable, actualTable);
+  }
+
+  @Test
+  public void shouldFindActiveCaseByClient() throws Exception {
+    cleanAllAndInsert("/dbunit/CaseActiveCanceled.xml");
+
+    executeInTransaction(
+        sessionFactory,
+        (sessionFactory) -> {
+          List<Case> cases = caseDao.findActiveByClient("AapJGAU04Z");
+          assertEquals(1, cases.size());
+        });
+  }
+
+  @Test
+  public void shouldFindClosedCasesByClient() throws Exception {
+    cleanAllAndInsert("/dbunit/CaseActiveCanceled.xml");
+
+    executeInTransaction(
+        sessionFactory,
+        (sessionFactory) -> {
+          List<Case> cases = caseDao.findClosedByClient("AaiU7IW999");
+          assertEquals(2, cases.size());
+        });
   }
 }

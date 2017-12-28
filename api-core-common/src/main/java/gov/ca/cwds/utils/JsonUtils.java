@@ -19,7 +19,7 @@ public final class JsonUtils {
     return objectMapper.writeValueAsString(o);
   }
 
-  public static Object from(String json, Class clazz) throws IOException {
+  public static <T> T from(String json, Class<T> clazz) throws IOException {
     return objectMapper.readValue(json, clazz);
   }
 }

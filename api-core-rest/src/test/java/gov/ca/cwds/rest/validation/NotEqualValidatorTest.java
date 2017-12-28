@@ -49,7 +49,8 @@ public class NotEqualValidatorTest {
     bean.abc = "abc";
     bean.def = "abc";
     assertThat(validator.isValid(bean, context), is(equalTo(false)));
-    verify(context, times(1)).buildConstraintViolationWithTemplate(contains("cant be same as abc"));
+    verify(context, times(1))
+        .buildConstraintViolationWithTemplate(contains("can not be same as abc"));
   }
 
   @Test

@@ -7,21 +7,13 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.AwolAbducted;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Disability;
 import gov.ca.cwds.data.legacy.cms.entity.enums.IcwaEligibility;
 import gov.ca.cwds.data.legacy.cms.entity.enums.PreviouslyAdopted;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.DeathCircumstancesType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
 
 /**
@@ -88,11 +80,8 @@ public class ChildClient extends Client {
   @Column(name = "CURNT_CSID")
   private String currentCaseId;
 
-  @NotFound(action = NotFoundAction.IGNORE)
-  @ManyToOne(fetch = FetchType.LAZY)
-  @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "DTH_CIRC", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
-  private DeathCircumstancesType deathCircumstancesType;
+  @Column(name = "DTH_CIRC", nullable = false)
+  private short deathCircumstancesTypeCode;
 
   @Column(name = "DISABLD_CD")
   @Convert(converter = Disability.DisabilityConverter.class)
@@ -230,7 +219,7 @@ public class ChildClient extends Client {
     this.attemptToAcquireHlthInfoDesc = attemptToAcquireHlthInfoDesc;
   }
 
-  public void setAwolAbductedCode(AwolAbducted awolAbducted) {
+  public void setAwolAbducted(AwolAbducted awolAbducted) {
     this.awolAbducted = awolAbducted;
   }
 
@@ -254,8 +243,8 @@ public class ChildClient extends Client {
     this.currentCaseId = currentCaseId;
   }
 
-  public void setDeathCircumstancesType(DeathCircumstancesType deathCircumstancesType) {
-    this.deathCircumstancesType = deathCircumstancesType;
+  public void setDeathCircumstancesTypeCode(short deathCircumstancesTypeCode) {
+    this.deathCircumstancesTypeCode = deathCircumstancesTypeCode;
   }
 
   public void setDisabilityDiagnosed(Disability disabilityDiagnosed) {
@@ -286,7 +275,7 @@ public class ChildClient extends Client {
     this.foodStampsApplicationIndicator = foodStampsApplicationIndicator;
   }
 
-  public void setIcwaEligibilityCode(IcwaEligibility icwaEligibility) {
+  public void setIcwaEligibility(IcwaEligibility icwaEligibility) {
     this.icwaEligibility = icwaEligibility;
   }
 
@@ -327,7 +316,7 @@ public class ChildClient extends Client {
     this.postsecVocIndicator = postsecVocIndicator;
   }
 
-  public void setPreviouslyAdoptedCode(PreviouslyAdopted previouslyAdopted) {
+  public void setPreviouslyAdopted(PreviouslyAdopted previouslyAdopted) {
     this.previouslyAdopted = previouslyAdopted;
   }
 
@@ -460,10 +449,10 @@ public class ChildClient extends Client {
   }
 
   /**
-   * @return the deathCircumstancesType
+   * @return the deathCircumstancesTypeCode
    */
-  public DeathCircumstancesType getDeathCircumstancesType() {
-    return deathCircumstancesType;
+  public short getDeathCircumstancesTypeCode() {
+    return deathCircumstancesTypeCode;
   }
 
   /**

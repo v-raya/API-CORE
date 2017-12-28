@@ -4,13 +4,10 @@ import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+
+import gov.ca.cwds.data.legacy.cms.entity.converter.ZipCodeConverter;
+import gov.ca.cwds.data.legacy.cms.entity.converter.ZipExtConverter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Fetch;
@@ -430,7 +427,8 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    */
   @Basic
   @Column(name = "P_ZIP_NO", nullable = false)
-  private Integer pZipNo;
+  @Convert( converter=ZipCodeConverter.class )
+  private String pZipNo;
 
   /**
    * PRIMARY_CONTACT_PERSON_NAME - The name of the facility's primary contact person for the
@@ -516,7 +514,8 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    */
   @Basic
   @Column(name = "ZIP_NO", nullable = false)
-  private Integer zipNo;
+  @Convert( converter=ZipCodeConverter.class )
+  private String zipNo;
 
   /**
    * ADDRESS_DESCRIPTION - Any additional information pertaining to the  PLACEMENT HOME's address
@@ -606,14 +605,16 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    */
   @Basic
   @Column(name = "PY_ZIP_SFX", nullable = false)
-  private Short pyZipSfx;
+  @Convert(converter = ZipExtConverter.class)
+  private String pyZipSfx;
 
   /**
    * ZIP_SUFFIX_NUMBER - The last four digits of the zip code for a PLACEMENT HOME's address.
    */
   @Basic
   @Column(name = "ZIP_SFX_NO", nullable = false)
-  private Short zipSfxNo;
+  @Convert(converter = ZipExtConverter.class)
+  private String zipSfxNo;
 
   /**
    * APPLICATION_STATUS_TYPE - The system generated number which identifies the current status of
@@ -697,7 +698,8 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    */
   @Basic
   @Column(name = "LA_P_ZIPNO", nullable = false)
-  private Integer laPZipno;
+  @Convert(converter = ZipCodeConverter.class)
+  private String laPZipno;
 
   /**
    * LA_PAYEE_ZIP_SUFFIX_NUMBER - The last four digits of the zip code for the Designated Payee's
@@ -705,7 +707,8 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    */
   @Basic
   @Column(name = "LA_P_ZPSFX", nullable = false)
-  private Short laPZpsfx;
+  @Convert(converter = ZipExtConverter.class)
+  private String laPZpsfx;
 
   /**
    * LA_PAYEE_BUSINESS - LA payee business
@@ -1236,11 +1239,11 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
     this.pstreetNo = pstreetNo;
   }
 
-  public Integer getpZipNo() {
+  public String getpZipNo() {
     return pZipNo;
   }
 
-  public void setpZipNo(Integer pZipNo) {
+  public void setpZipNo(String pZipNo) {
     this.pZipNo = pZipNo;
   }
 
@@ -1317,11 +1320,11 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
     this.streetNo = streetNo;
   }
 
-  public Integer getZipNo() {
+  public String getZipNo() {
     return zipNo;
   }
 
-  public void setZipNo(Integer zipNo) {
+  public void setZipNo(String zipNo) {
     this.zipNo = zipNo;
   }
 
@@ -1397,19 +1400,19 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
     this.rlgActdsc = rlgActdsc;
   }
 
-  public Short getPyZipSfx() {
+  public String getPyZipSfx() {
     return pyZipSfx;
   }
 
-  public void setPyZipSfx(Short pyZipSfx) {
+  public void setPyZipSfx(String pyZipSfx) {
     this.pyZipSfx = pyZipSfx;
   }
 
-  public Short getZipSfxNo() {
+  public String getZipSfxNo() {
     return zipSfxNo;
   }
 
-  public void setZipSfxNo(Short zipSfxNo) {
+  public void setZipSfxNo(String zipSfxNo) {
     this.zipSfxNo = zipSfxNo;
   }
 
@@ -1477,19 +1480,19 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
     this.laPStno = laPStno;
   }
 
-  public Integer getLaPZipno() {
+  public String getLaPZipno() {
     return laPZipno;
   }
 
-  public void setLaPZipno(Integer laPZipno) {
+  public void setLaPZipno(String laPZipno) {
     this.laPZipno = laPZipno;
   }
 
-  public Short getLaPZpsfx() {
+  public String getLaPZpsfx() {
     return laPZpsfx;
   }
 
-  public void setLaPZpsfx(Short laPZpsfx) {
+  public void setLaPZpsfx(String laPZpsfx) {
     this.laPZpsfx = laPZpsfx;
   }
 

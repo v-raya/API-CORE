@@ -9,7 +9,7 @@ public abstract class BaseCwsCmsInMemoryPersistenceTest extends BasePersistenceT
   private final String USER = "";
   private final String PASSWORD = "";
   private final String DRIVER_CLASS_NAME = "org.h2.Driver";
-  private final String LIQUIBASE_SCRIPT_PATH = "liquibase/cwscms_database_master.xml";
+  private final String LIQUIBASE_SCRIPT_PATH = "liquibase/cwscms_database_base_with_lookups.xml";
   private final String HIBERNATE_CONFIG_PATH = "hibernate.cfg.xml";
 
   @Override

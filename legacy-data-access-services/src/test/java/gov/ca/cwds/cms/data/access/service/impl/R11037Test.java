@@ -10,14 +10,13 @@ import org.junit.Test;
 /**
  * Created by TPT2 on 12/12/2017.
  */
-public class R11037Test extends BaseDocToolRulesTest {
+public class R11037Test extends BaseDocToolRulesPlacementHomeTest {
 
   @Test
   public void testDoesNotHavePrivilege() throws Exception {
     try {
-      placementHomeEntityAwareDTO.getPerryAccount().getPrivileges().remove(
-          USR_PRV_RESOURCE_MGMT_PLACEMENT_FACILITY_MAINT);
-      service.runBusinessValidation(placementHomeEntityAwareDTO);
+      principal.getPrivileges().remove(USR_PRV_RESOURCE_MGMT_PLACEMENT_FACILITY_MAINT);
+      placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
       fail();
     } catch (BusinessValidationException e) {
       Assert.assertEquals("R-11037", e.getValidationDetailsList().iterator().next().getCode());

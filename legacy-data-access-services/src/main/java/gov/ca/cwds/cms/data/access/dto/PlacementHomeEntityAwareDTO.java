@@ -22,10 +22,6 @@ public class PlacementHomeEntityAwareDTO extends BaseEntityAwareDTO<PlacementHom
 
   private Set<? extends CWSIdentifier> homeLanguages = new HashSet<>();
 
-  public PlacementHomeEntityAwareDTO(PerryAccount perryAccount) {
-    super(perryAccount);
-  }
-
   public Set<? extends CWSIdentifier> getHomeLanguages() {
     return homeLanguages;
   }

@@ -35,7 +35,7 @@ public class ExceptionMapperUtils {
    * @param incidentId Incident ID
    * @return A generic Response created from given exception
    */
-  public static Response createGenericRespponse(Exception ex, IssueType issueType, int status,
+  public static Response createGenericResponse(Exception ex, IssueType issueType, int status,
       String incidentId) {
     IssueDetails issueDetails = new IssueDetails();
 
@@ -57,6 +57,6 @@ public class ExceptionMapperUtils {
     BaseExceptionResponse response = new BaseExceptionResponse();
     response.setIssueDetails(detailsList);
 
-    return Response.status(500).entity(response).type(MediaType.APPLICATION_JSON).build();
+    return Response.status(status).entity(response).type(MediaType.APPLICATION_JSON).build();
   }
 }

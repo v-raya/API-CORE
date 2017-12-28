@@ -14,11 +14,12 @@ allprojects {
 
     project.ext {
         versionPropertyValue = System.properties.getProperty('version')
-        releaseVersion = "0.5.2"
+        releaseVersion = "0.5.4"
         snapshotVersion = releaseVersion + '-SNAPSHOT'
         currentVersion = ((versionPropertyValue != null ) ? versionPropertyValue : snapshotVersion)
         commonGroupId = "gov.ca.cwds.api"
-        apiSecurityVersion = "0.5.3_304-RC"
+        apiSecurityVersion = "0.5.3_318"
+//        apiSecurityVersion = "0.5.3_304-RC"
         configPath = "$rootProject.projectDir/config/"
         dropwizardVersion = "1.1.0"
         dropwizardFlywayVersion = "1.0.0-1"
@@ -29,8 +30,6 @@ allprojects {
         log4jVersion = "2.8.2"
         logbackVersion = "1.2.1"
         slf4jVersion = "1.7.25"
-        mockitoVersion = "2.0.54-beta"
-        hamcrestVersion = "2.0.0.0"
         commonsIOVersion = "2.6"
         commonsBeanutilsVersion = "1.8.3"
         commonsCollectionsVersion = "4.1"
@@ -40,10 +39,15 @@ allprojects {
         glassfishJerseyExtVersion = "2.23.2"
         jacksonVersion = "2.8.2"
         postgresqlVersion = "9.4.1208.jre7"
-        dataModelVersion = '0.4.4'
+        dataModelVersion = '0.4.6'
         droolsVersion = "7.1.0.Final"
         mapstructVersion = '1.1.0.Final'
         junitVersion = '4.12'
+        mockitoVersion = "2.8.9"
+        hamcrestVersion = "2.0.0.0"
+        powerMockVersion = "1.7.3"
+        h2Version = "1.4.194"
+        liquibaseVersion = "3.5.3"
 
         // Publishing configuration
         snapshotMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/repo"
@@ -85,6 +89,9 @@ allprojects {
 
     test {
         exclude '**/*IT*'
+        jacoco {
+            excludes = ["**org/drools/**/*"]
+        }
     }
 
     task integrationTest(type: Test, dependsOn: testClasses) {

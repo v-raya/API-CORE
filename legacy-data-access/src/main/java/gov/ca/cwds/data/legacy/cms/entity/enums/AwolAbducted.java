@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.legacy.cms.entity.enums;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import javax.persistence.Converter;
@@ -20,6 +21,14 @@ public enum AwolAbducted implements EntityEnum<String> {
   AwolAbducted(String code, String description) {
     this.code = code;
     this.description = description;
+  }
+
+  public static AwolAbducted from(String code) {
+    return Arrays.asList(AwolAbducted.values())
+        .stream()
+        .findFirst()
+        .filter(e -> e.code.equals(code))
+        .orElse(null);
   }
 
   @Override

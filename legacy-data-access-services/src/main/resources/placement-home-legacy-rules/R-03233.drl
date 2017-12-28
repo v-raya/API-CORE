@@ -1,0 +1,87 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
+import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider
+import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
+import org.apache.commons.lang3.StringUtils
+
+global java.util.Set validationDetailsList
+
+rule "R-03233-zipSfxNo"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*;
+       Code: R - 03233
+       Rule Txt
+       The Zip+4 field must always be blank or contains 4 digits
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome: PlacementHome(zipSfxNo != null && zipSfxNo.length != 0 && zipSfxNo not matches "\\d{4}") from $placementHomeAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-03233");
+      details.setUserMessage("Placement home's zip suffix must always be blank or contains 4 digit");
+      details.setTechnicalMessage("The Zip+4 field must always be blank or contains 4 digits");
+      validationDetailsList.add(details);
+end
+
+
+rule "R-03233-pyZipSfx"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*;
+          Code: R - 03233
+          Rule Txt
+          All zip suffix entered must be blank or 4 digits.
+       */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome: PlacementHome(pyZipSfx != null && pyZipSfx.length != 0 && pyZipSfx not matches "\\d{4}") from $placementHomeAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-03233");
+      details.setUserMessage("Payee's zip suffix must always be blank or contains 4 digit");
+      details.setTechnicalMessage("The Zip+4 field must always be blank or contains 4 digits");
+      validationDetailsList.add(details);
+end
+
+
+rule "R-03233-laPZpsfx"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*;
+          Code: R - 03233
+          Rule Txt
+          All zip suffix entered must be blank or 4 digits.
+       */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome: PlacementHome(laPZpsfx != null && laPZpsfx.length != 0 && laPZpsfx not matches "\\d{4}") from $placementHomeAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-03233");
+      details.setUserMessage("LA Payee's zip suffix must always be blank or contains 4 digit");
+      details.setTechnicalMessage("The Zip+4 field must always be blank or contains 4 digits");
+      validationDetailsList.add(details);
+end
+
+
+rule "R-03233-primarySubstituteCareProvider.zipSfxNo"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*;
+          Code: R - 03233
+          Rule Txt
+          The Zip+4 field must always be blank or contains 4 digits
+       */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome: PlacementHome() from $placementHomeAwareDTO.entity
+      $primarySubstituteCareProvider : SubstituteCareProvider(zipSfxNo != null && zipSfxNo.length != 0 && zipSfxNo not matches "\\d{4}") from $placementHome.primarySubstituteCareProvider
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-03233");
+      details.setUserMessage("Primary Substitute Care Provider's zip suffix number must always be blank or contains 4 digit");
+      details.setTechnicalMessage("The Zip+4 field must always be blank or contains 4 digits");
+      validationDetailsList.add(details);
+end
