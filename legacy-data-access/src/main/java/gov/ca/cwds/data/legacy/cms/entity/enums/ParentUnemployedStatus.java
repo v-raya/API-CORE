@@ -19,14 +19,6 @@ public enum ParentUnemployedStatus implements EntityEnum<String> {
     this.description = description;
   }
 
-  public static ParentUnemployedStatus from(String code) {
-    return Arrays.asList(ParentUnemployedStatus.values())
-        .stream()
-        .findFirst()
-        .filter(e -> e.code.equals(code))
-        .orElse(null);
-  }
-
   @Override
   public String getCode() {
     return code;

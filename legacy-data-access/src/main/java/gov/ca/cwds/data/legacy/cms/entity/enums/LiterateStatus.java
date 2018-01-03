@@ -19,14 +19,6 @@ public enum LiterateStatus implements EntityEnum<String> {
     this.description = description;
   }
 
-  public static LiterateStatus from(String code) {
-    return Arrays.asList(LiterateStatus.values())
-        .stream()
-        .findFirst()
-        .filter(e -> e.code.equals(code))
-        .orElse(null);
-  }
-
   @Override
   public String getCode() {
     return code;

@@ -19,14 +19,6 @@ public enum IncapacitatedParentStatus implements EntityEnum<String> {
     this.description = description;
   }
 
-  public static IncapacitatedParentStatus from(String code) {
-    return Arrays.asList(IncapacitatedParentStatus.values())
-        .stream()
-        .findFirst()
-        .filter(e -> e.code.equals(code))
-        .orElse(null);
-  }
-
   @Override
   public String getCode() {
     return code;
