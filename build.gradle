@@ -50,7 +50,7 @@ allprojects {
         buildNumber = System.getProperty('BuildNumber')
         customVersion = System.getProperty('CustomVersion')
 
-        projectSnapshotVersion = projectMajorVersion + "-local"
+        projectSnapshotVersion = projectMajorVersion + "-SNAPSHOT"
         projectReleaseVersion = (customVersion == null || customVersion == "" || customVersion.startsWith('$') ? projectMajorVersion + '_' + buildNumber + '-RC' : customVersion )
         projectVersion = (isRelease ? projectReleaseVersion : projectSnapshotVersion )
 
