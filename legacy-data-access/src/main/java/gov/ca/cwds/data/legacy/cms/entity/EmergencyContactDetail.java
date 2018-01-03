@@ -1,10 +1,12 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
+import gov.ca.cwds.data.legacy.cms.entity.converter.StringToRequiredLongConverter;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -63,7 +65,8 @@ public class EmergencyContactDetail implements PersistentObject {
    */
   @Basic
   @Column(name = "PRI_PH_NO", nullable = true, precision = 0)
-  private Integer priPhNo;
+  @Convert( converter = StringToRequiredLongConverter.class)
+  private String priPhNo;
 
   /**
    * PRIMARY_PHONE_EXTENSION_NUMBER - The phone number extension where the contact person can be
@@ -79,7 +82,8 @@ public class EmergencyContactDetail implements PersistentObject {
    */
   @Basic
   @Column(name = "ALT_PH_NO", nullable = true, precision = 0)
-  private Integer altPhNo;
+  @Convert( converter = StringToRequiredLongConverter.class)
+  private String altPhNo;
 
   /**
    * ALTERNATE_PHONE_EXTENSION_NUMBER - The alternate phone number extension where the contact
@@ -196,11 +200,11 @@ public class EmergencyContactDetail implements PersistentObject {
     this.cntctNme = cntctNme;
   }
 
-  public Integer getPriPhNo() {
+  public String getPriPhNo() {
     return priPhNo;
   }
 
-  public void setPriPhNo(Integer priPhNo) {
+  public void setPriPhNo(String priPhNo) {
     this.priPhNo = priPhNo;
   }
 
@@ -212,11 +216,11 @@ public class EmergencyContactDetail implements PersistentObject {
     this.priPhExt = priPhExt;
   }
 
-  public Integer getAltPhNo() {
+  public String getAltPhNo() {
     return altPhNo;
   }
 
-  public void setAltPhNo(Integer altPhNo) {
+  public void setAltPhNo(String altPhNo) {
     this.altPhNo = altPhNo;
   }
 
