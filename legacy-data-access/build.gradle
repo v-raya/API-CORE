@@ -1,3 +1,4 @@
+
 dependencies {
     compile project(':api-core-common')
     compile group: "io.dropwizard", name: "dropwizard-hibernate", version: dropwizardVersion
