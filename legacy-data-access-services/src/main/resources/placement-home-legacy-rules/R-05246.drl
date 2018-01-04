@@ -1,0 +1,187 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
+import gov.ca.cwds.data.legacy.cms.entity.EmergencyContactDetail
+import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider
+import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
+import org.apache.commons.lang3.StringUtils
+
+global java.util.Set validationDetailsList
+
+rule "R-05246-bckTelNo"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+       Code: R - 05246
+       Rule Txt:
+       Zero is invalid as the first digit in this control. When the user tabs off this control
+       the control will be validated at the control level. If the control contains a zero as
+       the first digit the standard error message: "The field has invalid data and is going to
+       be reset to the original value" will be displayed.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome: PlacementHome(bckTelNo != null && bckTelNo.length > 0 && bckTelNo matches "^0.*") from $placementHomeAwareDTO.entity
+
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-05246");
+      details.setProperty("placementHome.bckTelNo");
+      details.setInvalidValue($placementHome.getBckTelNo());
+      details.setUserMessage("Zero is invalid as the first digit for the phone field");
+      details.setTechnicalMessage("Zero is invalid as the first digit for the phone field");
+      validationDetailsList.add(details);
+end
+
+
+rule "R-05246-prmTelNo"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+       Code: R - 05246
+       Rule Txt:
+       Zero is invalid as the first digit in this control. When the user tabs off this control
+       the control will be validated at the control level. If the control contains a zero as
+       the first digit the standard error message: "The field has invalid data and is going to
+       be reset to the original value" will be displayed.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome: PlacementHome(prmTelNo != null && prmTelNo.length > 0 && prmTelNo matches "^0.*") from $placementHomeAwareDTO.entity
+
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-05246");
+      details.setProperty("placementHome.prmTelNo");
+      details.setInvalidValue($placementHome.getPrmTelNo());
+      details.setUserMessage("Zero is invalid as the first digit for the phone field");
+      details.setTechnicalMessage("Zero is invalid as the first digit for the phone field");
+      validationDetailsList.add(details);
+end
+
+rule "R-05246-laPPhNo"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+       Code: R - 05246
+       Rule Txt:
+       Zero is invalid as the first digit in this control. When the user tabs off this control
+       the control will be validated at the control level. If the control contains a zero as
+       the first digit the standard error message: "The field has invalid data and is going to
+       be reset to the original value" will be displayed.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome: PlacementHome(laPPhNo != null && laPPhNo.length > 0 && laPPhNo matches "^0.*") from $placementHomeAwareDTO.entity
+
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-05246");
+      details.setProperty("placementHome.laPPhNo");
+      details.setInvalidValue($placementHome.getLaPPhNo());
+      details.setUserMessage("Zero is invalid as the first digit for the phone field");
+      details.setTechnicalMessage("Zero is invalid as the first digit for the phone field");
+      validationDetailsList.add(details);
+end
+
+rule "R-05246-pyeTelNo"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+       Code: R - 05246
+       Rule Txt:
+       Zero is invalid as the first digit in this control. When the user tabs off this control
+       the control will be validated at the control level. If the control contains a zero as
+       the first digit the standard error message: "The field has invalid data and is going to
+       be reset to the original value" will be displayed.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome: PlacementHome(pyeTelNo != null && pyeTelNo.length > 0 && pyeTelNo matches "^0.*") from $placementHomeAwareDTO.entity
+
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-05246");
+      details.setProperty("placementHome.pyeTelNo");
+      details.setInvalidValue($placementHome.getPyeTelNo());
+      details.setUserMessage("Zero is invalid as the first digit for the phone field");
+      details.setTechnicalMessage("Zero is invalid as the first digit for the phone field");
+      validationDetailsList.add(details);
+end
+
+
+rule "R-05246-faxNo"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+       Code: R - 05246
+       Rule Txt:
+       Zero is invalid as the first digit in this control. When the user tabs off this control
+       the control will be validated at the control level. If the control contains a zero as
+       the first digit the standard error message: "The field has invalid data and is going to
+       be reset to the original value" will be displayed.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome: PlacementHome(faxNo != null && faxNo.length > 0 && faxNo matches "^0.*") from $placementHomeAwareDTO.entity
+
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-05246");
+      details.setProperty("placementHome.faxNo");
+      details.setInvalidValue($placementHome.getFaxNo());
+      details.setUserMessage("Zero is invalid as the first digit for the phone field");
+      details.setTechnicalMessage("Zero is invalid as the first digit for the phone field");
+      validationDetailsList.add(details);
+end
+
+rule "R-05246-emergencyContact.priPhNo"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+       Code: R - 05246
+       Rule Txt:
+       Zero is invalid as the first digit in this control. When the user tabs off this control
+       the control will be validated at the control level. If the control contains a zero as
+       the first digit the standard error message: "The field has invalid data and is going to
+       be reset to the original value" will be displayed.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $emergencyContact: EmergencyContactDetail(priPhNo != null && priPhNo.length > 0 && priPhNo matches "^0.*") from $placementHomeAwareDTO.emergencyContactDetail
+
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-05246");
+      details.setProperty("emergencyContactDetail.priPhNo");
+      details.setInvalidValue($emergencyContact.getPriPhNo());
+      details.setUserMessage("Zero is invalid as the first digit for the phone field");
+      details.setTechnicalMessage("Zero is invalid as the first digit for the phone field");
+      validationDetailsList.add(details);
+end
+
+rule "R-05246-emergencyContact.altPhNo"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+       Code: R - 05246
+       Rule Txt:
+       Zero is invalid as the first digit in this control. When the user tabs off this control
+       the control will be validated at the control level. If the control contains a zero as
+       the first digit the standard error message: "The field has invalid data and is going to
+       be reset to the original value" will be displayed.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $emergencyContact: EmergencyContactDetail(altPhNo != null && altPhNo.length > 0 && altPhNo matches "^0.*") from $placementHomeAwareDTO.emergencyContactDetail
+
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-05246");
+      details.setProperty("emergencyContactDetail.altPhNo");
+      details.setInvalidValue($emergencyContact.getAltPhNo());
+      details.setUserMessage("Zero is invalid as the first digit for the phone field");
+      details.setTechnicalMessage("Zero is invalid as the first digit for the phone field");
+      validationDetailsList.add(details);
+end
+
+
