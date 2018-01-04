@@ -1,6 +1,7 @@
 plugins {
     id 'net.ltgt.apt' version '0.9'
 }
+
 dependencies {
     compile project(':legacy-data-access')
     compile project(':drools-engine')
@@ -13,10 +14,7 @@ dependencies {
     apt 'org.mapstruct:mapstruct-processor:' + mapstructVersion
 
     testCompile group: 'junit', name: 'junit', version: junitVersion
-    testCompile group: commonGroupId, name: 'api-core-test-util', version: projectVersion
 }
-
-test.dependsOn ":api-core-test-util:build"
 
 publishing {
     publications {
