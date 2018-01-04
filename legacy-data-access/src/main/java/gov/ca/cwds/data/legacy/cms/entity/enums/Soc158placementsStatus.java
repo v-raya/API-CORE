@@ -18,14 +18,6 @@ public enum Soc158placementsStatus implements EntityEnum<String> {
     this.description = description;
   }
 
-  public static Soc158placementsStatus from(String code) {
-    return Arrays.asList(Soc158placementsStatus.values())
-        .stream()
-        .findFirst()
-        .filter(e -> e.code.equals(code))
-        .orElse(null);
-  }
-
   @Override
   public String getCode() {
     return code;

@@ -5,9 +5,7 @@ import java.util.Collections;
 import java.util.Map;
 import javax.persistence.Converter;
 
-/**
- * @author CWDS CASE API Team
- */
+/** @author CWDS CASE API Team */
 public enum Disability implements EntityEnum<String> {
   NOT_YET_DETERMINED("D", "Not Yet Determined"),
   NO("N", "No"),
@@ -19,14 +17,6 @@ public enum Disability implements EntityEnum<String> {
   Disability(String code, String description) {
     this.code = code;
     this.description = description;
-  }
-
-  public static Disability from(String code) {
-    return Arrays.asList(Disability.values())
-        .stream()
-        .findFirst()
-        .filter(e -> e.code.equals(code))
-        .orElse(null);
   }
 
   @Override
@@ -51,4 +41,3 @@ public enum Disability implements EntityEnum<String> {
     }
   }
 }
-

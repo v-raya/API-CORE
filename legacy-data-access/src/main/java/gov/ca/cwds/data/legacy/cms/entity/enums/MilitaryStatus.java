@@ -20,14 +20,6 @@ public enum MilitaryStatus implements EntityEnum<String> {
     this.description = description;
   }
 
-  public static MilitaryStatus from(String code) {
-    return Arrays.asList(MilitaryStatus.values())
-        .stream()
-        .findFirst()
-        .filter(e -> e.code.equals(code))
-        .orElse(null);
-  }
-
   @Override
   public String getCode() {
     return code;

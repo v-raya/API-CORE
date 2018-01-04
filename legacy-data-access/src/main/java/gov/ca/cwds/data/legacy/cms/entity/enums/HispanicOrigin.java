@@ -21,14 +21,6 @@ public enum HispanicOrigin implements EntityEnum<String> {
     this.description = description;
   }
 
-  public static HispanicOrigin from(String code) {
-    return Arrays.asList(HispanicOrigin.values())
-        .stream()
-        .findFirst()
-        .filter(e -> e.code.equals(code))
-        .orElse(null);
-  }
-
   @Override
   public String getCode() {
     return code;
