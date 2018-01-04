@@ -1,8 +1,7 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
-import static gov.ca.cwds.util.TestUtils.localDate;
-
 import gov.ca.cwds.data.legacy.cms.entity.Client;
+import java.time.LocalDate;
 import org.junit.Test;
 
 public class R00739Test extends BaseDocToolRulesClientTest {
@@ -12,8 +11,8 @@ public class R00739Test extends BaseDocToolRulesClientTest {
   @Test
   public void testDeathDateGtBirthDate() throws Exception {
     Client client = new Client();
-    client.setBirthDate(localDate("2018-01-01"));
-    client.setDeathDate(localDate("2098-01-03"));
+    client.setBirthDate(LocalDate.of(2018, 1, 1));
+    client.setDeathDate(LocalDate.of(2098, 1, 3));
 
     checkRuleSatisfied(client, RULE_NAME);
   }
@@ -21,8 +20,8 @@ public class R00739Test extends BaseDocToolRulesClientTest {
   @Test
   public void testDeathDateLtBirthDate() throws Exception {
     Client client = new Client();
-    client.setBirthDate(localDate("2098-01-03"));
-    client.setDeathDate(localDate("2018-01-01"));
+    client.setBirthDate(LocalDate.of(2098, 1, 3));
+    client.setDeathDate(LocalDate.of(2018, 1, 1));
 
     checkRuleViolatedOnce(client, RULE_NAME);
   }
@@ -30,8 +29,8 @@ public class R00739Test extends BaseDocToolRulesClientTest {
   @Test
   public void testDeathDateEqBirthDate() throws Exception {
     Client client = new Client();
-    client.setBirthDate(localDate("2018-01-03"));
-    client.setDeathDate(localDate("2018-01-03"));
+    client.setBirthDate(LocalDate.of(2018, 1, 3));
+    client.setDeathDate(LocalDate.of(2018, 1, 3));
 
     checkRuleSatisfied(client, RULE_NAME);
   }
@@ -39,7 +38,7 @@ public class R00739Test extends BaseDocToolRulesClientTest {
   @Test
   public void testDeathDateNull() throws Exception {
     Client client = new Client();
-    client.setBirthDate(localDate("2018-01-03"));
+    client.setBirthDate(LocalDate.of(2018, 1, 3));
     client.setDeathDate(null);
 
     checkRuleSatisfied(client, RULE_NAME);
