@@ -1,12 +1,10 @@
 plugins {
     id 'net.ltgt.apt' version '0.9'
 }
-
 dependencies {
     compile project(':legacy-data-access')
     compile project(':drools-engine')
     compile project (':api-core-cms')
-    compile project (':api-core-test-util')
 
     compile group: 'org.apache.commons', name: 'commons-collections4', version: commonsCollectionsVersion
     compile group: 'gov.ca.cwds.api', name:'api-security', version: apiSecurityVersion
@@ -15,7 +13,10 @@ dependencies {
     apt 'org.mapstruct:mapstruct-processor:' + mapstructVersion
 
     testCompile group: 'junit', name: 'junit', version: junitVersion
+    testCompile group: commonGroupId, name: 'api-core-test-util', version: projectVersion
 }
+
+test.dependsOn ":api-core-test-util:build"
 
 publishing {
     publications {
