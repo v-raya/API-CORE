@@ -7,8 +7,9 @@ public class TestUtils {
 
   public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+  private TestUtils(){}
+
   public static LocalDate localDate(String dateStr) {
     return LocalDate.parse(dateStr, DATE_FORMATTER);
   }
-
 }
