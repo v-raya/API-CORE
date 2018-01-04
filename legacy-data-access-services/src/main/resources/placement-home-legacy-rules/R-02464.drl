@@ -1,0 +1,25 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
+import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
+import gov.ca.cwds.security.realm.PerryAccount;
+
+global java.util.Set validationDetailsList
+
+rule "R-02464"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+        Rule Txt
+            Set the default county to the logged on user's county if not State of California.
+
+        Logic
+            (logged on)STAFF_PERSON> CWS_OFFICE.Government_Entity_Type
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome: PlacementHome(gvrEntc == 0 || gvrEntc == null) from $placementHomeAwareDTO.entity
+      $perryAccount: PerryAccount(countyCode != 99)
+  then
+      $placementHomeAwareDTO.getEntity().setGvrEntc(Short.parseShort($perryAccount.getCountyCwsCode()));
+      update ($placementHomeAwareDTO);
+end
