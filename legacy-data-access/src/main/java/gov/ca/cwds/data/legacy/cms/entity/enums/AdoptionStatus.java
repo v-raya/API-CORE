@@ -1,6 +1,5 @@
 package gov.ca.cwds.data.legacy.cms.entity.enums;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import javax.persistence.Converter;
@@ -17,14 +16,6 @@ public enum AdoptionStatus implements EntityEnum<String> {
   AdoptionStatus(String code, String description) {
     this.code = code;
     this.description = description;
-  }
-
-  public static AdoptionStatus from(String code) {
-    return Arrays.asList(AdoptionStatus.values())
-        .stream()
-        .findFirst()
-        .filter(e -> e.code.equals(code))
-        .orElse(null);
   }
 
   @Override

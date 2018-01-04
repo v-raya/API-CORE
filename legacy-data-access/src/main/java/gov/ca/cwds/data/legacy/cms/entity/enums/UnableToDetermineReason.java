@@ -18,14 +18,6 @@ public enum UnableToDetermineReason implements EntityEnum<String> {
     this.description = description;
   }
 
-  public static UnableToDetermineReason from(String code) {
-    return Arrays.asList(UnableToDetermineReason.values())
-        .stream()
-        .findFirst()
-        .filter(e -> e.code.equals(code))
-        .orElse(null);
-  }
-
   @Override
   public String getCode() {
     return code;
