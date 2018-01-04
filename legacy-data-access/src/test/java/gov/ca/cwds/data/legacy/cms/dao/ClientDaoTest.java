@@ -1,6 +1,5 @@
 package gov.ca.cwds.data.legacy.cms.dao;
 
-import static gov.ca.cwds.util.TestUtils.localDate;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -21,6 +20,7 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Soc158placementsStatus;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType;
 import gov.ca.cwds.data.legacy.cms.persistence.BaseCwsCmsInMemoryPersistenceTest;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
@@ -98,7 +98,7 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
           c.setAdjudicatedDelinquentIndicator(false); // ADJDEL_IND
           c.setAdoptionStatus(AdoptionStatus.NOT_FREE); // ADPTN_STCD
           c.setAlienRegistrationNumber("AlienRegNum"); // ALN_REG_NO
-          c.setBirthDate(localDate("1972-08-17")); // BIRTH_DT
+          c.setBirthDate(LocalDate.of(1972, 8, 17)); // BIRTH_DT
           c.setBirthFacilityName("BirthFacilityName");
           c.setBirthCity("Sacramento"); // BIRTH_CITY
           c.setChildClientIndicator(false); // CHLD_CLT_B
@@ -106,7 +106,7 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
           c.setCommonLastName("Lazenby"); // COM_LST_NM
           c.setCommonMiddleName("Midname"); // COM_MID_NM
           c.setConfidentialityInEffectIndicator(false); // CONF_EFIND
-          c.setCreationDate(localDate("2004-08-17")); // CREATN_DT
+          c.setCreationDate(LocalDate.of(2004, 8, 17)); // CREATN_DT
           c.setDriverLicenseNumber("license"); // DRV_LIC_NO
           c.setGender(Gender.MALE); // GENDER_CD
           c.setIncapacitatedParentStatus(IncapacitatedParentStatus.UNKNOWN); // INCAPC_CD

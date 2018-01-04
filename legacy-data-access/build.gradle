@@ -7,10 +7,7 @@ dependencies {
     testCompile group: 'com.h2database', name: 'h2', version: h2Version
     testCompile group: 'org.dbunit', name: 'dbunit', version: '2.5.0'
     testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version: hamcrestVersion
-    testCompile group: commonGroupId, name: 'api-core-test-util', version: projectVersion
 }
-
-test.dependsOn ":api-core-test-util:build"
 
 publishing {
     publications {
