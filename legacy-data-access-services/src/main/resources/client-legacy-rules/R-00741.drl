@@ -2,7 +2,7 @@ import gov.ca.cwds.rest.exception.IssueDetails
 import gov.ca.cwds.data.legacy.cms.entity.Client
 import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
 
-global java.util.Set validationDetailsList
+global java.util.Set<IssueDetails> validationDetailsList
 
 rule "R-00741"
   dialect "mvel"
@@ -10,9 +10,11 @@ rule "R-00741"
   when
       /*
         Code: R - 00741
-        Rule Txt
+
+        Rule Txt:
         The primary and secondary languages of a client may not be the same.
-        Logic
+
+        Logic:
         CLIENT.Primary Language Type <> CLIENT.Secondary Language Type
       */
       $clientAwareDTO: ClientEntityAwareDTO()
