@@ -1,6 +1,6 @@
 package gov.ca.cwds.data.legacy.cms.dao;
 
-import static gov.ca.cwds.data.legacy.cms.TestUtils.localDate;
+import static gov.ca.cwds.util.TestUtils.localDate;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;

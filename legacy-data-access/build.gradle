@@ -1,6 +1,7 @@
 
 dependencies {
     compile project(':api-core-common')
+    compile project (':api-core-test-util')
     compile group: "io.dropwizard", name: "dropwizard-hibernate", version: dropwizardVersion
 
     testCompile group: 'gov.ca.cwds.cals', name: 'cws-cms-data-model', version: dataModelVersion, changing: true
