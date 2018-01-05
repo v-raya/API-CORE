@@ -90,13 +90,23 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
   public void runBusinessValidation(
       PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, PerryAccount principal)
       throws DroolsException {
+      runRulesAgenda(placementHomeEntityAwareDTO, PlacementHomeDroolsConfiguration.INSTANCE, principal);
+  }
 
-    Set<IssueDetails> detailsList =
-        droolsService.performBusinessRules(
-            PlacementHomeDroolsConfiguration.INSTANCE, placementHomeEntityAwareDTO, principal);
-    if (!detailsList.isEmpty()) {
-      throw new BusinessValidationException("Can't create Placement Home", detailsList);
-    }
+  @Override
+  public void runDataProcessing(
+          PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, PerryAccount principal)
+          throws DroolsException {
+      runRulesAgenda(placementHomeEntityAwareDTO, PlacementHomeDroolsConfiguration.DATA_PROCESSING_INSTANCE, principal);
+  }
+
+  private void runRulesAgenda(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, PlacementHomeDroolsConfiguration dataProcessingInstance, PerryAccount principal2) throws DroolsException {
+      Set<IssueDetails> detailsList =
+                droolsService.performBusinessRules(
+                        dataProcessingInstance, placementHomeEntityAwareDTO, principal2);
+        if (!detailsList.isEmpty()) {
+            throw new BusinessValidationException("Can't create Placement Home", detailsList);
+      }
   }
 
   @Override
@@ -104,12 +114,13 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
       throws DataAccessServicesException {
     try {
       validateParameters(placementHomeEntityAwareDTO);
+      runDataProcessing(placementHomeEntityAwareDTO, PrincipalUtils.getPrincipal());
       runBusinessValidation(placementHomeEntityAwareDTO, PrincipalUtils.getPrincipal());
       createPlacementHome(placementHomeEntityAwareDTO);
       createPlacementHomeUc(placementHomeEntityAwareDTO);
       createCountyOwnership(placementHomeEntityAwareDTO);
       createExternalInterface();
-      createBackgroundCheck(placementHomeEntityAwareDTO);
+      createBackgroundCheck();
       createEmergencyContactDetail(placementHomeEntityAwareDTO);
       createPlacementHomeProfile(placementHomeEntityAwareDTO);
       createSubstituteCareProviders(placementHomeEntityAwareDTO);
@@ -136,7 +147,7 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
     placementHomeDao.create(placementHome);
   }
 
-  private void createBackgroundCheck(PlacementHomeEntityAwareDTO parameterObject) {
+  private void createBackgroundCheck() {
     BackgroundCheck backgroundCheck = new BackgroundCheck();
     backgroundCheck.setIdentifier(IdGenerator.generateId());
     backgroundCheck.setBkgrchkc((short) -1);

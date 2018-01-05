@@ -15,6 +15,12 @@ public final class PlacementHomeDroolsConfiguration extends DroolsConfiguration<
       "placement-home-legacy-rules"
   );
 
+  public static final PlacementHomeDroolsConfiguration DATA_PROCESSING_INSTANCE = new PlacementHomeDroolsConfiguration(
+          "placement-home-session",
+          "placement-home-data-processi-gagenda",
+          "placement-home-legacy-rules"
+  );
+
   public PlacementHomeDroolsConfiguration(String rulesSession, String rulesAgenda,
       String kieContainerId) {
     super(rulesSession, rulesAgenda, kieContainerId);

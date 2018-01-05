@@ -65,6 +65,7 @@ public class R03960Test extends BaseDocToolRulesPlacementHomeTest {
   }
 
   private void runBusinessValidation() throws DroolsException {
+    placementHomeService.runDataProcessing(placementHomeEntityAwareDTO, principal);
     placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
   }
 }

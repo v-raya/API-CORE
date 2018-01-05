@@ -7,7 +7,7 @@ global java.util.Set validationDetailsList
 
 rule "R-02464"
   dialect "mvel"
-  agenda-group "placement-home-agenda"
+  agenda-group "placement-home-data-processi-gagenda"
   when
       /*
         Rule Txt
@@ -18,7 +18,7 @@ rule "R-02464"
       */
       $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
       $placementHome: PlacementHome(gvrEntc == 0 || gvrEntc == null) from $placementHomeAwareDTO.entity
-      $perryAccount: PerryAccount(countyCode != 99)
+      $perryAccount: PerryAccount(countyCode != 99 && countyCwsCode != null)
   then
       $placementHomeAwareDTO.getEntity().setGvrEntc(Short.parseShort($perryAccount.getCountyCwsCode()));
       update ($placementHomeAwareDTO);
