@@ -1,6 +1,7 @@
 import gov.ca.cwds.rest.exception.IssueDetails
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
 import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
+import org.apache.commons.lang3.StringUtils
 
 global java.util.Set validationDetailsList
 
@@ -31,24 +32,29 @@ rule "R-00168_1"
   agenda-group "placement-home-agenda"
   when
       $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
-      PlacementHome(pyeFstnm != null
-        || pyeMidnm != null
-        || pyeLstnm != null
-        || pstreetNm != null
-        || pstreetNo != null
-        || pCityNm != null
-        || pZipNo != null
-        || pyZipSfx != null
-        || pyeTelNo != null
-        || pyeExtNo != null
-        || payeeStateCode != null,
+      PlacementHome(
+         eval(
+           StringUtils.isNotBlank(pyeFstnm)
+              || StringUtils.isNotBlank(pyeMidnm)
+              || StringUtils.isNotBlank(pyeLstnm)
+              || StringUtils.isNotBlank(pstreetNm)
+              || StringUtils.isNotBlank(pstreetNo)
+              || StringUtils.isNotBlank(pCityNm)
+              || StringUtils.isNotBlank(pZipNo)
+              || StringUtils.isNotBlank(pyZipSfx)
+              || pyeTelNo != null
+              || pyeExtNo != null
+              || payeeStateCode != null
+         ),
 
-        pyeFstnm == null
-        || pyeLstnm == null
-        || pstreetNm == null
-        || pCityNm == null
+         eval(
+          StringUtils.isBlank(pyeFstnm)
+          || StringUtils.isBlank(pyeLstnm)
+          || StringUtils.isBlank(pstreetNm)
+          || StringUtils.isBlank(pCityNm)
+         )
+      ) from  $placementHomeAwareDTO.entity
 
-        ) from  $placementHomeAwareDTO.entity
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-00168");
@@ -65,7 +71,10 @@ rule "R-00168_2"
   agenda-group "placement-home-agenda"
   when
       $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
-      PlacementHome(pZipNo != null || pyZipSfx != null, payeeStateCode == null) from  $placementHomeAwareDTO.entity
+      PlacementHome(
+        eval(StringUtils.isNotBlank(ZipNo) || StringUtils.isNotBlank(pyZipSfx)),
+        payeeStateCode == null || payeeStateCode == 0
+      ) from  $placementHomeAwareDTO.entity
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-00168");
