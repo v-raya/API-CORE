@@ -1,12 +1,8 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
 import gov.ca.cwds.drools.DroolsException;
-import gov.ca.cwds.rest.exception.BusinessValidationException;
 import org.junit.Assert;
 import org.junit.Test;
-
-import static gov.ca.cwds.cms.data.access.Constants.StaffPersonPrivileges.USR_PRV_SOC158_APPLICATION;
-import static org.junit.Assert.fail;
 
 /**
  * Created by TPT2 on 12/11/2017.
@@ -17,7 +13,7 @@ public class R02464Test extends BaseDocToolRulesPlacementHomeTest {
   public void testCountyNull() throws Exception {
     checkR02464(() -> {
       placementHomeEntityAwareDTO.getEntity().setGvrEntc(null);
-        principal.setCountyCode("21");
+      principal.setCountyCode("21");
       principal.setCountyCwsCode("1088");
     });
     Assert.assertTrue(placementHomeEntityAwareDTO.getEntity().getGvrEntc() == 1088);

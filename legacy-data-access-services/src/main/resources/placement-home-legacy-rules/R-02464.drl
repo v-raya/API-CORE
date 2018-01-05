@@ -7,7 +7,7 @@ global java.util.Set validationDetailsList
 
 rule "R-02464"
   dialect "mvel"
-  agenda-group "placement-home-data-processi-gagenda"
+  agenda-group "placement-home-data-processing-agenda"
   when
       /*
         Rule Txt
