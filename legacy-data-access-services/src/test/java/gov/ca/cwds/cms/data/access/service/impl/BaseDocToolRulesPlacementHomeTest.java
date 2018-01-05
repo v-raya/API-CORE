@@ -31,6 +31,7 @@ public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRules
 
   protected void check(String ruleCode) {
     try {
+      placementHomeService.runDataProcessing(placementHomeEntityAwareDTO, principal);
       placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
       fail();
     } catch (BusinessValidationException e) {
