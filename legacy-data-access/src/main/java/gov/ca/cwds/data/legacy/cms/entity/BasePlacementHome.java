@@ -1,6 +1,7 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.legacy.cms.entity.converter.StringToRequiredLongConverter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
@@ -165,7 +166,8 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    */
   @Basic
   @Column(name = "BCK_TEL_NO", nullable = false, precision = 0)
-  private Long bckTelNo;
+  @Convert( converter = StringToRequiredLongConverter.class)
+  private String bckTelNo;
 
   /**
    * CERTIFIED_PENDING_LICENSURE_DATE - The date upon which a not yet licensed PLACEMENT HOME  has
@@ -230,7 +232,8 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    */
   @Basic
   @Column(name = "FAX_NO", nullable = false, precision = 0)
-  private Long faxNo;
+  @Convert( converter = StringToRequiredLongConverter.class)
+  private String faxNo;
 
   /**
    * FOREIGN_ADDRESS_IND_VAR - This indicator variable is used to indicate if there are any
@@ -474,7 +477,8 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    */
   @Basic
   @Column(name = "PRM_TEL_NO", nullable = false, precision = 0)
-  private Long prmTelNo;
+  @Convert( converter = StringToRequiredLongConverter.class)
+  private String prmTelNo;
 
   /**
    * PROVIDES_TRANSPORT_CODE - Indicates whether the home is willing to provide  transportation for
@@ -730,7 +734,8 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    */
   @Basic
   @Column(name = "LA_P_PH_NO", nullable = false, precision = 0)
-  private Long laPPhNo;
+  @Convert( converter = StringToRequiredLongConverter.class)
+  private String laPPhNo;
 
   /**
    * LA_PAYEE_PHONE_EXT - LA phone number extention
@@ -761,7 +766,8 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    */
   @Basic
   @Column(name = "PYE_TEL_NO", nullable = false, precision = 0)
-  private Long pyeTelNo;
+  @Convert( converter = StringToRequiredLongConverter.class)
+  private String pyeTelNo;
 
   /**
    * ARCHIVE_ASSOCIATION_IND - Indicates if the PLACEMENT_HOME is part of something that is
@@ -982,11 +988,11 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
     this.bckExtNo = bckExtNo;
   }
 
-  public Long getBckTelNo() {
+  public String getBckTelNo() {
     return bckTelNo;
   }
 
-  public void setBckTelNo(Long bckTelNo) {
+  public void setBckTelNo(String bckTelNo) {
     this.bckTelNo = bckTelNo;
   }
 
@@ -1046,11 +1052,11 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
     this.emrShltcd = emrShltcd;
   }
 
-  public Long getFaxNo() {
+  public String getFaxNo() {
     return faxNo;
   }
 
-  public void setFaxNo(Long faxNo) {
+  public void setFaxNo(String faxNo) {
     this.faxNo = faxNo;
   }
 
@@ -1280,11 +1286,11 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
     this.prmSubsnm = prmSubsnm;
   }
 
-  public Long getPrmTelNo() {
+  public String getPrmTelNo() {
     return prmTelNo;
   }
 
-  public void setPrmTelNo(Long prmTelNo) {
+  public void setPrmTelNo(String prmTelNo) {
     this.prmTelNo = prmTelNo;
   }
 
@@ -1512,11 +1518,11 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
     this.apStatDt = apStatDt;
   }
 
-  public Long getLaPPhNo() {
+  public String getLaPPhNo() {
     return laPPhNo;
   }
 
-  public void setLaPPhNo(Long laPPhNo) {
+  public void setLaPPhNo(String laPPhNo) {
     this.laPPhNo = laPPhNo;
   }
 
@@ -1544,11 +1550,11 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
     this.pyeExtNo = pyeExtNo;
   }
 
-  public Long getPyeTelNo() {
+  public String getPyeTelNo() {
     return pyeTelNo;
   }
 
-  public void setPyeTelNo(Long pyeTelNo) {
+  public void setPyeTelNo(String pyeTelNo) {
     this.pyeTelNo = pyeTelNo;
   }
 
