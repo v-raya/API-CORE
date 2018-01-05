@@ -1,19 +1,16 @@
 package gov.ca.cwds.data.legacy.cms.entity.enums;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import javax.persistence.Converter;
 
-/**
- * @author CWDS CASE API Team
- */
+/** @author CWDS CASE API Team */
 public enum AwolAbducted implements EntityEnum<String> {
   AWOL_BASED_ON_USER_ENTRY("A", "AWOL - user-entered"),
   ABDUCTED_BASED_ON_USER_ENTRY("B", "Abducted - user-entered"),
   ABDUCTED_BASED_ON_SYSTEM_SETTING("D", "Abducted - system-entered"),
   NOT_APPLICABLE("N", "Not Applicable"),
-  AWOL_BASED_ON_SYSTEM_SETTING("P",  "AWOL - system-entered");
+  AWOL_BASED_ON_SYSTEM_SETTING("P", "AWOL - system-entered");
 
   private final String code;
   private final String description;
@@ -21,14 +18,6 @@ public enum AwolAbducted implements EntityEnum<String> {
   AwolAbducted(String code, String description) {
     this.code = code;
     this.description = description;
-  }
-
-  public static AwolAbducted from(String code) {
-    return Arrays.asList(AwolAbducted.values())
-        .stream()
-        .findFirst()
-        .filter(e -> e.code.equals(code))
-        .orElse(null);
   }
 
   @Override
@@ -42,8 +31,7 @@ public enum AwolAbducted implements EntityEnum<String> {
   }
 
   @Converter
-  public static class AwolAbductedConverter extends
-      BaseEntityEnumConverter<AwolAbducted, String> {
+  public static class AwolAbductedConverter extends BaseEntityEnumConverter<AwolAbducted, String> {
 
     private static final Map<String, AwolAbducted> codeMap =
         Collections.unmodifiableMap(initializeMapping(AwolAbducted.values()));
@@ -54,4 +42,3 @@ public enum AwolAbducted implements EntityEnum<String> {
     }
   }
 }
-

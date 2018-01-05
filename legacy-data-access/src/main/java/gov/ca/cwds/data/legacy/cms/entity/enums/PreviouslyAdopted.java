@@ -5,9 +5,7 @@ import java.util.Collections;
 import java.util.Map;
 import javax.persistence.Converter;
 
-/**
- * @author CWDS CASE API Team
- */
+/** @author CWDS CASE API Team */
 public enum PreviouslyAdopted implements EntityEnum<String> {
   NO("N", "No"),
   UNKNOWN("U", "Unknown"),
@@ -22,14 +20,6 @@ public enum PreviouslyAdopted implements EntityEnum<String> {
     this.description = description;
   }
 
-  public static PreviouslyAdopted from(String code) {
-    return Arrays.asList(PreviouslyAdopted.values())
-        .stream()
-        .findFirst()
-        .filter(e -> e.code.equals(code))
-        .orElse(null);
-  }
-
   @Override
   public String getCode() {
     return code;
@@ -41,8 +31,8 @@ public enum PreviouslyAdopted implements EntityEnum<String> {
   }
 
   @Converter
-  public static class PreviouslyAdoptedConverter extends
-      BaseEntityEnumConverter<PreviouslyAdopted, String> {
+  public static class PreviouslyAdoptedConverter
+      extends BaseEntityEnumConverter<PreviouslyAdopted, String> {
 
     private static final Map<String, PreviouslyAdopted> codeMap =
         Collections.unmodifiableMap(initializeMapping(PreviouslyAdopted.values()));
@@ -53,4 +43,3 @@ public enum PreviouslyAdopted implements EntityEnum<String> {
     }
   }
 }
-
