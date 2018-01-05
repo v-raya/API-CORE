@@ -17,7 +17,7 @@ public final class PlacementHomeDroolsConfiguration extends DroolsConfiguration<
 
   public static final PlacementHomeDroolsConfiguration DATA_PROCESSING_INSTANCE = new PlacementHomeDroolsConfiguration(
           "placement-home-session",
-          "placement-home-data-processi-gagenda",
+          "placement-home-data-processing-agenda",
           "placement-home-legacy-rules"
   );
 

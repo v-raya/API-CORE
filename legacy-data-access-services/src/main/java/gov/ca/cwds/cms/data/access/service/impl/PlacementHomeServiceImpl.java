@@ -90,17 +90,17 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
   public void runBusinessValidation(
       PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, PerryAccount principal)
       throws DroolsException {
-      runRulesAgenda(placementHomeEntityAwareDTO, PlacementHomeDroolsConfiguration.INSTANCE, principal);
+      runRulesAgendaGroup(placementHomeEntityAwareDTO, PlacementHomeDroolsConfiguration.INSTANCE, principal);
   }
 
   @Override
   public void runDataProcessing(
           PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, PerryAccount principal)
           throws DroolsException {
-      runRulesAgenda(placementHomeEntityAwareDTO, PlacementHomeDroolsConfiguration.DATA_PROCESSING_INSTANCE, principal);
+      runRulesAgendaGroup(placementHomeEntityAwareDTO, PlacementHomeDroolsConfiguration.DATA_PROCESSING_INSTANCE, principal);
   }
 
-  private void runRulesAgenda(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, PlacementHomeDroolsConfiguration dataProcessingInstance, PerryAccount principal2) throws DroolsException {
+  private void runRulesAgendaGroup(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, PlacementHomeDroolsConfiguration dataProcessingInstance, PerryAccount principal2) throws DroolsException {
       Set<IssueDetails> detailsList =
                 droolsService.performBusinessRules(
                         dataProcessingInstance, placementHomeEntityAwareDTO, principal2);
