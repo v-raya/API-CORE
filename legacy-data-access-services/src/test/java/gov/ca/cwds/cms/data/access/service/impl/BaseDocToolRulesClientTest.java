@@ -10,43 +10,49 @@ import org.junit.Before;
 
 public abstract class BaseDocToolRulesClientTest extends BaseDocToolRulesTest {
 
-  protected ClientCoreServiceImpl clientCoreService;
+    protected ClientCoreServiceImpl clientCoreService;
+    protected ClientEntityAwareDTO clientEntityAwareDTO;
 
-  @Before
-  public void setUp() {
-    clientCoreService = new ClientCoreServiceImpl();
-    clientCoreService.setDroolsService(droolsService);
-  }
-
-  @Override
-  public String getPrivilege() {
-    return "";
-  }
-
-  protected void runBusinessValidation(Client client) throws DroolsException {
-    clientCoreService.runBusinessValidation(clientEntityAwareDTO(client), principal);
-  }
-
-  protected void checkRuleViolatedOnce(Client client, String ruleName) throws DroolsException {
-    try {
-      runBusinessValidation(client);
-      fail();
-    } catch (BusinessValidationException e) {
-      assertRuleViolatedOnce(ruleName, e);
+    @Before
+    public void setUp() {
+        clientCoreService = new ClientCoreServiceImpl();
+        clientCoreService.setDroolsService(droolsService);
+        clientEntityAwareDTO = new ClientEntityAwareDTO();
     }
-  }
 
-  protected void checkRuleSatisfied(Client client, String ruleName) throws DroolsException {
-    try {
-      runBusinessValidation(client);
-    } catch (BusinessValidationException e) {
-      assertRuleSatisfied(ruleName, e);
+    @Override
+    public String getPrivilege() {
+        return "";
     }
-  }
 
-  private ClientEntityAwareDTO clientEntityAwareDTO(Client client) {
-    ClientEntityAwareDTO clientEntityAwareDTO = new ClientEntityAwareDTO();
-    clientEntityAwareDTO.setEntity(client);
-    return clientEntityAwareDTO;
-  }
+    protected void checkRuleSatisfied(String ruleName) throws DroolsException {
+        try {
+            runBusinessValidation(clientEntityAwareDTO);
+        } catch (BusinessValidationException e) {
+            assertRuleSatisfied(ruleName, e);
+        }
+    }
+
+    protected void checkRuleViolatedOnce(String ruleName) throws DroolsException {
+        try {
+            runBusinessValidation(clientEntityAwareDTO);
+            fail();
+        } catch (BusinessValidationException e) {
+            assertRuleViolatedOnce(ruleName, e);
+        }
+    }
+
+    protected void checkRuleViolatedOnce(Client client, String ruleName) throws DroolsException {
+        clientEntityAwareDTO.setEntity(client);
+        checkRuleViolatedOnce(ruleName);
+    }
+
+    protected void checkRuleSatisfied(Client client, String ruleName) throws DroolsException {
+        clientEntityAwareDTO.setEntity(client);
+        checkRuleSatisfied(ruleName);
+    }
+
+    private void runBusinessValidation(ClientEntityAwareDTO clientEntityAwareDTO) throws DroolsException {
+        clientCoreService.runBusinessValidation(clientEntityAwareDTO, principal);
+    }
 }
