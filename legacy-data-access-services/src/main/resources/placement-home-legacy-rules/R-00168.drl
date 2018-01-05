@@ -72,7 +72,7 @@ rule "R-00168_2"
   when
       $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
       PlacementHome(
-        eval(StringUtils.isNotBlank(ZipNo) || StringUtils.isNotBlank(pyZipSfx)),
+        eval(StringUtils.isNotBlank(pZipNo) || StringUtils.isNotBlank(pyZipSfx)),
         payeeStateCode == null || payeeStateCode == 0
       ) from  $placementHomeAwareDTO.entity
   then
