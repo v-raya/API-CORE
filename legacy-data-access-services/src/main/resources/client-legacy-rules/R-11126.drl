@@ -1,6 +1,7 @@
 import gov.ca.cwds.rest.exception.IssueDetails
-import gov.ca.cwds.data.legacy.cms.entity.Client
-import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
+import gov.ca.cwds.data.legacy.cms.entity.ChildClient
+import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
+import gov.ca.cwds.data.legacy.cms.entity.FсEligibility;
 
 global java.util.Set<IssueDetails> validationDetailsList
 
@@ -18,13 +19,15 @@ rule "R-00741"
         AFDC_ELIGIBILITY.Date must be >= (If Exists) AFDC_ELIGIBILITY > CHILD_CLIENT > CLIENT.Birth_Date.
 
       */
-     $clientAwareDTO: ClientEntityAwareDTO()
-     $client: Client(birthDate != null, deathDate != null, birthDate.isAfter(deathDate)) from $clientAwareDTO.entity
+      $clientAwareDTO: ChildClientEntityAwareDTO()
+      $client: ChildClient() from $clientAwareDTO.entity
+      $fсEligibility : FсEligibility() from $clientAwareDTO.fcFсEligibilities
+      $client: ChildClient(birthDate != null , birthDate.isEqual($fсEligibility.date) || birthDate.isAfter($fсEligibility.date)) from $clientAwareDTO.entity
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-11126");
-      details.setUserMessage("The client's birth date must be less than or equal to the death date of the client.");
-      details.setTechnicalMessage("If Client.birthDate != null and Client.deathDate != null then should be: CLIENT.deathDate >= CLIENT.birthDate");
+      details.setUserMessage("The client's birth date must be grater than or equal to the AfdcEligibility date.");
+      details.setTechnicalMessage("If Client.birthDate != null then should be: CLIENT.birthDate >= AFDC_ELIGIBILITY.date");
       validationDetailsList.add(details);
 end
 

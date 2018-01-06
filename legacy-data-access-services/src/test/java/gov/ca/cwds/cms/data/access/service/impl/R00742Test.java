@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class R00742Test extends BaseDocToolRulesClientTest {
+public class R00742Test extends BaseDocToolRulesClientImplementationTest {
 
     private static final String RULE_NAME = "R-00742";
 
