@@ -45,6 +45,7 @@ public class R05761Test extends BaseDocToolRulesPlacementHomeTest {
     try {
       principal.getPrivileges().add(USR_PRV_SOC158_APPLICATION);
       testCase.run();
+      placementHomeService.runDataProcessing(placementHomeEntityAwareDTO, principal);
       placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
       fail();
     } catch (BusinessValidationException e) {
