@@ -3,7 +3,6 @@ package gov.ca.cwds.data;
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -76,7 +75,7 @@ public class CmsSystemCodeDeserializer extends StdDeserializer<Short> {
    */
   @Override
   public Short deserialize(final JsonParser jp, final DeserializationContext ctxt)
-      throws IOException, JsonProcessingException {
+      throws IOException {
     Short sysId = null;
     final JsonNode node = jp.getCodec().readTree(jp);
     final IntNode sn = (IntNode) node.get("sys_id");
@@ -84,8 +83,7 @@ public class CmsSystemCodeDeserializer extends StdDeserializer<Short> {
     if (sn != null) {
       sysId = sn.numberValue().shortValue();
     } else if (node instanceof IntNode) {
-      // Try short style.
-      sysId = node.numberValue().shortValue();
+      sysId = node.numberValue().shortValue(); // short style.
     }
 
     return sysId;

@@ -31,7 +31,7 @@ public abstract class NsElasticsearchObject {
    */
   protected NsElasticsearchObject(String updatedAt) {
     this.updatedAt = updatedAt;
-    this.createdAt = DomainChef.cookTimestamp(new Date()).toString();
+    this.createdAt = DomainChef.cookTimestamp(new Date());
   }
 
   /**

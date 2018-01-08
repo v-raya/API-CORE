@@ -15,7 +15,7 @@ public class ApiSecurityExceptionMapper extends ShiroExceptionMapper {
   @Override
   public Response toResponse(AuthorizationException exception) {
     int status = super.toResponse(exception).getStatus();
-    return ExceptionMapperUtils.createGenericRespponse(exception, IssueType.SECURITY_EXCEPTION,
-        status, null);
+    return ExceptionMapperUtils.createGenericResponse(exception, IssueType.SECURITY_EXCEPTION,
+        null);
   }
 }

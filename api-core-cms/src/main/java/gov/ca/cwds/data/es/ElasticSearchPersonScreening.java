@@ -22,9 +22,6 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 public class ElasticSearchPersonScreening extends ApiObjectIdentity
     implements ApiTypedIdentifier<String> {
 
-  /**
-   * Default serialization version.
-   */
   private static final long serialVersionUID = 1L;
 
   private String id;
@@ -83,56 +80,68 @@ public class ElasticSearchPersonScreening extends ApiObjectIdentity
     this.id = id;
   }
 
+  @SuppressWarnings("javadoc")
   @JsonIgnore
   public Date getStartDate() {
     return DomainChef.uncookDateString(startDate);
   }
 
+  @SuppressWarnings("javadoc")
   public void setStartDate(Date startDate) {
     this.startDate = DomainChef.cookDate(startDate);
   }
 
+  @SuppressWarnings("javadoc")
   @JsonIgnore
   public Date getEndDate() {
     return DomainChef.uncookDateString(endDate);
   }
 
+  @SuppressWarnings("javadoc")
   public void setEndDate(Date endDate) {
     this.endDate = DomainChef.cookDate(endDate);
   }
 
+  @SuppressWarnings("javadoc")
   @JsonIgnore
   public String getCountyName() {
     return countyName;
   }
 
+  @SuppressWarnings("javadoc")
   public void setCountyName(String countyName) {
     this.countyName = countyName;
   }
 
+  @SuppressWarnings("javadoc")
   @JsonIgnore
   public String getDecision() {
     return decision;
   }
 
+  @SuppressWarnings("javadoc")
   public void setDecision(String decision) {
     this.decision = decision;
   }
 
+  @SuppressWarnings("javadoc")
   @JsonIgnore
   public String getResponseTime() {
     return responseTime;
   }
 
+  @SuppressWarnings("javadoc")
   public void setResponseTime(String responseTime) {
     this.responseTime = responseTime;
   }
 
+  @SuppressWarnings("javadoc")
   @JsonIgnore
   public String getServiceName() {
     return serviceName;
   }
 
+  @SuppressWarnings("javadoc")
   public void setServiceName(String serviceName) {
     this.serviceName = serviceName;
   }

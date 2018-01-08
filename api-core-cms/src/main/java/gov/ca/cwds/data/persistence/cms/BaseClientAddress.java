@@ -22,9 +22,6 @@ import gov.ca.cwds.data.SystemCodeSerializer;
 @MappedSuperclass
 public abstract class BaseClientAddress extends CmsPersistentObject {
 
-  /**
-   * Base serialization version. Increment by class version.
-   */
   private static final long serialVersionUID = 1L;
 
   @Id
