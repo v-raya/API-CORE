@@ -14,6 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Fetch;
@@ -22,24 +23,33 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 @Entity
+@NamedQuery(
+  name = HealthInterventionPlan.FIND_ACTIVE_PLANS_BY_CLIENT_ID,
+  query =
+      "SELECT plan FROM HealthInterventionPlan plan where plan.client.id =:"
+          + HealthInterventionPlan.PARAM_CLIENT_ID + " and plan.endDate is null"
+)
 @Table(name = "HLTH_PLT")
 public class HealthInterventionPlan extends CmsPersistentObject {
 
   private static final long serialVersionUID = 1619289937653893727L;
+
+  public static final String FIND_ACTIVE_PLANS_BY_CLIENT_ID =
+      "ReferralAssignment.findAssignmentsByReferrals";
+  public static final String PARAM_CLIENT_ID = "reclientId";
 
   @EmbeddedId private Id id = new Id();
 
   @NotNull
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  //  @JoinColumn(name = "FKCHLD_CLT", referencedColumnName = "IDENTIFIER") and Client type ?
   @JoinColumn(
     name = "FKCHLD_CLT",
-    referencedColumnName = "FKCLIENT_T",
+    referencedColumnName = "IDENTIFIER",
     insertable = false,
     updatable = false
   )
-  private ChildClient childClient;
+  private Client client;
 
   @NotNull
   @Column(
@@ -80,12 +90,12 @@ public class HealthInterventionPlan extends CmsPersistentObject {
     return id;
   }
 
-  public ChildClient getChildClient() {
-    return childClient;
+  public Client getClient() {
+    return client;
   }
 
-  public void setChildClient(ChildClient childClient) {
-    this.childClient = childClient;
+  public void setClient(Client client) {
+    this.client = client;
   }
 
   public String getThirdId() {
