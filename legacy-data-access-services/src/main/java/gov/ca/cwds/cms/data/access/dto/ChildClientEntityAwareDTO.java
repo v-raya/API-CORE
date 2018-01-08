@@ -1,6 +1,6 @@
 package gov.ca.cwds.cms.data.access.dto;
 
-import gov.ca.cwds.data.legacy.cms.entity.FсEligibility;
+import gov.ca.cwds.data.legacy.cms.entity.FCEligibility;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,14 +8,14 @@ import java.util.List;
  * @author CWDS TPT-3 Team
  */
 public class ChildClientEntityAwareDTO extends ClientEntityAwareDTO {
-  private List<FсEligibility> fcFсEligibilities = new ArrayList<>();
+  private List<FCEligibility> fcEligibilities = new ArrayList<>();
 
-  public List<FсEligibility> getFcFсEligibilities() {
-    return fcFсEligibilities;
+  public List<FCEligibility> getFcEligibilities() {
+    return fcEligibilities;
   }
 
-  public void setFcFсEligibilities(
-      List<FсEligibility> fcFсEligibilities) {
-    this.fcFсEligibilities = fcFсEligibilities;
+  public void setFcEligibilities(
+      List<FCEligibility> fcEligibilities) {
+    this.fcEligibilities = fcEligibilities;
   }
 }

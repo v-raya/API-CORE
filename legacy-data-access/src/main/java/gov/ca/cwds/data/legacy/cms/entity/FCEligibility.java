@@ -20,7 +20,7 @@ import org.hibernate.annotations.NotFoundAction;
 /** @author CWDS TPT-3 Team */
 @Entity
 @Table(name = "FC_ELIGT")
-public class FсEligibility extends CmsPersistentObject {
+public class FCEligibility extends CmsPersistentObject {
 
   @Column(name = "FC_ELG_DT")
   private LocalDate date;

@@ -1,7 +1,7 @@
 import gov.ca.cwds.rest.exception.IssueDetails
 import gov.ca.cwds.data.legacy.cms.entity.ChildClient
 import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
-import gov.ca.cwds.data.legacy.cms.entity.FсEligibility;
+import gov.ca.cwds.data.legacy.cms.entity.FCEligibility;
 
 global java.util.Set<IssueDetails> validationDetailsList
 
@@ -20,7 +20,7 @@ rule "R-11126"
 
       */
       $clientAwareDTO: ChildClientEntityAwareDTO()
-      $fсEligibility : FсEligibility($fсEligibilityDate : date) from $clientAwareDTO.fcFсEligibilities
+      $fсEligibility : FCEligibility($fсEligibilityDate : date) from $clientAwareDTO.fcEligibilities
       $client: ChildClient(birthDate != null && birthDate.isAfter($fсEligibilityDate) && !birthDate.isEqual($fсEligibilityDate)) from $clientAwareDTO.entity
 
   then
