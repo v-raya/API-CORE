@@ -384,21 +384,21 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * particular PLACEMENT HOME.
    */
   @Basic
-  @Column(name = "P_CITY_NM", nullable = false, length = 20)
+  @Column(name = "P_CITY_NM", length = 20)
   private String pCityNm;
 
   /**
    * PAYEE_FIRST_NAME - The first name of the Designated Payee for a  particular PLACEMENT HOME.
    */
   @Basic
-  @Column(name = "PYE_FSTNM", nullable = false, length = 20)
+  @Column(name = "PYE_FSTNM", length = 20)
   private String pyeFstnm;
 
   /**
    * PAYEE_LAST_NAME - The last name of the Designated Payee for a  particular PLACEMENT HOME.
    */
   @Basic
-  @Column(name = "PYE_LSTNM", nullable = false, length = 25)
+  @Column(name = "PYE_LSTNM", length = 25)
   private String pyeLstnm;
 
   /**
@@ -406,7 +406,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * PLACEMENT HOME.
    */
   @Basic
-  @Column(name = "PYE_MIDNM", nullable = false, length = 1)
+  @Column(name = "PYE_MIDNM", length = 1)
   private String pyeMidnm;
 
   /**
@@ -414,7 +414,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * address for a particular PLACEMENT HOME.
    */
   @Basic
-  @Column(name = "PSTREET_NM", nullable = false, length = 40)
+  @Column(name = "PSTREET_NM", length = 40)
   private String pstreetNm;
 
   /**
@@ -423,7 +423,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * 119-10, 39.2, 100 1/2, etc.
    */
   @Basic
-  @Column(name = "PSTREET_NO", nullable = false, length = 10)
+  @Column(name = "PSTREET_NO", length = 10)
   private String pstreetNo;
 
   /**
@@ -431,7 +431,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * address for a particular PLACEMENT HOME.
    */
   @Basic
-  @Column(name = "P_ZIP_NO", nullable = false)
+  @Column(name = "P_ZIP_NO")
   @Convert( converter=ZipCodeConverter.class )
   private String pZipNo;
 
