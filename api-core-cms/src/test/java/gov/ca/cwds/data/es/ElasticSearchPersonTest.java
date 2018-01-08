@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.elasticsearch.search.SearchHit;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -38,6 +39,14 @@ public class ElasticSearchPersonTest {
   @Test
   public void instantiation() throws Exception {
     assertThat(target, notNullValue());
+  }
+
+  @Test
+  public void readPerson_Args__String() throws Exception {
+    final String json =
+        IOUtils.toString(getClass().getResourceAsStream("/fixtures/data/es/es_person.json"));
+    final ElasticSearchPerson actual = ElasticSearchPerson.readPerson(json);
+    assertThat(actual, is(notNullValue())); // if it loads, then it's 80% right.
   }
 
   @Test

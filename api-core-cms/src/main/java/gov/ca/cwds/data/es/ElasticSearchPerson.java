@@ -407,11 +407,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
 
-  // @Deprecated
   @JsonProperty("legacy_source_table")
   private String legacySourceTable;
 
-  // @Deprecated
   @JsonProperty("legacy_id")
   private String legacyId;
 
