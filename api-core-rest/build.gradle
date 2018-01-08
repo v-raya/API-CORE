@@ -42,10 +42,10 @@ publishing {
         version version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
     }
   }
-  repositories {
+/*  repositories {
     maven {
       //TODO : set to http url
-      url "file:///usr/share/nginx/html/maven2"
+        url "http://sonar.dev.cwds.io:8081/artifactory/libs-release/"
     }
-  }
+  }*/
 }
