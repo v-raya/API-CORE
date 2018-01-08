@@ -1,6 +1,7 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.legacy.cms.entity.converter.StringToRequiredIntegerConverter;
 import gov.ca.cwds.data.legacy.cms.entity.converter.StringToRequiredLongConverter;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -158,8 +159,9 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * backup contact person for the PLACEMENT HOME.
    */
   @Basic
-  @Column(name = "BCK_EXT_NO", nullable = false)
-  private Integer bckExtNo;
+  @Column(name = "BCK_EXT_NO")
+  @Convert( converter = StringToRequiredIntegerConverter.class)
+  private String bckExtNo;
 
   /**
    * BACKUP_PHONE_NUMBER - A phone number for the backup contact person for the PLACEMENT HOME.
@@ -446,8 +448,9 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * Foster Family Agency.
    */
   @Basic
-  @Column(name = "PRM_EXT_NO", nullable = false)
-  private Integer prmExtNo;
+  @Column(name = "PRM_EXT_NO")
+  @Convert( converter = StringToRequiredIntegerConverter.class)
+  private String prmExtNo;
 
   /**
    * PRIMARY_SUBS_CARE_PROVIDER_ID - The logical foreign key representing the ID from the source
@@ -741,8 +744,9 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * LA_PAYEE_PHONE_EXT - LA phone number extention
    */
   @Basic
-  @Column(name = "LA_P_PH_EX", nullable = false)
-  private Integer laPPhEx;
+  @Column(name = "LA_P_PH_EX")
+  @Convert( converter = StringToRequiredIntegerConverter.class)
+  private String laPPhEx;
 
   /**
    * ADOPTION_HOME_ONLY_IND - This indicates whether this home is only available to adoption workers
@@ -758,8 +762,9 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * PAYEE_PHONE_EXT - Payee phone number extension.
    */
   @Basic
-  @Column(name = "PYE_EXT_NO", nullable = false)
-  private Integer pyeExtNo;
+  @Column(name = "PYE_EXT_NO")
+  @Convert( converter = StringToRequiredIntegerConverter.class)
+  private String pyeExtNo;
 
   /**
    * PAYEE_PHONE_NUMBER - Payee phone number.
@@ -980,11 +985,11 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
     this.bckPersnm = bckPersnm;
   }
 
-  public Integer getBckExtNo() {
+  public String getBckExtNo() {
     return bckExtNo;
   }
 
-  public void setBckExtNo(Integer bckExtNo) {
+  public void setBckExtNo(String bckExtNo) {
     this.bckExtNo = bckExtNo;
   }
 
@@ -1261,11 +1266,11 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
     this.prmCnctnm = prmCnctnm;
   }
 
-  public Integer getPrmExtNo() {
+  public String getPrmExtNo() {
     return prmExtNo;
   }
 
-  public void setPrmExtNo(Integer prmExtNo) {
+  public void setPrmExtNo(String prmExtNo) {
     this.prmExtNo = prmExtNo;
   }
 
@@ -1526,11 +1531,11 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
     this.laPPhNo = laPPhNo;
   }
 
-  public Integer getLaPPhEx() {
+  public String getLaPPhEx() {
     return laPPhEx;
   }
 
-  public void setLaPPhEx(Integer laPPhEx) {
+  public void setLaPPhEx(String laPPhEx) {
     this.laPPhEx = laPPhEx;
   }
 
@@ -1542,11 +1547,11 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
     this.adhmonly = adhmonly;
   }
 
-  public Integer getPyeExtNo() {
+  public String getPyeExtNo() {
     return pyeExtNo;
   }
 
-  public void setPyeExtNo(Integer pyeExtNo) {
+  public void setPyeExtNo(String pyeExtNo) {
     this.pyeExtNo = pyeExtNo;
   }
 
