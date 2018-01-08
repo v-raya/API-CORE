@@ -22,6 +22,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
+@SuppressWarnings({"squid:S3437", "squid:S2160"})
 @Entity
 @NamedQuery(
   name = HealthInterventionPlan.FIND_ACTIVE_PLANS_BY_CLIENT_ID,
