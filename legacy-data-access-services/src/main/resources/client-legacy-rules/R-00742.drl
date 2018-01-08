@@ -17,9 +17,8 @@ rule "R-00742"
         If CLIENT.Primary Ethnicity is blank, CLIENT_SCP_ETHNICITY.Ethnicity_Type must be blank.
       */
       $clientAwareDTO: ClientEntityAwareDTO()
-      $client: Client() from $clientAwareDTO.entity
-      $clientScpEthnicity : ClientScpEthnicity() from $clientAwareDTO.clientScpEthnicities
-      Boolean(booleanValue == true) from $client.primaryEthnicityCode == (short)0 && $clientScpEthnicity.ethnctyc > (short)0
+      $clientScpEthnicity : ClientScpEthnicity($clientScpEthnicityCode : ethnctyc) from $clientAwareDTO.clientScpEthnicities
+      $client: Client(primaryEthnicityCode == (short)0, $clientScpEthnicityCode > (short)0) from $clientAwareDTO.entity
 
 
   then
