@@ -1,7 +1,6 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
-import gov.ca.cwds.data.legacy.cms.entity.converter.RequiredShortConverter;
 import gov.ca.cwds.data.legacy.cms.entity.converter.StringToRequiredIntegerConverter;
 import gov.ca.cwds.data.legacy.cms.entity.converter.StringToRequiredLongConverter;
 import gov.ca.cwds.data.legacy.cms.entity.converter.ZipCodeConverter;
@@ -82,7 +81,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
 
   @Basic
   @Column(name = "P_STATE_C")
-  @Convert( converter = RequiredShortConverter.class)
+  //@Convert( converter = RequiredShortConverter.class)
   private Short payeeStateCode;
 
   /**
