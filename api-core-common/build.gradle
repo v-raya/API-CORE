@@ -8,13 +8,12 @@ publishing {
       from components.java
       groupId commonGroupId
       artifactId 'api-core-common'
-        version version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
     }
   }
-/*  repositories {
+  repositories {
+    mavenLocal()
     maven {
-      //TODO : set to http url
-      url "file:///usr/share/nginx/html/maven2"
+      url artifactoryRepo
     }
-  }*/
+  }
 }

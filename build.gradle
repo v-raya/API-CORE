@@ -12,7 +12,7 @@ allprojects {
     compileJava {options.encoding = "UTF-8"}
 
     project.ext {
-        apiVersion = "3.6"
+
         commonGroupId = "gov.ca.cwds.api"
         shiroSecurityVersion = "0.25.69"
         configPath = "$rootProject.projectDir/config/"
@@ -34,13 +34,31 @@ allprojects {
         glassfishJerseyExtVersion = "2.23.2"
         jacksonVersion = "2.8.2"
         postgresqlVersion = "9.4.1208.jre7"
+
+        //apiVersion = "3.6"
+        projectMajorVersion = "3.6"
+
+        isRelease = System.getProperty("Release") == "true"
+        buildNumber = System.getProperty('BuildNumber')
+        customVersion = System.getProperty('CustomVersion')
+
+        projectSnapshotVersion = projectMajorVersion + "-SNAPSHOT"
+        projectReleaseVersion = (customVersion == null || customVersion == "" || customVersion.startsWith('$') ? projectMajorVersion + '_' + buildNumber + '-RC' : customVersion )
+        projectVersion = (isRelease ? projectReleaseVersion : projectSnapshotVersion )
+
+        // Publishing configuration
+        snapshotMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/repo"
+        releaseMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/libs-release"
+        artifactoryRepo = (isRelease ? releaseMavenRepo : snapshotMavenRepo)
     }
 
     licenseReport {
       renderer = new CWDSReportRenderer()
     }
 
-    version = apiVersion
+    version = projectVersion
+    project.group = commonGroupId
+    project.version = projectVersion
 
     repositories {
         mavenLocal()
@@ -127,15 +145,17 @@ publishing {
     publications {
         library(MavenPublication) {
             from components.java
+/*
             groupId commonGroupId
             artifactId 'api-core'
             version version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
+*/
         }
     }
     repositories {
         maven {
             //TODO : set to http url
-            url "http://sonar.dev.cwds.io:8081/artifactory/libs-release/"
+            url artifactoryRepo
         }
     }
 }

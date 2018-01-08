@@ -43,15 +43,12 @@ publishing {
       from components.java
       groupId commonGroupId
       artifactId 'api-core-cms'
-        version version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
     }
   }
-/*
   repositories {
-    maven {
-      // THOUGHT: set to http url or network share.
-      url "file:///usr/share/nginx/html/maven2"
-    }
+      mavenLocal()
+      maven {
+          url artifactoryRepo
+      }
   }
-*/
 }
