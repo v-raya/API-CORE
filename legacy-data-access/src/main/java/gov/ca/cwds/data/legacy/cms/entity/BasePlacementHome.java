@@ -1,15 +1,22 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.legacy.cms.entity.converter.RequiredShortConverter;
 import gov.ca.cwds.data.legacy.cms.entity.converter.StringToRequiredIntegerConverter;
 import gov.ca.cwds.data.legacy.cms.entity.converter.StringToRequiredLongConverter;
+import gov.ca.cwds.data.legacy.cms.entity.converter.ZipCodeConverter;
+import gov.ca.cwds.data.legacy.cms.entity.converter.ZipExtConverter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
-import javax.persistence.*;
-
-import gov.ca.cwds.data.legacy.cms.entity.converter.ZipCodeConverter;
-import gov.ca.cwds.data.legacy.cms.entity.converter.ZipExtConverter;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Fetch;
@@ -74,7 +81,8 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private Short stateCode;
 
   @Basic
-  @Column(name = "P_STATE_C", nullable = false)
+  @Column(name = "P_STATE_C")
+  @Convert( converter = RequiredShortConverter.class)
   private Short payeeStateCode;
 
   /**
