@@ -5,7 +5,7 @@ import gov.ca.cwds.data.legacy.cms.entity.FсEligibility;
 
 global java.util.Set<IssueDetails> validationDetailsList
 
-rule "R-00741"
+rule "R-11126"
   dialect "mvel"
   agenda-group "client-agenda"
   when
@@ -20,9 +20,9 @@ rule "R-00741"
 
       */
       $clientAwareDTO: ChildClientEntityAwareDTO()
-      $client: ChildClient() from $clientAwareDTO.entity
-      $fсEligibility : FсEligibility() from $clientAwareDTO.fcFсEligibilities
-      $client: ChildClient(birthDate != null , birthDate.isEqual($fсEligibility.date) || birthDate.isAfter($fсEligibility.date)) from $clientAwareDTO.entity
+      $fсEligibility : FсEligibility($fсEligibilityDate : date) from $clientAwareDTO.fcFсEligibilities
+      $client: ChildClient(birthDate != null && birthDate.isAfter($fсEligibilityDate) && !birthDate.isEqual($fсEligibilityDate)) from $clientAwareDTO.entity
+
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-11126");
