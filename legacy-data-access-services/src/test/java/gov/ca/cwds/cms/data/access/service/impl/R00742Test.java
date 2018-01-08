@@ -77,7 +77,6 @@ public class R00742Test extends BaseDocToolRulesClientImplementationTest {
         checkRuleSatisfied(RULE_NAME);
     }
 
-
     private static List<ClientScpEthnicity> createListOfDifferentClientScpEthnicities() {
         List<ClientScpEthnicity> clientScpEthnicityList = new ArrayList<>();
         ClientScpEthnicity clientScpEthnicity1 = createClientScpEthnicity("C", CLIENT_IDENTIFIER, (short) 3162);
@@ -96,6 +95,5 @@ public class R00742Test extends BaseDocToolRulesClientImplementationTest {
         clientScpEthnicity.setEthnctyc(ethnicityCode);
         return clientScpEthnicity;
     }
-
 
 }
