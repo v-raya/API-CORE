@@ -81,8 +81,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
 
   @Basic
   @Column(name = "P_STATE_C")
-  //@Convert( converter = RequiredShortConverter.class)
-  private Short payeeStateCode;
+  private Short payeeStateCode = 0;
 
   /**
    * LICENSE_STATUS_TYPE - The system generated number assigned to each type of license status for a
