@@ -9,8 +9,10 @@ import gov.ca.cwds.cms.data.access.service.rules.ClientDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.FCEligibilityDao;
 import gov.ca.cwds.data.legacy.cms.entity.ChildClient;
+import gov.ca.cwds.data.legacy.cms.dao.ClientScpEthnicityDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.FCEligibility;
+import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
@@ -22,32 +24,44 @@ import java.util.Set;
 
 public class ClientCoreServiceImpl implements ClientCoreService {
 
-  @Inject private DroolsService droolsService;
+    @Inject
+    private DroolsService droolsService;
 
-  @Inject private ClientDao clientDao;
+    @Inject
+    private ClientDao clientDao;
 
-  @Inject private FCEligibilityDao fcEligibilityDao;
+    @Inject
+    private ClientScpEthnicityDao clientScpEthnicityDao;
+
+    @Inject private FCEligibilityDao fcEligibilityDao;
 
   @Override
-  public Client create(ClientEntityAwareDTO entityAwareDTO) throws DataAccessServicesException {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public Client update(ClientEntityAwareDTO clientEntityAwareDTO)
-      throws DataAccessServicesException {
-    try {
-      runBusinessValidation(clientEntityAwareDTO, PrincipalUtils.getPrincipal());
-      updateClient(clientEntityAwareDTO);
-      return clientEntityAwareDTO.getEntity();
-    } catch (DroolsException e) {
-      throw new DataAccessServicesException(e);
+    public Client create(ClientEntityAwareDTO entityAwareDTO) throws DataAccessServicesException {
+        throw new UnsupportedOperationException();
     }
-  }
 
-  @Override
-  public void runBusinessValidation(
-      ClientEntityAwareDTO clientEntityAwareDTO, PerryAccount principal) throws DroolsException {
+    @Override
+    public Client update(ClientEntityAwareDTO clientEntityAwareDTO)
+            throws DataAccessServicesException {
+        try {
+            prepareEntityForValidation(clientEntityAwareDTO);
+            runBusinessValidation(clientEntityAwareDTO, PrincipalUtils.getPrincipal());
+            updateClient(clientEntityAwareDTO);
+            return clientEntityAwareDTO.getEntity();
+        } catch (DroolsException e) {
+            throw new DataAccessServicesException(e);
+        }
+    }
+
+  private void prepareEntityForValidation(ClientEntityAwareDTO clientEntityAwareDTO) {
+        if (clientEntityAwareDTO.getEntity() != null) {
+            List<ClientScpEthnicity> clientScpEthnicityList = clientScpEthnicityDao.findEthnicitiesByClient(clientEntityAwareDTO.getEntity().getIdentifier());
+            clientEntityAwareDTO.getClientScpEthnicities().addAll(clientScpEthnicityList);
+        }
+
+    }@Override
+  public void runBusinessValidation(ClientEntityAwareDTO clientEntityAwareDTO, PerryAccount principal)
+      throws DroolsException {
     Set<IssueDetails> detailsList =
         droolsService.performBusinessRules(
             ClientDroolsConfiguration.INSTANCE, clientEntityAwareDTO, principal);
@@ -56,18 +70,18 @@ public class ClientCoreServiceImpl implements ClientCoreService {
     }
   }
 
-  private void updateClient(ClientEntityAwareDTO clientEntityAwareDTO) {
-    final Client client = clientEntityAwareDTO.getEntity();
-    clientDao.update(client);
-  }
+    private void updateClient(ClientEntityAwareDTO clientEntityAwareDTO) {
+        final Client client = clientEntityAwareDTO.getEntity();
+        clientDao.update(client);
+    }
 
-  public void setDroolsService(DroolsService droolsService) {
-    this.droolsService = droolsService;
-  }
+    public void setDroolsService(DroolsService droolsService) {
+        this.droolsService = droolsService;
+    }
 
-  public void setClientDao(ClientDao clientDao) {
-    this.clientDao = clientDao;
-  }
+    public void setClientDao(ClientDao clientDao) {
+        this.clientDao = clientDao;
+    }
 
   private ClientEntityAwareDTO enrichClientEntityAwareDto(
       ClientEntityAwareDTO clientEntityAwareDTO) {
