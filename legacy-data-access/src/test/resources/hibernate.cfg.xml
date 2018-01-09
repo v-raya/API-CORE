@@ -20,6 +20,7 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.CountyLicenseCase" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.LicensingVisit" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.LongText" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.OtherAdultsInPlacementHome" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.OtherChildrenInPlacementHome" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.OtherPeopleScpRelationship" />

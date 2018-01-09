@@ -6,13 +6,11 @@ import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.ClientCoreService;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.rules.ClientDroolsConfiguration;
-import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
-import gov.ca.cwds.data.legacy.cms.dao.ClientScpEthnicityDao;
-import gov.ca.cwds.data.legacy.cms.dao.FCEligibilityDao;
-import gov.ca.cwds.data.legacy.cms.dao.HealthInterventionPlanDao;
+import gov.ca.cwds.data.legacy.cms.dao.*;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
 import gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan;
+import gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
@@ -35,6 +33,8 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
   @Inject private FCEligibilityDao fcEligibilityDao;
 
   @Inject private HealthInterventionPlanDao healthInterventionPlanDao;
+
+  @Inject private MedicalEligibilityApplicationDao medicalEligibilityApplicationDao;
 
   @Override
   public Client create(ClientEntityAwareDTO entityAwareDTO) throws DataAccessServicesException {
@@ -65,6 +65,11 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
     List<HealthInterventionPlan> activeHealthInterventionPlans =
         getHealthInterventionPlanDao().getActiveHealthInterventionPlans(clientId);
     clientEntityAwareDTO.setActiveHealthInterventionPlans(activeHealthInterventionPlans);
+
+    List<MedicalEligibilityApplication> medicalEligibilityApplications =
+        medicalEligibilityApplicationDao.findByChildClientId(clientId);
+    clientEntityAwareDTO.getMedicalEligibilityApplications().addAll(medicalEligibilityApplications);
+
     enrichClientEntityAwareDto((T) clientEntityAwareDTO);
   }
 

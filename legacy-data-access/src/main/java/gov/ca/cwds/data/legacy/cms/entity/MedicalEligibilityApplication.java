@@ -5,6 +5,7 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.IveEligebleStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.TypeOfApplication;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import org.hibernate.annotations.*;
+import org.hibernate.annotations.NamedQuery;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -13,6 +14,12 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@NamedQuery(
+        name = MedicalEligibilityApplication.NQ_FIND_BY_CHILD_CLIENT_ID,
+        query =
+                "SELECT mea FROM MedicalEligibilityApplication mea"
+                        + " WHERE mea.childClient.victimClientId = :" + MedicalEligibilityApplication.NQ_PARAM_CHILD_CLIENT_ID
+)
 /**
  * @author CWDS CM API Team
  * <p>
@@ -22,6 +29,9 @@ import java.time.LocalDateTime;
 @Table(name = "MEDELIGT")
 @SuppressWarnings({"squid:S3437"}) //LocalDate is serializable
 public class MedicalEligibilityApplication implements PersistentObject {
+    public static final String NQ_FIND_BY_CHILD_CLIENT_ID =
+            "gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication.findByChildClientId";
+    public static final String NQ_PARAM_CHILD_CLIENT_ID = "childId";
 
     private static final long serialVersionUID = -8983343570652292014L;
 
@@ -72,7 +82,7 @@ public class MedicalEligibilityApplication implements PersistentObject {
      * or the social worker has reason to believe the CHILD_CLIENT will be eligible for Federal AFDC-FC benefits (Y),
      * or not (N). If the social worker cannot determine this information at the time, the unknown (U) value should be used.
      */
-    @Column(name = "IV_E_ELIGIBLE_CODE", nullable = false, length = 1)
+    @Column(name = "IVE_ELG_CD", nullable = false, length = 1)
     @Convert(converter = IveEligebleStatus.IveEligebleStatusConverter.class)
     private IveEligebleStatus iveEligebleStatus;
 

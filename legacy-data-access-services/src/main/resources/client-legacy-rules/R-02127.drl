@@ -20,10 +20,8 @@ rule "R-02127"
         MEDICAL_ELIGIBILITY_APPLICATION.Adoption_Agreement_Term_Date >= CHILD_CLIENT>CLIENT.Birth_Date.
       */
       $clientAwareDTO: ClientEntityAwareDTO()
-      $client: Client() from $clientAwareDTO.entity
-      $medicalEligibilityApplication : MedicalEligibilityApplication() from $clientAwareDTO.medicalEligibilityApplications
-      Boolean(booleanValue == true) from $medicalEligibilityApplication.adoptionAgreementTermDate != null && $client.birthDate != null
-                                                && $medicalEligibilityApplication.adoptionAgreementTermDate.isBefore($client.birthDate)
+      $medicalEligibilityApplication : MedicalEligibilityApplication($adoptionAgreementTermDate : adoptionAgreementTermDate) from $clientAwareDTO.medicalEligibilityApplications
+      $client: Client(birthDate != null, $adoptionAgreementTermDate != null, $adoptionAgreementTermDate.isBefore(birthDate)) from $clientAwareDTO.entity
 
   then
       IssueDetails details = new IssueDetails();
