@@ -26,6 +26,7 @@ public class R03855Test extends BaseDocToolRulesPlacementHomeTest {
 
   private void runBusinessValidation(PlacementHome placementHome) throws DroolsException {
     placementHomeEntityAwareDTO.setEntity(placementHome);
+    placementHomeService.runDataProcessing(placementHomeEntityAwareDTO, principal);
     placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
   }
 }

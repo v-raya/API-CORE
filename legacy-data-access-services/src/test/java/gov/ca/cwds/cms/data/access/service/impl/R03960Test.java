@@ -12,14 +12,10 @@ public class R03960Test extends BaseDocToolRulesPlacementHomeTest {
 
 
   private void preparePlacementHome(int facilityType, String licenseCode, String facilityName) {
-    PlacementHome placementHome = new PlacementHome();
+    final PlacementHome placementHome = placementHomeEntityAwareDTO.getEntity();
     placementHome.setFacilityType((short) facilityType);
     placementHome.setLicensrCd(licenseCode);
     placementHome.setFacltyNm(facilityName);
-    placementHome.setZipNo("11111");
-    placementHome.setLaPZipno("11111");
-    placementHome.setpZipNo("11111");
-    placementHomeEntityAwareDTO.setEntity(placementHome);
   }
 
   @Test(expected = BusinessValidationException.class)
@@ -65,6 +61,7 @@ public class R03960Test extends BaseDocToolRulesPlacementHomeTest {
   }
 
   private void runBusinessValidation() throws DroolsException {
+    placementHomeService.runDataProcessing(placementHomeEntityAwareDTO, principal);
     placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
   }
 }

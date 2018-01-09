@@ -1,0 +1,84 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
+import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
+import org.apache.commons.lang3.StringUtils
+
+global java.util.Set validationDetailsList
+
+
+/*
+        Code: R - 00168
+
+        Rule Txt
+        Payee Name, Payee Street Name, Payee City Name and, if a domestic address is
+        entered then also the Payee State Code, must be specified when adding or updating
+        Placement Home Payee Details
+
+        Logic
+        After performing the process Add Home Payee Details, the PLACEMENT_HOME.Payee_First_Name,
+        .Payee_Last_Name, .Payee_Street_Name and .Payee_City_Name must not be null.
+        If .Payee_Zip_Number or .Payee_Zip_Suffix_Number is not null
+        then .Payee_State_Code_Type must not be null.
+*/
+
+
+
+/**
+* After performing the process Add Home Payee Details, the PLACEMENT_HOME.Payee_First_Name,
+* .Payee_Last_Name, .Payee_Street_Name and .Payee_City_Name must not be null.
+*/
+rule "R-00168_1"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      PlacementHome(
+         eval(
+           StringUtils.isNotBlank(pyeFstnm)
+              || StringUtils.isNotBlank(pyeMidnm)
+              || StringUtils.isNotBlank(pyeLstnm)
+              || StringUtils.isNotBlank(pstreetNm)
+              || StringUtils.isNotBlank(pstreetNo)
+              || StringUtils.isNotBlank(pCityNm)
+              || StringUtils.isNotBlank(pZipNo)
+              || StringUtils.isNotBlank(pyZipSfx)
+              || pyeTelNo != null
+              || pyeExtNo != null
+              || payeeStateCode != null
+         ),
+
+         eval(
+          StringUtils.isBlank(pyeFstnm)
+          || StringUtils.isBlank(pyeLstnm)
+          || StringUtils.isBlank(pstreetNm)
+          || StringUtils.isBlank(pCityNm)
+         )
+      ) from  $placementHomeAwareDTO.entity
+
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-00168");
+      details.setUserMessage("PLACEMENT_HOME.Payee_First_Name, .Payee_Last_Name, .Payee_Street_Name and .Payee_City_Name must not be null.");
+      details.setTechnicalMessage("PLACEMENT_HOME.Payee_First_Name, .Payee_Last_Name, .Payee_Street_Name and .Payee_City_Name must not be null.");
+      validationDetailsList.add(details);
+end
+
+/**
+* If .Payee_Zip_Number or .Payee_Zip_Suffix_Number is not null then .Payee_State_Code_Type must not be null.
+*/
+rule "R-00168_2"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      PlacementHome(
+        eval(StringUtils.isNotBlank(pZipNo) || StringUtils.isNotBlank(pyZipSfx)),
+        payeeStateCode == null || payeeStateCode == 0
+      ) from  $placementHomeAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-00168");
+      details.setUserMessage("PLACEMENT_HOME.Payee_State_Code_Type must not be null.");
+      details.setTechnicalMessage("If .Payee_Zip_Number or .Payee_Zip_Suffix_Number is not null then .Payee_State_Code_Type must not be null.");
+      validationDetailsList.add(details);
+end

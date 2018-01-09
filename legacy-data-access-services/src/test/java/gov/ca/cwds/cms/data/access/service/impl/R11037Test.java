@@ -16,6 +16,7 @@ public class R11037Test extends BaseDocToolRulesPlacementHomeTest {
   public void testDoesNotHavePrivilege() throws Exception {
     try {
       principal.getPrivileges().remove(USR_PRV_RESOURCE_MGMT_PLACEMENT_FACILITY_MAINT);
+      placementHomeService.runDataProcessing(placementHomeEntityAwareDTO, principal);
       placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
       fail();
     } catch (BusinessValidationException e) {

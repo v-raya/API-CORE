@@ -31,6 +31,7 @@ public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRules
 
   protected void check(String ruleCode) {
     try {
+      placementHomeService.runDataProcessing(placementHomeEntityAwareDTO, principal);
       placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
       fail();
     } catch (BusinessValidationException e) {
@@ -58,7 +59,14 @@ public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRules
     placementHome.setAgeToNo((short) 23);
     placementHome.setZipNo("11111");
     placementHome.setLaPZipno("11111");
+
     placementHome.setpZipNo("11111");
+    placementHome.setPyeFstnm("PyeFstnm");
+    placementHome.setPyeLstnm("PyeLstnm");
+    placementHome.setPstreetNm("PstreetNm");
+    placementHome.setpCityNm("pCityNm");
+    placementHome.setPayeeStateCode((short)1);
+
     SubstituteCareProvider substituteCareProvider = new SubstituteCareProvider();
     substituteCareProvider.setZipNo("11111");
     placementHome.setPrimarySubstituteCareProvider(substituteCareProvider);
