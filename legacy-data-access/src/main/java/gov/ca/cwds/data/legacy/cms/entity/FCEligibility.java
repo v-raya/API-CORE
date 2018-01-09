@@ -24,7 +24,7 @@ import org.hibernate.annotations.NotFoundAction;
 @Table(name = "FC_ELIGT")
 @NamedQuery(
     name = FCEligibility.FIND_BY_CLIENT,
-    query = "FROM FCEligibility WHERE childClientId = :childId"
+    query = "FROM FCEligibility WHERE childClientId = :childId and terminationDate=null"
 )
 public class FCEligibility extends CmsPersistentObject {
 
