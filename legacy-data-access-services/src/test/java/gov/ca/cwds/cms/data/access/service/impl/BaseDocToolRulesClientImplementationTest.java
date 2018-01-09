@@ -9,6 +9,11 @@ import gov.ca.cwds.data.legacy.cms.entity.Client;
 public abstract class BaseDocToolRulesClientImplementationTest extends BaseDocToolRulesClientTest<Client, ClientEntityAwareDTO> {
 
   @Override
+  protected ClientCoreServiceBase<ClientEntityAwareDTO> getClientCoreService() {
+    return new ClientCoreServiceImpl();
+  }
+
+  @Override
   protected ClientEntityAwareDTO getAwareDTO() {
     return new ClientEntityAwareDTO();
   }

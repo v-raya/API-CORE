@@ -10,15 +10,17 @@ import org.junit.Before;
 
 public abstract class BaseDocToolRulesClientTest<T extends Client, E extends ClientEntityAwareDTO> extends BaseDocToolRulesTest {
 
-    protected ClientCoreServiceImpl clientCoreService;
+    protected ClientCoreServiceBase<E> clientCoreService;
     protected E clientEntityAwareDTO;
 
     @Before
     public void setUp() {
-        clientCoreService = new ClientCoreServiceImpl();
+        clientCoreService = getClientCoreService();
         clientCoreService.setDroolsService(droolsService);
         clientEntityAwareDTO = getAwareDTO();
     }
+
+    protected abstract ClientCoreServiceBase<E> getClientCoreService();
 
     @Override
     public String getPrivilege() {
