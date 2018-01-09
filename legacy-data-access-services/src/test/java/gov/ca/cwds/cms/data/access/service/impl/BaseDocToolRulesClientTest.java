@@ -8,17 +8,19 @@ import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import org.junit.Before;
 
-public abstract class BaseDocToolRulesClientTest extends BaseDocToolRulesTest {
+public abstract class BaseDocToolRulesClientTest<T extends Client, E extends ClientEntityAwareDTO> extends BaseDocToolRulesTest {
 
-    protected ClientCoreServiceImpl clientCoreService;
-    protected ClientEntityAwareDTO clientEntityAwareDTO;
+    protected ClientCoreServiceBase<E> clientCoreService;
+    protected E clientEntityAwareDTO;
 
     @Before
     public void setUp() {
-        clientCoreService = new ClientCoreServiceImpl();
+        clientCoreService = getClientCoreService();
         clientCoreService.setDroolsService(droolsService);
-        clientEntityAwareDTO = new ClientEntityAwareDTO();
+        clientEntityAwareDTO = getAwareDTO();
     }
+
+    protected abstract ClientCoreServiceBase<E> getClientCoreService();
 
     @Override
     public String getPrivilege() {
@@ -59,12 +61,12 @@ public abstract class BaseDocToolRulesClientTest extends BaseDocToolRulesTest {
         }
     }
 
-    protected void checkRuleViolatedOnce(Client client, String ruleName) throws DroolsException {
+    protected void checkRuleViolatedOnce(T client, String ruleName) throws DroolsException {
         clientEntityAwareDTO.setEntity(client);
         checkRuleViolatedOnce(ruleName);
     }
 
-    protected void checkRuleSatisfied(Client client, String ruleName) throws DroolsException {
+    protected void checkRuleSatisfied(T client, String ruleName) throws DroolsException {
         clientEntityAwareDTO.setEntity(client);
         checkRuleSatisfied(ruleName);
     }
@@ -72,4 +74,6 @@ public abstract class BaseDocToolRulesClientTest extends BaseDocToolRulesTest {
     private void runBusinessValidation(ClientEntityAwareDTO clientEntityAwareDTO) throws DroolsException {
         clientCoreService.runBusinessValidation(clientEntityAwareDTO, principal);
     }
-}
+
+    protected abstract E getAwareDTO();
+ }

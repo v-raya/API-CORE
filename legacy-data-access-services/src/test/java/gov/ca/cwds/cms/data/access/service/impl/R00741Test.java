@@ -3,7 +3,7 @@ package gov.ca.cwds.cms.data.access.service.impl;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import org.junit.Test;
 
-public class R00741Test extends BaseDocToolRulesClientTest {
+public class R00741Test extends BaseDocToolRulesClientImplementationTest {
 
   private static final String RULE_NAME = "R-00741";
 

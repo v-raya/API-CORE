@@ -4,7 +4,7 @@ import gov.ca.cwds.data.legacy.cms.entity.Client;
 import java.time.LocalDate;
 import org.junit.Test;
 
-public class R00739Test extends BaseDocToolRulesClientTest {
+public class R00739Test extends BaseDocToolRulesClientImplementationTest {
 
   private static final String RULE_NAME = "R-00739";
 
