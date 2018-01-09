@@ -28,7 +28,8 @@ import org.hibernate.annotations.NotFoundAction;
   name = HealthInterventionPlan.FIND_ACTIVE_PLANS_BY_CLIENT_ID,
   query =
       "SELECT plan FROM HealthInterventionPlan plan where plan.client.id =:"
-          + HealthInterventionPlan.PARAM_CLIENT_ID + " and plan.endDate is null"
+          + HealthInterventionPlan.PARAM_CLIENT_ID
+          + " and plan.endDate is null"
 )
 @Table(name = "HLTH_PLT")
 public class HealthInterventionPlan extends CmsPersistentObject {
@@ -36,7 +37,7 @@ public class HealthInterventionPlan extends CmsPersistentObject {
   private static final long serialVersionUID = 1619289937653893727L;
 
   public static final String FIND_ACTIVE_PLANS_BY_CLIENT_ID =
-      "ReferralAssignment.findAssignmentsByReferrals";
+      "HealthInterventionPlan.findActivePlansByClientId";
   public static final String PARAM_CLIENT_ID = "reclientId";
 
   @EmbeddedId private Id id = new Id();
