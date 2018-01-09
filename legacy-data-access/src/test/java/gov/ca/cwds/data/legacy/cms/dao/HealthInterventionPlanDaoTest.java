@@ -22,9 +22,13 @@ public class HealthInterventionPlanDaoTest extends BaseCwsCmsInMemoryPersistence
 
     cleanAllAndInsert("/dbunit/HealthInterventionPlans.xml");
 
-    List<HealthInterventionPlan> plans = dao.getActiveHealthInterventionPlans("AapJGAU04Z");
-    assertEquals(1, plans.size());
-
+    executeInTransaction(
+        sessionFactory,
+        (sessionFactory) -> {
+          List<HealthInterventionPlan> plans = dao.getActiveHealthInterventionPlans("AapJGAU04Z");
+          assertEquals(1, plans.size());
+          HealthInterventionPlan plan = plans.get(0);
+          assertEquals("0123456789", plan.getThirdId());
+        });
   }
-
 }
