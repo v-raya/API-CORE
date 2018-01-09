@@ -10,9 +10,11 @@ import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.FCEligibilityDao;
 import gov.ca.cwds.data.legacy.cms.entity.ChildClient;
 import gov.ca.cwds.data.legacy.cms.dao.ClientScpEthnicityDao;
+import gov.ca.cwds.data.legacy.cms.dao.HealthInterventionPlanDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.FCEligibility;
 import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
+import gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
@@ -32,6 +34,8 @@ public class ClientCoreServiceImpl implements ClientCoreService {
 
   @Inject private FCEligibilityDao fcEligibilityDao;
 
+  @Inject private HealthInterventionPlanDao healthInterventionPlanDao;
+
   @Override
   public Client create(ClientEntityAwareDTO entityAwareDTO) throws DataAccessServicesException {
     throw new UnsupportedOperationException();
@@ -45,19 +49,20 @@ public class ClientCoreServiceImpl implements ClientCoreService {
       runBusinessValidation(clientEntityAwareDTO, PrincipalUtils.getPrincipal());
       updateClient(clientEntityAwareDTO);
       return clientEntityAwareDTO.getEntity();
-    } catch (DroolsException e) {
+    } catch (Exception e) {
       throw new DataAccessServicesException(e);
     }
   }
 
-  private void prepareEntityForValidation(ClientEntityAwareDTO clientEntityAwareDTO) {
-    if (clientEntityAwareDTO.getEntity() != null) {
-      List<ClientScpEthnicity> clientScpEthnicityList =
-          clientScpEthnicityDao.findEthnicitiesByClient(
-              clientEntityAwareDTO.getEntity().getIdentifier());
-      clientEntityAwareDTO.getClientScpEthnicities().addAll(clientScpEthnicityList);
-    }
+    private void prepareEntityForValidation(ClientEntityAwareDTO clientEntityAwareDTO) {
+        String clientId =clientEntityAwareDTO.getEntity() .getIdentifier();
+            List<ClientScpEthnicity> clientScpEthnicityList = clientScpEthnicityDao.findEthnicitiesByClient(clientId);
+            clientEntityAwareDTO.getClientScpEthnicities().addAll(clientScpEthnicityList);
 
+
+    List<HealthInterventionPlan> activeHealthInterventionPlans =
+        healthInterventionPlanDao.getActiveHealthInterventionPlans(clientId);
+    clientEntityAwareDTO.setActiveHealthInterventionPlans(activeHealthInterventionPlans);
     enrichClientEntityAwareDto(clientEntityAwareDTO);
   }
 
@@ -77,7 +82,7 @@ public class ClientCoreServiceImpl implements ClientCoreService {
     clientDao.update(client);
   }
 
-  private ClientEntityAwareDTO enrichClientEntityAwareDto(
+    private ClientEntityAwareDTO enrichClientEntityAwareDto(
       ClientEntityAwareDTO clientEntityAwareDTO) {
     if (clientEntityAwareDTO instanceof ChildClientEntityAwareDTO) {
       ChildClientEntityAwareDTO awareDTO = (ChildClientEntityAwareDTO) clientEntityAwareDTO;
@@ -90,11 +95,9 @@ public class ClientCoreServiceImpl implements ClientCoreService {
     }
 
     return clientEntityAwareDTO;
-  }
-
-  public void setDroolsService(DroolsService droolsService) {
-    this.droolsService = droolsService;
-  }
+  }public void setDroolsService(DroolsService droolsService) {
+        this.droolsService = droolsService;
+    }
 
   public void setClientDao(ClientDao clientDao) {
     this.clientDao = clientDao;

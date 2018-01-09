@@ -33,9 +33,26 @@ public abstract class BaseDocToolRulesClientTest<T extends Client, E extends Cli
         }
     }
 
+    protected void checkRuleSatisfied(ClientEntityAwareDTO dto, String ruleName) throws DroolsException {
+        try {
+            runBusinessValidation(dto);
+        } catch (BusinessValidationException e) {
+            assertRuleSatisfied(ruleName, e);
+        }
+    }
+
     protected void checkRuleViolatedOnce(String ruleName) throws DroolsException {
         try {
             runBusinessValidation(clientEntityAwareDTO);
+            fail();
+        } catch (BusinessValidationException e) {
+            assertRuleViolatedOnce(ruleName, e);
+        }
+    }
+
+    protected void checkRuleViolatedOnce(ClientEntityAwareDTO dto, String ruleName) throws DroolsException {
+        try {
+            runBusinessValidation(dto);
             fail();
         } catch (BusinessValidationException e) {
             assertRuleViolatedOnce(ruleName, e);

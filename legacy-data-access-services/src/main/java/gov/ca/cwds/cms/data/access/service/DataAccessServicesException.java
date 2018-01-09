@@ -1,14 +1,11 @@
 package gov.ca.cwds.cms.data.access.service;
 
-import gov.ca.cwds.drools.DroolsException;
-
-/**
- * @author CWDS CALS API Team
- */
-
+/** @author CWDS CALS API Team */
 public class DataAccessServicesException extends Exception {
 
-  public DataAccessServicesException(DroolsException exception) {
+  private static final long serialVersionUID = 1531891281265710299L;
+
+  public DataAccessServicesException(Exception exception) {
     super(exception);
   }
 }

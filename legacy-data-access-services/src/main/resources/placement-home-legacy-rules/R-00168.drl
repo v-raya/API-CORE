@@ -44,7 +44,7 @@ rule "R-00168_1"
               || StringUtils.isNotBlank(pyZipSfx)
               || pyeTelNo != null
               || pyeExtNo != null
-              || payeeStateCode != null
+              || (payeeStateCode != null && payeeStateCode != 0)
          ),
 
          eval(
