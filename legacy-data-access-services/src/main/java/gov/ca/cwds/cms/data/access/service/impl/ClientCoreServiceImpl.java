@@ -54,11 +54,11 @@ public class ClientCoreServiceImpl implements ClientCoreService {
     }
   }
 
-    private void prepareEntityForValidation(ClientEntityAwareDTO clientEntityAwareDTO) {
-        String clientId =clientEntityAwareDTO.getEntity() .getIdentifier();
-            List<ClientScpEthnicity> clientScpEthnicityList = clientScpEthnicityDao.findEthnicitiesByClient(clientId);
-            clientEntityAwareDTO.getClientScpEthnicities().addAll(clientScpEthnicityList);
-
+  private void prepareEntityForValidation(ClientEntityAwareDTO clientEntityAwareDTO) {
+    String clientId = clientEntityAwareDTO.getEntity().getIdentifier();
+    List<ClientScpEthnicity> clientScpEthnicityList =
+        clientScpEthnicityDao.findEthnicitiesByClient(clientId);
+    clientEntityAwareDTO.getClientScpEthnicities().addAll(clientScpEthnicityList);
 
     List<HealthInterventionPlan> activeHealthInterventionPlans =
         healthInterventionPlanDao.getActiveHealthInterventionPlans(clientId);
@@ -82,12 +82,12 @@ public class ClientCoreServiceImpl implements ClientCoreService {
     clientDao.update(client);
   }
 
-    private ClientEntityAwareDTO enrichClientEntityAwareDto(
+  private ClientEntityAwareDTO enrichClientEntityAwareDto(
       ClientEntityAwareDTO clientEntityAwareDTO) {
     if (clientEntityAwareDTO instanceof ChildClientEntityAwareDTO) {
       ChildClientEntityAwareDTO awareDTO = (ChildClientEntityAwareDTO) clientEntityAwareDTO;
       ChildClient childClient = (ChildClient) awareDTO.getEntity();
-      if (awareDTO.getEntity() != null && childClient.getAfdcFcEligibilityIndicatorVar()) {
+      if (childClient.getAfdcFcEligibilityIndicatorVar()) {
         List<FCEligibility> fcEligibilities =
             fcEligibilityDao.findByChildClientId(childClient.getIdentifier());
         ((ChildClientEntityAwareDTO) clientEntityAwareDTO).setFcEligibilities(fcEligibilities);
@@ -95,9 +95,11 @@ public class ClientCoreServiceImpl implements ClientCoreService {
     }
 
     return clientEntityAwareDTO;
-  }public void setDroolsService(DroolsService droolsService) {
-        this.droolsService = droolsService;
-    }
+  }
+
+  public void setDroolsService(DroolsService droolsService) {
+    this.droolsService = droolsService;
+  }
 
   public void setClientDao(ClientDao clientDao) {
     this.clientDao = clientDao;

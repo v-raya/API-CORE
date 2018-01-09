@@ -20,7 +20,5 @@ public interface DataAccessService<T extends PersistentObject, P extends BaseEnt
   }
 
   default void runDataProcessing(P entityAwareDTO, PerryAccount principal) throws DroolsException  {
-    //Empty by default
   }
-
 }
