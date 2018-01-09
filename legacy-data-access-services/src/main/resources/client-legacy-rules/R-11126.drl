@@ -19,9 +19,9 @@ rule "R-11126"
         AFDC_ELIGIBILITY.Date must be >= (If Exists) AFDC_ELIGIBILITY > CHILD_CLIENT > CLIENT.Birth_Date.
 
       */
-      $clientAwareDTO: ChildClientEntityAwareDTO()
-      $fсEligibility : FCEligibility($fсEligibilityDate : date) from $clientAwareDTO.fcEligibilities
-      $client: ChildClient(birthDate != null && birthDate.isAfter($fсEligibilityDate) && !birthDate.isEqual($fсEligibilityDate)) from $clientAwareDTO.entity
+      clientAwareDTO: ChildClientEntityAwareDTO()
+      eligibility : FCEligibility(elDate : date) from clientAwareDTO.fcEligibilities
+      client: ChildClient(birthDate != null && birthDate.isAfter(eligibility.date) && !birthDate.isEqual(eligibility.date)) from clientAwareDTO.entity
 
   then
       IssueDetails details = new IssueDetails();
