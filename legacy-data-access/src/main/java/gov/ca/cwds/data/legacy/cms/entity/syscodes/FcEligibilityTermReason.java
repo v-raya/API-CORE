@@ -9,7 +9,7 @@ import org.hibernate.annotations.NamedQuery;
 @Entity
 @Cacheable
 @DiscriminatorValue(value = "ELG_TRMC")
-@NamedQuery(name = FacilityType.NQ_ALL, query = "FROM FcEligibilityTermReason")
+@NamedQuery(name = FcEligibilityTermReason.NQ_ALL, query = "FROM FcEligibilityTermReason")
 public class FcEligibilityTermReason extends SystemCodeTable {
 
   public static final String NQ_ALL = "FcEligibilityTermReason.all";

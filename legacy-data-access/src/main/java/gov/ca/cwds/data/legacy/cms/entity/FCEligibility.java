@@ -7,6 +7,8 @@ import gov.ca.cwds.data.persistence.CompositeKey;
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -14,13 +16,23 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 /** @author CWDS TPT-3 Team */
 @Entity
 @Table(name = "FC_ELIGT")
+@NamedQuery(
+    name = FCEligibility.FIND_BY_CLIENT,
+    query = "FROM FCEligibility WHERE fkClient = :childId"
+)
 public class FCEligibility extends CmsPersistentObject {
+
+  public static final String FIND_BY_CLIENT = "FCEligibility.findByClient";
+
+  @EmbeddedId
+  private FCEligibilityId embeded = new FCEligibilityId();
 
   @Column(name = "FC_ELG_DT")
   private LocalDate date;
@@ -49,7 +61,7 @@ public class FCEligibility extends CmsPersistentObject {
   @Column(name = "ELG_TRM_DT")
   private LocalDate terminationDate;
 
-  @Column(name = "THIRD_ID")
+  @Column(name = "THIRD_ID" , insertable = false, updatable = false)
   private String thirdId;
 
   @Override
@@ -121,5 +133,34 @@ public class FCEligibility extends CmsPersistentObject {
 
   public void setThirdId(String thirdId) {
     this.thirdId = thirdId;
+  }
+
+  @Embeddable
+  public static class FCEligibilityId implements Serializable {
+    @Column(name = "FKREFERL_T")
+    private String childClientId;
+
+    @Column(name = "THIRD_ID")
+    private String thirdId;
+
+    public FCEligibilityId() {}
+
+    public FCEligibilityId(String childClientId, String thirdId) {
+      this.childClientId = childClientId;
+      this.thirdId = thirdId;
+    }
+
+    public boolean equals(Object o) {
+      if (o != null && o instanceof FCEligibilityId) {
+        FCEligibilityId that = (FCEligibilityId) o;
+        return this.childClientId.equals(that.childClientId) && this.thirdId.equals(that.thirdId);
+      } else {
+        return false;
+      }
+    }
+
+    public int hashCode() {
+      return childClientId.hashCode() + thirdId.hashCode();
+    }
   }
 }
