@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import org.junit.Test;
 
-public class R10354Test extends BaseDocToolRulesClientTest {
+public class R10354Test extends BaseDocToolRulesClientImplementationTest {
 
   private static final String RULE_NAME = "R-10354";
   private static final LocalDate SOME_DATE = LocalDate.of(2018, 1, 8);
