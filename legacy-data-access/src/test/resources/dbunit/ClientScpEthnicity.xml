@@ -1,0 +1,66 @@
+<dataset>
+    <CLSCP_ET
+            IDENTIFIER="AadfKnG07n"
+            ETHNCTYC="837"
+            ESTBLSH_ID="NHzI71h0Ki"
+            ESTBLSH_CD="C"
+            LST_UPD_ID="0Ki"
+            LST_UPD_TS="2001-03-08 14:10:28.700590"
+    />
+    <CLSCP_ET
+            IDENTIFIER="BHJEFBUq38"
+            ETHNCTYC="826"
+            ESTBLSH_ID="4NWalZx0Wl"
+            ESTBLSH_CD="C"
+            LST_UPD_ID="0Wl"
+            LST_UPD_TS="2013-02-12 15:40:42.903234"
+    />
+    <CLSCP_ET
+            IDENTIFIER="BhhJGya00R"
+            ETHNCTYC="5922"
+            ESTBLSH_ID="05gLqgG10R"
+            ESTBLSH_CD="C"
+            LST_UPD_ID="00R"
+            LST_UPD_TS="2000-12-08 11:05:43.792947"
+    />
+    <CLSCP_ET
+            IDENTIFIER="JDEsaQu00R"
+            ETHNCTYC="5923"
+            ESTBLSH_ID="05gLqgG10R"
+            ESTBLSH_CD="C"
+            LST_UPD_ID="00R"
+            LST_UPD_TS="2000-12-08 11:05:43.792947"
+    />
+    <CLSCP_ET
+            IDENTIFIER="NS6KhVsq38"
+            ETHNCTYC="825"
+            ESTBLSH_ID="064J1A9AWW"
+            ESTBLSH_CD="S"
+            LST_UPD_ID="q38"
+            LST_UPD_TS="2000-12-15 15:41:23.723895"
+    />
+    <CLSCP_ET
+            IDENTIFIER="N9Lfijcq38"
+            ETHNCTYC="827"
+            ESTBLSH_ID="06KlkhtAWW"
+            ESTBLSH_CD="S"
+            LST_UPD_ID="q38"
+            LST_UPD_TS="2000-12-15 15:41:23.723895"
+    />
+    <CLSCP_ET
+            IDENTIFIER="JDEsaQu11R"
+            ETHNCTYC="5923"
+            ESTBLSH_ID="05gLqgG00R"
+            ESTBLSH_CD="C"
+            LST_UPD_ID="00R"
+            LST_UPD_TS="2000-12-18 11:05:43.792947"
+    />
+    <CLSCP_ET
+            IDENTIFIER="JDETTQu00R"
+            ETHNCTYC="837"
+            ESTBLSH_ID="05gLqgG00R"
+            ESTBLSH_CD="S"
+            LST_UPD_ID="0R1"
+            LST_UPD_TS="2010-12-08 11:05:43.792947"
+    />
+</dataset>
