@@ -14,35 +14,22 @@ public class R10354Test extends BaseDocToolRulesClientTest {
 
   @Test
   public void testPlanStartDateGtBirthDate() throws Exception {
-    Client client = client(SOME_DATE);
-    HealthInterventionPlan plan = plan(SOME_DATE.plusDays(1));
-
-    checkRuleSatisfied(dto(client, plan), RULE_NAME);
+    checkRuleSatisfied(dto(client(SOME_DATE), plan(SOME_DATE.plusDays(1))), RULE_NAME);
   }
 
   @Test
   public void testPlanStartDateLtBirthDate() throws Exception {
-    Client client = client(SOME_DATE);
-    HealthInterventionPlan plan = plan(SOME_DATE.minusDays(1));
-
-
-    checkRuleViolatedOnce(dto(client, plan), RULE_NAME);
+    checkRuleViolatedOnce(dto(client(SOME_DATE), plan(SOME_DATE.minusDays(1))), RULE_NAME);
   }
 
   @Test
   public void testPlanStartDateEqBirthDate() throws Exception {
-    Client client = client(SOME_DATE);
-    HealthInterventionPlan plan = plan(SOME_DATE);
-
-    checkRuleSatisfied(dto(client, plan), RULE_NAME);
+    checkRuleSatisfied(dto(client(SOME_DATE), plan(SOME_DATE)), RULE_NAME);
   }
 
   @Test
   public void testBirthDateNull() throws Exception {
-    Client client = client(null);
-    HealthInterventionPlan plan = plan(SOME_DATE);
-
-    checkRuleSatisfied(dto(client, plan), RULE_NAME);
+    checkRuleSatisfied(dto(client(null), plan(SOME_DATE)), RULE_NAME);
   }
 
   private static Client client(LocalDate birthDate) {
