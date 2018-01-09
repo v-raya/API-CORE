@@ -57,6 +57,8 @@ public class ClientCoreServiceImpl implements ClientCoreService {
               clientEntityAwareDTO.getEntity().getIdentifier());
       clientEntityAwareDTO.getClientScpEthnicities().addAll(clientScpEthnicityList);
     }
+
+    enrichClientEntityAwareDto(clientEntityAwareDTO);
   }
 
   @Override
@@ -75,14 +77,6 @@ public class ClientCoreServiceImpl implements ClientCoreService {
     clientDao.update(client);
   }
 
-  public void setDroolsService(DroolsService droolsService) {
-    this.droolsService = droolsService;
-  }
-
-  public void setClientDao(ClientDao clientDao) {
-    this.clientDao = clientDao;
-  }
-
   private ClientEntityAwareDTO enrichClientEntityAwareDto(
       ClientEntityAwareDTO clientEntityAwareDTO) {
     if (clientEntityAwareDTO instanceof ChildClientEntityAwareDTO) {
@@ -91,10 +85,26 @@ public class ClientCoreServiceImpl implements ClientCoreService {
       if (awareDTO.getEntity() != null && childClient.getAfdcFcEligibilityIndicatorVar()) {
         List<FCEligibility> fcEligibilities =
             fcEligibilityDao.findByChildClientId(childClient.getIdentifier());
+        ((ChildClientEntityAwareDTO) clientEntityAwareDTO).setFcEligibilities(fcEligibilities);
       }
-      clientEntityAwareDTO = awareDTO;
     }
 
     return clientEntityAwareDTO;
+  }
+
+  public void setDroolsService(DroolsService droolsService) {
+    this.droolsService = droolsService;
+  }
+
+  public void setClientDao(ClientDao clientDao) {
+    this.clientDao = clientDao;
+  }
+
+  public FCEligibilityDao getFcEligibilityDao() {
+    return fcEligibilityDao;
+  }
+
+  public void setFcEligibilityDao(FCEligibilityDao fcEligibilityDao) {
+    this.fcEligibilityDao = fcEligibilityDao;
   }
 }
