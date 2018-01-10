@@ -4,9 +4,7 @@ import gov.ca.cwds.data.legacy.cms.entity.FCEligibility;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author CWDS TPT-3 Team
- */
+/** @author CWDS TPT-3 Team */
 public class ChildClientEntityAwareDTO extends ClientEntityAwareDTO {
   private List<FCEligibility> fcEligibilities = new ArrayList<>();
 
@@ -14,8 +12,7 @@ public class ChildClientEntityAwareDTO extends ClientEntityAwareDTO {
     return fcEligibilities;
   }
 
-  public void setFcEligibilities(
-      List<FCEligibility> fcEligibilities) {
+  public void setFcEligibilities(List<FCEligibility> fcEligibilities) {
     this.fcEligibilities = fcEligibilities;
   }
 }
