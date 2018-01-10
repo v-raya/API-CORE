@@ -33,7 +33,7 @@ public class R02127Test extends BaseDocToolRulesClientImplementationTest {
         clientEntityAwareDTO.setEntity(client);
 
         List<MedicalEligibilityApplication> medicalEligibilityApplications = generateListOfValidMedicalEligibilityApplications();
-        MedicalEligibilityApplication failedApplication = createMedicalEligibilityApplication(2013, 5, 17);
+        MedicalEligibilityApplication failedApplication = createMedicalEligibilityApplication(DEFAULT_BIRTHDATE.minusYears(2).plusMonths(3).plusDays(7));
         medicalEligibilityApplications.add(failedApplication);
         clientEntityAwareDTO.getMedicalEligibilityApplications().addAll(medicalEligibilityApplications);
 
@@ -59,6 +59,19 @@ public class R02127Test extends BaseDocToolRulesClientImplementationTest {
         checkRuleSatisfied(RULE_NAME);
     }
 
+
+    @Test
+    public void adoptionAgreementTermDateSameAsBirthdate() throws Exception {
+        Client client = createClient();
+        clientEntityAwareDTO.setEntity(client);
+
+        MedicalEligibilityApplication application = createMedicalEligibilityApplication(DEFAULT_BIRTHDATE);
+        clientEntityAwareDTO.getMedicalEligibilityApplications().add(application);
+
+        checkRuleSatisfied(RULE_NAME);
+    }
+
+
     private static Client createClient() {
         Client client = new Client();
         client.setBirthDate(DEFAULT_BIRTHDATE);
@@ -66,32 +79,19 @@ public class R02127Test extends BaseDocToolRulesClientImplementationTest {
         return client;
     }
 
-    @Test
-    public void adoptionAgreementTermDateSameAsBirthdate() throws Exception {
-        Client client = createClient();
-        clientEntityAwareDTO.setEntity(client);
-
-        MedicalEligibilityApplication application = createMedicalEligibilityApplication(2014, 10, 10);
-        clientEntityAwareDTO.getMedicalEligibilityApplications().add(application);
-
-        checkRuleSatisfied(RULE_NAME);
-    }
-
-
     private static List<MedicalEligibilityApplication> generateListOfValidMedicalEligibilityApplications() {
         List<MedicalEligibilityApplication> medicalEligibilityApplications = new ArrayList<>();
-        MedicalEligibilityApplication medicalEligibilityApplication1 = createMedicalEligibilityApplication(2014, 12, 12);
-        MedicalEligibilityApplication medicalEligibilityApplication2 = createMedicalEligibilityApplication(2017, 5, 25);
-        MedicalEligibilityApplication medicalEligibilityApplication3 = createMedicalEligibilityApplication(2016, 3, 8);
-
+        MedicalEligibilityApplication medicalEligibilityApplication1 = createMedicalEligibilityApplication(DEFAULT_BIRTHDATE.plusDays(2));
+        MedicalEligibilityApplication medicalEligibilityApplication2 = createMedicalEligibilityApplication(DEFAULT_BIRTHDATE.plusYears(2).minusDays(10));
+        MedicalEligibilityApplication medicalEligibilityApplication3 = createMedicalEligibilityApplication(DEFAULT_BIRTHDATE.plusMonths(7));
         medicalEligibilityApplications.addAll(Arrays.asList(medicalEligibilityApplication1, medicalEligibilityApplication2, medicalEligibilityApplication3));
-        return medicalEligibilityApplications;
+        return  medicalEligibilityApplications;
     }
 
 
-    private static MedicalEligibilityApplication createMedicalEligibilityApplication(int year, int month, int day) {
+    private static MedicalEligibilityApplication createMedicalEligibilityApplication(LocalDate adoptionAgreementTermDate) {
         MedicalEligibilityApplication medicalEligibilityApplication = new MedicalEligibilityApplication();
-        medicalEligibilityApplication.setAdoptionAgreementTermDate(LocalDate.of(year, month, day));
+        medicalEligibilityApplication.setAdoptionAgreementTermDate(adoptionAgreementTermDate);
         return medicalEligibilityApplication;
     }
 

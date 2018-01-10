@@ -68,7 +68,7 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
 
     List<MedicalEligibilityApplication> medicalEligibilityApplications =
         medicalEligibilityApplicationDao.findByChildClientId(clientId);
-    clientEntityAwareDTO.getMedicalEligibilityApplications().addAll(medicalEligibilityApplications);
+    clientEntityAwareDTO.setMedicalEligibilityApplications(medicalEligibilityApplications);
 
     enrichClientEntityAwareDto((T) clientEntityAwareDTO);
   }
