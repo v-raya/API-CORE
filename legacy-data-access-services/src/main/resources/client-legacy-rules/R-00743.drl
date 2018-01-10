@@ -24,6 +24,8 @@ rule "R-00743"
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-00743");
+      details.setProperty("client.secondaryLanguageCode");
+      details.setInvalidValue(client.getSecondaryLanguageCode());
       details.setUserMessage("A client must have a primary language in order to have a secondary language.");
       details.setTechnicalMessage("Client.primaryLanguageCode==null, Client.secondaryLanguageCode != null");
       validationDetailsList.add(details);
