@@ -64,6 +64,9 @@ node ('tpt2-slave'){
 	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'api-core-common/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report Common', reportTitles: 'JUnit Report Common'])
 	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'api-core-rest/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report REST', reportTitles: 'JUnit Report REST'])
 	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'api-core-cms/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report CMS', reportTitles: 'JUnit Report CMS'])
+	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'api-core-abac/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report ABAC', reportTitles: 'JUnit Report ABAC'])
+	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'legacy-data-access/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report legacy-data-access', reportTitles: 'JUnit Report Legacy Data Access'])
+	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'legacy-data-access-services/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report legacy-data-access-services', reportTitles: 'JUnit Report Legacy Data Access Services'])
    }
    stage('License Report') {
       		buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'libLicenseReport -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
