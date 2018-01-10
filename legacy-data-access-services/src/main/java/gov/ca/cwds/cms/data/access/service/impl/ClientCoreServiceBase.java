@@ -1,7 +1,6 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
 import com.google.inject.Inject;
-import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.ClientCoreService;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
@@ -43,10 +42,10 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
 
   @Override
   public Client update(ClientEntityAwareDTO clientEntityAwareDTO)
-      throws DataAccessServicesException {
+      throws DataAccessServicesException, DroolsException {
+    prepareEntityForValidation(clientEntityAwareDTO);
+    runBusinessValidation(clientEntityAwareDTO, PrincipalUtils.getPrincipal());
     try {
-      prepareEntityForValidation((T) clientEntityAwareDTO);
-      runBusinessValidation(clientEntityAwareDTO, PrincipalUtils.getPrincipal());
       updateClient(clientEntityAwareDTO);
       return clientEntityAwareDTO.getEntity();
     } catch (Exception e) {
