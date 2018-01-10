@@ -9,13 +9,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class R02127Test extends BaseDocToolRulesClientTest {
+public class R02127Test extends BaseDocToolRulesClientImplementationTest {
 
     private static final String RULE_NAME = "R-02127";
     private static final String CLIENT_IDENTIFIER = "1234567890";
     private static final LocalDate DEFAULT_BIRTHDATE = LocalDate.of(2014,10,10);
-
-
 
     @Test
     public void allApplicationDatesGtBirthdate() throws Exception {
