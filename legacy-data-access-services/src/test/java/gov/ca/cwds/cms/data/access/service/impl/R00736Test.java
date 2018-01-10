@@ -10,7 +10,12 @@ public class R00736Test extends BaseDocToolRulesClientImplementationTest {
 
   @Test
   public void testNoDriverLicenseNumberWithNonZeroStateCode() throws Exception {
-    checkRuleViolatedOnce(dto(null, (short)12), RULE_NAME);
+    checkRuleViolatedOnce(dto(null, (short) 12), RULE_NAME);
+  }
+
+  @Test
+  public void testBlankDriverLicenseNumberWithNonZeroStateCode() throws Exception {
+    checkRuleViolatedOnce(dto(" ", (short)12), RULE_NAME);
   }
 
   @Test
@@ -20,7 +25,12 @@ public class R00736Test extends BaseDocToolRulesClientImplementationTest {
 
   @Test
   public void testNoDriverLicenseNumberWithZeroStateCode() throws Exception {
-    checkRuleSatisfied(dto(null, (short)0), RULE_NAME);
+    checkRuleSatisfied(dto(null, (short) 0), RULE_NAME);
+  }
+
+  @Test
+  public void testBlankDriverLicenseNumberWithZeroStateCode() throws Exception {
+    checkRuleSatisfied(dto(" ", (short)0), RULE_NAME);
   }
 
   @Test

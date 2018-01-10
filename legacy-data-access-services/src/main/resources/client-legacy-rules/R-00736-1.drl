@@ -1,6 +1,7 @@
 import gov.ca.cwds.rest.exception.IssueDetails
 import gov.ca.cwds.data.legacy.cms.entity.Client
 import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
+import org.apache.commons.lang3.StringUtils;
 
 global java.util.Set<IssueDetails> validationDetailsList
 
@@ -21,7 +22,7 @@ rule "R-00736-1"
         If CLIENT. Driver License State Code Type <>  blank then CLIENT. Driver License Number <>  blank and vice-versa
       */
       $clientAwareDTO: ClientEntityAwareDTO()
-      $client: Client(driverLicenseNumber == null, driverLicenseStateCode > (short)0) from $clientAwareDTO.entity
+      $client: Client(StringUtils.isBlank(driverLicenseNumber), driverLicenseStateCode > (short)0) from $clientAwareDTO.entity
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-00736");
