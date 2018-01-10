@@ -13,7 +13,7 @@ public interface DataAccessService<T extends PersistentObject, P extends BaseEnt
 
   T create(P entityAwareDTO) throws DataAccessServicesException;
 
-  T update(P entityAwareDTO) throws DataAccessServicesException;
+  T update(P entityAwareDTO) throws DataAccessServicesException, DroolsException;
 
   default void runBusinessValidation(P entityAwareDTO, PerryAccount principal) throws DroolsException {
     //Empty by default
