@@ -1,13 +1,10 @@
 package gov.ca.cwds.rest;
 
-import gov.ca.cwds.inject.InjectorHolder;
-import io.dropwizard.jersey.setup.JerseyEnvironment;
 import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 
-import gov.ca.cwds.rest.resources.TokenResource;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.secnod.dropwizard.shiro.ShiroBundle;
@@ -124,26 +121,20 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
     registerFilters(environment, guiceBundle);
 
     LOGGER.info("Registering SystemCodeCache");
-
-    LOGGER.info("Setting up Guice injector");
-    // Providing access to the guice injector from external classes such as custom validators
-    InjectorHolder.INSTANCE.setInjector(injector);
-
     runInternal(configuration, environment);
   }
 
   private void registerExceptionMappers(Environment environment) {
-    final LoggingContext loggingContext = guiceBundle.getInjector().getInstance(LoggingContext.class);
-    final JerseyEnvironment jersey = environment.jersey();
-    jersey.register(new ApiSecurityExceptionMapper());
-    jersey.register(new UnexpectedExceptionMapperImpl(loggingContext));
-    jersey.register(new ExpectedExceptionMapperImpl(loggingContext));
-    jersey.register(new ValidationExceptionMapperImpl(loggingContext));
-    jersey.register(new BusinessValidationExceptionMapper());
-    jersey.register(new ReferentialIntegrityExceptionMapper(loggingContext));
-    jersey.register(new DaoExceptionMapper(loggingContext));
-    jersey.register(new ServiceExceptionMapper(loggingContext));
-    jersey.register(new CustomExceptionMapperBinder(loggingContext, true));
+    LoggingContext loggingContext = guiceBundle.getInjector().getInstance(LoggingContext.class);
+    environment.jersey().register(new ApiSecurityExceptionMapper());
+    environment.jersey().register(new UnexpectedExceptionMapperImpl(loggingContext));
+    environment.jersey().register(new ExpectedExceptionMapperImpl(loggingContext));
+    environment.jersey().register(new ValidationExceptionMapperImpl(loggingContext));
+    environment.jersey().register(new BusinessValidationExceptionMapper());
+    environment.jersey().register(new ReferentialIntegrityExceptionMapper(loggingContext));
+    environment.jersey().register(new DaoExceptionMapper(loggingContext));
+    environment.jersey().register(new ServiceExceptionMapper(loggingContext));
+    environment.jersey().register(new CustomExceptionMapperBinder(loggingContext, true));
   }
 
   /**
@@ -171,29 +162,24 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
     filter.setInitParameter("allowCredentials", "true");
   }
 
-  private void configureSwagger(final T apiConfiguration, final Environment environment) {
+  private final void configureSwagger(final T apiConfiguration, final Environment environment) {
     BeanConfig config = new BeanConfig();
-    SwaggerConfiguration swaggerConfiguration = apiConfiguration.getSwaggerConfiguration();
-    config.setTitle(swaggerConfiguration.getTitle());
-    config.setDescription(swaggerConfiguration.getDescription());
-    config.setResourcePackage(swaggerConfiguration.getResourcePackage());
+    config.setTitle(apiConfiguration.getSwaggerConfiguration().getTitle());
+    config.setDescription(apiConfiguration.getSwaggerConfiguration().getDescription());
+    config.setResourcePackage(apiConfiguration.getSwaggerConfiguration().getResourcePackage());
     config.setScan(true);
 
-    new AssetsBundle(swaggerConfiguration.getAssetsPath(),
-        swaggerConfiguration.getAssetsPath(), null, "swagger")
+    new AssetsBundle(apiConfiguration.getSwaggerConfiguration().getAssetsPath(),
+        apiConfiguration.getSwaggerConfiguration().getAssetsPath(), null, "swagger")
             .run(environment);
 
     LOGGER.info("Registering ApiListingResource");
     environment.jersey().register(new ApiListingResource());
 
     LOGGER.info("Registering SwaggerResource");
-    SwaggerResource swaggerResource = new SwaggerResource(swaggerConfiguration);
+    final SwaggerResource swaggerResource =
+        new SwaggerResource(apiConfiguration.getSwaggerConfiguration());
     environment.jersey().register(swaggerResource);
-
-    if (swaggerConfiguration.isShowSwagger()) {
-      TokenResource tokenResource = new TokenResource(swaggerConfiguration);
-      environment.jersey().register(tokenResource);
-    }
   }
 
   @SuppressWarnings("javadoc")
