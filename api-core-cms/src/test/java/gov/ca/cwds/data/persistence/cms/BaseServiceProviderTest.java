@@ -3,9 +3,9 @@ package gov.ca.cwds.data.persistence.cms;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import org.junit.Test;
@@ -70,9 +70,8 @@ public class BaseServiceProviderTest {
   @Test
   public void getFaxNumber_Args__() throws Exception {
     BaseServiceProvider target = new TestOnlyBaseServiceProvider();
-    BigDecimal actual = target.getFaxNumber();
-    BigDecimal expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    Long actual = target.getFaxNumber();
+    assertNull(actual);
   }
 
   @Test
@@ -118,9 +117,8 @@ public class BaseServiceProviderTest {
   @Test
   public void getPhoneNumberAsDecimal_Args__() throws Exception {
     BaseServiceProvider target = new TestOnlyBaseServiceProvider();
-    BigDecimal actual = target.getPhoneNumberAsDecimal();
-    BigDecimal expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    Long actual = target.getPhoneNumberAsDecimal();
+    assertNull(actual);
   }
 
   @Test

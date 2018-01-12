@@ -3,6 +3,7 @@ package gov.ca.cwds.data.persistence.cms;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -70,16 +71,9 @@ public class BaseAddressTest {
   @Test
   public void getEmergencyNumber_Args__() throws Exception {
     BaseAddress target = new TestOnlyBaseAddress();
-    BigDecimal actual = target.getEmergencyNumber();
+    Long actual = target.getEmergencyNumber();
     BigDecimal expected = null;
     assertThat(actual, is(equalTo(expected)));
-  }
-
-  @Test
-  public void setEmergencyNumber_Args__BigDecimal() throws Exception {
-    BaseAddress target = new TestOnlyBaseAddress();
-    BigDecimal emergencyNumber = mock(BigDecimal.class);
-    target.setEmergencyNumber(emergencyNumber);
   }
 
   @Test
@@ -100,7 +94,7 @@ public class BaseAddressTest {
   @Test
   public void getMessageNumber_Args__() throws Exception {
     BaseAddress target = new TestOnlyBaseAddress();
-    BigDecimal actual = target.getMessageNumber();
+    Long actual = target.getMessageNumber();
     BigDecimal expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
@@ -108,8 +102,7 @@ public class BaseAddressTest {
   @Test
   public void setMessageNumber_Args__BigDecimal() throws Exception {
     BaseAddress target = new TestOnlyBaseAddress();
-    BigDecimal messageNumber = mock(BigDecimal.class);
-    target.setMessageNumber(messageNumber);
+    assertNull(target.getMessageNumber());
   }
 
   @Test
@@ -145,7 +138,7 @@ public class BaseAddressTest {
   @Test
   public void getPrimaryNumber_Args__() throws Exception {
     BaseAddress target = new TestOnlyBaseAddress();
-    BigDecimal actual = target.getPrimaryNumber();
+    Long actual = target.getPrimaryNumber();
     BigDecimal expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
@@ -153,8 +146,7 @@ public class BaseAddressTest {
   @Test
   public void setPrimaryNumber_Args__BigDecimal() throws Exception {
     BaseAddress target = new TestOnlyBaseAddress();
-    BigDecimal primaryNumber = mock(BigDecimal.class);
-    target.setPrimaryNumber(primaryNumber);
+    assertNull(target.getPrimaryNumber());
   }
 
   @Test
@@ -403,13 +395,13 @@ public class BaseAddressTest {
     BaseAddress target = new TestOnlyBaseAddress();
 
     target.primaryExtension = 123;
-    target.primaryNumber = new BigDecimal("4083742790");
+    target.primaryNumber = 4083742790L;
 
     target.messageExtension = 456;
-    target.messageNumber = new BigDecimal("9163742790");
+    target.messageNumber = 9163742790L;
 
     target.emergencyExtension = 789;
-    target.emergencyNumber = new BigDecimal("5303742790");
+    target.emergencyNumber = 5303742790L;
 
     ApiPhoneAware[] actual = target.getPhones();
     assertThat(actual, notNullValue());
