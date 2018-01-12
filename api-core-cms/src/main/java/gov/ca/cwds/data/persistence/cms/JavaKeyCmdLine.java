@@ -43,6 +43,8 @@ public final class JavaKeyCmdLine {
 
   private static final class RipCKey extends ApiObjectIdentity {
 
+    private static final long serialVersionUID = 1L;
+
     private final String key;
     private final String staffId;
     private final Date date;

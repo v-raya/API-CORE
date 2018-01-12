@@ -22,9 +22,6 @@ import gov.ca.cwds.data.std.ApiPersonAware;
 public abstract class BaseSubstituteCareProvider extends CmsPersistentObject
     implements ApiPersonAware {
 
-  /**
-   * Base serialization version. Increment per change.
-   */
   private static final long serialVersionUID = 1L;
 
   @Id

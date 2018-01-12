@@ -12,6 +12,15 @@ import gov.ca.cwds.rest.SwaggerConfiguration;
 
 public class SwaggerViewTest {
 
+  SwaggerView target;
+
+  public void setup() throws Exception {
+    SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
+    String swaggerJsonUrl = null;
+    String callbackUrl = null;
+    target = new SwaggerView(swaggerConfiguration, swaggerJsonUrl, callbackUrl);
+  }
+
   @Test
   @Ignore
   public void type() throws Exception {
@@ -21,16 +30,12 @@ public class SwaggerViewTest {
   @Test
   @Ignore
   public void instantiation() throws Exception {
-    SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
-    SwaggerView target = new SwaggerView(swaggerConfiguration);
     assertThat(target, notNullValue());
   }
 
   @Test
   @Ignore
   public void getAssetsPath_Args__() throws Exception {
-    SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
-    SwaggerView target = new SwaggerView(swaggerConfiguration);
     String actual = target.getAssetsPath();
     String expected = null;
     assertThat(actual, is(equalTo(expected)));
@@ -39,8 +44,6 @@ public class SwaggerViewTest {
   @Test
   @Ignore
   public void getTitle_Args__() throws Exception {
-    SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
-    SwaggerView target = new SwaggerView(swaggerConfiguration);
     String actual = target.getTitle();
     String expected = null;
     assertThat(actual, is(equalTo(expected)));
@@ -49,8 +52,6 @@ public class SwaggerViewTest {
   @Test
   @Ignore
   public void getJsonUrl_Args__() throws Exception {
-    SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
-    SwaggerView target = new SwaggerView(swaggerConfiguration);
     String actual = target.getJsonUrl();
     String expected = null;
     assertThat(actual, is(equalTo(expected)));
@@ -59,8 +60,6 @@ public class SwaggerViewTest {
   @Test
   @Ignore
   public void getLogo_Args__() throws Exception {
-    SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
-    SwaggerView target = new SwaggerView(swaggerConfiguration);
     String actual = target.getLogo();
     String expected = null;
     assertThat(actual, is(equalTo(expected)));
@@ -69,8 +68,6 @@ public class SwaggerViewTest {
   @Test
   @Ignore
   public void getLoginUrl_Args__() throws Exception {
-    SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
-    SwaggerView target = new SwaggerView(swaggerConfiguration);
     String actual = target.getLoginUrl();
     String expected = null;
     assertThat(actual, is(equalTo(expected)));
@@ -79,8 +76,6 @@ public class SwaggerViewTest {
   @Test
   @Ignore
   public void getShowLoginButton_Args__() throws Exception {
-    SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
-    SwaggerView target = new SwaggerView(swaggerConfiguration);
     boolean actual = target.getShowLoginButton();
     boolean expected = false;
     assertThat(actual, is(equalTo(expected)));
@@ -89,8 +84,6 @@ public class SwaggerViewTest {
   @Test
   @Ignore
   public void getCallbackUrl_Args__() throws Exception {
-    SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
-    SwaggerView target = new SwaggerView(swaggerConfiguration);
     String actual = target.getCallbackUrl();
     String expected = null;
     assertThat(actual, is(equalTo(expected)));
@@ -99,8 +92,6 @@ public class SwaggerViewTest {
   @Test
   @Ignore
   public void getSpId_Args__() throws Exception {
-    SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
-    SwaggerView target = new SwaggerView(swaggerConfiguration);
     String actual = target.getSpId();
     String expected = null;
     assertThat(actual, is(equalTo(expected)));

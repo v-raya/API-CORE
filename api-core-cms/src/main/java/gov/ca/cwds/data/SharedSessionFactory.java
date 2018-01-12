@@ -351,4 +351,12 @@ public class SharedSessionFactory implements SessionFactory {
     return okToClose;
   }
 
+  public boolean isTestMode() {
+    return testMode;
+  }
+
+  public boolean isCloseOnSignal() {
+    return closeOnSignal;
+  }
+
 }

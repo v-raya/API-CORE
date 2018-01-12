@@ -5,7 +5,7 @@ import java.io.Serializable;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
 
-public final class TestPersistentObject extends ApiObjectIdentity implements PersistentObject {
+public class TestPersistentObject extends ApiObjectIdentity implements PersistentObject {
 
   private String id;
 
