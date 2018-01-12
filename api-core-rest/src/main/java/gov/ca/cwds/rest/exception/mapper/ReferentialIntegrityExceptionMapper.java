@@ -22,6 +22,6 @@ public class ReferentialIntegrityExceptionMapper
   @Override
   public Response toResponse(ReferentialIntegrityException exception) {
     return ExceptionMapperUtils.createGenericResponse(exception,
-        IssueType.REFRENTIAL_INTEGRITY_VIOLATION, 500, loggingContext.getUniqueId());
+        IssueType.REFRENTIAL_INTEGRITY_VIOLATION, loggingContext.getUniqueId());
   }
 }

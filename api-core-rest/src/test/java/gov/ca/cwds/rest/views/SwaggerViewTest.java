@@ -18,8 +18,7 @@ public class SwaggerViewTest {
     SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
     String swaggerJsonUrl = null;
     String callbackUrl = null;
-    swaggerConfiguration.setTokenUrl(swaggerJsonUrl);
-    target = new SwaggerView(swaggerConfiguration);
+    target = new SwaggerView(swaggerConfiguration, swaggerJsonUrl, callbackUrl);
   }
 
   @Test

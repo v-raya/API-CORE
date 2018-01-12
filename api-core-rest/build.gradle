@@ -14,7 +14,7 @@ dependencies {
     compile group: 'io.swagger', name: 'swagger-jersey2-jaxrs', version: swaggerVersion
     compile group: 'io.swagger', name: 'swagger-annotations', version: swaggerVersion
     //SECURITY
-    compile group: 'gov.ca.cwds.api', name:'api-security', version: apiSecurityVersion
+    compile group: 'gov.ca.cwds.api', name:'shiro-security', version: shiroSecurityVersion
 
 	compile group: 'org.secnod.dropwizard', name: 'dropwizard-shiro', version: '0.2.0'
 	compile group: 'org.glassfish.jersey.core', name: 'jersey-client', version: glassfishJerseyCoreVersion
@@ -31,8 +31,6 @@ dependencies {
     
     testCompile group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '2.1.6'
     testCompile 'org.ow2.asm:asm-all:5.1'
-    testCompile group: 'org.mockito', name: 'mockito-core', version: mockitoVersion
-    testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version: hamcrestVersion
 }
 
 publishing {

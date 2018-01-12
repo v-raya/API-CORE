@@ -31,13 +31,11 @@ public class ExceptionMapperUtils {
    * 
    * @param ex The exception
    * @param issueType Issue type
-   * @param status Response status
    * @param incidentId Incident ID
    * @return A generic Response created from given exception
    */
-  public static Response createGenericResponse(Exception ex, IssueType issueType, int status,
-      String incidentId) {
-    IssueDetails issueDetails = new IssueDetails();
+  public static Response createGenericResponse(Exception ex, IssueType issueType, String incidentId) {
+    final IssueDetails issueDetails = new IssueDetails();
 
     issueDetails.setType(issueType);
     issueDetails.setIncidentId(incidentId);
@@ -56,6 +54,6 @@ public class ExceptionMapperUtils {
     final BaseExceptionResponse response = new BaseExceptionResponse();
     response.setIssueDetails(detailsList);
 
-    return Response.status(status).entity(response).type(MediaType.APPLICATION_JSON).build();
+    return Response.status(500).entity(response).type(MediaType.APPLICATION_JSON).build();
   }
 }
