@@ -1,7 +1,5 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -49,7 +47,7 @@ public abstract class BaseCollateralIndividual extends CmsPersistentObject
   protected String establishedForCode;
 
   @Column(name = "FAX_NO")
-  protected BigDecimal faxNumber;
+  protected Long faxNumber;
 
   @Column(name = "FIRST_NM")
   @ColumnTransformer(read = ("trim(FIRST_NM)"))
@@ -88,7 +86,7 @@ public abstract class BaseCollateralIndividual extends CmsPersistentObject
   protected Integer primaryExtensionNumber;
 
   @Column(name = "PRM_TEL_NO")
-  protected BigInteger primaryPhoneNo;
+  protected Long primaryPhoneNo;
 
   @Column(name = "RESOST_IND")
   protected String residedOutOfStateIndicator;
@@ -185,7 +183,7 @@ public abstract class BaseCollateralIndividual extends CmsPersistentObject
   /**
    * @return faxNumber
    */
-  public BigDecimal getFaxNumber() {
+  public Long getFaxNumber() {
     return faxNumber;
   }
 
@@ -257,7 +255,7 @@ public abstract class BaseCollateralIndividual extends CmsPersistentObject
   /**
    * @return primaryPhoneNo
    */
-  public BigInteger getPrimaryPhoneNo() {
+  public Long getPrimaryPhoneNo() {
     return primaryPhoneNo;
   }
 

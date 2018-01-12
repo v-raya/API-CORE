@@ -1,6 +1,5 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -30,7 +29,7 @@ public abstract class BaseEducationProviderContact extends CmsPersistentObject
   protected String emailAddress;
 
   @Column(name = "FAX_NO")
-  protected BigDecimal faxNumber;
+  protected Long faxNumber;
 
   @Column(name = "FIRST_NME")
   protected String firstName;
@@ -56,7 +55,7 @@ public abstract class BaseEducationProviderContact extends CmsPersistentObject
   protected Integer phoneExtensionNumber;
 
   @Column(name = "PH_NUMBR")
-  protected BigDecimal phoneNumber;
+  protected Long phoneNumber;
 
   @Column(name = "PRICNTIND")
   protected String primaryContactIndicator;
@@ -106,7 +105,7 @@ public abstract class BaseEducationProviderContact extends CmsPersistentObject
   /**
    * @return faxNumber
    */
-  public BigDecimal getFaxNumber() {
+  public Long getFaxNumber() {
     return faxNumber;
   }
 
@@ -165,16 +164,9 @@ public abstract class BaseEducationProviderContact extends CmsPersistentObject
   /**
    * @return phoneNumber
    */
-  public BigDecimal getPhoneNumberAsDecimal() {
-    return phoneNumber;
-  }
-
-  /**
-   * @return phoneNumber
-   */
   @Override
   public String getPhoneNumber() {
-    return phoneNumber != null ? this.phoneNumber.toPlainString() : null;
+    return phoneNumber != null ? String.valueOf(this.phoneNumber) : null;
   }
 
   /**

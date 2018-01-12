@@ -3,9 +3,10 @@ package gov.ca.cwds.data.persistence.cms;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import org.junit.Test;
@@ -77,9 +78,7 @@ public class BaseEducationProviderContactTest {
   @Test
   public void getFaxNumber_Args__() throws Exception {
     BaseEducationProviderContact target = new TestOnlyEducationProviderContact();
-    BigDecimal actual = target.getFaxNumber();
-    BigDecimal expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    assertNull(target.getFaxNumber());
   }
 
   @Test
@@ -133,17 +132,7 @@ public class BaseEducationProviderContactTest {
   @Test
   public void getPhoneExtensionNumber_Args__() throws Exception {
     BaseEducationProviderContact target = new TestOnlyEducationProviderContact();
-    Integer actual = target.getPhoneExtensionNumber();
-    Integer expected = null;
-    assertThat(actual, is(equalTo(expected)));
-  }
-
-  @Test
-  public void getPhoneNumberAsDecimal_Args__() throws Exception {
-    BaseEducationProviderContact target = new TestOnlyEducationProviderContact();
-    BigDecimal actual = target.getPhoneNumberAsDecimal();
-    BigDecimal expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    assertNull(target.getPhoneExtensionNumber());
   }
 
   @Test
@@ -157,9 +146,9 @@ public class BaseEducationProviderContactTest {
   @Test
   public void getPhoneNumber_Args2_() throws Exception {
     BaseEducationProviderContact target = new TestOnlyEducationProviderContact();
-    target.phoneNumber = new BigDecimal("4083742790");
+    target.phoneNumber = 4083742790L;
     String actual = target.getPhoneNumber();
-    assertThat(actual, notNullValue());
+    assertNotNull(actual);
   }
 
   @Test

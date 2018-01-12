@@ -36,7 +36,7 @@ allprojects {
         postgresqlVersion = "9.4.1208.jre7"
 
         //apiVersion = "3.6"
-        projectMajorVersion = "3.6"
+        projectMajorVersion = "3.6.001"
 
         isRelease = System.getProperty("Release") == "true"
         buildNumber = System.getProperty('BuildNumber')

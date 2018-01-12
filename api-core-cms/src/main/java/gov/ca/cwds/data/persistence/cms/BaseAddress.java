@@ -1,6 +1,5 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,7 +48,7 @@ public abstract class BaseAddress extends CmsPersistentObject
   protected String city;
 
   @Column(name = "EMRG_TELNO", nullable = false)
-  protected BigDecimal emergencyNumber;
+  protected Long emergencyNumber;
 
   @Type(type = "integer")
   @Column(name = "EMRG_EXTNO", nullable = false)
@@ -65,7 +64,7 @@ public abstract class BaseAddress extends CmsPersistentObject
   protected Short governmentEntityCd;
 
   @Column(name = "MSG_TEL_NO", nullable = false)
-  protected BigDecimal messageNumber;
+  protected Long messageNumber;
 
   @Type(type = "integer")
   @Column(name = "MSG_EXT_NO", nullable = false)
@@ -76,7 +75,7 @@ public abstract class BaseAddress extends CmsPersistentObject
   protected String headerAddress;
 
   @Column(name = "PRM_TEL_NO", nullable = false)
-  protected BigDecimal primaryNumber;
+  protected Long primaryNumber;
 
   @Type(type = "integer")
   @Column(name = "PRM_EXT_NO", nullable = false)
@@ -204,11 +203,11 @@ public abstract class BaseAddress extends CmsPersistentObject
     this.city = city;
   }
 
-  public BigDecimal getEmergencyNumber() {
+  public Long getEmergencyNumber() {
     return emergencyNumber;
   }
 
-  public void setEmergencyNumber(BigDecimal emergencyNumber) {
+  public void setEmergencyNumber(Long emergencyNumber) {
     this.emergencyNumber = emergencyNumber;
   }
 
@@ -220,11 +219,11 @@ public abstract class BaseAddress extends CmsPersistentObject
     this.emergencyExtension = emergencyExtension;
   }
 
-  public BigDecimal getMessageNumber() {
+  public Long getMessageNumber() {
     return messageNumber;
   }
 
-  public void setMessageNumber(BigDecimal messageNumber) {
+  public void setMessageNumber(Long messageNumber) {
     this.messageNumber = messageNumber;
   }
 
@@ -244,11 +243,11 @@ public abstract class BaseAddress extends CmsPersistentObject
     this.headerAddress = headerAddress;
   }
 
-  public BigDecimal getPrimaryNumber() {
+  public Long getPrimaryNumber() {
     return primaryNumber;
   }
 
-  public void setPrimaryNumber(BigDecimal primaryNumber) {
+  public void setPrimaryNumber(Long primaryNumber) {
     this.primaryNumber = primaryNumber;
   }
 
@@ -385,19 +384,19 @@ public abstract class BaseAddress extends CmsPersistentObject
   @Override
   public ApiPhoneAware[] getPhones() {
     final List<ApiPhoneAware> phones = new ArrayList<>();
-    if (this.primaryNumber != null && BigDecimal.ZERO.compareTo(this.primaryNumber) != 0) {
-      phones.add(new ReadablePhone(null, this.primaryNumber.toPlainString(),
+    if (this.primaryNumber != null && this.primaryNumber != 0) {
+      phones.add(new ReadablePhone(null, String.valueOf(this.primaryNumber),
           this.primaryExtension != null ? this.primaryExtension.toString() : null, null));
     }
 
-    if (this.messageNumber != null && BigDecimal.ZERO.compareTo(this.messageNumber) != 0) {
-      phones.add(new ReadablePhone(null, this.messageNumber.toPlainString(),
+    if (this.messageNumber != null && this.messageNumber != 0) {
+      phones.add(new ReadablePhone(null, String.valueOf(this.messageNumber),
           this.messageExtension != null ? this.messageExtension.toString() : null,
           ApiPhoneAware.PhoneType.Cell));
     }
 
-    if (this.emergencyNumber != null && BigDecimal.ZERO.compareTo(this.emergencyNumber) != 0) {
-      phones.add(new ReadablePhone(null, this.emergencyNumber.toPlainString(),
+    if (this.emergencyNumber != null && this.emergencyNumber != 0) {
+      phones.add(new ReadablePhone(null, String.valueOf(this.emergencyNumber),
           this.emergencyExtension != null ? this.emergencyExtension.toString() : null,
           ApiPhoneAware.PhoneType.Other));
     }
