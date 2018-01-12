@@ -1,7 +1,6 @@
 package gov.ca.cwds.data.persistence.cms;
 
 import java.beans.Transient;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,7 +55,7 @@ public abstract class BaseAttorney extends CmsPersistentObject
   protected Date endDate;
 
   @Column(name = "FAX_NO")
-  protected BigDecimal faxNumber;
+  protected Long faxNumber;
 
   @Column(name = "FIRST_NM")
   @ColumnTransformer(read = ("trim(FIRST_NM)"))
@@ -87,7 +86,7 @@ public abstract class BaseAttorney extends CmsPersistentObject
   protected Integer messagePhoneExtensionNumber;
 
   @Column(name = "MSG_TEL_NO")
-  protected BigDecimal messagePhoneNumber;
+  protected Long messagePhoneNumber;
 
   @Column(name = "MID_INI_NM")
   @ColumnTransformer(read = ("trim(MID_INI_NM)"))
@@ -105,7 +104,7 @@ public abstract class BaseAttorney extends CmsPersistentObject
   protected Integer primaryPhoneExtensionNumber;
 
   @Column(name = "PRM_TEL_NO")
-  protected BigDecimal primaryPhoneNumber;
+  protected Long primaryPhoneNumber;
 
   @SystemCodeSerializer(logical = true, description = true)
   @JsonDeserialize(using = CmsSystemCodeDeserializer.class)
@@ -203,7 +202,7 @@ public abstract class BaseAttorney extends CmsPersistentObject
   /**
    * @return the faxNumber
    */
-  public BigDecimal getFaxNumber() {
+  public Long getFaxNumber() {
     return faxNumber;
   }
 
@@ -254,7 +253,7 @@ public abstract class BaseAttorney extends CmsPersistentObject
   /**
    * @return the messagePhoneNumber
    */
-  public BigDecimal getMessagePhoneNumber() {
+  public Long getMessagePhoneNumber() {
     return messagePhoneNumber;
   }
 
@@ -289,7 +288,7 @@ public abstract class BaseAttorney extends CmsPersistentObject
   /**
    * @return the primaryPhoneNumber
    */
-  public BigDecimal getPrimaryPhoneNumber() {
+  public Long getPrimaryPhoneNumber() {
     return primaryPhoneNumber;
   }
 
@@ -378,20 +377,18 @@ public abstract class BaseAttorney extends CmsPersistentObject
   @Transient
   public ApiPhoneAware[] getPhones() {
     List<ApiPhoneAware> phones = new ArrayList<>();
-    if (this.primaryPhoneNumber != null
-        && BigDecimal.ZERO.compareTo(this.primaryPhoneNumber) != 0) {
-      phones.add(new ReadablePhone(null, this.primaryPhoneNumber.toPlainString(),
+    if (this.primaryPhoneNumber != null && this.messagePhoneNumber != 0) {
+      phones.add(new ReadablePhone(null, String.valueOf(this.primaryPhoneNumber),
           this.primaryPhoneExtensionNumber != null ? this.primaryPhoneExtensionNumber.toString()
               : null,
           null));
     }
 
-    if (this.messagePhoneNumber != null
-        && BigDecimal.ZERO.compareTo(this.messagePhoneNumber) != 0) {
+    if (this.messagePhoneNumber != null && this.messagePhoneNumber != 0) {
       LOGGER.debug("add message phone");
       phones
           .add(new ReadablePhone(null,
-              this.messagePhoneNumber.toPlainString(), this.messagePhoneExtensionNumber != null
+              String.valueOf(this.messagePhoneNumber), this.messagePhoneExtensionNumber != null
                   ? this.messagePhoneExtensionNumber.toString() : null,
               ApiPhoneAware.PhoneType.Cell));
     }
@@ -423,7 +420,7 @@ public abstract class BaseAttorney extends CmsPersistentObject
     this.endDate = endDate;
   }
 
-  public void setFaxNumber(BigDecimal faxNumber) {
+  public void setFaxNumber(Long faxNumber) {
     this.faxNumber = faxNumber;
   }
 
@@ -451,7 +448,7 @@ public abstract class BaseAttorney extends CmsPersistentObject
     this.messagePhoneExtensionNumber = messagePhoneExtensionNumber;
   }
 
-  public void setMessagePhoneNumber(BigDecimal messagePhoneNumber) {
+  public void setMessagePhoneNumber(Long messagePhoneNumber) {
     this.messagePhoneNumber = messagePhoneNumber;
   }
 
@@ -471,7 +468,7 @@ public abstract class BaseAttorney extends CmsPersistentObject
     this.primaryPhoneExtensionNumber = primaryPhoneExtensionNumber;
   }
 
-  public void setPrimaryPhoneNumber(BigDecimal primaryPhoneNumber) {
+  public void setPrimaryPhoneNumber(Long primaryPhoneNumber) {
     this.primaryPhoneNumber = primaryPhoneNumber;
   }
 

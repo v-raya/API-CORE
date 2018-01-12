@@ -29,7 +29,7 @@ public abstract class BaseSubstituteCareProvider extends CmsPersistentObject
   protected String id;
 
   @Column(name = "ADD_TEL_NO")
-  protected BigDecimal additionalPhoneNumber;
+  protected Long additionalPhoneNumber;
 
   @Type(type = "integer")
   @Column(name = "ADD_EXT_NO")
@@ -188,7 +188,7 @@ public abstract class BaseSubstituteCareProvider extends CmsPersistentObject
   /**
    * @return the additionalPhoneNumber
    */
-  public BigDecimal getAdditionalPhoneNumber() {
+  public Long getAdditionalPhoneNumber() {
     return additionalPhoneNumber;
   }
 
