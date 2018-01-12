@@ -1,6 +1,7 @@
 dependencies {
     compile project(':api-core-common')
-
+    compile project(':legacy-data-access')
+    
 	// MAIN:
     compile group: "io.dropwizard", name: "dropwizard-hibernate", version: dropwizardVersion
     compile group: "io.dropwizard", name: "dropwizard-views-mustache", version: dropwizardVersion
@@ -9,7 +10,8 @@ dependencies {
     compile group: "io.dropwizard.modules", name: "dropwizard-flyway", version: dropwizardFlywayVersion
     compile group: "org.glassfish.jersey.ext", name: "jersey-declarative-linking", version: glassfishJerseyExtVersion
     compile group: 'com.google.guava', name: 'guava', version: guavaVersion
-	compile group: 'commons-collections', name: 'commons-collections', version: '3.0'
+    compile group: 'org.apache.commons', name: 'commons-collections4', version: commonsCollectionsVersion
+    compile group: 'commons-io', name: 'commons-io', version: commonsIOVersion
     
 
     // ES 5.x:
@@ -35,6 +37,9 @@ dependencies {
     
     testCompile group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '2.1.6'
     testCompile 'org.ow2.asm:asm-all:5.2'
+    testCompile group: 'org.mockito', name: 'mockito-core', version: mockitoVersion
+    testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version: hamcrestVersion
+    testCompile group: 'com.fasterxml.jackson.module', name: 'jackson-module-guice', version: jacksonVersion
 }
 
 publishing {
