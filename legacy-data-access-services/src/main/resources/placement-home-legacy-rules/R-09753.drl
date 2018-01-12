@@ -1,0 +1,29 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
+import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
+import org.apache.commons.lang3.StringUtils
+
+global java.util.Set validationDetailsList
+
+
+/*
+        Code: R - 09753
+
+        Rule Txt
+        If Street Number is entered, then Street Name is mandatory.
+*/
+/*
+rule "R-09753"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      PlacementHome(eval(StringUtils.isNotBlank(txtEmergencyStreetNo) && StringUtils.isNotBlank(txtEmergencyStreetNo))) from  $placementHomeAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-00168");
+      details.setUserMessage("PLACEMENT_HOME.Payee_First_Name, .Payee_Last_Name, .Payee_Street_Name and .Payee_City_Name must not be null.");
+      details.setTechnicalMessage("PLACEMENT_HOME.Payee_First_Name, .Payee_Last_Name, .Payee_Street_Name and .Payee_City_Name must not be null.");
+      validationDetailsList.add(details);
+end
+*/
