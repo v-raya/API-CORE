@@ -1,0 +1,43 @@
+import java.time.LocalDate
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
+import gov.ca.cwds.data.legacy.cms.entity.OtherChildrenInPlacementHome
+
+import gov.ca.cwds.cms.data.access.dto.OtherChildInHomeEntityAwareDTO
+import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO
+import org.apache.commons.lang3.StringUtils
+
+global java.util.Set validationDetailsList
+
+
+/*
+        Rule Txt
+        BIRTH DATE must be less than or equal to the system date.
+
+        Logic
+        OTHER_CHILDREN_IN_PLACEMENT_HOME: Birth_Date must be <= than system date.
+        For Placement Home Notebook in the OtherChildrenInHome Page Use PM Other Children in Home
+        View for any additional information needed.
+*/
+
+
+
+rule "R-00182"
+  dialect "java"
+  agenda-group "placement-home-agenda"
+  when
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      PlacementHomeEntityAwareDTO($list : otherChildrenInHomeParameterObjects)
+      $otherChild: OtherChildInHomeEntityAwareDTO() from $list
+      $otherChildInPlacementHome: OtherChildrenInPlacementHome(birthDt != null, eval(birthDt.isAfter(LocalDate.now()))) from $otherChild.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-00182");
+      details.setInvalidValue($otherChildInPlacementHome.getBirthDt());
+      details.setUserMessage("BIRTH DATE for the OTHER CHILDREN IN PLACEMENT HOME must be less or equal current date.");
+      details.setTechnicalMessage("Logic\n"
+                                   + "        OTHER_CHILDREN_IN_PLACEMENT_HOME: Birth_Date must be <= than system date.\n"
+                                   + "        For Placement Home Notebook in the OtherChildrenInHome Page Use PM Other Children in Home\n"
+                                   + "        View for any additional information needed.");
+      validationDetailsList.add(details);
+end
