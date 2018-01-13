@@ -34,58 +34,78 @@
   <script type="text/javascript">
     $(function () {
       var url = "{{jsonUrl}}";
-	  
-	  var token = window.location.search.match(/token=([^&]+)/);
-	  if (token && token.length > 1) {
-        token = decodeURIComponent(token[1]);
-      }
 
-      hljs.configure({
-        highlightSizeThreshold: 5000
-      });
+	  var token;
 
-      // Pre load translate...
-      if(window.SwaggerTranslator) {
-        window.SwaggerTranslator.translate();
-      }
-      window.swaggerUi = new SwaggerUi({
-        url: url,
-        dom_id: "swagger-ui-container",
-        apisSorter : "alpha",
-        supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
-        onComplete: function(swaggerApi, swaggerUi){
-          if(typeof initOAuth == "function") {
-            initOAuth({
-              clientId: "your-client-id",
-              clientSecret: "your-client-secret-if-required",
-              realm: "your-realms",
-              appName: "your-app-name",
-              scopeSeparator: " ",
-              additionalQueryStringParams: {}
-            });
-          }
+	  var accessCode = window.location.search.match(/accessCode=([^&]+)/);
+	  if (accessCode && accessCode.length > 1) {
+        accessCode = decodeURIComponent(accessCode[1]);
 
-          if(window.SwaggerTranslator) {
-            window.SwaggerTranslator.translate();
-          }
-        },
-        onFailure: function(data) {
-          log("Unable to Load SwaggerUI");
-        },
-        docExpansion: "none",
-        jsonEditor: false,
-        defaultModelRendering: 'schema',
-        showRequestHeaders: false
-      });
+        var baseUri = url.match(/.*\/\/(.*?)\//);
+        var backendTokenUrl = baseUri[0] + "token?accessCode=" + accessCode;
 
-      window.swaggerUi.load();
-      window.swaggerUi.api.clientAuthorizations.add("key", new SwaggerClient.ApiKeyAuthorization("token", token, "query"));
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", backendTokenUrl, false);
+        xhttp.setRequestHeader("Content-type", "text/plain");
+        xhttp.send();
+        token = xhttp.responseText;
+        var redirectUrl = window.location.href.split("?")[0] + "?token=" + token;
+        window.location.assign(redirectUrl);
 
-      function log() {
-        if ('console' in window) {
-          console.log.apply(console, arguments);
+      } else {
+
+        token = window.location.search.match(/token=([^&]+)/);
+        if (token && token.length > 1) {
+            token = decodeURIComponent(token[1]);
         }
-      }
+
+        hljs.configure({
+          highlightSizeThreshold: 5000
+        });
+
+        // Pre load translate...
+        if(window.SwaggerTranslator) {
+          window.SwaggerTranslator.translate();
+        }
+        window.swaggerUi = new SwaggerUi({
+          url: url,
+          dom_id: "swagger-ui-container",
+          apisSorter : "alpha",
+          supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
+          onComplete: function(swaggerApi, swaggerUi){
+            if(typeof initOAuth == "function") {
+              initOAuth({
+                clientId: "your-client-id",
+                clientSecret: "your-client-secret-if-required",
+                realm: "your-realms",
+                appName: "your-app-name",
+                scopeSeparator: " ",
+                additionalQueryStringParams: {}
+              });
+            }
+
+            if(window.SwaggerTranslator) {
+              window.SwaggerTranslator.translate();
+            }
+          },
+          onFailure: function(data) {
+            log("Unable to Load SwaggerUI");
+          },
+          docExpansion: "none",
+          jsonEditor: false,
+          defaultModelRendering: 'schema',
+          showRequestHeaders: false
+        });
+
+        window.swaggerUi.load();
+        window.swaggerUi.api.clientAuthorizations.add("key", new SwaggerClient.ApiKeyAuthorization("token", token, "query"));
+
+        function log() {
+          if ('console' in window) {
+            console.log.apply(console, arguments);
+          }
+        }
+        }
   });
   </script>
 </head>

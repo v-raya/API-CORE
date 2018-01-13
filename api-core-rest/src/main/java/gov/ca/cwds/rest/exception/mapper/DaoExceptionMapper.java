@@ -22,6 +22,7 @@ public class DaoExceptionMapper implements ExceptionMapper<DaoException> {
 
   @Override
   public Response toResponse(DaoException ex) {
-    return ExceptionMapperUtils.createGenericResponse(ex, IssueType.DATA_ACCESS_EXCEPTION, loggingContext.getUniqueId());
+    return ExceptionMapperUtils.createGenericResponse(ex, IssueType.DATA_ACCESS_EXCEPTION, 500,
+        loggingContext.getUniqueId());
   }
 }

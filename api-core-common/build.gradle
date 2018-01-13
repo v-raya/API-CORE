@@ -1,5 +1,9 @@
 dependencies {
-    compile group: "io.dropwizard", name: "dropwizard-views-mustache", version: dropwizardVersion
+  compile group: "io.dropwizard", name: "dropwizard-views-mustache", version: dropwizardVersion
+  compile group: 'commons-beanutils', name: 'commons-beanutils', version: commonsBeanutilsVersion
+  compile group: 'com.google.inject', name: 'guice', version:guiceVersion
+
+  testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version: hamcrestVersion
 }
 
 publishing {

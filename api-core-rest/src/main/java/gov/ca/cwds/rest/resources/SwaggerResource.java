@@ -26,16 +26,13 @@ public class SwaggerResource implements Resource {
 
   @Inject
   public SwaggerResource(SwaggerConfiguration swaggerConfiguration) {
-    super();
     this.swaggerConfiguration = swaggerConfiguration;
   }
 
   @GET
   public SwaggerView get() {
-    String callbackUrl = swaggerConfiguration.getCallbackUrl();
     if (swaggerConfiguration.isShowSwagger()) {
-      String swaggerjsonUrl = swaggerConfiguration.getJsonUrl();
-      return new SwaggerView(swaggerConfiguration, swaggerjsonUrl, callbackUrl);
+      return new SwaggerView(swaggerConfiguration);
     } else {
       throw new WebApplicationException(404);
     }

@@ -1,0 +1,47 @@
+import java.time.LocalDate
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
+import gov.ca.cwds.data.legacy.cms.entity.OtherChildrenInPlacementHome
+
+import gov.ca.cwds.cms.data.access.dto.OtherChildInHomeEntityAwareDTO
+import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO
+import org.apache.commons.lang3.StringUtils
+
+global java.util.Set validationDetailsList
+
+
+/*
+        Rule Txt
+        BIRTH DATE must be greater than (system date - 18 years).
+
+        Logic
+        OTHER_CHILDREN_IN_PLACEMENT_HOME: Birth_Date must be >= than (system date - 18 years).
+        For Placement Home Notebook in the OtherChildrenInHome Page Use PM Other Children in
+        Home View for any additional information needed.
+*/
+
+
+
+/**
+* After performing the process Add Home Payee Details, the PLACEMENT_HOME.Payee_First_Name,
+* .Payee_Last_Name, .Payee_Street_Name and .Payee_City_Name must not be null.
+*/
+rule "R-00181"
+  dialect "java"
+  agenda-group "placement-home-agenda"
+  when
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      PlacementHomeEntityAwareDTO($list : otherChildrenInHomeParameterObjects)
+      $otherChild: OtherChildInHomeEntityAwareDTO() from $list
+      $otherChildInPlacementHome: OtherChildrenInPlacementHome(birthDt != null, eval(birthDt.isBefore(LocalDate.now().minusYears(18)))) from $otherChild.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-00181");
+      details.setInvalidValue($otherChildInPlacementHome.getBirthDt());
+      details.setUserMessage("BIRTH DATE for the OTHER CHILDREN IN PLACEMENT HOME must be greater than (current date - 18 years).");
+      details.setTechnicalMessage("Logic: \n"
+                                   + "        OTHER_CHILDREN_IN_PLACEMENT_HOME: Birth_Date must be >= than (system date - 18 years).\n"
+                                   + "        For Placement Home Notebook in the OtherChildrenInHome Page Use PM Other Children in\n"
+                                   + "        Home View for any additional information needed.");
+      validationDetailsList.add(details);
+end

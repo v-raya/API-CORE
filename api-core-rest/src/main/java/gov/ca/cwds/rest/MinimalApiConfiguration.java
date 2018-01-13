@@ -1,16 +1,11 @@
 package gov.ca.cwds.rest;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
+import gov.ca.cwds.security.configuration.SecurityConfiguration;
+import io.dropwizard.Configuration;
 import javax.annotation.Nullable;
-
 import org.hibernate.validator.constraints.NotEmpty;
 import org.secnod.dropwizard.shiro.ShiroConfiguration;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import io.dropwizard.Configuration;
 
 public class MinimalApiConfiguration extends Configuration {
 
@@ -37,6 +32,9 @@ public class MinimalApiConfiguration extends Configuration {
 
   @Nullable
   private ShiroConfiguration shiroConfiguration;
+
+  @Nullable
+  private SecurityConfiguration securityConfiguration;
 
   @JsonProperty
   public String getApplicationName() {
@@ -102,5 +100,16 @@ public class MinimalApiConfiguration extends Configuration {
   @JsonProperty
   public void setWebSecurityConfiguration(WebSecurityConfiguration webSecurityConfiguration) {
     this.webSecurityConfiguration = webSecurityConfiguration;
+  }
+
+  @JsonProperty(value = "security")
+  public SecurityConfiguration getSecurityConfiguration() {
+    return securityConfiguration;
+  }
+
+  @JsonProperty
+  public void setSecurityConfiguration(
+      SecurityConfiguration securityConfiguration) {
+    this.securityConfiguration = securityConfiguration;
   }
 }
