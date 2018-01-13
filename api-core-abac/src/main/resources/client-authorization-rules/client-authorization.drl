@@ -1,0 +1,64 @@
+/*
+ * These rules implement "Client Search Access Matrix" (the Abstract part of it)
+ * from "Client Search" section of "Legacy Security_V2.7" document (page 30).
+ *
+ * As input it expects single ClientCondition fact (represents rows of the matrix) and
+ * multiple instances of StaffPrivilegeType (which represent columns of the matrix).
+ *
+ * If any of StaffPrivilegeType is permitted for ClientCondition the "authorizationResult"
+ * global variable is set to "true" and ClientCondition is retracted to stop rules invocation.
+ * It is expected that default "authorizationResult" value is false (must be set to this value )
+ */
+
+import gov.ca.cwds.authorizer.ClientCondition
+import gov.ca.cwds.authorizer.StaffPrivilegeType
+
+global Boolean authorizationResult;
+
+rule "No Conditions client"
+when
+    $clientCondition: ClientCondition(this == ClientCondition.NO_CONDITIONS)
+then
+    kcontext.getKieRuntime().setGlobal("authorizationResult", true);
+    retract($clientCondition);
+end
+
+
+rule "Same County Sensitive client"
+when
+    $clientCondition: ClientCondition(this == ClientCondition.SAME_COUNTY_SENSITIVE)
+    StaffPrivilegeType(this == StaffPrivilegeType.COUNTY_SENSITIVE || this == StaffPrivilegeType.STATE_SENSITIVE)
+then
+    kcontext.getKieRuntime().setGlobal("authorizationResult", true);
+    retract($clientCondition);
+end
+
+
+rule "Same County Sealed client"
+when
+    $clientCondition: ClientCondition(this == ClientCondition.SAME_COUNTY_SEALED)
+    StaffPrivilegeType(this == StaffPrivilegeType.COUNTY_SEALED || this == StaffPrivilegeType.STATE_SEALED)
+then
+    kcontext.getKieRuntime().setGlobal("authorizationResult", true);
+    retract($clientCondition);
+end
+
+
+rule "No County Sensitive client"
+when
+    $clientCondition: ClientCondition(this == ClientCondition.NO_COUNTY_SENSITIVE)
+    StaffPrivilegeType(this == StaffPrivilegeType.COUNTY_SENSITIVE)
+then
+    kcontext.getKieRuntime().setGlobal("authorizationResult", true);
+    retract($clientCondition);
+end
+
+
+rule "No County Sealed client"
+when
+    $clientCondition: ClientCondition(this == ClientCondition.NO_COUNTY_SEALED)
+    StaffPrivilegeType(this == StaffPrivilegeType.COUNTY_SEALED || this == StaffPrivilegeType.STATE_SEALED)
+then
+    kcontext.getKieRuntime().setGlobal("authorizationResult", true);
+    retract($clientCondition);
+end

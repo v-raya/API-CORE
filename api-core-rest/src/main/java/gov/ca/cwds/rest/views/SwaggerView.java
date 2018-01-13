@@ -8,15 +8,10 @@ import org.apache.commons.lang3.StringUtils;
 public class SwaggerView extends View {
 
   SwaggerConfiguration swaggerConfiguration;
-  String swaggerJsonUrl;
-  String callbackUrl;
 
-  public SwaggerView(SwaggerConfiguration swaggerConfiguration, String swaggerJsonUrl,
-      String callbackUrl) {
+  public SwaggerView(SwaggerConfiguration swaggerConfiguration) {
     super(swaggerConfiguration.getTemplateName(), Charsets.UTF_8);
     this.swaggerConfiguration = swaggerConfiguration;
-    this.swaggerJsonUrl = swaggerJsonUrl;
-    this.callbackUrl = callbackUrl;
   }
 
   public String getAssetsPath() {
@@ -28,7 +23,7 @@ public class SwaggerView extends View {
   }
 
   public String getJsonUrl() {
-    return swaggerJsonUrl;
+    return swaggerConfiguration.getJsonUrl();
   }
 
   public String getLogo() {
@@ -37,6 +32,10 @@ public class SwaggerView extends View {
 
   public String getLoginUrl() {
     return swaggerConfiguration.getLoginUrl();
+  }
+
+  public String getTokenUrl() {
+    return swaggerConfiguration.getTokenUrl();
   }
 
   public String getLogoutUrl() {
@@ -51,7 +50,7 @@ public class SwaggerView extends View {
    * @return the callbackUrl
    */
   public String getCallbackUrl() {
-    return callbackUrl;
+    return swaggerConfiguration.getCallbackUrl();
   }
 
   public String getSpId() {

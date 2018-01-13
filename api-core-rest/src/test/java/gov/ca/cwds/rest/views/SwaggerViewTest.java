@@ -16,9 +16,7 @@ public class SwaggerViewTest {
 
   public void setup() throws Exception {
     SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
-    String swaggerJsonUrl = null;
-    String callbackUrl = null;
-    target = new SwaggerView(swaggerConfiguration, swaggerJsonUrl, callbackUrl);
+    target = new SwaggerView(swaggerConfiguration);
   }
 
   @Test
