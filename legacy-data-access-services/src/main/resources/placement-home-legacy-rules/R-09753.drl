@@ -19,10 +19,12 @@ rule "R-09753"
   agenda-group "placement-home-agenda"
   when
       $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
-      EmergencyContactDetail(eval(StringUtils.isNotBlank(streetNo) && StringUtils.isBlank(streetNm))) from  $placementHomeAwareDTO.emergencyContactDetail
+      $emergencyContact: EmergencyContactDetail(eval(StringUtils.isNotBlank(streetNo) && StringUtils.isBlank(streetNm))) from  $placementHomeAwareDTO.emergencyContactDetail
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-09753");
+      details.setProperty("EmergencyContactDetail.streetNm");
+      details.setInvalidValue($emergencyContact.streetNm);
       details.setUserMessage("Street name must not be empty if Street no is entered");
       details.setTechnicalMessage("If Street Number is entered, then Street Name is mandatory.");
       validationDetailsList.add(details);

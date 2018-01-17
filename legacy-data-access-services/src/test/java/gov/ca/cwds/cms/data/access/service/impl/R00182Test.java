@@ -18,15 +18,15 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by TPT2
  */
-public class R00181Test extends BaseDocToolRulesPlacementHomeTest {
+public class R00182Test extends BaseDocToolRulesPlacementHomeTest {
 
-  private static final Logger LOG = LoggerFactory.getLogger(R00181Test.class);
+  private static final Logger LOG = LoggerFactory.getLogger(R00182Test.class);
 
   @Before
   public void before() {
     OtherChildInHomeEntityAwareDTO otherChild1 = new OtherChildInHomeEntityAwareDTO();
     otherChild1.setEntity(new OtherChildrenInPlacementHome());
-    otherChild1.getEntity().setBirthDt(LocalDate.now().minusYears(4));
+    otherChild1.getEntity().setBirthDt(LocalDate.now());
 
     OtherChildInHomeEntityAwareDTO otherChild2 = new OtherChildInHomeEntityAwareDTO();
     otherChild2.setEntity(new OtherChildrenInPlacementHome());
@@ -47,20 +47,20 @@ public class R00181Test extends BaseDocToolRulesPlacementHomeTest {
 
 
   @Test
-  public void testFirstChildAgeGreaterThan18() throws Exception {
+  public void testFirstChildBirthdayInFuture() throws Exception {
     assertInvalid(() -> {
       placementHomeEntityAwareDTO.getOtherChildrenInHomeParameterObjects().get(0)
-          .getEntity().setBirthDt(LocalDate.now().minusYears(20));
+          .getEntity().setBirthDt(LocalDate.now().plusYears(1));
     });
   }
 
   @Test
-  public void testFirstAndSecondChildAgeGreaterThan18() throws Exception {
+  public void testFirstAndSecondChildrenBirthdayInFuture () throws Exception {
     assertInvalid(() -> {
       placementHomeEntityAwareDTO.getOtherChildrenInHomeParameterObjects().get(0)
-          .getEntity().setBirthDt(LocalDate.now().minusYears(20));
+          .getEntity().setBirthDt(LocalDate.now().plusYears(1));
       placementHomeEntityAwareDTO.getOtherChildrenInHomeParameterObjects().get(1)
-          .getEntity().setBirthDt(LocalDate.now().minusYears(20));
+          .getEntity().setBirthDt(LocalDate.now().plusYears(2));
     });
   }
 
@@ -72,7 +72,7 @@ public class R00181Test extends BaseDocToolRulesPlacementHomeTest {
       fail();
     } catch (BusinessValidationException e) {
       LOG.info(e.getValidationDetailsList().toString());
-      Assert.assertEquals("R-00181", e.getValidationDetailsList().iterator().next().getCode());
+      Assert.assertEquals("R-00182", e.getValidationDetailsList().iterator().next().getCode());
     }
   }
 
