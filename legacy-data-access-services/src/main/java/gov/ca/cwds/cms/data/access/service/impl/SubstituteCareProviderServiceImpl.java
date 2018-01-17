@@ -21,6 +21,7 @@ import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
+import gov.ca.cwds.cms.data.access.service.rules.SubstituteCareProviderDroolsConfiguration;
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
 import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
@@ -31,6 +32,9 @@ import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeInformation;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProviderUc;
 import gov.ca.cwds.drools.DroolsException;
+import gov.ca.cwds.drools.DroolsService;
+import gov.ca.cwds.rest.exception.BusinessValidationException;
+import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.time.LocalDate;
@@ -39,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import org.apache.commons.collections4.CollectionUtils;
 
 /**
@@ -46,6 +51,9 @@ import org.apache.commons.collections4.CollectionUtils;
  */
 
 public class SubstituteCareProviderServiceImpl implements SubstituteCareProviderService {
+
+  @Inject
+  private DroolsService droolsService;
 
   @Inject
   private SubstituteCareProviderDao substituteCareProviderDao;
@@ -78,23 +86,35 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   @Override
   public void runBusinessValidation(SCPEntityAwareDTO entityAwareDTO, PerryAccount principal)
       throws DroolsException {
+    // Perform validation rules
+    Set<IssueDetails> detailsList =
+        droolsService.performBusinessRules(
+            SubstituteCareProviderDroolsConfiguration.INSTANCE, entityAwareDTO, principal);
 
+    if (!detailsList.isEmpty()) {
+      throw new BusinessValidationException(
+          "Business rules validation is failed for SubstituteCareProvider", detailsList);
+    }
+  }
+
+  @Override
+  public void runDataProcessing(SCPEntityAwareDTO entityAwareDTO, PerryAccount principal)
+      throws DroolsException {
+    // Perform data processing roles
+    droolsService.performBusinessRules(
+        SubstituteCareProviderDroolsConfiguration.DATA_PROCESSING_INSTANCE, entityAwareDTO, principal);
   }
 
   @Override
   public SubstituteCareProvider create(SCPEntityAwareDTO scpEntityAwareDTO)
       throws DataAccessServicesException {
-
-    ExtendedSCPEntityAwareDTO extScpEntityAwareDTO = enrichSCPEntityAwareDTO(scpEntityAwareDTO);
-    validateParameters(extScpEntityAwareDTO);
-
-    final SubstituteCareProvider substituteCareProvider = extScpEntityAwareDTO.getEntity();
-
     try {
-      runBusinessValidation(extScpEntityAwareDTO, PrincipalUtils.getPrincipal());
+      validateParameters(scpEntityAwareDTO);
+      ExtendedSCPEntityAwareDTO extScpEntityAwareDTO = enrichSCPEntityAwareDTO(scpEntityAwareDTO);
+      final SubstituteCareProvider substituteCareProvider = extScpEntityAwareDTO.getEntity();
+      applyBusinessRules(extScpEntityAwareDTO);
       SubstituteCareProvider storedSubstituteCareProvider = substituteCareProviderDao
           .create(substituteCareProvider);
-
       substituteCareProviderUcDao.create(extScpEntityAwareDTO.getSubstituteCareProviderUc());
       placementHomeInformationDao.create(extScpEntityAwareDTO.getPlacementHomeInformation());
       clientScpEthnicityDao.create(extScpEntityAwareDTO.getClientScpEthnicity());
@@ -110,12 +130,19 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
     }
   }
 
+  private void applyBusinessRules(ExtendedSCPEntityAwareDTO extScpEntityAwareDTO)
+      throws DroolsException {
+    PerryAccount principal = PrincipalUtils.getPrincipal();
+    runDataProcessing(extScpEntityAwareDTO, principal);
+    runBusinessValidation(extScpEntityAwareDTO, principal);
+  }
+
   /**
    * Build all entities which are required for creating SubstituteCareProvider entity
    */
   private ExtendedSCPEntityAwareDTO enrichSCPEntityAwareDTO(SCPEntityAwareDTO scpEntityAwareDTO) {
     ExtendedSCPEntityAwareDTO dto = new ExtendedSCPEntityAwareDTO(scpEntityAwareDTO);
-    SubstituteCareProvider substituteCareProvider = dto.getEntity();
+    final SubstituteCareProvider substituteCareProvider = dto.getEntity();
     substituteCareProvider.setIdentifier(IdGenerator.generateId());
     dto.setSubstituteCareProviderUc(buildSubstituteCareProviderUc(dto.getEntity()));
     dto.setPlacementHomeInformation(buildPlacementHomeInformation(dto.getEntity(), dto));
@@ -243,4 +270,7 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
     countyOwnershipDao.create(countyOwnership);
   }
 
+  public void setDroolsService(DroolsService droolsService) {
+    this.droolsService = droolsService;
+  }
 }
