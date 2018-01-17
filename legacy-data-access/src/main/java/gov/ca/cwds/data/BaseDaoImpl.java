@@ -1,6 +1,5 @@
 package gov.ca.cwds.data;
 
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.ImmigrationStatus;
 import java.util.Date;
 import java.util.List;
 

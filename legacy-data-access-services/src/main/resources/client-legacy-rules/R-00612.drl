@@ -1,0 +1,50 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.Client
+import gov.ca.cwds.data.legacy.cms.entity.DeliveredService
+import gov.ca.cwds.data.legacy.cms.entity.enums.IndividualType
+import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
+
+global java.util.Set<IssueDetails> validationDetailsList
+
+rule "R-00612"
+  dialect "mvel"
+  agenda-group "client-agenda"
+     /*
+        Code: R - 00612
+
+        Rule text:
+          The client must be born before the delivered service occurs. If date of birth is not
+          recorded, this does not apply. If the Delivered Service Start Date is entered, then
+          the Birth Date for the Client cannot be changed to a date later than that of the
+          Delivered Service Start Date.
+
+        Logic:
+          For all DELIVERED_SERVICE where DELIVERED_SERVICE > INDIVIDUAL_DELIVERED_SERVICE
+          where INDIVIDUAL_DELIVERED_SERVICE.Delivered_To_Individual_Code = 'C',
+          and DELIVERED_SERVICE.Start_Date >= CLIENT.Birth_Date
+          where CLIENT.Id= DELIVERED_SERVICE.Delivered_To_Individual_Id.
+
+      */
+  when
+      clientAwareDTO: ClientEntityAwareDTO()
+      deliveredService: DeliveredService(dDate : startDate, code : individualType.getCode) from clientAwareDTO.deliveredService
+      type: IndividualType() from deliveredService.individualType
+      client: Client(type.code.equals("C") && dDate.isBefore(birthDate)) from clientAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-00612");
+      details.setProperty("client.birthDate");
+      details.setInvalidValue(client.getBirthDate());
+      details.setUserMessage("The client must be born before the delivered service occurs. "
+      + "If date of birth is not recorded, this does not apply. If the Delivered Service Start "
+      + "Date is entered, then the Birth Date for the Client cannot be changed to a date later "
+      + "than that of the Delivered Service Start Date.");
+      details.setTechnicalMessage("CLIENT.Birth_Date >= DELIVERED_SERVICE.Start_Date");
+      validationDetailsList.add(details);
+end
+
+
+
+
+
+
