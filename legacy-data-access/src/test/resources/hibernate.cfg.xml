@@ -60,5 +60,6 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.FcEligibilityTermReason" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.FcEligibilityDentalReason" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.HealthPlanTerminationType" />
-	</session-factory>
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.ClientRelationship"/>
+  </session-factory>
 </hibernate-configuration>
