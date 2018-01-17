@@ -2,6 +2,7 @@ package gov.ca.cwds.cms.data.access.dto;
 
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
+import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
 import gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication;
 import gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan;
 
@@ -12,6 +13,7 @@ public class ClientEntityAwareDTO extends BaseEntityAwareDTO<Client> {
   private List<ClientScpEthnicity> clientScpEthnicities = new ArrayList<>();
   private List<MedicalEligibilityApplication> medicalEligibilityApplications = new ArrayList<>();
   private List<HealthInterventionPlan> activeHealthInterventionPlans = new ArrayList<>();
+  private DeliveredService deliveredService;
 
   public List<ClientScpEthnicity> getClientScpEthnicities() {
     return clientScpEthnicities;
@@ -37,5 +39,13 @@ public class ClientEntityAwareDTO extends BaseEntityAwareDTO<Client> {
   public void setActiveHealthInterventionPlans(
       List<HealthInterventionPlan> activeHealthInterventionPlans) {
     this.activeHealthInterventionPlans = activeHealthInterventionPlans;
+  }
+
+  public void setDeliveredService(DeliveredService deliveredService) {
+    this.deliveredService = deliveredService;
+  }
+
+  public DeliveredService getDeliveredService() {
+    return deliveredService;
   }
 }
