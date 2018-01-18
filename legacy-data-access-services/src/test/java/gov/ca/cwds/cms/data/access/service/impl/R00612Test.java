@@ -99,7 +99,8 @@ public class R00612Test extends BaseDocToolRulesClientImplementationTest {
 
     List<DeliveredService> deliveredServices = new ArrayList<>();
     deliveredServices.add(getDeliveredService());
-    deliveredServices.add(getDeliveredService());
+    deliveredServices.add(
+        getDeliveredService()); // I've added 2 lines because I've found 2 same lines in DB
     deliveredServices.add(
         getDeliveredService(CLIENT_BIRTH_DAY.plusMonths(10), CLIENT_ID, IndividualType.ATTORNEYS));
 
