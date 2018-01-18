@@ -40,9 +40,10 @@ public class DeliveredServiceDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
     executeInTransaction(
         sessionFactory,
         sessionFactory1 -> {
-          DeliveredService deliveredService = deliveredServiceDao.findByClientId(CLIENT_ID);
+          List<DeliveredService> deliveredService = deliveredServiceDao.findByClientId(CLIENT_ID);
           assertNotNull(deliveredService);
-          assertEquals(CLIENT_ID, deliveredService.getIndividualId());
+          assertEquals(1, deliveredService.size());
+          assertEquals(CLIENT_ID, deliveredService.get(0).getIndividualId());
         });
   }
 
@@ -60,8 +61,9 @@ public class DeliveredServiceDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
     executeInTransaction(
         sessionFactory,
         sessionFactory1 -> {
-          DeliveredService deliveredService = deliveredServiceDao.findByClientId(WRONG_CLIENT_ID);
-          assertNull(deliveredService);
+          List<DeliveredService> deliveredService =
+              deliveredServiceDao.findByClientId(WRONG_CLIENT_ID);
+          assertEquals(0, deliveredService.size());
         });
   }
 }

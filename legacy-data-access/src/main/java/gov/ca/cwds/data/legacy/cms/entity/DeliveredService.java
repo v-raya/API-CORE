@@ -1,9 +1,9 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
+import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.enums.IndividualType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.County;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ServiceContactType;
-import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -35,7 +35,7 @@ import org.hibernate.annotations.NotFoundAction;
   name = DeliveredService.FIND_BY_CLIENT,
   query = "FROM DeliveredService WHERE individualId = :clientId"
 )
-public class DeliveredService implements PersistentObject {
+public class DeliveredService extends CmsPersistentObject {
 
   public static final String FIND_BY_CLIENT = "DeliveredService.findByClient";
 

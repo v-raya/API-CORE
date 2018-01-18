@@ -13,7 +13,7 @@ public class ClientEntityAwareDTO extends BaseEntityAwareDTO<Client> {
   private List<ClientScpEthnicity> clientScpEthnicities = new ArrayList<>();
   private List<MedicalEligibilityApplication> medicalEligibilityApplications = new ArrayList<>();
   private List<HealthInterventionPlan> activeHealthInterventionPlans = new ArrayList<>();
-  private DeliveredService deliveredService;
+  private List<DeliveredService> deliveredService;
 
   public List<ClientScpEthnicity> getClientScpEthnicities() {
     return clientScpEthnicities;
@@ -41,11 +41,12 @@ public class ClientEntityAwareDTO extends BaseEntityAwareDTO<Client> {
     this.activeHealthInterventionPlans = activeHealthInterventionPlans;
   }
 
-  public void setDeliveredService(DeliveredService deliveredService) {
-    this.deliveredService = deliveredService;
+  public List<DeliveredService> getDeliveredService() {
+    return deliveredService;
   }
 
-  public DeliveredService getDeliveredService() {
-    return deliveredService;
+  public void setDeliveredService(
+      List<DeliveredService> deliveredService) {
+    this.deliveredService = deliveredService;
   }
 }

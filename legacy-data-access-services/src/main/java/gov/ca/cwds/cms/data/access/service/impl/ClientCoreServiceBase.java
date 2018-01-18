@@ -72,8 +72,8 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
         medicalEligibilityApplicationDao.findByChildClientId(clientId);
     clientEntityAwareDTO.setMedicalEligibilityApplications(medicalEligibilityApplications);
 
-    DeliveredService deliveredService = deliveredServiceDao.findByClientId(clientId);
-    clientEntityAwareDTO.setDeliveredService(deliveredService);
+    List<DeliveredService> deliveredServices = deliveredServiceDao.findByClientId(clientId);
+    clientEntityAwareDTO.setDeliveredService(deliveredServices);
 
     enrichClientEntityAwareDto((T) clientEntityAwareDTO);
   }
