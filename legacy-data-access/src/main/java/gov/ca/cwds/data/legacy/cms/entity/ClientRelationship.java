@@ -1,48 +1,67 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.legacy.cms.entity.enums.SameHomeStatus;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.ClientRelationshipType;
 import java.io.Serializable;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "CLN_RELT")
+@SuppressWarnings("squid:S3437")
 public class ClientRelationship extends CmsPersistentObject {
 
+  private static final long serialVersionUID = -7091947672861995190L;
+
   @Id
-  @Column(name = "IDENTIFIER", nullable = false, length = 10)
+  @Column(name = "IDENTIFIER", nullable = false, length = CMS_ID_LEN)
   private String identifier;
 
-  @Column(name = "ABSENT_CD", nullable = false, length = 1)
-  private String absentCd;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "FKCLIENT_T", referencedColumnName = "IDENTIFIER")
+  private Client leftSide;
 
-  @Column(name = "CLNTRELC", nullable = false)
-  private short clntrelc;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "FKCLIENT_0", referencedColumnName = "IDENTIFIER")
+  private Client rightSide;
 
-  @Column(name = "END_DT", nullable = true)
-  private Date endDt;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @Fetch(FetchMode.JOIN)
+  @JoinColumn(name = "CLNTRELC", referencedColumnName = "SYS_ID")
+  private ClientRelationshipType relationshipType;
 
-  @Column(name = "SAME_HM_CD", nullable = false, length = 1)
-  private String sameHmCd;
+  @Column(name = "START_DT")
+  private LocalDate startDate;
 
-  @Column(name = "START_DT", nullable = true)
-  private Date startDt;
+  @Column(name = "END_DT")
+  private LocalDate endDate;
 
-  @Column(name = "FKCLIENT_T", nullable = false, length = 10)
-  private String fkclientT;
+  @Type(type = "yes_no")
+  @Column(name = "ABSENT_CD")
+  private boolean absentParentIndicator;
 
-  @Column(name = "FKCLIENT_0", nullable = false, length = 10)
-  private String fkclient0;
+  @Column(name = "SAME_HM_CD")
+  @Convert(converter = SameHomeStatus.SameHomeStatusConverter.class)
+  private SameHomeStatus sameHomeStatus;
 
   @Override
   public Serializable getPrimaryKey() {
     return identifier;
   }
-
 
   public String getIdentifier() {
     return identifier;
@@ -52,67 +71,62 @@ public class ClientRelationship extends CmsPersistentObject {
     this.identifier = identifier;
   }
 
-
-  public String getAbsentCd() {
-    return absentCd;
+  public boolean getAbsentParentIndicator() {
+    return absentParentIndicator;
   }
 
-  public void setAbsentCd(String absentCd) {
-    this.absentCd = absentCd;
+  public void setAbsentParentIndicator(boolean absentParentIndicator) {
+    this.absentParentIndicator = absentParentIndicator;
   }
 
-
-  public short getClntrelc() {
-    return clntrelc;
+  public ClientRelationshipType getRelationshipType() {
+    return relationshipType;
   }
 
-  public void setClntrelc(short clntrelc) {
-    this.clntrelc = clntrelc;
+  public void setRelationshipType(ClientRelationshipType relationshipType) {
+    this.relationshipType = relationshipType;
   }
 
-
-  public Date getEndDt() {
-    return endDt;
+  public LocalDate getEndDate() {
+    return endDate;
   }
 
-  public void setEndDt(Date endDt) {
-    this.endDt = endDt;
+  public void setEndDate(LocalDate endDt) {
+    this.endDate = endDt;
   }
 
-
-  public String getSameHmCd() {
-    return sameHmCd;
+  public SameHomeStatus getSameHomeStatus() {
+    return sameHomeStatus;
   }
 
-  public void setSameHmCd(String sameHmCd) {
-    this.sameHmCd = sameHmCd;
+  public void setSameHomeStatus(SameHomeStatus sameHomeStatus) {
+    this.sameHomeStatus = sameHomeStatus;
   }
 
-
-  public Date getStartDt() {
-    return startDt;
+  public LocalDate getStartDate() {
+    return startDate;
   }
 
-  public void setStartDt(Date startDt) {
-    this.startDt = startDt;
+  public void setStartDate(LocalDate startDt) {
+    this.startDate = startDt;
   }
 
-
-  public String getFkclientT() {
-    return fkclientT;
+  public Client getLeftSide() {
+    return leftSide;
   }
 
-  public void setFkclientT(String fkclientT) {
-    this.fkclientT = fkclientT;
+  public void setLeftSide(Client leftSide) {
+    this.leftSide = leftSide;
   }
 
-  public String getFkclient0() {
-    return fkclient0;
+  public Client getRightSide() {
+    return rightSide;
   }
 
-  public void setFkclient0(String fkclient0) {
-    this.fkclient0 = fkclient0;
+  public void setRightSide(Client rightSide) {
+    this.rightSide = rightSide;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -122,24 +136,21 @@ public class ClientRelationship extends CmsPersistentObject {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ClientRelationship clnRelt = (ClientRelationship) o;
-    return clntrelc == clnRelt.clntrelc &&
-        Objects.equals(identifier, clnRelt.identifier) &&
-        Objects.equals(absentCd, clnRelt.absentCd) &&
-        Objects.equals(endDt, clnRelt.endDt) &&
-        Objects.equals(sameHmCd, clnRelt.sameHmCd) &&
-        Objects.equals(startDt, clnRelt.startDt) &&
-        Objects.equals(fkclientT, clnRelt.fkclientT) &&
-        Objects.equals(fkclient0, clnRelt.fkclient0);
+    if (!super.equals(o)) {
+      return false;
+    }
+    ClientRelationship that = (ClientRelationship) o;
+    return Objects.equals(leftSide, that.leftSide) &&
+        Objects.equals(rightSide, that.rightSide) &&
+        Objects.equals(relationshipType, that.relationshipType) &&
+        Objects.equals(startDate, that.startDate) &&
+        Objects.equals(endDate, that.endDate);
   }
 
   @Override
   public int hashCode() {
 
     return Objects
-        .hash(identifier, absentCd, clntrelc, endDt, sameHmCd, startDt,
-            fkclientT,
-            fkclient0);
+        .hash(super.hashCode(), leftSide, rightSide, relationshipType, startDate, endDate);
   }
-
 }

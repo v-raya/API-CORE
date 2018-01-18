@@ -38,6 +38,7 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.FCEligibility" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan"/>
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.ClientRelationship"/>
 
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.ActiveServiceComponentType" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.ApprovalStatusType" />
@@ -60,6 +61,6 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.FcEligibilityTermReason" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.FcEligibilityDentalReason" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.HealthPlanTerminationType" />
-    <mapping class="gov.ca.cwds.data.legacy.cms.entity.ClientRelationship"/>
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.ClientRelationshipType" />
   </session-factory>
 </hibernate-configuration>
