@@ -27,6 +27,8 @@ rule "R-03821"
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-03821");
+      details.setProperty("OtherAdultsInPlacementHome.birthDt");
+      details.setInvalidValue($otherAdults.getBirthDt());
       details.setUserMessage("Other adults' start date must be greater than or equal to the date of birth. Other adults ID: " + $otherAdults.identifier);
       details.setTechnicalMessage("Violation of rule: OTHER_ADULTS_IN_PLACEMENT_HOME.Start_Date must be >= OTHER_ADULTS_IN_PLACEMENT_HOME.Birth_Date.");
       validationDetailsList.add(details);
