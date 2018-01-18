@@ -28,7 +28,7 @@ rule "R-00612"
   when
       clientAwareDTO: ClientEntityAwareDTO()
       deliveredService: DeliveredService(dDate : startDate, code : individualType.getCode) from clientAwareDTO.deliveredService
-      type: IndividualType() from deliveredService.individualType
+      type: IndividualType(deliveredService != null) from deliveredService.individualType
       client: Client(type.code.equals("C") && dDate.isBefore(birthDate)) from clientAwareDTO.entity
   then
       IssueDetails details = new IssueDetails();

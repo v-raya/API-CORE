@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
 import gov.ca.cwds.inject.CmsSessionFactory;
-import javax.persistence.NoResultException;
+import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -21,18 +21,11 @@ public class DeliveredServiceDao extends BaseDaoImpl<DeliveredService> {
     super(sessionFactory);
   }
 
-  public DeliveredService findByClientId(String clientId) {
+  public List<DeliveredService> findByClientId(String clientId) {
     Session session = this.getSessionFactory().getCurrentSession();
     Query<DeliveredService> query =
         session.createNamedQuery(DeliveredService.FIND_BY_CLIENT, DeliveredService.class);
     query.setParameter("clientId", clientId);
-    DeliveredService service = null;
-    try {
-      service = query.getSingleResult();
-    } catch (NoResultException e) {
-      LOG.warn("There is no result for clientId = {}", clientId);
-      LOG.debug(e.getMessage(), e);
-    }
-    return service;
+    return query.list();
   }
 }
