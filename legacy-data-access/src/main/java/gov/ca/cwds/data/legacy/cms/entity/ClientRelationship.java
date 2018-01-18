@@ -1,5 +1,9 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
+import static gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.NQ_PARAM_CURRENT_DATE;
+import static gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.NQ_PARAM_LEFT_SIDE_ID;
+import static gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.NQ_PARAM_RIGHT_SIDE_ID;
+
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.enums.SameHomeStatus;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ClientRelationshipType;
@@ -16,12 +20,39 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "CLN_RELT")
+@NamedQuery(
+    name = ClientRelationship.NQ_FIND_CURRENT_RELATIONSHIPS_FROM_LEFT_SIDE,
+    query =
+        "SELECT r FROM ClientRelationship r WHERE r.leftSide.identifier = :" + NQ_PARAM_LEFT_SIDE_ID
+            + " AND (r.startDate <= :" + NQ_PARAM_CURRENT_DATE + " OR r.startDate is null)"
+            + " AND (r.endDate >= :" + NQ_PARAM_CURRENT_DATE + " OR r.endDate is null)"
+)
+@NamedQuery(
+    name = ClientRelationship.NQ_FIND_CURRENT_RELATIONSHIPS_FROM_RIGHT_SIDE,
+    query =
+        "SELECT r FROM ClientRelationship r WHERE r.rightSide.identifier = :" + NQ_PARAM_RIGHT_SIDE_ID
+            + " AND (r.startDate <= :" + NQ_PARAM_CURRENT_DATE + " OR r.startDate is null)"
+            + " AND (r.endDate >= :" + NQ_PARAM_CURRENT_DATE +" OR r.endDate is null)"
+)
 @SuppressWarnings("squid:S3437")
 public class ClientRelationship extends CmsPersistentObject {
+
+  public static final String NQ_FIND_CURRENT_RELATIONSHIPS_FROM_LEFT_SIDE =
+      "gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.findCurrentRelationshipsFromLeftSide";
+
+  public static final String NQ_FIND_CURRENT_RELATIONSHIPS_FROM_RIGHT_SIDE =
+      "gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.findCurrentRelationshipsFromRightSide";
+
+  public static final String NQ_PARAM_LEFT_SIDE_ID = "leftSideId";
+
+  public static final String NQ_PARAM_RIGHT_SIDE_ID = "rightSideId";
+
+  public static final String NQ_PARAM_CURRENT_DATE = "currentDate";
 
   private static final long serialVersionUID = -7091947672861995190L;
 
@@ -60,7 +91,7 @@ public class ClientRelationship extends CmsPersistentObject {
 
   @Override
   public Serializable getPrimaryKey() {
-    return identifier;
+    return getIdentifier();
   }
 
   public String getIdentifier() {
