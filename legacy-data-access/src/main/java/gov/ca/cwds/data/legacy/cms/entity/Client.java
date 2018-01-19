@@ -22,7 +22,6 @@ import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Convert;
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -85,7 +84,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private String identifier;
 
   @OneToMany(fetch = FetchType.LAZY)
-  @JoinColumn(name = "FKCLIENT_T", referencedColumnName = "IDENTIFIER")
+  @JoinColumn(
+    name = "FKCLIENT_T",
+    referencedColumnName = "IDENTIFIER",
+    insertable = false,
+    updatable = false
+  )
   @OrderBy("removalDt DESC")
   private Set<PlacementEpisode> placementEpisodes = new HashSet<>();
 
