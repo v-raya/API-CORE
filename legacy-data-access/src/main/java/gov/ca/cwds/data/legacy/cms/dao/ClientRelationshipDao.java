@@ -18,15 +18,15 @@ public class ClientRelationshipDao extends BaseDaoImpl<ClientRelationship> {
   }
 
   public List<ClientRelationship> findRelationshipsFromLeftSide(String leftSideId,
-      LocalDate date) {
+      LocalDate localDate) {
     Require.requireNotNullAndNotEmpty(leftSideId);
-    Require.requireNotNullAndNotEmpty(date);
+    Require.requireNotNullAndNotEmpty(localDate);
 
     final List<ClientRelationship> relationships = currentSession()
         .createNamedQuery(ClientRelationship.NQ_FIND_CURRENT_RELATIONSHIPS_FROM_LEFT_SIDE,
             ClientRelationship.class)
         .setParameter(ClientRelationship.NQ_PARAM_LEFT_SIDE_ID, leftSideId)
-        .setParameter(ClientRelationship.NQ_PARAM_CURRENT_DATE, date)
+        .setParameter(ClientRelationship.NQ_PARAM_CURRENT_DATE, localDate)
         .list();
 
     return ImmutableList.copyOf(relationships);
@@ -37,15 +37,15 @@ public class ClientRelationshipDao extends BaseDaoImpl<ClientRelationship> {
   }
 
   public List<ClientRelationship> findRelationshipsFromRightSide(String rightSideId,
-      LocalDate date) {
+      LocalDate localDate) {
     Require.requireNotNullAndNotEmpty(rightSideId);
-    Require.requireNotNullAndNotEmpty(date);
+    Require.requireNotNullAndNotEmpty(localDate);
 
     final List<ClientRelationship> relationships = currentSession()
         .createNamedQuery(ClientRelationship.NQ_FIND_CURRENT_RELATIONSHIPS_FROM_RIGHT_SIDE,
             ClientRelationship.class)
         .setParameter(ClientRelationship.NQ_PARAM_RIGHT_SIDE_ID, rightSideId)
-        .setParameter(ClientRelationship.NQ_PARAM_CURRENT_DATE, date)
+        .setParameter(ClientRelationship.NQ_PARAM_CURRENT_DATE, localDate)
         .list();
 
     return ImmutableList.copyOf(relationships);

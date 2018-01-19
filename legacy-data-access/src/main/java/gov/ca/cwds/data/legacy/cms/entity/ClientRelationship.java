@@ -29,15 +29,15 @@ import org.hibernate.annotations.Type;
     name = ClientRelationship.NQ_FIND_CURRENT_RELATIONSHIPS_FROM_LEFT_SIDE,
     query =
         "SELECT r FROM ClientRelationship r WHERE r.leftSide.identifier = :" + NQ_PARAM_LEFT_SIDE_ID
-            + " AND (r.startDate <= :" + NQ_PARAM_CURRENT_DATE + " OR r.startDate is null)"
-            + " AND (r.endDate >= :" + NQ_PARAM_CURRENT_DATE + " OR r.endDate is null)"
+            + " AND ((r.startDate is null) OR (r.startDate <= :" + NQ_PARAM_CURRENT_DATE + "))"
+            + " AND ((r.endDate is null) OR (r.endDate >= :" + NQ_PARAM_CURRENT_DATE + "))"
 )
 @NamedQuery(
     name = ClientRelationship.NQ_FIND_CURRENT_RELATIONSHIPS_FROM_RIGHT_SIDE,
     query =
         "SELECT r FROM ClientRelationship r WHERE r.rightSide.identifier = :" + NQ_PARAM_RIGHT_SIDE_ID
-            + " AND (r.startDate <= :" + NQ_PARAM_CURRENT_DATE + " OR r.startDate is null)"
-            + " AND (r.endDate >= :" + NQ_PARAM_CURRENT_DATE +" OR r.endDate is null)"
+            + " AND ((r.startDate is null) OR (r.startDate <= :" + NQ_PARAM_CURRENT_DATE + "))"
+            + " AND ((r.endDate is null) OR (r.endDate >= :" + NQ_PARAM_CURRENT_DATE +"))"
 )
 @SuppressWarnings("squid:S3437")
 public class ClientRelationship extends CmsPersistentObject {
