@@ -34,45 +34,58 @@ public class ClientRelationshipDaoTest extends BaseCwsCmsInMemoryPersistenceTest
 
           final LocalDate CURRENT_DATE = LocalDate.of(2018, 1, 18);
 
-          List<ClientRelationship> rels0 = dao
+          List<ClientRelationship> relsLeft = dao
               .findRelationshipsFromLeftSide("AaiU7IW0Rt", CURRENT_DATE);
-          assertEquals(2, rels0.size());
+          assertEquals(3, relsLeft.size());
 
-          Map<String, ClientRelationship> relMap0 = rels0.stream().collect(Collectors
+          Map<String, ClientRelationship> relMap = relsLeft.stream().collect(Collectors
               .toMap(clientRelationship -> clientRelationship.getRightSide().getIdentifier(),
                   clientRelationship -> clientRelationship));
 
-          assertTrue(relMap0.containsKey("AasRx3r0Ha"));
-          ClientRelationship rel00 = relMap0.get("AasRx3r0Ha");
-          assertEquals("AaiU7IW0Rt", rel00.getLeftSide().getIdentifier());
-          assertEquals("AasRx3r0Ha", rel00.getRightSide().getIdentifier());
-          assertFalse(rel00.getAbsentParentIndicator());
-          assertEquals(SameHomeStatus.YES, rel00.getSameHomeStatus());
-          ClientRelationshipType relType0 = rel00.getRelationshipType();
+          assertTrue(relMap.containsKey("AasRx3r0Ha"));
+          assertTrue(relMap.containsKey("AazXkWY06s"));
+          assertTrue(relMap.containsKey("AfGN4uS0CR"));
+
+          //both dates are NULL
+          ClientRelationship rel0 = relMap.get("AasRx3r0Ha");
+          assertEquals("AaiU7IW0Rt", rel0.getLeftSide().getIdentifier());
+          assertEquals("AasRx3r0Ha", rel0.getRightSide().getIdentifier());
+          assertFalse(rel0.getAbsentParentIndicator());
+          assertEquals(SameHomeStatus.YES, rel0.getSameHomeStatus());
+          ClientRelationshipType relType0 = rel0.getRelationshipType();
           assertEquals((short) 276, relType0.getPrimaryKey());
           assertEquals("Sister/Brother", relType0.getShortDescription());
 
-          assertTrue(relMap0.containsKey("AazXkWY06s"));
-          ClientRelationship rel01 = relMap0.get("AazXkWY06s");
-          assertEquals("AaiU7IW0Rt", rel01.getLeftSide().getIdentifier());
-          assertEquals("AazXkWY06s", rel01.getRightSide().getIdentifier());
-          assertTrue(rel01.getAbsentParentIndicator());
-          assertEquals(SameHomeStatus.NO, rel01.getSameHomeStatus());
-          ClientRelationshipType relType01 = rel01.getRelationshipType();
-          assertEquals((short) 190, relType01.getPrimaryKey());
-          assertEquals("Daughter/Father (Birth)", relType01.getShortDescription());
+          //both dates are not null
+          ClientRelationship rel1 = relMap.get("AazXkWY06s");
+          assertEquals("AaiU7IW0Rt", rel1.getLeftSide().getIdentifier());
+          assertEquals("AazXkWY06s", rel1.getRightSide().getIdentifier());
+          assertTrue(rel1.getAbsentParentIndicator());
+          assertEquals(SameHomeStatus.NO, rel1.getSameHomeStatus());
+          ClientRelationshipType relType1 = rel1.getRelationshipType();
+          assertEquals((short) 190, relType1.getPrimaryKey());
+          assertEquals("Daughter/Father (Birth)", relType1.getShortDescription());
 
-          List<ClientRelationship> rels1 = dao
+          //start date is null, end date greater than current date
+          ClientRelationship rel2 = relMap.get("AfGN4uS0CR");
+          assertEquals("AaiU7IW0Rt", rel2.getLeftSide().getIdentifier());
+          assertEquals("AfGN4uS0CR", rel2.getRightSide().getIdentifier());
+          assertFalse(rel2.getAbsentParentIndicator());
+          assertEquals(SameHomeStatus.NO, rel2.getSameHomeStatus());
+          ClientRelationshipType relType2 = rel2.getRelationshipType();
+          assertEquals((short) 301, relType2.getPrimaryKey());
+          assertEquals("Ward/Guardian", relType2.getShortDescription());
+
+          List<ClientRelationship> relsFromRight = dao
               .findRelationshipsFromRightSide("AasRx3r0Ha", CURRENT_DATE);
-          assertEquals(1, rels1.size());
-          ClientRelationship rel10 = rels1.get(0);
-          assertEquals(rel00, rel10);//the same relation is taken from the right side
+          assertEquals(1, relsFromRight.size());
+          ClientRelationship relR0 = relsFromRight.get(0);
+          assertEquals(rel0, relR0);//the same relation is taken from the right side
 
-          //no relations when taken from left side by right side id
-          List<ClientRelationship> rels2 = dao
+          //no relations when take them from left side by right side id
+          List<ClientRelationship> relsLeft2 = dao
               .findRelationshipsFromLeftSide("AasRx3r0Ha", CURRENT_DATE);
-          assertEquals(0, rels2.size());
+          assertEquals(0, relsLeft2.size());
         });
   }
-
 }
