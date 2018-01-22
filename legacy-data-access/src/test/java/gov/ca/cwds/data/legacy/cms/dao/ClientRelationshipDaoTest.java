@@ -35,7 +35,7 @@ public class ClientRelationshipDaoTest extends BaseCwsCmsInMemoryPersistenceTest
           final LocalDate CURRENT_DATE = LocalDate.of(2018, 1, 18);
 
           List<ClientRelationship> relsLeft = dao
-              .findRelationshipsFromLeftSide("AaiU7IW0Rt", CURRENT_DATE);
+              .findRightRelationships("AaiU7IW0Rt", CURRENT_DATE);
           assertEquals(3, relsLeft.size());
 
           Map<String, ClientRelationship> relMap = relsLeft.stream().collect(Collectors
@@ -77,14 +77,14 @@ public class ClientRelationshipDaoTest extends BaseCwsCmsInMemoryPersistenceTest
           assertEquals("Ward/Guardian", relType2.getShortDescription());
 
           List<ClientRelationship> relsFromRight = dao
-              .findRelationshipsFromRightSide("AasRx3r0Ha", CURRENT_DATE);
+              .findLeftRelationships("AasRx3r0Ha", CURRENT_DATE);
           assertEquals(1, relsFromRight.size());
           ClientRelationship relR0 = relsFromRight.get(0);
           assertEquals(rel0, relR0);//the same relation is taken from the right side
 
           //no relations when take them from left side by right side id
           List<ClientRelationship> relsLeft2 = dao
-              .findRelationshipsFromLeftSide("AasRx3r0Ha", CURRENT_DATE);
+              .findRightRelationships("AasRx3r0Ha", CURRENT_DATE);
           assertEquals(0, relsLeft2.size());
         });
   }

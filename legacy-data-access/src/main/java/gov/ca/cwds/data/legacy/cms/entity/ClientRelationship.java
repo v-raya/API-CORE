@@ -43,10 +43,10 @@ import org.hibernate.annotations.Type;
 public class ClientRelationship extends CmsPersistentObject {
 
   public static final String NQ_FIND_CURRENT_RELATIONSHIPS_FROM_LEFT_SIDE =
-      "gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.findCurrentRelationshipsFromLeftSide";
+      "gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.findCurrentRightRelationships";
 
   public static final String NQ_FIND_CURRENT_RELATIONSHIPS_FROM_RIGHT_SIDE =
-      "gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.findCurrentRelationshipsFromRightSide";
+      "gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.findCurrentLeftRelationships";
 
   public static final String NQ_PARAM_LEFT_SIDE_ID = "leftSideId";
 

@@ -17,7 +17,7 @@ public class ClientRelationshipDao extends BaseDaoImpl<ClientRelationship> {
     super(sessionFactory);
   }
 
-  public List<ClientRelationship> findRelationshipsFromLeftSide(String leftSideId,
+  public List<ClientRelationship> findRightRelationships(String leftSideId,
       LocalDate localDate) {
     Require.requireNotNullAndNotEmpty(leftSideId);
     Require.requireNotNullAndNotEmpty(localDate);
@@ -32,11 +32,11 @@ public class ClientRelationshipDao extends BaseDaoImpl<ClientRelationship> {
     return ImmutableList.copyOf(relationships);
   }
 
-  public List<ClientRelationship> findCurrentRelationshipsFromLeftSide(String leftSideId) {
-    return findRelationshipsFromLeftSide(leftSideId, LocalDate.now());
+  public List<ClientRelationship> findCurrentRightRelationships(String leftSideId) {
+    return findRightRelationships(leftSideId, LocalDate.now());
   }
 
-  public List<ClientRelationship> findRelationshipsFromRightSide(String rightSideId,
+  public List<ClientRelationship> findLeftRelationships(String rightSideId,
       LocalDate localDate) {
     Require.requireNotNullAndNotEmpty(rightSideId);
     Require.requireNotNullAndNotEmpty(localDate);
@@ -51,7 +51,7 @@ public class ClientRelationshipDao extends BaseDaoImpl<ClientRelationship> {
     return ImmutableList.copyOf(relationships);
   }
 
-  public List<ClientRelationship> findCurrentRelationshipsFromRightSide(String rightSideId) {
-    return findRelationshipsFromRightSide(rightSideId, LocalDate.now());
+  public List<ClientRelationship> findCurrentLeftRelationships(String rightSideId) {
+    return findLeftRelationships(rightSideId, LocalDate.now());
   }
 }
