@@ -347,4 +347,46 @@
     SAME_HM_CD="N"
     LST_UPD_ID="0ND"
     LST_UPD_TS="2003-02-28 11:49:16"/>
+
+  <SYS_CD_C
+    SYS_ID="190"
+    CATEGORYID="0"
+    INACTV_IND="N"
+    OTHER_CD="fM"
+    SHORT_DSC="Daughter/Father (Birth)                 "
+    LGC_ID="D   "
+    LST_UPD_ID="q25"
+    LST_UPD_TS="1996-02-13 13:10:13"
+    THIRD_ID="0000000000"
+    FKS_META_T="CLNTRELC"
+    LONG_DSC="205                                                                                                                                                             "
+  />
+
+  <SYS_CD_C
+    SYS_ID="276"
+    CATEGORYID="0"
+    INACTV_IND="N"
+    OTHER_CD="FM"
+    SHORT_DSC="Sister/Brother                          "
+    LGC_ID="SI  "
+    LST_UPD_ID="q25"
+    LST_UPD_TS="1996-02-13 13:10:13"
+    THIRD_ID="0000000000"
+    FKS_META_T="CLNTRELC"
+    LONG_DSC="182                                                                                                                                                             "
+  />
+
+  <SYS_CD_C
+    SYS_ID="301"
+    CATEGORYID="0"
+    INACTV_IND="N"
+    OTHER_CD="UU"
+    SHORT_DSC="Ward/Guardian                           "
+    LGC_ID="OTH "
+    LST_UPD_ID="q25"
+    LST_UPD_TS="1996-02-13 13:10:13"
+    THIRD_ID="0000000000"
+    FKS_META_T="CLNTRELC"
+    LONG_DSC="241                                                                                                                                                             "
+  />
 </dataset>
