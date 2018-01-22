@@ -1,9 +1,7 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
+import static gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.CLIENT_ID;
 import static gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.DATE_CONDITION;
-import static gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.NQ_PARAM_CURRENT_DATE;
-import static gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.NQ_PARAM_LEFT_SIDE_ID;
-import static gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.NQ_PARAM_RIGHT_SIDE_ID;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.enums.SameHomeStatus;
@@ -29,15 +27,13 @@ import org.hibernate.annotations.Type;
 @NamedQuery(
     name = ClientRelationship.NQ_FIND_CURRENT_RELATIONSHIPS_FROM_LEFT_SIDE,
     query =
-        "SELECT r FROM ClientRelationship r WHERE r.leftSide.identifier = :"
-            + NQ_PARAM_LEFT_SIDE_ID
+        "SELECT r FROM ClientRelationship r WHERE r.leftSide.identifier = :" + CLIENT_ID
             + DATE_CONDITION
 )
 @NamedQuery(
     name = ClientRelationship.NQ_FIND_CURRENT_RELATIONSHIPS_FROM_RIGHT_SIDE,
     query =
-        "SELECT r FROM ClientRelationship r WHERE r.rightSide.identifier = :"
-            + NQ_PARAM_RIGHT_SIDE_ID
+        "SELECT r FROM ClientRelationship r WHERE r.rightSide.identifier = :" + CLIENT_ID
             + DATE_CONDITION
 )
 @SuppressWarnings("squid:S3437")
@@ -55,9 +51,7 @@ public class ClientRelationship extends CmsPersistentObject {
       " AND ((r.startDate is null) OR (r.startDate <= :" + NQ_PARAM_CURRENT_DATE + "))"
           + " AND ((r.endDate is null) OR (r.endDate >= :" + NQ_PARAM_CURRENT_DATE + "))";
 
-  public static final String NQ_PARAM_LEFT_SIDE_ID = "leftSideId";
-
-  public static final String NQ_PARAM_RIGHT_SIDE_ID = "rightSideId";
+  public static final String CLIENT_ID = "clientId";
 
   private static final long serialVersionUID = -7091947672861995190L;
 
