@@ -73,7 +73,7 @@ public class ClientRelationship extends CmsPersistentObject {
   @ManyToOne(fetch = FetchType.EAGER)
   @Fetch(FetchMode.JOIN)
   @JoinColumn(name = "CLNTRELC", referencedColumnName = "SYS_ID")
-  private ClientRelationshipType relationshipType;
+  private ClientRelationshipType type;
 
   @Column(name = "START_DT")
   private LocalDate startDate;
@@ -110,12 +110,12 @@ public class ClientRelationship extends CmsPersistentObject {
     this.absentParentIndicator = absentParentIndicator;
   }
 
-  public ClientRelationshipType getRelationshipType() {
-    return relationshipType;
+  public ClientRelationshipType getType() {
+    return type;
   }
 
-  public void setRelationshipType(ClientRelationshipType relationshipType) {
-    this.relationshipType = relationshipType;
+  public void setType(ClientRelationshipType relationshipType) {
+    this.type = relationshipType;
   }
 
   public LocalDate getEndDate() {
@@ -173,7 +173,7 @@ public class ClientRelationship extends CmsPersistentObject {
     ClientRelationship that = (ClientRelationship) o;
     return Objects.equals(leftSide, that.leftSide) &&
         Objects.equals(rightSide, that.rightSide) &&
-        Objects.equals(relationshipType, that.relationshipType) &&
+        Objects.equals(type, that.type) &&
         Objects.equals(startDate, that.startDate) &&
         Objects.equals(endDate, that.endDate);
   }
@@ -182,6 +182,6 @@ public class ClientRelationship extends CmsPersistentObject {
   public int hashCode() {
 
     return Objects
-        .hash(super.hashCode(), leftSide, rightSide, relationshipType, startDate, endDate);
+        .hash(super.hashCode(), leftSide, rightSide, type, startDate, endDate);
   }
 }

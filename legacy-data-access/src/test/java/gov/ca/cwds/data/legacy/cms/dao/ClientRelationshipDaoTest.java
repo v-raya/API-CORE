@@ -52,7 +52,7 @@ public class ClientRelationshipDaoTest extends BaseCwsCmsInMemoryPersistenceTest
           assertEquals("AasRx3r0Ha", rel0.getRightSide().getIdentifier());
           assertFalse(rel0.getAbsentParentIndicator());
           assertEquals(SameHomeStatus.YES, rel0.getSameHomeStatus());
-          ClientRelationshipType relType0 = rel0.getRelationshipType();
+          ClientRelationshipType relType0 = rel0.getType();
           assertEquals((short) 276, relType0.getPrimaryKey());
           assertEquals("Sister/Brother", relType0.getShortDescription());
 
@@ -62,7 +62,7 @@ public class ClientRelationshipDaoTest extends BaseCwsCmsInMemoryPersistenceTest
           assertEquals("AazXkWY06s", rel1.getRightSide().getIdentifier());
           assertTrue(rel1.getAbsentParentIndicator());
           assertEquals(SameHomeStatus.NO, rel1.getSameHomeStatus());
-          ClientRelationshipType relType1 = rel1.getRelationshipType();
+          ClientRelationshipType relType1 = rel1.getType();
           assertEquals((short) 190, relType1.getPrimaryKey());
           assertEquals("Daughter/Father (Birth)", relType1.getShortDescription());
 
@@ -72,7 +72,7 @@ public class ClientRelationshipDaoTest extends BaseCwsCmsInMemoryPersistenceTest
           assertEquals("AfGN4uS0CR", rel2.getRightSide().getIdentifier());
           assertFalse(rel2.getAbsentParentIndicator());
           assertEquals(SameHomeStatus.NO, rel2.getSameHomeStatus());
-          ClientRelationshipType relType2 = rel2.getRelationshipType();
+          ClientRelationshipType relType2 = rel2.getType();
           assertEquals((short) 301, relType2.getPrimaryKey());
           assertEquals("Ward/Guardian", relType2.getShortDescription());
 
