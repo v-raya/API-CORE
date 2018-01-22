@@ -8,6 +8,7 @@ import gov.ca.cwds.cms.data.access.service.rules.ClientDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.dao.*;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
+import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
 import gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan;
 import gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication;
 import gov.ca.cwds.drools.DroolsException;
@@ -34,6 +35,8 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
   @Inject private HealthInterventionPlanDao healthInterventionPlanDao;
 
   @Inject private MedicalEligibilityApplicationDao medicalEligibilityApplicationDao;
+
+  @Inject private DeliveredServiceDao deliveredServiceDao;
 
   @Override
   public Client create(ClientEntityAwareDTO entityAwareDTO) throws DataAccessServicesException {
@@ -68,6 +71,9 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
     List<MedicalEligibilityApplication> medicalEligibilityApplications =
         medicalEligibilityApplicationDao.findByChildClientId(clientId);
     clientEntityAwareDTO.setMedicalEligibilityApplications(medicalEligibilityApplications);
+
+    List<DeliveredService> deliveredServices = deliveredServiceDao.findByClientId(clientId);
+    clientEntityAwareDTO.setDeliveredService(deliveredServices);
 
     enrichClientEntityAwareDto((T) clientEntityAwareDTO);
   }

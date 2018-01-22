@@ -87,7 +87,12 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private String identifier;
 
   @OneToMany(fetch = FetchType.LAZY)
-  @JoinColumn(name = "FKCLIENT_T", referencedColumnName = "IDENTIFIER")
+  @JoinColumn(
+    name = "FKCLIENT_T",
+    referencedColumnName = "IDENTIFIER",
+    insertable = false,
+    updatable = false
+  )
   @OrderBy("removalDt DESC")
   private Set<PlacementEpisode> placementEpisodes = new HashSet<>();
 

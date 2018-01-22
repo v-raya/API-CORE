@@ -1,0 +1,37 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
+import gov.ca.cwds.data.legacy.cms.entity.OtherAdultsInPlacementHome
+import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO
+import gov.ca.cwds.security.realm.PerryAccount
+
+global java.util.Set validationDetailsList
+
+rule "R-03821"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+      Code: R - 03821
+
+      Field: fraOtherAdultsInHome.txtDoB
+
+      Rule Txt
+      The start date must be greater than or equal to the date of birth.
+
+      Logic
+      OTHER_ADULTS_IN_PLACEMENT_HOME.Start_Date must be >= OTHER_ADULTS_IN_PLACEMENT_HOME.Birth_Date
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome: PlacementHome() from $placementHomeAwareDTO.entity
+      $otherAdults : OtherAdultsInPlacementHome(birthDt != null && startDt != null && eval(startDt.isBefore(birthDt))) from $placementHome.otherAdultsInPlacementHomes
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-03821");
+      details.setProperty("OtherAdultsInPlacementHome.birthDt");
+      details.setInvalidValue($otherAdults.getBirthDt());
+      details.setUserMessage("Other adults' start date must be greater than or equal to the date of birth. Other adults ID: " + $otherAdults.identifier);
+      details.setTechnicalMessage("Violation of rule: OTHER_ADULTS_IN_PLACEMENT_HOME.Start_Date must be >= OTHER_ADULTS_IN_PLACEMENT_HOME.Birth_Date.");
+      validationDetailsList.add(details);
+end
+
+
