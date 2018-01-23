@@ -178,6 +178,7 @@ public class Case extends CmsPersistentObject {
   private LocalDate limitedAccessDate;
 
   @Column(name = "LMT_ACSDSC")
+  @ColumnTransformer(read = "trim(LMT_ACSDSC)")
   private String limitedAccessDesc;
 
   @NotFound(action = NotFoundAction.IGNORE)
