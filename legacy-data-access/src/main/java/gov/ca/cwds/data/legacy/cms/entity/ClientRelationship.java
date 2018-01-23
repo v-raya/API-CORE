@@ -2,6 +2,7 @@ package gov.ca.cwds.data.legacy.cms.entity;
 
 import static gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.CLIENT_ID;
 import static gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.DATE_CONDITION;
+import static gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.INACTIVE_IND_CONDITION;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.enums.SameHomeStatus;
@@ -28,13 +29,13 @@ import org.hibernate.annotations.Type;
     name = ClientRelationship.NQ_FIND_CURRENT_RELATIONSHIPS_FROM_LEFT_SIDE,
     query =
         "SELECT r FROM ClientRelationship r WHERE r.leftSide.identifier = :" + CLIENT_ID
-            + DATE_CONDITION
+            + INACTIVE_IND_CONDITION + DATE_CONDITION
 )
 @NamedQuery(
     name = ClientRelationship.NQ_FIND_CURRENT_RELATIONSHIPS_FROM_RIGHT_SIDE,
     query =
         "SELECT r FROM ClientRelationship r WHERE r.rightSide.identifier = :" + CLIENT_ID
-            + DATE_CONDITION
+            + INACTIVE_IND_CONDITION +DATE_CONDITION
 )
 @SuppressWarnings("squid:S3437")
 public class ClientRelationship extends CmsPersistentObject {
@@ -46,6 +47,8 @@ public class ClientRelationship extends CmsPersistentObject {
       "gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.findCurrentLeftRelationships";
 
   public static final String NQ_PARAM_CURRENT_DATE = "currentDate";
+
+  public static final String INACTIVE_IND_CONDITION = " AND r.type.inactiveIndicator = FALSE";
 
   public static final String DATE_CONDITION =
       " AND ((r.startDate is null) OR (r.startDate <= :" + NQ_PARAM_CURRENT_DATE + "))"

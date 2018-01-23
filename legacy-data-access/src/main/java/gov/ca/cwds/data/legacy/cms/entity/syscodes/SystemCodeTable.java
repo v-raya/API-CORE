@@ -12,6 +12,7 @@ import javax.persistence.Transient;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.ColumnTransformer;
+import org.hibernate.annotations.Type;
 
 /**
  * @author CWDS CALS API Team
@@ -30,8 +31,9 @@ public abstract class SystemCodeTable implements PersistentObject {
   @Column(name = "CATEGORYID")
   private Short categoryId;
 
+  @Type(type = "yes_no")
   @Column(name = "INACTV_IND")
-  private String inactiveIndicator;
+  private boolean inactiveIndicator;
 
   @Column(name = "OTHER_CD")
   @ColumnTransformer(read = "trim(OTHER_CD)")
@@ -77,11 +79,11 @@ public abstract class SystemCodeTable implements PersistentObject {
     this.categoryId = categoryid;
   }
 
-  public String getInactiveIndicator() {
+  public boolean getInactiveIndicator() {
     return inactiveIndicator;
   }
 
-  public void setInactiveIndicator(String inactvInd) {
+  public void setInactiveIndicator(boolean inactvInd) {
     this.inactiveIndicator = inactvInd;
   }
 
