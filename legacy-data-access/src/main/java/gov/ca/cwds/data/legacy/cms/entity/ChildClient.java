@@ -14,6 +14,7 @@ import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Type;
 
 /**
@@ -56,9 +57,11 @@ public class ChildClient extends Client {
   private boolean allHealthInfoOnFileIndicator;
 
   @Column(name = "ACQ_ED_DSC")
+  @ColumnTransformer(read = "trim(ACQ_ED_DSC)")
   private String attemptToAcquireEducInfoDesc;
 
   @Column(name = "ACQ_HTHDSC")
+  @ColumnTransformer(read = "trim(ACQ_HTHDSC)")
   private String attemptToAcquireHlthInfoDesc;
 
   @Column(name = "AWOL_AB_CD")
@@ -88,12 +91,15 @@ public class ChildClient extends Client {
   private Disability disabilityDiagnosed;
 
   @Column(name = "HEPDOC_OLD")
+  @ColumnTransformer(read = "trim(HEPDOC_OLD)")
   private String drmsHePassportDocOld;
 
   @Column(name = "DRMSHEPDOC")
+  @ColumnTransformer(read = "trim(DRMSHEPDOC)")
   private String drmsHealthEducPassportDoc;
 
   @Column(name = "VOL_PLCDOC")
+  @ColumnTransformer(read = "trim(VOL_PLCDOC)")
   private String drmsVoluntaryPlcmntAgrmntDoc;
 
   @Type(type = "yes_no")
