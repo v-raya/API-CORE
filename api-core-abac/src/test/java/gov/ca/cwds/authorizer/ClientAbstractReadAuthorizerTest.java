@@ -3,14 +3,20 @@ package gov.ca.cwds.authorizer;
 import static gov.ca.cwds.util.PerryAccountUtils.initPerryAccountWithPrivileges;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.spy;
 import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
+import gov.ca.cwds.cms.data.access.service.ClientCoreService;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
 import gov.ca.cwds.drools.DroolsService;
@@ -35,6 +41,9 @@ public class ClientAbstractReadAuthorizerTest {
   @Mock
   private ClientCountyDeterminationService clientCountyDeterminationServiceMock;
 
+  @Mock
+  private ClientCoreService clientCoreServiceMock;
+
   private ClientAbstractReadAuthorizer testSubject;
 
   @Before
@@ -42,10 +51,10 @@ public class ClientAbstractReadAuthorizerTest {
     MockitoAnnotations.initMocks(this);
     final DroolsService droolsService = new DroolsService();
     final DroolsAuthorizationService droolsAuthorizationService = new DroolsAuthorizationService(droolsService);
-    testSubject = new ClientAbstractReadAuthorizer(
-        droolsAuthorizationService,
-        clientCountyDeterminationServiceMock
-    );
+    testSubject = new ClientAbstractReadAuthorizer();
+    testSubject.setClientCoreService(clientCoreServiceMock);
+    testSubject.setDroolsAuthorizationService(droolsAuthorizationService);
+    testSubject.setCountyDeterminationService(clientCountyDeterminationServiceMock);
   }
 
   @Test
@@ -119,11 +128,36 @@ public class ClientAbstractReadAuthorizerTest {
     verify(clientCountyDeterminationServiceMock, times(1)).getClientCountyById(anyString());
   }
 
+  @Test
+  public void testCheckIdAuthorized() throws Exception {
+    ClientAbstractReadAuthorizer spy = spy(testSubject);
+
+    Client client = initClient(null);
+    when(clientCoreServiceMock.find(anyString())).thenReturn(client);
+    doReturn(true).when(spy).checkInstance(any());
+
+    spy.setClientCoreService(clientCoreServiceMock);
+
+    assertTrue(spy.checkId("-1"));
+  }
+
+  @Test
+  public void testCheckIdUnauthorized() throws Exception {
+    ClientAbstractReadAuthorizer spy = spy(testSubject);
+
+    Client client = initClient(null);
+    when(clientCoreServiceMock.find(anyString())).thenReturn(client);
+    doReturn(false).when(spy).checkInstance(any());
+
+    spy.setClientCoreService(clientCoreServiceMock);
+
+    assertFalse(spy.checkId("-1"));
+  }
+
   private Client initClient(Sensitivity sensitivity) {
     final Client client = new Client();
     client.setIdentifier("id");
     client.setSensitivity(sensitivity);
     return client;
   }
-
 }
