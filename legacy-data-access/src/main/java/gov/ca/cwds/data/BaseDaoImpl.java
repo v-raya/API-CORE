@@ -69,9 +69,10 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
   }
 
   public List<T> queryImmutableList(String queryName) {
-    Session session = this.getSessionFactory().getCurrentSession();
-    org.hibernate.query.Query<T> query = session.createNamedQuery(queryName, getEntityClass());
-    ImmutableList.Builder<T> entities = new ImmutableList.Builder<>();
+    final Session session = this.getSessionFactory().getCurrentSession();
+    final org.hibernate.query.Query<T> query =
+        session.createNamedQuery(queryName, getEntityClass());
+    final ImmutableList.Builder<T> entities = new ImmutableList.Builder<>();
     entities.addAll(query.list());
     return entities.build();
   }
