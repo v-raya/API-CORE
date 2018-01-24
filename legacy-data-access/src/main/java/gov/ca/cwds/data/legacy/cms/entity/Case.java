@@ -5,10 +5,8 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.LimitedAccess;
 import gov.ca.cwds.data.legacy.cms.entity.enums.ResponsibleAgency;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ActiveServiceComponentType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ApprovalStatusType;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.CaseClosureReasonType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.County;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -25,7 +23,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;

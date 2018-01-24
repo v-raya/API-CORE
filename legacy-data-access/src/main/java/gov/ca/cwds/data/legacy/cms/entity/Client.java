@@ -20,6 +20,8 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -81,6 +83,7 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
 
   @Id
   @Column(name = "IDENTIFIER", nullable = false, length = 10)
+  @Access(AccessType.PROPERTY)//to get id without fetching entire client
   private String identifier;
 
   @OneToMany(fetch = FetchType.LAZY)
