@@ -28,14 +28,14 @@ import org.hibernate.annotations.Type;
 @NamedQuery(
     name = ClientRelationship.NQ_FIND_CURRENT_RELATIONSHIPS_FROM_LEFT_SIDE,
     query =
-        "SELECT r FROM ClientRelationship r WHERE r.leftSide.identifier = :" + CLIENT_ID
-            + INACTIVE_IND_CONDITION + DATE_CONDITION
+        "SELECT r FROM ClientRelationship r left join fetch r.type WHERE r.leftSide.identifier = :"
+            + CLIENT_ID + INACTIVE_IND_CONDITION + DATE_CONDITION
 )
 @NamedQuery(
     name = ClientRelationship.NQ_FIND_CURRENT_RELATIONSHIPS_FROM_RIGHT_SIDE,
     query =
-        "SELECT r FROM ClientRelationship r WHERE r.rightSide.identifier = :" + CLIENT_ID
-            + INACTIVE_IND_CONDITION +DATE_CONDITION
+        "SELECT r FROM ClientRelationship r left join fetch r.type WHERE r.rightSide.identifier = :"
+            + CLIENT_ID + INACTIVE_IND_CONDITION + DATE_CONDITION
 )
 @SuppressWarnings("squid:S3437")
 public class ClientRelationship extends CmsPersistentObject {
@@ -72,8 +72,8 @@ public class ClientRelationship extends CmsPersistentObject {
   @JoinColumn(name = "FKCLIENT_0", referencedColumnName = "IDENTIFIER")
   private Client rightSide;
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @Fetch(FetchMode.JOIN)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
   @JoinColumn(name = "CLNTRELC", referencedColumnName = "SYS_ID")
   private ClientRelationshipType type;
 
