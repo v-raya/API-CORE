@@ -1,8 +1,8 @@
 package gov.ca.cwds.data.legacy.cms.dao;
 
 import static gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.CLIENT_ID;
-import static gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.NQ_FIND_CURRENT_RELATIONSHIPS_FROM_LEFT_SIDE;
-import static gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.NQ_FIND_CURRENT_RELATIONSHIPS_FROM_RIGHT_SIDE;
+import static gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.NQ_FIND_RELATIONSHIPS_BY_LEFT_SIDE;
+import static gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.NQ_FIND_RELATIONSHIPS_BY_RIGHT_SIDE;
 import static gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.NQ_PARAM_CURRENT_DATE;
 
 import com.google.common.collect.ImmutableList;
@@ -22,22 +22,14 @@ public class ClientRelationshipDao extends BaseDaoImpl<ClientRelationship> {
     super(sessionFactory);
   }
 
-  public List<ClientRelationship> findRightRelationships(String clientId,
+  public List<ClientRelationship> findRelationshipsByLeftSide(String leftSideClientId,
       LocalDate localDate) {
-    return findRelationships(NQ_FIND_CURRENT_RELATIONSHIPS_FROM_LEFT_SIDE, clientId, localDate);
+    return findRelationships(NQ_FIND_RELATIONSHIPS_BY_LEFT_SIDE, leftSideClientId, localDate);
   }
 
-  public List<ClientRelationship> findCurrentRightRelationships(String clientId) {
-    return findRightRelationships(clientId, LocalDate.now());
-  }
-
-  public List<ClientRelationship> findLeftRelationships(String clientId,
+  public List<ClientRelationship> findRelationshipsByRightSide(String rightSideClientId,
       LocalDate localDate) {
-    return findRelationships(NQ_FIND_CURRENT_RELATIONSHIPS_FROM_RIGHT_SIDE, clientId, localDate);
-  }
-
-  public List<ClientRelationship> findCurrentLeftRelationships(String clientId) {
-    return findLeftRelationships(clientId, LocalDate.now());
+    return findRelationships(NQ_FIND_RELATIONSHIPS_BY_RIGHT_SIDE, rightSideClientId, localDate);
   }
 
   private List<ClientRelationship> findRelationships(String queryName, String clientId,

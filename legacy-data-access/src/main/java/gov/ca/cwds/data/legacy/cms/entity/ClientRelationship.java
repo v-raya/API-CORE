@@ -26,13 +26,13 @@ import org.hibernate.annotations.Type;
 @Entity
 @Table(name = "CLN_RELT")
 @NamedQuery(
-    name = ClientRelationship.NQ_FIND_CURRENT_RELATIONSHIPS_FROM_LEFT_SIDE,
+    name = ClientRelationship.NQ_FIND_RELATIONSHIPS_BY_LEFT_SIDE,
     query =
         "SELECT r FROM ClientRelationship r left join fetch r.type WHERE r.leftSide.identifier = :"
             + CLIENT_ID + INACTIVE_IND_CONDITION + DATE_CONDITION
 )
 @NamedQuery(
-    name = ClientRelationship.NQ_FIND_CURRENT_RELATIONSHIPS_FROM_RIGHT_SIDE,
+    name = ClientRelationship.NQ_FIND_RELATIONSHIPS_BY_RIGHT_SIDE,
     query =
         "SELECT r FROM ClientRelationship r left join fetch r.type WHERE r.rightSide.identifier = :"
             + CLIENT_ID + INACTIVE_IND_CONDITION + DATE_CONDITION
@@ -40,11 +40,11 @@ import org.hibernate.annotations.Type;
 @SuppressWarnings("squid:S3437")
 public class ClientRelationship extends CmsPersistentObject {
 
-  public static final String NQ_FIND_CURRENT_RELATIONSHIPS_FROM_LEFT_SIDE =
-      "gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.findCurrentRightRelationships";
+  public static final String NQ_FIND_RELATIONSHIPS_BY_LEFT_SIDE =
+      "gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.findRelationshipsByLeftSide";
 
-  public static final String NQ_FIND_CURRENT_RELATIONSHIPS_FROM_RIGHT_SIDE =
-      "gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.findCurrentLeftRelationships";
+  public static final String NQ_FIND_RELATIONSHIPS_BY_RIGHT_SIDE =
+      "gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.findRelationshipsByRigtSide";
 
   public static final String NQ_PARAM_CURRENT_DATE = "currentDate";
 
