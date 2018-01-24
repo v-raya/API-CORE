@@ -33,6 +33,7 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.Referral"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.ReferralAssignment"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.ReferralClient"/>
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.SafetyAlert"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.StaffPerson"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.StaffPersonCaseLoad"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider"/>
@@ -49,6 +50,7 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.DeathCircumstancesType"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.FacilityType"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.LicenseStatus"/>
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.SafetyAlertActivationReasonType"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.SecondaryAssignmentRoleType"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.State"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.SystemCode"/>
