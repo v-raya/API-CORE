@@ -17,6 +17,7 @@ import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -39,8 +40,8 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
   @Inject private DeliveredServiceDao deliveredServiceDao;
 
   @Override
-  public Client create(ClientEntityAwareDTO entityAwareDTO) throws DataAccessServicesException {
-    throw new UnsupportedOperationException();
+  public Client find(Serializable primaryKey) {
+    return clientDao.find(primaryKey);
   }
 
   @Override
