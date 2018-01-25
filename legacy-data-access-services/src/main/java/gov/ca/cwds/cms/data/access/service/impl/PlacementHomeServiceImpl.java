@@ -114,8 +114,9 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
       throws DataAccessServicesException {
     try {
       validateParameters(placementHomeEntityAwareDTO);
-      runDataProcessing(placementHomeEntityAwareDTO, PrincipalUtils.getPrincipal());
-      runBusinessValidation(placementHomeEntityAwareDTO, PrincipalUtils.getPrincipal());
+      PerryAccount perryAccount = PrincipalUtils.getPrincipal();
+      runDataProcessing(placementHomeEntityAwareDTO, perryAccount);
+      runBusinessValidation(placementHomeEntityAwareDTO, perryAccount);
       createPlacementHome(placementHomeEntityAwareDTO);
       createPlacementHomeUc(placementHomeEntityAwareDTO);
       createCountyOwnership(placementHomeEntityAwareDTO);

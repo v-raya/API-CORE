@@ -13,12 +13,16 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.lang.annotation.Annotation;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author CWDS CALS API Team
  */
 public abstract class DroolsValidator<A extends Annotation, T> implements
     ConstraintValidator<A, T> {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(DroolsValidator.class);
 
   @Override
   public boolean isValid(T obj, ConstraintValidatorContext context) {
@@ -34,6 +38,7 @@ public abstract class DroolsValidator<A extends Annotation, T> implements
     try {
       detailsList = droolsService.performBusinessRules(configuration, validatedFact);
     } catch (DroolsException e) {
+      LOGGER.warn(e.getMessage(), e);
       throw new RuntimeException(
           String.format(DroolsErrorMessages.CANT_PERFORM_BUSINESS_VALIDATION,
               configuration.getAgendaGroup()));

@@ -54,7 +54,7 @@ public class ClientAbstractReadAuthorizer extends BaseAuthorizer<Client, Long> {
 
   private static Short getStaffGovernmentEntityType(final String staffCountyCodeString) {
     return StringUtils.isNotBlank(staffCountyCodeString)
-          ? Short.parseShort(staffCountyCodeString)
+          ? Short.valueOf(staffCountyCodeString)
           : null;
   }
 
