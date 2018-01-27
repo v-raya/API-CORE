@@ -35,7 +35,9 @@ import static gov.ca.cwds.cms.data.access.service.impl.IdGenerator.generateId;
 import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
 import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
 
-/** @author CWDS CALS API Team */
+/**
+ * @author CWDS CALS API Team
+ */
 public class PlacementHomeServiceImpl implements PlacementHomeService {
 
   @Inject
@@ -90,23 +92,27 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
   public void runBusinessValidation(
       PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, PerryAccount principal)
       throws DroolsException {
-      runRulesAgendaGroup(placementHomeEntityAwareDTO, PlacementHomeDroolsConfiguration.INSTANCE, principal);
+    runRulesAgendaGroup(placementHomeEntityAwareDTO, PlacementHomeDroolsConfiguration.INSTANCE,
+        principal);
   }
 
   @Override
   public void runDataProcessing(
-          PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, PerryAccount principal)
-          throws DroolsException {
-      runRulesAgendaGroup(placementHomeEntityAwareDTO, PlacementHomeDroolsConfiguration.DATA_PROCESSING_INSTANCE, principal);
+      PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, PerryAccount principal)
+      throws DroolsException {
+    runRulesAgendaGroup(placementHomeEntityAwareDTO,
+        PlacementHomeDroolsConfiguration.DATA_PROCESSING_INSTANCE, principal);
   }
 
-  private void runRulesAgendaGroup(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, PlacementHomeDroolsConfiguration dataProcessingInstance, PerryAccount principal2) throws DroolsException {
-      Set<IssueDetails> detailsList =
-                droolsService.performBusinessRules(
-                        dataProcessingInstance, placementHomeEntityAwareDTO, principal2);
-        if (!detailsList.isEmpty()) {
-            throw new BusinessValidationException("Can't create Placement Home", detailsList);
-      }
+  private void runRulesAgendaGroup(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO,
+      PlacementHomeDroolsConfiguration dataProcessingInstance, PerryAccount principal2)
+      throws DroolsException {
+    Set<IssueDetails> detailsList =
+        droolsService.performBusinessRules(
+            dataProcessingInstance, placementHomeEntityAwareDTO, principal2);
+    if (!detailsList.isEmpty()) {
+      throw new BusinessValidationException("Can't create Placement Home", detailsList);
+    }
   }
 
   @Override
@@ -134,8 +140,7 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
   }
 
   @Override
-  public PlacementHome update(PlacementHomeEntityAwareDTO entityAwareDTO)
-      throws DataAccessServicesException {
+  public PlacementHome update(PlacementHomeEntityAwareDTO entityAwareDTO) {
     throw new UnsupportedOperationException();
   }
 
@@ -323,7 +328,7 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
     ssaName3Dao.callStoredProc(parameterObject);
   }
 
-  void setDroolsService(DroolsService droolsService) {
+  public void setDroolsService(DroolsService droolsService) {
     this.droolsService = droolsService;
   }
 }

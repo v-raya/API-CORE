@@ -1,7 +1,6 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
 import static org.junit.Assert.assertTrue;
-
 import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.security.realm.PerryAccount;
@@ -21,7 +20,7 @@ public abstract class BaseDocToolRulesTest {
     principal = getPrincipal(getPrivilege());
   }
 
-  protected abstract String getPrivilege();
+  public abstract String getPrivilege();
 
   protected void assertRuleSatisfied(String ruleName, BusinessValidationException e) {
     assertTrue(
@@ -37,6 +36,14 @@ public abstract class BaseDocToolRulesTest {
                 .filter(issueDetails -> issueDetails.getCode().equals(ruleName))
                 .count()
             == 1);
+  }
+
+
+  protected void assertRuleValid(String ruleName, BusinessValidationException e) {
+    assertTrue(
+        e.getValidationDetailsList()
+            .stream()
+            .noneMatch(issueDetails -> issueDetails.getCode().equals(ruleName)));
   }
 
   private static PerryAccount getPrincipal(String privilege) {
