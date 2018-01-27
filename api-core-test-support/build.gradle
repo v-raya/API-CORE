@@ -1,0 +1,49 @@
+project.ext {
+    dropwizardVersion = '1.1.0'
+    commonsIOVersion = '2.5'
+    junitVersion = '4.12'
+    liquibaseVersion = '3.5.3'
+    cwdsModelVersion = '0.5.6_425-RC'
+    h2Version = '1.4.194'
+    securityTestSupportVersion = '0.5.3_312'
+}
+
+    dependencies {
+
+    compile project(':api-core-common')
+
+    compile group: 'junit', name: 'junit', version: junitVersion
+    compile group: 'commons-io', name: 'commons-io', version: commonsIOVersion
+
+    compile group: 'io.dropwizard', name: 'dropwizard-core', version: dropwizardVersion
+    compile group: 'io.dropwizard', name: 'dropwizard-hibernate', version: dropwizardVersion
+    compile group: 'io.dropwizard', name: 'dropwizard-testing', version: dropwizardVersion
+
+    compile group: 'org.liquibase', name: 'liquibase-core', version: liquibaseVersion
+    compile group: 'com.h2database', name: 'h2', version: h2Version
+
+    testCompile project(':api-core-rest')
+    testCompile group: 'gov.ca.cwds.api', name:'api-security-test-support', version: securityTestSupportVersion
+    testCompile (group: 'gov.ca.cwds.cals', name: 'lis-data-model', version: cwdsModelVersion, changing: true)
+    testCompile (group: 'gov.ca.cwds.cals', name: 'cals-ns-data-model', version: cwdsModelVersion, changing: true)
+    testCompile (group: 'gov.ca.cwds.cals', name: 'fas-data-model', version: cwdsModelVersion, changing: true)
+    testCompile (group: 'gov.ca.cwds.cals', name: 'cws-cms-data-model', version: cwdsModelVersion, changing: true)
+
+}
+
+publishing {
+    publications {
+        library(MavenPublication) {
+            from components.java
+            groupId commonGroupId
+            artifactId 'api-core-test-support'
+        }
+    }
+    repositories {
+        mavenLocal()
+        maven {
+            url artifactoryRepo
+        }
+    }
+}
+
