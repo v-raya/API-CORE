@@ -29,13 +29,15 @@ import org.hibernate.annotations.Type;
     name = ClientRelationship.NQ_FIND_RELATIONSHIPS_BY_LEFT_SIDE,
     query =
         "SELECT r FROM ClientRelationship r left join fetch r.type WHERE r.leftSide.identifier = :"
-            + CLIENT_ID + INACTIVE_IND_CONDITION + DATE_CONDITION
+            + CLIENT_ID + " AND r.rightSide.identifier != :" + CLIENT_ID
+            + INACTIVE_IND_CONDITION + DATE_CONDITION
 )
 @NamedQuery(
     name = ClientRelationship.NQ_FIND_RELATIONSHIPS_BY_RIGHT_SIDE,
     query =
         "SELECT r FROM ClientRelationship r left join fetch r.type WHERE r.rightSide.identifier = :"
-            + CLIENT_ID + INACTIVE_IND_CONDITION + DATE_CONDITION
+            + CLIENT_ID + " AND r.leftSide.identifier != :" + CLIENT_ID
+            + INACTIVE_IND_CONDITION + DATE_CONDITION
 )
 @SuppressWarnings("squid:S3437")
 public class ClientRelationship extends CmsPersistentObject {
