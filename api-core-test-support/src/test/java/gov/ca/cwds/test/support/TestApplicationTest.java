@@ -27,7 +27,7 @@ public class TestApplicationTest extends BaseApiTest<TestConfiguration> {
     @Before
     public void before() throws LiquibaseException {
         DatabaseHelper.setUpDatabase(application.getConfiguration().getFasDataSourceFactory(), DataSourceName.FAS);
-        DatabaseHelper.setUpDatabase(application.getConfiguration().getCmsDataSourceFactory(), DataSourceName.CMS);
+        DatabaseHelper.setUpDatabase(application.getConfiguration().getCmsDataSourceFactory(), DataSourceName.CWS);
         DatabaseHelper.setUpDatabase(application.getConfiguration().getLisDataSourceFactory(), DataSourceName.LIS);
         DatabaseHelper.setUpDatabase(application.getConfiguration().getNsDataSourceFactory(), DataSourceName.NS);
         DatabaseHelper.setUpDatabase(application.getConfiguration().getCmsrsDataSourceFactory(), DataSourceName.CMSRS);

@@ -78,7 +78,7 @@ public class DatabaseHelper {
     DatabaseHelper databaseHelper = new DatabaseHelper(
             dataSourceFactory.getUrl(), dataSourceFactory.getUser(), dataSourceFactory.getPassword());
     switch (dataSourceName) {
-      case CMS: databaseHelper.runScript("liquibase/cwscms_database_master.xml");
+      case CWS: databaseHelper.runScript("liquibase/cwscms_database_master.xml");
                 break;
       case LIS: databaseHelper.runScript("liquibase/lis_database_master.xml");
                 break;
