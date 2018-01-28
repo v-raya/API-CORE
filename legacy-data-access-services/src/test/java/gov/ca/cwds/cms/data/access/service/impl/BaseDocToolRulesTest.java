@@ -38,6 +38,16 @@ public abstract class BaseDocToolRulesTest {
             == 1);
   }
 
+  protected void assertRuleViolated(String ruleName, BusinessValidationException e, int count) {
+    assertTrue(
+        e.getValidationDetailsList()
+            .stream()
+            .filter(issueDetails -> issueDetails.getCode().equals(ruleName))
+            .count()
+            == count);
+  }
+
+
 
   protected void assertRuleValid(String ruleName, BusinessValidationException e) {
     assertTrue(

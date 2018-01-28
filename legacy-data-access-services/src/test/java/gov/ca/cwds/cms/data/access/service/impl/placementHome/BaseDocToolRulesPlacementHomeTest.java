@@ -36,6 +36,15 @@ public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRules
     }
   }
 
+  void checkRuleViolated(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, String ruleName, int count) throws DroolsException {
+    try {
+      runBusinessValidation(placementHomeEntityAwareDTO);
+      fail();
+    } catch (BusinessValidationException e) {
+      assertRuleViolated(ruleName, e, count);
+    }
+  }
+
   void checkRuleValid(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, String ruleName) throws DroolsException {
     try {
       runBusinessValidation(placementHomeEntityAwareDTO);
