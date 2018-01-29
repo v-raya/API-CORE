@@ -1,17 +1,17 @@
 package gov.ca.cwds.test.support;
 
-import io.dropwizard.Application;
-import io.dropwizard.setup.Environment;
+import com.google.inject.Module;
+import gov.ca.cwds.rest.BaseApiApplication;
+import io.dropwizard.setup.Bootstrap;
 
 /**
  * @author CWDS CALS API Team
  */
 
-public class TestApplication extends Application<TestConfiguration> {
-
+public class TestApplication extends BaseApiApplication<TestConfiguration> {
     @Override
-    public void run(TestConfiguration configuration, Environment environment) throws Exception {
-        environment.jersey().register(new TestResource());
+    public Module applicationModule(Bootstrap<TestConfiguration> bootstrap) {
+        return new ApplicationModule();
     }
 
 }

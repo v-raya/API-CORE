@@ -2,11 +2,13 @@ package gov.ca.cwds.test.support;
 
 import gov.ca.cwds.DataSourceName;
 import liquibase.exception.LiquibaseException;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,8 +26,8 @@ public class TestApplicationTest extends BaseApiTest<TestConfiguration> {
         return application;
     }
 
-    @Before
-    public void before() throws LiquibaseException {
+    @BeforeClass
+    public static void before() throws LiquibaseException {
         DatabaseHelper.setUpDatabase(application.getConfiguration().getFasDataSourceFactory(), DataSourceName.FAS);
         DatabaseHelper.setUpDatabase(application.getConfiguration().getCmsDataSourceFactory(), DataSourceName.CWS);
         DatabaseHelper.setUpDatabase(application.getConfiguration().getLisDataSourceFactory(), DataSourceName.LIS);
@@ -34,9 +36,16 @@ public class TestApplicationTest extends BaseApiTest<TestConfiguration> {
     }
 
     @Test
-    public void test() {
+    public void defaultPrincipalTest() throws IOException {
         assertEquals("Ok", clientTestRule.target("test").
                 request(MediaType.APPLICATION_JSON).get(String.class));
+    }
+
+    @Test
+    public void customPrincipalTest() throws IOException {
+        final Response response = clientTestRule.withSecurityToken("perry-account/custom-perry-account.json")
+                .target("test/custom").request(MediaType.APPLICATION_JSON).get();
+        assertEquals("Ok", response.readEntity(String.class));
     }
 
 }

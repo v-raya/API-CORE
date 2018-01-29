@@ -129,20 +129,3 @@ webSecurity:
     # Prevent everything other than same origin
     Content-Security-Policy: default-src 'self' 'unsafe-inline';
 
-logging:
-  level: INFO
-  loggers:
-    "org.hibernate.SQL":
-      level: INFO
-    "org.hibernate.type.descriptor.sql":
-      level: INFO
-    "AUDIT":
-      level: ALL
-    "gov.ca.cwds":
-      level: DEBUG
-  appenders:
-    - type: console
-      threshold: INFO
-      timeZone: UTC
-      target: stdout
-      logFormat: '[%X{remoteAddress}] [%date{ISO8601}] [%level] [%thread] [%X{uniqueId}] [%logger:] [%message]%n'
