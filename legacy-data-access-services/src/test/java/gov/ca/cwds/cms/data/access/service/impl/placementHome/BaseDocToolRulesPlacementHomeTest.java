@@ -62,7 +62,7 @@ public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRules
     return StaffPersonPrivileges.USR_PRV_RESOURCE_MGMT_PLACEMENT_FACILITY_MAINT;
   }
 
-  void check(String ruleCode) {
+  protected void check(String ruleCode) {
     try {
       placementHomeService.runDataProcessing(placementHomeEntityAwareDTO, principal);
       placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
@@ -78,7 +78,7 @@ public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRules
     }
   }
 
-  void assertValid() {
+  protected void assertValid() {
     try {
       placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
     } catch (Exception e) {
