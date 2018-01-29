@@ -35,9 +35,6 @@ rule "R-00182"
       details.setCode("R-00182");
       details.setInvalidValue($otherChildInPlacementHome.getBirthDt());
       details.setUserMessage("BIRTH DATE for the OTHER CHILDREN IN PLACEMENT HOME must be less or equal current date.");
-      details.setTechnicalMessage("Logic\n"
-                                   + "        OTHER_CHILDREN_IN_PLACEMENT_HOME: Birth_Date must be <= than system date.\n"
-                                   + "        For Placement Home Notebook in the OtherChildrenInHome Page Use PM Other Children in Home\n"
-                                   + "        View for any additional information needed.");
+      details.setTechnicalMessage("Logic OTHER_CHILDREN_IN_PLACEMENT_HOME: Birth_Date must be <= than system date. For Placement Home Notebook in the OtherChildrenInHome Page Use PM Other Children in Home View for any additional information needed.");
       validationDetailsList.add(details);
 end

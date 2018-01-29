@@ -1,0 +1,40 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
+import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
+import gov.ca.cwds.security.realm.PerryAccount;
+
+global java.util.Set validationDetailsList
+
+rule "R-04606-1"
+  dialect "mvel"
+  agenda-group "placement-home-data-processing-agenda"
+  when
+      /*
+        Rule Txt
+            When initially creating a Placement Home, default the 'Accepted Age From' to 0
+            and the 'Accepted Age To' to 18.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome: PlacementHome(ageFrmNo == null) from $placementHomeAwareDTO.entity
+  then
+      Short ageFrom = 0;
+      $placementHomeAwareDTO.getEntity().setAgeFrmNo(ageFrom);
+      update ($placementHomeAwareDTO);
+end
+
+rule "R-04606-2"
+  dialect "mvel"
+  agenda-group "placement-home-data-processing-agenda"
+  when
+      /*
+        Rule Txt
+            When initially creating a Placement Home, default the 'Accepted Age From' to 0
+            and the 'Accepted Age To' to 18.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome: PlacementHome(ageToNo == null) from $placementHomeAwareDTO.entity
+  then
+      Short ageTo = 18;
+      $placementHomeAwareDTO.getEntity().setAgeToNo(ageTo);
+      update ($placementHomeAwareDTO);
+end
