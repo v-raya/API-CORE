@@ -22,7 +22,7 @@ rule "R-00221"
       */
       $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
       $placementHome: PlacementHome() from $placementHomeAwareDTO.entity
-      $primarySubstituteCareProvider : SubstituteCareProvider(birthDt.isAfter(LocalDate.now().minus(18L, ChronoUnit.YEARS))) from $placementHome.primarySubstituteCareProvider
+      $primarySubstituteCareProvider : SubstituteCareProvider(birthDt != null && birthDt.isAfter(LocalDate.now().minus(18L, ChronoUnit.YEARS))) from $placementHome.primarySubstituteCareProvider
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-00221");
