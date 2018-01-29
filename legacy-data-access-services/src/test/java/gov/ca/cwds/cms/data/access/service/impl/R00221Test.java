@@ -15,7 +15,7 @@ public class R00221Test extends BaseDocToolRulesPlacementHomeTest {
 
 
   @Test
-  public void checkValidStartAndBirthDate() {
+  public void checkValidBirthDate() {
     SubstituteCareProvider substituteCareProvider = new SubstituteCareProvider();
     substituteCareProvider.setBirthDt(LocalDate.now().minus(19L, ChronoUnit.YEARS));
     placementHomeEntityAwareDTO.getEntity().setPrimarySubstituteCareProvider(substituteCareProvider);
@@ -23,7 +23,7 @@ public class R00221Test extends BaseDocToolRulesPlacementHomeTest {
   }
 
   @Test
-  public void checkInvalidStartAndBirthDate() {
+  public void checkInvalidBirthDate() {
     SubstituteCareProvider substituteCareProvider = new SubstituteCareProvider();
     substituteCareProvider.setBirthDt(LocalDate.now().minus(17L, ChronoUnit.YEARS));
     placementHomeEntityAwareDTO.getEntity().setPrimarySubstituteCareProvider(substituteCareProvider);
