@@ -1,12 +1,10 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
-import gov.ca.cwds.data.legacy.cms.entity.OtherAdultsInPlacementHome;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import org.junit.Test;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
 
 /**
  * Created by TPT2 on 12/21/2017.
