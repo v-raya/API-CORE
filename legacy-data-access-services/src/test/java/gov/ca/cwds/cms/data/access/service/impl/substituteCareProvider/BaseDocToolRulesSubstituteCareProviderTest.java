@@ -7,6 +7,7 @@ import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.impl.BaseDocToolRulesTest;
 import gov.ca.cwds.cms.data.access.service.impl.SubstituteCareProviderServiceImpl;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeInformation;
+import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import org.junit.Before;
@@ -30,6 +31,8 @@ public abstract class BaseDocToolRulesSubstituteCareProviderTest extends BaseDoc
 
     scpService = new SubstituteCareProviderServiceImpl();
     scpService.setDroolsService(droolsService);
+
+    entityAwareDTO.setEntity(new SubstituteCareProvider());
   }
 
   void checkSuccess() {
