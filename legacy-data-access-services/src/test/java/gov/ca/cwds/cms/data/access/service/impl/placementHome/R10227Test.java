@@ -1,5 +1,6 @@
 package gov.ca.cwds.cms.data.access.service.impl.placementHome;
 
+import gov.ca.cwds.cms.data.access.dto.OtherAdultInHomeEntityAwareDTO;
 import gov.ca.cwds.data.legacy.cms.entity.OtherAdultsInPlacementHome;
 import org.junit.Test;
 
@@ -13,7 +14,9 @@ public class R10227Test extends BaseDocToolRulesPlacementHomeTest {
         OtherAdultsInPlacementHome otherAdultsInPlacementHome = new OtherAdultsInPlacementHome();
         otherAdultsInPlacementHome.setBirthDt(LocalDate.now().minus(20, ChronoUnit.YEARS));
         otherAdultsInPlacementHome.setIdentfdDt(LocalDate.now().minus(10, ChronoUnit.YEARS));
-        placementHomeEntityAwareDTO.getEntity().setOtherAdultsInPlacementHomes(Collections.singletonList(otherAdultsInPlacementHome));
+        OtherAdultInHomeEntityAwareDTO otherAdultInHomeEntityAwareDTO = new OtherAdultInHomeEntityAwareDTO();
+        otherAdultInHomeEntityAwareDTO.setEntity(otherAdultsInPlacementHome);
+        placementHomeEntityAwareDTO.setOtherAdultInHomeParameterObjects(Collections.singletonList(otherAdultInHomeEntityAwareDTO));
         assertValid();
     }
 
@@ -22,7 +25,9 @@ public class R10227Test extends BaseDocToolRulesPlacementHomeTest {
         OtherAdultsInPlacementHome otherAdultsInPlacementHome = new OtherAdultsInPlacementHome();
         otherAdultsInPlacementHome.setBirthDt(LocalDate.now().minus(20, ChronoUnit.YEARS));
         otherAdultsInPlacementHome.setIdentfdDt(LocalDate.now().minus(30, ChronoUnit.YEARS));
-        placementHomeEntityAwareDTO.getEntity().setOtherAdultsInPlacementHomes(Collections.singletonList(otherAdultsInPlacementHome));
+        OtherAdultInHomeEntityAwareDTO otherAdultInHomeEntityAwareDTO = new OtherAdultInHomeEntityAwareDTO();
+        otherAdultInHomeEntityAwareDTO.setEntity(otherAdultsInPlacementHome);
+        placementHomeEntityAwareDTO.setOtherAdultInHomeParameterObjects(Collections.singletonList(otherAdultInHomeEntityAwareDTO));
         check("R-10227");
     }
 }
