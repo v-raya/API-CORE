@@ -86,7 +86,7 @@ public class DatabaseHelper {
                 break;
       case NS:  databaseHelper.runScript("liquibase/calsns_database_master_for_tests.xml");
                 break;
-      case CMSRS: databaseHelper.runScript("liquibase/cwscmsrs_database_master.xml");
+      case CWSRS: databaseHelper.runScript("liquibase/cwscmsrs_database_master.xml");
     };
   }
 

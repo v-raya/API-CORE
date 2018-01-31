@@ -61,8 +61,8 @@ public class RestClientTestRule<T extends Configuration> implements TestRule {
     try {
       return generateToken(DEFAULT_IDENTITY_JSON);
     } catch (Exception e) {
-      LOG.warn("Cannot generate token");
-      return null;
+      LOG.error("Cannot generate token", e);
+      throw new RuntimeException(e);
     }
   }
 
@@ -83,7 +83,7 @@ public class RestClientTestRule<T extends Configuration> implements TestRule {
     }
 
     Properties properties = new Properties();
-    properties.load(getClass().getClassLoader().getResourceAsStream("test-shiro.ini"));
+    properties.load(getClass().getClassLoader().getResourceAsStream("api-core-test-support-shiro.ini"));
 
     jwtConfiguration = new JwtConfiguration();
     //JWT
@@ -111,7 +111,7 @@ public class RestClientTestRule<T extends Configuration> implements TestRule {
 
   public WebTarget target(String pathInfo) throws IOException {
     String restUrl = getUriString() + pathInfo;
-    WebTarget target = client.target(restUrl).queryParam("token", token);
+    WebTarget target = client.target(restUrl).queryParam("token", token).register(new LoggingFilter());
     token = getDefaultToken();
     return target;
   }
