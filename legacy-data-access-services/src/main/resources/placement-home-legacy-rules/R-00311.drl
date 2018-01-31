@@ -1,0 +1,67 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
+import gov.ca.cwds.data.legacy.cms.entity.OtherAdultsInPlacementHome
+import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO
+import gov.ca.cwds.cms.data.access.dto.OtherAdultInHomeEntityAwareDTO
+import gov.ca.cwds.security.realm.PerryAccount
+
+global java.util.Set validationDetailsList
+
+rule "R-00311-CA"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+      Code: R - 00311
+
+      Rule Txt
+
+      GOVERNMENT ENTITY TYPE (location county) must be specified if STATE CODE TYPE is CA and must not be specified if not CA .
+
+      Logic
+
+      If State_Code_Type = CA, Government_Entity_Type must not be null. If State_Code_Type <> CA,
+      Government_Entity_Type must be null.
+
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome : PlacementHome(stateCode == 1828, gvrEntc == null) from $placementHomeAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-00311");
+      details.setProperty("PlacementHome.gvrEntc");
+      details.setInvalidValue($placementHome.gvrEntc);
+      details.setUserMessage("GOVERNMENT ENTITY TYPE (location county) must be specified if STATE CODE TYPE is CA and must not be specified if not CA .");
+      details.setTechnicalMessage("If State_Code_Type = CA, Government_Entity_Type must not be null. If State_Code_Type <> CA, Government_Entity_Type must be null.");
+      validationDetailsList.add(details);
+end
+
+
+rule "R-00311-NON-CA"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+      Code: R - 00311
+
+      Rule Txt
+
+      GOVERNMENT ENTITY TYPE (location county) must be specified if STATE CODE TYPE is CA and must not be specified if not CA .
+
+      Logic
+
+      If State_Code_Type = CA, Government_Entity_Type must not be null. If State_Code_Type <> CA,
+      Government_Entity_Type must be null.
+
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome : PlacementHome(stateCode != 1828, gvrEntc != null) from $placementHomeAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-00311");
+      details.setProperty("PlacementHome.gvrEntc");
+      details.setInvalidValue($placementHome.gvrEntc);
+      details.setUserMessage("GOVERNMENT ENTITY TYPE (location county) must be specified if STATE CODE TYPE is CA and must not be specified if not CA .");
+      details.setTechnicalMessage("If State_Code_Type = CA, Government_Entity_Type must not be null. If State_Code_Type <> CA, Government_Entity_Type must be null.");
+      validationDetailsList.add(details);
+end
