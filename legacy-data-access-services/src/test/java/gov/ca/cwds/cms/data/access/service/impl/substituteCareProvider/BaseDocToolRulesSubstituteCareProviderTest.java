@@ -46,6 +46,18 @@ public abstract class BaseDocToolRulesSubstituteCareProviderTest extends BaseDoc
     }
   }
 
+  protected void checkSuccess(String ruleCode) {
+    try {
+      scpService.runDataProcessing(entityAwareDTO, principal);
+      scpService.runBusinessValidation(entityAwareDTO, principal);
+    } catch (BusinessValidationException e) {
+      assert e.getValidationDetailsList().stream().noneMatch(issueDetails -> issueDetails.getCode().equals(ruleCode));
+    } catch (DroolsException e) {
+      fail(e.getMessage());
+    }
+
+  }
+
   protected void checkFail(String ruleCode) {
     try {
       scpService.runDataProcessing(entityAwareDTO, principal);
