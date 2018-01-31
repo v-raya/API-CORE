@@ -11,5 +11,5 @@ import javax.persistence.Entity;
 @Cacheable
 @DiscriminatorValue(value = "PRTERM_C")
 public class ParentalRightTerminationType extends SystemCodeTable {
-    private static final long serialVersionUID = -477660288071506104L;
+  private static final long serialVersionUID = -477660288071506104L;
 }
