@@ -1,0 +1,64 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
+import gov.ca.cwds.data.legacy.cms.entity.EmergencyContactDetail
+import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider
+import gov.ca.cwds.cms.data.access.dto.ExtendedSCPEntityAwareDTO
+import org.apache.commons.lang3.StringUtils
+import java.time.temporal.ChronoUnit
+import java.time.LocalDate
+
+global java.util.Set validationDetailsList
+
+function boolean noAlphaCharsSingleString(String string) {
+    return string != null && !string.matches(".*[a-zA-Z]+.*");
+}
+
+rule "R-04966-firstNm"
+  dialect "mvel"
+  agenda-group "substitute-care-provider-agenda"
+  when
+      $scpAwareDTO: ExtendedSCPEntityAwareDTO()
+      $primarySubstituteCareProvider : SubstituteCareProvider(noAlphaCharsSingleString(firstNm)) from $scpAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-04966");
+      details.setProperty("SubstituteCareProvider.firstNm");
+      details.setInvalidValue($primarySubstituteCareProvider.firstNm);
+      details.setUserMessage("Substitute care provider first name must have at least one alpha character");
+      details.setTechnicalMessage("Substitute care provider first name must have at least one alpha character");
+      validationDetailsList.add(details);
+end
+
+rule "R-04966-lastNm"
+  dialect "mvel"
+  agenda-group "substitute-care-provider-agenda"
+  when
+      $scpAwareDTO: ExtendedSCPEntityAwareDTO()
+      $primarySubstituteCareProvider : SubstituteCareProvider(noAlphaCharsSingleString(lastNm)) from $scpAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-04966");
+      details.setProperty("SubstituteCareProvider.lastNm");
+      details.setInvalidValue($primarySubstituteCareProvider.lastNm);
+      details.setUserMessage("Substitute care provider last name must have at least one alpha character");
+      details.setTechnicalMessage("Substitute care provider last name must have at least one alpha character");
+      validationDetailsList.add(details);
+end
+
+rule "R-04966-midIniNm"
+  dialect "mvel"
+  agenda-group "substitute-care-provider-agenda"
+  when
+      $scpAwareDTO: ExtendedSCPEntityAwareDTO()
+      $primarySubstituteCareProvider : SubstituteCareProvider(noAlphaCharsSingleString(midIniNm)) from $scpAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-04966");
+      details.setProperty("SubstituteCareProvider.midIniNm");
+      details.setInvalidValue($primarySubstituteCareProvider.midIniNm);
+      details.setUserMessage("Substitute care provider middle name must have at least one alpha character");
+      details.setTechnicalMessage("Substitute care provider middle name must have at least one alpha character");
+      validationDetailsList.add(details);
+end
+
+

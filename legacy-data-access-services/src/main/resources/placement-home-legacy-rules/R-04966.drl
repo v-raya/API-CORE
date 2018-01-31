@@ -1,0 +1,408 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
+import gov.ca.cwds.data.legacy.cms.entity.OtherChildrenInPlacementHome
+import gov.ca.cwds.data.legacy.cms.entity.OtherAdultsInPlacementHome
+import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO
+import gov.ca.cwds.cms.data.access.dto.OtherAdultInHomeEntityAwareDTO
+import gov.ca.cwds.cms.data.access.dto.OtherChildInHomeEntityAwareDTO
+import gov.ca.cwds.security.realm.PerryAccount
+import java.lang.String
+
+global java.util.Set validationDetailsList
+
+function boolean noAlphaChars(String string) {
+    return string != null && !string.matches("([^\\s]*[a-zA-Z]+[^\\s]*[\\s]*)+");
+}
+
+function boolean noAlphaCharsSingleString(String string) {
+    return string != null && !string.matches(".*[a-zA-Z]+.*");
+}
+
+rule "R-04966-other-adults-name"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+      Code: R - 04966
+
+      Rule Txt
+
+      There must be at least one alpha character in at least one of the name fields (first, middle, last).
+
+      Logic
+
+      For the following pages: Client/fraNameAndID,
+      Client/fraNames, Placement Home/fraSCP, Person/fraID.
+      If ((txtFirstName does not have an alpha character) and (txtMiddleName does not have an alpha character) and (txtLastName does not have an alpha character)),
+      then return the cursor to the txtFirstName control and trigger Error 1201.
+      For the following pages in the Search notebook:
+      Search/fraClientSearch, Search/fraClientSubstituteCareProviderSearch, fraSubstituteCareProvider,
+      fraHomeSearch(Rel/FFH/SFH/Grdn), fraHomeSearch(FFACH/FFH), fraHomeSearch(GH/FFA),
+      and fraHomeSearch(GH/FFACH) if you are using First Name, Middle Name,
+      Last Name as part of your search criteria and the rule check fails then disable the OK button.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $otherAdultInHomeEntityAwareDTO: OtherAdultInHomeEntityAwareDTO() from $placementHomeAwareDTO.otherAdultInHomeParameterObjects
+      $otherAdults : OtherAdultsInPlacementHome(noAlphaChars(othAdltnm)) from $otherAdultInHomeEntityAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-04966");
+      details.setProperty("OtherAdultsInPlacementHome.othAdltnm");
+      details.setInvalidValue($otherAdults.othAdltnm);
+      details.setUserMessage("Other adults name must have at least one alpha character");
+      details.setTechnicalMessage("Other adults name must have at least one alpha character");
+      validationDetailsList.add(details);
+end
+
+
+rule "R-04966-other-children-name"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+      Code: R - 04966
+
+      Rule Txt
+
+      There must be at least one alpha character in at least one of the name fields (first, middle, last).
+
+      Logic
+
+      For the following pages: Client/fraNameAndID,
+      Client/fraNames, Placement Home/fraSCP, Person/fraID.
+      If ((txtFirstName does not have an alpha character) and (txtMiddleName does not have an alpha character) and (txtLastName does not have an alpha character)),
+      then return the cursor to the txtFirstName control and trigger Error 1201.
+      For the following pages in the Search notebook:
+      Search/fraClientSearch, Search/fraClientSubstituteCareProviderSearch, fraSubstituteCareProvider,
+      fraHomeSearch(Rel/FFH/SFH/Grdn), fraHomeSearch(FFACH/FFH), fraHomeSearch(GH/FFA),
+      and fraHomeSearch(GH/FFACH) if you are using First Name, Middle Name,
+      Last Name as part of your search criteria and the rule check fails then disable the OK button.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $otherChildInHomeEntityAwareDTO: OtherChildInHomeEntityAwareDTO() from $placementHomeAwareDTO.otherChildrenInHomeParameterObjects
+      $otherChild : OtherChildrenInPlacementHome(noAlphaChars(othchldNm)) from $otherChildInHomeEntityAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-04966");
+      details.setProperty("OtherChildrenInPlacementHome.othchldNm");
+      details.setInvalidValue($otherChild.othchldNm);
+      details.setUserMessage("Other child name must have at least one alpha character");
+      details.setTechnicalMessage("Other child name must have at least one alpha character");
+      validationDetailsList.add(details);
+end
+
+rule "R-04966-bckPersnm"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+      Code: R - 04966
+
+      Rule Txt
+
+      There must be at least one alpha character in at least one of the name fields (first, middle, last).
+
+      Logic
+
+      For the following pages: Client/fraNameAndID,
+      Client/fraNames, Placement Home/fraSCP, Person/fraID.
+      If ((txtFirstName does not have an alpha character) and (txtMiddleName does not have an alpha character) and (txtLastName does not have an alpha character)),
+      then return the cursor to the txtFirstName control and trigger Error 1201.
+      For the following pages in the Search notebook:
+      Search/fraClientSearch, Search/fraClientSubstituteCareProviderSearch, fraSubstituteCareProvider,
+      fraHomeSearch(Rel/FFH/SFH/Grdn), fraHomeSearch(FFACH/FFH), fraHomeSearch(GH/FFA),
+      and fraHomeSearch(GH/FFACH) if you are using First Name, Middle Name,
+      Last Name as part of your search criteria and the rule check fails then disable the OK button.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome : PlacementHome(noAlphaChars(bckPersnm)) from $placementHomeAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-04966");
+      details.setProperty("PlacementHome.bckPersnm");
+      details.setInvalidValue($placementHome.bckPersnm);
+      details.setUserMessage("Backup contact person name must have at least one alpha character");
+      details.setTechnicalMessage("BACKUP_CONTACT_PERSON_NAME must have at least one alpha character");
+      validationDetailsList.add(details);
+end
+
+rule "R-04966-pyeFstnm"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+      Code: R - 04966
+
+      Rule Txt
+
+      There must be at least one alpha character in at least one of the name fields (first, middle, last).
+
+      Logic
+
+      For the following pages: Client/fraNameAndID,
+      Client/fraNames, Placement Home/fraSCP, Person/fraID.
+      If ((txtFirstName does not have an alpha character) and (txtMiddleName does not have an alpha character) and (txtLastName does not have an alpha character)),
+      then return the cursor to the txtFirstName control and trigger Error 1201.
+      For the following pages in the Search notebook:
+      Search/fraClientSearch, Search/fraClientSubstituteCareProviderSearch, fraSubstituteCareProvider,
+      fraHomeSearch(Rel/FFH/SFH/Grdn), fraHomeSearch(FFACH/FFH), fraHomeSearch(GH/FFA),
+      and fraHomeSearch(GH/FFACH) if you are using First Name, Middle Name,
+      Last Name as part of your search criteria and the rule check fails then disable the OK button.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome : PlacementHome(noAlphaCharsSingleString(pyeFstnm)) from $placementHomeAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-04966");
+      details.setProperty("PlacementHome.pyeFstnm");
+      details.setInvalidValue($placementHome.pyeFstnm);
+      details.setUserMessage("Payee first name must have at least one alpha character");
+      details.setTechnicalMessage("Payee first name must have at least one alpha character");
+      validationDetailsList.add(details);
+end
+
+rule "R-04966-pyeLstnm"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+      Code: R - 04966
+
+      Rule Txt
+
+      There must be at least one alpha character in at least one of the name fields (first, middle, last).
+
+      Logic
+
+      For the following pages: Client/fraNameAndID,
+      Client/fraNames, Placement Home/fraSCP, Person/fraID.
+      If ((txtFirstName does not have an alpha character) and (txtMiddleName does not have an alpha character) and (txtLastName does not have an alpha character)),
+      then return the cursor to the txtFirstName control and trigger Error 1201.
+      For the following pages in the Search notebook:
+      Search/fraClientSearch, Search/fraClientSubstituteCareProviderSearch, fraSubstituteCareProvider,
+      fraHomeSearch(Rel/FFH/SFH/Grdn), fraHomeSearch(FFACH/FFH), fraHomeSearch(GH/FFA),
+      and fraHomeSearch(GH/FFACH) if you are using First Name, Middle Name,
+      Last Name as part of your search criteria and the rule check fails then disable the OK button.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome : PlacementHome(noAlphaCharsSingleString(pyeLstnm)) from $placementHomeAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-04966");
+      details.setProperty("PlacementHome.pyeLstnm");
+      details.setInvalidValue($placementHome.pyeLstnm);
+      details.setUserMessage("Payee last name must have at least one alpha character");
+      details.setTechnicalMessage("Payee last name must have at least one alpha character");
+      validationDetailsList.add(details);
+end
+
+rule "R-04966-pyeMidnm"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+      Code: R - 04966
+
+      Rule Txt
+
+      There must be at least one alpha character in at least one of the name fields (first, middle, last).
+
+      Logic
+
+      For the following pages: Client/fraNameAndID,
+      Client/fraNames, Placement Home/fraSCP, Person/fraID.
+      If ((txtFirstName does not have an alpha character) and (txtMiddleName does not have an alpha character) and (txtLastName does not have an alpha character)),
+      then return the cursor to the txtFirstName control and trigger Error 1201.
+      For the following pages in the Search notebook:
+      Search/fraClientSearch, Search/fraClientSubstituteCareProviderSearch, fraSubstituteCareProvider,
+      fraHomeSearch(Rel/FFH/SFH/Grdn), fraHomeSearch(FFACH/FFH), fraHomeSearch(GH/FFA),
+      and fraHomeSearch(GH/FFACH) if you are using First Name, Middle Name,
+      Last Name as part of your search criteria and the rule check fails then disable the OK button.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome : PlacementHome(noAlphaCharsSingleString(pyeMidnm)) from $placementHomeAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-04966");
+      details.setProperty("PlacementHome.pyeMidnm");
+      details.setInvalidValue($placementHome.pyeMidnm);
+      details.setUserMessage("Payee middle name must have at least one alpha character");
+      details.setTechnicalMessage("Payee middle name must have at least one alpha character");
+      validationDetailsList.add(details);
+end
+
+rule "R-04966-prmCnctnm"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+      Code: R - 04966
+
+      Rule Txt
+
+      There must be at least one alpha character in at least one of the name fields (first, middle, last).
+
+      Logic
+
+      For the following pages: Client/fraNameAndID,
+      Client/fraNames, Placement Home/fraSCP, Person/fraID.
+      If ((txtFirstName does not have an alpha character) and (txtMiddleName does not have an alpha character) and (txtLastName does not have an alpha character)),
+      then return the cursor to the txtFirstName control and trigger Error 1201.
+      For the following pages in the Search notebook:
+      Search/fraClientSearch, Search/fraClientSubstituteCareProviderSearch, fraSubstituteCareProvider,
+      fraHomeSearch(Rel/FFH/SFH/Grdn), fraHomeSearch(FFACH/FFH), fraHomeSearch(GH/FFA),
+      and fraHomeSearch(GH/FFACH) if you are using First Name, Middle Name,
+      Last Name as part of your search criteria and the rule check fails then disable the OK button.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome : PlacementHome(noAlphaChars(prmCnctnm)) from $placementHomeAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-04966");
+      details.setProperty("PlacementHome.prmCnctnm");
+      details.setInvalidValue($placementHome.prmCnctnm);
+      details.setUserMessage("Primary contact name must have at least one alpha character");
+      details.setTechnicalMessage("Primary contact name must have at least one alpha character");
+      validationDetailsList.add(details);
+end
+
+rule "R-04966-prmSubsnm"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+      Code: R - 04966
+
+      Rule Txt
+
+      There must be at least one alpha character in at least one of the name fields (first, middle, last).
+
+      Logic
+
+      For the following pages: Client/fraNameAndID,
+      Client/fraNames, Placement Home/fraSCP, Person/fraID.
+      If ((txtFirstName does not have an alpha character) and (txtMiddleName does not have an alpha character) and (txtLastName does not have an alpha character)),
+      then return the cursor to the txtFirstName control and trigger Error 1201.
+      For the following pages in the Search notebook:
+      Search/fraClientSearch, Search/fraClientSubstituteCareProviderSearch, fraSubstituteCareProvider,
+      fraHomeSearch(Rel/FFH/SFH/Grdn), fraHomeSearch(FFACH/FFH), fraHomeSearch(GH/FFA),
+      and fraHomeSearch(GH/FFACH) if you are using First Name, Middle Name,
+      Last Name as part of your search criteria and the rule check fails then disable the OK button.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome : PlacementHome(noAlphaChars(prmSubsnm)) from $placementHomeAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-04966");
+      details.setProperty("PlacementHome.prmSubsnm");
+      details.setInvalidValue($placementHome.prmSubsnm);
+      details.setUserMessage("Primary SCP name must have at least one alpha character");
+      details.setTechnicalMessage("Primary SCP name must have at least one alpha character");
+      validationDetailsList.add(details);
+end
+
+rule "R-04966-laPMidnm"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+      Code: R - 04966
+
+      Rule Txt
+
+      There must be at least one alpha character in at least one of the name fields (first, middle, last).
+
+      Logic
+
+      For the following pages: Client/fraNameAndID,
+      Client/fraNames, Placement Home/fraSCP, Person/fraID.
+      If ((txtFirstName does not have an alpha character) and (txtMiddleName does not have an alpha character) and (txtLastName does not have an alpha character)),
+      then return the cursor to the txtFirstName control and trigger Error 1201.
+      For the following pages in the Search notebook:
+      Search/fraClientSearch, Search/fraClientSubstituteCareProviderSearch, fraSubstituteCareProvider,
+      fraHomeSearch(Rel/FFH/SFH/Grdn), fraHomeSearch(FFACH/FFH), fraHomeSearch(GH/FFA),
+      and fraHomeSearch(GH/FFACH) if you are using First Name, Middle Name,
+      Last Name as part of your search criteria and the rule check fails then disable the OK button.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome : PlacementHome(noAlphaCharsSingleString(laPMidnm)) from $placementHomeAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-04966");
+      details.setProperty("PlacementHome.laPMidnm");
+      details.setInvalidValue($placementHome.laPMidnm);
+      details.setUserMessage("LA Payee middle name must have at least one alpha character");
+      details.setTechnicalMessage("LA Payee middle name must have at least one alpha character");
+      validationDetailsList.add(details);
+end
+
+rule "R-04966-laPLstnm"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+      Code: R - 04966
+
+      Rule Txt
+
+      There must be at least one alpha character in at least one of the name fields (first, middle, last).
+
+      Logic
+
+      For the following pages: Client/fraNameAndID,
+      Client/fraNames, Placement Home/fraSCP, Person/fraID.
+      If ((txtFirstName does not have an alpha character) and (txtMiddleName does not have an alpha character) and (txtLastName does not have an alpha character)),
+      then return the cursor to the txtFirstName control and trigger Error 1201.
+      For the following pages in the Search notebook:
+      Search/fraClientSearch, Search/fraClientSubstituteCareProviderSearch, fraSubstituteCareProvider,
+      fraHomeSearch(Rel/FFH/SFH/Grdn), fraHomeSearch(FFACH/FFH), fraHomeSearch(GH/FFA),
+      and fraHomeSearch(GH/FFACH) if you are using First Name, Middle Name,
+      Last Name as part of your search criteria and the rule check fails then disable the OK button.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome : PlacementHome(noAlphaCharsSingleString(laPLstnm)) from $placementHomeAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-04966");
+      details.setProperty("PlacementHome.laPLstnm");
+      details.setInvalidValue($placementHome.laPLstnm);
+      details.setUserMessage("LA Payee last name must have at least one alpha character");
+      details.setTechnicalMessage("LA Payee last name must have at least one alpha character");
+      validationDetailsList.add(details);
+end
+
+rule "R-04966-laPFstnm"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+      Code: R - 04966
+
+      Rule Txt
+
+      There must be at least one alpha character in at least one of the name fields (first, middle, last).
+
+      Logic
+
+      For the following pages: Client/fraNameAndID,
+      Client/fraNames, Placement Home/fraSCP, Person/fraID.
+      If ((txtFirstName does not have an alpha character) and (txtMiddleName does not have an alpha character) and (txtLastName does not have an alpha character)),
+      then return the cursor to the txtFirstName control and trigger Error 1201.
+      For the following pages in the Search notebook:
+      Search/fraClientSearch, Search/fraClientSubstituteCareProviderSearch, fraSubstituteCareProvider,
+      fraHomeSearch(Rel/FFH/SFH/Grdn), fraHomeSearch(FFACH/FFH), fraHomeSearch(GH/FFA),
+      and fraHomeSearch(GH/FFACH) if you are using First Name, Middle Name,
+      Last Name as part of your search criteria and the rule check fails then disable the OK button.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $placementHome : PlacementHome(noAlphaCharsSingleString(laPFstnm)) from $placementHomeAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-04966");
+      details.setProperty("PlacementHome.laPFstnm");
+      details.setInvalidValue($placementHome.laPFstnm);
+      details.setUserMessage("LA Payee first name must have at least one alpha character");
+      details.setTechnicalMessage("LA Payee first name must have at least one alpha character");
+      validationDetailsList.add(details);
+end
+

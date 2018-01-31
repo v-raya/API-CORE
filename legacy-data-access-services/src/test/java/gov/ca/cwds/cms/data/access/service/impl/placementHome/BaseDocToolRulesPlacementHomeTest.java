@@ -78,6 +78,17 @@ public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRules
     }
   }
 
+  protected void assertValid(String ruleCode) {
+    try {
+      placementHomeService.runDataProcessing(placementHomeEntityAwareDTO, principal);
+      placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
+    } catch (BusinessValidationException e) {
+      assert e.getValidationDetailsList().stream().noneMatch(issueDetails -> issueDetails.getCode().equals(ruleCode));
+    } catch (Exception e) {
+      fail(e.getMessage());
+    }
+  }
+
   protected void assertValid() {
     try {
       placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
