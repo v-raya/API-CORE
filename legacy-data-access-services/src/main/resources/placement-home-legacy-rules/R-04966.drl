@@ -7,15 +7,16 @@ import gov.ca.cwds.cms.data.access.dto.OtherAdultInHomeEntityAwareDTO
 import gov.ca.cwds.cms.data.access.dto.OtherChildInHomeEntityAwareDTO
 import gov.ca.cwds.security.realm.PerryAccount
 import java.lang.String
+import org.apache.commons.lang3.StringUtils
 
 global java.util.Set validationDetailsList
 
 function boolean noAlphaChars(String string) {
-    return string != null && !string.matches("([^\\s]*[a-zA-Z]+[^\\s]*[\\s]*)+");
+    return StringUtils.isNotBlank(string) && !string.matches("([^\\s]*[a-zA-Z]+[^\\s]*[\\s]*)+");
 }
 
 function boolean noAlphaCharsSingleString(String string) {
-    return string != null && !string.matches(".*[a-zA-Z]+.*");
+    return StringUtils.isNotBlank(string) && !string.matches(".*[a-zA-Z]+.*");
 }
 
 rule "R-04966-other-adults-name"
