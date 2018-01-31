@@ -2,6 +2,7 @@ package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.enums.CompetencyType;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.ParentalRightTerminationType;
 import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -26,7 +27,7 @@ import org.hibernate.annotations.Type;
 @Table(name = "PRG_TRMT")
 public class ParentalRightsTermination extends CmsPersistentObject {
 
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = -1268395950553736492L;
 
   @EmbeddedId
   private Id id = new Id();
@@ -35,10 +36,10 @@ public class ParentalRightsTermination extends CmsPersistentObject {
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
   @JoinColumn(
-    name = "FKCHLD_CLT",
-    referencedColumnName = "FKCLIENT_T",
-    insertable = false,
-    updatable = false
+      name = "FKCHLD_CLT",
+      referencedColumnName = "FKCLIENT_T",
+      insertable = false,
+      updatable = false
   )
   private ChildClient child;
 
@@ -95,8 +96,10 @@ public class ParentalRightsTermination extends CmsPersistentObject {
   private String locationDescription;
 
   @NotNull
-  @Column(name = "PRTERM_C")
-  private short parentalRightTerminationType;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @Fetch(FetchMode.SELECT)
+  @JoinColumn(name = "PRTERM_C", referencedColumnName = "SYS_ID")
+  private ParentalRightTerminationType parentalRightTerminationType;
 
   @Type(type = "yes_no")
   @Column(name = "APPEAL_IND")
@@ -217,12 +220,13 @@ public class ParentalRightsTermination extends CmsPersistentObject {
     this.courtCaseNumber = courtcsNo;
   }
 
-  public short getParentalRightTerminationType() {
+  public ParentalRightTerminationType getParentalRightTerminationType() {
     return parentalRightTerminationType;
   }
 
-  public void setParentalRightTerminationType(short prtermC) {
-    this.parentalRightTerminationType = prtermC;
+  public void setParentalRightTerminationType(
+      ParentalRightTerminationType parentalRightTerminationType) {
+    this.parentalRightTerminationType = parentalRightTerminationType;
   }
 
   @Override
@@ -233,31 +237,20 @@ public class ParentalRightsTermination extends CmsPersistentObject {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ParentalRightsTermination prgTrmt = (ParentalRightsTermination) o;
-    return parentalRightTerminationType == prgTrmt.parentalRightTerminationType &&
-        Objects.equals(date, prgTrmt.date) &&
-        Objects.equals(underAppealedIndicator, prgTrmt.underAppealedIndicator) &&
-        Objects.equals(voluntaryRelinquishmentIndicator, prgTrmt.voluntaryRelinquishmentIndicator) &&
-        Objects.equals(child, prgTrmt.child) &&
-        Objects.equals(parent, prgTrmt.parent) &&
-        Objects.equals(courtId, prgTrmt.courtId) &&
-        Objects.equals(commentDescription, prgTrmt.commentDescription) &&
-        Objects.equals(locationDescription, prgTrmt.locationDescription) &&
-        Objects.equals(competencyType, prgTrmt.competencyType) &&
-        Objects.equals(competencyExaminationDate, prgTrmt.competencyExaminationDate) &&
-        Objects.equals(competencyProfessionalName, prgTrmt.competencyProfessionalName) &&
-        Objects.equals(conservatorshipAllowsRelIndicator, prgTrmt.conservatorshipAllowsRelIndicator) &&
-        Objects.equals(courtCaseNumber, prgTrmt.courtCaseNumber);
+    if (!super.equals(o)) {
+      return false;
+    }
+    ParentalRightsTermination that = (ParentalRightsTermination) o;
+    return Objects.equals(child, that.child) &&
+        Objects.equals(parent, that.parent) &&
+        Objects.equals(courtCaseNumber, that.courtCaseNumber) &&
+        Objects.equals(courtId, that.courtId);
   }
 
   @Override
   public int hashCode() {
 
-    return Objects
-        .hash(date, underAppealedIndicator, voluntaryRelinquishmentIndicator, child, parent, courtId,
-            commentDescription, locationDescription, competencyType, competencyExaminationDate,
-            competencyProfessionalName, conservatorshipAllowsRelIndicator, courtCaseNumber,
-            parentalRightTerminationType);
+    return Objects.hash(super.hashCode(), child, parent, courtCaseNumber, courtId);
   }
 
   @Override
@@ -280,7 +273,8 @@ public class ParentalRightsTermination extends CmsPersistentObject {
     @Column(name = "FKCLIENT_T")
     private String parentId;
 
-    public Id() {}
+    public Id() {
+    }
 
     public Id(String childId, String parentId) {
       this.childId = childId;

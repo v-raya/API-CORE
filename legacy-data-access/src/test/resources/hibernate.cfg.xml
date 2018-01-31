@@ -69,5 +69,6 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.ServiceContactType"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.SexualExploitationType"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.ClientRelationshipType" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.ParentalRightTerminationType" />
   </session-factory>
 </hibernate-configuration>
