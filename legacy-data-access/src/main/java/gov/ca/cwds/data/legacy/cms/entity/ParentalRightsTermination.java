@@ -1,5 +1,8 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
+import static gov.ca.cwds.data.legacy.cms.entity.ParentalRightsTermination.FIND_TERMINATION_BY_CHILD_CLIENT_ID;
+import static gov.ca.cwds.data.legacy.cms.entity.ParentalRightsTermination.PARAM_CHILD_CLIENT_ID;
+
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.enums.CompetencyType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ParentalRightTerminationType;
@@ -15,6 +18,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -24,10 +28,19 @@ import org.hibernate.annotations.Type;
 
 @SuppressWarnings({"squid:S3437", "squid:S2160"})
 @Entity
+@NamedQuery(
+    name = FIND_TERMINATION_BY_CHILD_CLIENT_ID,
+    query = "SELECT t FROM ParentalRightsTermination t where t.child.id =:" + PARAM_CHILD_CLIENT_ID
+)
 @Table(name = "PRG_TRMT")
 public class ParentalRightsTermination extends CmsPersistentObject {
 
   private static final long serialVersionUID = -1268395950553736492L;
+
+  public static final String FIND_TERMINATION_BY_CHILD_CLIENT_ID =
+      "ParentalRightsTermination.findTerminationByChildClientId";
+
+  public static final String PARAM_CHILD_CLIENT_ID = "childClientId";
 
   @EmbeddedId
   private Id id = new Id();
