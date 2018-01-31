@@ -1,7 +1,7 @@
 import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan;
-import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
+import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
 
 global java.util.Set validationDetailsList
 
@@ -18,7 +18,7 @@ rule "R-10354"
         Logic:
         HEALTH_INTERVENTION_PLAN.Intervention_Plan_Start_Date must be >= CLIENT.Birth_Date.
       */
-      $clientAwareDTO: ClientEntityAwareDTO()
+      $clientAwareDTO: ChildClientEntityAwareDTO()
       Client($birthDate: birthDate != null) from $clientAwareDTO.entity
       HealthInterventionPlan(startDate.isBefore($birthDate)) from $clientAwareDTO.activeHealthInterventionPlans
   then
