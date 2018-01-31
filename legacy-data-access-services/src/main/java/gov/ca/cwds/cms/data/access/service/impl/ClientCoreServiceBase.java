@@ -47,8 +47,7 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
   @Override
   public Client update(ClientEntityAwareDTO clientEntityAwareDTO)
       throws DataAccessServicesException, DroolsException {
-    prepareEntityForValidation(clientEntityAwareDTO);
-    runBusinessValidation(clientEntityAwareDTO, PrincipalUtils.getPrincipal());
+    validate(clientEntityAwareDTO);
     try {
       updateClient(clientEntityAwareDTO);
       return clientEntityAwareDTO.getEntity();
@@ -57,9 +56,13 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
     }
   }
 
+  public void validate(ClientEntityAwareDTO clientEntityAwareDTO) throws DroolsException {
+    runBusinessValidation(enrichValidationData(clientEntityAwareDTO), PrincipalUtils.getPrincipal());
+  }
+
   protected abstract void enrichClientEntityAwareDto(T clientEntityAwareDTO);
 
-  private void prepareEntityForValidation(ClientEntityAwareDTO clientEntityAwareDTO) {
+  private ClientEntityAwareDTO enrichValidationData(ClientEntityAwareDTO clientEntityAwareDTO) {
     String clientId = clientEntityAwareDTO.getEntity().getIdentifier();
     List<ClientScpEthnicity> clientScpEthnicityList =
         getClientScpEthnicityDao().findEthnicitiesByClient(clientId);
@@ -77,6 +80,8 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
     clientEntityAwareDTO.setDeliveredService(deliveredServices);
 
     enrichClientEntityAwareDto((T) clientEntityAwareDTO);
+
+    return clientEntityAwareDTO;
   }
 
   @Override
