@@ -1,7 +1,7 @@
 import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ParentalRightsTermination;
-import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
+import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO
 
 global java.util.Set validationDetailsList
 
@@ -21,12 +21,14 @@ rule "R-00769"
         Select CLIENT > CHILD_CLIENT > PARENTAL_RIGHT_TERMINATION.Date >= CLIENT.Birth_Date.
       */
       $clientAwareDTO: ChildClientEntityAwareDTO()
-      Client($birthDate: birthDate != null) from $clientAwareDTO.entity
-      ParentalRightsTermination(date.isBefore($birthDate)) from $clientAwareDTO.parentalRightsTerminations
+      $child: Client($birthDate: birthDate != null) from $clientAwareDTO.entity
+      $termination: ParentalRightsTermination(date.isBefore($birthDate)) from $clientAwareDTO.parentalRightsTerminations
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-00769");
-      details.setUserMessage("The Parental Rights Termination Date cannot be less than the birth date of the Child Client.");
+      details.setUserMessage(String.format("The Parental Rights Termination Date cannot be less than the birth date of the Child Client."
+      + " Child Client ID:'%s' , Child birth date: %tD, Parent Client ID:'%s', Parental Rights Termination Date: %tD",
+      $child.getIdentifier(), $child.getBirthDate(), $termination.getParent().getIdentifier(), $termination.getDate()));
       details.setTechnicalMessage("If Client.birthDate != null then for each ParentalRightsTermination should be: ParentalRightsTermination.date >= Client.birthDate");
       validationDetailsList.add(details);
 end
