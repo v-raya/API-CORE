@@ -256,14 +256,13 @@ public class ParentalRightsTermination extends CmsPersistentObject {
     ParentalRightsTermination that = (ParentalRightsTermination) o;
     return Objects.equals(child, that.child) &&
         Objects.equals(parent, that.parent) &&
-        Objects.equals(courtCaseNumber, that.courtCaseNumber) &&
-        Objects.equals(courtId, that.courtId);
+        Objects.equals(date, that.date);
   }
 
   @Override
   public int hashCode() {
 
-    return Objects.hash(super.hashCode(), child, parent, courtCaseNumber, courtId);
+    return Objects.hash(super.hashCode(), child, parent, date);
   }
 
   @Override
