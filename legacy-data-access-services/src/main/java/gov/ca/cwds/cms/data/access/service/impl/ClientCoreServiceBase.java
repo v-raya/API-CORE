@@ -79,6 +79,9 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
     List<DeliveredService> deliveredServices = deliveredServiceDao.findByClientId(clientId);
     clientEntityAwareDTO.setDeliveredService(deliveredServices);
 
+    Client persistentClientState = clientDao.find(clientId);
+    clientEntityAwareDTO.setPersistentClientState(persistentClientState);
+
     enrichClientEntityAwareDto((T) clientEntityAwareDTO);
 
     return clientEntityAwareDTO;
