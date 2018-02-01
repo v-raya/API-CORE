@@ -19,12 +19,14 @@ rule "R-10354"
         HEALTH_INTERVENTION_PLAN.Intervention_Plan_Start_Date must be >= CLIENT.Birth_Date.
       */
       $clientAwareDTO: ChildClientEntityAwareDTO()
-      Client($birthDate: birthDate != null) from $clientAwareDTO.entity
-      HealthInterventionPlan(startDate.isBefore($birthDate)) from $clientAwareDTO.activeHealthInterventionPlans
+      $client: Client($birthDate: birthDate != null) from $clientAwareDTO.entity
+      $plan: HealthInterventionPlan(startDate.isBefore($birthDate)) from $clientAwareDTO.activeHealthInterventionPlans
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-10354");
-      details.setUserMessage("The Intervention Plan Start Date cannot be less than the birth date of the Child Client.");
+      details.setUserMessage(String.format("The Intervention Plan Start Date cannot be less than the birth date of the Child Client. "
+      + " Client ID: '%s', Client Birth Date: %tD, Intervention Plan ThirdID: '%s', Intervention Plan Start Date: %tD",
+      $client.getIdentifier(), $client.getBirthDate(), $plan.getThirdId(), $plan.getStartDate()));
       details.setTechnicalMessage("If Client.birthDate != null then should be: HealthInterventionPlan.startDate >= Client.birthDate");
       validationDetailsList.add(details);
 end
