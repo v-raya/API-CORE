@@ -38,6 +38,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(PerrySubject.class)
 public class ClientAbstractReadAuthorizerTest {
 
+  private static final String CLIENT_ID = "id";
+
   @Mock
   private ClientCountyDeterminationService clientCountyDeterminationServiceMock;
 
@@ -129,6 +131,41 @@ public class ClientAbstractReadAuthorizerTest {
   }
 
   @Test
+  public void checkId_true_fullHappyPath() {
+    // given
+    final PerryAccount perryAccount = initPerryAccountWithPrivileges("Sensitive Persons");
+    perryAccount.setGovernmentEntityType("100");
+    mockStatic(PerrySubject.class);
+    when(PerrySubject.getPerryAccount()).thenReturn(perryAccount);
+    when(clientCoreServiceMock.find(anyString())).thenReturn(initClient(Sensitivity.SENSITIVE));
+    when(clientCountyDeterminationServiceMock.getClientCountyById(anyString()))
+        .thenReturn((short) 100);
+
+    // when
+    final boolean actual = testSubject.checkId(CLIENT_ID);
+
+    // then
+    assertThat(actual, is(true));
+    verifyStatic(PerrySubject.class, times(1));
+    PerrySubject.getPerryAccount();
+    verify(clientCoreServiceMock, times(1)).find(anyString());
+    verify(clientCountyDeterminationServiceMock, times(1)).getClientCountyById(anyString());
+  }
+
+  @Test
+  public void checkId_true_whenNoClientExists() {
+    // given
+    when(clientCoreServiceMock.find(CLIENT_ID)).thenReturn(null);
+
+    // when
+    final boolean actual = testSubject.checkId(CLIENT_ID);
+
+    // then
+    assertThat(actual, is(true));
+    verify(clientCoreServiceMock, times(1)).find(anyString());
+  }
+
+  @Test
   public void testCheckIdAuthorized() throws Exception {
     ClientAbstractReadAuthorizer spy = spy(testSubject);
 
@@ -156,7 +193,7 @@ public class ClientAbstractReadAuthorizerTest {
 
   private Client initClient(Sensitivity sensitivity) {
     final Client client = new Client();
-    client.setIdentifier("id");
+    client.setIdentifier(CLIENT_ID);
     client.setSensitivity(sensitivity);
     return client;
   }
