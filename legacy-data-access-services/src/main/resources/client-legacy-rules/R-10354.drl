@@ -25,7 +25,7 @@ rule "R-10354"
       IssueDetails details = new IssueDetails();
       details.setCode("R-10354");
       details.setUserMessage(String.format("The Intervention Plan Start Date cannot be less than the birth date of the Child Client. "
-      + " Client ID: '%s', Client Birth Date: %tD, Intervention Plan ThirdID: '%s', Intervention Plan Start Date: %tD",
+      + " Client ID: '%s', Client Birth Date: %tm/%td/%tY, Intervention Plan ThirdID: '%s', Intervention Plan Start Date: %tm/%td/%tY",
       $client.getIdentifier(), $client.getBirthDate(), $plan.getThirdId(), $plan.getStartDate()));
       details.setTechnicalMessage("If Client.birthDate != null then should be: HealthInterventionPlan.startDate >= Client.birthDate");
       validationDetailsList.add(details);

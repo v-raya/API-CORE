@@ -27,7 +27,7 @@ rule "R-00769"
       IssueDetails details = new IssueDetails();
       details.setCode("R-00769");
       details.setUserMessage(String.format("The Parental Rights Termination Date cannot be less than the birth date of the Child Client."
-      + " Child Client ID:'%s' , Child birth date: %tD, Parent Client ID:'%s', Parental Rights Termination Date: %tD",
+      + " Child Client ID:'%s' , Child birth date: %tm/%td/%tY, Parent Client ID:'%s', Parental Rights Termination Date: %tm/%td/%tY",
       $child.getIdentifier(), $child.getBirthDate(), $termination.getParent().getIdentifier(), $termination.getDate()));
       details.setTechnicalMessage("If Client.birthDate != null then for each ParentalRightsTermination should be: ParentalRightsTermination.date >= Client.birthDate");
       validationDetailsList.add(details);
