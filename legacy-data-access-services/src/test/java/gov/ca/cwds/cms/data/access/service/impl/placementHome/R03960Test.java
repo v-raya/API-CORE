@@ -34,7 +34,7 @@ public class R03960Test extends BaseDocToolRulesPlacementHomeTest {
   @Test
   public void testFosterFamilyHomeOtherLicenceCode() throws Exception {
     preparePlacementHome(1416, "AA", null);
-    runBusinessValidation();
+    placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
   }
 
   @Test(expected = BusinessValidationException.class)
@@ -52,7 +52,7 @@ public class R03960Test extends BaseDocToolRulesPlacementHomeTest {
   @Test
   public void testResourceFamilyHomeOtherLicenceCode() throws Exception {
     preparePlacementHome(6914, "BB", null);
-    runBusinessValidation();
+    placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
   }
 
   @Test

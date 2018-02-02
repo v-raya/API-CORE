@@ -1,6 +1,6 @@
-import gov.ca.cwds.rest.exception.IssueDetails
-import gov.ca.cwds.data.legacy.cms.entity.Client
-import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
+import gov.ca.cwds.rest.exception.IssueDetails;
+import gov.ca.cwds.data.legacy.cms.entity.ChildClient
+import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO
 import gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication
 
 global java.util.Set<IssueDetails> validationDetailsList
@@ -19,9 +19,9 @@ rule "R-02127"
         Logic:
         MEDICAL_ELIGIBILITY_APPLICATION.Adoption_Agreement_Term_Date >= CHILD_CLIENT>CLIENT.Birth_Date.
       */
-      $clientAwareDTO: ClientEntityAwareDTO()
+      $clientAwareDTO: ChildClientEntityAwareDTO()
       $medicalEligibilityApplication : MedicalEligibilityApplication($adoptionAgreementTermDate : adoptionAgreementTermDate) from $clientAwareDTO.medicalEligibilityApplications
-      $client: Client(birthDate != null, $adoptionAgreementTermDate != null, $adoptionAgreementTermDate.isBefore(birthDate)) from $clientAwareDTO.entity
+      $client: ChildClient(birthDate != null, $adoptionAgreementTermDate != null, $adoptionAgreementTermDate.isBefore(birthDate)) from $clientAwareDTO.entity
 
   then
       IssueDetails details = new IssueDetails();

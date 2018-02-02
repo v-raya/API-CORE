@@ -26,7 +26,9 @@ rule "R-00736-1"
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-00736");
-      details.setUserMessage("If a Driver License State is entered, then a Driver_License Number must be entered.");
+      details.setUserMessage(String.format(
+          "If a Driver License State is entered, then a Driver_License Number must be entered. Client ID:'%s'",
+          $client.getIdentifier()));
       details.setTechnicalMessage("If Client.driverLicenseStateCode > 0 then should be: Client.driverLicenseNumber != null");
       validationDetailsList.add(details);
 end

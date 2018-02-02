@@ -14,6 +14,10 @@ public abstract class BaseApiTest<T extends Configuration> {
     @Rule
   public RestClientTestRule clientTestRule = new RestClientTestRule(getApplication());
 
+  public String transformDTOtoJSON(Object o) throws Exception {
+    return clientTestRule.getMapper().writeValueAsString(o);
+  }
+
   @After
   public void tearDown() throws Exception {
   }

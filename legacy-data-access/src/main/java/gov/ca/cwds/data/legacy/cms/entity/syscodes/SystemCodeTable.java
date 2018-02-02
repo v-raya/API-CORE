@@ -3,6 +3,8 @@ package gov.ca.cwds.data.legacy.cms.entity.syscodes;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -26,6 +28,7 @@ public abstract class SystemCodeTable implements PersistentObject {
 
   @Id
   @Column(name = "SYS_ID")
+  @Access(AccessType.PROPERTY)//to get id without fetching entire System Code entity
   private Short systemId;
 
   @Column(name = "CATEGORYID")

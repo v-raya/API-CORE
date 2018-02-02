@@ -1,7 +1,6 @@
 package gov.ca.cwds.cms.data.access.service.impl.client;
 
 import gov.ca.cwds.data.legacy.cms.entity.ChildClient;
-import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,10 +9,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.time.temporal.ChronoUnit;
 
-public class R02127Test extends BaseDocToolRulesChildClientImplementationTest {
+public class R02761Test extends BaseDocToolRulesChildClientImplementationTest {
 
-  private static final String RULE_NAME = "R-02127";
+  private static final String RULE_NAME = "R-02761";
   private static final String CLIENT_IDENTIFIER = "1234567890";
   private static final LocalDate DEFAULT_BIRTHDATE = LocalDate.of(2014, 10, 10);
 
@@ -24,7 +24,7 @@ public class R02127Test extends BaseDocToolRulesChildClientImplementationTest {
   }
 
   @Test
-  public void allApplicationDatesGtBirthdate() throws Exception {
+  public void allMedicalEligibilityApplicationValid() throws Exception {
     List<MedicalEligibilityApplication> medicalEligibilityApplications =
         generateListOfValidMedicalEligibilityApplications();
     clientEntityAwareDTO.getMedicalEligibilityApplications().addAll(medicalEligibilityApplications);
@@ -33,12 +33,10 @@ public class R02127Test extends BaseDocToolRulesChildClientImplementationTest {
   }
 
   @Test
-  public void oneApplicationDateLtBirthdate() throws Exception {
+  public void oneMedicalEligibilityApplicationNotValid() throws Exception {
     List<MedicalEligibilityApplication> medicalEligibilityApplications =
         generateListOfValidMedicalEligibilityApplications();
-    MedicalEligibilityApplication failedApplication =
-        createMedicalEligibilityApplication(
-            DEFAULT_BIRTHDATE.minusYears(2).plusMonths(3).plusDays(7));
+    MedicalEligibilityApplication failedApplication = createMedicalEligibilityApplication(-2);
     medicalEligibilityApplications.add(failedApplication);
     clientEntityAwareDTO.getMedicalEligibilityApplications().addAll(medicalEligibilityApplications);
 
@@ -47,7 +45,7 @@ public class R02127Test extends BaseDocToolRulesChildClientImplementationTest {
 
   @Test
   public void birthDateNotSet() throws Exception {
-    Client client = new Client();
+    ChildClient client = new ChildClient();
     client.setIdentifier(CLIENT_IDENTIFIER);
     clientEntityAwareDTO.setEntity(client);
 
@@ -59,14 +57,13 @@ public class R02127Test extends BaseDocToolRulesChildClientImplementationTest {
   }
 
   @Test
-  public void noApplications() throws Exception {
+  public void noMedicalEligibilityApplications() throws Exception {
     checkRuleSatisfied(RULE_NAME);
   }
 
   @Test
-  public void adoptionAgreementTermDateSameAsBirthdate() throws Exception {
-    MedicalEligibilityApplication application =
-        createMedicalEligibilityApplication(DEFAULT_BIRTHDATE);
+  public void medicalEligibilityApplicationSameLenghthAsAge() throws Exception {
+    MedicalEligibilityApplication application = createMedicalEligibilityApplication(0);
     clientEntityAwareDTO.getMedicalEligibilityApplications().add(application);
 
     checkRuleSatisfied(RULE_NAME);
@@ -83,11 +80,11 @@ public class R02127Test extends BaseDocToolRulesChildClientImplementationTest {
       generateListOfValidMedicalEligibilityApplications() {
     List<MedicalEligibilityApplication> medicalEligibilityApplications = new ArrayList<>();
     MedicalEligibilityApplication medicalEligibilityApplication1 =
-        createMedicalEligibilityApplication(DEFAULT_BIRTHDATE.plusDays(2));
+        createMedicalEligibilityApplication(3);
     MedicalEligibilityApplication medicalEligibilityApplication2 =
-        createMedicalEligibilityApplication(DEFAULT_BIRTHDATE.plusYears(2).minusDays(10));
+        createMedicalEligibilityApplication(2);
     MedicalEligibilityApplication medicalEligibilityApplication3 =
-        createMedicalEligibilityApplication(DEFAULT_BIRTHDATE.plusMonths(7));
+        createMedicalEligibilityApplication(5);
     medicalEligibilityApplications.addAll(
         Arrays.asList(
             medicalEligibilityApplication1,
@@ -96,11 +93,15 @@ public class R02127Test extends BaseDocToolRulesChildClientImplementationTest {
     return medicalEligibilityApplications;
   }
 
-  private static MedicalEligibilityApplication createMedicalEligibilityApplication(
-      LocalDate adoptionAgreementTermDate) {
+  private static MedicalEligibilityApplication createMedicalEligibilityApplication(int adjustment) {
+    short retroactiveMonthsCount = getAmountOfRetroactiveMonths(adjustment);
     MedicalEligibilityApplication medicalEligibilityApplication =
         new MedicalEligibilityApplication();
-    medicalEligibilityApplication.setAdoptionAgreementTermDate(adoptionAgreementTermDate);
+    medicalEligibilityApplication.setRetroactiveMonthsCount(retroactiveMonthsCount);
     return medicalEligibilityApplication;
+  }
+
+  private static short getAmountOfRetroactiveMonths(int adjustment) {
+    return (short) (ChronoUnit.MONTHS.between(DEFAULT_BIRTHDATE, LocalDate.now()) - adjustment);
   }
 }

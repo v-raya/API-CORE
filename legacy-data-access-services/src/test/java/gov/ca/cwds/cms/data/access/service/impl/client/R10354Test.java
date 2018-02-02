@@ -1,7 +1,6 @@
 package gov.ca.cwds.cms.data.access.service.impl.client;
 
-import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
-import gov.ca.cwds.cms.data.access.service.impl.client.BaseDocToolRulesClientImplementationTest;
+import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan;
 import java.time.LocalDate;
@@ -12,6 +11,8 @@ public class R10354Test extends BaseDocToolRulesClientImplementationTest {
 
   private static final String RULE_NAME = "R-10354";
   private static final LocalDate SOME_DATE = LocalDate.of(2018, 1, 8);
+  private static final String CLIENT_ID = "AdCfWS40FG";
+  private static final String PLAN_THIRD_ID = "AhmDhCP0Fm";
 
   @Test
   public void testPlanStartDateGtBirthDate() throws Exception {
@@ -35,18 +36,20 @@ public class R10354Test extends BaseDocToolRulesClientImplementationTest {
 
   private static Client client(LocalDate birthDate) {
     Client client = new Client();
+    client.setIdentifier(CLIENT_ID);
     client.setBirthDate(birthDate);
     return client;
   }
 
   private static HealthInterventionPlan plan(LocalDate startDate) {
     HealthInterventionPlan plan = new HealthInterventionPlan();
+    plan.setThirdId(PLAN_THIRD_ID);
     plan.setStartDate(startDate);
     return plan;
   }
 
-  private static ClientEntityAwareDTO dto(Client client, HealthInterventionPlan... plans) {
-    ClientEntityAwareDTO dto = new ClientEntityAwareDTO();
+  private static ChildClientEntityAwareDTO dto(Client client, HealthInterventionPlan... plans) {
+    ChildClientEntityAwareDTO dto = new ChildClientEntityAwareDTO();
     dto.setEntity(client);
     dto.setActiveHealthInterventionPlans(Arrays.asList(plans));
     return dto;

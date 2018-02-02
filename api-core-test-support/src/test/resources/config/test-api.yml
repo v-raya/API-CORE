@@ -16,7 +16,7 @@ server:
     port: 9091
 
 shiro:
- iniConfigs: ["classpath:test-shiro.ini"]
+ iniConfigs: ["classpath:api-core-test-support-shiro.ini"]
 
 swagger:
   templateName: swagger.mustache
