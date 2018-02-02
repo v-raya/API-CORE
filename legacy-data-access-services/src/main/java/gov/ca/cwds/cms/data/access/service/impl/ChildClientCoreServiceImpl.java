@@ -48,7 +48,7 @@ public class ChildClientCoreServiceImpl extends
       HealthInterventionPlanDao healthInterventionPlanDao) {
     this.healthInterventionPlanDao = healthInterventionPlanDao;
     List<MedicalEligibilityApplication> medicalEligibilityApplications =
-            getMedicalEligibilityApplicationDao().findByChildClientId(childClient.getIdentifier());
+            getMedicalEligibilityApplicationDao().findByChildClientId(clientId);
     clientEntityAwareDTO.setMedicalEligibilityApplications(medicalEligibilityApplications);
   }
 }

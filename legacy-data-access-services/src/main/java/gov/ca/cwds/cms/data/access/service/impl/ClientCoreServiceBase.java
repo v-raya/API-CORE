@@ -69,9 +69,6 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
         getClientScpEthnicityDao().findEthnicitiesByClient(clientId);
     clientEntityAwareDTO.getClientScpEthnicities().addAll(clientScpEthnicityList);
 
-    List<MedicalEligibilityApplication> medicalEligibilityApplications =
-        medicalEligibilityApplicationDao.findByChildClientId(clientId);
-    clientEntityAwareDTO.setMedicalEligibilityApplications(medicalEligibilityApplications);
 
     List<DeliveredService> deliveredServices = deliveredServiceDao.findByClientId(clientId);
     clientEntityAwareDTO.setDeliveredService(deliveredServices);

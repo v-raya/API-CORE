@@ -1,7 +1,6 @@
-package gov.ca.cwds.cms.data.access.service.impl;
+package gov.ca.cwds.cms.data.access.service.impl.client;
 
 import gov.ca.cwds.data.legacy.cms.entity.ChildClient;
-import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication;
 import org.junit.Before;
 import org.junit.Test;
