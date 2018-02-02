@@ -24,7 +24,7 @@ rule "R-00738"
       details.setCode("R-00738");
       details.setUserMessage(String.format(
           "The client's birth date must be less than or equal to the creation date of the Client. "
-          + "Client ID:'%s', Client Birth Date: %tm/%td/%tY, Creation Date: %tm/%td/%tY",
+          + "Client ID:'%s', Client Birth Date: %tm/%<td/%<tY, Creation Date: %tm/%<td/%<tY",
           $client.getIdentifier(), $client.getBirthDate(), $client.getCreationDate()));
       details.setTechnicalMessage("If Client.birthDate != null then should be: Client.creationDate >= Client.birthDate");
       validationDetailsList.add(details);
