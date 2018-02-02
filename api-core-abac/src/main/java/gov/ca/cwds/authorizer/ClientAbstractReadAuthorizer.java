@@ -35,9 +35,9 @@ public class ClientAbstractReadAuthorizer extends BaseAuthorizer<Client, String>
   private ClientCountyDeterminationService countyDeterminationService;
 
   @Override
-  protected boolean checkId(String clientId) {
-    Client client = clientCoreService.find(clientId);
-    return checkInstance(client);
+  protected boolean checkId(final String clientId) {
+    final Client client = clientCoreService.find(clientId);
+    return client == null || checkInstance(client);
   }
 
   @Override
