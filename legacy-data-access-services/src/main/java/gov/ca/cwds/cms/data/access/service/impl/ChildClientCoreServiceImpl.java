@@ -9,6 +9,8 @@ import gov.ca.cwds.data.legacy.cms.entity.ChildClient;
 import gov.ca.cwds.data.legacy.cms.entity.FCEligibility;
 import gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan;
 import gov.ca.cwds.data.legacy.cms.entity.ParentalRightsTermination;
+import gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication;
+
 import java.util.List;
 
 /**
@@ -45,5 +47,8 @@ public class ChildClientCoreServiceImpl extends
   public void setHealthInterventionPlanDao(
       HealthInterventionPlanDao healthInterventionPlanDao) {
     this.healthInterventionPlanDao = healthInterventionPlanDao;
+    List<MedicalEligibilityApplication> medicalEligibilityApplications =
+            getMedicalEligibilityApplicationDao().findByChildClientId(childClient.getIdentifier());
+    clientEntityAwareDTO.setMedicalEligibilityApplications(medicalEligibilityApplications);
   }
 }
