@@ -25,7 +25,7 @@ public class CsecHistoryDaoTest1 extends BaseCwsCmsInMemoryPersistenceTest {
 
   @Test
   public void testFindByChildClientId() throws Exception {
-    cleanAllAndInsert("/dbunit/CsecHistory.xml");
+    cleanAllAndInsert("/dbunit/CsecHistory1.xml");
 
     executeInTransaction(sessionFactory, sessionFactory1 -> {
       List<CsecHistory1> csecHistories = csecHistoryDao.findByClientId(CHILD_CLIENT_ID);
@@ -37,7 +37,7 @@ public class CsecHistoryDaoTest1 extends BaseCwsCmsInMemoryPersistenceTest {
 
   @Test
   public void testFindByWrongChildClientId() throws Exception {
-    cleanAllAndInsert("/dbunit/CsecHistory.xml");
+    cleanAllAndInsert("/dbunit/CsecHistory1.xml");
 
     executeInTransaction(sessionFactory, sessionFactory1 -> {
       List<CsecHistory1> csecHistories = csecHistoryDao.findByClientId(WRONG_CHILD_CLIENT_ID);
