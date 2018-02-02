@@ -40,7 +40,7 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.FCEligibility" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.DeliveredService"/>
-    <mapping class="gov.ca.cwds.data.legacy.cms.entity.CsecHistory"/>
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.CsecHistory1"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.ClientRelationship"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.ParentalRightsTermination"/>
 

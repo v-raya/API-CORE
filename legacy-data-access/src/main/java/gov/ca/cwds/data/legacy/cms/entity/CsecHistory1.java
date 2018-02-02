@@ -21,15 +21,15 @@ import org.hibernate.annotations.NotFoundAction;
 @Entity
 @Table(name = "CSECHIST")
 @NamedQuery(
-    name = CsecHistory.FIND_BY_CLIENT_ID,
-    query = "FROM CsecHistory where childClient =:" + CsecHistory.PARAM_CLIENT_ID
+    name = CsecHistory1.FIND_BY_CLIENT_ID,
+    query = "FROM CsecHistory1 where childClient =:" + CsecHistory1.PARAM_CLIENT_ID
 )
-public class CsecHistory extends CmsPersistentObject {
+public class CsecHistory1 extends CmsPersistentObject {
 
   private static final long serialVersionUID = -1114099625983617913L;
 
   public static final String PARAM_CLIENT_ID = "clientId";
-  public static final String FIND_BY_CLIENT_ID = "CsecHistory.findByClient";
+  public static final String FIND_BY_CLIENT_ID = "CsecHistory1.findByClient";
 
   @Column(name = "CREATN_TS")
   private LocalDate creationDate;
