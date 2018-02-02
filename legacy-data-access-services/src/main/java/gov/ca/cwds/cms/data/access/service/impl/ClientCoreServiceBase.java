@@ -5,11 +5,14 @@ import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.ClientCoreService;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.rules.ClientDroolsConfiguration;
-import gov.ca.cwds.data.legacy.cms.dao.*;
+import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
+import gov.ca.cwds.data.legacy.cms.dao.ClientScpEthnicityDao;
+import gov.ca.cwds.data.legacy.cms.dao.DeliveredServiceDao;
+import gov.ca.cwds.data.legacy.cms.dao.FCEligibilityDao;
+import gov.ca.cwds.data.legacy.cms.dao.MedicalEligibilityApplicationDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
 import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
-import gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan;
 import gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.drools.DroolsService;
@@ -32,8 +35,6 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
   @Inject private ClientScpEthnicityDao clientScpEthnicityDao;
 
   @Inject private FCEligibilityDao fcEligibilityDao;
-
-  @Inject private HealthInterventionPlanDao healthInterventionPlanDao;
 
   @Inject private MedicalEligibilityApplicationDao medicalEligibilityApplicationDao;
 
@@ -67,10 +68,6 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
     List<ClientScpEthnicity> clientScpEthnicityList =
         getClientScpEthnicityDao().findEthnicitiesByClient(clientId);
     clientEntityAwareDTO.getClientScpEthnicities().addAll(clientScpEthnicityList);
-
-    List<HealthInterventionPlan> activeHealthInterventionPlans =
-        getHealthInterventionPlanDao().getActiveHealthInterventionPlans(clientId);
-    clientEntityAwareDTO.setActiveHealthInterventionPlans(activeHealthInterventionPlans);
 
     List<MedicalEligibilityApplication> medicalEligibilityApplications =
         medicalEligibilityApplicationDao.findByChildClientId(clientId);
@@ -128,7 +125,4 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
     return clientScpEthnicityDao;
   }
 
-  public HealthInterventionPlanDao getHealthInterventionPlanDao() {
-    return healthInterventionPlanDao;
-  }
 }

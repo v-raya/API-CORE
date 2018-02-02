@@ -24,7 +24,10 @@ rule "R-00739"
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-00739");
-      details.setUserMessage("The client's birth date must be less than or equal to the death date of the client.");
+      details.setUserMessage(String.format(
+          "The client's birth date must be less than or equal to the death date of the client. "
+          + "Client ID:'%s', Client Birth Date: %tm/%td/%tY, Client Death Date: %tm/%td/%tY",
+          $client.getIdentifier(), $client.getBirthDate(), $client.getDeathDate()));
       details.setTechnicalMessage("If Client.birthDate != null and Client.deathDate != null then should be: CLIENT.deathDate >= CLIENT.birthDate");
       validationDetailsList.add(details);
 end

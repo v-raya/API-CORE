@@ -22,7 +22,8 @@ rule "R-00741"
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-00741");
-      details.setUserMessage("The primary and secondary languages of a client may not be the same.");
+      details.setUserMessage(String.format("The primary and secondary languages of a client may not be the same. "
+      + "Client ID:'%s', Language Code: %d", $client.getIdentifier(), $client.getPrimaryLanguageCode()));
       details.setTechnicalMessage("Client primary and secondary languages codes may not be equals and greater than 0");
       validationDetailsList.add(details);
 end

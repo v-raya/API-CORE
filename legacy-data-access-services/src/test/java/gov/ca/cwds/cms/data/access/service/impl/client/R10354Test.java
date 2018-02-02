@@ -1,5 +1,6 @@
 package gov.ca.cwds.cms.data.access.service.impl.client;
 
+import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.impl.client.BaseDocToolRulesClientImplementationTest;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
@@ -45,8 +46,8 @@ public class R10354Test extends BaseDocToolRulesClientImplementationTest {
     return plan;
   }
 
-  private static ClientEntityAwareDTO dto(Client client, HealthInterventionPlan... plans) {
-    ClientEntityAwareDTO dto = new ClientEntityAwareDTO();
+  private static ChildClientEntityAwareDTO dto(Client client, HealthInterventionPlan... plans) {
+    ChildClientEntityAwareDTO dto = new ChildClientEntityAwareDTO();
     dto.setEntity(client);
     dto.setActiveHealthInterventionPlans(Arrays.asList(plans));
     return dto;
