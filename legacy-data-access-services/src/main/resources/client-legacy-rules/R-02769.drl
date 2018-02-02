@@ -25,7 +25,7 @@ rule "R-02769"
   when
         $clientAwareDTO: ClientEntityAwareDTO()
         $persistentClient: Client() from $clientAwareDTO.persistentClientState
-        client: Client(
+        $client: Client(
             nameType != null,
             $persistentClient != null,
             $persistentClient.nameType != null,
@@ -45,7 +45,7 @@ rule "R-02769"
       details.setCode("R-02769");
       details.setUserMessage("If the client's common name type is 'Doe' "
                               + "and the common name itself is changed, "
-                              + "then the common name type must change."
+                              + "then the common name type must change.")
       details.setTechnicalMessage("If CLIENT.Common Name Type = 'Doe' and CLIENT.Common First Name, Common Last Name,"
                                  +  "or Suffix Title Type changes then Common Name Type must change.");
       validationDetailsList.add(details);
