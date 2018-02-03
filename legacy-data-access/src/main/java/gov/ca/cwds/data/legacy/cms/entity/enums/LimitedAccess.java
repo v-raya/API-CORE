@@ -18,6 +18,10 @@ public enum LimitedAccess implements EntityEnum<String> {
     this.description = description;
   }
 
+  public static LimitedAccess fromCode(String code) {
+    return new LimitedAccessConverter().convertToEntityAttribute(code);
+  }
+
   @Override
   public String getCode() {
     return code;

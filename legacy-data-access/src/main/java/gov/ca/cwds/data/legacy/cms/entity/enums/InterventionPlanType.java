@@ -19,6 +19,10 @@ public enum InterventionPlanType implements EntityEnum<String> {
     this.description = description;
   }
 
+  public static InterventionPlanType fromCode(String code) {
+    return new InterventionPlanTypeConverter().convertToEntityAttribute(code);
+  }
+
   @Override
   public String getCode() {
     return code;

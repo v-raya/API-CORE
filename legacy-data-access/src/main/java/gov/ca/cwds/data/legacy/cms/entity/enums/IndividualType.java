@@ -23,6 +23,10 @@ public enum IndividualType implements EntityEnum<String> {
     this.description = description;
   }
 
+  public static IndividualType fromCode(String code) {
+    return new IndividualTypeConverter().convertToEntityAttribute(code);
+  }
+
   @Override
   public String getCode() {
     return code;

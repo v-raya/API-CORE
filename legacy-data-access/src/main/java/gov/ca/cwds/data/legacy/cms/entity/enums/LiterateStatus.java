@@ -18,6 +18,10 @@ public enum LiterateStatus implements EntityEnum<String> {
     this.description = description;
   }
 
+  public static LiterateStatus fromCode(String code) {
+    return new LiterateStatusConverter().convertToEntityAttribute(code);
+  }
+
   @Override
   public String getCode() {
     return code;
