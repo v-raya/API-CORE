@@ -254,15 +254,15 @@ public class ParentalRightsTermination extends CmsPersistentObject {
       return false;
     }
     ParentalRightsTermination that = (ParentalRightsTermination) o;
-    return Objects.equals(child, that.child) &&
-        Objects.equals(parent, that.parent) &&
+    return Objects.equals(child.getIdentifier(), that.child.getIdentifier()) &&
+        Objects.equals(parent.getIdentifier(), that.parent.getIdentifier()) &&
         Objects.equals(date, that.date);
   }
 
   @Override
   public int hashCode() {
 
-    return Objects.hash(super.hashCode(), child, parent, date);
+    return Objects.hash(super.hashCode(), child.getIdentifier(), parent.getIdentifier(), date);
   }
 
   @Override

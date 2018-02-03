@@ -5,7 +5,8 @@ import static gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.DATE_CONDITI
 import static gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.INACTIVE_IND_CONDITION;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
-import gov.ca.cwds.data.legacy.cms.entity.enums.SameHomeStatus;
+import gov.ca.cwds.data.legacy.cms.entity.enums.YesNoUnknown;
+import gov.ca.cwds.data.legacy.cms.entity.enums.YesNoUnknown.YesNoUnknownConverter;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ClientRelationshipType;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -90,8 +91,8 @@ public class ClientRelationship extends CmsPersistentObject {
   private boolean absentParentIndicator;
 
   @Column(name = "SAME_HM_CD")
-  @Convert(converter = SameHomeStatus.SameHomeStatusConverter.class)
-  private SameHomeStatus sameHomeStatus;
+  @Convert(converter = YesNoUnknownConverter.class)
+  private YesNoUnknown sameHomeStatus;
 
   @Override
   public Serializable getPrimaryKey() {
@@ -130,11 +131,11 @@ public class ClientRelationship extends CmsPersistentObject {
     this.endDate = endDt;
   }
 
-  public SameHomeStatus getSameHomeStatus() {
+  public YesNoUnknown getSameHomeStatus() {
     return sameHomeStatus;
   }
 
-  public void setSameHomeStatus(SameHomeStatus sameHomeStatus) {
+  public void setSameHomeStatus(YesNoUnknown sameHomeStatus) {
     this.sameHomeStatus = sameHomeStatus;
   }
 
