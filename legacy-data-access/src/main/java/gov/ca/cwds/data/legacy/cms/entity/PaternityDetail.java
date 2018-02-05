@@ -1,5 +1,8 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
+import static gov.ca.cwds.data.legacy.cms.entity.PaternityDetail.FIND_PATERNITY_DETAILS_BY_CHILD_CLIENT_ID;
+import static gov.ca.cwds.data.legacy.cms.entity.PaternityDetail.PARAM_CHILD_CLIENT_ID;
+
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.enums.AllegedFatherPaternityStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.AllegedFatherPaternityStatus.AllegedFatherPaternityStatusConverter;
@@ -17,6 +20,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -27,10 +31,19 @@ import org.hibernate.annotations.FetchMode;
 @SuppressWarnings({"squid:S3437", "squid:S2160"})
 @Entity
 @DiscriminatorColumn(name = "PRMY_IDVCD")
+@NamedQuery(
+    name = FIND_PATERNITY_DETAILS_BY_CHILD_CLIENT_ID,
+    query = "SELECT pd FROM PaternityDetail pd where pd.childClient.id =:" + PARAM_CHILD_CLIENT_ID
+)
 @Table(name = "PTRNYDET")
 public abstract class PaternityDetail extends CmsPersistentObject {
 
   private static final long serialVersionUID = -5009086933409179477L;
+
+  public static final String FIND_PATERNITY_DETAILS_BY_CHILD_CLIENT_ID =
+      "PaternityDetail.findPaternityDetailsByChildClientId";
+
+  public static final String PARAM_CHILD_CLIENT_ID = "childClientId";
 
   @Id
   @Size(max = CMS_ID_LEN)
@@ -75,7 +88,7 @@ public abstract class PaternityDetail extends CmsPersistentObject {
   @Convert(converter = LegalStatusConverter.class)
   private LegalStatus clientLegalStatus;
 
-  @Column(name = "TEST_DT", nullable = true)
+  @Column(name = "TEST_DT")
   private LocalDate paternityTestDate;
 
   @NotNull
