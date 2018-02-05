@@ -69,7 +69,7 @@ public class R10974Test extends BaseDocToolRulesChildClientImplementationTest {
     csecHistories.addAll(
         Arrays.asList(
             getCsecHistory(CSEC_ID_1, clientBirthDay, validDates),
-            getCsecHistory(CSEC_ID_1, clientBirthDay, validDates)));
+            getCsecHistory(CSEC_ID_2, clientBirthDay, validDates)));
     return csecHistories;
   }
 
