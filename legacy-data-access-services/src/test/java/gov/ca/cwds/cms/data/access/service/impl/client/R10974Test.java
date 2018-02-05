@@ -73,10 +73,6 @@ public class R10974Test extends BaseDocToolRulesChildClientImplementationTest {
     return csecHistories;
   }
 
-  private CsecHistory getCsecHistory(String csecId, LocalDate clientBirthDay) {
-    return getCsecHistory(csecId, clientBirthDay, null);
-  }
-
   private CsecHistory getCsecHistory(String csecId, LocalDate clientBirthDay, Boolean validDates) {
     CsecHistory csecHistory = new CsecHistory();
     csecHistory.setThirdId(csecId);
