@@ -31,19 +31,19 @@ public class ChildClientCoreServiceImpl extends ClientCoreServiceBase<ChildClien
 
     if (childClient.getAfdcFcEligibilityIndicatorVar()) {
       List<FCEligibility> fcEligibilities = fcEligibilityDao.findByChildClientId(childClientId);
-      clientEntityAwareDTO.setFcEligibilities(fcEligibilities);
+      clientEntityAwareDTO.getFcEligibilities().addAll(fcEligibilities);
     }
 
     List<HealthInterventionPlan> activeHealthInterventionPlans =
         healthInterventionPlanDao.getActiveHealthInterventionPlans(childClientId);
-    clientEntityAwareDTO.setActiveHealthInterventionPlans(activeHealthInterventionPlans);
+    clientEntityAwareDTO.getActiveHealthInterventionPlans().addAll(activeHealthInterventionPlans);
 
     List<ParentalRightsTermination> parentalRightsTerminations =
         parentalRightsTerminationDao.getParentalRightsTerminationsByChildClientId(childClientId);
-    clientEntityAwareDTO.setParentalRightsTerminations(parentalRightsTerminations);
+    clientEntityAwareDTO.getParentalRightsTerminations().addAll(parentalRightsTerminations);
 
     List<MedicalEligibilityApplication> medicalEligibilityApplications =
         medicalEligibilityApplicationDao.findByChildClientId(childClientId);
-    clientEntityAwareDTO.setMedicalEligibilityApplications(medicalEligibilityApplications);
+    clientEntityAwareDTO.getMedicalEligibilityApplications().addAll(medicalEligibilityApplications);
   }
 }
