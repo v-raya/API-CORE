@@ -357,8 +357,8 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
       return false;
     }
     Client client = (Client) o;
-    return Objects.equals(getBirthCountryCode(), client.getBirthCountryCode())
-        && Objects.equals(getBirthStateCode(), client.getBirthStateCode())
+    return (getBirthCountryCode() == client.getBirthCountryCode())
+        && (getBirthStateCode() == client.getBirthStateCode())
         && Objects.equals(getBirthCity(), client.getBirthCity())
         && Objects.equals(getBirthDate(), client.getBirthDate())
         && Objects.equals(getBirthFacilityName(), client.getBirthFacilityName())
@@ -366,7 +366,7 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
         && Objects.equals(getCommonLastName(), client.getCommonLastName())
         && Objects.equals(getCommonMiddleName(), client.getCommonMiddleName())
         && Objects.equals(getEmailAddress(), client.getEmailAddress())
-        && Objects.equals(getChildClientIndicator(), client.getChildClientIndicator());
+        && (getChildClientIndicator() == client.getChildClientIndicator());
   }
 
   @Override
