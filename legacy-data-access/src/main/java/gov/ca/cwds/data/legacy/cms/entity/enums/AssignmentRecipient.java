@@ -23,6 +23,10 @@ public enum AssignmentRecipient implements EntityEnum<String> {
     this.description = description;
   }
 
+  public static AssignmentRecipient fromCode(String code) {
+    return new AssignmentRecipientConverter().convertToEntityAttribute(code);
+  }
+
   @Override
   public String getCode() {
     return code;

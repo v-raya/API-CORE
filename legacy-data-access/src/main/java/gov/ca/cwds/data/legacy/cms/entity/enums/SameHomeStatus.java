@@ -17,6 +17,10 @@ public enum SameHomeStatus implements EntityEnum<String> {
     this.description = description;
   }
 
+  public static SameHomeStatus fromCode(String code) {
+    return new SameHomeStatusConverter().convertToEntityAttribute(code);
+  }
+
   @Override
   public String getCode() {
     return code;
