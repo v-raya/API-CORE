@@ -35,9 +35,6 @@ public class ClientPaternityDetail extends PaternityDetail {
     if (!(o instanceof ClientPaternityDetail)) {
       return false;
     }
-    if (!super.equals(o)) {
-      return false;
-    }
     ClientPaternityDetail that = (ClientPaternityDetail) o;
     return Objects.equals(getClient(), that.getClient()) &&
         Objects.equals(getChildClient(), that.getChildClient()) &&
@@ -48,7 +45,7 @@ public class ClientPaternityDetail extends PaternityDetail {
 
   @Override
   public final int hashCode() {
-    return Objects.hash(super.hashCode(), getClient(), getChildClient(), getPaternityTestDate(),
+    return Objects.hash(getClient(), getChildClient(), getPaternityTestDate(),
         getEstablishedLocationDescription());
   }
 

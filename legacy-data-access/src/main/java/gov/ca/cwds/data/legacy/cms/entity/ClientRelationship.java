@@ -169,24 +169,21 @@ public class ClientRelationship extends CmsPersistentObject {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    if (!super.equals(o)) {
+    if (!(o instanceof ClientRelationship)) {
       return false;
     }
     ClientRelationship that = (ClientRelationship) o;
-    return Objects.equals(leftSide, that.leftSide) &&
-        Objects.equals(rightSide, that.rightSide) &&
-        Objects.equals(type, that.type) &&
-        Objects.equals(startDate, that.startDate) &&
-        Objects.equals(endDate, that.endDate);
+    return Objects.equals(getLeftSide(), that.getLeftSide()) &&
+        Objects.equals(getRightSide(), that.getRightSide()) &&
+        Objects.equals(getType(), that.getType()) &&
+        Objects.equals(getStartDate(), that.getStartDate()) &&
+        Objects.equals(getEndDate(), that.getEndDate());
   }
 
   @Override
   public int hashCode() {
 
     return Objects
-        .hash(super.hashCode(), leftSide, rightSide, type, startDate, endDate);
+        .hash(super.hashCode(), getLeftSide(), getRightSide(), getType(), getStartDate(), getEndDate());
   }
 }

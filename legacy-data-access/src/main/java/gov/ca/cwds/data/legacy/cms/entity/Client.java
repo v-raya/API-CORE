@@ -349,41 +349,39 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private boolean zippyCreatedIndicator;
 
   @Override
-  public boolean equals(Object o) {
+  public final boolean equals(Object o) {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    if (!super.equals(o)) {
+    if (!(o instanceof Client)) {
       return false;
     }
     Client client = (Client) o;
-    return Objects.equals(birthCountryCode, client.birthCountryCode)
-        && Objects.equals(birthStateCode, client.birthStateCode)
-        && Objects.equals(birthCity, client.birthCity)
-        && Objects.equals(birthDate, client.birthDate)
-        && Objects.equals(birthFacilityName, client.birthFacilityName)
-        && Objects.equals(commonFirstName, client.commonFirstName)
-        && Objects.equals(commonLastName, client.commonLastName)
-        && Objects.equals(commonMiddleName, client.commonMiddleName)
-        && Objects.equals(emailAddress, client.emailAddress);
+    return Objects.equals(getBirthCountryCode(), client.getBirthCountryCode())
+        && Objects.equals(getBirthStateCode(), client.getBirthStateCode())
+        && Objects.equals(getBirthCity(), client.getBirthCity())
+        && Objects.equals(getBirthDate(), client.getBirthDate())
+        && Objects.equals(getBirthFacilityName(), client.getBirthFacilityName())
+        && Objects.equals(getCommonFirstName(), client.getCommonFirstName())
+        && Objects.equals(getCommonLastName(), client.getCommonLastName())
+        && Objects.equals(getCommonMiddleName(), client.getCommonMiddleName())
+        && Objects.equals(getEmailAddress(), client.getEmailAddress())
+        && Objects.equals(getChildClientIndicator(), client.getChildClientIndicator());
   }
 
   @Override
-  public int hashCode() {
+  public final int hashCode() {
     return Objects.hash(
-        super.hashCode(),
-        birthCountryCode,
-        birthStateCode,
-        birthCity,
-        birthDate,
-        birthFacilityName,
-        commonFirstName,
-        commonLastName,
-        commonMiddleName,
-        emailAddress);
+        getBirthCountryCode(),
+        getBirthStateCode(),
+        getBirthCity(),
+        getBirthDate(),
+        getBirthFacilityName(),
+        getCommonFirstName(),
+        getCommonLastName(),
+        getCommonMiddleName(),
+        getEmailAddress(),
+        getChildClientIndicator());
   }
 
   public String getIdentifier() {

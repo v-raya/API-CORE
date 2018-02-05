@@ -27,9 +27,6 @@ public class CollateralInividualPaternityDetail extends PaternityDetail {
     if (!(o instanceof CollateralInividualPaternityDetail)) {
       return false;
     }
-    if (!super.equals(o)) {
-      return false;
-    }
     CollateralInividualPaternityDetail that = (CollateralInividualPaternityDetail) o;
     return Objects.equals(getCollateralInividualId(), that.getCollateralInividualId()) &&
         Objects.equals(getChildClient(), that.getChildClient()) &&
@@ -40,7 +37,7 @@ public class CollateralInividualPaternityDetail extends PaternityDetail {
 
   @Override
   public final int hashCode() {
-    return Objects.hash(super.hashCode(), getCollateralInividualId(), getChildClient(), getPaternityTestDate(),
+    return Objects.hash(getCollateralInividualId(), getChildClient(), getPaternityTestDate(),
         getEstablishedLocationDescription());
   }
 
