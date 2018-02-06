@@ -18,6 +18,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.hibernate.annotations.Type;
 
 /** @author CWDS TPT-3 Team */
 @Entity
@@ -49,6 +50,7 @@ public class FCEligibility extends CmsPersistentObject {
   @Id
   private String childClientId;
 
+  @Type(type = "yes_no")
   @Column(name = "FND_APVIND")
   private boolean fundingApprovedIndicator;
 
