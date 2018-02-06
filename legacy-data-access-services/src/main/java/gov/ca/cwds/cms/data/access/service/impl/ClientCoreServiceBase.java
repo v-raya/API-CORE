@@ -8,15 +8,19 @@ import gov.ca.cwds.cms.data.access.service.rules.ClientDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.ClientScpEthnicityDao;
 import gov.ca.cwds.data.legacy.cms.dao.DeliveredServiceDao;
+import gov.ca.cwds.data.legacy.cms.dao.NameTypeDao;
+import gov.ca.cwds.data.legacy.cms.dao.SystemCodeDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
 import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
+import org.hibernate.Hibernate;
 
 import java.io.Serializable;
 import java.util.List;
@@ -30,6 +34,7 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
   @Inject private ClientDao clientDao;
   @Inject private ClientScpEthnicityDao clientScpEthnicityDao;
   @Inject private DeliveredServiceDao deliveredServiceDao;
+  @Inject private NameTypeDao nameTypeDao;
 
   @Override
   public Client find(Serializable primaryKey) {
@@ -66,6 +71,9 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
 
     Client persistentClientState = clientDao.find(clientId);
     clientEntityAwareDTO.setPersistentClientState(persistentClientState);
+
+    Short nameTypeId = clientEntityAwareDTO.getEntity().getNameType().getSystemId();
+    clientEntityAwareDTO.getEntity().setNameType(nameTypeDao.find(nameTypeId));
 
     enrichClientEntityAwareDto((T) clientEntityAwareDTO);
 
