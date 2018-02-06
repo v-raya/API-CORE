@@ -18,9 +18,9 @@ rule "R-10974"
         Logic:
         CSECHIST.startDate must be <= (If Exists) CHILD_CLIENT > CLIENT.Birth_Date.
       */
-      clientAwareDTO: ChildClientEntityAwareDTO()
-      csecHistory : CsecHistory(startDate : startDate) from clientAwareDTO.csecHistories
-      client: ChildClient(birthDate != null && birthDate.isAfter(startDate) && !birthDate.isEqual(startDate)) from clientAwareDTO.entity
+      $clientAwareDTO: ChildClientEntityAwareDTO()
+      $csecHistory : CsecHistory(startDate : startDate) from $clientAwareDTO.csecHistories
+      $client: ChildClient(birthDate != null && startDate.isBefore(birthDate)) from $clientAwareDTO.entity
 
   then
       IssueDetails details = new IssueDetails();
