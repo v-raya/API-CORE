@@ -9,7 +9,9 @@ import gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication;
 import java.util.ArrayList;
 import java.util.List;
 
-/** @author CWDS TPT-3 Team */
+/**
+ * @author CWDS TPT-3 Team
+ **/
 public class ChildClientEntityAwareDTO extends ClientEntityAwareDTO {
   private final List<FCEligibility> fcEligibilities = new ArrayList<>();
   private final List<HealthInterventionPlan> activeHealthInterventionPlans = new ArrayList<>();
