@@ -1,6 +1,5 @@
 package gov.ca.cwds.data.legacy.cms.entity.enums;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import javax.persistence.Converter;
@@ -18,6 +17,10 @@ public enum IcwaEligibility implements EntityEnum<String> {
   IcwaEligibility(String code, String description) {
     this.code = code;
     this.description = description;
+  }
+
+  public static IcwaEligibility fromCode(String code) {
+    return new IcwaEligibilityConverter().convertToEntityAttribute(code);
   }
 
   @Override

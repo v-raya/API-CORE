@@ -20,6 +20,10 @@ public enum AwolAbducted implements EntityEnum<String> {
     this.description = description;
   }
 
+  public static AwolAbducted fromCode(String code) {
+    return new AwolAbductedConverter().convertToEntityAttribute(code);
+  }
+
   @Override
   public String getCode() {
     return code;

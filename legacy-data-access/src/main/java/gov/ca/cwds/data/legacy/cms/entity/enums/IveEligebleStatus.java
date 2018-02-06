@@ -17,6 +17,10 @@ public enum IveEligebleStatus implements EntityEnum<String> {
     this.description = description;
   }
 
+  public static IveEligebleStatus fromCode(String code) {
+    return new IveEligebleStatusConverter().convertToEntityAttribute(code);
+  }
+
   @Override
   public String getCode() {
     return code;

@@ -82,8 +82,6 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
     final String expectedFilePath = "/dbunit/Client/insert/Client_after_insert.xml";
 
     cleanAll(expectedFilePath);
-    cleanAllAndInsert("/dbunit/Client/insert/Client_before_insert.xml");
-
     executeInTransaction(
         sessionFactory,
         (sessionFactory) -> {

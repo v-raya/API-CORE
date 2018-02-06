@@ -23,6 +23,10 @@ public enum ResponsibleAgency implements EntityEnum<String> {
     this.description = description;
   }
 
+  public static ResponsibleAgency fromCode(String code) {
+    return new ResponsibleAgencyConverter().convertToEntityAttribute(code);
+  }
+
   @Override
   public String getCode() {
     return code;

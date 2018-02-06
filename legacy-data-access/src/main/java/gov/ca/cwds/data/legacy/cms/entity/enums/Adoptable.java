@@ -18,6 +18,10 @@ public enum Adoptable implements EntityEnum<String> {
     this.description = description;
   }
 
+  public static Adoptable fromCode(String code) {
+    return new AdoptableConverter().convertToEntityAttribute(code);
+  }
+
   @Override
   public String getCode() {
     return code;
