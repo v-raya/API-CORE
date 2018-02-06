@@ -19,8 +19,7 @@ public class PaternityDetailDao extends BaseDaoImpl<PaternityDetail> {
     super(sessionFactory);
   }
 
-  public List<PaternityDetail> getPaternityDetailsByChildClientId(
-      String childClientId) {
+  public List<PaternityDetail> findByChildClientId(String childClientId) {
 
     Require.requireNotNullAndNotEmpty(childClientId);
 

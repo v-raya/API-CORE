@@ -27,7 +27,7 @@ import org.hibernate.annotations.NotFoundAction;
 @NamedQuery(
   name = HealthInterventionPlan.FIND_ACTIVE_PLANS_BY_CLIENT_ID,
   query =
-      "SELECT plan FROM HealthInterventionPlan plan where plan.client.id =:"
+      "SELECT plan FROM HealthInterventionPlan plan where plan.childClient.id =:"
           + HealthInterventionPlan.PARAM_CLIENT_ID
           + " and plan.endDate is null"
 )
@@ -47,11 +47,11 @@ public class HealthInterventionPlan extends CmsPersistentObject {
   @Fetch(FetchMode.SELECT)
   @JoinColumn(
     name = "FKCHLD_CLT",
-    referencedColumnName = "IDENTIFIER",
+    referencedColumnName = "FKCLIENT_T",
     insertable = false,
     updatable = false
   )
-  private Client client;
+  private ChildClient childClient;
 
   @NotNull
   @Column(
@@ -92,12 +92,12 @@ public class HealthInterventionPlan extends CmsPersistentObject {
     return id;
   }
 
-  public Client getClient() {
-    return client;
+  public ChildClient getChildClient() {
+    return childClient;
   }
 
-  public void setClient(Client client) {
-    this.client = client;
+  public void setChildClient(ChildClient client) {
+    this.childClient = client;
   }
 
   public String getThirdId() {

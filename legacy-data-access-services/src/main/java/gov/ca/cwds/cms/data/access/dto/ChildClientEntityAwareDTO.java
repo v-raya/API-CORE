@@ -5,22 +5,27 @@ import gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan;
 import gov.ca.cwds.data.legacy.cms.entity.ParentalRightsTermination;
 import gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication;
 
+import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
 import java.util.ArrayList;
 import java.util.List;
 
-/** @author CWDS TPT-3 Team */
+/**
+ * @author CWDS TPT-3 Team
+ */
 public class ChildClientEntityAwareDTO extends ClientEntityAwareDTO {
+
   private List<FCEligibility> fcEligibilities = new ArrayList<>();
   private List<HealthInterventionPlan> activeHealthInterventionPlans = new ArrayList<>();
   private List<ParentalRightsTermination> parentalRightsTerminations = new ArrayList<>();
   private List<MedicalEligibilityApplication> medicalEligibilityApplications = new ArrayList<>();
+  private List<PaternityDetail> paternityDetails = new ArrayList<>();
 
   public List<MedicalEligibilityApplication> getMedicalEligibilityApplications() {
     return medicalEligibilityApplications;
   }
 
   public void setMedicalEligibilityApplications(
-          List<MedicalEligibilityApplication> medicalEligibilityApplications) {
+      List<MedicalEligibilityApplication> medicalEligibilityApplications) {
     this.medicalEligibilityApplications = medicalEligibilityApplications;
   }
 
@@ -48,5 +53,13 @@ public class ChildClientEntityAwareDTO extends ClientEntityAwareDTO {
   public void setParentalRightsTerminations(
       List<ParentalRightsTermination> parentalRightsTerminations) {
     this.parentalRightsTerminations = parentalRightsTerminations;
+  }
+
+  public List<PaternityDetail> getPaternityDetails() {
+    return paternityDetails;
+  }
+
+  public void setPaternityDetails(List<PaternityDetail> paternityDetails) {
+    this.paternityDetails = paternityDetails;
   }
 }

@@ -31,8 +31,7 @@ public class PaternityDetailDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
         (sessionFactory) -> {
           final String CHILD_CLIENT_ID = "AapJGAU04Z";
 
-          List<PaternityDetail> paternityDetails =
-              dao.getPaternityDetailsByChildClientId(CHILD_CLIENT_ID);
+          List<PaternityDetail> paternityDetails = dao.findByChildClientId(CHILD_CLIENT_ID);
 
           assertEquals(2, paternityDetails.size());
 
@@ -52,7 +51,7 @@ public class PaternityDetailDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
           assertTrue(pt1 instanceof CollateralInividualPaternityDetail);
 
           List<PaternityDetail> paternityDetails2 = dao
-              .getPaternityDetailsByChildClientId("unknownone");
+              .findByChildClientId("unknownone");
           assertEquals(0, paternityDetails2.size());
         });
   }
