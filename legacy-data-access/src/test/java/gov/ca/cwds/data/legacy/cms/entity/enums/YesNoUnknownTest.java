@@ -1,23 +1,22 @@
 package gov.ca.cwds.data.legacy.cms.entity.enums;
 
-import static gov.ca.cwds.data.legacy.cms.entity.enums.SameHomeStatus.NO;
-import static gov.ca.cwds.data.legacy.cms.entity.enums.SameHomeStatus.UNKNOWN;
-import static gov.ca.cwds.data.legacy.cms.entity.enums.SameHomeStatus.YES;
+import static gov.ca.cwds.data.legacy.cms.entity.enums.YesNoUnknown.NO;
+import static gov.ca.cwds.data.legacy.cms.entity.enums.YesNoUnknown.UNKNOWN;
+import static gov.ca.cwds.data.legacy.cms.entity.enums.YesNoUnknown.YES;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import gov.ca.cwds.data.legacy.cms.entity.enums.Gender.GenderConverter;
-import gov.ca.cwds.data.legacy.cms.entity.enums.SameHomeStatus.SameHomeStatusConverter;
+import gov.ca.cwds.data.legacy.cms.entity.enums.YesNoUnknown.YesNoUnknownConverter;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SameHomeStatusTest {
+public class YesNoUnknownTest {
 
-  private SameHomeStatusConverter converter;
+  private YesNoUnknownConverter converter;
 
   @Before
   public void before() {
-    converter = new SameHomeStatusConverter();
+    converter = new YesNoUnknownConverter();
   }
 
   @Test

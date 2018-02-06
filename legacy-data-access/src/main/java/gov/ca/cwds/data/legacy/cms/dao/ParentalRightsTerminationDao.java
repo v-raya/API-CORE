@@ -19,7 +19,7 @@ public class ParentalRightsTerminationDao extends BaseDaoImpl<ParentalRightsTerm
     super(sessionFactory);
   }
 
-  public List<ParentalRightsTermination> getParentalRightsTerminationsByChildClientId(
+  public List<ParentalRightsTermination> findByChildClientId(
       String childClientId) {
 
     Require.requireNotNullAndNotEmpty(childClientId);

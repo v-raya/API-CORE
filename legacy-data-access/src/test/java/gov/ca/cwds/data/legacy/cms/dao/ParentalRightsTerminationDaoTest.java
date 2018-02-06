@@ -28,7 +28,7 @@ public class ParentalRightsTerminationDaoTest extends BaseCwsCmsInMemoryPersiste
           final String CHILD_CLIENT_ID = "AapJGAU04Z";
 
           List<ParentalRightsTermination> terminations =
-              dao.getParentalRightsTerminationsByChildClientId(CHILD_CLIENT_ID);
+              dao.findByChildClientId(CHILD_CLIENT_ID);
           assertEquals(2, terminations.size());
 
           ParentalRightsTermination term0 = terminations.get(0);
@@ -37,7 +37,7 @@ public class ParentalRightsTerminationDaoTest extends BaseCwsCmsInMemoryPersiste
           ParentalRightsTermination term1 = terminations.get(1);
           assertEquals(term1.getChild().getIdentifier(), CHILD_CLIENT_ID);
 
-          List<ParentalRightsTermination> terminations2 = dao.getParentalRightsTerminationsByChildClientId("unknownone");
+          List<ParentalRightsTermination> terminations2 = dao.findByChildClientId("unknownone");
           assertEquals(0, terminations2.size());
         });
   }

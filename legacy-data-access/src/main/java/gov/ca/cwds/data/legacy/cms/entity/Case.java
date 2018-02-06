@@ -495,21 +495,20 @@ public class Case extends CmsPersistentObject {
   }
 
   @Override
-  public boolean equals(Object o) {
+  public final boolean equals(Object o) {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+    if (!(o instanceof Case)) {
       return false;
     }
     Case aCase = (Case) o;
-    return Objects.equals(
-            childClient.getVictimClientId(), aCase.getChildClient().getVictimClientId())
-        && Objects.equals(startDate, aCase.startDate);
+    return Objects.equals(getChildClient(), aCase.getChildClient())
+        && Objects.equals(getStartDate(), aCase.getStartDate());
   }
 
   @Override
-  public int hashCode() {
-    return Objects.hash(childClient.getVictimClientId(), startDate);
+  public final int hashCode() {
+    return Objects.hash(getChildClient(), getStartDate());
   }
 }

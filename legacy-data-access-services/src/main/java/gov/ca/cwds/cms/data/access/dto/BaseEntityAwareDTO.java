@@ -1,7 +1,6 @@
 package gov.ca.cwds.cms.data.access.dto;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
-import gov.ca.cwds.security.realm.PerryAccount;
 
 /**
  * @author CWDS CALS API Team
