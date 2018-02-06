@@ -13,7 +13,7 @@ public class HealthInterventionPlanDaoTest extends BaseCwsCmsInMemoryPersistence
   private HealthInterventionPlanDao dao = null;
 
   @Before
-  public void before() throws Exception {
+  public void before() {
     dao = new HealthInterventionPlanDao(sessionFactory);
   }
 
@@ -25,7 +25,7 @@ public class HealthInterventionPlanDaoTest extends BaseCwsCmsInMemoryPersistence
     executeInTransaction(
         sessionFactory,
         (sessionFactory) -> {
-          List<HealthInterventionPlan> plans = dao.getActiveHealthInterventionPlans("AapJGAU04Z");
+          List<HealthInterventionPlan> plans = dao.findByChildClientId("AapJGAU04Z");
           assertEquals(1, plans.size());
           HealthInterventionPlan plan = plans.get(0);
           assertEquals("0123456789", plan.getThirdId());

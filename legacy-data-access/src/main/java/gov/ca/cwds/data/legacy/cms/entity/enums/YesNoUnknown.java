@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.Map;
 import javax.persistence.Converter;
 
-public enum SameHomeStatus implements EntityEnum<String> {
+public enum YesNoUnknown implements EntityEnum<String> {
   NO("N", "No"),
   UNKNOWN("U", "Unknown"),
   YES("Y", "Yes");
@@ -12,13 +12,13 @@ public enum SameHomeStatus implements EntityEnum<String> {
   private final String code;
   private final String description;
 
-  SameHomeStatus(String code, String description) {
+  YesNoUnknown(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
-  public static SameHomeStatus fromCode(String code) {
-    return new SameHomeStatusConverter().convertToEntityAttribute(code);
+  public static YesNoUnknown fromCode(String code) {
+    return new YesNoUnknownConverter().convertToEntityAttribute(code);
   }
 
   @Override
@@ -32,13 +32,13 @@ public enum SameHomeStatus implements EntityEnum<String> {
   }
 
   @Converter
-  public static class SameHomeStatusConverter extends BaseEntityEnumConverter<SameHomeStatus, String> {
+  public static class YesNoUnknownConverter extends BaseEntityEnumConverter<YesNoUnknown, String> {
 
-    private static final Map<String, SameHomeStatus> codeMap =
-        Collections.unmodifiableMap(initializeMapping(SameHomeStatus.values()));
+    private static final Map<String, YesNoUnknown> codeMap =
+        Collections.unmodifiableMap(initializeMapping(YesNoUnknown.values()));
 
     @Override
-    Map<String, SameHomeStatus> getCodeMap() {
+    Map<String, YesNoUnknown> getCodeMap() {
       return codeMap;
     }
   }

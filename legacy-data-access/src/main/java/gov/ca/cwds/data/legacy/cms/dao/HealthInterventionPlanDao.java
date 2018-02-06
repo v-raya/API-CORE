@@ -17,7 +17,7 @@ public class HealthInterventionPlanDao extends BaseDaoImpl<HealthInterventionPla
     super(sessionFactory);
   }
 
-  public List<HealthInterventionPlan> getActiveHealthInterventionPlans(String clientId) {
+  public List<HealthInterventionPlan> findByChildClientId(String clientId) {
 
     if (StringUtils.isEmpty(clientId)) {
       return new ArrayList<>();

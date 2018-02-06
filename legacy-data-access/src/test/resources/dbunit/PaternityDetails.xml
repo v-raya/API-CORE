@@ -1,0 +1,16 @@
+<dataset>
+  <PTRNYDET IDENTIFIER="KncJHIT0If" ESTB_CD="Y" HEARING_DT="1994-02-07" PRMY_IDVID="IU2geDF0If"
+    PRMY_IDVCD="C" COMNT_DSC="                                                                                                                                                                                    "
+    ETBLOC_DSC="Vacaville                                         " TSTRSL_DSC="                                                            " LST_UPD_ID="0If" LST_UPD_TS="2001-02-16 10:17:52.496558"
+    FKCHLD_CLT="AapJGAU04Z"/>
+
+  <PTRNYDET IDENTIFIER="Tq5uZMo75C" ESTB_CD="Y" HEARING_DT="1998-03-11" PRMY_IDVID="EflNfbm75C"
+    PRMY_IDVCD="I" COMNT_DSC="                                                                                                                                                                                    "
+    ETBLOC_DSC="Los Angeles                                       " TSTRSL_DSC="                                                            " LST_UPD_ID="75C" LST_UPD_TS="1998-03-11 17:10:05.977736"
+    FKCHLD_CLT="AapJGAU04Z"/>
+
+  <PTRNYDET IDENTIFIER="TJo9RTv0Hj" ESTB_CD="U" PRMY_IDVID="DNA5jaV0Hj"
+    PRMY_IDVCD="C" COMNT_DSC="                                                                                                                                                                                    "
+    ETBLOC_DSC="Sutter Court                                      " TSTRSL_DSC="                                                            " LST_UPD_ID="0EE" LST_UPD_TS="2000-06-08 08:44:45.296464"
+    FKCHLD_CLT="0SeiXTv0Hj"/>
+</dataset>
