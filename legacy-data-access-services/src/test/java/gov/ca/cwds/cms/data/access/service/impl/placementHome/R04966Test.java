@@ -14,7 +14,7 @@ public class R04966Test extends BaseDocToolRulesPlacementHomeTest {
     @Test
     public void testOtherAdultsNameValid() {
         OtherAdultsInPlacementHome otherAdultsInPlacementHome = new OtherAdultsInPlacementHome();
-        otherAdultsInPlacementHome.setOthAdltnm("Valid2 Nam31 Jr.");
+        otherAdultsInPlacementHome.setOthAdltnm(" A v f ");
         OtherAdultInHomeEntityAwareDTO otherAdultInHomeEntityAwareDTO = new OtherAdultInHomeEntityAwareDTO();
         otherAdultInHomeEntityAwareDTO.setEntity(otherAdultsInPlacementHome);
         placementHomeEntityAwareDTO.setOtherAdultInHomeParameterObjects(Collections.singletonList(otherAdultInHomeEntityAwareDTO));
