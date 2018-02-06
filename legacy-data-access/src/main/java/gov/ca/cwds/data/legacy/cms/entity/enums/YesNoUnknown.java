@@ -17,8 +17,8 @@ public enum YesNoUnknown implements EntityEnum<String> {
     this.description = description;
   }
 
-  public static SameHomeStatus fromCode(String code) {
-    return new SameHomeStatusConverter().convertToEntityAttribute(code);
+  public static YesNoUnknown fromCode(String code) {
+    return new YesNoUnknownConverter().convertToEntityAttribute(code);
   }
 
   @Override
