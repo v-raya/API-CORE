@@ -3,12 +3,14 @@ package gov.ca.cwds.cms.data.access.service.impl;
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.ChildClientCoreService;
+import gov.ca.cwds.data.legacy.cms.dao.CsecHistoryDao;
 import gov.ca.cwds.data.legacy.cms.dao.FCEligibilityDao;
 import gov.ca.cwds.data.legacy.cms.dao.HealthInterventionPlanDao;
 import gov.ca.cwds.data.legacy.cms.dao.MedicalEligibilityApplicationDao;
 import gov.ca.cwds.data.legacy.cms.dao.ParentalRightsTerminationDao;
 import gov.ca.cwds.data.legacy.cms.dao.PaternityDetailDao;
 import gov.ca.cwds.data.legacy.cms.entity.ChildClient;
+import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
 import gov.ca.cwds.data.legacy.cms.entity.FCEligibility;
 import gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan;
 import gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication;
@@ -25,6 +27,7 @@ public class ChildClientCoreServiceImpl extends ClientCoreServiceBase<ChildClien
   @Inject private ParentalRightsTerminationDao parentalRightsTerminationDao;
   @Inject private MedicalEligibilityApplicationDao medicalEligibilityApplicationDao;
   @Inject private FCEligibilityDao fcEligibilityDao;
+  @Inject private CsecHistoryDao csecHistoryDao;
   @Inject private PaternityDetailDao paternityDetailDao;
 
   protected void enrichClientEntityAwareDto(ChildClientEntityAwareDTO clientEntityAwareDTO) {
@@ -34,20 +37,23 @@ public class ChildClientCoreServiceImpl extends ClientCoreServiceBase<ChildClien
 
     if (childClient.getAfdcFcEligibilityIndicatorVar()) {
       List<FCEligibility> fcEligibilities = fcEligibilityDao.findByChildClientId(childClientId);
-      clientEntityAwareDTO.setFcEligibilities(fcEligibilities);
+      clientEntityAwareDTO.getFcEligibilities().addAll(fcEligibilities);
     }
 
     List<HealthInterventionPlan> activeHealthInterventionPlans =
         healthInterventionPlanDao.findByChildClientId(childClientId);
-    clientEntityAwareDTO.setActiveHealthInterventionPlans(activeHealthInterventionPlans);
+    clientEntityAwareDTO.getActiveHealthInterventionPlans().addAll(activeHealthInterventionPlans);
 
     List<ParentalRightsTermination> parentalRightsTerminations =
         parentalRightsTerminationDao.findByChildClientId(childClientId);
-    clientEntityAwareDTO.setParentalRightsTerminations(parentalRightsTerminations);
+    clientEntityAwareDTO.getParentalRightsTerminations().addAll(parentalRightsTerminations);
 
     List<MedicalEligibilityApplication> medicalEligibilityApplications =
         medicalEligibilityApplicationDao.findByChildClientId(childClientId);
-    clientEntityAwareDTO.setMedicalEligibilityApplications(medicalEligibilityApplications);
+    clientEntityAwareDTO.getMedicalEligibilityApplications().addAll(medicalEligibilityApplications);
+
+    List<CsecHistory> csecHistories = csecHistoryDao.findByClientId(childClientId);
+    clientEntityAwareDTO.getCsecHistories().addAll(csecHistories);
 
     List<PaternityDetail> paternityDetails = paternityDetailDao.findByChildClientId(childClientId);
     clientEntityAwareDTO.setPaternityDetails(paternityDetails);
