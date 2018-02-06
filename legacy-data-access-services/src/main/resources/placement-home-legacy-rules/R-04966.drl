@@ -12,7 +12,7 @@ import org.apache.commons.lang3.StringUtils
 global java.util.Set validationDetailsList
 
 function boolean noAlphaChars(String string) {
-    return StringUtils.isNotBlank(string) && !string.matches("([^\\s]*[a-zA-Z]+[^\\s]*[\\s]*)+");
+    return StringUtils.isNotBlank(string) && !string.matches("[\\s]*([^\\s]*[a-zA-Z]+[^\\s]*[\\s]*)+");
 }
 
 function boolean noAlphaCharsSingleString(String string) {
