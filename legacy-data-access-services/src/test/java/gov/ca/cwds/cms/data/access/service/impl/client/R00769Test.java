@@ -73,7 +73,7 @@ public class R00769Test extends BaseDocToolRulesClientImplementationTest {
       ParentalRightsTermination... terminations) {
     ChildClientEntityAwareDTO dto = new ChildClientEntityAwareDTO();
     dto.setEntity(childClient);
-    dto.setParentalRightsTerminations(Arrays.asList(terminations));
+    dto.getParentalRightsTerminations().addAll(Arrays.asList(terminations));
     return dto;
   }
 }

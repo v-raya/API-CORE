@@ -2,6 +2,7 @@ import gov.ca.cwds.rest.exception.IssueDetails
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
 import gov.ca.cwds.data.legacy.cms.entity.OtherAdultsInPlacementHome
 import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO
+import gov.ca.cwds.cms.data.access.dto.OtherAdultInHomeEntityAwareDTO
 import gov.ca.cwds.security.realm.PerryAccount
 
 global java.util.Set validationDetailsList
@@ -22,8 +23,10 @@ rule "R-00179"
       OTHER_ADULTS_IN_PLACEMENT_HOME: Birth_Date must be <= (system date - 18 years)
       */
       $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
-      $placementHome: PlacementHome() from $placementHomeAwareDTO.entity
-      $otherAdults : OtherAdultsInPlacementHome(birthDt != null, eval(birthDt.isAfter(LocalDate.now().minusYears(18)))) from $placementHome.otherAdultsInPlacementHomes
+
+      PlacementHomeEntityAwareDTO($list : otherAdultInHomeParameterObjects)
+      $otherAdultDTO: OtherAdultInHomeEntityAwareDTO() from $list
+      $otherAdults : OtherAdultsInPlacementHome(birthDt != null, eval(birthDt.isAfter(LocalDate.now().minusYears(18)))) from $otherAdultDTO.entity
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-00179");
