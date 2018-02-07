@@ -1,11 +1,9 @@
 package gov.ca.cwds.cms.data.access.service.impl.placementHome;
 
+import gov.ca.cwds.cms.data.access.dto.OtherAdultInHomeEntityAwareDTO;
 import gov.ca.cwds.data.legacy.cms.entity.OtherAdultsInPlacementHome;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import org.junit.Test;
 
 /**
@@ -20,7 +18,9 @@ public class R00180Test extends BaseDocToolRulesPlacementHomeTest {
     OtherAdultsInPlacementHome otherAdultsInPlacementHome = new OtherAdultsInPlacementHome();
     otherAdultsInPlacementHome.setStartDt(LocalDate.now().minus(20, ChronoUnit.YEARS));
     otherAdultsInPlacementHome.setEndDt(LocalDate.now().minus(10, ChronoUnit.YEARS));
-    placementHomeEntityAwareDTO.getEntity().setOtherAdultsInPlacementHomes(Collections.singletonList(otherAdultsInPlacementHome));
+    OtherAdultInHomeEntityAwareDTO otherAdultInHomeEntityAwareDTO = new OtherAdultInHomeEntityAwareDTO();
+    otherAdultInHomeEntityAwareDTO.setEntity(otherAdultsInPlacementHome);
+    placementHomeEntityAwareDTO.getOtherAdultInHomeParameterObjects().add(otherAdultInHomeEntityAwareDTO);
     checkRuleValid(placementHomeEntityAwareDTO, RULE_NAME);
   }
 
@@ -29,7 +29,9 @@ public class R00180Test extends BaseDocToolRulesPlacementHomeTest {
     OtherAdultsInPlacementHome otherAdultsInPlacementHome = new OtherAdultsInPlacementHome();
     otherAdultsInPlacementHome.setStartDt(LocalDate.now().minus(10, ChronoUnit.YEARS));
     otherAdultsInPlacementHome.setEndDt(LocalDate.now().minus(20, ChronoUnit.YEARS));
-    placementHomeEntityAwareDTO.getEntity().setOtherAdultsInPlacementHomes(Collections.singletonList(otherAdultsInPlacementHome));
+    OtherAdultInHomeEntityAwareDTO otherAdultInHomeEntityAwareDTO = new OtherAdultInHomeEntityAwareDTO();
+    otherAdultInHomeEntityAwareDTO.setEntity(otherAdultsInPlacementHome);
+    placementHomeEntityAwareDTO.getOtherAdultInHomeParameterObjects().add(otherAdultInHomeEntityAwareDTO);
     checkRuleViolatedOnce(placementHomeEntityAwareDTO, RULE_NAME);
   }
 
@@ -39,14 +41,18 @@ public class R00180Test extends BaseDocToolRulesPlacementHomeTest {
     otherAdultsInPlacementHome1.setStartDt(LocalDate.now().minus(10, ChronoUnit.YEARS));
     otherAdultsInPlacementHome1.setEndDt(LocalDate.now().minus(20, ChronoUnit.YEARS));
     otherAdultsInPlacementHome1.setIdentifier("id1");
+    OtherAdultInHomeEntityAwareDTO otherAdultInHomeEntityAwareDTO1 = new OtherAdultInHomeEntityAwareDTO();
+    otherAdultInHomeEntityAwareDTO1.setEntity(otherAdultsInPlacementHome1);
+    placementHomeEntityAwareDTO.getOtherAdultInHomeParameterObjects().add(otherAdultInHomeEntityAwareDTO1);
+
     OtherAdultsInPlacementHome otherAdultsInPlacementHome2 = new OtherAdultsInPlacementHome();
     otherAdultsInPlacementHome2.setStartDt(LocalDate.now().minus(19, ChronoUnit.YEARS));
     otherAdultsInPlacementHome2.setEndDt(LocalDate.now().minus(20, ChronoUnit.YEARS));
     otherAdultsInPlacementHome2.setIdentifier("id2");
-    List<OtherAdultsInPlacementHome> otherAdultsInPlacementHomeList = new ArrayList<>();
-    otherAdultsInPlacementHomeList.add(otherAdultsInPlacementHome1);
-    otherAdultsInPlacementHomeList.add(otherAdultsInPlacementHome2);
-    placementHomeEntityAwareDTO.getEntity().setOtherAdultsInPlacementHomes(otherAdultsInPlacementHomeList);
+    OtherAdultInHomeEntityAwareDTO otherAdultInHomeEntityAwareDTO2 = new OtherAdultInHomeEntityAwareDTO();
+    otherAdultInHomeEntityAwareDTO2.setEntity(otherAdultsInPlacementHome2);
+    placementHomeEntityAwareDTO.getOtherAdultInHomeParameterObjects().add(otherAdultInHomeEntityAwareDTO2);
+
     checkRuleViolated(placementHomeEntityAwareDTO, RULE_NAME, 2);
   }
 
@@ -55,7 +61,9 @@ public class R00180Test extends BaseDocToolRulesPlacementHomeTest {
     OtherAdultsInPlacementHome otherAdultsInPlacementHome = new OtherAdultsInPlacementHome();
     otherAdultsInPlacementHome.setStartDt(LocalDate.now().minus(10, ChronoUnit.YEARS));
     otherAdultsInPlacementHome.setEndDt(null);
-    placementHomeEntityAwareDTO.getEntity().setOtherAdultsInPlacementHomes(Collections.singletonList(otherAdultsInPlacementHome));
+    OtherAdultInHomeEntityAwareDTO otherAdultInHomeEntityAwareDTO = new OtherAdultInHomeEntityAwareDTO();
+    otherAdultInHomeEntityAwareDTO.setEntity(otherAdultsInPlacementHome);
+    placementHomeEntityAwareDTO.getOtherAdultInHomeParameterObjects().add(otherAdultInHomeEntityAwareDTO);
     checkRuleValid(placementHomeEntityAwareDTO, RULE_NAME);
   }
 
@@ -64,7 +72,9 @@ public class R00180Test extends BaseDocToolRulesPlacementHomeTest {
     OtherAdultsInPlacementHome otherAdultsInPlacementHome = new OtherAdultsInPlacementHome();
     otherAdultsInPlacementHome.setStartDt(null);
     otherAdultsInPlacementHome.setEndDt(LocalDate.now().minus(10, ChronoUnit.YEARS));
-    placementHomeEntityAwareDTO.getEntity().setOtherAdultsInPlacementHomes(Collections.singletonList(otherAdultsInPlacementHome));
+    OtherAdultInHomeEntityAwareDTO otherAdultInHomeEntityAwareDTO = new OtherAdultInHomeEntityAwareDTO();
+    otherAdultInHomeEntityAwareDTO.setEntity(otherAdultsInPlacementHome);
+    placementHomeEntityAwareDTO.getOtherAdultInHomeParameterObjects().add(otherAdultInHomeEntityAwareDTO);
     checkRuleValid(placementHomeEntityAwareDTO, RULE_NAME);
   }
 
@@ -73,7 +83,9 @@ public class R00180Test extends BaseDocToolRulesPlacementHomeTest {
     OtherAdultsInPlacementHome otherAdultsInPlacementHome = new OtherAdultsInPlacementHome();
     otherAdultsInPlacementHome.setStartDt(null);
     otherAdultsInPlacementHome.setEndDt(null);
-    placementHomeEntityAwareDTO.getEntity().setOtherAdultsInPlacementHomes(Collections.singletonList(otherAdultsInPlacementHome));
+    OtherAdultInHomeEntityAwareDTO otherAdultInHomeEntityAwareDTO = new OtherAdultInHomeEntityAwareDTO();
+    otherAdultInHomeEntityAwareDTO.setEntity(otherAdultsInPlacementHome);
+    placementHomeEntityAwareDTO.getOtherAdultInHomeParameterObjects().add(otherAdultInHomeEntityAwareDTO);
     checkRuleValid(placementHomeEntityAwareDTO, RULE_NAME);
   }
 

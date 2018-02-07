@@ -2,6 +2,7 @@ import gov.ca.cwds.rest.exception.IssueDetails
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
 import gov.ca.cwds.data.legacy.cms.entity.OtherAdultsInPlacementHome
 import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO
+import gov.ca.cwds.cms.data.access.dto.OtherAdultInHomeEntityAwareDTO
 import gov.ca.cwds.security.realm.PerryAccount
 
 global java.util.Set validationDetailsList
@@ -23,9 +24,9 @@ rule "R-00180"
       For Placement Home Notebook in the OtherChildrenInHome Page Use PM Other
       Children in Home View for any additional information needed.
       */
-      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
-      $placementHome: PlacementHome() from $placementHomeAwareDTO.entity
-      $otherAdults : OtherAdultsInPlacementHome(startDt != null && endDt != null, eval(startDt.isAfter(endDt))) from $placementHome.otherAdultsInPlacementHomes
+      PlacementHomeEntityAwareDTO($list : otherAdultInHomeParameterObjects)
+      $otherAdultDTO: OtherAdultInHomeEntityAwareDTO() from $list
+      $otherAdults : OtherAdultsInPlacementHome(startDt != null && endDt != null, eval(startDt.isAfter(endDt))) from $otherAdultDTO.entity
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-00180");
