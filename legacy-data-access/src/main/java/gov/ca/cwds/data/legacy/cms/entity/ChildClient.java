@@ -9,7 +9,6 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.IcwaEligibility;
 import gov.ca.cwds.data.legacy.cms.entity.enums.PreviouslyAdopted;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
