@@ -217,7 +217,7 @@ public final class CmsKeyIdGenerator {
 
 
   /**
-   * Simplified overload. Generate an identifier with the given staff id and current timestamp.
+   * Generate next identifier with the given staff id.
    *
    * @param staffId the staffId
    * @return the unique key from staffId
@@ -226,7 +226,7 @@ public final class CmsKeyIdGenerator {
     String newValue;
     do {
       newValue = generate(staffId, new Date());
-    } while(newValue != null && newValue.equals(currentValue));
+    } while(newValue.equals(currentValue));
 
     currentValue = newValue;
     return currentValue;
