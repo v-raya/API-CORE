@@ -51,7 +51,7 @@ public class R10354Test extends BaseDocToolRulesClientImplementationTest {
   private static ChildClientEntityAwareDTO dto(Client client, HealthInterventionPlan... plans) {
     ChildClientEntityAwareDTO dto = new ChildClientEntityAwareDTO();
     dto.setEntity(client);
-    dto.setActiveHealthInterventionPlans(Arrays.asList(plans));
+    dto.getActiveHealthInterventionPlans().addAll(Arrays.asList(plans));
     return dto;
   }
 }
