@@ -1,9 +1,9 @@
 package gov.ca.cwds.cms.data.access.service.impl.placementHome;
 
+import gov.ca.cwds.cms.data.access.dto.OtherAdultInHomeEntityAwareDTO;
 import gov.ca.cwds.data.legacy.cms.entity.OtherAdultsInPlacementHome;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
 import org.junit.Test;
 
 /**
@@ -17,7 +17,9 @@ public class R00179Test extends BaseDocToolRulesPlacementHomeTest {
   public void checkValidBirthDate()  throws Exception {
     OtherAdultsInPlacementHome otherAdultsInPlacementHome = new OtherAdultsInPlacementHome();
     otherAdultsInPlacementHome.setBirthDt(LocalDate.now().minus(20, ChronoUnit.YEARS));
-    placementHomeEntityAwareDTO.getEntity().setOtherAdultsInPlacementHomes(Collections.singletonList(otherAdultsInPlacementHome));
+    OtherAdultInHomeEntityAwareDTO otherAdultInHomeEntityAwareDTO = new OtherAdultInHomeEntityAwareDTO();
+    otherAdultInHomeEntityAwareDTO.setEntity(otherAdultsInPlacementHome);
+    placementHomeEntityAwareDTO.getOtherAdultInHomeParameterObjects().add(otherAdultInHomeEntityAwareDTO);
     checkRuleValid(placementHomeEntityAwareDTO, RULE_NAME);
   }
 
@@ -25,7 +27,9 @@ public class R00179Test extends BaseDocToolRulesPlacementHomeTest {
   public void checkBirthDateInFuture() throws Exception {
     OtherAdultsInPlacementHome otherAdultsInPlacementHome = new OtherAdultsInPlacementHome();
     otherAdultsInPlacementHome.setBirthDt(LocalDate.now().plus(1, ChronoUnit.DAYS));
-    placementHomeEntityAwareDTO.getEntity().setOtherAdultsInPlacementHomes(Collections.singletonList(otherAdultsInPlacementHome));
+    OtherAdultInHomeEntityAwareDTO otherAdultInHomeEntityAwareDTO = new OtherAdultInHomeEntityAwareDTO();
+    otherAdultInHomeEntityAwareDTO.setEntity(otherAdultsInPlacementHome);
+    placementHomeEntityAwareDTO.getOtherAdultInHomeParameterObjects().add(otherAdultInHomeEntityAwareDTO);
     checkRuleViolatedOnce(placementHomeEntityAwareDTO, RULE_NAME);
   }
 
@@ -33,7 +37,9 @@ public class R00179Test extends BaseDocToolRulesPlacementHomeTest {
   public void checkBirthDateLessThen18() throws Exception {
     OtherAdultsInPlacementHome otherAdultsInPlacementHome = new OtherAdultsInPlacementHome();
     otherAdultsInPlacementHome.setBirthDt(LocalDate.now().minus(17, ChronoUnit.YEARS));
-    placementHomeEntityAwareDTO.getEntity().setOtherAdultsInPlacementHomes(Collections.singletonList(otherAdultsInPlacementHome));
+    OtherAdultInHomeEntityAwareDTO otherAdultInHomeEntityAwareDTO = new OtherAdultInHomeEntityAwareDTO();
+    otherAdultInHomeEntityAwareDTO.setEntity(otherAdultsInPlacementHome);
+    placementHomeEntityAwareDTO.getOtherAdultInHomeParameterObjects().add(otherAdultInHomeEntityAwareDTO);
     checkRuleViolatedOnce(placementHomeEntityAwareDTO, RULE_NAME);
   }
 

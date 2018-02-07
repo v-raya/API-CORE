@@ -9,10 +9,12 @@ import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.ClientScpEthnicityDao;
 import gov.ca.cwds.data.legacy.cms.dao.DeliveredServiceDao;
 import gov.ca.cwds.data.legacy.cms.dao.NameTypeDao;
+import gov.ca.cwds.data.legacy.cms.dao.NearFatalityDao;
 import gov.ca.cwds.data.legacy.cms.dao.SafetyAlertDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
 import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
+import gov.ca.cwds.data.legacy.cms.entity.NearFatality;
 import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.drools.DroolsService;
@@ -20,6 +22,7 @@ import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -35,6 +38,7 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
   @Inject private DeliveredServiceDao deliveredServiceDao;
   @Inject private NameTypeDao nameTypeDao;
   @Inject private SafetyAlertDao safetyAlertDao;
+  @Inject private NearFatalityDao nearFatalityDao;
 
   @Override
   public Client find(Serializable primaryKey) {
@@ -70,6 +74,9 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
 
     List<DeliveredService> deliveredServices = deliveredServiceDao.findByClientId(clientId);
     clientEntityAwareDTO.setDeliveredService(deliveredServices);
+
+    List<NearFatality> nearFatalities = nearFatalityDao.findNearFatalitiesByClientId(clientId);
+    clientEntityAwareDTO.getNearFatalities().addAll(nearFatalities);
 
     Client persistentClientState = clientDao.find(clientId);
     clientEntityAwareDTO.setPersistentClientState(persistentClientState);

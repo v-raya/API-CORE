@@ -1,0 +1,36 @@
+import gov.ca.cwds.rest.exception.IssueDetails;
+import gov.ca.cwds.data.legacy.cms.entity.Client;
+import gov.ca.cwds.data.legacy.cms.entity.NearFatality;
+import gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan;
+import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
+import java.time.LocalDate;
+
+global java.util.Set validationDetailsList
+
+rule "R-09619"
+  dialect "mvel"
+  agenda-group "client-agenda"
+  when
+      /*
+        Code: R - 09619
+
+        Rule Txt:
+        The client's near fatality date must be greater than or equal to the birth date of the client and less than the client's deceased date, if it exists
+
+        Logic:
+        NEAR_FATALITY.Near_Fatality_Date >= CLIENT.Birth_Date and If CLIENT.Death_Date <> null, NEAR_FATALITY.Near_Fatality_Date < CLIENT.Death_Date.
+      */
+
+      $clientAwareDTO: ClientEntityAwareDTO()
+      $fatality: NearFatality($fDate : fatalityDate.toLocalDate()) from $clientAwareDTO.nearFatalities
+      client: Client(
+           birthDate != null && (
+           $fDate.isBefore(birthDate)
+           || $fDate.isAfter(deathDate) || $fDate.isEqual(deathDate))) from $clientAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-09619");
+      details.setUserMessage("The client's near fatality date must be greater than or equal to the birth date of the client and less than the client's deceased date, if it exists.");
+      details.setTechnicalMessage("NEAR_FATALITY.Near_Fatality_Date >= CLIENT.Birth_Date and If CLIENT.Death_Date <> null, NEAR_FATALITY.Near_Fatality_Date < CLIENT.Death_Date.");
+      validationDetailsList.add(details);
+end

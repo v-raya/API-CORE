@@ -46,6 +46,7 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.PaternityDetail"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.ClientPaternityDetail"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.CollateralInividualPaternityDetail"/>
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.NearFatality"/>
 
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.ActiveServiceComponentType"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.ApprovalStatusType"/>
