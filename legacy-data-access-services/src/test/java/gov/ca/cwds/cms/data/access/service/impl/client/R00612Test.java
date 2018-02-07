@@ -1,6 +1,5 @@
 package gov.ca.cwds.cms.data.access.service.impl.client;
 
-import gov.ca.cwds.cms.data.access.service.impl.client.BaseDocToolRulesClientImplementationTest;
 import gov.ca.cwds.data.legacy.cms.entity.ChildClient;
 import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
 import gov.ca.cwds.data.legacy.cms.entity.enums.IndividualType;

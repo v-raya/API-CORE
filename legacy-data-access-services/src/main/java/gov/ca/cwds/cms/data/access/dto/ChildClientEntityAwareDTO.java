@@ -3,9 +3,8 @@ package gov.ca.cwds.cms.data.access.dto;
 import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
 import gov.ca.cwds.data.legacy.cms.entity.FCEligibility;
 import gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan;
-import gov.ca.cwds.data.legacy.cms.entity.ParentalRightsTermination;
 import gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication;
-
+import gov.ca.cwds.data.legacy.cms.entity.ParentalRightsTermination;
 import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
 import java.util.ArrayList;
 import java.util.List;

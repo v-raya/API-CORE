@@ -1,13 +1,11 @@
 package gov.ca.cwds.cms.data.access.service.impl.client;
 
-import gov.ca.cwds.cms.data.access.service.impl.client.BaseDocToolRulesClientImplementationTest;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.junit.Test;
 
 public class R00742Test extends BaseDocToolRulesClientImplementationTest {
 
