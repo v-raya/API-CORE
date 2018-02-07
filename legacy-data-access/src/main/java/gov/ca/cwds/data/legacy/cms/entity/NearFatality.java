@@ -12,7 +12,10 @@ import org.hibernate.annotations.NamedQuery;
 /** @author CWDS TPT-3 Team */
 @Entity
 @Table(name = "NR_FATLT")
-@NamedQuery(name = NearFatality.NQ_BY_CLIENT_ID, query = "FROM NearFatality where clientId= :clientId")
+@NamedQuery(
+  name = NearFatality.NQ_BY_CLIENT_ID,
+  query = "FROM NearFatality where clientId =:clientId"
+)
 public class NearFatality extends CmsPersistentObject {
 
   public static final String NQ_BY_CLIENT_ID = "NearFatality.findByClientId";
