@@ -206,11 +206,30 @@ public final class CmsKeyIdGenerator {
       'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
       'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 
+  private static String currentValue;
+
   /**
    * Static class only, do not instantiate.
    */
-  CmsKeyIdGenerator() {
+  private CmsKeyIdGenerator() {
     // Static class only, do not instantiate.
+  }
+
+
+  /**
+   * Generate next identifier with the given staff id.
+   *
+   * @param staffId the staffId
+   * @return the unique key from staffId
+   */
+  public static synchronized String getNextValue(String staffId) {
+    String newValue;
+    do {
+      newValue = generate(staffId, new Date());
+    } while(newValue.equals(currentValue));
+
+    currentValue = newValue;
+    return currentValue;
   }
 
   /**
@@ -220,7 +239,7 @@ public final class CmsKeyIdGenerator {
    * @return CMS formatted timestamp
    * @throws ParseException on parsing error
    */
-  protected String createTimestampStr(final Date ts) throws ParseException {
+  protected static String createTimestampStr(final Date ts) throws ParseException {
     return ts == null ? createTimestampStr()
         : doubleToStrN(7, timestampToDouble(getTimestampSeed(ts)), POWER_BASE62);
   }
@@ -238,7 +257,7 @@ public final class CmsKeyIdGenerator {
    * @return CMS formatted timestamp
    * @throws ParseException on parsing error
    */
-  protected String createTimestampStr() throws ParseException {
+  protected static String createTimestampStr() throws ParseException {
     double nTimestamp = 0;
     double nPreviousTimestamp = 0; // previous value - used for UNIQUENESS!
 
@@ -264,7 +283,7 @@ public final class CmsKeyIdGenerator {
    * @param cal preferred timestamp
    * @return the timestamp in double
    */
-  public double timestampToDouble(final Calendar cal) {
+  public static double timestampToDouble(final Calendar cal) {
     double ret = 0;
     final NumberFormat fmt = new DecimalFormat("###,###.000");
 
@@ -298,7 +317,7 @@ public final class CmsKeyIdGenerator {
    * @param powers the power vector for the destination base
    * @return the double to string
    */
-  public String doubleToStrN(int dstLen, double src, final BigDecimal[] powers) {
+  public static String doubleToStrN(int dstLen, double src, final BigDecimal[] powers) {
     int i;
     int p = 0;
     double integral;
@@ -377,7 +396,7 @@ public final class CmsKeyIdGenerator {
    * @param ts timestamp to use or null for current date/time
    * @return Calendar set to preferred timestamp
    */
-  protected final Calendar getTimestampSeed(final Date ts) {
+  protected static final Calendar getTimestampSeed(final Date ts) {
     Calendar cal = Calendar.getInstance();
 
     if (ts != null) {
@@ -394,7 +413,7 @@ public final class CmsKeyIdGenerator {
    * @param ts timestamp to use or null for current date/time
    * @return generated 10 character, base-62 key
    */
-  protected String makeKey(final String staffId, final Date ts) {
+  protected static String makeKey(final String staffId, final Date ts) {
     return makeKey(new StringKey(staffId), ts);
   }
 
@@ -405,23 +424,13 @@ public final class CmsKeyIdGenerator {
    * @param ts timestamp to use or null for current date/time
    * @return the key from staffID
    */
-  protected String makeKey(final StringKey wrap, final Date ts) {
+  protected static String makeKey(final StringKey wrap, final Date ts) {
     try {
       ResourceParamValidator.<StringKey>validate(wrap);
       return createTimestampStr(ts).trim() + wrap.getValue();
     } catch (Exception e) {
       throw new ServiceException(e);
     }
-  }
-
-  /**
-   * Simplified overload. Generate an identifier with the given staff id and current timestamp.
-   * 
-   * @param staffId the staffId
-   * @return the unique key from staffId
-   */
-  public static String generate(String staffId) {
-    return generate(staffId, new Date());
   }
 
   /**
@@ -432,8 +441,7 @@ public final class CmsKeyIdGenerator {
    * @return unique key from staff id and timestamp
    */
   public static String generate(String staffId, final Date ts) {
-    final CmsKeyIdGenerator rend = new CmsKeyIdGenerator();
-    return rend.makeKey(!StringUtils.isBlank(staffId) ? staffId : DEFAULT_USER_ID, ts);
+    return makeKey(!StringUtils.isBlank(staffId) ? staffId : DEFAULT_USER_ID, ts);
   }
 
   /**
