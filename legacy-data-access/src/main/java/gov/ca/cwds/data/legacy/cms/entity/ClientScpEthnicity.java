@@ -17,7 +17,7 @@ import org.hibernate.annotations.NamedQuery;
 @NamedQuery(
         name = ClientScpEthnicity.NQ_FIND_BY_TYPE_AND_ESTABLISHED_FOR_ID,
         query =
-                "SELECT cse FROM ClientScpEthnicity cse"
+                "SELECT cse FROM gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity cse"
                         + " WHERE cse.estblshCd = :" + ClientScpEthnicity.NQ_PARAM_ESTABLISHED_FOR_CODE
                         + " AND cse.estblshId = :" + ClientScpEthnicity.NQ_PARAM_ESTABLISHED_FOR_ID
 )

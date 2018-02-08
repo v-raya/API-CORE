@@ -8,8 +8,8 @@ import javax.persistence.Entity;
 import org.hibernate.annotations.NamedQuery;
 
 /** @author CWDS CASE API Team */
-@NamedQuery(name = NQ_ALL, query = "FROM Country ORDER BY logicalId ASC")
-@NamedQuery(name = "Country.findByLogicalId", query = "FROM Country where logicalId = :logicalId")
+@NamedQuery(name = NQ_ALL, query = "FROM gov.ca.cwds.data.legacy.cms.entity.syscodes.Country ORDER BY logicalId ASC")
+@NamedQuery(name = "Country.findByLogicalId", query = "FROM gov.ca.cwds.data.legacy.cms.entity.syscodes.Country where logicalId = :logicalId")
 @Entity
 @Cacheable
 @DiscriminatorValue(value = "CNTRY_C")

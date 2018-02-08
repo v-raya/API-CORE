@@ -12,7 +12,7 @@ import org.hibernate.annotations.NamedQuery;
 @Entity
 @Cacheable
 @DiscriminatorValue(value = "HL_TERMC")
-@NamedQuery(name = HealthPlanTerminationType.NQ_ALL, query = "FROM HealthPlanTerminationType")
+@NamedQuery(name = HealthPlanTerminationType.NQ_ALL, query = "FROM gov.ca.cwds.data.legacy.cms.entity.syscodes.HealthPlanTerminationType")
 public class HealthPlanTerminationType extends SystemCodeTable {
 
     public static final String NQ_ALL = "HealthPlanTerminationType.all";

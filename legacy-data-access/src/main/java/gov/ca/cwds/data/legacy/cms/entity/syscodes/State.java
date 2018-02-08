@@ -11,7 +11,7 @@ import org.hibernate.annotations.NamedQuery;
 @Entity
 @Cacheable
 @DiscriminatorValue(value = "STATE_C ")
-@NamedQuery(name = State.NQ_ALL, query = "FROM State")
+@NamedQuery(name = State.NQ_ALL, query = "FROM gov.ca.cwds.data.legacy.cms.entity.syscodes.State")
 public class State extends SystemCodeTable {
 
   public static final String NQ_ALL = "State.all";

@@ -14,7 +14,7 @@ import org.hibernate.annotations.NotFoundAction;
  */
 @NamedQuery(
         name = "PlacementHome.find",
-        query = "SELECT ph FROM PlacementHome ph "
+        query = "SELECT ph FROM gov.ca.cwds.data.legacy.cms.entity.PlacementHome ph "
                 + " LEFT JOIN FETCH ph.countyLicenseCase cls"
                 + " LEFT JOIN FETCH cls.staffPerson sp"
                 + " LEFT JOIN FETCH cls.licensingVisits lv"

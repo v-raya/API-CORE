@@ -29,7 +29,7 @@ import org.hibernate.annotations.NotFoundAction;
 @NamedQueries(
     @NamedQuery(
         name = SafetyAlert.NQ_FIND_BY_CLIENT_ID,
-        query = "from SafetyAlert a where a.fkClientId = :" + SafetyAlert.NQ_PARAM_CLIENT_ID
+        query = "from gov.ca.cwds.data.legacy.cms.entity.SafetyAlert a where a.fkClientId = :" + SafetyAlert.NQ_PARAM_CLIENT_ID
     )
 )
 public class SafetyAlert extends CmsPersistentObject {

@@ -11,7 +11,7 @@ import org.hibernate.annotations.NamedQuery;
 @Entity
 @Cacheable
 @DiscriminatorValue(value = "LIC_STC ")
-@NamedQuery(name = LicenseStatus.NQ_ALL, query = "FROM LicenseStatus")
+@NamedQuery(name = LicenseStatus.NQ_ALL, query = "FROM gov.ca.cwds.data.legacy.cms.entity.syscodes.LicenseStatus")
 public class LicenseStatus extends SystemCodeTable {
 
     public static final String NQ_ALL = "LicenseStatus.all";
