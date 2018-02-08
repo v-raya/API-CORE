@@ -27,7 +27,7 @@ import org.hibernate.annotations.NotFoundAction;
 @NamedQuery(
   name = HealthInterventionPlan.FIND_ACTIVE_PLANS_BY_CLIENT_ID,
   query =
-      "SELECT plan FROM HealthInterventionPlan plan where plan.childClient.id =:"
+      "SELECT plan FROM gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan plan where plan.childClient.id =:"
           + HealthInterventionPlan.PARAM_CLIENT_ID
           + " and plan.endDate is null"
 )

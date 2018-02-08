@@ -33,7 +33,7 @@ import org.hibernate.annotations.NotFoundAction;
 @Table(name = "IDV_SVCT")
 @NamedQuery(
   name = DeliveredService.FIND_BY_CLIENT,
-  query = "FROM DeliveredService WHERE individualId = :clientId"
+  query = "FROM gov.ca.cwds.data.legacy.cms.entity.DeliveredService WHERE individualId = :clientId"
 )
 public class DeliveredService extends CmsPersistentObject {
 

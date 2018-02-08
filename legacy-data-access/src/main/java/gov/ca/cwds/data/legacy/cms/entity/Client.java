@@ -48,7 +48,7 @@ import org.hibernate.annotations.Type;
 @NamedQuery(
   name = "Client.find",
   query =
-      "SELECT c FROM Client c"
+      "SELECT c FROM gov.ca.cwds.data.legacy.cms.entity.Client c"
           + " JOIN c.placementEpisodes pe"
           + " JOIN pe.outOfHomePlacements ohp"
           + " JOIN ohp.placementHome ph"
@@ -57,7 +57,7 @@ import org.hibernate.annotations.Type;
 @NamedQuery(
   name = "Client.findAll",
   query =
-      "SELECT c FROM Client c"
+      "SELECT c FROM gov.ca.cwds.data.legacy.cms.entity.Client c"
           + " JOIN c.placementEpisodes pe"
           + " JOIN pe.outOfHomePlacements ohp"
           + " JOIN ohp.placementHome ph"
@@ -67,7 +67,7 @@ import org.hibernate.annotations.Type;
 @NamedQuery(
   name = "Client.findByFacilityId",
   query =
-      "SELECT c FROM Client c"
+      "SELECT c FROM gov.ca.cwds.data.legacy.cms.entity.Client c"
           + " JOIN c.placementEpisodes pe"
           + " JOIN pe.outOfHomePlacements ohp"
           + " JOIN ohp.placementHome ph"

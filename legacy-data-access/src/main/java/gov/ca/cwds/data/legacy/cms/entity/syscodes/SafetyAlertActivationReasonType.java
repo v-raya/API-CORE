@@ -14,7 +14,7 @@ import org.hibernate.annotations.NamedQuery;
 @DiscriminatorValue(value = "ACTV_RNC")
 @NamedQuery(
     name = SafetyAlertActivationReasonType.NQ_ALL,
-    query = "FROM SafetyAlertActivationReasonType"
+    query = "FROM gov.ca.cwds.data.legacy.cms.entity.syscodes.SafetyAlertActivationReasonType"
 )
 public class SafetyAlertActivationReasonType extends SystemCodeTable {
   public static final String NQ_ALL = "SafetyAlertActivationReasonType.all";

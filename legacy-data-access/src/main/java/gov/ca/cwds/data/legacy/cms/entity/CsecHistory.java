@@ -22,7 +22,7 @@ import org.hibernate.annotations.NotFoundAction;
 @Table(name = "CSECHIST")
 @NamedQuery(
     name = CsecHistory.FIND_BY_CLIENT_ID,
-    query = "FROM CsecHistory where childClient =:" + CsecHistory.PARAM_CLIENT_ID
+    query = "FROM gov.ca.cwds.data.legacy.cms.entity.CsecHistory where childClient =:" + CsecHistory.PARAM_CLIENT_ID
 )
 public class CsecHistory extends CmsPersistentObject {
 

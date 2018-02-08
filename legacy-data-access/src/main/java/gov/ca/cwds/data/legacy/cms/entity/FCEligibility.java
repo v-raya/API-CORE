@@ -25,7 +25,7 @@ import org.hibernate.annotations.Type;
 @Table(name = "FC_ELIGT")
 @NamedQuery(
     name = FCEligibility.FIND_BY_CLIENT,
-    query = "FROM FCEligibility WHERE childClientId = :childId and terminationDate=null"
+    query = "FROM gov.ca.cwds.data.legacy.cms.entity.FCEligibility WHERE childClientId = :childId and terminationDate=null"
 )
 public class FCEligibility extends CmsPersistentObject {
 

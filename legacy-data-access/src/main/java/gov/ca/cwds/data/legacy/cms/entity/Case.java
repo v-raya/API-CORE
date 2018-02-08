@@ -56,7 +56,7 @@ import org.hibernate.annotations.Type;
   @NamedQuery(
     name = Case.NQ_FIND_ACTIVE_BY_CLIENT_ID,
     query =
-        "select distinct c from Case c"
+        "select distinct c from gov.ca.cwds.data.legacy.cms.entity.Case c"
             + " left join c.childClient ch"
             + " where ch.victimClientId = :"
             + Case.NQ_PARAM_CLIENT_ID
@@ -65,7 +65,7 @@ import org.hibernate.annotations.Type;
   @NamedQuery(
     name = Case.NQ_FIND_CLOSED_BY_CLIENT_ID,
     query =
-        "select distinct c from Case c"
+        "select distinct c from gov.ca.cwds.data.legacy.cms.entity.Case c"
             + " left join c.childClient ch"
             + " where ch.victimClientId = :"
             + Case.NQ_PARAM_CLIENT_ID

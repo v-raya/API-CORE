@@ -12,7 +12,7 @@ import org.hibernate.annotations.NamedQuery;
 @Entity
 @Cacheable
 @DiscriminatorValue(value = "SRV_CMPC")
-@NamedQuery(name = ActiveServiceComponentType.NQ_ALL, query = "FROM ActiveServiceComponentType")
+@NamedQuery(name = ActiveServiceComponentType.NQ_ALL, query = "FROM gov.ca.cwds.data.legacy.cms.entity.syscodes.ActiveServiceComponentType")
 public class ActiveServiceComponentType extends SystemCodeTable {
 
     public static final String NQ_ALL = "ActiveServiceComponentType.all";

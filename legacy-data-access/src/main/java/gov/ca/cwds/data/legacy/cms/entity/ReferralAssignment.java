@@ -15,7 +15,7 @@ import org.hibernate.annotations.NotFoundAction;
 @NamedQuery(
   name = ReferralAssignment.FIND_ASSIGNMENTS_BY_REFERRALS,
   query =
-      "SELECT assignment FROM ReferralAssignment assignment where "
+      "SELECT assignment FROM gov.ca.cwds.data.legacy.cms.entity.ReferralAssignment assignment where "
           + "assignment.referral.id in (:" + ReferralAssignment.PARAM_REFERRAL_IDS + ")"
 )
 public class ReferralAssignment extends BaseAssignment {

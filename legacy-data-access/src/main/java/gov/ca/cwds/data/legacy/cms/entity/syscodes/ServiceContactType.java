@@ -9,7 +9,7 @@ import org.hibernate.annotations.NamedQuery;
 @Entity
 @Cacheable
 @DiscriminatorValue(value = "SVC_CNTC")
-@NamedQuery(name = ServiceContactType.NQ_ALL, query = "FROM ServiceContactType")
+@NamedQuery(name = ServiceContactType.NQ_ALL, query = "FROM gov.ca.cwds.data.legacy.cms.entity.syscodes.ServiceContactType")
 public class ServiceContactType extends SystemCodeTable {
   public static final String NQ_ALL = "ServiceContactType.all";
 

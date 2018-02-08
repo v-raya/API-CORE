@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @NamedQuery(
         name = MedicalEligibilityApplication.NQ_FIND_BY_CHILD_CLIENT_ID,
         query =
-                "SELECT mea FROM MedicalEligibilityApplication mea"
+                "SELECT mea FROM gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication mea"
                         + " WHERE mea.childClient.victimClientId = :" + MedicalEligibilityApplication.NQ_PARAM_CHILD_CLIENT_ID
 )
 /**
