@@ -8,7 +8,7 @@ import javax.persistence.Id;
 /**
  * @author CWDS TPT-3 Team
  */
-public class DualAgencyServicesHistoryPK implements Serializable {
+public class DasHistoryPK implements Serializable {
 
   private static final long serialVersionUID = -7321082877124692110L;
 
@@ -20,10 +20,10 @@ public class DualAgencyServicesHistoryPK implements Serializable {
   @Column(name = "THIRD_ID", nullable = false, length = 10)
   private String thirdId;
 
-  public DualAgencyServicesHistoryPK() {
+  public DasHistoryPK() {
   }
 
-  public DualAgencyServicesHistoryPK(String fkclientT, String thirdId) {
+  public DasHistoryPK(String fkclientT, String thirdId) {
     this.fkclientT = fkclientT;
     this.thirdId = thirdId;
   }
@@ -49,10 +49,10 @@ public class DualAgencyServicesHistoryPK implements Serializable {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof DualAgencyServicesHistoryPK)) {
+    if (!(o instanceof DasHistoryPK)) {
       return false;
     }
-    DualAgencyServicesHistoryPK that = (DualAgencyServicesHistoryPK) o;
+    DasHistoryPK that = (DasHistoryPK) o;
     return Objects.equal(fkclientT, that.fkclientT) &&
         Objects.equal(thirdId, that.thirdId);
   }

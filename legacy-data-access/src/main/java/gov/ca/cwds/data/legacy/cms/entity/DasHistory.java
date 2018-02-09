@@ -22,20 +22,20 @@ import org.hibernate.annotations.ColumnTransformer;
  */
 @Entity
 @Table(name = "DAS_HIST")
-@IdClass(DualAgencyServicesHistoryPK.class)
+@IdClass(DasHistoryPK.class)
 @NamedQueries(
     @NamedQuery(
-        name = DualAgencyServicesHistory.NQ_FIND_BY_CLIENT_ID,
-        query = "from DualAgencyServicesHistory where fkclientT = :"
-            + DualAgencyServicesHistory.NQ_PARAM_CLIENT_ID
+        name = DasHistory.NQ_FIND_BY_CLIENT_ID,
+        query = "from DasHistory where fkclientT = :"
+            + DasHistory.NQ_PARAM_CLIENT_ID
     )
 )
-public class DualAgencyServicesHistory implements PersistentObject {
+public class DasHistory implements PersistentObject {
 
   private static final long serialVersionUID = 6572734754959171762L;
 
   public static final String NQ_FIND_BY_CLIENT_ID =
-      "gov.ca.cwds.data.legacy.cms.entity.DualAgencyServicesHistory.findByClientId";
+      "gov.ca.cwds.data.legacy.cms.entity.DasHistory.findByClientId";
   public static final String NQ_PARAM_CLIENT_ID = "clientId";
 
   @Id
@@ -68,7 +68,7 @@ public class DualAgencyServicesHistory implements PersistentObject {
   @Override
   @Transient
   public Serializable getPrimaryKey() {
-    return new DualAgencyServicesHistoryPK(this.fkclientT, this.thirdId);
+    return new DasHistoryPK(this.fkclientT, this.thirdId);
   }
 
   public String getFkclientT() {
@@ -141,10 +141,10 @@ public class DualAgencyServicesHistory implements PersistentObject {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof DualAgencyServicesHistory)) {
+    if (!(o instanceof DasHistory)) {
       return false;
     }
-    DualAgencyServicesHistory that = (DualAgencyServicesHistory) o;
+    DasHistory that = (DasHistory) o;
     return Objects.equal(fkclientT, that.fkclientT) &&
         Objects.equal(thirdId, that.thirdId) &&
         Objects.equal(startDate, that.startDate) &&

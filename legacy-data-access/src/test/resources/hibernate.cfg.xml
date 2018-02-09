@@ -23,7 +23,7 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.CountyLicenseCase" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.CsecHistory"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.DeliveredService"/>
-    <mapping class="gov.ca.cwds.data.legacy.cms.entity.DualAgencyServicesHistory"/>
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.DasHistory"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.FCEligibility" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.LicensingVisit" />
