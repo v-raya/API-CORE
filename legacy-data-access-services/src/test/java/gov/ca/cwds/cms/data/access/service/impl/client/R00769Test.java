@@ -42,7 +42,7 @@ public class R00769Test extends BaseDocToolRulesClientImplementationTest {
 
   @Test
   public void testBirthDateNull() throws Exception {
-    checkRuleSatisfied(dto(childClient(null), termination(client(), SOME_DATE)),
+    checkRuleSatisfied(dto(childClient(), termination(client(), SOME_DATE)),
         RULE_NAME);
   }
 }
