@@ -21,9 +21,10 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.CollateralInividualPaternityDetail"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.CountyLicenseCase" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.CreditReportHistory"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.CsecHistory"/>
-    <mapping class="gov.ca.cwds.data.legacy.cms.entity.DeliveredService"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.DasHistory"/>
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.DeliveredService"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.FCEligibility" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.LicensingVisit" />
@@ -55,6 +56,9 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.ClientRelationshipType" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.Country"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.County"/>
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.CreditAgencyType" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.CreditReportRequestedByType" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.CreditReportStatusType" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.DeathCircumstancesType"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.Ethnicity"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.FacilityType"/>

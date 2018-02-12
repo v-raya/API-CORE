@@ -11,6 +11,7 @@ import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
 import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;
 import java.time.LocalDate;
 import java.util.Arrays;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author CWDS TPT-3 Team
@@ -34,9 +35,25 @@ public class ClientTestUtil {
     return client;
   }
 
+  public static ChildClient childClient() {
+    return childClient(null, null);
+  }
+
+  public static ChildClient childClient(String clientId) {
+    return childClient(null, clientId);
+  }
+
   public static ChildClient childClient(LocalDate birthDate) {
+    return childClient(birthDate, null);
+  }
+
+  public static ChildClient childClient(LocalDate birthDate, String clientId) {
     ChildClient childClient = new ChildClient();
-    childClient.setIdentifier(CHILD_CLIENT_ID);
+    if (StringUtils.isEmpty(clientId)) {
+      childClient.setIdentifier(CHILD_CLIENT_ID);
+    } else {
+      childClient.setIdentifier(clientId);
+    }
     childClient.setBirthDate(birthDate);
     return childClient;
   }
