@@ -4,6 +4,7 @@ import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
 import gov.ca.cwds.data.legacy.cms.entity.ChildClient;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientPaternityDetail;
+import gov.ca.cwds.data.legacy.cms.entity.DasHistory;
 import gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan;
 import gov.ca.cwds.data.legacy.cms.entity.ParentalRightsTermination;
 import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
@@ -54,6 +55,12 @@ public class ClientTestUtil {
     return safetyAlert;
   }
 
+  public static DasHistory dasHistory(LocalDate startDate) {
+    DasHistory dasHistory = new DasHistory();
+    dasHistory.setStartDate(startDate);
+    return dasHistory;
+  }
+
   public static ParentalRightsTermination termination(Client parent, LocalDate date) {
     ParentalRightsTermination termination = new ParentalRightsTermination();
     termination.setChild(childClient(SOME_DATE));
@@ -79,6 +86,13 @@ public class ClientTestUtil {
     ChildClientEntityAwareDTO dto = new ChildClientEntityAwareDTO();
     dto.setEntity(client);
     dto.getActiveHealthInterventionPlans().addAll(Arrays.asList(plans));
+    return dto;
+  }
+
+  public static ChildClientEntityAwareDTO dto(Client client, DasHistory... dasHistories) {
+    ChildClientEntityAwareDTO dto = new ChildClientEntityAwareDTO();
+    dto.setEntity(client);
+    dto.getDasHistories().addAll(Arrays.asList(dasHistories));
     return dto;
   }
 
