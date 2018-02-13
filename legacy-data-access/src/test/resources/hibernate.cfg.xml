@@ -46,6 +46,7 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.ReferralAssignment" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.ReferralClient" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.SafetyAlert" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.SpecialEducation" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.StaffPerson" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.StaffPersonCaseLoad" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider" />
