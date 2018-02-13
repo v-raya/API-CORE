@@ -184,6 +184,7 @@ public class ClientRelationship extends CmsPersistentObject {
   public int hashCode() {
 
     return Objects
-        .hash(super.hashCode(), getLeftSide(), getRightSide(), getType(), getStartDate(), getEndDate());
+        .hash(super.hashCode(), getLeftSide(), getRightSide(), getType(), getStartDate(),
+            getEndDate());
   }
 }

@@ -1,5 +1,8 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
+import static gov.ca.cwds.data.legacy.cms.entity.HealthReferral.FIND_HEALTH_REFERRAL_BY_CHILD_CLIENT_ID;
+import static gov.ca.cwds.data.legacy.cms.entity.HealthReferral.PARAM_CHILD_CLIENT_ID;
+
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.enums.ReferralOutcome;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.HealthConsentType;
@@ -21,6 +24,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
@@ -28,7 +32,18 @@ import org.hibernate.annotations.Type;
 @SuppressWarnings({"squid:S3437", "squid:S2160"})
 @Entity
 @Table(name = "HLTH_RFT")
+@NamedQuery(
+    name = FIND_HEALTH_REFERRAL_BY_CHILD_CLIENT_ID,
+    query =
+        "SELECT hr FROM gov.ca.cwds.data.legacy.cms.entity.HealthReferral hr where hr.childClient.identifier = :"
+            + PARAM_CHILD_CLIENT_ID
+)
 public class HealthReferral extends CmsPersistentObject {
+
+  public static final String FIND_HEALTH_REFERRAL_BY_CHILD_CLIENT_ID =
+      "HealthReferral.findByChildClientId";
+
+  public static final String PARAM_CHILD_CLIENT_ID = "childClientId";
 
   private static final long serialVersionUID = -7710959950918747285L;
 
