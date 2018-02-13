@@ -4,12 +4,14 @@ import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
 import gov.ca.cwds.data.legacy.cms.entity.ChildClient;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientPaternityDetail;
+import gov.ca.cwds.data.legacy.cms.entity.DasHistory;
 import gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan;
 import gov.ca.cwds.data.legacy.cms.entity.ParentalRightsTermination;
 import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
 import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;
 import java.time.LocalDate;
 import java.util.Arrays;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author CWDS TPT-3 Team
@@ -33,9 +35,25 @@ public class ClientTestUtil {
     return client;
   }
 
+  public static ChildClient childClient() {
+    return childClient(null, null);
+  }
+
+  public static ChildClient childClient(String clientId) {
+    return childClient(null, clientId);
+  }
+
   public static ChildClient childClient(LocalDate birthDate) {
+    return childClient(birthDate, null);
+  }
+
+  public static ChildClient childClient(LocalDate birthDate, String clientId) {
     ChildClient childClient = new ChildClient();
-    childClient.setIdentifier(CHILD_CLIENT_ID);
+    if (StringUtils.isEmpty(clientId)) {
+      childClient.setIdentifier(CHILD_CLIENT_ID);
+    } else {
+      childClient.setIdentifier(clientId);
+    }
     childClient.setBirthDate(birthDate);
     return childClient;
   }
@@ -52,6 +70,12 @@ public class ClientTestUtil {
     safetyAlert.setThirdId(thirdId);
     safetyAlert.setActivationDate(activationDate);
     return safetyAlert;
+  }
+
+  public static DasHistory dasHistory(LocalDate startDate) {
+    DasHistory dasHistory = new DasHistory();
+    dasHistory.setStartDate(startDate);
+    return dasHistory;
   }
 
   public static ParentalRightsTermination termination(Client parent, LocalDate date) {
@@ -79,6 +103,13 @@ public class ClientTestUtil {
     ChildClientEntityAwareDTO dto = new ChildClientEntityAwareDTO();
     dto.setEntity(client);
     dto.getActiveHealthInterventionPlans().addAll(Arrays.asList(plans));
+    return dto;
+  }
+
+  public static ChildClientEntityAwareDTO dto(Client client, DasHistory... dasHistories) {
+    ChildClientEntityAwareDTO dto = new ChildClientEntityAwareDTO();
+    dto.setEntity(client);
+    dto.getDasHistories().addAll(Arrays.asList(dasHistories));
     return dto;
   }
 

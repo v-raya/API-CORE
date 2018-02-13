@@ -7,12 +7,14 @@ import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.rules.ClientDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.ClientScpEthnicityDao;
+import gov.ca.cwds.data.legacy.cms.dao.DasHistoryDao;
 import gov.ca.cwds.data.legacy.cms.dao.DeliveredServiceDao;
 import gov.ca.cwds.data.legacy.cms.dao.NameTypeDao;
 import gov.ca.cwds.data.legacy.cms.dao.NearFatalityDao;
 import gov.ca.cwds.data.legacy.cms.dao.SafetyAlertDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
+import gov.ca.cwds.data.legacy.cms.entity.DasHistory;
 import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
 import gov.ca.cwds.data.legacy.cms.entity.NearFatality;
 import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;
@@ -38,6 +40,7 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
   @Inject private DeliveredServiceDao deliveredServiceDao;
   @Inject private NameTypeDao nameTypeDao;
   @Inject private SafetyAlertDao safetyAlertDao;
+  @Inject private DasHistoryDao dasHistoryDao;
   @Inject private NearFatalityDao nearFatalityDao;
 
   @Override
@@ -86,6 +89,9 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
 
     final Collection<SafetyAlert> safetyAlerts = safetyAlertDao.findByClientId(clientId);
     clientEntityAwareDTO.getSafetyAlerts().addAll(safetyAlerts);
+
+    final Collection<DasHistory> dasHistories = dasHistoryDao.findByClientId(clientId);
+    clientEntityAwareDTO.getDasHistories().addAll(dasHistories);
 
     enrichClientEntityAwareDto((T) clientEntityAwareDTO);
 

@@ -49,7 +49,7 @@ public class R10974Test extends BaseDocToolRulesChildClientImplementationTest {
 
   @Test
   public void childClientBirthDateDoesntExist() throws Exception {
-    clientEntityAwareDTO.setEntity(childClient(null));
+    clientEntityAwareDTO.setEntity(childClient());
 
     List<CsecHistory> csecHistories = createListOfCsecHistories(CLIENT_BIRTH_DAY);
     clientEntityAwareDTO.getCsecHistories().addAll(csecHistories);

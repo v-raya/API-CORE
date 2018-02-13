@@ -1,0 +1,42 @@
+import gov.ca.cwds.rest.exception.IssueDetails;
+import gov.ca.cwds.data.legacy.cms.entity.Client;
+import gov.ca.cwds.data.legacy.cms.entity.DasHistory;
+import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
+
+global java.util.Set validationDetailsList
+
+rule "R-10538"
+  /*
+    Code:
+    R - 10538
+
+    Rule Txt:
+    The Services Start Date cannot be less than the birth date (if it exists) of the client.
+
+    Logic:
+    DUAL_AGENCY_SERVICES_HISTORY.Start_Date must be >= CLIENT.Birth_Date
+  */
+  dialect "mvel"
+  agenda-group "client-agenda"
+  when
+    $clientAwareDTO: ChildClientEntityAwareDTO()
+    $client: Client($birthDate: birthDate != null) from $clientAwareDTO.entity
+    $dasHistory: DasHistory(startDate != null && startDate.isBefore($birthDate))
+      from $clientAwareDTO.dasHistories
+  then
+    IssueDetails details = new IssueDetails();
+    details.setCode("R-10538");
+    details.setUserMessage(
+      String.format(
+        "The Services Start Date cannot be less than the birth date (if it exists) of the client."
+            + " Client ID: '%s';"
+            + " Client Birth Date: %tm/%<td/%<tY;"
+            + " DasHistory Start Date: %tm/%<td/%<tY",
+        $client.getIdentifier(),
+        $client.getBirthDate(),
+        $dasHistory.getStartDate()
+      )
+    );
+    details.setTechnicalMessage("DUAL_AGENCY_SERVICES_HISTORY.Start_Date must be >= CLIENT.Birth_Date");
+    validationDetailsList.add(details);
+end

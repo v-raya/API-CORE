@@ -1,17 +1,17 @@
 package gov.ca.cwds.cms.data.access.dto;
 
+import gov.ca.cwds.data.legacy.cms.entity.CreditReportHistory;
 import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
 import gov.ca.cwds.data.legacy.cms.entity.FCEligibility;
 import gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan;
 import gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication;
 import gov.ca.cwds.data.legacy.cms.entity.ParentalRightsTermination;
 import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
+import gov.ca.cwds.data.legacy.cms.entity.SpecialEducation;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author CWDS TPT-3 Team
- */
+/** @author CWDS TPT-3 Team */
 public class ChildClientEntityAwareDTO extends ClientEntityAwareDTO {
 
   private final List<FCEligibility> fcEligibilities = new ArrayList<>();
@@ -21,6 +21,8 @@ public class ChildClientEntityAwareDTO extends ClientEntityAwareDTO {
       new ArrayList<>();
   private final List<CsecHistory> csecHistories = new ArrayList<>();
   private List<PaternityDetail> paternityDetails = new ArrayList<>();
+  private final List<CreditReportHistory> creditReportHistories = new ArrayList<>();
+  private final List<SpecialEducation> specialEducations = new ArrayList<>();
 
   public List<MedicalEligibilityApplication> getMedicalEligibilityApplications() {
     return medicalEligibilityApplications;
@@ -48,5 +50,13 @@ public class ChildClientEntityAwareDTO extends ClientEntityAwareDTO {
 
   public void setPaternityDetails(List<PaternityDetail> paternityDetails) {
     this.paternityDetails = paternityDetails;
+  }
+
+  public List<CreditReportHistory> getCreditReportHistories() {
+    return creditReportHistories;
+  }
+
+  public List<SpecialEducation> getSpecialEducations() {
+    return specialEducations;
   }
 }

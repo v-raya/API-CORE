@@ -17,13 +17,13 @@ public class R00772_2Test extends BaseDocToolRulesClientImplementationTest {
   @Test
   public void testPaternityTestDateAndBirthDateAreNulls() throws Exception {
     checkRuleSatisfied(
-        dto(childClient(null), paternityDetail(SOME_ID, null)),
+        dto(childClient(), paternityDetail(SOME_ID, null)),
         RULE_NAME);
   }
 
   @Test
   public void testBirthDateIsNull() throws Exception {
-    checkRuleSatisfied(dto(childClient(null), paternityDetail(SOME_ID, SOME_DATE)),
+    checkRuleSatisfied(dto(childClient(), paternityDetail(SOME_ID, SOME_DATE)),
         RULE_NAME);
   }
 
