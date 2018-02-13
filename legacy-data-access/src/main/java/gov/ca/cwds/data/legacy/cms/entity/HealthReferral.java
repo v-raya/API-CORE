@@ -35,7 +35,7 @@ import org.hibernate.annotations.Type;
 @NamedQuery(
     name = FIND_HEALTH_REFERRAL_BY_CHILD_CLIENT_ID,
     query =
-        "SELECT hr FROM gov.ca.cwds.data.legacy.cms.entity.HealthReferral hr where hr.childClient.identifier = :"
+        "SELECT hr FROM HealthReferral hr where hr.childClient.identifier = :"
             + PARAM_CHILD_CLIENT_ID
 )
 public class HealthReferral extends CmsPersistentObject {
