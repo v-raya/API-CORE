@@ -15,7 +15,7 @@ public class R10787Test extends BaseDocToolRulesChildClientImplementationTest {
   private static LocalDate CLIENT_BIRTH_DAY = LocalDate.of(1990, 1, 22);
 
   @Test
-  public void clientBirthdayGraterThanReportRefusualDate() throws Exception {
+  public void clientBirthdayLessThanReportRefusualDate() throws Exception {
     clientEntityAwareDTO.setEntity(ClientTestUtil.childClient(CLIENT_BIRTH_DAY, CHILD_CLIENT_ID));
 
     List<CreditReportHistory> creditReportHistoryList =
@@ -31,7 +31,7 @@ public class R10787Test extends BaseDocToolRulesChildClientImplementationTest {
   }
 
   @Test
-  public void clientBirthdayLessThanReportRefusualDate() throws Exception {
+  public void clientBirthdayGraterThanReportRefusualDate() throws Exception {
     clientEntityAwareDTO.setEntity(ClientTestUtil.childClient(CLIENT_BIRTH_DAY, CHILD_CLIENT_ID));
 
     List<CreditReportHistory> creditReportHistoryList =
