@@ -10,6 +10,7 @@ import gov.ca.cwds.data.legacy.cms.dao.HealthInterventionPlanDao;
 import gov.ca.cwds.data.legacy.cms.dao.MedicalEligibilityApplicationDao;
 import gov.ca.cwds.data.legacy.cms.dao.ParentalRightsTerminationDao;
 import gov.ca.cwds.data.legacy.cms.dao.PaternityDetailDao;
+import gov.ca.cwds.data.legacy.cms.dao.SpecialEducationDao;
 import gov.ca.cwds.data.legacy.cms.entity.ChildClient;
 import gov.ca.cwds.data.legacy.cms.entity.CreditReportHistory;
 import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
@@ -19,6 +20,7 @@ import gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication;
 import gov.ca.cwds.data.legacy.cms.entity.ParentalRightsTermination;
 
 import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
+import gov.ca.cwds.data.legacy.cms.entity.SpecialEducation;
 import java.util.List;
 
 /** @author CWDS TPT-3 Team */
@@ -32,6 +34,7 @@ public class ChildClientCoreServiceImpl extends ClientCoreServiceBase<ChildClien
   @Inject private CsecHistoryDao csecHistoryDao;
   @Inject private PaternityDetailDao paternityDetailDao;
   @Inject private CreditReportHistoryDao creditReportHistoryDao;
+  @Inject private SpecialEducationDao specialEducationDao;
 
   protected void enrichClientEntityAwareDto(ChildClientEntityAwareDTO clientEntityAwareDTO) {
 
@@ -64,5 +67,8 @@ public class ChildClientCoreServiceImpl extends ClientCoreServiceBase<ChildClien
     List<CreditReportHistory> creditReportHistories =
         creditReportHistoryDao.findByClientId(childClientId);
     clientEntityAwareDTO.getCreditReportHistories().addAll(creditReportHistories);
+
+    List<SpecialEducation> specialEducations = specialEducationDao.findByClientId(childClientId);
+    clientEntityAwareDTO.getSpecialEducations().addAll(specialEducations);
   }
 }
