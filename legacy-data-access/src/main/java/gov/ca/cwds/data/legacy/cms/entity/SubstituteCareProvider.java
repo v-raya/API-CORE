@@ -354,7 +354,7 @@ public class SubstituteCareProvider implements PersistentObject {
     return addTelNo;
   }
 
-  public void setAddTelNo(int addTelNo) {
+  public void setAddTelNo(long addTelNo) {
     this.addTelNo = addTelNo;
   }
 
