@@ -47,7 +47,7 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.ClientPaternityDetail"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.CollateralInividualPaternityDetail"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.NearFatality"/>
-    <mapping class="gov.ca.cwds.data.legacy.cms.entity.HlthRft"/>
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.HealthReferral"/>
 
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.ActiveServiceComponentType"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.ApprovalStatusType"/>
@@ -75,5 +75,8 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.SexualExploitationType"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.ClientRelationshipType" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.ParentalRightTerminationType" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.HealthConsentType" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.HealthReferredToType" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.HealthReferralType" />
   </session-factory>
 </hibernate-configuration>
