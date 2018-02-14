@@ -49,7 +49,7 @@ public class SubstituteCareProvider implements PersistentObject {
    */
   @Basic
   @Column(name = "ADD_TEL_NO", nullable = false, precision = 0)
-  private int addTelNo;
+  private long addTelNo;
 
   /**
    * ADDITIONL_PHONE_EXTENSION_NUMBER - No longer in use. With the implementation of R6.3 on
@@ -350,11 +350,11 @@ public class SubstituteCareProvider implements PersistentObject {
     this.identifier = identifier;
   }
 
-  public int getAddTelNo() {
+  public long getAddTelNo() {
     return addTelNo;
   }
 
-  public void setAddTelNo(int addTelNo) {
+  public void setAddTelNo(long addTelNo) {
     this.addTelNo = addTelNo;
   }
 
