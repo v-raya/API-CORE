@@ -115,15 +115,7 @@ public class HealthReferral extends CmsPersistentObject {
 
   @Override
   public Serializable getPrimaryKey() {
-    return null;
-  }
-
-  public ChildClient getChildClient() {
-    return childClient;
-  }
-
-  public void setChildClient(ChildClient childClient) {
-    this.childClient = childClient;
+    return getId();
   }
 
   public String getId() {
@@ -132,6 +124,14 @@ public class HealthReferral extends CmsPersistentObject {
 
   public void setId(String thirdId) {
     this.id = thirdId;
+  }
+
+  public ChildClient getChildClient() {
+    return childClient;
+  }
+
+  public void setChildClient(ChildClient childClient) {
+    this.childClient = childClient;
   }
 
   public HealthReferralType getHealthReferralType() {

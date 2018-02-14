@@ -2,11 +2,10 @@ package gov.ca.cwds.cms.data.access.dto;
 
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
-import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
 import gov.ca.cwds.data.legacy.cms.entity.DasHistory;
-import gov.ca.cwds.data.legacy.cms.entity.HealthReferral;
-import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;
+import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
 import gov.ca.cwds.data.legacy.cms.entity.NearFatality;
+import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +16,6 @@ public class ClientEntityAwareDTO extends BaseEntityAwareDTO<Client> {
   private final List<SafetyAlert> safetyAlerts = new ArrayList<>();
   private final List<DasHistory> dasHistories = new ArrayList<>();
   private List<NearFatality> nearFatalities = new ArrayList<>();
-
-  private List<HealthReferral> healthReferrals = new ArrayList<>();
 
   public List<ClientScpEthnicity> getClientScpEthnicities() {
     return clientScpEthnicities;
@@ -54,9 +51,5 @@ public class ClientEntityAwareDTO extends BaseEntityAwareDTO<Client> {
 
   public List<NearFatality> getNearFatalities() {
     return nearFatalities;
-  }
-
-  public List<HealthReferral> getHealthReferrals() {
-    return healthReferrals;
   }
 }
