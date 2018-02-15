@@ -1,0 +1,32 @@
+import gov.ca.cwds.rest.exception.IssueDetails;
+import gov.ca.cwds.data.legacy.cms.entity.Client;
+import gov.ca.cwds.data.legacy.cms.entity.HealthReferral;
+import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO
+
+global java.util.Set validationDetailsList
+
+rule "R-10339"
+  dialect "mvel"
+  agenda-group "client-agenda"
+  when
+      /*
+        Code: R - 10339
+
+        Rule Txt:
+        The Referral Date cannot be less than the birth date (if it exists) of the Child Client.
+
+        Logic:
+        HEALTH_REFERRAL.Referral_Date must be >= CLIENT.Birth_Date.
+      */
+      $clientAwareDTO: ChildClientEntityAwareDTO()
+      $child: Client($birthDate: birthDate != null) from $clientAwareDTO.entity
+      $healthReferral: HealthReferral(referralDate != null, referralDate.isBefore($birthDate)) from $clientAwareDTO.healthReferrals
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-10339");
+      details.setUserMessage(String.format("The Referral Date cannot be less than the birth date (if it exists) of the Child Client."
+      + " Child Client ID:'%s' , Child birth date: %tm/%<td/%<tY, Health Referral ID:'%s', Referral Date: %tm/%<td/%<tY",
+      $child.getIdentifier(), $child.getBirthDate(), $healthReferral.getId(), $healthReferral.getReferralDate()));
+      details.setTechnicalMessage("If Client.birthDate != null then for each HealthReferral should be: HealthReferral.referralDate >= Client.birthDate");
+      validationDetailsList.add(details);
+end

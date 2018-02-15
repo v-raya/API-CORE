@@ -2,10 +2,10 @@ package gov.ca.cwds.cms.data.access.dto;
 
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
-import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
 import gov.ca.cwds.data.legacy.cms.entity.DasHistory;
-import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;
+import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
 import gov.ca.cwds.data.legacy.cms.entity.NearFatality;
+import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;
 import java.util.ArrayList;
 import java.util.List;
 

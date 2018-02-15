@@ -50,6 +50,7 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.StaffPerson" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.StaffPersonCaseLoad" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.HealthReferral"/>
 
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.ActiveServiceComponentType"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.ApprovalStatusType"/>
@@ -80,5 +81,8 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.State"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.SystemCode"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.VisitType"/>
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.HealthConsentType" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.HealthReferredToType" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.HealthReferralType" />
   </session-factory>
 </hibernate-configuration>
