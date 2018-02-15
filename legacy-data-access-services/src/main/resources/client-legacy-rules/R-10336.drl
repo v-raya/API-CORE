@@ -13,10 +13,10 @@ rule "R-10336"
         Code: R - 10336
 
         Rule Txt:
-        The Referral Date cannot be less than the birth date (if it exists) of the Child Client.
+        The Consent on File Date cannot be less than the birth date (if it exists) of the Child Client.
 
         Logic:
-        HEALTH_REFERRAL.Referral_Date must be >= CLIENT.Birth_Date.
+        HEALTH_REFERRAL.Consent_On_File_Date must be >= CLIENT.Birth_Date.
       */
       $clientAwareDTO: ChildClientEntityAwareDTO()
       $child: Client($birthDate: birthDate != null) from $clientAwareDTO.entity
