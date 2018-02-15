@@ -24,8 +24,8 @@ rule "R-10339"
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-10339");
-      details.setUserMessage(String.format("TThe Referral Date cannot be less than the birth date (if it exists) of the Child Client."
-      + " Child Client ID:'%s' , Child birth date: %tm/%<td/%<tY, Parent Client ID:'%s', Parental Rights Termination Date: %tm/%<td/%<tY",
+      details.setUserMessage(String.format("The Referral Date cannot be less than the birth date (if it exists) of the Child Client."
+      + " Child Client ID:'%s' , Child birth date: %tm/%<td/%<tY, Health Referral ID:'%s', Referral Date: %tm/%<td/%<tY",
       $child.getIdentifier(), $child.getBirthDate(), $healthReferral.getId(), $healthReferral.getReferralDate()));
       details.setTechnicalMessage("If Client.birthDate != null then for each HealthReferral should be: HealthReferral.referralDate >= Client.birthDate");
       validationDetailsList.add(details);
