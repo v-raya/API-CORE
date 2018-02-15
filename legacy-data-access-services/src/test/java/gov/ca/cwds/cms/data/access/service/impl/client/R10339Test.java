@@ -15,36 +15,41 @@ public class R10339Test extends BaseDocToolRulesClientImplementationTest {
   private static final String RULE_NAME = "R-10339";
 
   @Test
-  public void testTerminationStartDateGtBirthDate() throws Exception {
+  public void testReferralDateGtBirthDate() throws Exception {
+    ChildClient childClient = childClient(SOME_DATE);
     checkRuleSatisfied(
-        dto(childClient(SOME_DATE), healthReferral(childClient(SOME_DATE), SOME_DATE.plusDays(1))),
+        dto(childClient, healthReferral(childClient, SOME_DATE.plusDays(1))),
         RULE_NAME);
   }
 
   @Test
-  public void testTerminationStartDateLtBirthDate() throws Exception {
+  public void testReferralDateLtBirthDate() throws Exception {
+    ChildClient childClient = childClient(SOME_DATE);
     checkRuleViolatedOnce(
-        dto(childClient(SOME_DATE), healthReferral(childClient(SOME_DATE), SOME_DATE.minusDays(1))),
+        dto(childClient, healthReferral(childClient, SOME_DATE.minusDays(1))),
         RULE_NAME);
   }
 
   @Test
-  public void testTwoTerminationStartDateLtBirthDate() throws Exception {
-    checkRuleViolated(dto(childClient(SOME_DATE),
-        healthReferral(childClient(SOME_DATE), SOME_DATE.minusDays(1)),
-        healthReferral(childClient(SOME_DATE), SOME_DATE.minusDays(2))),
+  public void testTwoReferralDateLtBirthDate() throws Exception {
+    ChildClient childClient = childClient(SOME_DATE);
+    checkRuleViolated(dto(childClient,
+        healthReferral(childClient, SOME_DATE.minusDays(1)),
+        healthReferral(childClient, SOME_DATE.minusDays(2))),
         RULE_NAME, 2);
   }
 
   @Test
-  public void testTerminationStartDateEqBirthDate() throws Exception {
-    checkRuleSatisfied(dto(childClient(SOME_DATE), healthReferral(childClient(SOME_DATE), SOME_DATE)),
+  public void testReferralDateEqBirthDate() throws Exception {
+    ChildClient childClient = childClient(SOME_DATE);
+    checkRuleSatisfied(dto(childClient, healthReferral(childClient, SOME_DATE)),
         RULE_NAME);
   }
 
   @Test
   public void testBirthDateNull() throws Exception {
-    checkRuleSatisfied(dto(childClient(SOME_DATE), healthReferral(childClient(SOME_DATE), SOME_DATE)),
+    ChildClient childClient = childClient(null);
+    checkRuleSatisfied(dto(childClient, healthReferral(childClient, SOME_DATE)),
         RULE_NAME);
   }
 
