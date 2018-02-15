@@ -1,0 +1,37 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.ChildClient
+import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
+
+global java.util.Set<IssueDetails> validationDetailsList
+
+rule "R-10104"
+  dialect "mvel"
+  agenda-group "client-agenda"
+  when
+      /*
+        Code: R - 10104
+
+        Rule Txt:
+        The Tribal Customary Adoption Date cannot be less than the Birth Date (if it exists) of
+        the Child Client. If Tribal Customary Adoption Date is entered, then the client's birth
+        date cannot be changed to a date later than that of the Tribal Customary Adoption Date.
+
+        Logic:
+        CLIENT.TCADPT_DT >= CLIENT.Birth_Date
+      */
+      $clientAwareDTO: ChildClientEntityAwareDTO()
+      $client: ChildClient(birthDate != null, tribalCustomaryAdoptionDate != null, birthDate.isAfter(tribalCustomaryAdoptionDate)) from $clientAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-10104");
+      details.setUserMessage(String.format(
+          "The Tribal Customary Adoption Date cannot be less than the Birth Date (if it exists) "
+          + "of the Child Client. If Tribal Customary Adoption Date is entered, then the client's "
+          + "birth date cannot be changed to a date later than that of the Tribal Customary "
+          + "Adoption Date."
+          + "Client ID:'%s', Client Birth Date: %tm/%<td/%<tY, "
+          + "Tribal Customary Adoption Date: %tm/%<td/%<tY",
+          $client.getIdentifier(), $client.getBirthDate(), $client.getTribalCustomaryAdoptionDate()));
+      details.setTechnicalMessage("If Client.birthDate != null then should be: Client.creationDate >= Client.birthDate");
+      validationDetailsList.add(details);
+end
