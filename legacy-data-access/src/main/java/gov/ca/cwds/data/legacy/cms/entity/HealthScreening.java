@@ -149,16 +149,18 @@ public class HealthScreening extends CmsPersistentObject {
       return false;
     }
     HealthScreening that = (HealthScreening) o;
-    return Objects.equals(getChildClient(), that.getChildClient()) &&
-        Objects.equals(getHealthScreeningType(), that.getHealthScreeningType()) &&
+    return Objects.equals(getChildClient().getIdentifier(), that.getChildClient().getIdentifier()) &&
+        Objects.equals(getHealthScreeningType().getSystemId(),
+            that.getHealthScreeningType().getSystemId()) &&
         Objects.equals(getScreeningDate(), that.getScreeningDate()) &&
-        Objects.equals(getHealthScreenedByType(), that.getHealthScreenedByType());
+        Objects.equals(getHealthScreenedByType().getSystemId(),
+            that.getHealthScreenedByType().getSystemId());
   }
 
   @Override
   public int hashCode() {
     return Objects
-        .hash(getChildClient(), getHealthScreeningType(), getScreeningDate(),
-            getHealthScreenedByType());
+        .hash(getChildClient().getIdentifier(), getHealthScreeningType().getSystemId(),
+            getScreeningDate(), getHealthScreenedByType().getSystemId());
   }
 }
