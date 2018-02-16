@@ -52,6 +52,7 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.HealthReferral"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.TribalAncestryNotification"/>
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.HealthScreening"/>
 
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.ActiveServiceComponentType"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.ApprovalStatusType"/>
@@ -85,5 +86,7 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.HealthConsentType" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.HealthReferredToType" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.HealthReferralType" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.HealthScreeningType" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.HealthScreenedByType" />
   </session-factory>
 </hibernate-configuration>
