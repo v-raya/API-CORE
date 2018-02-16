@@ -9,6 +9,7 @@ import gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan;
 import gov.ca.cwds.data.legacy.cms.entity.ParentalRightsTermination;
 import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
 import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;
+import gov.ca.cwds.data.legacy.cms.entity.SchoolOriginHistory;
 import java.time.LocalDate;
 import java.util.Arrays;
 import org.apache.commons.lang3.StringUtils;
@@ -78,6 +79,12 @@ public class ClientTestUtil {
     return dasHistory;
   }
 
+  public static SchoolOriginHistory schoolOriginHistory(LocalDate schoolDecisionDate) {
+    SchoolOriginHistory history = new SchoolOriginHistory();
+    history.setSchoolDecisionDate(schoolDecisionDate);
+    return history;
+  }
+
   public static ParentalRightsTermination termination(Client parent, LocalDate date) {
     ParentalRightsTermination termination = new ParentalRightsTermination();
     termination.setChild(childClient(SOME_DATE));
@@ -110,6 +117,13 @@ public class ClientTestUtil {
     ChildClientEntityAwareDTO dto = new ChildClientEntityAwareDTO();
     dto.setEntity(client);
     dto.getDasHistories().addAll(Arrays.asList(dasHistories));
+    return dto;
+  }
+
+  public static ChildClientEntityAwareDTO dto(Client client, SchoolOriginHistory... histories) {
+    ChildClientEntityAwareDTO dto = new ChildClientEntityAwareDTO();
+    dto.setEntity(client);
+    dto.getSchoolOriginHistories().addAll(Arrays.asList(histories));
     return dto;
   }
 
