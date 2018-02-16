@@ -1,5 +1,8 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
+import static gov.ca.cwds.data.legacy.cms.entity.HealthScreening.FIND_BY_CHILD_CLIENT_ID;
+import static gov.ca.cwds.data.legacy.cms.entity.HealthScreening.PARAM_CHILD_CLIENT_ID;
+
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.enums.ScreeningResult;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.HealthScreenedByType;
@@ -14,6 +17,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -24,10 +28,19 @@ import org.hibernate.annotations.NotFoundAction;
 
 @SuppressWarnings({"squid:S3437", "squid:S2160"})
 @Entity
+@NamedQuery(
+    name = FIND_BY_CHILD_CLIENT_ID,
+    query = "SELECT hs FROM HealthScreening hs where hs.childClient.identifier =:" + PARAM_CHILD_CLIENT_ID
+)
 @Table(name = "HLTH_SCT")
 public class HealthScreening extends CmsPersistentObject {
 
   private static final long serialVersionUID = 8308841481569645507L;
+
+  public static final String FIND_BY_CHILD_CLIENT_ID =
+      "HealthScreening.findByChildClientId";
+
+  public static final String PARAM_CHILD_CLIENT_ID = "childClientId";
 
   @Id
   @Size(min = CMS_ID_LEN, max = CMS_ID_LEN)
