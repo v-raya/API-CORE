@@ -1,0 +1,33 @@
+import gov.ca.cwds.rest.exception.IssueDetails;
+import gov.ca.cwds.data.legacy.cms.entity.Client;
+import gov.ca.cwds.data.legacy.cms.entity.HealthScreening;
+import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO
+
+global java.util.Set validationDetailsList
+
+rule "R-10326"
+  dialect "mvel"
+  agenda-group "client-agenda"
+  when
+      /*
+        Code: R - 10326
+
+        Rule Txt:
+        Screening Date cannot be less than the birth date (if it exists) of the Child Client.
+
+        Logic:
+        HEALTH_SCREENING.Screening_Date must be >= CLIENT.Birth_Date.
+      */
+      $clientAwareDTO: ChildClientEntityAwareDTO()
+      $child: Client($birthDate: birthDate != null) from $clientAwareDTO.entity
+      $healthScreening: HealthScreening(screeningDate != null, screeningDate.isBefore($birthDate)) from $clientAwareDTO.healthScreenings
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-10326");
+      details.setUserMessage(String.format("Screening Date cannot be less than the birth date (if it exists) of the Child Client."
+      + " Child Client ID:'%s' , Child birth date: %tm/%<td/%<tY, Health Screening ID:'%s', Health Screening Date: %tm/%<td/%<tY",
+      $child.getIdentifier(), $child.getBirthDate(), $healthScreening.getId(), $healthScreening.getScreeningDate()));
+      details.setTechnicalMessage("If Client.birthDate != null then for each HealthScreening should be: "
+      + "HealthScreening.screeningDate >= Client.birthDate");
+      validationDetailsList.add(details);
+end

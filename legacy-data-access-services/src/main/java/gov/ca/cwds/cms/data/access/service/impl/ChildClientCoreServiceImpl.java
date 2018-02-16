@@ -8,6 +8,7 @@ import gov.ca.cwds.data.legacy.cms.dao.CsecHistoryDao;
 import gov.ca.cwds.data.legacy.cms.dao.FCEligibilityDao;
 import gov.ca.cwds.data.legacy.cms.dao.HealthInterventionPlanDao;
 import gov.ca.cwds.data.legacy.cms.dao.HealthReferralDao;
+import gov.ca.cwds.data.legacy.cms.dao.HealthScreeningDao;
 import gov.ca.cwds.data.legacy.cms.dao.MedicalEligibilityApplicationDao;
 import gov.ca.cwds.data.legacy.cms.dao.ParentalRightsTerminationDao;
 import gov.ca.cwds.data.legacy.cms.dao.PaternityDetailDao;
@@ -18,6 +19,7 @@ import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
 import gov.ca.cwds.data.legacy.cms.entity.FCEligibility;
 import gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan;
 import gov.ca.cwds.data.legacy.cms.entity.HealthReferral;
+import gov.ca.cwds.data.legacy.cms.entity.HealthScreening;
 import gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication;
 import gov.ca.cwds.data.legacy.cms.entity.ParentalRightsTermination;
 
@@ -38,6 +40,7 @@ public class ChildClientCoreServiceImpl extends ClientCoreServiceBase<ChildClien
   @Inject private CreditReportHistoryDao creditReportHistoryDao;
   @Inject private SpecialEducationDao specialEducationDao;
   @Inject private HealthReferralDao healthReferralDao;
+  @Inject private HealthScreeningDao healthScreeningDao;
 
   protected void enrichClientEntityAwareDto(ChildClientEntityAwareDTO clientEntityAwareDTO) {
 
@@ -76,5 +79,8 @@ public class ChildClientCoreServiceImpl extends ClientCoreServiceBase<ChildClien
 
     List<HealthReferral> healthReferrals = healthReferralDao.findByChildClientId(childClientId);
     clientEntityAwareDTO.getHealthReferrals().addAll(healthReferrals);
+
+    List<HealthScreening> healthScreenings = healthScreeningDao.findByChildClientId(childClientId);
+    clientEntityAwareDTO.getHealthScreenings().addAll(healthScreenings);
   }
 }
