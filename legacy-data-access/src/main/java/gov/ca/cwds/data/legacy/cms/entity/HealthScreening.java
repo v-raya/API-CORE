@@ -30,7 +30,8 @@ import org.hibernate.annotations.NotFoundAction;
 @Entity
 @NamedQuery(
     name = FIND_BY_CHILD_CLIENT_ID,
-    query = "SELECT hs FROM HealthScreening hs where hs.childClient.identifier =:" + PARAM_CHILD_CLIENT_ID
+    query = "SELECT hs FROM HealthScreening hs where hs.childClient.identifier =:"
+        + PARAM_CHILD_CLIENT_ID
 )
 @Table(name = "HLTH_SCT")
 public class HealthScreening extends CmsPersistentObject {
@@ -53,6 +54,7 @@ public class HealthScreening extends CmsPersistentObject {
   @JoinColumn(
       name = "FKCHLD_CLT",
       referencedColumnName = "FKCLIENT_T",
+      nullable = false,
       insertable = false,
       updatable = false
   )
@@ -64,6 +66,7 @@ public class HealthScreening extends CmsPersistentObject {
   @JoinColumn(
       name = "HL_SCRNC",
       referencedColumnName = "SYS_ID",
+      nullable = false,
       insertable = false,
       updatable = false)
   private HealthScreeningType healthScreeningType;
@@ -163,17 +166,14 @@ public class HealthScreening extends CmsPersistentObject {
     }
     HealthScreening that = (HealthScreening) o;
     return Objects.equals(getChildClient().getIdentifier(), that.getChildClient().getIdentifier()) &&
-        Objects.equals(getHealthScreeningType().getSystemId(),
-            that.getHealthScreeningType().getSystemId()) &&
-        Objects.equals(getScreeningDate(), that.getScreeningDate()) &&
-        Objects.equals(getHealthScreenedByType().getSystemId(),
-            that.getHealthScreenedByType().getSystemId());
+        Objects.equals(getHealthScreeningType().getSystemId(), that.getHealthScreeningType().getSystemId()) &&
+        Objects.equals(getScreeningDate(), that.getScreeningDate());
   }
 
   @Override
   public int hashCode() {
     return Objects
         .hash(getChildClient().getIdentifier(), getHealthScreeningType().getSystemId(),
-            getScreeningDate(), getHealthScreenedByType().getSystemId());
+            getScreeningDate());
   }
 }
