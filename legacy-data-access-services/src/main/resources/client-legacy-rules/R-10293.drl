@@ -1,0 +1,44 @@
+import gov.ca.cwds.rest.exception.IssueDetails;
+import gov.ca.cwds.data.legacy.cms.entity.Client;
+import gov.ca.cwds.data.legacy.cms.entity.SchoolOriginHistory;
+import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
+
+global java.util.Set validationDetailsList
+
+rule "R-10293"
+  /*
+    Code:
+    R - 10293
+
+    Rule Txt:
+    The School of Origin Decision Date cannot be less than the Birth Date (if it exists) of the Client.
+    If the Decision Date is entered, then the client's birth date cannot be changed to a date later
+    than the Decision Date.
+
+    Logic:
+    CLIENT > CHILD_CLIENT > (any) SCHOOL_ORIGIN_HISTORY.School_Decision_Date >= CLIENT.Birth_Date.
+  */
+  dialect "mvel"
+  agenda-group "client-agenda"
+  when
+    $clientAwareDTO: ChildClientEntityAwareDTO()
+    $client: Client($birthDate: birthDate != null) from $clientAwareDTO.entity
+    $schoolDecisionHistory: SchoolOriginHistory(schoolDecisionDate != null && schoolDecisionDate.isBefore($birthDate))
+      from $clientAwareDTO.schoolOriginHistories
+  then
+    IssueDetails details = new IssueDetails();
+    details.setCode("R-10293");
+    details.setUserMessage(
+      String.format(
+        "The School of Origin Decision Date cannot be less than the Birth Date (if it exists) of the Client."
+            + " Client ID: '%s';"
+            + " Client Birth Date: %tm/%<td/%<tY;"
+            + " School Decision Date: %tm/%<td/%<tY",
+        $client.getIdentifier(),
+        $client.getBirthDate(),
+        $schoolDecisionHistory.getSchoolDecisionDate()
+      )
+    );
+    details.setTechnicalMessage("CLIENT > CHILD_CLIENT > (any) SCHOOL_ORIGIN_HISTORY.School_Decision_Date >= CLIENT.Birth_Date");
+    validationDetailsList.add(details);
+end

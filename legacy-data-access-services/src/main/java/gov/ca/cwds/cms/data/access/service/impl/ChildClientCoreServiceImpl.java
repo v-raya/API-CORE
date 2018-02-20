@@ -12,6 +12,7 @@ import gov.ca.cwds.data.legacy.cms.dao.HealthScreeningDao;
 import gov.ca.cwds.data.legacy.cms.dao.MedicalEligibilityApplicationDao;
 import gov.ca.cwds.data.legacy.cms.dao.ParentalRightsTerminationDao;
 import gov.ca.cwds.data.legacy.cms.dao.PaternityDetailDao;
+import gov.ca.cwds.data.legacy.cms.dao.SchoolOriginHistoryDao;
 import gov.ca.cwds.data.legacy.cms.dao.SpecialEducationDao;
 import gov.ca.cwds.data.legacy.cms.entity.ChildClient;
 import gov.ca.cwds.data.legacy.cms.entity.CreditReportHistory;
@@ -24,7 +25,9 @@ import gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication;
 import gov.ca.cwds.data.legacy.cms.entity.ParentalRightsTermination;
 
 import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
+import gov.ca.cwds.data.legacy.cms.entity.SchoolOriginHistory;
 import gov.ca.cwds.data.legacy.cms.entity.SpecialEducation;
+import java.util.Collection;
 import java.util.List;
 
 /** @author CWDS TPT-3 Team */
@@ -40,6 +43,7 @@ public class ChildClientCoreServiceImpl extends ClientCoreServiceBase<ChildClien
   @Inject private CreditReportHistoryDao creditReportHistoryDao;
   @Inject private SpecialEducationDao specialEducationDao;
   @Inject private HealthReferralDao healthReferralDao;
+  @Inject private SchoolOriginHistoryDao schoolOriginHistoryDao;
   @Inject private HealthScreeningDao healthScreeningDao;
 
   protected void enrichClientEntityAwareDto(ChildClientEntityAwareDTO clientEntityAwareDTO) {
@@ -79,6 +83,10 @@ public class ChildClientCoreServiceImpl extends ClientCoreServiceBase<ChildClien
 
     List<HealthReferral> healthReferrals = healthReferralDao.findByChildClientId(childClientId);
     clientEntityAwareDTO.getHealthReferrals().addAll(healthReferrals);
+
+    final Collection<SchoolOriginHistory> schoolOriginHistories = schoolOriginHistoryDao
+        .findByClientId(childClientId);
+    clientEntityAwareDTO.getSchoolOriginHistories().addAll(schoolOriginHistories);
 
     List<HealthScreening> healthScreenings = healthScreeningDao.findByChildClientId(childClientId);
     clientEntityAwareDTO.getHealthScreenings().addAll(healthScreenings);
