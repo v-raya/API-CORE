@@ -146,6 +146,14 @@ public class TribalAncestryNotification extends CmsPersistentObject {
       this.thirdId = thirdId;
     }
 
+    public String getThirdId() {
+      return thirdId;
+    }
+
+    public String getChildClientId() {
+      return childClientId;
+    }
+
     @Override
     public boolean equals(Object o) {
       if (this == o) {
