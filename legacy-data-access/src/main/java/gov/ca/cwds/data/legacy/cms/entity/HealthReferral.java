@@ -13,9 +13,10 @@ import java.time.LocalDate;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Convert;
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -34,23 +35,20 @@ import org.hibernate.annotations.Type;
 @Table(name = "HLTH_RFT")
 @NamedQuery(
     name = FIND_HEALTH_REFERRAL_BY_CHILD_CLIENT_ID,
-    query =
-        "SELECT hr FROM HealthReferral hr where hr.childClient.identifier = :"
-            + PARAM_CHILD_CLIENT_ID
+    query = "SELECT hr FROM gov.ca.cwds.data.legacy.cms.entity.HealthReferral hr "
+        + "where hr.childClient.identifier = :" + PARAM_CHILD_CLIENT_ID
 )
 public class HealthReferral extends CmsPersistentObject {
 
   public static final String FIND_HEALTH_REFERRAL_BY_CHILD_CLIENT_ID =
-      "HealthReferral.findByChildClientId";
+      "gov.ca.cwds.data.legacy.cms.entity.HealthReferral.findByChildClientId";
 
   public static final String PARAM_CHILD_CLIENT_ID = "childClientId";
 
-  private static final long serialVersionUID = -7710959950918747285L;
+  private static final long serialVersionUID = 3694382844372673874L;
 
-  @Id
-  @Size(min = CMS_ID_LEN, max = CMS_ID_LEN)
-  @Column(name = "THIRD_ID")
-  private String id;
+  @EmbeddedId
+  private HealthReferral.Id id = new HealthReferral.Id();
 
   @NotNull
   @ManyToOne(fetch = FetchType.LAZY)
@@ -118,12 +116,12 @@ public class HealthReferral extends CmsPersistentObject {
     return getId();
   }
 
-  public String getId() {
+  public HealthReferral.Id getId() {
     return id;
   }
 
-  public void setId(String thirdId) {
-    this.id = thirdId;
+  public void setId(HealthReferral.Id id) {
+    this.id = id;
   }
 
   public ChildClient getChildClient() {
@@ -232,5 +230,47 @@ public class HealthReferral extends CmsPersistentObject {
         .hash(getChildClient(), getHealthReferralType(), getReferralDate(),
             getHealthConsentType(), getConsentOnFileDate(), getHealthReferredToType(),
             referralOutcome, getReferralOutcomeDate());
+  }
+
+  @Embeddable
+  public static class Id implements Serializable {
+
+    private static final long serialVersionUID = -7055774987410564403L;
+
+    @NotNull
+    @Size(min = CMS_ID_LEN, max = CMS_ID_LEN)
+    @Column(name = "FKCHLD_CLT")
+    private String childClientId;
+
+    @NotNull
+    @Size(min = CMS_ID_LEN, max = CMS_ID_LEN)
+    @Column(name = "THIRD_ID")
+    private String thirdId;
+
+    public Id() {
+    }
+
+    public Id(String childClientId, String thirdId) {
+      this.childClientId = childClientId;
+      this.thirdId = thirdId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (o == null || getClass() != o.getClass()) {
+        return false;
+      }
+      HealthReferral.Id that = (HealthReferral.Id) o;
+      return Objects.equals(childClientId, that.childClientId)
+          && Objects.equals(thirdId, that.thirdId);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(childClientId, thirdId);
+    }
   }
 }
