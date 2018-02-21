@@ -37,7 +37,7 @@ import org.hibernate.annotations.NotFoundAction;
 @Table(name = "HLTH_SCT")
 public class HealthScreening extends CmsPersistentObject {
 
-  private static final long serialVersionUID = 8308841481569645507L;
+  private static final long serialVersionUID = -1071587677373461693L;
 
   public static final String FIND_BY_CHILD_CLIENT_ID =
       "gov.ca.cwds.data.legacy.cms.entity.HealthScreening.findByChildClientId";
