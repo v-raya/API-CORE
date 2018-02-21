@@ -9,9 +9,10 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
@@ -25,23 +26,21 @@ import org.hibernate.annotations.FetchMode;
 @Entity
 @NamedQuery(
     name = FIND_TRIBAL_ANCESTRY_NOTIFICATION_BY_CHILD_CLIENT_ID,
-    query = "SELECT n FROM TribalAncestryNotification n where n.childClient.identifier =:"
-        + PARAM_CHILD_CLIENT_ID
+    query = "SELECT n FROM gov.ca.cwds.data.legacy.cms.entity.TribalAncestryNotification n "
+        + "where n.childClient.identifier =:" + PARAM_CHILD_CLIENT_ID
 )
 @Table(name = "TRBA_NOT")
 public class TribalAncestryNotification extends CmsPersistentObject {
 
-  private static final long serialVersionUID = 3860004593026707422L;
+  private static final long serialVersionUID = 2723371565126423195L;
 
   public static final String FIND_TRIBAL_ANCESTRY_NOTIFICATION_BY_CHILD_CLIENT_ID =
-      "TribalAncestryNotification.findTribalAncestryNotificationByChildClientId";
+      "gov.ca.cwds.data.legacy.cms.entity.TribalAncestryNotification.findByChildClientId";
 
   public static final String PARAM_CHILD_CLIENT_ID = "childClientId";
 
-  @Id
-  @Size(min = CMS_ID_LEN, max = CMS_ID_LEN)
-  @Column(name = "THIRD_ID")
-  private String id;
+  @EmbeddedId
+  private TribalAncestryNotification.Id id = new TribalAncestryNotification.Id();
 
   @NotNull
   @ManyToOne(fetch = FetchType.LAZY)
@@ -73,12 +72,12 @@ public class TribalAncestryNotification extends CmsPersistentObject {
     return getId();
   }
 
-  public String getId() {
+  public TribalAncestryNotification.Id getId() {
     return id;
   }
 
-  public void setId(String thirdId) {
-    this.id = thirdId;
+  public void setId(TribalAncestryNotification.Id id) {
+    this.id = id;
   }
 
   public County getCounty() {
@@ -122,5 +121,47 @@ public class TribalAncestryNotification extends CmsPersistentObject {
   @Override
   public int hashCode() {
     return Objects.hash(getChildClient(), getCounty(), getNotificationDate());
+  }
+
+  @Embeddable
+  public static class Id implements Serializable {
+
+    private static final long serialVersionUID = -7055774987410564403L;
+
+    @NotNull
+    @Size(min = CMS_ID_LEN, max = CMS_ID_LEN)
+    @Column(name = "THIRD_ID")
+    private String thirdId;
+
+    @NotNull
+    @Size(min = CMS_ID_LEN, max = CMS_ID_LEN)
+    @Column(name = "FKCHLD_CLT")
+    private String childClientId;
+
+    public Id() {
+    }
+
+    public Id(String childClientId, String thirdId) {
+      this.childClientId = childClientId;
+      this.thirdId = thirdId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (o == null || getClass() != o.getClass()) {
+        return false;
+      }
+      TribalAncestryNotification.Id that = (TribalAncestryNotification.Id) o;
+      return Objects.equals(childClientId, that.childClientId)
+          && Objects.equals(thirdId, that.thirdId);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(childClientId, thirdId);
+    }
   }
 }
