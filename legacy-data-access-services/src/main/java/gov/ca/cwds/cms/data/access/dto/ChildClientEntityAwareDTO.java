@@ -5,6 +5,7 @@ import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
 import gov.ca.cwds.data.legacy.cms.entity.FCEligibility;
 import gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan;
 import gov.ca.cwds.data.legacy.cms.entity.HealthReferral;
+import gov.ca.cwds.data.legacy.cms.entity.HealthScreening;
 import gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication;
 import gov.ca.cwds.data.legacy.cms.entity.ParentalRightsTermination;
 import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
@@ -27,6 +28,8 @@ public class ChildClientEntityAwareDTO extends ClientEntityAwareDTO {
   private final List<CreditReportHistory> creditReportHistories = new ArrayList<>();
   private final List<SpecialEducation> specialEducations = new ArrayList<>();
   private List<HealthReferral> healthReferrals = new ArrayList<>();
+
+  private List<HealthScreening> healthScreenings = new ArrayList<>();
 
   public List<MedicalEligibilityApplication> getMedicalEligibilityApplications() {
     return medicalEligibilityApplications;
@@ -70,5 +73,9 @@ public class ChildClientEntityAwareDTO extends ClientEntityAwareDTO {
 
   public List<HealthReferral> getHealthReferrals() {
     return healthReferrals;
+  }
+
+  public List<HealthScreening> getHealthScreenings() {
+    return healthScreenings;
   }
 }

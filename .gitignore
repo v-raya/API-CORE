@@ -8,3 +8,5 @@ bin/
 .idea
 *.env
 *.sw*
+/gradle/
+/gradlew
