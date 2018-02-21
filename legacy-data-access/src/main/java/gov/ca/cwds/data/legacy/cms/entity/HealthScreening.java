@@ -12,9 +12,10 @@ import java.time.LocalDate;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Convert;
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
@@ -30,8 +31,8 @@ import org.hibernate.annotations.NotFoundAction;
 @Entity
 @NamedQuery(
     name = FIND_BY_CHILD_CLIENT_ID,
-    query = "SELECT hs FROM HealthScreening hs where hs.childClient.identifier =:"
-        + PARAM_CHILD_CLIENT_ID
+    query = "SELECT hs FROM gov.ca.cwds.data.legacy.cms.entity.HealthScreening hs "
+        + "where hs.childClient.identifier =:" + PARAM_CHILD_CLIENT_ID
 )
 @Table(name = "HLTH_SCT")
 public class HealthScreening extends CmsPersistentObject {
@@ -39,14 +40,12 @@ public class HealthScreening extends CmsPersistentObject {
   private static final long serialVersionUID = 8308841481569645507L;
 
   public static final String FIND_BY_CHILD_CLIENT_ID =
-      "HealthScreening.findByChildClientId";
+      "gov.ca.cwds.data.legacy.cms.entity.HealthScreening.findByChildClientId";
 
   public static final String PARAM_CHILD_CLIENT_ID = "childClientId";
 
-  @Id
-  @Size(min = CMS_ID_LEN, max = CMS_ID_LEN)
-  @Column(name = "THIRD_ID")
-  private String id;
+  @EmbeddedId
+  private HealthInterventionPlan.Id id = new HealthInterventionPlan.Id();
 
   @NotNull
   @ManyToOne(fetch = FetchType.LAZY)
@@ -108,11 +107,11 @@ public class HealthScreening extends CmsPersistentObject {
     this.childClient = childClient;
   }
 
-  public String getId() {
+  public HealthInterventionPlan.Id getId() {
     return id;
   }
 
-  public void setId(String thirdId) {
+  public void setId(HealthInterventionPlan.Id thirdId) {
     this.id = thirdId;
   }
 
@@ -175,5 +174,46 @@ public class HealthScreening extends CmsPersistentObject {
     return Objects
         .hash(getChildClient().getIdentifier(), getHealthScreeningType().getSystemId(),
             getScreeningDate());
+  }
+
+  @Embeddable
+  public static class Id implements Serializable {
+
+    private static final long serialVersionUID = -7055774987410564403L;
+
+    @NotNull
+    @Size(min = CMS_ID_LEN, max = CMS_ID_LEN)
+    @Column(name = "FKCHLD_CLT")
+    private String childClientId;
+
+    @NotNull
+    @Size(min = CMS_ID_LEN, max = CMS_ID_LEN)
+    @Column(name = "THIRD_ID")
+    private String thirdId;
+
+    public Id() {}
+
+    public Id(String childClientId, String thirdId) {
+      this.childClientId = childClientId;
+      this.thirdId = thirdId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (o == null || getClass() != o.getClass()) {
+        return false;
+      }
+      HealthScreening.Id that = (HealthScreening.Id) o;
+      return Objects.equals(childClientId, that.childClientId)
+          && Objects.equals(thirdId, that.thirdId);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(childClientId, thirdId);
+    }
   }
 }
