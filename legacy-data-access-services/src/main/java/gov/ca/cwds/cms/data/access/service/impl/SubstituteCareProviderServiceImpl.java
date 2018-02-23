@@ -106,6 +106,15 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
         SubstituteCareProviderDroolsConfiguration.DATA_PROCESSING_INSTANCE, entityAwareDTO, principal);
   }
 
+
+  /**
+   *
+   * Creates SubstituteCareProvider and dependent entities
+   *
+   * @param scpEntityAwareDTO
+   * @return
+   * @throws DataAccessServicesException
+   */
   @Override
   public SubstituteCareProvider create(SCPEntityAwareDTO scpEntityAwareDTO)
       throws DataAccessServicesException {
@@ -119,10 +128,7 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
       substituteCareProviderUcDao.create(extScpEntityAwareDTO.getSubstituteCareProviderUc());
       placementHomeInformationDao.create(extScpEntityAwareDTO.getPlacementHomeInformation());
 
-      extScpEntityAwareDTO.getClientScpEthnicities().forEach(clientScpEthnicity -> {
-        clientScpEthnicityDao.create(clientScpEthnicity);
-      });
-
+      storeEthnicities(extScpEntityAwareDTO);
       storeCountyOwnership(substituteCareProvider.getIdentifier());
       storePhoneContactDetails(extScpEntityAwareDTO.getPhoneNumbers());
       storeOutOfStateChecks(extScpEntityAwareDTO);
@@ -132,6 +138,26 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
     } catch (DroolsException e) {
       throw new DataAccessServicesException(e);
     }
+  }
+
+  /**
+   * DocTool rule R - 07045 implemented in this method
+   *
+   * Rule Txt:
+   * For each ethnicity selected by the user in the Ethnicity dialog,
+   * create a CLIENT_SCP_ETHNICITY row.
+   *
+   * Logic:
+   * Create CLIENT_SCP_ETHNICITY. Set .Established_For_Code = S,
+   * and set .Established_For_Id = SUBSTITUTE_CARE_PROVIDER.Id.
+   * Set .Ethnicity_Type = (user selected) Ethnicity Type.
+   *
+   * @param extScpEntityAwareDTO
+   */
+  private void storeEthnicities(ExtendedSCPEntityAwareDTO extScpEntityAwareDTO) {
+    extScpEntityAwareDTO.getClientScpEthnicities().forEach(clientScpEthnicity -> {
+      clientScpEthnicityDao.create(clientScpEthnicity);
+    });
   }
 
   private void applyBusinessRules(ExtendedSCPEntityAwareDTO extScpEntityAwareDTO)
@@ -277,6 +303,48 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
         countyOwnershipMapper.toCountyOwnership(scpIdentifier,
             "S", Collections.emptyList());
     countyOwnershipDao.create(countyOwnership);
+  }
+
+  public void setSubstituteCareProviderDao(
+      SubstituteCareProviderDao substituteCareProviderDao) {
+    this.substituteCareProviderDao = substituteCareProviderDao;
+  }
+
+  public void setSubstituteCareProviderUcDao(
+      SubstituteCareProviderUcDao substituteCareProviderUcDao) {
+    this.substituteCareProviderUcDao = substituteCareProviderUcDao;
+  }
+
+  public void setCountyOwnershipDao(CountyOwnershipDao countyOwnershipDao) {
+    this.countyOwnershipDao = countyOwnershipDao;
+  }
+
+  public void setCountyOwnershipMapper(
+      CountyOwnershipMapper countyOwnershipMapper) {
+    this.countyOwnershipMapper = countyOwnershipMapper;
+  }
+
+  public void setPlacementHomeInformationDao(
+      PlacementHomeInformationDao placementHomeInformationDao) {
+    this.placementHomeInformationDao = placementHomeInformationDao;
+  }
+
+  public void setPhoneContactDetailDao(
+      PhoneContactDetailDao phoneContactDetailDao) {
+    this.phoneContactDetailDao = phoneContactDetailDao;
+  }
+
+  public void setScpSsaName3Dao(SsaName3Dao scpSsaName3Dao) {
+    this.scpSsaName3Dao = scpSsaName3Dao;
+  }
+
+  public void setClientScpEthnicityDao(
+      ClientScpEthnicityDao clientScpEthnicityDao) {
+    this.clientScpEthnicityDao = clientScpEthnicityDao;
+  }
+
+  public void setOutOfStateCheckDao(OutOfStateCheckDao outOfStateCheckDao) {
+    this.outOfStateCheckDao = outOfStateCheckDao;
   }
 
   public void setDroolsService(DroolsService droolsService) {
