@@ -1,0 +1,34 @@
+import gov.ca.cwds.rest.exception.IssueDetails;
+import gov.ca.cwds.data.legacy.cms.entity.Client;
+import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
+import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO
+
+global java.util.Set validationDetailsList
+
+rule "R-00772-1"
+  dialect "mvel"
+  agenda-group "client-agenda"
+  when
+      /*
+        Code: R - 00772
+
+        Rule Txt:
+        The Paternity Decision Date cannot be less than the birth date (if it exists) of the
+        child Client associated with this case. If the Paternity Decision Date is entered, then the
+        Client's birth date cannot be changed to be greater than that of the Paternity Decision Date.
+
+        Logic:
+        Select CLIENT > PATERNITY_DETAIL.Paternity_Hearing_Date >= CLIENT.Birth_Date and .Paternity_Test_Date >= CLIENT.Birth_Date.
+      */
+      $clientAwareDTO: ChildClientEntityAwareDTO()
+      $child: Client($birthDate: birthDate != null) from $clientAwareDTO.entity
+      $paternityDetail: PaternityDetail(paternityHearingDate != null, paternityHearingDate.isBefore($birthDate)) from $clientAwareDTO.paternityDetails
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-00772");
+      details.setUserMessage(String.format("The Hearing Date of the Parental Detail cannot be less than the birth date of the Child Client."
+      + " Child Client ID:'%s' , Child birth date: %tm/%<td/%<tY, Paternity Detail ID:'%s', Paternity Hearing Date: %tm/%<td/%<tY",
+      $child.getIdentifier(), $child.getBirthDate(), $paternityDetail.getId(), $paternityDetail.getPaternityHearingDate()));
+      details.setTechnicalMessage("If Client.birthDate != null then for each PaternityDetail should be: PaternityDetail.paternityHearingDate >= Client.birthDate");
+      validationDetailsList.add(details);
+end

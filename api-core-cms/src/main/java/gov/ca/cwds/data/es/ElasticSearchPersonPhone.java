@@ -1,6 +1,10 @@
 package gov.ca.cwds.data.es;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -8,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.data.ApiTypedIdentifier;
-import gov.ca.cwds.data.std.ApiObjectIdentity;
+import gov.ca.cwds.data.std.ApiMarker;
 import gov.ca.cwds.data.std.ApiPhoneAware;
 import gov.ca.cwds.data.std.ApiPhoneAwareWritable;
 
@@ -17,8 +21,8 @@ import gov.ca.cwds.data.std.ApiPhoneAwareWritable;
  * 
  * @author CWDS API Team
  */
-public class ElasticSearchPersonPhone extends ApiObjectIdentity
-    implements ApiTypedIdentifier<String>, ApiPhoneAwareWritable {
+public class ElasticSearchPersonPhone
+    implements ApiMarker, ApiTypedIdentifier<String>, ApiPhoneAwareWritable {
 
   private static final long serialVersionUID = 1L;
 
@@ -55,8 +59,8 @@ public class ElasticSearchPersonPhone extends ApiObjectIdentity
       if (StringUtils.isNotBlank(other.getPhoneId())) {
         this.id = other.getPhoneId();
       }
-      setPhoneNumber(other.getPhoneNumber());
-      setPhoneType(other.getPhoneType());
+      this.phoneNumber = other.getPhoneNumber();
+      this.phoneType = other.getPhoneType();
     }
   }
 
@@ -111,7 +115,24 @@ public class ElasticSearchPersonPhone extends ApiObjectIdentity
     return this.id;
   }
 
+  @SuppressWarnings("javadoc")
   public void setPhoneNumberExtension(String phoneNumberExtension) {
     this.phoneNumberExtension = phoneNumberExtension;
   }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, true);
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
+
 }

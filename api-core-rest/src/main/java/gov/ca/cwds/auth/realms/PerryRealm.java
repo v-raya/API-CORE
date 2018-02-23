@@ -6,7 +6,6 @@ import static com.google.common.base.Preconditions.checkState;
 
 import java.util.List;
 
-import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
@@ -27,6 +26,7 @@ import gov.ca.cwds.auth.clients.PerryClient;
 public class PerryRealm extends AuthorizingRealm {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PerryRealm.class);
+
   private PerryClient client = null;
 
   public PerryRealm() {
@@ -39,17 +39,14 @@ public class PerryRealm extends AuthorizingRealm {
   }
 
   @Override
-  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
-      throws AuthenticationException {
+  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) {
     checkNotNull(token, "Authentication Token cannot be null.");
     checkArgument(token instanceof PerryShiroToken, "Token must be of instance `PerryShiroToken`.");
     checkState(client != null, "PerryClient must be set.");
     PerryShiroToken perryShiroToken = (PerryShiroToken) token;
     try {
       LOGGER.debug("Reaching out to Perry for authentication...");
-      String identity = client.validateToken(perryShiroToken);
-
-      return mapIdentity(identity, token);
+      return mapIdentity(client.validateToken(perryShiroToken), token);
     } catch (InvalidTokenException e) {
       LOGGER.warn("Invalid Token {}", perryShiroToken.getPrincipal(), e);
       return null;
@@ -60,9 +57,9 @@ public class PerryRealm extends AuthorizingRealm {
   }
 
   protected AuthenticationInfo mapIdentity(String identity, AuthenticationToken token) {
-    List<Object> principals = Lists.newArrayList(identity);
-    PrincipalCollection principalCollection = new SimplePrincipalCollection(principals, getName());
-    return new SimpleAuthenticationInfo(principalCollection, token);
+    final List<Object> principals = Lists.newArrayList(identity);
+    return new SimpleAuthenticationInfo(new SimplePrincipalCollection(principals, getName()),
+        token);
   }
 
   /**

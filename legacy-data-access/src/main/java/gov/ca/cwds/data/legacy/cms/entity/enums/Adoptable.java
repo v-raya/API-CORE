@@ -1,17 +1,14 @@
 package gov.ca.cwds.data.legacy.cms.entity.enums;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import javax.persistence.Converter;
 
-/**
- * @author CWDS CASE API Team
- */
+/** @author CWDS CASE API Team */
 public enum Adoptable implements EntityEnum<String> {
   NOT_ADOPTABLE("N", "No"),
   NOT_ASSESSED("NA", "NA"),
-  ADOPTABLE("Y",  "Yes");
+  ADOPTABLE("Y", "Yes");
 
   private final String code;
   private final String description;
@@ -21,12 +18,8 @@ public enum Adoptable implements EntityEnum<String> {
     this.description = description;
   }
 
-  public static Adoptable from(String code) {
-    return Arrays.asList(Adoptable.values())
-        .stream()
-        .findFirst()
-        .filter(e -> e.code.equals(code))
-        .orElse(null);
+  public static Adoptable fromCode(String code) {
+    return new AdoptableConverter().convertToEntityAttribute(code);
   }
 
   @Override
@@ -40,7 +33,7 @@ public enum Adoptable implements EntityEnum<String> {
   }
 
   @Converter
-  public static class AdoptableConverter extends BaseEntityEnumConverter<Adoptable,String> {
+  public static class AdoptableConverter extends BaseEntityEnumConverter<Adoptable, String> {
 
     private static final Map<String, Adoptable> codeMap =
         Collections.unmodifiableMap(initializeMapping(Adoptable.values()));
@@ -51,4 +44,3 @@ public enum Adoptable implements EntityEnum<String> {
     }
   }
 }
-

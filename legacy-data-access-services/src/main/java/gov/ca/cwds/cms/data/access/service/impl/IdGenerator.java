@@ -10,31 +10,11 @@ import org.slf4j.LoggerFactory;
  */
 class IdGenerator {
 
-  private static final Logger LOG = LoggerFactory.getLogger(IdGenerator.class);
-
-  private static final Object monitor = new Object();
-  private static String lastId;
-
   private IdGenerator() {
   }
 
   public static String generateId() {
-    synchronized (monitor) {
-      String generated = null;
-      do {
-        generated = CmsKeyIdGenerator.generate(PrincipalUtils.getStaffPersonId());
-        try {
-          monitor.wait(10L);
-        } catch (InterruptedException e) {
-          LOG.warn("Interrupted: " + e.getMessage(), e);
-          Thread.currentThread().interrupt();
-        }
-      } while (lastId != null && lastId.equals(generated));
-
-      lastId = generated;
-    }
-    return lastId;
+      return CmsKeyIdGenerator.getNextValue(PrincipalUtils.getStaffPersonId());
   }
-
 }
 

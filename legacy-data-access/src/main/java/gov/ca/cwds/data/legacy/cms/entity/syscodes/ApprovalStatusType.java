@@ -12,7 +12,7 @@ import org.hibernate.annotations.NamedQuery;
 @Entity
 @Cacheable
 @DiscriminatorValue(value = "APV_STC")
-@NamedQuery(name = ApprovalStatusType.NQ_ALL, query = "FROM ApprovalStatusType")
+@NamedQuery(name = ApprovalStatusType.NQ_ALL, query = "FROM gov.ca.cwds.data.legacy.cms.entity.syscodes.ApprovalStatusType")
 public class ApprovalStatusType extends SystemCodeTable {
 
     public static final String NQ_ALL = "ApprovalStatusType.all";

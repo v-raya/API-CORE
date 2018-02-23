@@ -12,7 +12,7 @@ import org.hibernate.annotations.NamedQuery;
 @Entity
 @Cacheable
 @DiscriminatorValue(value = "PLC_FCLC")
-@NamedQuery(name = FacilityType.NQ_ALL, query = "FROM FacilityType")
+@NamedQuery(name = FacilityType.NQ_ALL, query = "FROM gov.ca.cwds.data.legacy.cms.entity.syscodes.FacilityType")
 public class FacilityType extends SystemCodeTable {
 
     public static final String NQ_ALL = "FacilityType.all";

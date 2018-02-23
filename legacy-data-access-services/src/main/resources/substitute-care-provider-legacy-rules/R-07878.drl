@@ -1,0 +1,26 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.cms.data.access.dto.ExtendedSCPEntityAwareDTO;
+import org.apache.commons.lang3.StringUtils
+import java.time.LocalDate
+
+global java.util.Set validationDetailsList
+/*
+        Code: R - 07878
+
+        Rule Txt
+        When creating an Substitute Care Provider to Placement Home association,
+        default the Start Date to the System Date.
+
+        Logic
+        Default PLACEMENT_HOME_SUB_CARE_PROVIDER.Start_Date = System Date.
+*/
+rule "R-07878"
+  dialect "mvel"
+  agenda-group "substitute-care-provider-data-processing-agenda"
+  when
+      $scpAwareDTO: ExtendedSCPEntityAwareDTO(placementHomeInformation.startDt == null)
+  then
+      $scpAwareDTO.getPlacementHomeInformation().setStartDt(LocalDate.now());
+      update ($scpAwareDTO);
+end
+

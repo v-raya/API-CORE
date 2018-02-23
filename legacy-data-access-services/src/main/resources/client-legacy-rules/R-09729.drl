@@ -1,0 +1,44 @@
+import gov.ca.cwds.rest.exception.IssueDetails;
+import gov.ca.cwds.data.legacy.cms.entity.Client;
+import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;
+import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
+
+global java.util.Set validationDetailsList
+
+rule "R-09729"
+  /*
+    Code: R - 09729
+
+    Rule Txt:
+    The Safety Alert Activation Date cannot be less than the Birth Date (if it exists) of
+    the Client. If the Safety Alert Activation Date is entered, then the client's birth
+    date cannot be changed to a date later than the Safety Alert Activation Date.
+
+    Logic:
+    CLIENT > (any) SAFETY_ALERT.Activation_Date >= CLIENT.Birth_Date
+  */
+  dialect "mvel"
+  agenda-group "client-agenda"
+  when
+    $clientAwareDTO: ChildClientEntityAwareDTO()
+    $client: Client($birthDate: birthDate != null) from $clientAwareDTO.entity
+    $safetyAlert: SafetyAlert(activationDate.isBefore($birthDate)) from $clientAwareDTO.safetyAlerts
+  then
+    IssueDetails details = new IssueDetails();
+    details.setCode("R-09729");
+    details.setUserMessage(
+      String.format(
+        "The Safety Alert Activation Date cannot be less than the Birth Date of the Client."
+            + " Client ID: '%s';"
+            + " Client Birth Date: %tm/%<td/%<tY;"
+            + " Safety Alert ThirdID: '%s';"
+            + " Safety Alert Activation Date: %tm/%<td/%<tY",
+        $client.getIdentifier(),
+        $client.getBirthDate(),
+        $safetyAlert.getThirdId(),
+        $safetyAlert.getActivationDate()
+      )
+    );
+    details.setTechnicalMessage("CLIENT > (any) SAFETY_ALERT.Activation_Date >= CLIENT.Birth_Date");
+    validationDetailsList.add(details);
+end

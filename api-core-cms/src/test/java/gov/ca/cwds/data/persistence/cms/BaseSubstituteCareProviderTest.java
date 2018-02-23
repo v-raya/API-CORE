@@ -3,6 +3,7 @@ package gov.ca.cwds.data.persistence.cms;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 import java.math.BigDecimal;
@@ -46,9 +47,8 @@ public class BaseSubstituteCareProviderTest {
   @Test
   public void getAdditionalPhoneNumber_Args__() throws Exception {
     BaseSubstituteCareProvider target = new TestOnlyBaseSubstituteCareProvider();
-    BigDecimal actual = target.getAdditionalPhoneNumber();
-    BigDecimal expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    Long actual = target.getAdditionalPhoneNumber();
+    assertNull(actual);
   }
 
   @Test

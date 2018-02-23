@@ -1,0 +1,34 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.Client
+import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
+import org.apache.commons.lang3.StringUtils;
+
+global java.util.Set<IssueDetails> validationDetailsList
+
+rule "R-00736-1"
+  dialect "mvel"
+  agenda-group "client-agenda"
+  when
+      /*
+        Code: R - 00736
+
+        Rule Txt:
+        If the Driver License Number is specified, the client must be associated to the state which issued it and vice versa.
+        If Driver_License_Number is entered, then a Driver_License_State_Code_Type must be entered.
+        If a Driver_License_State_Code_Type is entered, then a Driver_License_Number must be entered.
+        When an attempt is made to close, an error message will appear.
+
+        Logic:
+        If CLIENT. Driver License State Code Type <>  blank then CLIENT. Driver License Number <>  blank and vice-versa
+      */
+      $clientAwareDTO: ClientEntityAwareDTO()
+      $client: Client(StringUtils.isBlank(driverLicenseNumber), driverLicenseStateCode > (short)0) from $clientAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-00736");
+      details.setUserMessage(String.format(
+          "If a Driver License State is entered, then a Driver_License Number must be entered. Client ID:'%s'",
+          $client.getIdentifier()));
+      details.setTechnicalMessage("If Client.driverLicenseStateCode > 0 then should be: Client.driverLicenseNumber != null");
+      validationDetailsList.add(details);
+end

@@ -1,6 +1,5 @@
 package gov.ca.cwds.data.legacy.cms.entity.enums;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import javax.persistence.Converter;
@@ -18,12 +17,8 @@ public enum DateOfBirthStatus implements EntityEnum<String> {
     this.description = description;
   }
 
-  public static DateOfBirthStatus from(String code) {
-    return Arrays.asList(DateOfBirthStatus.values())
-        .stream()
-        .findFirst()
-        .filter(e -> e.code.equals(code))
-        .orElse(null);
+  public static DateOfBirthStatus fromCode(String code) {
+    return new DateOfBirthStatusConverter().convertToEntityAttribute(code);
   }
 
   @Override

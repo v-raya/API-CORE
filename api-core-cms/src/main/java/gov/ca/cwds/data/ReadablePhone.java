@@ -15,11 +15,8 @@ import gov.ca.cwds.data.std.ApiPhoneAware;
  * 
  * @author CWDS API Team
  */
-public final class ReadablePhone implements ApiPhoneAware, Serializable {
+public class ReadablePhone implements ApiPhoneAware, Serializable {
 
-  /**
-   * Base serialization version. Increment by class version.
-   */
   private static final long serialVersionUID = 1L;
 
   private final String phoneId;

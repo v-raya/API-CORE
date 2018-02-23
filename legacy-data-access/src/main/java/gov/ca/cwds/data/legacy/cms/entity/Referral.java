@@ -9,7 +9,6 @@ import java.time.LocalTime;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Convert;
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -33,7 +32,7 @@ import org.hibernate.annotations.Type;
   @NamedQuery(
     name = Referral.FIND_ACTIVE_BY_STAFF_ID,
     query =
-        "select distinct assignment.referral from CaseLoad cl"
+        "select distinct assignment.referral from gov.ca.cwds.data.legacy.cms.entity.CaseLoad cl"
             + " left join cl.referralAssignments assignment"
             + " where cl.caseLoadWeighting.fkstfperst = :"
             + Referral.PARAM_STAFF_ID
@@ -47,7 +46,7 @@ import org.hibernate.annotations.Type;
   @NamedQuery(
     name = Referral.FIND_ACTIVE_BY_CLIENT,
     query =
-        "SELECT DISTINCT rclient.referral from ReferralClient rclient"
+        "SELECT DISTINCT rclient.referral from gov.ca.cwds.data.legacy.cms.entity.ReferralClient rclient"
             + "  left join rclient.referral where rclient.client.identifier = :"
             + Referral.PARAM_CLIENT_ID
             + " and rclient.referral.closureDate is null"
@@ -55,7 +54,7 @@ import org.hibernate.annotations.Type;
   @NamedQuery(
     name = Referral.FIND_CLOSED_BY_CLIENT,
     query =
-        "SELECT DISTINCT rclient.referral from ReferralClient rclient"
+        "SELECT DISTINCT rclient.referral from gov.ca.cwds.data.legacy.cms.entity.ReferralClient rclient"
             + "  left join Referral referral where rclient.client.identifier = :"
             + Referral.PARAM_CLIENT_ID
             + " and rclient.referral.closureDate is not null"
@@ -63,7 +62,7 @@ import org.hibernate.annotations.Type;
   @NamedQuery(
     name = Referral.FIND_BY_CLIENT,
     query =
-        "SELECT DISTINCT rclient.referral from ReferralClient rclient"
+        "SELECT DISTINCT rclient.referral from gov.ca.cwds.data.legacy.cms.entity.ReferralClient rclient"
             + "  left join rclient.referral where rclient.client.identifier = :"
             + Referral.PARAM_CLIENT_ID
   )

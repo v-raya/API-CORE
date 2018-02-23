@@ -1,0 +1,33 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.ChildClient
+import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
+import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
+
+global java.util.Set<IssueDetails> validationDetailsList
+
+rule "R-10974"
+  dialect "mvel"
+  agenda-group "client-agenda"
+  when
+      /*
+        Code: R - 10974
+
+        Rule text:
+        The CSEC History Start Date must be greater than or equal to the birth date (if it exists) of the Child Client.
+
+        Logic:
+        CSECHIST.startDate must be <= (If Exists) CHILD_CLIENT > CLIENT.Birth_Date.
+      */
+      $clientAwareDTO: ChildClientEntityAwareDTO()
+      $csecHistory : CsecHistory(startDate : startDate) from $clientAwareDTO.csecHistories
+      $client: ChildClient(birthDate != null && startDate.isBefore(birthDate)) from $clientAwareDTO.entity
+
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-10974");
+      details.setUserMessage("The CSEC History Start Date must be greater than or equal to the birth date (if it exists) of the Child Client.");
+      details.setTechnicalMessage("CSECHIST.startDate must be <= (If Exists) CHILD_CLIENT > CLIENT.Birth_Date.");
+      validationDetailsList.add(details);
+end
+
+

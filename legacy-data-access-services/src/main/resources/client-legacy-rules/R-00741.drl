@@ -2,7 +2,7 @@ import gov.ca.cwds.rest.exception.IssueDetails
 import gov.ca.cwds.data.legacy.cms.entity.Client
 import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
 
-global java.util.Set validationDetailsList
+global java.util.Set<IssueDetails> validationDetailsList
 
 rule "R-00741"
   dialect "mvel"
@@ -10,9 +10,11 @@ rule "R-00741"
   when
       /*
         Code: R - 00741
-        Rule Txt
+
+        Rule Txt:
         The primary and secondary languages of a client may not be the same.
-        Logic
+
+        Logic:
         CLIENT.Primary Language Type <> CLIENT.Secondary Language Type
       */
       $clientAwareDTO: ClientEntityAwareDTO()
@@ -20,7 +22,8 @@ rule "R-00741"
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-00741");
-      details.setUserMessage("The primary and secondary languages of a client may not be the same.");
+      details.setUserMessage(String.format("The primary and secondary languages of a client may not be the same. "
+      + "Client ID:'%s', Language Code: %d", $client.getIdentifier(), $client.getPrimaryLanguageCode()));
       details.setTechnicalMessage("Client primary and secondary languages codes may not be equals and greater than 0");
       validationDetailsList.add(details);
 end

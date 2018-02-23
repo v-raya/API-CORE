@@ -1,13 +1,10 @@
 package gov.ca.cwds.data.legacy.cms.entity.enums;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import javax.persistence.Converter;
 
-/**
- * @author CWDS CASE API Team
- */
+/** @author CWDS CASE API Team */
 public enum IcwaEligibility implements EntityEnum<String> {
   NOT_ELIGIBLE("N", "Not Eligible"),
   PENDING("P", "Pending"),
@@ -22,12 +19,8 @@ public enum IcwaEligibility implements EntityEnum<String> {
     this.description = description;
   }
 
-  public static IcwaEligibility from(String code) {
-    return Arrays.asList(IcwaEligibility.values())
-        .stream()
-        .findFirst()
-        .filter(e -> e.code.equals(code))
-        .orElse(null);
+  public static IcwaEligibility fromCode(String code) {
+    return new IcwaEligibilityConverter().convertToEntityAttribute(code);
   }
 
   @Override
@@ -41,8 +34,8 @@ public enum IcwaEligibility implements EntityEnum<String> {
   }
 
   @Converter
-  public static class IcwaEligibilityConverter extends
-      BaseEntityEnumConverter<IcwaEligibility, String> {
+  public static class IcwaEligibilityConverter
+      extends BaseEntityEnumConverter<IcwaEligibility, String> {
 
     private static final Map<String, IcwaEligibility> codeMap =
         Collections.unmodifiableMap(initializeMapping(IcwaEligibility.values()));
@@ -53,4 +46,3 @@ public enum IcwaEligibility implements EntityEnum<String> {
     }
   }
 }
-

@@ -1,0 +1,32 @@
+import gov.ca.cwds.rest.exception.IssueDetails;
+import gov.ca.cwds.data.legacy.cms.entity.Client;
+import gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan;
+import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
+
+global java.util.Set validationDetailsList
+
+rule "R-10354"
+  dialect "mvel"
+  agenda-group "client-agenda"
+  when
+      /*
+        Code: R - 10354
+
+        Rule Txt:
+        The Intervention Plan Start Date cannot be less than the birth date (if it exists) of the Child Client.
+
+        Logic:
+        HEALTH_INTERVENTION_PLAN.Intervention_Plan_Start_Date must be >= CLIENT.Birth_Date.
+      */
+      $clientAwareDTO: ChildClientEntityAwareDTO()
+      $client: Client($birthDate: birthDate != null) from $clientAwareDTO.entity
+      $plan: HealthInterventionPlan(startDate.isBefore($birthDate)) from $clientAwareDTO.activeHealthInterventionPlans
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-10354");
+      details.setUserMessage(String.format("The Intervention Plan Start Date cannot be less than the birth date of the Child Client. "
+      + " Client ID: '%s', Client Birth Date: %tm/%<td/%<tY, Intervention Plan ThirdID: '%s', Intervention Plan Start Date: %tm/%<td/%<tY",
+      $client.getIdentifier(), $client.getBirthDate(), $plan.getThirdId(), $plan.getStartDate()));
+      details.setTechnicalMessage("If Client.birthDate != null then should be: HealthInterventionPlan.startDate >= Client.birthDate");
+      validationDetailsList.add(details);
+end

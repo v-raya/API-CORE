@@ -41,10 +41,10 @@ public class CustomJerseyViolationExceptionMapper
 
   @Override
   public Response toResponse(final JerseyViolationException exception) {
-    Set<IssueDetails> validationDetailsList = new HashSet<>();
-    Set<ConstraintViolation<?>> constraintViolations = exception.getConstraintViolations();
+    final Set<IssueDetails> validationDetailsList = new HashSet<>();
+    final Set<ConstraintViolation<?>> transgressions = exception.getConstraintViolations();
 
-    for (ConstraintViolation<?> v : constraintViolations) {
+    for (ConstraintViolation<?> v : transgressions) {
       String message = CustomConstraintMessage.getMessage(v, exception.getInvocable()).trim();
       IssueDetails details = unmarshallData(message);
 

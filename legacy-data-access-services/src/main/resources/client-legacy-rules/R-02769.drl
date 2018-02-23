@@ -1,0 +1,58 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.Client
+import gov.ca.cwds.data.legacy.cms.entity.DeliveredService
+import gov.ca.cwds.data.legacy.cms.entity.enums.IndividualType
+import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
+import java.util.Objects;
+
+global java.util.Set<IssueDetails> validationDetailsList
+
+rule "R-02769"
+  dialect "mvel"
+  agenda-group "client-agenda"
+     /*
+        Code: R - 02967
+
+        Rule text:
+          If the client's common name type is 'Doe' and the common name itself is changed,
+          then the common name type must change.
+
+        Logic:
+          If CLIENT. Common Name Type = 'Doe' and CLIENT. Common First Name, Common Last Name,
+          or Suffix Title Type changes then Common Name Type must change.
+
+      */
+  when
+        $clientAwareDTO: ClientEntityAwareDTO()
+        $persistentClient: Client() from $clientAwareDTO.persistentClientState
+        $client: Client(
+            nameType != null,
+            $persistentClient != null,
+            $persistentClient.nameType != null,
+            Objects.equals($persistentClient.nameType.shortDescription, "Doe"),
+            eval(
+                    (!Objects.equals(commonFirstName, $persistentClient.commonFirstName) ||
+                    !Objects.equals(commonLastName, $persistentClient.commonLastName)  ||
+                    !Objects.equals(suffixTitleDescription, $persistentClient.suffixTitleDescription)
+                    )
+                        && Objects.equals(nameType.shortDescription, "Doe")
+                )
+        )
+        from $clientAwareDTO.entity
+
+ then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-02769");
+      details.setUserMessage("If the client's common name type is 'Doe' "
+                              + "and the common name itself is changed, "
+                              + "then the common name type must change.")
+      details.setTechnicalMessage("If CLIENT.Common Name Type = 'Doe' and CLIENT.Common First Name, Common Last Name,"
+                                 +  "or Suffix Title Type changes then Common Name Type must change.");
+      validationDetailsList.add(details);
+end
+
+
+
+
+
+

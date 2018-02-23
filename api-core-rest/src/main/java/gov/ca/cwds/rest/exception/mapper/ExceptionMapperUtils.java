@@ -49,12 +49,11 @@ public class ExceptionMapperUtils {
       issueDetails.setCauseStackTrace(
           StringEscapeUtils.escapeJson(ExceptionUtils.getStackTrace(ex.getCause())));
     }
-    String stackTrace = ExceptionUtils.getStackTrace(ex);
-    issueDetails.setStackTrace(StringEscapeUtils.escapeJson(stackTrace));
+    issueDetails.setStackTrace(StringEscapeUtils.escapeJson(ExceptionUtils.getStackTrace(ex)));
 
-    Set<IssueDetails> detailsList = new HashSet<>();
+    final Set<IssueDetails> detailsList = new HashSet<>();
     detailsList.add(issueDetails);
-    BaseExceptionResponse response = new BaseExceptionResponse();
+    final BaseExceptionResponse response = new BaseExceptionResponse();
     response.setIssueDetails(detailsList);
 
     return Response.status(status).entity(response).type(MediaType.APPLICATION_JSON).build();

@@ -1,6 +1,5 @@
 package gov.ca.cwds.data.legacy.cms.entity.enums;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import javax.persistence.Converter;
@@ -18,12 +17,8 @@ public enum Gender implements EntityEnum<String> {
     this.description = description;
   }
 
-  public static Gender from(String code) {
-    return Arrays.asList(Gender.values())
-        .stream()
-        .findFirst()
-        .filter(e -> e.code.equals(code))
-        .orElse(null);
+  public static Gender fromCode(String code) {
+    return new GenderConverter().convertToEntityAttribute(code);
   }
 
   @Override
@@ -37,8 +32,7 @@ public enum Gender implements EntityEnum<String> {
   }
 
   @Converter
-  public static class GenderConverter
-      extends BaseEntityEnumConverter<Gender, String> {
+  public static class GenderConverter extends BaseEntityEnumConverter<Gender, String> {
 
     private static final Map<String, Gender> codeMap =
         Collections.unmodifiableMap(initializeMapping(Gender.values()));

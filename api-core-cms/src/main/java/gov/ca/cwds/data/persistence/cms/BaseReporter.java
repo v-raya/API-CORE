@@ -1,7 +1,6 @@
 package gov.ca.cwds.data.persistence.cms;
 
 import java.beans.Transient;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -93,7 +92,7 @@ public abstract class BaseReporter extends CmsPersistentObject
   protected Integer messagePhoneExtensionNumber;
 
   @Column(name = "MSG_TEL_NO")
-  protected BigDecimal messagePhoneNumber;
+  protected Long messagePhoneNumber;
 
   @Column(name = "MID_INI_NM")
   @ColumnTransformer(read = ("trim(MID_INI_NM)"))
@@ -104,7 +103,7 @@ public abstract class BaseReporter extends CmsPersistentObject
   protected String namePrefixDescription;
 
   @Column(name = "PRM_TEL_NO")
-  protected BigDecimal primaryPhoneNumber;
+  protected Long primaryPhoneNumber;
 
   @Type(type = "integer")
   @Column(name = "PRM_EXT_NO")
@@ -279,7 +278,7 @@ public abstract class BaseReporter extends CmsPersistentObject
   /**
    * @return the messagePhoneNumber
    */
-  public BigDecimal getMessagePhoneNumber() {
+  public Long getMessagePhoneNumber() {
     return messagePhoneNumber;
   }
 
@@ -300,7 +299,7 @@ public abstract class BaseReporter extends CmsPersistentObject
   /**
    * @return the primaryPhoneNumber
    */
-  public BigDecimal getPrimaryPhoneNumber() {
+  public Long getPrimaryPhoneNumber() {
     return primaryPhoneNumber;
   }
 
@@ -457,19 +456,17 @@ public abstract class BaseReporter extends CmsPersistentObject
   @Transient
   public ApiPhoneAware[] getPhones() {
     List<ApiPhoneAware> phones = new ArrayList<>();
-    if (this.primaryPhoneNumber != null
-        && BigDecimal.ZERO.compareTo(this.primaryPhoneNumber) != 0) {
-      phones.add(new ReadablePhone(null, this.primaryPhoneNumber.toPlainString(),
+    if (this.primaryPhoneNumber != null) {
+      phones.add(new ReadablePhone(null, String.valueOf(this.primaryPhoneNumber),
           this.primaryPhoneExtensionNumber != null ? this.primaryPhoneExtensionNumber.toString()
               : null,
           null));
     }
 
-    if (this.messagePhoneNumber != null
-        && BigDecimal.ZERO.compareTo(this.messagePhoneNumber) != 0) {
+    if (this.messagePhoneNumber != null) {
       phones
           .add(new ReadablePhone(null,
-              this.messagePhoneNumber.toPlainString(), this.messagePhoneExtensionNumber != null
+              String.valueOf(this.messagePhoneNumber), this.messagePhoneExtensionNumber != null
                   ? this.messagePhoneExtensionNumber.toString() : null,
               ApiPhoneAware.PhoneType.Cell));
     }

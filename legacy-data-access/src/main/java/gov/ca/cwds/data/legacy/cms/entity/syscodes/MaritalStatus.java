@@ -9,7 +9,7 @@ import org.hibernate.annotations.NamedQuery;
 @Entity
 @Cacheable
 @DiscriminatorValue(value = "MRTL_STC")
-@NamedQuery(name = MaritalStatus.NQ_ALL, query = "FROM MaritalStatus")
+@NamedQuery(name = MaritalStatus.NQ_ALL, query = "FROM gov.ca.cwds.data.legacy.cms.entity.syscodes.MaritalStatus")
 public class MaritalStatus extends SystemCodeTable {
 
   public static final String NQ_ALL = "MaritalStatus.all";

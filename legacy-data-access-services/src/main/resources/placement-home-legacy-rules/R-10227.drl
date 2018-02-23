@@ -1,0 +1,36 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
+import gov.ca.cwds.data.legacy.cms.entity.OtherAdultsInPlacementHome
+import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO
+import gov.ca.cwds.cms.data.access.dto.OtherAdultInHomeEntityAwareDTO
+import gov.ca.cwds.security.realm.PerryAccount
+
+global java.util.Set validationDetailsList
+
+rule "R-10227"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+      Code: R - 10227
+
+      Field: fraOtherAdultsInHome.txtDoB
+
+      Rule TxtThe date identified must be greater than or equal to the date of birth.
+
+      Logic: OTHER_ADULTS_IN_PLACEMENT_HOME.Identified_Date must be >= OTHER_ADULTS_IN_PLACEMENT_HOME.Birth_Date.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      $otherAdultInHomeEntityAwareDTO: OtherAdultInHomeEntityAwareDTO() from $placementHomeAwareDTO.otherAdultInHomeParameterObjects
+      $otherAdults : OtherAdultsInPlacementHome(identfdDt != null, birthDt != null, eval(identfdDt.isBefore(birthDt))) from $otherAdultInHomeEntityAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-10227");
+      details.setProperty("OtherAdultsInPlacementHome.identfdDt");
+      details.setInvalidValue($otherAdults.identfdDt);
+      details.setUserMessage("Date identified must be greater than or equal to the date of birth.");
+      details.setTechnicalMessage("OTHER_ADULTS_IN_PLACEMENT_HOME.Identified_Date must be >= OTHER_ADULTS_IN_PLACEMENT_HOME.Birth_Date");
+      validationDetailsList.add(details);
+end
+
+

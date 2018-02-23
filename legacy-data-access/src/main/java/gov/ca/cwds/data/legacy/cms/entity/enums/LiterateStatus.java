@@ -1,6 +1,5 @@
 package gov.ca.cwds.data.legacy.cms.entity.enums;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import javax.persistence.Converter;
@@ -19,12 +18,8 @@ public enum LiterateStatus implements EntityEnum<String> {
     this.description = description;
   }
 
-  public static LiterateStatus from(String code) {
-    return Arrays.asList(LiterateStatus.values())
-        .stream()
-        .findFirst()
-        .filter(e -> e.code.equals(code))
-        .orElse(null);
+  public static LiterateStatus fromCode(String code) {
+    return new LiterateStatusConverter().convertToEntityAttribute(code);
   }
 
   @Override

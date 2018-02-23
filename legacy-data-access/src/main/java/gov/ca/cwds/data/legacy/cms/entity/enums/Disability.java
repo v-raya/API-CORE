@@ -1,13 +1,10 @@
 package gov.ca.cwds.data.legacy.cms.entity.enums;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import javax.persistence.Converter;
 
-/**
- * @author CWDS CASE API Team
- */
+/** @author CWDS CASE API Team */
 public enum Disability implements EntityEnum<String> {
   NOT_YET_DETERMINED("D", "Not Yet Determined"),
   NO("N", "No"),
@@ -21,12 +18,8 @@ public enum Disability implements EntityEnum<String> {
     this.description = description;
   }
 
-  public static Disability from(String code) {
-    return Arrays.asList(Disability.values())
-        .stream()
-        .findFirst()
-        .filter(e -> e.code.equals(code))
-        .orElse(null);
+  public static Disability fromCode(String code) {
+    return new DisabilityConverter().convertToEntityAttribute(code);
   }
 
   @Override
@@ -51,4 +44,3 @@ public enum Disability implements EntityEnum<String> {
     }
   }
 }
-

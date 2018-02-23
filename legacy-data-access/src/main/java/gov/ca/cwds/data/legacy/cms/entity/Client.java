@@ -20,9 +20,10 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -47,7 +48,7 @@ import org.hibernate.annotations.Type;
 @NamedQuery(
   name = "Client.find",
   query =
-      "SELECT c FROM Client c"
+      "SELECT c FROM gov.ca.cwds.data.legacy.cms.entity.Client c"
           + " JOIN c.placementEpisodes pe"
           + " JOIN pe.outOfHomePlacements ohp"
           + " JOIN ohp.placementHome ph"
@@ -56,7 +57,7 @@ import org.hibernate.annotations.Type;
 @NamedQuery(
   name = "Client.findAll",
   query =
-      "SELECT c FROM Client c"
+      "SELECT c FROM gov.ca.cwds.data.legacy.cms.entity.Client c"
           + " JOIN c.placementEpisodes pe"
           + " JOIN pe.outOfHomePlacements ohp"
           + " JOIN ohp.placementHome ph"
@@ -66,7 +67,7 @@ import org.hibernate.annotations.Type;
 @NamedQuery(
   name = "Client.findByFacilityId",
   query =
-      "SELECT c FROM Client c"
+      "SELECT c FROM gov.ca.cwds.data.legacy.cms.entity.Client c"
           + " JOIN c.placementEpisodes pe"
           + " JOIN pe.outOfHomePlacements ohp"
           + " JOIN ohp.placementHome ph"
@@ -82,10 +83,16 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
 
   @Id
   @Column(name = "IDENTIFIER", nullable = false, length = 10)
+  @Access(AccessType.PROPERTY)//to get id without fetching entire client
   private String identifier;
 
   @OneToMany(fetch = FetchType.LAZY)
-  @JoinColumn(name = "FKCLIENT_T", referencedColumnName = "IDENTIFIER")
+  @JoinColumn(
+    name = "FKCLIENT_T",
+    referencedColumnName = "IDENTIFIER",
+    insertable = false,
+    updatable = false
+  )
   @OrderBy("removalDt DESC")
   private Set<PlacementEpisode> placementEpisodes = new HashSet<>();
 
@@ -342,41 +349,39 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private boolean zippyCreatedIndicator;
 
   @Override
-  public boolean equals(Object o) {
+  public final boolean equals(Object o) {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    if (!super.equals(o)) {
+    if (!(o instanceof Client)) {
       return false;
     }
     Client client = (Client) o;
-    return Objects.equals(birthCountryCode, client.birthCountryCode)
-        && Objects.equals(birthStateCode, client.birthStateCode)
-        && Objects.equals(birthCity, client.birthCity)
-        && Objects.equals(birthDate, client.birthDate)
-        && Objects.equals(birthFacilityName, client.birthFacilityName)
-        && Objects.equals(commonFirstName, client.commonFirstName)
-        && Objects.equals(commonLastName, client.commonLastName)
-        && Objects.equals(commonMiddleName, client.commonMiddleName)
-        && Objects.equals(emailAddress, client.emailAddress);
+    return (getBirthCountryCode() == client.getBirthCountryCode())
+        && (getBirthStateCode() == client.getBirthStateCode())
+        && Objects.equals(getBirthCity(), client.getBirthCity())
+        && Objects.equals(getBirthDate(), client.getBirthDate())
+        && Objects.equals(getBirthFacilityName(), client.getBirthFacilityName())
+        && Objects.equals(getCommonFirstName(), client.getCommonFirstName())
+        && Objects.equals(getCommonLastName(), client.getCommonLastName())
+        && Objects.equals(getCommonMiddleName(), client.getCommonMiddleName())
+        && Objects.equals(getEmailAddress(), client.getEmailAddress())
+        && (getChildClientIndicator() == client.getChildClientIndicator());
   }
 
   @Override
-  public int hashCode() {
+  public final int hashCode() {
     return Objects.hash(
-        super.hashCode(),
-        birthCountryCode,
-        birthStateCode,
-        birthCity,
-        birthDate,
-        birthFacilityName,
-        commonFirstName,
-        commonLastName,
-        commonMiddleName,
-        emailAddress);
+        getBirthCountryCode(),
+        getBirthStateCode(),
+        getBirthCity(),
+        getBirthDate(),
+        getBirthFacilityName(),
+        getCommonFirstName(),
+        getCommonLastName(),
+        getCommonMiddleName(),
+        getEmailAddress(),
+        getChildClientIndicator());
   }
 
   public String getIdentifier() {

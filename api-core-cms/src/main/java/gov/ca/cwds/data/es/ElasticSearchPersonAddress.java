@@ -204,6 +204,7 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
   }
 
   @Override
+  @JsonIgnore
   public void setCounty(String county) {
     // this.county = county;
   }

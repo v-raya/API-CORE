@@ -1,0 +1,15 @@
+{
+  "user": "000 supervisor",
+  "staffId": "Custom",
+  "roles": [
+    "Supervisor"
+  ],
+  "county_code": "21",
+  "county_name": "Marin",
+  "government_entity_type": "1088",
+  "privileges": [
+    "CWS Case Management System",
+    "Sensitive Persons",
+    "Sealed"
+  ]
+}

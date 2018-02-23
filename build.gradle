@@ -11,7 +11,6 @@ allprojects {
     sourceCompatibility = 1.8
     compileJava {options.encoding = "UTF-8"}
 
-
     project.ext {
         commonGroupId = "gov.ca.cwds.api"
         apiSecurityVersion = "0.5.4_328-RC"
@@ -34,7 +33,7 @@ allprojects {
         glassfishJerseyExtVersion = "2.23.2"
         jacksonVersion = "2.8.2"
         postgresqlVersion = "9.4.1208.jre7"
-        dataModelVersion = '0.4.6'
+        dataModelVersion = '0.5.6_462-RC'
         droolsVersion = "7.1.0.Final"
         mapstructVersion = '1.1.0.Final'
         junitVersion = '4.12'
@@ -44,7 +43,7 @@ allprojects {
         h2Version = "1.4.194"
         liquibaseVersion = "3.5.3"
 
-        projectMajorVersion = "0.5.4"
+        projectMajorVersion = "0.5.6"
 
         isRelease = System.getProperty("Release") == "true"
         buildNumber = System.getProperty('BuildNumber')

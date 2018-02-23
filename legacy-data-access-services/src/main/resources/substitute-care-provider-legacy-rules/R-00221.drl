@@ -1,0 +1,28 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
+import gov.ca.cwds.data.legacy.cms.entity.EmergencyContactDetail
+import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider
+import gov.ca.cwds.cms.data.access.dto.ExtendedSCPEntityAwareDTO
+import org.apache.commons.lang3.StringUtils
+import java.time.temporal.ChronoUnit
+import java.time.LocalDate
+
+global java.util.Set validationDetailsList
+
+rule "R-00221"
+  dialect "mvel"
+  agenda-group "substitute-care-provider-agenda"
+  when
+      $scpAwareDTO: ExtendedSCPEntityAwareDTO()
+      $primarySubstituteCareProvider : SubstituteCareProvider(birthDt != null && birthDt.isAfter(LocalDate.now().minus(18L, ChronoUnit.YEARS))) from $scpAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-00221");
+      details.setProperty("fraSCP.txtBirthDate");
+      details.setInvalidValue($primarySubstituteCareProvider.birthDt);
+      details.setUserMessage("Substitute care provider must be at least 18 years old");
+      details.setTechnicalMessage("SUBSTITUTE CARE PROVIDER.BIRTH DATE must be equal to or less than (System date - 18 years)");
+      validationDetailsList.add(details);
+end
+
+

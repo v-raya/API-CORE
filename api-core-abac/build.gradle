@@ -1,5 +1,6 @@
 dependencies {
     compile project(':legacy-data-access')
+    compile project(':legacy-data-access-services')
     compile project(':drools-engine')
     compile group: 'gov.ca.cwds.api', name:'api-security', version: apiSecurityVersion
 
