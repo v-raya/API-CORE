@@ -55,7 +55,7 @@ rule "R-02974: SCP Primary Provider Check (All county-licensed and non-licensed 
       /**
         (All) PLACEMENT_HOME
         (where .End_Date = null AND .New_License_Number = null
-        and .Process_Placement_Home_Move_Ind = 'N',
+        and .Process_Placement_Home_Move_Ind(newlicUpd) = 'N',
         and .Licenser_Code = 'CT' or 'NA'
         (except where .Placement_Facility_Type = 'Supervised Independent Living Placement'
         or ('Foster Fam Agency Cert Resource Fam Home' or 'Foster Family Agency Certified Home'
@@ -63,13 +63,15 @@ rule "R-02974: SCP Primary Provider Check (All county-licensed and non-licensed 
         (where .Primary_Provider_Ind = 'Y') .End_Date = null must exist.
       */
       $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
-      $placementHome: PlacementHome(newlicUpd == "N" && endDt == null && StringUtils.isEmpty(newlicNo) && (licensrCd == "CT" || licensrCd == "NA") && facilityType != 6716 && !(facilityType == 6915 || facilityType == 2200 && trnhsgInd == "N")) from $placementHomeAwareDTO.entity
-      not SubstituteCareProvider() from $placementHome.primarySubstituteCareProvider
+      exists PlacementHome(newlicUpd == "N" && endDt == null && StringUtils.isEmpty(newlicNo) && licensrCd in ("CT", "NA")) from $placementHomeAwareDTO.entity
+      not PlacementHome(facilityType == 6716) from $placementHomeAwareDTO.entity
+      not PlacementHome(facilityType == 6915 || facilityType == 2200 && trnhsgInd == "N") from $placementHomeAwareDTO.entity
+      not SubstituteCareProvider() from $placementHomeAwareDTO.entity.primarySubstituteCareProvider
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-02974");
       details.setProperty("primarySubstituteCareProvider");
-      details.setInvalidValue($placementHome);
+      details.setInvalidValue("null");
       details.setUserMessage("All county-licensed and non-licensed homes must have one active Substitute Care Provider associated to it that is identified as the Primary Provider.");
       details.setTechnicalMessage("(All) PLACEMENT_HOME  " +
                                    "(where .End_Date = null AND .New_License_Number = null  " +
