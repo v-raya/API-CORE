@@ -63,9 +63,7 @@ rule "R-02974: SCP Primary Provider Check (All county-licensed and non-licensed 
         (where .Primary_Provider_Ind = 'Y') .End_Date = null must exist.
       */
       $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
-      //todo and .Process_Placement_Home_Move_Ind = 'N' ?
-      //todo (facilityType == 6915 || facilityType == 2200 && trnhsgInd == "N") or (facilityType in(6915, 2200) && trnhsgInd == "N") ??
-      $placementHome: PlacementHome(endDt == null && StringUtils.isEmpty(newlicNo) && (licensrCd == "CT" || licensrCd == "NA") && facilityType != 6716 && !(facilityType == 6915 || facilityType == 2200 && trnhsgInd == "N")) from $placementHomeAwareDTO.entity
+      $placementHome: PlacementHome(newlicUpd == "N" && endDt == null && StringUtils.isEmpty(newlicNo) && (licensrCd == "CT" || licensrCd == "NA") && facilityType != 6716 && !(facilityType == 6915 || facilityType == 2200 && trnhsgInd == "N")) from $placementHomeAwareDTO.entity
       not SubstituteCareProvider() from $placementHome.primarySubstituteCareProvider
   then
       IssueDetails details = new IssueDetails();

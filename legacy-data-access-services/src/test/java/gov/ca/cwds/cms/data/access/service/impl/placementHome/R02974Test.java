@@ -1,9 +1,15 @@
 package gov.ca.cwds.cms.data.access.service.impl.placementHome;
 
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
+import org.junit.Before;
 import org.junit.Test;
 
 public class R02974Test extends BaseDocToolRulesPlacementHomeTest {
+
+    @Before
+    public void before() {
+        placementHomeEntityAwareDTO.getEntity().setNewlicUpd("N");
+    }
 
     @Test
     public void testAbsentSCPViolation() {
