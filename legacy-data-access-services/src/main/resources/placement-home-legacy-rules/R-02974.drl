@@ -1,0 +1,85 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
+import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider
+import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
+import org.apache.commons.lang3.StringUtils
+
+global java.util.Set validationDetailsList
+
+/**
+
+Code: R - 02974
+Rule Txt
+All county-licensed and non-licensed homes
+(Non-LIS Foster Family Homes, Resource Family Homes,
+and FFA-Certified Homes
+or Foster Fam Agency Cert Resource Fam Homes
+that are not Transitional Housing Placement Program Facilities,
+Court Specified Homes, Relative/NREFM, Tribe Specified Homes,
+and Guardian Homes)
+
+must have one active Substitute Care Provider associated to it that is identified as the Primary Provider.
+
+For Supervised Independent Living Placements or homes that come from LIS,
+if Substitute Care Providers are added one active Primary Provider must exist,
+otherwise no Substitute Care Providers are required. Group Homes,
+TSCFs and STRTPs are not required to have a Substitute Care Provider.
+If a placement home has been end dated (or is the old home as a result of a process placement home move)
+there is no need to have an active Substitute Care Provider.
+Execute R 10430 prior to executing this rule.
+
+Logic
+(All) PLACEMENT_HOME
+(where .End_Date = null AND .New_License_Number = null
+and .Process_Placement_Home_Move_Ind = 'N',
+and .Licenser_Code = 'CT' or 'NA'
+(except where .Placement_Facility_Type = 'Supervised Independent Living Placement'
+or ('Foster Fam Agency Cert Resource Fam Home' or 'Foster Family Agency Certified Home'
+and .Transitional_Housing_Placement_Program_Facility_Ind = 'N'))) > PLACEMENT_HOME_SUB_CARE_PROVIDER
+(where .Primary_Provider_Ind = 'Y') .End_Date = null must exist.
+
+If creating PLACEMENT_HOME_SUB_CARE_PROVIDER
+for PLACEMENT_HOME
+  (where .Licenser_Code = 'CL' or .Placement_Facility_Type = 'Supervised Independent Living Placement'), then
+PLACEMENT_HOME (where .End_Date <> null)
+> PLACEMENT_HOME_SUB_CARE_PROVIDER (where .Primary_Provider_Ind = 'Y') .End_Date = null must exist.
+Execute R 10430 prior to executing this rule.
+
+*/
+
+
+rule "R-02974: SCP Primary Provider Check (All county-licensed and non-licensed homes)"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /**
+        (All) PLACEMENT_HOME
+        (where .End_Date = null AND .New_License_Number = null
+        and .Process_Placement_Home_Move_Ind(newlicUpd) = 'N',
+        and .Licenser_Code = 'CT' or 'NA'
+        (except where .Placement_Facility_Type = 'Supervised Independent Living Placement'
+        or ('Foster Fam Agency Cert Resource Fam Home' or 'Foster Family Agency Certified Home'
+        and .Transitional_Housing_Placement_Program_Facility_Ind = 'N'))) > PLACEMENT_HOME_SUB_CARE_PROVIDER
+        (where .Primary_Provider_Ind = 'Y') .End_Date = null must exist.
+      */
+      $placementHomeAwareDTO: PlacementHomeEntityAwareDTO()
+      exists PlacementHome(newlicUpd == "N" && endDt == null && StringUtils.isBlank(newlicNo) && licensrCd in ("CT", "NA")) from $placementHomeAwareDTO.entity
+      not PlacementHome(facilityType == 6716) from $placementHomeAwareDTO.entity
+      not PlacementHome(facilityType == 6915 || facilityType == 2200 && trnhsgInd == "N") from $placementHomeAwareDTO.entity
+      not SubstituteCareProvider() from $placementHomeAwareDTO.entity.primarySubstituteCareProvider
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-02974");
+      details.setProperty("primarySubstituteCareProvider");
+      details.setInvalidValue("null");
+      details.setUserMessage("All county-licensed and non-licensed homes must have one active Substitute Care Provider associated to it that is identified as the Primary Provider.");
+      details.setTechnicalMessage("(All) PLACEMENT_HOME  " +
+                                   "(where .End_Date = null AND .New_License_Number = null  " +
+                                   "and .Process_Placement_Home_Move_Ind = 'N',  " +
+                                   "and .Licenser_Code = 'CT' or 'NA'  " +
+                                   "(except where .Placement_Facility_Type = 'Supervised Independent Living Placement'  " +
+                                   "or ('Foster Fam Agency Cert Resource Fam Home' or 'Foster Family Agency Certified Home'  " +
+                                   "and .Transitional_Housing_Placement_Program_Facility_Ind = 'N'))) > PLACEMENT_HOME_SUB_CARE_PROVIDER  " +
+                                   "(where .Primary_Provider_Ind = 'Y') .End_Date = null must exist.");
+      validationDetailsList.add(details);
+end
