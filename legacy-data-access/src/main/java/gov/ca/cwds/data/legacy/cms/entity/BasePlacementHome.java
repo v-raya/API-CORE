@@ -117,6 +117,14 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private List<PlacementHomeNotes> placementHomeNotes;
 
   /**
+   * Historic information on when
+   * a Placement Home Facility Type is changed and the dates the Placement Home Facility type was of a specific type
+   */
+  @OneToMany
+  @JoinColumn(name = "FKPLC_HM_T")
+  private List<PlacementFacilityTypeHistory> placementFacilityTypeHistory;
+
+  /**
    * LICENSE_NUMBER - The number identifying a specific License issued by either the State of
    * California (CCL) or a county to a specific PLACEMENT HOME.  This number is at times referred to
    * as the facility number.
@@ -949,6 +957,14 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   public void setPlacementHomeNotes(
       List<PlacementHomeNotes> placementHomeNotes) {
     this.placementHomeNotes = placementHomeNotes;
+  }
+
+  public List<PlacementFacilityTypeHistory> getPlacementFacilityTypeHistory() {
+    return placementFacilityTypeHistory;
+  }
+
+  public void setPlacementFacilityTypeHistory(List<PlacementFacilityTypeHistory> placementFacilityTypeHistory) {
+    this.placementFacilityTypeHistory = placementFacilityTypeHistory;
   }
 
   public String getLicenseNo() {
