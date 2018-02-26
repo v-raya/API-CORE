@@ -126,7 +126,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
    * @param suffix suffix of the named query
    * @return named query for lookup
    */
-  private String constructNamedQueryName(String suffix) {
+  protected String constructNamedQueryName(String suffix) {
     return getEntityClass().getName() + "." + suffix;
   }
 
