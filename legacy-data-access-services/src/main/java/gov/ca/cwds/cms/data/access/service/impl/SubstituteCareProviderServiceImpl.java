@@ -4,7 +4,19 @@ import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPers
 import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
 import static org.apache.commons.lang3.StringUtils.upperCase;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.apache.commons.collections4.CollectionUtils;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.cms.data.access.Constants;
 import gov.ca.cwds.cms.data.access.Constants.PhoneticSearchTables;
@@ -37,15 +49,6 @@ import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import org.apache.commons.collections4.CollectionUtils;
 
 /**
  * @author CWDS CALS API Team
@@ -88,9 +91,8 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   public void runBusinessValidation(SCPEntityAwareDTO entityAwareDTO, PerryAccount principal)
       throws DroolsException {
     // Perform validation rules
-    Set<IssueDetails> detailsList =
-        droolsService.performBusinessRules(
-            SubstituteCareProviderDroolsConfiguration.INSTANCE, entityAwareDTO, principal);
+    Set<IssueDetails> detailsList = droolsService.performBusinessRules(
+        SubstituteCareProviderDroolsConfiguration.INSTANCE, entityAwareDTO, principal);
 
     if (!detailsList.isEmpty()) {
       throw new BusinessValidationException(
@@ -103,7 +105,8 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
       throws DroolsException {
     // Perform data processing roles
     droolsService.performBusinessRules(
-        SubstituteCareProviderDroolsConfiguration.DATA_PROCESSING_INSTANCE, entityAwareDTO, principal);
+        SubstituteCareProviderDroolsConfiguration.DATA_PROCESSING_INSTANCE, entityAwareDTO,
+        principal);
   }
 
 
@@ -112,7 +115,7 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
    * Creates SubstituteCareProvider and dependent entities
    *
    * @param scpEntityAwareDTO
-   * @return
+   * @return a substitute care provider
    * @throws DataAccessServicesException
    */
   @Override
@@ -123,8 +126,8 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
       ExtendedSCPEntityAwareDTO extScpEntityAwareDTO = enrichSCPEntityAwareDTO(scpEntityAwareDTO);
       final SubstituteCareProvider substituteCareProvider = extScpEntityAwareDTO.getEntity();
       applyBusinessRules(extScpEntityAwareDTO);
-      SubstituteCareProvider storedSubstituteCareProvider = substituteCareProviderDao
-          .create(substituteCareProvider);
+      SubstituteCareProvider storedSubstituteCareProvider =
+          substituteCareProviderDao.create(substituteCareProvider);
       substituteCareProviderUcDao.create(extScpEntityAwareDTO.getSubstituteCareProviderUc());
       placementHomeInformationDao.create(extScpEntityAwareDTO.getPlacementHomeInformation());
 
@@ -143,14 +146,11 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   /**
    * DocTool rule R - 07045 implemented in this method
    *
-   * Rule Txt:
-   * For each ethnicity selected by the user in the Ethnicity dialog,
-   * create a CLIENT_SCP_ETHNICITY row.
+   * Rule Txt: For each ethnicity selected by the user in the Ethnicity dialog, create a
+   * CLIENT_SCP_ETHNICITY row.
    *
-   * Logic:
-   * Create CLIENT_SCP_ETHNICITY. Set .Established_For_Code = S,
-   * and set .Established_For_Id = SUBSTITUTE_CARE_PROVIDER.Id.
-   * Set .Ethnicity_Type = (user selected) Ethnicity Type.
+   * Logic: Create CLIENT_SCP_ETHNICITY. Set .Established_For_Code = S, and set .Established_For_Id
+   * = SUBSTITUTE_CARE_PROVIDER.Id. Set .Ethnicity_Type = (user selected) Ethnicity Type.
    *
    * @param extScpEntityAwareDTO
    */
@@ -221,11 +221,10 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
 
   private void enrichPhoneContactDetails(ExtendedSCPEntityAwareDTO scpDto) {
     if (CollectionUtils.isNotEmpty(scpDto.getPhoneNumbers())) {
-      scpDto.getPhoneNumbers()
-          .forEach(phoneNumber -> {
-            phoneNumber.setEstblshId(scpDto.getEntity().getIdentifier());
-            phoneNumber.setThirdId(IdGenerator.generateId());
-          });
+      scpDto.getPhoneNumbers().forEach(phoneNumber -> {
+        phoneNumber.setEstblshId(scpDto.getEntity().getIdentifier());
+        phoneNumber.setThirdId(IdGenerator.generateId());
+      });
     }
   }
 
@@ -300,13 +299,11 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
 
   private void storeCountyOwnership(String scpIdentifier) {
     CountyOwnership countyOwnership =
-        countyOwnershipMapper.toCountyOwnership(scpIdentifier,
-            "S", Collections.emptyList());
+        countyOwnershipMapper.toCountyOwnership(scpIdentifier, "S", Collections.emptyList());
     countyOwnershipDao.create(countyOwnership);
   }
 
-  public void setSubstituteCareProviderDao(
-      SubstituteCareProviderDao substituteCareProviderDao) {
+  public void setSubstituteCareProviderDao(SubstituteCareProviderDao substituteCareProviderDao) {
     this.substituteCareProviderDao = substituteCareProviderDao;
   }
 
@@ -319,8 +316,7 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
     this.countyOwnershipDao = countyOwnershipDao;
   }
 
-  public void setCountyOwnershipMapper(
-      CountyOwnershipMapper countyOwnershipMapper) {
+  public void setCountyOwnershipMapper(CountyOwnershipMapper countyOwnershipMapper) {
     this.countyOwnershipMapper = countyOwnershipMapper;
   }
 
@@ -329,8 +325,7 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
     this.placementHomeInformationDao = placementHomeInformationDao;
   }
 
-  public void setPhoneContactDetailDao(
-      PhoneContactDetailDao phoneContactDetailDao) {
+  public void setPhoneContactDetailDao(PhoneContactDetailDao phoneContactDetailDao) {
     this.phoneContactDetailDao = phoneContactDetailDao;
   }
 
@@ -338,8 +333,7 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
     this.scpSsaName3Dao = scpSsaName3Dao;
   }
 
-  public void setClientScpEthnicityDao(
-      ClientScpEthnicityDao clientScpEthnicityDao) {
+  public void setClientScpEthnicityDao(ClientScpEthnicityDao clientScpEthnicityDao) {
     this.clientScpEthnicityDao = clientScpEthnicityDao;
   }
 
