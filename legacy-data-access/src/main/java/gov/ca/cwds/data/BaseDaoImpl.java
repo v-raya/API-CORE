@@ -56,14 +56,14 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
     }
 
     try {
-      final Query query = session.getNamedQuery(namedQueryName);
+      final Query<T> query = session.getNamedQuery(namedQueryName);
       final ImmutableList.Builder<T> entities = new ImmutableList.Builder<>();
       entities.addAll(query.list());
       txn.commit();
       return entities.build();
     } catch (HibernateException h) {
       txn.rollback();
-      String message = h.getMessage() + ". Transaction Status: " + txn.getStatus();
+      final String message = h.getMessage() + ". Transaction Status: " + txn.getStatus();
       throw new DaoException(message, h);
     }
   }
@@ -97,8 +97,8 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
       // Iterate, process, flush.
       int fetchSize = 5000;
       query.setFetchSize(fetchSize);
-      ScrollableResults results = query.scroll(ScrollMode.FORWARD_ONLY);
-      ImmutableList.Builder<T> ret = new ImmutableList.Builder<>();
+      final ScrollableResults results = query.scroll(ScrollMode.FORWARD_ONLY);
+      final ImmutableList.Builder<T> ret = new ImmutableList.Builder<>();
       int cnt = 0;
 
       while (results.next()) {
