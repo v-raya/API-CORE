@@ -13,7 +13,12 @@ import org.slf4j.LoggerFactory;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
- * DAO retrieves all codes for {@link ApiSystemCodeCache} from a tab-delimited file.
+ * DAO retrieves all codes for {@link ApiSystemCodeCache} from a tab-delimited file. Convenient
+ * where DB2 access is restricted or unavailable.
+ * 
+ * <p>
+ * Update regularly with IBMA quarterly release.
+ * </p>
  * 
  * @author CWDS API Team
  */
@@ -63,7 +68,7 @@ public class SystemCodeDaoFileImpl implements ApiSystemCodeDao {
    */
   public List<CmsSystemCode> produce(InputStream iss) throws ServiceException {
     List<CmsSystemCode> ret;
-    try (BufferedReader reader = new BufferedReader(new InputStreamReader(iss))) {
+    try (final BufferedReader reader = new BufferedReader(new InputStreamReader(iss))) {
       ret = produce(reader);
     } catch (Exception e) {
       LOGGER.error("Unable to read system code file");

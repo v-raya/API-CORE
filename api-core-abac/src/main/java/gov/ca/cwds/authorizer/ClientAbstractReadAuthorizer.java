@@ -54,11 +54,11 @@ public class ClientAbstractReadAuthorizer extends BaseAuthorizer<Client, String>
 
   private ClientCondition getClientCondition(final Client client, final PerryAccount perryAccount) {
     final Short clientCountyCode = countyDeterminationService.getClientCountyById(client.getIdentifier());
-    final Short staffGovernmentEntityType = getStaffGovernmentEntityType(perryAccount.getGovernmentEntityType());
-    return toClientCondition(client, clientCountyCode, staffGovernmentEntityType);
+    final Short staffPersonCountyCode = getStaffPersonCountyCode(perryAccount.getCountyCwsCode());
+    return toClientCondition(client, clientCountyCode, staffPersonCountyCode);
   }
 
-  private static Short getStaffGovernmentEntityType(final String staffCountyCodeString) {
+  private static Short getStaffPersonCountyCode(final String staffCountyCodeString) {
     return StringUtils.isNotBlank(staffCountyCodeString)
           ? Short.valueOf(staffCountyCodeString)
           : null;

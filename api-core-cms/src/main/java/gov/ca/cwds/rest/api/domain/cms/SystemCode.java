@@ -115,7 +115,6 @@ public class SystemCode extends ReportingDomain implements Response {
     this.longDescription = persistedSystemCode.getLongDescription();
   }
 
-
   /**
    * @return the systemId
    */

@@ -19,9 +19,6 @@ import gov.ca.cwds.rest.services.ServiceException;
  */
 public class CmsSystemCode implements ApiMarker {
 
-  /**
-   * Base serialization value. Increment per class change.
-   */
   private static final long serialVersionUID = 1L;
 
   private final int sysId;

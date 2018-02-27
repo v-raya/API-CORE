@@ -1,18 +1,17 @@
 package gov.ca.cwds.cms.data.access.service.impl.substituteCareProvider;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
 import gov.ca.cwds.cms.data.access.service.impl.SubstituteCareProviderServiceImpl;
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
 import gov.ca.cwds.data.legacy.cms.entity.PhoneContactDetail;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.junit.Test;
 
 /**
  * @author CWDS CALS API Team
