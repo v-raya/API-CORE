@@ -2,6 +2,7 @@ import gov.ca.cwds.rest.exception.IssueDetails
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider
 import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
+import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO
 import org.apache.commons.lang3.StringUtils
 
 global java.util.Set validationDetailsList
@@ -66,7 +67,7 @@ rule "R-02974: SCP Primary Provider Check (All county-licensed and non-licensed 
       exists PlacementHome(newlicUpd == "N" && endDt == null && StringUtils.isBlank(newlicNo) && licensrCd in ("CT", "NA")) from $placementHomeAwareDTO.entity
       not PlacementHome(facilityType == 6716) from $placementHomeAwareDTO.entity
       not PlacementHome(facilityType == 6915 || facilityType == 2200 && trnhsgInd == "N") from $placementHomeAwareDTO.entity
-      not SubstituteCareProvider() from $placementHomeAwareDTO.entity.primarySubstituteCareProvider
+      not SCPEntityAwareDTO(primaryApplicant == true) from $placementHomeAwareDTO.scpParameterObjects
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-02974");
