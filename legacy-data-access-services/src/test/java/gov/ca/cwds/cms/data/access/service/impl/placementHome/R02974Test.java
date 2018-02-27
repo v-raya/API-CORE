@@ -1,8 +1,11 @@
 package gov.ca.cwds.cms.data.access.service.impl.placementHome;
 
+import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Collections;
 
 public class R02974Test extends BaseDocToolRulesPlacementHomeTest {
 
@@ -27,7 +30,7 @@ public class R02974Test extends BaseDocToolRulesPlacementHomeTest {
 
     @Test
     public void testSCPIsPresent() {
-        placementHomeEntityAwareDTO.getEntity().setPrimarySubstituteCareProvider(new SubstituteCareProvider());
+        placementHomeEntityAwareDTO.setScpParameterObjects(Collections.singletonList(new SCPEntityAwareDTO(){{setPrimaryApplicant(true);}}));
         placementHomeEntityAwareDTO.getEntity().setFacilityType((short) 0);
         assertValid("R-02974");
     }
