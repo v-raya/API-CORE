@@ -6,14 +6,12 @@ import gov.ca.cwds.cms.data.access.service.ClientCoreService;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.rules.ClientDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
-import gov.ca.cwds.data.legacy.cms.dao.ClientScpEthnicityDao;
 import gov.ca.cwds.data.legacy.cms.dao.DasHistoryDao;
 import gov.ca.cwds.data.legacy.cms.dao.DeliveredServiceDao;
 import gov.ca.cwds.data.legacy.cms.dao.NameTypeDao;
 import gov.ca.cwds.data.legacy.cms.dao.NearFatalityDao;
 import gov.ca.cwds.data.legacy.cms.dao.SafetyAlertDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
-import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
 import gov.ca.cwds.data.legacy.cms.entity.DasHistory;
 import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
 import gov.ca.cwds.data.legacy.cms.entity.NearFatality;
@@ -24,11 +22,11 @@ import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import org.hibernate.Hibernate;
 
 /** @author CWDS TPT-3 Team */
 public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
@@ -36,7 +34,6 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
 
   @Inject private DroolsService droolsService;
   @Inject private ClientDao clientDao;
-  @Inject private ClientScpEthnicityDao clientScpEthnicityDao;
   @Inject private DeliveredServiceDao deliveredServiceDao;
   @Inject private NameTypeDao nameTypeDao;
   @Inject private SafetyAlertDao safetyAlertDao;
@@ -70,10 +67,11 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
   protected abstract void enrichClientEntityAwareDto(T clientEntityAwareDTO);
 
   private ClientEntityAwareDTO enrichValidationData(ClientEntityAwareDTO clientEntityAwareDTO) {
-    String clientId = clientEntityAwareDTO.getEntity().getIdentifier();
-    List<ClientScpEthnicity> clientScpEthnicityList =
-        clientScpEthnicityDao.findEthnicitiesByClient(clientId);
-    clientEntityAwareDTO.getClientScpEthnicities().addAll(clientScpEthnicityList);
+    Client client = clientEntityAwareDTO.getEntity();
+    String clientId = client.getIdentifier();
+
+    Hibernate.initialize(client.getOtherEthnicities());
+    clientEntityAwareDTO.getOtherEthnicities().addAll(client.getOtherEthnicities());
 
     List<DeliveredService> deliveredServices = deliveredServiceDao.findByClientId(clientId);
     clientEntityAwareDTO.setDeliveredService(deliveredServices);

@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
-import gov.ca.cwds.cms.data.access.dao.ClientScpEthnicityDao;
+import gov.ca.cwds.cms.data.access.dao.ScpOtherEthnicityDao;
 import gov.ca.cwds.cms.data.access.dao.CountyOwnershipDao;
 import gov.ca.cwds.cms.data.access.dao.PlacementHomeInformationDao;
 import gov.ca.cwds.cms.data.access.dao.SsaName3Dao;
@@ -36,12 +36,12 @@ import org.powermock.modules.junit4.PowerMockRunner;
 public class R07045Test {
 
   private SubstituteCareProviderServiceImpl scpService;
-  private ClientScpEthnicityDao mockedEthnicityDao;
+  private ScpOtherEthnicityDao mockedEthnicityDao;
   @Before
   public void setup() {
     scpService = new SubstituteCareProviderServiceImpl();
-    mockedEthnicityDao = mock(ClientScpEthnicityDao.class);
-    scpService.setClientScpEthnicityDao(mockedEthnicityDao);
+    mockedEthnicityDao = mock(ScpOtherEthnicityDao.class);
+    scpService.setScpOtherEthnicityDao(mockedEthnicityDao);
     scpService.setDroolsService(mock(DroolsService.class));
     scpService.setSubstituteCareProviderDao(mock(SubstituteCareProviderDao.class));
     scpService.setSubstituteCareProviderUcDao(mock(SubstituteCareProviderUcDao.class));

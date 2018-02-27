@@ -4,23 +4,11 @@ import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPers
 import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
 import static org.apache.commons.lang3.StringUtils.upperCase;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.apache.commons.collections4.CollectionUtils;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.cms.data.access.Constants;
 import gov.ca.cwds.cms.data.access.Constants.PhoneticSearchTables;
-import gov.ca.cwds.cms.data.access.dao.ClientScpEthnicityDao;
+import gov.ca.cwds.cms.data.access.dao.ScpOtherEthnicityDao;
 import gov.ca.cwds.cms.data.access.dao.CountyOwnershipDao;
 import gov.ca.cwds.cms.data.access.dao.OutOfStateCheckDao;
 import gov.ca.cwds.cms.data.access.dao.PhoneContactDetailDao;
@@ -36,11 +24,11 @@ import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
 import gov.ca.cwds.cms.data.access.service.rules.SubstituteCareProviderDroolsConfiguration;
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
-import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
 import gov.ca.cwds.data.legacy.cms.entity.CountyOwnership;
 import gov.ca.cwds.data.legacy.cms.entity.OutOfStateCheck;
 import gov.ca.cwds.data.legacy.cms.entity.PhoneContactDetail;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeInformation;
+import gov.ca.cwds.data.legacy.cms.entity.ScpOtherEthnicity;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProviderUc;
 import gov.ca.cwds.drools.DroolsException;
@@ -49,6 +37,15 @@ import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.apache.commons.collections4.CollectionUtils;
 
 /**
  * @author CWDS CALS API Team
@@ -81,7 +78,7 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
   private SsaName3Dao scpSsaName3Dao;
 
   @Inject
-  private ClientScpEthnicityDao clientScpEthnicityDao;
+  private ScpOtherEthnicityDao scpOtherEthnicityDao;
 
   @Inject
   private OutOfStateCheckDao outOfStateCheckDao;
@@ -156,7 +153,7 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
    */
   private void storeEthnicities(ExtendedSCPEntityAwareDTO extScpEntityAwareDTO) {
     extScpEntityAwareDTO.getClientScpEthnicities().forEach(clientScpEthnicity -> {
-      clientScpEthnicityDao.create(clientScpEthnicity);
+      scpOtherEthnicityDao.create(clientScpEthnicity);
     });
   }
 
@@ -178,8 +175,8 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
     dto.setPlacementHomeInformation(buildPlacementHomeInformation(dto.getEntity(), dto));
     enrichPhoneContactDetails(dto);
 
-    List<ClientScpEthnicity> clientScpEthnicities = dto.getEthnicityList().stream()
-        .map(ethnicity -> buildClientScpEthnicity(ethnicity, dto.getEntity().getIdentifier()))
+    List<ScpOtherEthnicity> clientScpEthnicities = dto.getEthnicityList().stream()
+        .map(ethnicity -> buildScpOtherEthnicity(ethnicity, dto.getEntity().getIdentifier()))
         .collect(Collectors.toList());
 
     dto.setClientScpEthnicities(clientScpEthnicities);
@@ -228,14 +225,13 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
     }
   }
 
-  private ClientScpEthnicity buildClientScpEthnicity(CWSIdentifier ethnicity, String scpId) {
-    ClientScpEthnicity clientScpEthnicity = new ClientScpEthnicity();
-    clientScpEthnicity.setEthnctyc((short) ethnicity.getCwsId());
-    clientScpEthnicity.setEstblshId(scpId);
-    clientScpEthnicity.setEstblshCd("S");
-    clientScpEthnicity.setIdentifier(IdGenerator.generateId());
-    clientScpEthnicity.setLstUpdId(getStaffPersonId());
-    clientScpEthnicity.setLstUpdTs(LocalDateTime.now());
+  private ScpOtherEthnicity buildScpOtherEthnicity(CWSIdentifier ethnicity, String scpId) {
+    ScpOtherEthnicity clientScpEthnicity = new ScpOtherEthnicity();
+    clientScpEthnicity.setEthnicityCode((short) ethnicity.getCwsId());
+    clientScpEthnicity.setSubstituteCareProviderId(scpId);
+    clientScpEthnicity.setId(IdGenerator.generateId());
+    clientScpEthnicity.setLastUpdateId(getStaffPersonId());
+    clientScpEthnicity.setLastUpdateTime(LocalDateTime.now());
     return clientScpEthnicity;
   }
 
@@ -333,8 +329,8 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
     this.scpSsaName3Dao = scpSsaName3Dao;
   }
 
-  public void setClientScpEthnicityDao(ClientScpEthnicityDao clientScpEthnicityDao) {
-    this.clientScpEthnicityDao = clientScpEthnicityDao;
+  public void setScpOtherEthnicityDao(ScpOtherEthnicityDao scpOtherEthnicityDao) {
+    this.scpOtherEthnicityDao = scpOtherEthnicityDao;
   }
 
   public void setOutOfStateCheckDao(OutOfStateCheckDao outOfStateCheckDao) {
