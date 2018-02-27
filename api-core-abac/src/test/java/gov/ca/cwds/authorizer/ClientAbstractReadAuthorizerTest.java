@@ -92,7 +92,7 @@ public class ClientAbstractReadAuthorizerTest {
   public void checkInstance_true_fullHappyPath() {
     // given
     final PerryAccount perryAccount = initPerryAccountWithPrivileges("Sensitive Persons");
-    perryAccount.setGovernmentEntityType("100");
+    perryAccount.setCountyCwsCode("100");
     mockStatic(PerrySubject.class);
     when(PerrySubject.getPerryAccount()).thenReturn(perryAccount);
     when(clientCountyDeterminationServiceMock.getClientCountyById(anyString()))
@@ -113,7 +113,7 @@ public class ClientAbstractReadAuthorizerTest {
   public void checkInstance_false_fullHappyPath() {
     // given
     final PerryAccount perryAccount = initPerryAccountWithPrivileges("Sensitive Persons");
-    perryAccount.setGovernmentEntityType("1");
+    perryAccount.setCountyCwsCode("1");
     mockStatic(PerrySubject.class);
     when(PerrySubject.getPerryAccount()).thenReturn(perryAccount);
     when(clientCountyDeterminationServiceMock.getClientCountyById(anyString()))
@@ -134,7 +134,7 @@ public class ClientAbstractReadAuthorizerTest {
   public void checkId_true_fullHappyPath() {
     // given
     final PerryAccount perryAccount = initPerryAccountWithPrivileges("Sensitive Persons");
-    perryAccount.setGovernmentEntityType("100");
+    perryAccount.setCountyCwsCode("100");
     mockStatic(PerrySubject.class);
     when(PerrySubject.getPerryAccount()).thenReturn(perryAccount);
     when(clientCoreServiceMock.find(anyString())).thenReturn(initClient(Sensitivity.SENSITIVE));
