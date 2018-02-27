@@ -1,8 +1,8 @@
 package gov.ca.cwds.cms.data.access.dto;
 
-import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
 import gov.ca.cwds.data.legacy.cms.entity.OutOfStateCheck;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeInformation;
+import gov.ca.cwds.data.legacy.cms.entity.ScpOtherEthnicity;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProviderUc;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
 public class ExtendedSCPEntityAwareDTO extends SCPEntityAwareDTO {
 
   private PlacementHomeInformation placementHomeInformation;
-  private List<ClientScpEthnicity> clientScpEthnicities = new ArrayList<>();
+  private List<ScpOtherEthnicity> clientScpEthnicities = new ArrayList<>();
   private List<OutOfStateCheck> outOfStateChecks;
 
   public ExtendedSCPEntityAwareDTO(SCPEntityAwareDTO scpEntityAwareDTO) {
@@ -43,12 +43,12 @@ public class ExtendedSCPEntityAwareDTO extends SCPEntityAwareDTO {
     return placementHomeInformation;
   }
 
-  public List<ClientScpEthnicity> getClientScpEthnicities() {
+  public List<ScpOtherEthnicity> getClientScpEthnicities() {
     return clientScpEthnicities;
   }
 
   public void setClientScpEthnicities(
-      List<ClientScpEthnicity> clientScpEthnicities) {
+      List<ScpOtherEthnicity> clientScpEthnicities) {
     this.clientScpEthnicities = clientScpEthnicities;
   }
 
