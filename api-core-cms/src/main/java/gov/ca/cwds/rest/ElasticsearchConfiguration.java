@@ -18,17 +18,21 @@ public class ElasticsearchConfiguration {
   @JsonProperty("elasticsearch.cluster")
   private String elasticsearchCluster;
 
-//  @NotNull
-//  @JsonProperty("elasticsearch.host")
-//  private String elasticsearchHost;
+  @NotNull
+  @JsonProperty("elasticsearch.host")
+  private String elasticsearchHost;
 
   @NotNull
-  @JsonProperty("elasticsearch.hosts")
-  private Map<String, String> hosts;
+  @JsonProperty("elasticsearch.port")
+  private String elasticsearchPort;
 
   @NotNull
-  @JsonProperty("elasticsearch.ports")
-  private Map<String, String> ports;
+  @JsonProperty("elasticsearch.additional.hosts")
+  private Map<String, String> additionalHosts;
+
+  @NotNull
+  @JsonProperty("elasticsearch.additional.ports")
+  private Map<String, String> additionalPorts;
 
   @NotNull
   @JsonProperty("elasticsearch.alias")
@@ -60,29 +64,33 @@ public class ElasticsearchConfiguration {
   /**
    * @return the elasticsearchHost
    */
-//  public String getElasticsearchHost() {
-//    return elasticsearchHost;
-//  }
+  public String getElasticsearchHost() {
+    return elasticsearchHost;
+  }
+
+  /**
+   * @return the list of additional elasticsearch ports for clustering support
+   */
+  public String getElasticsearchPort() {
+    return elasticsearchPort;
+  }
+
+  /**
+   * @return the list of additional elasticsearch hosts for clustering support
+   */
+  public Map<String, String> getAdditionalHosts() {
+    return additionalHosts;
+  }
+
+  public Map<String, String> getAdditionalPorts() {
+    return additionalPorts;
+  }
 
   /**
    * @return the elasticsearchCluster
    */
   public String getElasticsearchCluster() {
     return elasticsearchCluster;
-  }
-
-  /**
-   * @return the list of elasticsearch hosts
-   */
-  public Map<String, String> getHosts() {
-    return hosts;
-  }
-
-  /**
-   * @return the list of elasticsearch ports
-   */
-  public Map<String, String> getPorts() {
-    return ports;
   }
 
   /**
