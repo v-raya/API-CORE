@@ -25,7 +25,7 @@ import org.junit.Test;
  */
 public class ClientCountyDeterminationServiceTest {
 
-  private static final String LIQUIBASE_CWSRS1_PATH = "liquibase/cwsrs1-database-master.xml";
+  private static final String LIQUIBASE_CWSRS1_PATH = "liquibase/api-core-abac/api-core-abac-database-master.xml";
   private static final String SCHEMA = "CWSRS1";
   private static final String USERNAME = "";
   private static final String URL = "jdbc:h2:mem:"+ SCHEMA;
