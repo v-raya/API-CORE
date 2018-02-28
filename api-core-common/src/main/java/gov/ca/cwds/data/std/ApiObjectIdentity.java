@@ -6,14 +6,15 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * Convenient, default implementations of {@link #toString()}, {@link #hashCode()}, and {@link
- * #equals(Object)}.
+ * Convenient, default implementations of {@link #toString()}, {@link #hashCode()}, and
+ * {@link #equals(Object)}.
  *
  * @author CWDS API Team
  */
 public abstract class ApiObjectIdentity implements ApiMarker {
 
-  private static final String[] EXCLUDED_FIELDS = new String[] {"identifier", "lastUpdatedId", "lastUpdatedTime"};
+  private static final String[] EXCLUDED_FIELDS =
+      new String[] {"identifier", "lastUpdatedId", "lastUpdatedTime"};
 
   private static final long serialVersionUID = 1L;
 
@@ -24,13 +25,14 @@ public abstract class ApiObjectIdentity implements ApiMarker {
 
   @Override
   public int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(
-        17, 37, this, false, ApiObjectIdentity.class, EXCLUDED_FIELDS);
+    return HashCodeBuilder.reflectionHashCode(17, 37, this, false, ApiObjectIdentity.class,
+        EXCLUDED_FIELDS);
   }
 
   @Override
   public boolean equals(Object obj) {
-    return EqualsBuilder.reflectionEquals(
-        this, obj, false, ApiObjectIdentity.class, EXCLUDED_FIELDS);
+    return EqualsBuilder.reflectionEquals(this, obj, false, ApiObjectIdentity.class,
+        EXCLUDED_FIELDS);
   }
+
 }

@@ -1,13 +1,9 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
-import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
-import gov.ca.cwds.data.legacy.cms.entity.converter.StringToRequiredIntegerConverter;
-import gov.ca.cwds.data.legacy.cms.entity.converter.StringToRequiredLongConverter;
-import gov.ca.cwds.data.legacy.cms.entity.converter.ZipCodeConverter;
-import gov.ca.cwds.data.legacy.cms.entity.converter.ZipExtConverter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -16,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Fetch;
@@ -23,28 +20,36 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
+import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.legacy.cms.entity.converter.StringToRequiredIntegerConverter;
+import gov.ca.cwds.data.legacy.cms.entity.converter.StringToRequiredLongConverter;
+import gov.ca.cwds.data.legacy.cms.entity.converter.ZipCodeConverter;
+import gov.ca.cwds.data.legacy.cms.entity.converter.ZipExtConverter;
+
 /**
  * @author CWDS CALS API Team
  *
- * All licensed and nonlicensed substitute care homes in which a child may potentially be placed.
- * This entity includes definitions for both PLACEMENT_HOMEs and Foster Family Agencies (FFA).
- * Attributes for each of these entities are almost identical, with the gov.ca.cwds.cals.exception of Backup Contact
- * Person information and Unit Number for FFA. PLACEMENT_HOMEs may be licensed homes, certified
- * foster family homes and relative homes, as well as those homes which have been certified pending
- * licensure. The street name, city and county of the PLACEMENT_HOME must be known before the entity
- * can be created. Once created, additional information may be added such as the phone number,
- * capacity information, information regarding other residents in the home, and backup contact
- * information specific to the home. A Foster Family Agency (FFA) is a CCL licensed organization
- * which recruits foster family homes to operate under its license. The recruited foster family
- * homes must undergo a certification process to ensure licensing standards are met, and that child
- * placements can be successfully made at the home. The FFA is the point of contact with the social
- * worker assigned to the child, and is often times the one to actually find the most suitable home
- * for the child and place them in that home. In order to create an FFA in the CWS system, the
- * agency name, street name, city, and state must be known. The remaining items in the address of
- * the agency, contact name and phone number can be entered at a later date. Each PLACEMENT_HOME
- * will have a Designated Payee as will the FFA. Before any payment can be established for a
- * particular OUT_OF_HOME_PLACEMENT at a specific PLACEMENT_HOME or an FFA home, all the Payee
- * mailing address information must be entered.
+ *         All licensed and nonlicensed substitute care homes in which a child may potentially be
+ *         placed. This entity includes definitions for both PLACEMENT_HOMEs and Foster Family
+ *         Agencies (FFA). Attributes for each of these entities are almost identical, with the
+ *         gov.ca.cwds.cals.exception of Backup Contact Person information and Unit Number for FFA.
+ *         PLACEMENT_HOMEs may be licensed homes, certified foster family homes and relative homes,
+ *         as well as those homes which have been certified pending licensure. The street name, city
+ *         and county of the PLACEMENT_HOME must be known before the entity can be created. Once
+ *         created, additional information may be added such as the phone number, capacity
+ *         information, information regarding other residents in the home, and backup contact
+ *         information specific to the home. A Foster Family Agency (FFA) is a CCL licensed
+ *         organization which recruits foster family homes to operate under its license. The
+ *         recruited foster family homes must undergo a certification process to ensure licensing
+ *         standards are met, and that child placements can be successfully made at the home. The
+ *         FFA is the point of contact with the social worker assigned to the child, and is often
+ *         times the one to actually find the most suitable home for the child and place them in
+ *         that home. In order to create an FFA in the CWS system, the agency name, street name,
+ *         city, and state must be known. The remaining items in the address of the agency, contact
+ *         name and phone number can be entered at a later date. Each PLACEMENT_HOME will have a
+ *         Designated Payee as will the FFA. Before any payment can be established for a particular
+ *         OUT_OF_HOME_PLACEMENT at a specific PLACEMENT_HOME or an FFA home, all the Payee mailing
+ *         address information must be entered.
  */
 @MappedSuperclass
 @SuppressWarnings({"squid:S00104", "squid:S3437"})
@@ -63,8 +68,8 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private Short facilityType;
 
   /**
-   * GOVERNMENT_ENTITY_TYPE - The system generated number which represents the  specific county
-   * (e.g., Yolo, Butte, Fresno, etc.)  within the state of California where the PLACEMENT HOME is
+   * GOVERNMENT_ENTITY_TYPE - The system generated number which represents the specific county
+   * (e.g., Yolo, Butte, Fresno, etc.) within the state of California where the PLACEMENT HOME is
    * located.
    */
   @Basic
@@ -72,8 +77,8 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private Short gvrEntc;
 
   /**
-   * STATE_CODE_TYPE - The system generated number which identifies the  State where the PLACEMENT
-   * HOME is located (e.g.,  California, Texas, Nevada, etc.).
+   * STATE_CODE_TYPE - The system generated number which identifies the State where the PLACEMENT
+   * HOME is located (e.g., California, Texas, Nevada, etc.).
    */
   @Basic
   @Column(name = "F_STATE_C", nullable = false)
@@ -95,8 +100,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * ID - A system generated number used to uniquely identify each PLACEMENT_HOME. This ID is
    * composed of a base 62 Creation Timestamp and the STAFF_PERSON ID (a sequential 3 digit base 62
    * number generated by the system). This value eliminates the need for an additional set of
-   * Creation Timestamp and Creation User ID which is needed to satisfy the Audit Trail
-   * requirement.
+   * Creation Timestamp and Creation User ID which is needed to satisfy the Audit Trail requirement.
    */
   @Id
   @Column(name = "IDENTIFIER", nullable = false, length = 10)
@@ -110,7 +114,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private List<PlacementHomeProfile> placementHomeProfiles;
 
   /**
-   * Additional notes for  a Placement Home
+   * Additional notes for a Placement Home
    */
   @OneToMany
   @JoinColumn(name = "FKPLC_HM_T")
@@ -126,7 +130,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
 
   /**
    * LICENSE_NUMBER - The number identifying a specific License issued by either the State of
-   * California (CCL) or a county to a specific PLACEMENT HOME.  This number is at times referred to
+   * California (CCL) or a county to a specific PLACEMENT HOME. This number is at times referred to
    * as the facility number.
    */
   @Basic
@@ -174,7 +178,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    */
   @Basic
   @Column(name = "BCK_EXT_NO")
-  @Convert( converter = StringToRequiredIntegerConverter.class)
+  @Convert(converter = StringToRequiredIntegerConverter.class)
   private String bckExtNo;
 
   /**
@@ -182,12 +186,12 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    */
   @Basic
   @Column(name = "BCK_TEL_NO", nullable = false, precision = 0)
-  @Convert( converter = StringToRequiredLongConverter.class)
+  @Convert(converter = StringToRequiredLongConverter.class)
   private String bckTelNo;
 
   /**
-   * CERTIFIED_PENDING_LICENSURE_DATE - The date upon which a not yet licensed PLACEMENT HOME  has
-   * been certified meeting all licensing  requirements, but awaiting formal License approval.  This
+   * CERTIFIED_PENDING_LICENSURE_DATE - The date upon which a not yet licensed PLACEMENT HOME has
+   * been certified meeting all licensing requirements, but awaiting formal License approval. This
    * process is performed when a suitable placement match has been found, but the home is not yet
    * licensed.
    */
@@ -203,7 +207,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private String chlcrPlcd;
 
   /**
-   * CITY_NAME - The name of the city where the PLACEMENT HOME is  located.
+   * CITY_NAME - The name of the city where the PLACEMENT HOME is located.
    */
   @Basic
   @Column(name = "CITY_NM", nullable = false, length = 20)
@@ -248,7 +252,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    */
   @Basic
   @Column(name = "FAX_NO", nullable = false, precision = 0)
-  @Convert( converter = StringToRequiredLongConverter.class)
+  @Convert(converter = StringToRequiredLongConverter.class)
   private String faxNo;
 
   /**
@@ -262,7 +266,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
 
   /**
    * GENDER_ACCEPTED_CODE - Indicates if the home accepts only males (M), only females (F), or
-   * either gender (B) of children.  This information can be entered by the maintenance worker once
+   * either gender (B) of children. This information can be entered by the maintenance worker once
    * it becomes known.
    */
   @Basic
@@ -271,7 +275,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
 
   /**
    * GEOGRAPHIC_REGION_TEXT_CODE - Represents the geographical region (e.g., NW, SE, NE, etc.) in
-   * which the PLACEMENT HOME is located.  The geographic regions are county specific within each
+   * which the PLACEMENT HOME is located. The geographic regions are county specific within each
    * county.
    */
   @Basic
@@ -287,9 +291,9 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private String inhmVstcd;
 
   /**
-   * KNOWN_MAX_CAPACITY_NUMBER - The known maximum number of placement beds for CWS children.  This
-   * must be equal to or less than the maximum number stated on the license.  This number may be
-   * changed by the county after consulting with the SUBSTITUTE CARE PROVIDER.  The number is the
+   * KNOWN_MAX_CAPACITY_NUMBER - The known maximum number of placement beds for CWS children. This
+   * must be equal to or less than the maximum number stated on the license. This number may be
+   * changed by the county after consulting with the SUBSTITUTE CARE PROVIDER. The number is the
    * result of a joint decision between the worker and the SUBSTITUTE CARE PROVIDER.
    */
   @Basic
@@ -297,8 +301,8 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private Short maxCapNo;
 
   /**
-   * LA_VENDOR_ID - A vendor id assigned by Los Angeles county (and  unique within the county) to a
-   * PLACEMENT HOME.  This is only used for the APPS interface program.
+   * LA_VENDOR_ID - A vendor id assigned by Los Angeles county (and unique within the county) to a
+   * PLACEMENT HOME. This is only used for the APPS interface program.
    */
   @Basic
   @Column(name = "LA_VNDR_ID", nullable = false, length = 6)
@@ -328,8 +332,8 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private LocalDate licEfctdt;
 
   /**
-   * LICENSE_EXPIRATION_DATE - The date on which the License expires and is no  longer valid for
-   * this PLACEMENT HOME.
+   * LICENSE_EXPIRATION_DATE - The date on which the License expires and is no longer valid for this
+   * PLACEMENT HOME.
    */
   @Basic
   @Column(name = "LIC_EXP_DT", nullable = true)
@@ -353,7 +357,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private Short licBsnc;
 
   /**
-   * LICENSEE_ORGANIZATION_NAME - The complete name (normally the name of an  organization) of a
+   * LICENSEE_ORGANIZATION_NAME - The complete name (normally the name of an organization) of a
    * FOSTER FAMILY AGENCY licensee.
    */
   @Basic
@@ -394,29 +398,29 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private String oprtdBycd;
 
   /**
-   * PAYEE_CITY_NAME - The city name on the mailing address of the  Designated Payee for a
-   * particular PLACEMENT HOME.
+   * PAYEE_CITY_NAME - The city name on the mailing address of the Designated Payee for a particular
+   * PLACEMENT HOME.
    */
   @Basic
   @Column(name = "P_CITY_NM", length = 20)
   private String pCityNm;
 
   /**
-   * PAYEE_FIRST_NAME - The first name of the Designated Payee for a  particular PLACEMENT HOME.
+   * PAYEE_FIRST_NAME - The first name of the Designated Payee for a particular PLACEMENT HOME.
    */
   @Basic
   @Column(name = "PYE_FSTNM", length = 20)
   private String pyeFstnm;
 
   /**
-   * PAYEE_LAST_NAME - The last name of the Designated Payee for a  particular PLACEMENT HOME.
+   * PAYEE_LAST_NAME - The last name of the Designated Payee for a particular PLACEMENT HOME.
    */
   @Basic
   @Column(name = "PYE_LSTNM", length = 25)
   private String pyeLstnm;
 
   /**
-   * PAYEE_MIDDLE_INITIAL_NAME - The middle initial of the Designated Payee for a  particular
+   * PAYEE_MIDDLE_INITIAL_NAME - The middle initial of the Designated Payee for a particular
    * PLACEMENT HOME.
    */
   @Basic
@@ -433,7 +437,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
 
   /**
    * PAYEE_STREET_NUMBER - The street or house number associated with the Street Name as part of the
-   * Designated Payee's address.  This may include the fractional or alphabetic modifier, e.g. A-17,
+   * Designated Payee's address. This may include the fractional or alphabetic modifier, e.g. A-17,
    * 119-10, 39.2, 100 1/2, etc.
    */
   @Basic
@@ -441,12 +445,12 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private String pstreetNo;
 
   /**
-   * PAYEE_ZIP_NUMBER - The first five digits of the zip code for the  Designated Payee's mailing
+   * PAYEE_ZIP_NUMBER - The first five digits of the zip code for the Designated Payee's mailing
    * address for a particular PLACEMENT HOME.
    */
   @Basic
   @Column(name = "P_ZIP_NO")
-  @Convert( converter=ZipCodeConverter.class )
+  @Convert(converter = ZipCodeConverter.class)
   private String pZipNo;
 
   /**
@@ -463,7 +467,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    */
   @Basic
   @Column(name = "PRM_EXT_NO")
-  @Convert( converter = StringToRequiredIntegerConverter.class)
+  @Convert(converter = StringToRequiredIntegerConverter.class)
   private String prmExtNo;
 
   /**
@@ -494,11 +498,11 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    */
   @Basic
   @Column(name = "PRM_TEL_NO", nullable = false, precision = 0)
-  @Convert( converter = StringToRequiredLongConverter.class)
+  @Convert(converter = StringToRequiredLongConverter.class)
   private String prmTelNo;
 
   /**
-   * PROVIDES_TRANSPORT_CODE - Indicates whether the home is willing to provide  transportation for
+   * PROVIDES_TRANSPORT_CODE - Indicates whether the home is willing to provide transportation for
    * children in the home.
    */
   @Basic
@@ -514,7 +518,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private String pubTrnscd;
 
   /**
-   * STREET_NAME - The actual name of the street associated with the PLACEMENT HOME's address.  Do
+   * STREET_NAME - The actual name of the street associated with the PLACEMENT HOME's address. Do
    * not abbreviate if at all possible for matching purposes.
    */
   @Basic
@@ -523,23 +527,23 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
 
   /**
    * STREET_NUMBER - The street or house number associated with the street name as part of the
-   * PLACEMENT HOME's address.  This may include the fractional or alphabetic modifier, e.g., A-17,
-   * 119-10, 39.2,  100 1/2, etc.
+   * PLACEMENT HOME's address. This may include the fractional or alphabetic modifier, e.g., A-17,
+   * 119-10, 39.2, 100 1/2, etc.
    */
   @Basic
   @Column(name = "STREET_NO", nullable = false, length = 10)
   private String streetNo;
 
   /**
-   * ZIP_NUMBER - The first five digits of the zip code for the  PLACEMENT HOME's address.
+   * ZIP_NUMBER - The first five digits of the zip code for the PLACEMENT HOME's address.
    */
   @Basic
   @Column(name = "ZIP_NO", nullable = false)
-  @Convert( converter=ZipCodeConverter.class )
+  @Convert(converter = ZipCodeConverter.class)
   private String zipNo;
 
   /**
-   * ADDRESS_DESCRIPTION - Any additional information pertaining to the  PLACEMENT HOME's address
+   * ADDRESS_DESCRIPTION - Any additional information pertaining to the PLACEMENT HOME's address
    * which may include directions for getting to the PLACEMENT HOME.
    */
   @Basic
@@ -564,8 +568,8 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
 
   /**
    * EDUCATION_PROVIDER_DESCRIPTION - The free form text field which describes the schools servicing
-   * the home.  These schools can be elementary schools, junior high schools, high schools, and/or
-   * others.  This information may be used to find a suitable placement for a child when the social
+   * the home. These schools can be elementary schools, junior high schools, high schools, and/or
+   * others. This information may be used to find a suitable placement for a child when the social
    * worker determines that it is desirable to keep the child in the school he/she currently
    * attends.
    */
@@ -575,8 +579,8 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
 
   /**
    * ENVIRONMENTAL_FACTOR_DESCRIPTION - Significant environmental factors that may affect the
-   * placement of a child at a facility participating in vacancy match.  Examples include a facility
-   * located in an area with an overabundance of pollen.  This could be critical in the placement of
+   * placement of a child at a facility participating in vacancy match. Examples include a facility
+   * located in an area with an overabundance of pollen. This could be critical in the placement of
    * an asthmatic child.
    */
   @Basic
@@ -605,8 +609,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private String lisPrfdsc;
 
   /**
-   * PETS_DESCRIPTION - Identifies and describes whether the home allows pets or currently has
-   * pets.
+   * PETS_DESCRIPTION - Identifies and describes whether the home allows pets or currently has pets.
    */
   @Basic
   @Column(name = "PETS_DSC", nullable = false, length = 60)
@@ -663,7 +666,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private String laPCtynm;
 
   /**
-   * LA_PAYEE_FIRST_NAME - The first name of the Designated LA   Payee for a particular PLACEMENT
+   * LA_PAYEE_FIRST_NAME - The first name of the Designated LA Payee for a particular PLACEMENT
    * HOME.
    */
   @Basic
@@ -671,14 +674,14 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private String laPFstnm;
 
   /**
-   * LA_PAYEE_LAST_NAME - The last name of the Designated Payee for a  particular PLACEMENT HOME.
+   * LA_PAYEE_LAST_NAME - The last name of the Designated Payee for a particular PLACEMENT HOME.
    */
   @Basic
   @Column(name = "LA_P_LSTNM", nullable = false, length = 25)
   private String laPLstnm;
 
   /**
-   * LA_PAYEE_MIDDLE_INITIAL_NAME - The middle initial of the Designated Payee for a  particular
+   * LA_PAYEE_MIDDLE_INITIAL_NAME - The middle initial of the Designated Payee for a particular
    * PLACEMENT HOME.
    */
   @Basic
@@ -686,8 +689,8 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private String laPMidnm;
 
   /**
-   * LA_PAYEE_STATE_CODE_TYPE - The system generated number which identifies the  State for the
-   * Designated Payee's mailing address  (e.g., California, Nevada, Texas, etc.).
+   * LA_PAYEE_STATE_CODE_TYPE - The system generated number which identifies the State for the
+   * Designated Payee's mailing address (e.g., California, Nevada, Texas, etc.).
    *
    * @Basic
    * @Column(name = "LP_STATE_C", nullable = false) private Short lpStateC;
@@ -706,7 +709,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
 
   /**
    * LA_PAYEE_STREET_NUMBER - The street or house number associated with the Street Name as part of
-   * the Designated Payee's address.  This may include the fractional or alphabetic modifier, e.g.
+   * the Designated Payee's address. This may include the fractional or alphabetic modifier, e.g.
    * A-17, 119-10, 39.2, 100 1/2, etc.
    */
   @Basic
@@ -714,7 +717,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private String laPStno;
 
   /**
-   * LA_PAYEE_ZIP_NUMBER - The first five digits of the zip code for the  Designated Payee's mailing
+   * LA_PAYEE_ZIP_NUMBER - The first five digits of the zip code for the Designated Payee's mailing
    * address for a particular PLACEMENT HOME.
    */
   @Basic
@@ -751,7 +754,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    */
   @Basic
   @Column(name = "LA_P_PH_NO", nullable = false, precision = 0)
-  @Convert( converter = StringToRequiredLongConverter.class)
+  @Convert(converter = StringToRequiredLongConverter.class)
   private String laPPhNo;
 
   /**
@@ -759,7 +762,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    */
   @Basic
   @Column(name = "LA_P_PH_EX")
-  @Convert( converter = StringToRequiredIntegerConverter.class)
+  @Convert(converter = StringToRequiredIntegerConverter.class)
   private String laPPhEx;
 
   /**
@@ -777,7 +780,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    */
   @Basic
   @Column(name = "PYE_EXT_NO")
-  @Convert( converter = StringToRequiredIntegerConverter.class)
+  @Convert(converter = StringToRequiredIntegerConverter.class)
   private String pyeExtNo;
 
   /**
@@ -785,7 +788,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    */
   @Basic
   @Column(name = "PYE_TEL_NO", nullable = false, precision = 0)
-  @Convert( converter = StringToRequiredLongConverter.class)
+  @Convert(converter = StringToRequiredLongConverter.class)
   private String pyeTelNo;
 
   /**
@@ -798,7 +801,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
 
   /**
    * COMMUNITY_TREATMENT_FACILITY_IND - Indicates whether this is a Community Treatment Facility (Y)
-   * or a Group Home (N). Code Values: ˆY‰ = Yes and ˆN‰ = No
+   * or a Group Home (N). Code Values: Y = Yes and N = No
    */
   @Basic
   @Column(name = "COMFAC_IND", nullable = false, length = 1)
@@ -806,7 +809,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
 
   /**
    * TRANSITIONAL_HOUSING_PLACEMENT_P - Indicates whether this is a Transitional Housing Placement
-   * Program (Y) or a Foster Family Agency (N). Code Values: ˆY‰ = Yes and ˆN‰ = No. Default to N.
+   * Program (Y) or a Foster Family Agency (N). Code Values: Y = Yes and N = No. Default to N.
    * Mandatory attribute.
    */
   @Basic
@@ -815,8 +818,8 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
 
   /**
    * TRANSITIONAL_HOUSING_PLACEMENT - Indicates whether this is a Transitional Housing Placement
-   * Program Facility (Y) or a Foster Family Agency Certified Home (N). Code Values: ˆY‰ = Yes and
-   * ˆN‰ = No. Default to N. Mandatory attribute.
+   * Program Facility (Y) or a Foster Family Agency Certified Home (N). Code Values: Y = Yes and N =
+   * No. Default to N. Mandatory attribute.
    */
   @Basic
   @Column(name = "TRNHSG_FAC", nullable = false, length = 1)
@@ -843,8 +846,8 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * New_License_Number to show when a facility has a new license number and that any necessary
    * pointers for homes and/or providers have been reset. It also indicates all active out-of-home
    * and adoptive placements have been re-pointed to the new version of the home, when applicable.
-   * It will be set to ˆY‰ on the old facility after the updates are complete. Both the LIS
-   * Interface and the online application will set this attribute.
+   * It will be set to Y on the old facility after the updates are complete. Both the LIS Interface
+   * and the online application will set this attribute.
    */
   @Basic
   @Column(name = "NEWLIC_UPD", nullable = false, length = 1)
@@ -945,8 +948,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
     return placementHomeProfiles;
   }
 
-  public void setPlacementHomeProfiles(
-      List<PlacementHomeProfile> placementHomeProfiles) {
+  public void setPlacementHomeProfiles(List<PlacementHomeProfile> placementHomeProfiles) {
     this.placementHomeProfiles = placementHomeProfiles;
   }
 
@@ -954,8 +956,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
     return placementHomeNotes;
   }
 
-  public void setPlacementHomeNotes(
-      List<PlacementHomeNotes> placementHomeNotes) {
+  public void setPlacementHomeNotes(List<PlacementHomeNotes> placementHomeNotes) {
     this.placementHomeNotes = placementHomeNotes;
   }
 

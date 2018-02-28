@@ -104,9 +104,6 @@ import gov.ca.cwds.data.persistence.cms.VarargPrimaryKey;
 @Embeddable
 public class EmbeddableCompositeKey2 implements Serializable {
 
-  /**
-   * Base serialization version. Increment by version or create a unique number.
-   */
   private static final long serialVersionUID = 1L;
 
   private String id1 = "";

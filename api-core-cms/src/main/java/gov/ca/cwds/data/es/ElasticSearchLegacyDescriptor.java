@@ -56,52 +56,42 @@ public class ElasticSearchLegacyDescriptor extends ApiObjectIdentity {
     this.legacyTableDescription = legacyTableDescription;
   }
 
-  @SuppressWarnings("javadoc")
   public String getLegacyId() {
     return legacyId;
   }
 
-  @SuppressWarnings("javadoc")
   public void setLegacyId(String legacyId) {
     this.legacyId = legacyId;
   }
 
-  @SuppressWarnings("javadoc")
   public String getLegacyUiId() {
     return legacyUiId;
   }
 
-  @SuppressWarnings("javadoc")
   public void setLegacyUiId(String legacyUiId) {
     this.legacyUiId = legacyUiId;
   }
 
-  @SuppressWarnings("javadoc")
   public String getLegacyLastUpdated() {
     return legacyLastUpdated;
   }
 
-  @SuppressWarnings("javadoc")
   public void setLegacyLastUpdated(String legacyLastUpdated) {
     this.legacyLastUpdated = legacyLastUpdated;
   }
 
-  @SuppressWarnings("javadoc")
   public String getLegacyTableName() {
     return legacyTableName;
   }
 
-  @SuppressWarnings("javadoc")
   public void setLegacyTableName(String legacyTableName) {
     this.legacyTableName = legacyTableName;
   }
 
-  @SuppressWarnings("javadoc")
   public String getLegacyTableDescription() {
     return legacyTableDescription;
   }
 
-  @SuppressWarnings("javadoc")
   public void setLegacyTableDescription(String legacyTableDescription) {
     this.legacyTableDescription = legacyTableDescription;
   }
