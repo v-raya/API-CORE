@@ -64,7 +64,7 @@ public class BackgroundCheck implements PersistentObject {
   private short bkgrchkc;
 
   /**
-   * BACKGRND_CHECK_DATE - The date the background check was made for a recipient.
+   * BACKGRND_CHECK_DATE - The date the background check was requested for a recipient.
    */
   @Basic
   @Column(name = "BKGRCHK_DT", nullable = false)
