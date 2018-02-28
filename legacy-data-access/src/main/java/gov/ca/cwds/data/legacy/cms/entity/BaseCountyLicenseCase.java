@@ -37,6 +37,7 @@ public abstract class BaseCountyLicenseCase implements ICountyLicenseCase, Persi
   private String trngCmplt;
   private LocalDate trngDt;
   private String cntySpfcd;
+  private Integer clcApvc;
 
   @Basic
   @Column(name = "ANN_CMP_DT", nullable = true)
@@ -196,6 +197,15 @@ public abstract class BaseCountyLicenseCase implements ICountyLicenseCase, Persi
 
   public void setCntySpfcd(String cntySpfcd) {
     this.cntySpfcd = cntySpfcd;
+  }
+
+  @Column(name = "CLC_APVC")
+  public Integer getClcApvc() {
+    return clcApvc;
+  }
+
+  public void setClcApvc(Integer clcApvc) {
+    this.clcApvc = clcApvc;
   }
 
   @Override
