@@ -93,6 +93,12 @@ public class BackgroundCheck implements PersistentObject {
   @Column(name = "FKCOLTRL_T", nullable = true, length = 10)
   private String fkcoltrlT;
 
+  /**
+   * RECEIVED_DATE - The date the background check result was received.
+   */
+  @Column(name = "RCVD_DT")
+  private LocalDate receivedDate;
+
   public String getIdentifier() {
     return identifier;
   }
@@ -155,6 +161,14 @@ public class BackgroundCheck implements PersistentObject {
 
   public void setFkcoltrlT(String fkcoltrlT) {
     this.fkcoltrlT = fkcoltrlT;
+  }
+
+  public LocalDate getReceivedDate() {
+    return receivedDate;
+  }
+
+  public void setReceivedDate(LocalDate receivedDate) {
+    this.receivedDate = receivedDate;
   }
 
   @Override
