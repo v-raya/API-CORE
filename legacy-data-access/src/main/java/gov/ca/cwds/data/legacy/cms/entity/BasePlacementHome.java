@@ -826,7 +826,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private String trnhsgFac;
 
   /**
-   *NEW_LICENSE_NUMBER - This field is populated when a change of ownership or location takes place for a specific
+   * NEW_LICENSE_NUMBER - This field is populated when a change of ownership or location takes place for a specific
    * Placement Facility. It identifies what the license number of the new facility will be.
    * The new License Number is issued by the State of California (CCL) or can be entered by the user when processing
    * a Placement Home Move online. After both the old facility is closed and the new facility has been added to the
