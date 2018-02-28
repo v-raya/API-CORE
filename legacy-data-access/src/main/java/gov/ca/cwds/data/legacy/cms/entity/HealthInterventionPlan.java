@@ -87,6 +87,19 @@ public class HealthInterventionPlan extends CmsPersistentObject {
   @Column(name = "END_DT")
   private LocalDate endDate;
 
+  /**
+   * MEDICAL_NECESSITY_DATE - The date the Childs mental health needs were determined to be a Medical Necessity.
+   */
+  @Column(name = "MEDNCST_DT")
+  private LocalDate medicalNecessityDate;
+
+  /**
+   * MEDICAL_NECESSITY_CODE - Indicates whether a Child’s Mental Health needs meet the definition of medical necessity.
+   * Yes (Y) or No (N) or Unknown (U).
+   */
+  @Column(name = "MEDNCST_CD", length = 1, nullable = false)
+  private String medicalNecessityCode;
+
   @Override
   public Serializable getPrimaryKey() {
     return id;
@@ -146,6 +159,22 @@ public class HealthInterventionPlan extends CmsPersistentObject {
 
   public void setEndDate(LocalDate endDt) {
     this.endDate = endDt;
+  }
+
+  public LocalDate getMedicalNecessityDate() {
+    return medicalNecessityDate;
+  }
+
+  public void setMedicalNecessityDate(LocalDate medicalNecessityDate) {
+    this.medicalNecessityDate = medicalNecessityDate;
+  }
+
+  public String getMedicalNecessityCode() {
+    return medicalNecessityCode;
+  }
+
+  public void setMedicalNecessityCode(String medicalNecessityCode) {
+    this.medicalNecessityCode = medicalNecessityCode;
   }
 
   @Embeddable
