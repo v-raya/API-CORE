@@ -83,6 +83,18 @@
         }
       }
     },
+    "client_counties": {
+      "properties": {
+        "id": {
+          "type": "text",
+          "store": true
+        },
+        "description": {
+          "type": "text",
+          "store": true
+        }
+      }
+    },
     "legacy_descriptor": {
       "properties": {
         "legacy_id": {

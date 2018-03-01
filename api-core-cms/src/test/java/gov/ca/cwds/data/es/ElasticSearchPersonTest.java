@@ -304,7 +304,7 @@ public class ElasticSearchPersonTest {
 
   @Test
   public void setHighlights_Args__Map() throws Exception {
-    Map<String, String> highlights = new HashMap<String, String>();
+    Map<String, String> highlights = new HashMap<>();
     target.setHighlights(highlights);
   }
 
@@ -482,8 +482,14 @@ public class ElasticSearchPersonTest {
   }
 
   @Test
+  public void setClientCounties_Args__List() throws Exception {
+    List<ElasticSearchSystemCode> counties = target.getClientCounties();
+    target.setClientCounties(counties);
+  }
+
+  @Test
   public void pullCol_Args__Map__Object() throws Exception {
-    Map<String, Object> m = new HashMap<String, Object>();
+    Map<String, Object> m = new HashMap<>();
     ESColumn f = ESColumn.FIRST_NAME;
     Object actual = ElasticSearchPerson.pullCol(m, f);
     assertThat(actual, notNullValue());

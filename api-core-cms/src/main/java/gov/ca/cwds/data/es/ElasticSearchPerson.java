@@ -394,8 +394,12 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonProperty("sensitivity_indicator")
   private transient String sensitivityIndicator = DEFAULT_SENSITIVITY_INDICATOR;
 
+  @Deprecated
   @JsonProperty("client_county")
   private ElasticSearchSystemCode clientCounty;
+
+  @JsonProperty("client_counties")
+  private List<ElasticSearchSystemCode> clientCounties;
 
   @JsonProperty("race_ethnicity")
   private ElasticSearchRaceAndEthnicity cleintRace;
@@ -1382,7 +1386,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * Get client county
    * 
    * @return The client county
+   * @deprecated Use {@link #getClientCounties()}
    */
+  @Deprecated
   public ElasticSearchSystemCode getClientCounty() {
     return clientCounty;
   }
@@ -1391,9 +1397,29 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * Set client county
    * 
    * @param clientCounty The client county
+   * @deprecated Use {@link #setClientCounties(List)}
    */
+  @Deprecated
   public void setClientCounty(ElasticSearchSystemCode clientCounty) {
     this.clientCounty = clientCounty;
+  }
+
+  /**
+   * Get the client counties
+   * 
+   * @return The client counties
+   */
+  public List<ElasticSearchSystemCode> getClientCounties() {
+    return clientCounties;
+  }
+
+  /**
+   * Set the client counties
+   * 
+   * @param clientCounties The client counties
+   */
+  public void setClientCounties(List<ElasticSearchSystemCode> clientCounties) {
+    this.clientCounties = clientCounties;
   }
 
   /**
