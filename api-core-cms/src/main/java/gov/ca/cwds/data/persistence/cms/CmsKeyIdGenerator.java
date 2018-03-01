@@ -434,23 +434,13 @@ public final class CmsKeyIdGenerator {
   }
 
   /**
-   * Simplified overload. Generate an identifier with the given staff id and current timestamp.
-   * 
-   * @param staffId the staffId
-   * @return the unique key from staffId
-   */
-  public static String generate(String staffId) {
-    return generate(staffId, new Date());
-  }
-
-  /**
    * Generate an identifier with the given staff id and current timestamp.
    * 
    * @param staffId three char staff id
    * @param ts timestamp to use
    * @return unique key from staff id and timestamp
    */
-  public static String generate(String staffId, final Date ts) {
+  protected static String generate(String staffId, final Date ts) {
     return makeKey(!StringUtils.isBlank(staffId) ? staffId : DEFAULT_USER_ID, ts);
   }
 
