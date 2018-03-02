@@ -1,0 +1,26 @@
+/*
+ * These rules implement authorization rules around access to Placement Home according to DocTool.
+ *
+ * As input it expects single instance of PlacementHome object and multiple instances of
+ * StaffPrivilegeType which represents Staff Person provoleges.
+ *
+ * If any of StaffPrivilegeType is permitted for PlacementHome the "authorizationResult"
+ * global variable is set to "true" and PlacementHome is retracted to stop rules invocation.
+ * It is expected that default "authorizationResult" value is false (must be set to this value )
+ */
+
+import gov.ca.cwds.authorizer.StaffPrivilegeType
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
+
+global Boolean authorizationResult;
+
+rule "User can create Placement Home with types Foster Family Home or Resource Family Home"
+  dialect "mvel"
+  agenda-group "placement-home-authorization-agenda"
+when
+    $placementHome: PlacementHome()
+    StaffPrivilegeType(this == StaffPrivilegeType.RESOURCE_MGMT_PLACEMENT_FACILITY_MAINT)
+then
+    kcontext.getKieRuntime().setGlobal("authorizationResult", true);
+    retract($placementHome);
+end
