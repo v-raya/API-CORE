@@ -318,6 +318,18 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
     }
   }
 
+  /**
+   * Rule Txt
+   *
+   * If the placement home is being saved to the database for the first time then create
+   * a new Placement Facility Type History row.
+   *
+   *  Logic
+   *  If (in focus) PLACEMENT_HOME is saved to the database for the first time then create
+   *  PLACEMENT_HOME > PLACEMENT_FACILITY_TYPE_HISTORY set
+   *  .Start_Timestamp = System Timestamp
+   *  AND .Placement_Facility_Type = (in focus) PLACEMENT_HOME.Placement_Facility_Type.
+   */
   private void createPlacementFacilityTypeHistory(PlacementHomeEntityAwareDTO parameterObject) {
     final PlacementHome placementHome = parameterObject.getEntity();
     PlacementFacilityTypeHistory placementFacilityTypeHistory = new PlacementFacilityTypeHistory();
