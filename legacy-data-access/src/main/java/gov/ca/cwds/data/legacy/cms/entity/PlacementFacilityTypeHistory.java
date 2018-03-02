@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
+import gov.ca.cwds.data.persistence.PersistentObject;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "PFACHIST")
 @IdClass(PlacementFacilityTypeHistoryPK.class)
-public class PlacementFacilityTypeHistory implements Serializable {
+public class PlacementFacilityTypeHistory implements PersistentObject {
 
     private static final long serialVersionUID = -5838053429059604299L;
 
@@ -149,5 +150,10 @@ public class PlacementFacilityTypeHistory implements Serializable {
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    @Override
+    public Serializable getPrimaryKey() {
+        return new PlacementFacilityTypeHistoryPK(this.fkplcHmT, this.thirdId);
     }
 }
