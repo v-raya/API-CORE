@@ -3,9 +3,10 @@ package gov.ca.cwds.data.persistence.cms;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
-import java.math.BigDecimal;
+
 import java.util.Date;
 
 import org.junit.Test;
@@ -152,9 +153,7 @@ public class BaseReporterTest {
   @Test
   public void getMessagePhoneNumber_Args__() throws Exception {
     BaseReporter target = new TestOnlyBaseReporter();
-    BigDecimal actual = target.getMessagePhoneNumber();
-    BigDecimal expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    assertNull(target.getMessagePhoneNumber());
   }
 
   @Test
@@ -176,9 +175,8 @@ public class BaseReporterTest {
   @Test
   public void getPrimaryPhoneNumber_Args__() throws Exception {
     BaseReporter target = new TestOnlyBaseReporter();
-    BigDecimal actual = target.getPrimaryPhoneNumber();
-    BigDecimal expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    Long actual = target.getPrimaryPhoneNumber();
+    assertNull(actual);
   }
 
   @Test
@@ -354,8 +352,8 @@ public class BaseReporterTest {
   @Test
   public void getPhones_Args2__() throws Exception {
     BaseReporter target = new TestOnlyBaseReporter();
-    target.primaryPhoneNumber = new BigDecimal("4083742790");
-    target.messagePhoneNumber = new BigDecimal("4083742790");
+    target.primaryPhoneNumber = 4083742790L;
+    target.messagePhoneNumber = 4083742790L;
     ApiPhoneAware[] actual = target.getPhones();
     assertThat(actual, notNullValue());
   }

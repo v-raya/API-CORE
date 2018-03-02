@@ -6,8 +6,8 @@ import java.util.Map;
 import javax.persistence.AttributeConverter;
 import org.apache.commons.lang3.StringUtils;
 
-public abstract class BaseEntityEnumConverter<E extends EntityEnum<K>, K> implements
-    AttributeConverter<E, K> {
+public abstract class BaseEntityEnumConverter<E extends EntityEnum<K>, K>
+    implements AttributeConverter<E, K> {
 
   static <K, E> Map<K, E> initializeMapping(EntityEnum<K>[] values) {
     Map result = new HashMap<K, EntityEnum<K>>();
@@ -28,7 +28,7 @@ public abstract class BaseEntityEnumConverter<E extends EntityEnum<K>, K> implem
   @Override
   public E convertToEntityAttribute(K code) {
     if (code == null || isBlankString(code) || isSpaceString(code)) {
-        return null;
+      return null;
     }
 
     K trimmed = trimCode(code);
@@ -52,9 +52,7 @@ public abstract class BaseEntityEnumConverter<E extends EntityEnum<K>, K> implem
   }
 
   private K trimCode(K code) {
-    return code instanceof String
-        ? (K) ((String) code).trim()
-        : code;
+    return code instanceof String ? (K) ((String) code).trim() : code;
   }
 
   abstract Map<K, E> getCodeMap();

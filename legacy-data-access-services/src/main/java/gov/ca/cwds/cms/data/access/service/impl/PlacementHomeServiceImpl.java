@@ -15,6 +15,7 @@ import gov.ca.cwds.cms.data.access.service.PlacementHomeService;
 import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
 import gov.ca.cwds.cms.data.access.service.rules.PlacementHomeDroolsConfiguration;
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
+import gov.ca.cwds.cms.data.access.dao.PlacementFacilityTypeHistoryDao;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
 import gov.ca.cwds.data.legacy.cms.entity.*;
 import gov.ca.cwds.drools.DroolsException;
@@ -28,15 +29,15 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
 import static gov.ca.cwds.cms.data.access.service.impl.IdGenerator.generateId;
 import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
 import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
 
-/** @author CWDS CALS API Team */
+/**
+ * @author CWDS CALS API Team
+ */
 public class PlacementHomeServiceImpl implements PlacementHomeService {
 
   @Inject
@@ -67,6 +68,9 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
   private PlacementHomeProfileDao placementHomeProfileDao;
 
   @Inject
+  private PlacementFacilityTypeHistoryDao placementFacilityTypeHistoryDao;
+
+  @Inject
   private SubstituteCareProviderService substituteCareProviderService;
 
   @Inject
@@ -91,23 +95,27 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
   public void runBusinessValidation(
       PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, PerryAccount principal)
       throws DroolsException {
-      runRulesAgendaGroup(placementHomeEntityAwareDTO, PlacementHomeDroolsConfiguration.INSTANCE, principal);
+    runRulesAgendaGroup(placementHomeEntityAwareDTO, PlacementHomeDroolsConfiguration.INSTANCE,
+        principal);
   }
 
   @Override
   public void runDataProcessing(
-          PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, PerryAccount principal)
-          throws DroolsException {
-      runRulesAgendaGroup(placementHomeEntityAwareDTO, PlacementHomeDroolsConfiguration.DATA_PROCESSING_INSTANCE, principal);
+      PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, PerryAccount principal)
+      throws DroolsException {
+    runRulesAgendaGroup(placementHomeEntityAwareDTO,
+        PlacementHomeDroolsConfiguration.DATA_PROCESSING_INSTANCE, principal);
   }
 
-  private void runRulesAgendaGroup(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, PlacementHomeDroolsConfiguration dataProcessingInstance, PerryAccount principal2) throws DroolsException {
-      Set<IssueDetails> detailsList =
-                droolsService.performBusinessRules(
-                        dataProcessingInstance, placementHomeEntityAwareDTO, principal2);
-        if (!detailsList.isEmpty()) {
-            throw new BusinessValidationException("Can't create Placement Home", detailsList);
-      }
+  private void runRulesAgendaGroup(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO,
+                                   PlacementHomeDroolsConfiguration dataProcessingInstance, PerryAccount principal2)
+      throws DroolsException {
+    Set<IssueDetails> detailsList =
+        droolsService.performBusinessRules(
+            dataProcessingInstance, placementHomeEntityAwareDTO, principal2);
+    if (!detailsList.isEmpty()) {
+      throw new BusinessValidationException("Can't create Placement Home", detailsList);
+    }
   }
 
   @Override
@@ -115,8 +123,9 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
       throws DataAccessServicesException {
     try {
       validateParameters(placementHomeEntityAwareDTO);
-      runDataProcessing(placementHomeEntityAwareDTO, PrincipalUtils.getPrincipal());
-      runBusinessValidation(placementHomeEntityAwareDTO, PrincipalUtils.getPrincipal());
+      PerryAccount perryAccount = PrincipalUtils.getPrincipal();
+      runDataProcessing(placementHomeEntityAwareDTO, perryAccount);
+      runBusinessValidation(placementHomeEntityAwareDTO, perryAccount);
       createPlacementHome(placementHomeEntityAwareDTO);
       createPlacementHomeUc(placementHomeEntityAwareDTO);
       createCountyOwnership(placementHomeEntityAwareDTO);
@@ -124,6 +133,7 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
       createBackgroundCheck();
       createEmergencyContactDetail(placementHomeEntityAwareDTO);
       createPlacementHomeProfile(placementHomeEntityAwareDTO);
+      createPlacementFacilityTypeHistory(placementHomeEntityAwareDTO);
       createSubstituteCareProviders(placementHomeEntityAwareDTO);
       createOtherAdultsInHome(placementHomeEntityAwareDTO);
       createOtherChildrenInHome(placementHomeEntityAwareDTO);
@@ -135,8 +145,7 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
   }
 
   @Override
-  public PlacementHome update(PlacementHomeEntityAwareDTO entityAwareDTO)
-      throws DataAccessServicesException {
+  public PlacementHome update(PlacementHomeEntityAwareDTO entityAwareDTO) {
     throw new UnsupportedOperationException();
   }
 
@@ -310,6 +319,33 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
     }
   }
 
+  /**
+   * Rule: R - 11179
+   *
+   * Rule Txt
+   *
+   * If the placement home is being saved to the database for the first time then create
+   * a new Placement Facility Type History row.
+   *
+   *  Logic
+   *  If (in focus) PLACEMENT_HOME is saved to the database for the first time then create
+   *  PLACEMENT_HOME > PLACEMENT_FACILITY_TYPE_HISTORY set
+   *  .Start_Timestamp = System Timestamp
+   *  AND .Placement_Facility_Type = (in focus) PLACEMENT_HOME.Placement_Facility_Type.
+   */
+  private void createPlacementFacilityTypeHistory(PlacementHomeEntityAwareDTO parameterObject) {
+    final PlacementHome placementHome = parameterObject.getEntity();
+    PlacementFacilityTypeHistory placementFacilityTypeHistory = new PlacementFacilityTypeHistory();
+    placementFacilityTypeHistory.setThirdId(generateId());
+    placementFacilityTypeHistory.setFkplcHmT(placementHome.getIdentifier());
+    placementFacilityTypeHistory.setPlacementFacilityType(placementHome.getFacilityType());
+    placementFacilityTypeHistory.setStartTimestamp(LocalDateTime.now());
+    placementFacilityTypeHistory.setCreationTimestamp(LocalDateTime.now());
+    placementFacilityTypeHistory.setLastUpdateTimestamp(LocalDateTime.now());
+    placementFacilityTypeHistory.setLastUpdateId(getStaffPersonId());
+    placementFacilityTypeHistoryDao.create(placementFacilityTypeHistory);
+  }
+
   private void prepareAddressPhoneticSearchKeywords(PlacementHome placementHome) {
     SsaName3ParameterObject parameterObject = new SsaName3ParameterObject();
     parameterObject.setTableName(PhoneticSearchTables.ADR_PHTT);
@@ -324,7 +360,7 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
     ssaName3Dao.callStoredProc(parameterObject);
   }
 
-  void setDroolsService(DroolsService droolsService) {
+  public void setDroolsService(DroolsService droolsService) {
     this.droolsService = droolsService;
   }
 }

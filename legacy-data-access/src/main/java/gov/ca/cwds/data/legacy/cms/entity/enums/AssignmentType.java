@@ -35,6 +35,10 @@ public enum AssignmentType implements EntityEnum<String> {
     this.description = description;
   }
 
+  public static AssignmentType fromCode(String code) {
+    return new AssignmentTypeConverter().convertToEntityAttribute(code);
+  }
+
   @Override
   public String getCode() {
     return code;

@@ -5,10 +5,8 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.LimitedAccess;
 import gov.ca.cwds.data.legacy.cms.entity.enums.ResponsibleAgency;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ActiveServiceComponentType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ApprovalStatusType;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.CaseClosureReasonType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.County;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.State;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -25,7 +23,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -59,7 +56,7 @@ import org.hibernate.annotations.Type;
   @NamedQuery(
     name = Case.NQ_FIND_ACTIVE_BY_CLIENT_ID,
     query =
-        "select distinct c from Case c"
+        "select distinct c from gov.ca.cwds.data.legacy.cms.entity.Case c"
             + " left join c.childClient ch"
             + " where ch.victimClientId = :"
             + Case.NQ_PARAM_CLIENT_ID
@@ -68,7 +65,7 @@ import org.hibernate.annotations.Type;
   @NamedQuery(
     name = Case.NQ_FIND_CLOSED_BY_CLIENT_ID,
     query =
-        "select distinct c from Case c"
+        "select distinct c from gov.ca.cwds.data.legacy.cms.entity.Case c"
             + " left join c.childClient ch"
             + " where ch.victimClientId = :"
             + Case.NQ_PARAM_CLIENT_ID
@@ -178,6 +175,7 @@ public class Case extends CmsPersistentObject {
   private LocalDate limitedAccessDate;
 
   @Column(name = "LMT_ACSDSC")
+  @ColumnTransformer(read = "trim(LMT_ACSDSC)")
   private String limitedAccessDesc;
 
   @NotFound(action = NotFoundAction.IGNORE)
@@ -497,21 +495,20 @@ public class Case extends CmsPersistentObject {
   }
 
   @Override
-  public boolean equals(Object o) {
+  public final boolean equals(Object o) {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+    if (!(o instanceof Case)) {
       return false;
     }
     Case aCase = (Case) o;
-    return Objects.equals(
-            childClient.getVictimClientId(), aCase.getChildClient().getVictimClientId())
-        && Objects.equals(startDate, aCase.startDate);
+    return Objects.equals(getChildClient(), aCase.getChildClient())
+        && Objects.equals(getStartDate(), aCase.getStartDate());
   }
 
   @Override
-  public int hashCode() {
-    return Objects.hash(childClient.getVictimClientId(), startDate);
+  public final int hashCode() {
+    return Objects.hash(getChildClient(), getStartDate());
   }
 }

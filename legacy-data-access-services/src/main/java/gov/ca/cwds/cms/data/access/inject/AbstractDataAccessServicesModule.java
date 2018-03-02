@@ -6,8 +6,12 @@ import com.google.inject.Injector;
 import com.google.inject.Provides;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.mapper.ExternalInterfaceMapper;
+import gov.ca.cwds.cms.data.access.service.ChildClientCoreService;
+import gov.ca.cwds.cms.data.access.service.ClientCoreService;
 import gov.ca.cwds.cms.data.access.service.PlacementHomeService;
 import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
+import gov.ca.cwds.cms.data.access.service.impl.ChildClientCoreServiceImpl;
+import gov.ca.cwds.cms.data.access.service.impl.ClientCoreServiceImpl;
 import gov.ca.cwds.cms.data.access.service.impl.PlacementHomeServiceImpl;
 import gov.ca.cwds.cms.data.access.service.impl.SubstituteCareProviderServiceImpl;
 import org.hibernate.SessionFactory;
@@ -36,6 +40,8 @@ public abstract class AbstractDataAccessServicesModule extends AbstractModule {
   private void configureDataAccessServices() {
     bind(PlacementHomeService.class).to(PlacementHomeServiceImpl.class);
     bind(SubstituteCareProviderService.class).to(SubstituteCareProviderServiceImpl.class);
+    bind(ClientCoreService.class).to(ClientCoreServiceImpl.class);
+    bind(ChildClientCoreService.class).to(ChildClientCoreServiceImpl.class);
   }
 
   private void configureMappers() {

@@ -5,46 +5,50 @@ import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.ClientCoreService;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.rules.ClientDroolsConfiguration;
-import gov.ca.cwds.data.legacy.cms.dao.*;
+import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
+import gov.ca.cwds.data.legacy.cms.dao.DasHistoryDao;
+import gov.ca.cwds.data.legacy.cms.dao.DeliveredServiceDao;
+import gov.ca.cwds.data.legacy.cms.dao.NameTypeDao;
+import gov.ca.cwds.data.legacy.cms.dao.NearFatalityDao;
+import gov.ca.cwds.data.legacy.cms.dao.SafetyAlertDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
-import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity;
-import gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan;
-import gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication;
+import gov.ca.cwds.data.legacy.cms.entity.DasHistory;
+import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
+import gov.ca.cwds.data.legacy.cms.entity.NearFatality;
+import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
+import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import org.hibernate.Hibernate;
 
 /** @author CWDS TPT-3 Team */
 public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
     implements ClientCoreService {
 
   @Inject private DroolsService droolsService;
-
   @Inject private ClientDao clientDao;
-
-  @Inject private ClientScpEthnicityDao clientScpEthnicityDao;
-
-  @Inject private FCEligibilityDao fcEligibilityDao;
-
-  @Inject private HealthInterventionPlanDao healthInterventionPlanDao;
-
-  @Inject private MedicalEligibilityApplicationDao medicalEligibilityApplicationDao;
+  @Inject private DeliveredServiceDao deliveredServiceDao;
+  @Inject private NameTypeDao nameTypeDao;
+  @Inject private SafetyAlertDao safetyAlertDao;
+  @Inject private DasHistoryDao dasHistoryDao;
+  @Inject private NearFatalityDao nearFatalityDao;
 
   @Override
-  public Client create(ClientEntityAwareDTO entityAwareDTO) throws DataAccessServicesException {
-    throw new UnsupportedOperationException();
+  public Client find(Serializable primaryKey) {
+    return clientDao.find(primaryKey);
   }
 
   @Override
   public Client update(ClientEntityAwareDTO clientEntityAwareDTO)
       throws DataAccessServicesException, DroolsException {
-    prepareEntityForValidation(clientEntityAwareDTO);
-    runBusinessValidation(clientEntityAwareDTO, PrincipalUtils.getPrincipal());
+    validate(clientEntityAwareDTO);
     try {
       updateClient(clientEntityAwareDTO);
       return clientEntityAwareDTO.getEntity();
@@ -53,31 +57,50 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
     }
   }
 
+  public void validate(ClientEntityAwareDTO clientEntityAwareDTO) throws DroolsException {
+    runBusinessValidation(
+        enrichValidationData(clientEntityAwareDTO),
+        PrincipalUtils.getPrincipal()
+    );
+  }
+
   protected abstract void enrichClientEntityAwareDto(T clientEntityAwareDTO);
 
-  private void prepareEntityForValidation(ClientEntityAwareDTO clientEntityAwareDTO) {
-    String clientId = clientEntityAwareDTO.getEntity().getIdentifier();
-    List<ClientScpEthnicity> clientScpEthnicityList =
-        getClientScpEthnicityDao().findEthnicitiesByClient(clientId);
-    clientEntityAwareDTO.getClientScpEthnicities().addAll(clientScpEthnicityList);
+  private ClientEntityAwareDTO enrichValidationData(ClientEntityAwareDTO clientEntityAwareDTO) {
+    Client client = clientEntityAwareDTO.getEntity();
+    String clientId = client.getIdentifier();
 
-    List<HealthInterventionPlan> activeHealthInterventionPlans =
-        getHealthInterventionPlanDao().getActiveHealthInterventionPlans(clientId);
-    clientEntityAwareDTO.setActiveHealthInterventionPlans(activeHealthInterventionPlans);
+    Hibernate.initialize(client.getOtherEthnicities());
+    clientEntityAwareDTO.getOtherEthnicities().addAll(client.getOtherEthnicities());
 
-    List<MedicalEligibilityApplication> medicalEligibilityApplications =
-        medicalEligibilityApplicationDao.findByChildClientId(clientId);
-    clientEntityAwareDTO.setMedicalEligibilityApplications(medicalEligibilityApplications);
+    List<DeliveredService> deliveredServices = deliveredServiceDao.findByClientId(clientId);
+    clientEntityAwareDTO.setDeliveredService(deliveredServices);
+
+    List<NearFatality> nearFatalities = nearFatalityDao.findNearFatalitiesByClientId(clientId);
+    clientEntityAwareDTO.getNearFatalities().addAll(nearFatalities);
+
+    Client persistentClientState = clientDao.find(clientId);
+    clientEntityAwareDTO.setPersistentClientState(persistentClientState);
+
+    Short nameTypeId = clientEntityAwareDTO.getEntity().getNameType().getSystemId();
+    clientEntityAwareDTO.getEntity().setNameType(nameTypeDao.find(nameTypeId));
+
+    final Collection<SafetyAlert> safetyAlerts = safetyAlertDao.findByClientId(clientId);
+    clientEntityAwareDTO.getSafetyAlerts().addAll(safetyAlerts);
+
+    final Collection<DasHistory> dasHistories = dasHistoryDao.findByClientId(clientId);
+    clientEntityAwareDTO.getDasHistories().addAll(dasHistories);
 
     enrichClientEntityAwareDto((T) clientEntityAwareDTO);
+
+    return clientEntityAwareDTO;
   }
 
   @Override
-  public void runBusinessValidation(
-      ClientEntityAwareDTO clientEntityAwareDTO, PerryAccount principal) throws DroolsException {
-    Set<IssueDetails> detailsList =
-        droolsService.performBusinessRules(
-            ClientDroolsConfiguration.INSTANCE, clientEntityAwareDTO, principal);
+  public void runBusinessValidation(ClientEntityAwareDTO clientEntityAwareDTO, PerryAccount principal)
+      throws DroolsException {
+    Set<IssueDetails> detailsList = droolsService.performBusinessRules(
+        ClientDroolsConfiguration.INSTANCE, clientEntityAwareDTO, principal);
     if (!detailsList.isEmpty()) {
       throw new BusinessValidationException("Can't create Client", detailsList);
     }
@@ -90,33 +113,5 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
 
   public void setDroolsService(DroolsService droolsService) {
     this.droolsService = droolsService;
-  }
-
-  public void setClientDao(ClientDao clientDao) {
-    this.clientDao = clientDao;
-  }
-
-  public FCEligibilityDao getFcEligibilityDao() {
-    return fcEligibilityDao;
-  }
-
-  public void setFcEligibilityDao(FCEligibilityDao fcEligibilityDao) {
-    this.fcEligibilityDao = fcEligibilityDao;
-  }
-
-  public DroolsService getDroolsService() {
-    return droolsService;
-  }
-
-  public ClientDao getClientDao() {
-    return clientDao;
-  }
-
-  public ClientScpEthnicityDao getClientScpEthnicityDao() {
-    return clientScpEthnicityDao;
-  }
-
-  public HealthInterventionPlanDao getHealthInterventionPlanDao() {
-    return healthInterventionPlanDao;
   }
 }

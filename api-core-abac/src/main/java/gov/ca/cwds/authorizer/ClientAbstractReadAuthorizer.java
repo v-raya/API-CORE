@@ -5,6 +5,7 @@ import static gov.ca.cwds.authorizer.util.StaffPrivilegeUtil.toStaffPersonPrivil
 
 import com.google.inject.Inject;
 import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
+import gov.ca.cwds.cms.data.access.service.ClientCoreService;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.authorizer.BaseAuthorizer;
@@ -20,18 +21,23 @@ import org.slf4j.LoggerFactory;
 /**
  * @author CWDS TPT-3 Team
  */
-public class ClientAbstractReadAuthorizer extends BaseAuthorizer<Client, Long> {
+public class ClientAbstractReadAuthorizer extends BaseAuthorizer<Client, String> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ClientAbstractReadAuthorizer.class);
 
-  private final DroolsAuthorizationService droolsAuthorizationService;
-  private final ClientCountyDeterminationService countyDeterminationService;
+  @Inject
+  private ClientCoreService clientCoreService;
 
   @Inject
-  public ClientAbstractReadAuthorizer(DroolsAuthorizationService droolsAuthorizationService,
-      ClientCountyDeterminationService countyDeterminationService) {
-    this.droolsAuthorizationService = droolsAuthorizationService;
-    this.countyDeterminationService = countyDeterminationService;
+  private DroolsAuthorizationService droolsAuthorizationService;
+
+  @Inject
+  private ClientCountyDeterminationService countyDeterminationService;
+
+  @Override
+  protected boolean checkId(final String clientId) {
+    final Client client = clientCoreService.find(clientId);
+    return client == null || checkInstance(client);
   }
 
   @Override
@@ -48,13 +54,13 @@ public class ClientAbstractReadAuthorizer extends BaseAuthorizer<Client, Long> {
 
   private ClientCondition getClientCondition(final Client client, final PerryAccount perryAccount) {
     final Short clientCountyCode = countyDeterminationService.getClientCountyById(client.getIdentifier());
-    final Short staffGovernmentEntityType = getStaffGovernmentEntityType(perryAccount.getGovernmentEntityType());
-    return toClientCondition(client, clientCountyCode, staffGovernmentEntityType);
+    final Short staffPersonCountyCode = getStaffPersonCountyCode(perryAccount.getCountyCwsCode());
+    return toClientCondition(client, clientCountyCode, staffPersonCountyCode);
   }
 
-  private static Short getStaffGovernmentEntityType(final String staffCountyCodeString) {
+  private static Short getStaffPersonCountyCode(final String staffCountyCodeString) {
     return StringUtils.isNotBlank(staffCountyCodeString)
-          ? Short.parseShort(staffCountyCodeString)
+          ? Short.valueOf(staffCountyCodeString)
           : null;
   }
 
@@ -90,5 +96,17 @@ public class ClientAbstractReadAuthorizer extends BaseAuthorizer<Client, Long> {
           authorizationResult
       );
     }
+  }
+
+  void setClientCoreService(ClientCoreService clientCoreService) {
+    this.clientCoreService = clientCoreService;
+  }
+
+  void setDroolsAuthorizationService(DroolsAuthorizationService droolsAuthorizationService) {
+    this.droolsAuthorizationService = droolsAuthorizationService;
+  }
+
+  void setCountyDeterminationService(ClientCountyDeterminationService countyDeterminationService) {
+    this.countyDeterminationService = countyDeterminationService;
   }
 }

@@ -1,0 +1,38 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import java.time.LocalDate
+import gov.ca.cwds.data.legacy.cms.entity.ChildClient
+import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO
+import gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication
+
+global java.util.Set<IssueDetails> validationDetailsList
+
+rule "R-02761"
+  dialect "mvel"
+  agenda-group "client-agenda"
+  when
+      /*
+        Code: R - 02761
+
+        Rule Txt:
+        The number of months retroactive cannot precede the client's birth month/year. If the retroactive months count
+        is entered, then the Client's birth date cannot be changed to be greater than that of the retroactive months count.
+
+
+        Logic:
+        (System Date - MEDICAL_ELIGIBILITY_APPLICATION.Retroactive_Months_Count) >= CLIENT.Birth_Date.
+      */
+      $clientAwareDTO: ChildClientEntityAwareDTO()
+      $medicalEligibilityApplication : MedicalEligibilityApplication($retroactiveMonthsCount : retroactiveMonthsCount) from $clientAwareDTO.medicalEligibilityApplications
+      $client: ChildClient(
+        birthDate != null,
+        $retroactiveMonthsCount!= null,
+        eval(birthDate.isAfter(LocalDate.now().minusMonths((long)$retroactiveMonthsCount)))
+      ) from $clientAwareDTO.entity
+
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-02761");
+      //details.setUserMessage("Adoption Agreement Term Date cannot be earlier than birth date");
+     // details.setTechnicalMessage("If MedicalEligibilityApplication.adoptionAgreementTermDate != null then should be: MedicalEligibilityApplication.adoptionAgreementTermDate >= Client.birthDate");
+      validationDetailsList.add(details);
+end

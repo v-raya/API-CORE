@@ -4,10 +4,9 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 
 import org.junit.Test;
@@ -95,9 +94,7 @@ public class BaseCollateralIndividualTest {
   @Test
   public void getFaxNumber_Args__() throws Exception {
     BaseCollateralIndividual target = new TestOnlyCollateralIndividual();
-    BigDecimal actual = target.getFaxNumber();
-    BigDecimal expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    assertNull(target.getFaxNumber());
   }
 
   @Test
@@ -175,9 +172,8 @@ public class BaseCollateralIndividualTest {
   @Test
   public void getPrimaryPhoneNo_Args__() throws Exception {
     BaseCollateralIndividual target = new TestOnlyCollateralIndividual();
-    BigInteger actual = target.getPrimaryPhoneNo();
-    BigInteger expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    Long actual = target.getPrimaryPhoneNo();
+    assertNull(actual);
   }
 
   @Test

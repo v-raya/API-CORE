@@ -19,16 +19,14 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * {@link DomainObject} representing a SystemCode
+ * {@link DomainObject} representing a CMS System Code entry.
  * 
  * @author CWDS API Team
  */
 @JsonSnakeCase
 @ApiModel
 public class SystemCode extends ReportingDomain implements Response {
-  /**
-   * Serialization version
-   */
+
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("system_id")
@@ -69,8 +67,6 @@ public class SystemCode extends ReportingDomain implements Response {
 
   @JsonProperty("long_description")
   private String longDescription;
-
-
 
   /**
    * Construct from all fields.
@@ -118,7 +114,6 @@ public class SystemCode extends ReportingDomain implements Response {
     this.foreignKeyMetaTable = persistedSystemCode.getForeignKeyMetaTable();
     this.longDescription = persistedSystemCode.getLongDescription();
   }
-
 
   /**
    * @return the systemId

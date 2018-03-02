@@ -21,11 +21,6 @@ global java.util.Set validationDetailsList
 */
 
 
-
-/**
-* After performing the process Add Home Payee Details, the PLACEMENT_HOME.Payee_First_Name,
-* .Payee_Last_Name, .Payee_Street_Name and .Payee_City_Name must not be null.
-*/
 rule "R-00181"
   dialect "java"
   agenda-group "placement-home-agenda"
@@ -37,11 +32,9 @@ rule "R-00181"
   then
       IssueDetails details = new IssueDetails();
       details.setCode("R-00181");
+      details.setProperty("OtherChildrenInPlacementHome.birthDt");
       details.setInvalidValue($otherChildInPlacementHome.getBirthDt());
       details.setUserMessage("BIRTH DATE for the OTHER CHILDREN IN PLACEMENT HOME must be greater than (current date - 18 years).");
-      details.setTechnicalMessage("Logic: \n"
-                                   + "        OTHER_CHILDREN_IN_PLACEMENT_HOME: Birth_Date must be >= than (system date - 18 years).\n"
-                                   + "        For Placement Home Notebook in the OtherChildrenInHome Page Use PM Other Children in\n"
-                                   + "        Home View for any additional information needed.");
+      details.setTechnicalMessage("Logic: OTHER_CHILDREN_IN_PLACEMENT_HOME: Birth_Date must be >= than (system date - 18 years). For Placement Home Notebook in the OtherChildrenInHome Page Use PM Other Children in Home View for any additional information needed.");
       validationDetailsList.add(details);
 end

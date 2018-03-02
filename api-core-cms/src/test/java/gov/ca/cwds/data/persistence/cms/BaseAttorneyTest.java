@@ -3,6 +3,7 @@ package gov.ca.cwds.data.persistence.cms;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -89,7 +90,7 @@ public class BaseAttorneyTest {
   @Test
   public void getFaxNumber_Args__() throws Exception {
     BaseAttorney target = new TestOnlyBaseAttorney();
-    BigDecimal actual = target.getFaxNumber();
+    Long actual = target.getFaxNumber();
     BigDecimal expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
@@ -145,9 +146,7 @@ public class BaseAttorneyTest {
   @Test
   public void getMessagePhoneNumber_Args__() throws Exception {
     BaseAttorney target = new TestOnlyBaseAttorney();
-    BigDecimal actual = target.getMessagePhoneNumber();
-    BigDecimal expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    assertNull(target.getMessagePhoneNumber());
   }
 
   @Test
@@ -177,25 +176,19 @@ public class BaseAttorneyTest {
   @Test
   public void getPrimaryPhoneExtensionNumber_Args__() throws Exception {
     BaseAttorney target = new TestOnlyBaseAttorney();
-    Integer actual = target.getPrimaryPhoneExtensionNumber();
-    Integer expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    assertNull(target.getPrimaryPhoneExtensionNumber());
   }
 
   @Test
   public void getPrimaryPhoneNumber_Args__() throws Exception {
     BaseAttorney target = new TestOnlyBaseAttorney();
-    BigDecimal actual = target.getPrimaryPhoneNumber();
-    BigDecimal expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    assertNull(target.getPrimaryPhoneNumber());
   }
 
   @Test
   public void getStateCodeType_Args__() throws Exception {
     BaseAttorney target = new TestOnlyBaseAttorney();
-    Short actual = target.getStateCodeType();
-    Short expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    assertNull(target.getStateCodeType());
   }
 
   @Test
@@ -289,8 +282,8 @@ public class BaseAttorneyTest {
   @Test
   public void getPhones_Args2__() throws Exception {
     BaseAttorney target = new TestOnlyBaseAttorney();
-    target.primaryPhoneNumber = new BigDecimal("4083742790");
-    target.messagePhoneNumber = new BigDecimal("4083742790");
+    target.primaryPhoneNumber = 4083742790L;
+    target.messagePhoneNumber = 4083742790L;
     ApiPhoneAware[] actual = target.getPhones();
     assertThat(actual, notNullValue());
   }
@@ -338,13 +331,6 @@ public class BaseAttorneyTest {
   }
 
   @Test
-  public void setFaxNumber_Args__BigDecimal() throws Exception {
-    BaseAttorney target = new TestOnlyBaseAttorney();
-    BigDecimal faxNumber = mock(BigDecimal.class);
-    target.setFaxNumber(faxNumber);
-  }
-
-  @Test
   public void setFirstName_Args__String() throws Exception {
     BaseAttorney target = new TestOnlyBaseAttorney();
     String firstName = null;
@@ -389,8 +375,7 @@ public class BaseAttorneyTest {
   @Test
   public void setMessagePhoneNumber_Args__BigDecimal() throws Exception {
     BaseAttorney target = new TestOnlyBaseAttorney();
-    BigDecimal messagePhoneNumber = mock(BigDecimal.class);
-    target.setMessagePhoneNumber(messagePhoneNumber);
+    assertNull(target.getMessagePhoneNumber());
   }
 
   @Test
@@ -424,8 +409,7 @@ public class BaseAttorneyTest {
   @Test
   public void setPrimaryPhoneNumber_Args__BigDecimal() throws Exception {
     BaseAttorney target = new TestOnlyBaseAttorney();
-    BigDecimal primaryPhoneNumber = mock(BigDecimal.class);
-    target.setPrimaryPhoneNumber(primaryPhoneNumber);
+    assertNull(target.getPrimaryPhoneNumber());
   }
 
   @Test

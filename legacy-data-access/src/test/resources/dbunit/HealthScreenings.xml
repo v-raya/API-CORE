@@ -1,0 +1,25 @@
+<dataset>
+  <HLTH_SCT
+    THIRD_ID="CiO9R9V0Wl"
+    FKCHLD_CLT="Ek694Ij0Wl"
+    HL_SCRNC="6614"
+    HL_SCR_DT="2013-02-01"
+    HL_SCRDC="6606"
+    COMNT_TXT="[NULL]"
+    SCR_RSL_CD="N"
+    LST_UPD_ID="0Wl"
+    LST_UPD_TS="2013-02-12 15:40:42.903234"
+    />
+
+  <HLTH_SCT
+    THIRD_ID="DjocVcg0WL"
+    FKCHLD_CLT="0rdj8iw0WL"
+    HL_SCRNC="6615"
+    HL_SCR_DT="2013-02-01"
+    HL_SCRDC="[NULL]"
+    COMNT_TXT="[NULL]"
+    SCR_RSL_CD="[NULL]"
+    LST_UPD_ID="0WL"
+    LST_UPD_TS="2006-01-09 12:07:50.165611"
+    />
+</dataset>

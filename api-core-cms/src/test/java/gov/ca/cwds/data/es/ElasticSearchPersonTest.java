@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.elasticsearch.search.SearchHit;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -38,6 +39,14 @@ public class ElasticSearchPersonTest {
   @Test
   public void instantiation() throws Exception {
     assertThat(target, notNullValue());
+  }
+
+  @Test
+  public void readPerson_Args__String() throws Exception {
+    final String json =
+        IOUtils.toString(getClass().getResourceAsStream("/fixtures/data/es/es_person.json"));
+    final ElasticSearchPerson actual = ElasticSearchPerson.readPerson(json);
+    assertThat(actual, is(notNullValue())); // if it loads, then it's 80% right.
   }
 
   @Test
@@ -295,7 +304,7 @@ public class ElasticSearchPersonTest {
 
   @Test
   public void setHighlights_Args__Map() throws Exception {
-    Map<String, String> highlights = new HashMap<String, String>();
+    Map<String, String> highlights = new HashMap<>();
     target.setHighlights(highlights);
   }
 
@@ -473,8 +482,14 @@ public class ElasticSearchPersonTest {
   }
 
   @Test
+  public void setClientCounties_Args__List() throws Exception {
+    List<ElasticSearchSystemCode> counties = target.getClientCounties();
+    target.setClientCounties(counties);
+  }
+
+  @Test
   public void pullCol_Args__Map__Object() throws Exception {
-    Map<String, Object> m = new HashMap<String, Object>();
+    Map<String, Object> m = new HashMap<>();
     ESColumn f = ESColumn.FIRST_NAME;
     Object actual = ElasticSearchPerson.pullCol(m, f);
     assertThat(actual, notNullValue());

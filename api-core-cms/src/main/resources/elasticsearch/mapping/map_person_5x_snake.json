@@ -24,6 +24,18 @@
         }
       }
     },
+    "client_counties": {
+      "properties": {
+        "id": {
+          "type": "text",
+          "store": true
+        },
+        "description": {
+          "type": "text",
+          "store": true
+        }
+      }
+    },
     "legacy_source_table": {
       "type": "text",
       "store": true

@@ -296,7 +296,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
     @JsonIgnore
     public String[] getLegacy() {
-      return legacy;
+      return legacy != null ? Arrays.copyOf(legacy, legacy.length) : new String[0];
     }
 
     public ElasticSearchPersonNameSuffix lookupLegacy(String val) {
@@ -336,9 +336,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   static gov.ca.cwds.rest.api.domain.cms.SystemCodeCache systemCodes =
       gov.ca.cwds.rest.api.domain.cms.SystemCodeCache.global();
 
-  /**
-   * Base serialization version. Increment by class version.
-   */
   private static final long serialVersionUID = 1L;
 
   /**
@@ -397,8 +394,12 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonProperty("sensitivity_indicator")
   private transient String sensitivityIndicator = DEFAULT_SENSITIVITY_INDICATOR;
 
+  @Deprecated
   @JsonProperty("client_county")
   private ElasticSearchSystemCode clientCounty;
+
+  @JsonProperty("client_counties")
+  private List<ElasticSearchSystemCode> clientCounties;
 
   @JsonProperty("race_ethnicity")
   private ElasticSearchRaceAndEthnicity cleintRace;
@@ -410,11 +411,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
 
-  // @Deprecated
   @JsonProperty("legacy_source_table")
   private String legacySourceTable;
 
-  // @Deprecated
   @JsonProperty("legacy_id")
   private String legacyId;
 
@@ -1387,7 +1386,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * Get client county
    * 
    * @return The client county
+   * @deprecated Use {@link #getClientCounties()}
    */
+  @Deprecated
   public ElasticSearchSystemCode getClientCounty() {
     return clientCounty;
   }
@@ -1396,9 +1397,29 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * Set client county
    * 
    * @param clientCounty The client county
+   * @deprecated Use {@link #setClientCounties(List)}
    */
+  @Deprecated
   public void setClientCounty(ElasticSearchSystemCode clientCounty) {
     this.clientCounty = clientCounty;
+  }
+
+  /**
+   * Get the client counties
+   * 
+   * @return The client counties
+   */
+  public List<ElasticSearchSystemCode> getClientCounties() {
+    return clientCounties;
+  }
+
+  /**
+   * Set the client counties
+   * 
+   * @param clientCounties The client counties
+   */
+  public void setClientCounties(List<ElasticSearchSystemCode> clientCounties) {
+    this.clientCounties = clientCounties;
   }
 
   /**

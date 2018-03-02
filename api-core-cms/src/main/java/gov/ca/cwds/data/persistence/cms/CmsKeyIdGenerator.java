@@ -102,7 +102,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * where:
  *   All timestamp fields include leading zeros.
  *   t... represents convolved time
- *   p... represents the staffperson
+ *   p... represents the staff person
  *   YYYY represents the year
  *   MM   represents the month
  *   DD   represents the day of the month
@@ -206,11 +206,30 @@ public final class CmsKeyIdGenerator {
       'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
       'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 
+  private static String currentValue;
+
   /**
    * Static class only, do not instantiate.
    */
-  CmsKeyIdGenerator() {
+  private CmsKeyIdGenerator() {
     // Static class only, do not instantiate.
+  }
+
+
+  /**
+   * Generate next identifier with the given staff id.
+   *
+   * @param staffId the staffId
+   * @return the unique key from staffId
+   */
+  public static synchronized String getNextValue(String staffId) {
+    String newValue;
+    do {
+      newValue = generate(staffId, new Date());
+    } while (newValue.equals(currentValue));
+
+    currentValue = newValue;
+    return currentValue;
   }
 
   /**
@@ -220,7 +239,7 @@ public final class CmsKeyIdGenerator {
    * @return CMS formatted timestamp
    * @throws ParseException on parsing error
    */
-  protected String createTimestampStr(final Date ts) throws ParseException {
+  protected static String createTimestampStr(final Date ts) throws ParseException {
     return ts == null ? createTimestampStr()
         : doubleToStrN(7, timestampToDouble(getTimestampSeed(ts)), POWER_BASE62);
   }
@@ -229,16 +248,16 @@ public final class CmsKeyIdGenerator {
    * Format the CMS timestamp String, the last 7 characters of the key.
    * 
    * <p>
-   * Code taken from the original C++ algorithm, designed for a fat client Visual Basic application.
-   * In that world of dial-up modems, the inefficiency of waiting on hundredths of a second for a
-   * single user was acceptable. Obviously, this approach makes little sense today in the age of web
-   * servers and pervasive, wireless internet connections.
+   * Code taken originally from the original C++ algorithm, designed for legacy fat client Visual
+   * Basic application. In that world of dial-up modems, the inefficiency of waiting on hundredths
+   * of a second for a single user was acceptable. Obviously, this approach makes little sense today
+   * in the age of web servers and pervasive, wireless internet connections.
    * </p>
    * 
    * @return CMS formatted timestamp
    * @throws ParseException on parsing error
    */
-  protected String createTimestampStr() throws ParseException {
+  protected static String createTimestampStr() throws ParseException {
     double nTimestamp = 0;
     double nPreviousTimestamp = 0; // previous value - used for UNIQUENESS!
 
@@ -249,7 +268,7 @@ public final class CmsKeyIdGenerator {
       // If the timestamp value is the same as before, stay in the loop.
       // Otherwise, break out since it is unique.
       if (nTimestamp == nPreviousTimestamp) { // NOSONAR
-        Thread.yield();
+        Thread.yield(); // From original algorithm
         continue;
       } else {
         break;
@@ -264,7 +283,7 @@ public final class CmsKeyIdGenerator {
    * @param cal preferred timestamp
    * @return the timestamp in double
    */
-  public double timestampToDouble(final Calendar cal) {
+  public static double timestampToDouble(final Calendar cal) {
     double ret = 0;
     final NumberFormat fmt = new DecimalFormat("###,###.000");
 
@@ -298,7 +317,7 @@ public final class CmsKeyIdGenerator {
    * @param powers the power vector for the destination base
    * @return the double to string
    */
-  public String doubleToStrN(int dstLen, double src, final BigDecimal[] powers) {
+  public static String doubleToStrN(int dstLen, double src, final BigDecimal[] powers) {
     int i;
     int p = 0;
     double integral;
@@ -377,7 +396,7 @@ public final class CmsKeyIdGenerator {
    * @param ts timestamp to use or null for current date/time
    * @return Calendar set to preferred timestamp
    */
-  protected final Calendar getTimestampSeed(final Date ts) {
+  protected static final Calendar getTimestampSeed(final Date ts) {
     Calendar cal = Calendar.getInstance();
 
     if (ts != null) {
@@ -394,7 +413,7 @@ public final class CmsKeyIdGenerator {
    * @param ts timestamp to use or null for current date/time
    * @return generated 10 character, base-62 key
    */
-  protected String makeKey(final String staffId, final Date ts) {
+  protected static String makeKey(final String staffId, final Date ts) {
     return makeKey(new StringKey(staffId), ts);
   }
 
@@ -405,7 +424,7 @@ public final class CmsKeyIdGenerator {
    * @param ts timestamp to use or null for current date/time
    * @return the key from staffID
    */
-  protected String makeKey(final StringKey wrap, final Date ts) {
+  protected static String makeKey(final StringKey wrap, final Date ts) {
     try {
       ResourceParamValidator.<StringKey>validate(wrap);
       return createTimestampStr(ts).trim() + wrap.getValue();
@@ -415,25 +434,14 @@ public final class CmsKeyIdGenerator {
   }
 
   /**
-   * Simplified overload. Generate an identifier with the given staff id and current timestamp.
-   * 
-   * @param staffId the staffId
-   * @return the unique key from staffId
-   */
-  public static String generate(String staffId) {
-    return generate(staffId, new Date());
-  }
-
-  /**
    * Generate an identifier with the given staff id and current timestamp.
    * 
    * @param staffId three char staff id
    * @param ts timestamp to use
    * @return unique key from staff id and timestamp
    */
-  public static String generate(String staffId, final Date ts) {
-    final CmsKeyIdGenerator rend = new CmsKeyIdGenerator();
-    return rend.makeKey(!StringUtils.isBlank(staffId) ? staffId : DEFAULT_USER_ID, ts);
+  protected static String generate(String staffId, final Date ts) {
+    return makeKey(!StringUtils.isBlank(staffId) ? staffId : DEFAULT_USER_ID, ts);
   }
 
   /**

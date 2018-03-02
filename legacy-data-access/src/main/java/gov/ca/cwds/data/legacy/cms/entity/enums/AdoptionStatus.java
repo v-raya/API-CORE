@@ -18,6 +18,10 @@ public enum AdoptionStatus implements EntityEnum<String> {
     this.description = description;
   }
 
+  public static AdoptionStatus fromCode(String code) {
+    return new AdoptionStatusConverter().convertToEntityAttribute(code);
+  }
+
   @Override
   public String getCode() {
     return code;

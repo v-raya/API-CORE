@@ -11,7 +11,7 @@ import org.hibernate.annotations.NamedQuery;
 @Entity
 @Cacheable
 @DiscriminatorValue(value = "ASSG_RLC")
-@NamedQuery(name = SecondaryAssignmentRoleType.NQ_ALL, query = "FROM SecondaryAssignmentRoleType")
+@NamedQuery(name = SecondaryAssignmentRoleType.NQ_ALL, query = "FROM gov.ca.cwds.data.legacy.cms.entity.syscodes.SecondaryAssignmentRoleType")
 public class SecondaryAssignmentRoleType extends SystemCodeTable {
 
   private static final long serialVersionUID = 1417537320344197400L;

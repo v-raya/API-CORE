@@ -17,6 +17,10 @@ public enum DateOfBirthStatus implements EntityEnum<String> {
     this.description = description;
   }
 
+  public static DateOfBirthStatus fromCode(String code) {
+    return new DateOfBirthStatusConverter().convertToEntityAttribute(code);
+  }
+
   @Override
   public String getCode() {
     return code;

@@ -1,0 +1,40 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome
+import gov.ca.cwds.data.legacy.cms.entity.OtherAdultsInPlacementHome
+import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO
+import gov.ca.cwds.cms.data.access.dto.OtherAdultInHomeEntityAwareDTO
+import gov.ca.cwds.security.realm.PerryAccount
+
+global java.util.Set validationDetailsList
+
+rule "R-00180"
+  dialect "mvel"
+  agenda-group "placement-home-agenda"
+  when
+      /*
+      Code: R - 00180
+
+      Field: fraOtherAdultsInHome.txtEndDate, fraOtherAdultsInHome.txtStartDate
+
+      Rule Txt
+      OTHER_ADULTS_IN_PLACEMENT_HOME: Start_Date must be <= OTHER_ADULTS_IN_PLACEMENT_HOME: End_Date
+
+      Logic
+      OTHER_CHILDREN_IN_PLACEMENT_HOME: Birth_Date must be <= than system date.
+      For Placement Home Notebook in the OtherChildrenInHome Page Use PM Other
+      Children in Home View for any additional information needed.
+      */
+      PlacementHomeEntityAwareDTO($list : otherAdultInHomeParameterObjects)
+      $otherAdultDTO: OtherAdultInHomeEntityAwareDTO() from $list
+      $otherAdults : OtherAdultsInPlacementHome(startDt != null && endDt != null, eval(startDt.isAfter(endDt))) from $otherAdultDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-00180");
+      details.setProperty("OtherAdultsInPlacementHome.startDt");
+      details.setInvalidValue($otherAdults.getStartDt());
+      details.setUserMessage("Other adults' start date must be less then end date. Other adult ID: " + $otherAdults.identifier);
+      details.setTechnicalMessage("Violation of rule: OTHER_ADULTS_IN_PLACEMENT_HOME: Start_Date must be <= OTHER_ADULTS_IN_PLACEMENT_HOME: End_Date");
+      validationDetailsList.add(details);
+end
+
+

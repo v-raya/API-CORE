@@ -6,5 +6,5 @@ include 'api-core-abac'
 include 'legacy-data-access'
 include 'legacy-data-access-services'
 include 'drools-engine'
-
+include 'api-core-test-support'
 

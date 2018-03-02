@@ -13,9 +13,7 @@ import gov.ca.cwds.data.std.ApiObjectIdentity;
  */
 public class ElasticSearchPersonAllegation extends ApiObjectIdentity
     implements ApiTypedIdentifier<String> {
-  /**
-   * Default serialization version.
-   */
+
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("id")
@@ -67,7 +65,7 @@ public class ElasticSearchPersonAllegation extends ApiObjectIdentity
   private String victimLegacyClientId;
 
   @JsonProperty("legacy_descriptor")
-  @JsonInclude(JsonInclude.Include.NON_NULL)
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
 
   @JsonProperty("victim")

@@ -1,27 +1,30 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
-import gov.ca.cwds.data.legacy.cms.entity.converter.StringToRequiredLongConverter;
-import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import gov.ca.cwds.data.legacy.cms.entity.converter.StringToRequiredLongConverter;
+import gov.ca.cwds.data.persistence.PersistentObject;
 
 /**
  * @author CWDS CALS API Team
  *
- * Contact information to be used in the event of an emergency.
+ *         Contact information to be used in the event of an emergency.
  *
  */
 @Entity
 @Table(name = "EM_CNT_T")
-@SuppressWarnings({"squid:S3437"}) //LocalDate is serializable
+@SuppressWarnings({"squid:S3437"}) // LocalDate is serializable
 public class EmergencyContactDetail implements PersistentObject {
 
   private static final long serialVersionUID = -5970396226634857223L;
@@ -65,7 +68,7 @@ public class EmergencyContactDetail implements PersistentObject {
    */
   @Basic
   @Column(name = "PRI_PH_NO", nullable = true, precision = 0)
-  @Convert( converter = StringToRequiredLongConverter.class)
+  @Convert(converter = StringToRequiredLongConverter.class)
   private String priPhNo;
 
   /**
@@ -82,7 +85,7 @@ public class EmergencyContactDetail implements PersistentObject {
    */
   @Basic
   @Column(name = "ALT_PH_NO", nullable = true, precision = 0)
-  @Convert( converter = StringToRequiredLongConverter.class)
+  @Convert(converter = StringToRequiredLongConverter.class)
   private String altPhNo;
 
   /**
@@ -101,7 +104,7 @@ public class EmergencyContactDetail implements PersistentObject {
   /**
    * STREET_NUMBER - The street or house number associated with the street name as part of the
    * EMERGENCY CONTACT person's address. This may include the fractional or alphabetic modifier,
-   * e.g., A-17, 119-10, 39.2, 100 ½, etc.
+   * e.g., A-17, 119-10, 39.2, 100.5, etc.
    */
   @Basic
   @Column(name = "STREET_NO", nullable = true, length = 10)

@@ -15,13 +15,10 @@ import gov.ca.cwds.data.std.ApiMarker;
  */
 public class User implements ApiMarker, Serializable {
 
-  /**
-   * Default serialization.
-   */
   private static final long serialVersionUID = 1L;
 
   private final String racf;
-  private final transient Subject subject;
+  private final Subject subject;
 
   /**
    * Constructor.
@@ -47,4 +44,5 @@ public class User implements ApiMarker, Serializable {
   public Subject getSubject() {
     return subject;
   }
+
 }

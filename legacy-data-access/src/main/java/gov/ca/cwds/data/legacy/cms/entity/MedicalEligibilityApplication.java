@@ -1,10 +1,8 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
-
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.enums.IveEligebleStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.TypeOfApplication;
-import gov.ca.cwds.data.persistence.PersistentObject;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.NamedQuery;
 
@@ -13,12 +11,11 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @NamedQuery(
         name = MedicalEligibilityApplication.NQ_FIND_BY_CHILD_CLIENT_ID,
         query =
-                "SELECT mea FROM MedicalEligibilityApplication mea"
+                "SELECT mea FROM gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication mea"
                         + " WHERE mea.childClient.victimClientId = :" + MedicalEligibilityApplication.NQ_PARAM_CHILD_CLIENT_ID
 )
 /**

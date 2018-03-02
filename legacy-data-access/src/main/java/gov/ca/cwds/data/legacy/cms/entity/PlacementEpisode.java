@@ -1,6 +1,5 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
-import gov.ca.cwds.data.legacy.cms.entity.BasePlacementEpisode;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;

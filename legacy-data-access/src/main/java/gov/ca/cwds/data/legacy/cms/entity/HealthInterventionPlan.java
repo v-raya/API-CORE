@@ -27,7 +27,7 @@ import org.hibernate.annotations.NotFoundAction;
 @NamedQuery(
   name = HealthInterventionPlan.FIND_ACTIVE_PLANS_BY_CLIENT_ID,
   query =
-      "SELECT plan FROM HealthInterventionPlan plan where plan.client.id =:"
+      "SELECT plan FROM gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan plan where plan.childClient.id =:"
           + HealthInterventionPlan.PARAM_CLIENT_ID
           + " and plan.endDate is null"
 )
@@ -47,11 +47,11 @@ public class HealthInterventionPlan extends CmsPersistentObject {
   @Fetch(FetchMode.SELECT)
   @JoinColumn(
     name = "FKCHLD_CLT",
-    referencedColumnName = "IDENTIFIER",
+    referencedColumnName = "FKCLIENT_T",
     insertable = false,
     updatable = false
   )
-  private Client client;
+  private ChildClient childClient;
 
   @NotNull
   @Column(
@@ -87,17 +87,30 @@ public class HealthInterventionPlan extends CmsPersistentObject {
   @Column(name = "END_DT")
   private LocalDate endDate;
 
+  /**
+   * MEDICAL_NECESSITY_DATE - The date the Childs mental health needs were determined to be a Medical Necessity.
+   */
+  @Column(name = "MEDNCST_DT")
+  private LocalDate medicalNecessityDate;
+
+  /**
+   * MEDICAL_NECESSITY_CODE - Indicates whether a Child’s Mental Health needs meet the definition of medical necessity.
+   * Yes (Y) or No (N) or Unknown (U).
+   */
+  @Column(name = "MEDNCST_CD", length = 1, nullable = false)
+  private String medicalNecessityCode;
+
   @Override
   public Serializable getPrimaryKey() {
     return id;
   }
 
-  public Client getClient() {
-    return client;
+  public ChildClient getChildClient() {
+    return childClient;
   }
 
-  public void setClient(Client client) {
-    this.client = client;
+  public void setChildClient(ChildClient client) {
+    this.childClient = client;
   }
 
   public String getThirdId() {
@@ -146,6 +159,22 @@ public class HealthInterventionPlan extends CmsPersistentObject {
 
   public void setEndDate(LocalDate endDt) {
     this.endDate = endDt;
+  }
+
+  public LocalDate getMedicalNecessityDate() {
+    return medicalNecessityDate;
+  }
+
+  public void setMedicalNecessityDate(LocalDate medicalNecessityDate) {
+    this.medicalNecessityDate = medicalNecessityDate;
+  }
+
+  public String getMedicalNecessityCode() {
+    return medicalNecessityCode;
+  }
+
+  public void setMedicalNecessityCode(String medicalNecessityCode) {
+    this.medicalNecessityCode = medicalNecessityCode;
   }
 
   @Embeddable

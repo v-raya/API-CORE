@@ -9,22 +9,17 @@ import java.io.Serializable;
  */
 public abstract class DomainObject implements Serializable {
 
-  /**
-   * Base serialization version. Increment by class change.
-   */
   private static final long serialVersionUID = 1L;
+
   public static final String DATE_FORMAT = DomainChef.DATE_FORMAT;
   public static final String TIME_FORMAT = DomainChef.TIME_FORMAT;
   public static final String TIMESTAMP_ISO8601_FORMAT = DomainChef.TIMESTAMP_ISO8601_FORMAT;
 
   /**
-   * 
+   * Default constructor.
    */
-  public DomainObject() {}
+  public DomainObject() {
+    // default
+  }
 
-  @Override
-  public abstract boolean equals(Object obj);
-
-  @Override
-  public abstract int hashCode();
 }

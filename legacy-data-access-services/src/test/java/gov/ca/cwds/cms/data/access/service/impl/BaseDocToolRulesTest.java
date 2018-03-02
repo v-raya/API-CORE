@@ -1,15 +1,19 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
+import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.security.realm.PerryAccount;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Before;
 
-/** @author CWDS CALS API Team */
+/**
+ * @author CWDS CALS API Team
+ */
 public abstract class BaseDocToolRulesTest {
 
   protected DroolsService droolsService;
@@ -21,7 +25,7 @@ public abstract class BaseDocToolRulesTest {
     principal = getPrincipal(getPrivilege());
   }
 
-  protected abstract String getPrivilege();
+  public abstract String getPrivilege();
 
   protected void assertRuleSatisfied(String ruleName, BusinessValidationException e) {
     assertTrue(
@@ -30,13 +34,26 @@ public abstract class BaseDocToolRulesTest {
             .noneMatch(issueDetails -> issueDetails.getCode().equals(ruleName)));
   }
 
-  protected void assertRuleViolatedOnce(String ruleName, BusinessValidationException e) {
+  protected void assertRuleViolated(String ruleName, BusinessValidationException e,
+      int expectedCount) {
     assertTrue(
         e.getValidationDetailsList()
-                .stream()
-                .filter(issueDetails -> issueDetails.getCode().equals(ruleName))
-                .count()
-            == 1);
+            .stream()
+            .filter(issueDetails -> issueDetails.getCode().equals(ruleName))
+            .count()
+            == expectedCount);
+  }
+
+
+  protected void assertRuleViolatedOnce(String ruleName, BusinessValidationException e) {
+    assertRuleViolated(ruleName, e, 1);
+  }
+
+  protected void assertRuleValid(String ruleName, BusinessValidationException e) {
+    assertTrue(
+        e.getValidationDetailsList()
+            .stream()
+            .noneMatch(issueDetails -> issueDetails.getCode().equals(ruleName)));
   }
 
   private static PerryAccount getPrincipal(String privilege) {

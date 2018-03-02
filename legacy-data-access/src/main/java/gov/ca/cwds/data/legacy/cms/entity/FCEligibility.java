@@ -18,13 +18,14 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.hibernate.annotations.Type;
 
 /** @author CWDS TPT-3 Team */
 @Entity
 @Table(name = "FC_ELIGT")
 @NamedQuery(
     name = FCEligibility.FIND_BY_CLIENT,
-    query = "FROM FCEligibility WHERE childClientId = :childId and terminationDate=null"
+    query = "FROM gov.ca.cwds.data.legacy.cms.entity.FCEligibility WHERE childClientId = :childId and terminationDate=null"
 )
 public class FCEligibility extends CmsPersistentObject {
 
@@ -49,6 +50,7 @@ public class FCEligibility extends CmsPersistentObject {
   @Id
   private String childClientId;
 
+  @Type(type = "yes_no")
   @Column(name = "FND_APVIND")
   private boolean fundingApprovedIndicator;
 

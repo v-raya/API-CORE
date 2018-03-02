@@ -1,6 +1,6 @@
 import gov.ca.cwds.rest.exception.IssueDetails
 import gov.ca.cwds.data.legacy.cms.entity.Client
-import gov.ca.cwds.data.legacy.cms.entity.ClientScpEthnicity
+import gov.ca.cwds.data.legacy.cms.entity.ClientOtherEthnicity
 import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
 
 global java.util.Set validationDetailsList
@@ -17,8 +17,8 @@ rule "R-00742"
         If CLIENT.Primary Ethnicity is blank, CLIENT_SCP_ETHNICITY.Ethnicity_Type must be blank.
       */
       $clientAwareDTO: ClientEntityAwareDTO()
-      $clientScpEthnicity : ClientScpEthnicity($clientScpEthnicityCode : ethnctyc) from $clientAwareDTO.clientScpEthnicities
-      $client: Client(primaryEthnicityCode == (short)0, $clientScpEthnicityCode > (short)0) from $clientAwareDTO.entity
+      $otherEthnicity : ClientOtherEthnicity($otherEthnicityCode : ethnicityCode) from $clientAwareDTO.otherEthnicities
+      $client: Client(primaryEthnicityCode == (short)0, $otherEthnicityCode > (short)0) from $clientAwareDTO.entity
 
 
   then
