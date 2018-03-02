@@ -1,6 +1,8 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
 import com.google.common.base.Objects;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -10,7 +12,7 @@ public class PlacementFacilityTypeHistoryPK implements Serializable {
 
     private static final long serialVersionUID = -3497372643940393467L;
     @Id
-    @Column(name = "FKCLIENT_T", nullable = false, length = 10)
+    @Column(name = "FKPLC_HM_T", nullable = false, length = 10)
     private String fkplcHmT;
 
     @Id
@@ -43,19 +45,11 @@ public class PlacementFacilityTypeHistoryPK implements Serializable {
 
     @Override
     public final boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof PlacementFacilityTypeHistoryPK)) {
-            return false;
-        }
-        PlacementFacilityTypeHistoryPK that = (PlacementFacilityTypeHistoryPK) o;
-        return Objects.equal(fkplcHmT, that.fkplcHmT) &&
-                Objects.equal(thirdId, that.thirdId);
+        return EqualsBuilder.reflectionEquals(this, o);
     }
 
     @Override
     public final int hashCode() {
-        return Objects.hashCode(fkplcHmT, thirdId);
+        return  HashCodeBuilder.reflectionHashCode(this);
     }
 }

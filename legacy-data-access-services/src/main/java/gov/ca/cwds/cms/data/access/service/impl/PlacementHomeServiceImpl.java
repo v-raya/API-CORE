@@ -15,6 +15,7 @@ import gov.ca.cwds.cms.data.access.service.PlacementHomeService;
 import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
 import gov.ca.cwds.cms.data.access.service.rules.PlacementHomeDroolsConfiguration;
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
+import gov.ca.cwds.cms.data.access.dao.PlacementFacilityTypeHistoryDao;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
 import gov.ca.cwds.data.legacy.cms.entity.*;
 import gov.ca.cwds.drools.DroolsException;
@@ -27,9 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
 import static gov.ca.cwds.cms.data.access.service.impl.IdGenerator.generateId;
 import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
@@ -66,6 +65,9 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
 
   @Inject
   private PlacementHomeProfileDao placementHomeProfileDao;
+
+  @Inject
+  private PlacementFacilityTypeHistoryDao placementFacilityTypeHistoryDao;
 
   @Inject
   private SubstituteCareProviderService substituteCareProviderService;
@@ -105,7 +107,7 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
   }
 
   private void runRulesAgendaGroup(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO,
-      PlacementHomeDroolsConfiguration dataProcessingInstance, PerryAccount principal2)
+                                   PlacementHomeDroolsConfiguration dataProcessingInstance, PerryAccount principal2)
       throws DroolsException {
     Set<IssueDetails> detailsList =
         droolsService.performBusinessRules(
@@ -130,6 +132,7 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
       createBackgroundCheck();
       createEmergencyContactDetail(placementHomeEntityAwareDTO);
       createPlacementHomeProfile(placementHomeEntityAwareDTO);
+      createPlacementFacilityTypeHistory(placementHomeEntityAwareDTO);
       createSubstituteCareProviders(placementHomeEntityAwareDTO);
       createOtherAdultsInHome(placementHomeEntityAwareDTO);
       createOtherChildrenInHome(placementHomeEntityAwareDTO);
@@ -313,6 +316,19 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
       placementHomeProfile.setFkplcHmT(placementHome.getIdentifier());
       placementHomeProfileDao.create(placementHomeProfile);
     }
+  }
+
+  private void createPlacementFacilityTypeHistory(PlacementHomeEntityAwareDTO parameterObject) {
+    final PlacementHome placementHome = parameterObject.getEntity();
+    PlacementFacilityTypeHistory placementFacilityTypeHistory = new PlacementFacilityTypeHistory();
+    placementFacilityTypeHistory.setThirdId(generateId());
+    placementFacilityTypeHistory.setFkplcHmT(placementHome.getIdentifier());
+    placementFacilityTypeHistory.setPlacementFacilityType(placementHome.getFacilityType());
+    placementFacilityTypeHistory.setStartTimestamp(LocalDateTime.now());
+    placementFacilityTypeHistory.setCreationTimestamp(LocalDateTime.now());
+    placementFacilityTypeHistory.setLastUpdateTimestamp(LocalDateTime.now());
+    placementFacilityTypeHistory.setLastUpdateId(getStaffPersonId());
+    placementFacilityTypeHistoryDao.create(placementFacilityTypeHistory);
   }
 
   private void prepareAddressPhoneticSearchKeywords(PlacementHome placementHome) {
