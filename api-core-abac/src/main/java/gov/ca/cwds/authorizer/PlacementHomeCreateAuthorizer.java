@@ -58,15 +58,13 @@ public class PlacementHomeCreateAuthorizer extends BaseAuthorizer<PlacementHome,
       final Set<StaffPrivilegeType> staffPrivilegeTypes,
       final PlacementHome placementHome,
       final boolean authorizationResult) {
-    if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug(
-          "StaffPerson [{}] with staffPrivilegeTypes = {} is creating Placement Home [{}] with condition = [{}]. "
-              + "Authorization result = [{}]",
-          perryAccount.getStaffId(),
-          staffPrivilegeTypes,
-          placementHome.getIdentifier(),
-          authorizationResult
-      );
-    }
+    LOGGER.info(
+        "StaffPerson [{}] with staffPrivilegeTypes = {} is creating Placement Home [{}] with condition = [{}]. "
+            + "Authorization result = [{}]",
+        perryAccount.getStaffId(),
+        staffPrivilegeTypes,
+        placementHome.getIdentifier(),
+        authorizationResult
+    );
   }
 }

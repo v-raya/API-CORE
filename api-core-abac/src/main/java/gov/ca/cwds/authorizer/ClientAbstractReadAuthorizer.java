@@ -5,7 +5,7 @@ import static gov.ca.cwds.authorizer.util.StaffPrivilegeUtil.toStaffPersonPrivil
 
 import com.google.inject.Inject;
 import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
-import gov.ca.cwds.cms.data.access.service.ClientCoreService;
+import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.authorizer.BaseAuthorizer;
@@ -26,7 +26,7 @@ public class ClientAbstractReadAuthorizer extends BaseAuthorizer<Client, String>
   private static final Logger LOGGER = LoggerFactory.getLogger(ClientAbstractReadAuthorizer.class);
 
   @Inject
-  private ClientCoreService clientCoreService;
+  private ClientDao clientDao;
 
   @Inject
   private DroolsAuthorizationService droolsAuthorizationService;
@@ -36,7 +36,7 @@ public class ClientAbstractReadAuthorizer extends BaseAuthorizer<Client, String>
 
   @Override
   protected boolean checkId(final String clientId) {
-    final Client client = clientCoreService.find(clientId);
+    final Client client = clientDao.find(clientId);
     return client == null || checkInstance(client);
   }
 
@@ -98,8 +98,8 @@ public class ClientAbstractReadAuthorizer extends BaseAuthorizer<Client, String>
     }
   }
 
-  void setClientCoreService(ClientCoreService clientCoreService) {
-    this.clientCoreService = clientCoreService;
+  void setClientDao(ClientDao clientDao) {
+    this.clientDao = clientDao;
   }
 
   void setDroolsAuthorizationService(DroolsAuthorizationService droolsAuthorizationService) {
