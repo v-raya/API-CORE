@@ -306,10 +306,7 @@ public final class CmsKeyIdGeneratorTest {
   @Test
   public void generate_Args__String__Date() throws Exception {
     final String staffId = "0X5";
-    final Date ts = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2017-06-09 13:04:22");
-    final String actual = CmsKeyIdGenerator.generate(staffId, ts);
-    // final String expected = "06SoJiH0X5";
-    // assertThat(actual, is(equalTo(expected)));
+    final String actual = CmsKeyIdGenerator.getNextValue(staffId);
     assertThat(actual, is(not("")));
   }
 

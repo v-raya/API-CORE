@@ -41,7 +41,7 @@ public class CreditReportHistory implements PersistentObject {
   public static final String PARAM_CLIENT_ID = "clientId";
   public static final String FIND_BY_CLIENT_ID = "CreditReportHistory.findByClient";
 
-  @Column(name = "THIRD_ID", length = 10)
+  @Column(name = "COMNT_TXT", length = 10)
   private String commentText;
 
   @Column(name = "CTYREQ_DT")

@@ -226,7 +226,7 @@ public final class CmsKeyIdGenerator {
     String newValue;
     do {
       newValue = generate(staffId, new Date());
-    } while(newValue.equals(currentValue));
+    } while (newValue.equals(currentValue));
 
     currentValue = newValue;
     return currentValue;
@@ -248,10 +248,10 @@ public final class CmsKeyIdGenerator {
    * Format the CMS timestamp String, the last 7 characters of the key.
    * 
    * <p>
-   * Code taken originally from the original C++ algorithm, designed for legacy fat client Visual Basic application.
-   * In that world of dial-up modems, the inefficiency of waiting on hundredths of a second for a
-   * single user was acceptable. Obviously, this approach makes little sense today in the age of web
-   * servers and pervasive, wireless internet connections.
+   * Code taken originally from the original C++ algorithm, designed for legacy fat client Visual
+   * Basic application. In that world of dial-up modems, the inefficiency of waiting on hundredths
+   * of a second for a single user was acceptable. Obviously, this approach makes little sense today
+   * in the age of web servers and pervasive, wireless internet connections.
    * </p>
    * 
    * @return CMS formatted timestamp
@@ -440,7 +440,7 @@ public final class CmsKeyIdGenerator {
    * @param ts timestamp to use
    * @return unique key from staff id and timestamp
    */
-  public static String generate(String staffId, final Date ts) {
+  protected static String generate(String staffId, final Date ts) {
     return makeKey(!StringUtils.isBlank(staffId) ? staffId : DEFAULT_USER_ID, ts);
   }
 

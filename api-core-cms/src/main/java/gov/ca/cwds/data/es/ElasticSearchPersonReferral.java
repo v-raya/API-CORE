@@ -68,7 +68,7 @@ public class ElasticSearchPersonReferral extends ApiObjectIdentity
   private ElasticSearchAccessLimitation accessLimitation = new ElasticSearchAccessLimitation();
 
   @JsonProperty("legacy_descriptor")
-  @JsonInclude(JsonInclude.Include.NON_NULL)
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
 
   @Override

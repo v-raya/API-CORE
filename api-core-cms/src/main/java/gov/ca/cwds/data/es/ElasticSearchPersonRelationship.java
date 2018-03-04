@@ -13,9 +13,6 @@ import gov.ca.cwds.data.std.ApiObjectIdentity;
  */
 public class ElasticSearchPersonRelationship extends ApiObjectIdentity {
 
-  /**
-   * Default serialization version.
-   */
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("related_person_id")
@@ -49,51 +46,42 @@ public class ElasticSearchPersonRelationship extends ApiObjectIdentity {
   private ElasticSearchLegacyDescriptor legacyDescriptor = new ElasticSearchLegacyDescriptor();
 
   @JsonIgnore
-  @SuppressWarnings("javadoc")
   public String getRelatedPersonId() {
     return relatedPersonId;
   }
 
-  @SuppressWarnings("javadoc")
   public void setRelatedPersonId(String relatedPersonId) {
     this.relatedPersonId = relatedPersonId;
   }
 
   @JsonIgnore
-  @SuppressWarnings("javadoc")
   public String getRelatedPersonFirstName() {
     return relatedPersonFirstName;
   }
 
-  @SuppressWarnings("javadoc")
   public void setRelatedPersonFirstName(String relatedPersonFirstName) {
     this.relatedPersonFirstName = relatedPersonFirstName;
   }
 
   @JsonIgnore
-  @SuppressWarnings("javadoc")
   public String getRelatedPersonLastName() {
     return relatedPersonLastName;
   }
 
-  @SuppressWarnings("javadoc")
   public void setRelatedPersonLastName(String relatedPersonLastName) {
     this.relatedPersonLastName = relatedPersonLastName;
   }
 
   @JsonIgnore
-  @SuppressWarnings("javadoc")
   public String getIndexedPersonRelationship() {
     return indexedPersonRelationship;
   }
 
-  @SuppressWarnings("javadoc")
   public void setIndexedPersonRelationship(String indexedPersonRelationship) {
     this.indexedPersonRelationship = indexedPersonRelationship;
   }
 
   // @Deprecated
-  @SuppressWarnings("javadoc")
   public String getRelatedPersonLegacyId() {
     return relatedPersonLegacyId;
   }

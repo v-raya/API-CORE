@@ -1,15 +1,19 @@
 package gov.ca.cwds.data.legacy.cms.dao;
 
-import com.google.inject.Inject;
-import gov.ca.cwds.data.DaoException;
-import gov.ca.cwds.inject.CmsSessionFactory;
 import java.text.SimpleDateFormat;
+
 import javax.persistence.ParameterMode;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.procedure.ProcedureCall;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.inject.Inject;
+
+import gov.ca.cwds.data.DaoException;
+import gov.ca.cwds.inject.CmsSessionFactory;
 
 /**
  * @author CWDS CALS API Team
@@ -30,7 +34,7 @@ public class SsaName3Dao {
    * Call DB2 stored procedure SPSSANAME3 to insert soundex records for client search. Story
    * #146481759.
    *
-   * @param parameterObject.tableName table name
+   * @param parameterObject table name
    * @param crudOper CRUD operation (I/U/D)
    * @param identifier legacy identifier
    * @param nameCd name code
@@ -48,9 +52,8 @@ public class SsaName3Dao {
     final String STORED_PROC_NAME = "SPSSANAME3";
     final String schema =
         (String) session.getSessionFactory().getProperties().get("hibernate.default_schema");
-    String strdtts =
-        new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS")
-            .format(parameterObject.getUpdateTimeStamp());
+    String strdtts = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS")
+        .format(parameterObject.getUpdateTimeStamp());
 
     try {
       ProcedureCall q = session.createStoredProcedureCall(schema + "." + STORED_PROC_NAME);

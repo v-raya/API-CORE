@@ -7,11 +7,11 @@ import gov.ca.cwds.data.std.ApiMarker;
 import gov.ca.cwds.inject.SystemCodeCache;
 
 /**
- * Store singleton, typed instances for easy retrieval. This is useful where dependency injection
- * into short-lived beans is overly complicated or unwieldy.
+ * Store singleton, typed instances for easy retrieval. Useful where dependency injection into
+ * short-lived beans is overly complicated or unwieldy.
  * 
  * <p>
- * Usage:
+ * <h3>Usage:</h3>
  * </p>
  * 
  * <p>
@@ -21,7 +21,7 @@ import gov.ca.cwds.inject.SystemCodeCache;
  * </p>
  * 
  * <p>
- * <strong>Note on static generics:</strong>
+ * <h3>Note on static generics:</h3>
  * </p>
  * 
  * <p>
@@ -32,10 +32,11 @@ import gov.ca.cwds.inject.SystemCodeCache;
  * </p>
  * 
  * <p>
- * To paraphrase Java's documentation, static variables and methods are shared among ALL class
- * instances. For example, {@code MyClass<T>} would contain hypothetical static variable
+ * To paraphrase Java's documentation, static variables and methods are <strong>shared</strong>
+ * among ALL class instances. For example, {@code MyClass<T>} contains static variable
  * {@code private static T shared}. Unfortunately, {@code MyClass<ABC>} would <strong>share</strong>
- * that static variable with {@code MyClass<XYZ>}. Which static type would win, ABC or XYZ?
+ * that static variable with {@code MyClass<XYZ>}. Question: which static type would win, ABC or
+ * XYZ?
  * </p>
  * 
  * <p>
@@ -49,9 +50,6 @@ import gov.ca.cwds.inject.SystemCodeCache;
  */
 public class DeferredRegistry<T extends ApiMarker> implements ApiMarker {
 
-  /**
-   * Default.
-   */
   private static final long serialVersionUID = 1L;
 
   /**
@@ -132,7 +130,6 @@ public class DeferredRegistry<T extends ApiMarker> implements ApiMarker {
     return reg != null ? reg.wrapped : null;
   }
 
-  @SuppressWarnings("javadoc")
   public Class<T> getKlass() {
     return klass;
   }

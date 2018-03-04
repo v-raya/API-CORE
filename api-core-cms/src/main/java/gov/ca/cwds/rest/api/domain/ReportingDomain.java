@@ -13,9 +13,6 @@ import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
  */
 public abstract class ReportingDomain extends DomainObject implements Request, Response {
 
-  /**
-   * Serialization version
-   */
   private static final long serialVersionUID = 1L;
 
   @JsonIgnore

@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -40,8 +41,6 @@ import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NamedQuery;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
 
 /** @author CWDS CALS API Team */
@@ -95,6 +94,13 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   )
   @OrderBy("removalDt DESC")
   private Set<PlacementEpisode> placementEpisodes = new HashSet<>();
+
+  @OneToMany(
+    mappedBy = "client",
+    fetch = FetchType.LAZY,
+    cascade = CascadeType.ALL,
+    orphanRemoval = true)
+  private Set<ClientOtherEthnicity> otherEthnicities = new HashSet<>();
 
   @Column(name = "ADJDEL_IND", length = 1)
   @Convert(converter = NullableBooleanConverter.class)
@@ -266,7 +272,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   private LocalDate motherParentalRightTermDate;
 
   @NotNull
-  @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
   @JoinColumn(name = "NAME_TPC", referencedColumnName = "SYS_ID")
@@ -347,6 +352,20 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
   @Type(type = "yes_no")
   @Column(name = "ZIPPY_IND", nullable = false, length = 1)
   private boolean zippyCreatedIndicator;
+
+  public void addOtherEthnicity(ClientOtherEthnicity otherEthnicity) {
+    otherEthnicities.add(otherEthnicity);
+    otherEthnicity.setClient(this);
+  }
+
+  public void removeOtherEthnicity(ClientOtherEthnicity otherEthnicity) {
+    otherEthnicities.remove(otherEthnicity);
+    otherEthnicity.setClient(null);
+  }
+
+  public Set<ClientOtherEthnicity> getOtherEthnicities() {
+    return otherEthnicities;
+  }
 
   @Override
   public final boolean equals(Object o) {

@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest;
 
+import java.util.Map;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,16 +15,24 @@ import gov.ca.cwds.data.es.ElasticsearchDao;
 public class ElasticsearchConfiguration {
 
   @NotNull
-  @JsonProperty("elasticsearch.host")
-  private String elasticsearchHost;
-
-  @NotNull
   @JsonProperty("elasticsearch.cluster")
   private String elasticsearchCluster;
 
   @NotNull
+  @JsonProperty("elasticsearch.host")
+  private String elasticsearchHost;
+
+  @NotNull
   @JsonProperty("elasticsearch.port")
   private String elasticsearchPort;
+
+  @NotNull
+  @JsonProperty("elasticsearch.additional.hosts")
+  private Map<String, String> additionalHosts;
+
+  @NotNull
+  @JsonProperty("elasticsearch.additional.ports")
+  private Map<String, String> additionalPorts;
 
   @NotNull
   @JsonProperty("elasticsearch.alias")
@@ -60,17 +69,28 @@ public class ElasticsearchConfiguration {
   }
 
   /**
+   * @return the list of additional elasticsearch ports for clustering support
+   */
+  public String getElasticsearchPort() {
+    return elasticsearchPort;
+  }
+
+  /**
+   * @return the list of additional elasticsearch hosts for clustering support
+   */
+  public Map<String, String> getAdditionalHosts() {
+    return additionalHosts;
+  }
+
+  public Map<String, String> getAdditionalPorts() {
+    return additionalPorts;
+  }
+
+  /**
    * @return the elasticsearchCluster
    */
   public String getElasticsearchCluster() {
     return elasticsearchCluster;
-  }
-
-  /**
-   * @return the elasticsearchPort
-   */
-  public String getElasticsearchPort() {
-    return elasticsearchPort;
   }
 
   /**

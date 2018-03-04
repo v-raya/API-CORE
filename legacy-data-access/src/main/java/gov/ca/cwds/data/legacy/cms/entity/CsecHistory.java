@@ -2,6 +2,7 @@ package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.SexualExploitationType;
+import gov.ca.cwds.data.persistence.CompositeKey;
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -40,6 +41,7 @@ public class CsecHistory extends CmsPersistentObject {
   @Column(name = "END_DT")
   private LocalDate endDate;
 
+  @Id
   @Column(name = "FKCHLD_CLT")
   private String childClient;
 
@@ -55,7 +57,7 @@ public class CsecHistory extends CmsPersistentObject {
 
   @Override
   public Serializable getPrimaryKey() {
-    return getThirdId();
+    return new CompositeKey(getThirdId(), getChildClient());
   }
 
   public LocalDate getCreationDate() {
