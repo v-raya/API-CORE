@@ -31,5 +31,12 @@ public final class Constants {
     private StaffPersonPrivileges() {}
   }
 
+  public static class Authorize {
+    public static final String CLIENT_READ_CLIENT = "client:read:client";
+
+    private Authorize() {
+    }
+  }
+
 
 }

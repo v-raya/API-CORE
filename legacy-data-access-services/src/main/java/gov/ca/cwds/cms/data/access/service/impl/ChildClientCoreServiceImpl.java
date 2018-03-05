@@ -3,6 +3,7 @@ package gov.ca.cwds.cms.data.access.service.impl;
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.ChildClientCoreService;
+import gov.ca.cwds.data.legacy.cms.dao.ChildClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.CreditReportHistoryDao;
 import gov.ca.cwds.data.legacy.cms.dao.CsecHistoryDao;
 import gov.ca.cwds.data.legacy.cms.dao.FCEligibilityDao;
@@ -27,8 +28,13 @@ import gov.ca.cwds.data.legacy.cms.entity.ParentalRightsTermination;
 import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
 import gov.ca.cwds.data.legacy.cms.entity.SchoolOriginHistory;
 import gov.ca.cwds.data.legacy.cms.entity.SpecialEducation;
+import gov.ca.cwds.security.annotations.Authorize;
+
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+
+import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
 
 /** @author CWDS TPT-3 Team */
 public class ChildClientCoreServiceImpl extends ClientCoreServiceBase<ChildClientEntityAwareDTO>
@@ -45,6 +51,13 @@ public class ChildClientCoreServiceImpl extends ClientCoreServiceBase<ChildClien
   @Inject private HealthReferralDao healthReferralDao;
   @Inject private SchoolOriginHistoryDao schoolOriginHistoryDao;
   @Inject private HealthScreeningDao healthScreeningDao;
+  @Inject private ChildClientDao childClientDao;
+
+  @Override
+  @Authorize(CLIENT_READ_CLIENT)
+  public ChildClient find(Serializable primaryKey) {
+    return childClientDao.find(primaryKey);
+  }
 
   protected void enrichClientEntityAwareDto(ChildClientEntityAwareDTO clientEntityAwareDTO) {
 
