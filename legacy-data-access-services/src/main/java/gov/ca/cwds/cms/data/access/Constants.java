@@ -1,9 +1,6 @@
 package gov.ca.cwds.cms.data.access;
 
-/**
- * @author CWDS CALS API Team
- */
-
+/** @author CWDS CALS API Team */
 public final class Constants {
 
   private Constants() {}
@@ -18,14 +15,13 @@ public final class Constants {
 
     public static final String ADR_PHTT = "ADR_PHTT";
 
-    private PhoneticSearchTables() {
-    }
-
+    private PhoneticSearchTables() {}
   }
 
   public static class StaffPersonPrivileges {
 
-    public static final String USR_PRV_RESOURCE_MGMT_PLACEMENT_FACILITY_MAINT = "Resource Mgmt Placement Facility Maint";
+    public static final String USR_PRV_RESOURCE_MGMT_PLACEMENT_FACILITY_MAINT =
+        "Resource Mgmt Placement Facility Maint";
     public static final String USR_PRV_SOC158_APPLICATION = "SOC158 Application";
 
     private StaffPersonPrivileges() {}
@@ -33,10 +29,8 @@ public final class Constants {
 
   public static class Authorize {
     public static final String CLIENT_READ_CLIENT = "client:read:client";
+    public static final String CLIENT_READ_CLIENT_ID = "client:read:clientId";
 
-    private Authorize() {
-    }
+    private Authorize() {}
   }
-
-
 }
