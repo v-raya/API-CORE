@@ -297,7 +297,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
         }
       }
 
-      LOGGER.info("Loaded all system code cache. Size: " + systemCodeMap.size());
+      LOGGER.info("Loaded all system code cache. Size: {}", systemCodeMap.size());
       return systemCodeMap;
     }
   }
