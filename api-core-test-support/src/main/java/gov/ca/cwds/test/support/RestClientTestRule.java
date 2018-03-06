@@ -1,12 +1,18 @@
 package gov.ca.cwds.test.support;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
-import gov.ca.cwds.security.jwt.JwtConfiguration;
-import gov.ca.cwds.security.jwt.JwtService;
-import io.dropwizard.Configuration;
-import io.dropwizard.testing.junit.DropwizardAppRule;
+import static io.dropwizard.testing.FixtureHelpers.fixture;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
+import java.util.Properties;
+
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.WebTarget;
+
 import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClientBuilder;
@@ -16,17 +22,14 @@ import org.junit.runners.model.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.WebTarget;
-import java.io.File;
-import java.io.IOException;
-import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
-import java.util.Properties;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 
-import static io.dropwizard.testing.FixtureHelpers.fixture;
+import gov.ca.cwds.security.jwt.JwtConfiguration;
+import gov.ca.cwds.security.jwt.JwtService;
+import io.dropwizard.Configuration;
+import io.dropwizard.testing.junit.DropwizardAppRule;
 
 
 public class RestClientTestRule<T extends Configuration> implements TestRule {
@@ -38,12 +41,16 @@ public class RestClientTestRule<T extends Configuration> implements TestRule {
 
   private final DropwizardAppRule<T> dropWizardApplication;
 
-  private static final TrustManager[] TRUST_ALL_CERTS = new TrustManager[]{new X509TrustManager() {
+  private static final TrustManager[] TRUST_ALL_CERTS = new TrustManager[] {new X509TrustManager() {
+    @Override
     public X509Certificate[] getAcceptedIssuers() {
       return null;
     }
+
+    @Override
     public void checkClientTrusted(X509Certificate[] certs, String authType) {}
 
+    @Override
     public void checkServerTrusted(X509Certificate[] certs, String authType) {}
   }};
 
@@ -52,7 +59,7 @@ public class RestClientTestRule<T extends Configuration> implements TestRule {
   private JwtConfiguration jwtConfiguration;
   private String token;
 
-  public RestClientTestRule(DropwizardAppRule<T> dropWizardApplication)  {
+  public RestClientTestRule(DropwizardAppRule<T> dropWizardApplication) {
     this.dropWizardApplication = dropWizardApplication;
     this.token = getDefaultToken();
   }
@@ -83,26 +90,28 @@ public class RestClientTestRule<T extends Configuration> implements TestRule {
     }
 
     Properties properties = new Properties();
-    properties.load(getClass().getClassLoader().getResourceAsStream("api-core-test-support-shiro.ini"));
+    properties
+        .load(getClass().getClassLoader().getResourceAsStream("api-core-test-support-shiro.ini"));
 
     jwtConfiguration = new JwtConfiguration();
-    //JWT
+    // JWT
     jwtConfiguration.setTimeout(30);
     jwtConfiguration.setIssuer(properties.getProperty("perryRealm.tokenIssuer"));
     jwtConfiguration.setKeyStore(new JwtConfiguration.KeyStoreConfiguration());
-    //KeyStore
+    // KeyStore
     jwtConfiguration.getKeyStore()
-            .setPath(new File(properties.getProperty("perryRealm.keyStorePath")).getPath());
-    jwtConfiguration.getKeyStore().setPassword(properties.getProperty("perryRealm.keyStorePassword"));
-    //Sign/Validate Key
+        .setPath(new File(properties.getProperty("perryRealm.keyStorePath")).getPath());
+    jwtConfiguration.getKeyStore()
+        .setPassword(properties.getProperty("perryRealm.keyStorePassword"));
+    // Sign/Validate Key
     jwtConfiguration.getKeyStore().setAlias(properties.getProperty("perryRealm.keyStoreAlias"));
     jwtConfiguration.getKeyStore()
-            .setKeyPassword(properties.getProperty("perryRealm.keyStoreKeyPassword"));
-    //Enc Key
+        .setKeyPassword(properties.getProperty("perryRealm.keyStoreKeyPassword"));
+    // Enc Key
     jwtConfiguration
-            .setEncryptionEnabled(Boolean.valueOf(properties.getProperty("perryRealm.useEncryption")));
+        .setEncryptionEnabled(Boolean.valueOf(properties.getProperty("perryRealm.useEncryption")));
     jwtConfiguration.getKeyStore()
-            .setEncKeyPassword(properties.getProperty("perryRealm.encKeyPassword"));
+        .setEncKeyPassword(properties.getProperty("perryRealm.encKeyPassword"));
     jwtConfiguration.getKeyStore().setEncAlias(properties.getProperty("perryRealm.encKeyAlias"));
     jwtConfiguration.setEncryptionMethod(properties.getProperty("perryRealm.encryptionMethod"));
     return jwtConfiguration;
@@ -111,7 +120,8 @@ public class RestClientTestRule<T extends Configuration> implements TestRule {
 
   public WebTarget target(String pathInfo) throws IOException {
     String restUrl = getUriString() + pathInfo;
-    WebTarget target = client.target(restUrl).queryParam("token", token).register(new LoggingFilter());
+    WebTarget target =
+        client.target(restUrl).queryParam("token", token).register(new LoggingFilter());
     token = getDefaultToken();
     return target;
   }
@@ -121,7 +131,7 @@ public class RestClientTestRule<T extends Configuration> implements TestRule {
   }
 
   protected String getUriString() {
-    return isRemoteMode()? getRemoteUrl(): composeUriString();
+    return isRemoteMode() ? getRemoteUrl() : composeUriString();
   }
 
   private boolean isRemoteMode() {
@@ -142,8 +152,8 @@ public class RestClientTestRule<T extends Configuration> implements TestRule {
       @Override
       public void evaluate() throws Throwable {
 
-        JerseyClientBuilder clientBuilder = new JerseyClientBuilder()
-                .property(ClientProperties.CONNECT_TIMEOUT, 5000)
+        JerseyClientBuilder clientBuilder =
+            new JerseyClientBuilder().property(ClientProperties.CONNECT_TIMEOUT, 5000)
                 .property(ClientProperties.READ_TIMEOUT, 20000)
                 .hostnameVerifier((hostName, sslSession) -> {
                   // Just ignore host verification for test purposes
