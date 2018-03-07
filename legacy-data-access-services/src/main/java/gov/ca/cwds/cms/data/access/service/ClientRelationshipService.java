@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.List;
 
+import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT_ID;
 
 public class ClientRelationshipService {
@@ -27,5 +28,9 @@ public class ClientRelationshipService {
   public List<ClientRelationship> findRelationshipsByRightSide(
       @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
     return clientRelationshipDao.findRelationshipsByRightSide(clientId, LocalDate.now());
+  }
+
+  public ClientRelationship create(final ClientRelationship clientRelationship) {
+    return clientRelationshipDao.create(clientRelationship);
   }
 }
