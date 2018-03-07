@@ -1,14 +1,11 @@
 package gov.ca.cwds.service;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import gov.ca.cwds.data.dao.cms.CountyDeterminationDao;
 import io.dropwizard.testing.junit.DAOTestRule;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -16,6 +13,7 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.DatabaseException;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -54,26 +52,19 @@ public class ClientCountyDeterminationServiceTest {
 
   @Test
   public void getClientCounties_success_whenFound() {
-    assertThat(
-        testSubject.getClientCountyById("00jnURO00h"),
-        is((short) 1077)
-    );
+    List<Short> clientCounties = testSubject.getClientCountiesById("00jnURO00h");
+    Assert.assertArrayEquals(new Short[] {1077}, clientCounties.toArray());
   }
 
   @Test
   public void getClientCounties_success_whenCountyIdIsZero() {
-    assertThat(
-        testSubject.getClientCountyById("0044Q7k0Rt"),
-        is(nullValue())
-    );
+    List<Short> clientCounties = testSubject.getClientCountiesById("0044Q7k0Rt");
+    Assert.assertArrayEquals(new Short[] {0}, clientCounties.toArray());
   }
 
   @Test
   public void getClientCounties_success_whenNotFound() {
-    assertThat(
-        testSubject.getClientCountyById("unknownId"),
-        is(nullValue())
-    );
+    Assert.assertTrue(testSubject.getClientCountiesById("unknownId").isEmpty());
   }
 
   private static void runLiquibaseScript(String script) throws LiquibaseException {
