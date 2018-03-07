@@ -59,7 +59,7 @@ public class PlacementHomeCreateAuthorizer extends BaseAuthorizer<PlacementHome,
       final PlacementHome placementHome,
       final boolean authorizationResult) {
     LOGGER.info(
-        "StaffPerson [{}] with staffPrivilegeTypes = {} is creating Placement Home [{}] with condition = [{}]. "
+        "StaffPerson [{}] with staffPrivilegeTypes = {} is creating Placement Home [{}]. "
             + "Authorization result = [{}]",
         perryAccount.getStaffId(),
         staffPrivilegeTypes,

@@ -59,7 +59,7 @@ public class SubstituteCareProviderCreateAuthorizer extends BaseAuthorizer<Subst
       final SubstituteCareProvider substituteCareProvider,
       final boolean authorizationResult) {
     LOGGER.info(
-        "StaffPerson [{}] with staffPrivilegeTypes = {} is creating Substitute Care Provider [{}] with condition = [{}]. "
+        "StaffPerson [{}] with staffPrivilegeTypes = {} is creating Substitute Care Provider [{}]. "
             + "Authorization result = [{}]",
         perryAccount.getStaffId(),
         staffPrivilegeTypes,
