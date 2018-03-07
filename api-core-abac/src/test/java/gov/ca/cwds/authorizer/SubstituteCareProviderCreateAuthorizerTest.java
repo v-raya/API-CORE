@@ -3,17 +3,14 @@ package gov.ca.cwds.authorizer;
 import static gov.ca.cwds.util.PerryAccountUtils.initPerryAccountWithPrivileges;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
-import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
-import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
+import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.realm.PerrySubject;
@@ -29,16 +26,16 @@ import org.powermock.modules.junit4.PowerMockRunner;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(PerrySubject.class)
-public class PlacementHomeCreateAuthorizerTest {
+public class SubstituteCareProviderCreateAuthorizerTest {
 
-  private PlacementHomeCreateAuthorizer testSubject;
+  private SubstituteCareProviderCreateAuthorizer testSubject;
 
   @Before
   public void init() {
     MockitoAnnotations.initMocks(this);
     final DroolsService droolsService = new DroolsService();
     final DroolsAuthorizationService droolsAuthorizationService = new DroolsAuthorizationService(droolsService);
-    testSubject = new PlacementHomeCreateAuthorizer(
+    testSubject = new SubstituteCareProviderCreateAuthorizer(
         droolsAuthorizationService
     );
   }
@@ -81,10 +78,10 @@ public class PlacementHomeCreateAuthorizerTest {
     perryAccount.setCountyName("Alameda");
     mockStatic(PerrySubject.class);
     when(PerrySubject.getPerryAccount()).thenReturn(perryAccount);
-    final PlacementHome placementHome= initPlacementHome();
+    final SubstituteCareProvider substituteCareProvider= initSCP();
 
     // when
-    final boolean actual = testSubject.checkInstance(placementHome);
+    final boolean actual = testSubject.checkInstance(substituteCareProvider);
 
     // then
     assertThat(actual, is(false));
@@ -99,21 +96,19 @@ public class PlacementHomeCreateAuthorizerTest {
     perryAccount.setCountyName("State of California");
     mockStatic(PerrySubject.class);
     when(PerrySubject.getPerryAccount()).thenReturn(perryAccount);
-    final PlacementHome placementHome= initPlacementHome();
+    final SubstituteCareProvider substituteCareProvider= initSCP();
 
     // when
-    final boolean actual = testSubject.checkInstance(placementHome);
+    final boolean actual = testSubject.checkInstance(substituteCareProvider);
 
     // then
     assertThat(actual, is(true));
   }
 
-  private PlacementHome initPlacementHome() {
-    final PlacementHome placementHome = new PlacementHome();
-    placementHome.setIdentifier("id");
-    placementHome.setLicensrCd("CT");
-    placementHome.setFacilityType(Short.valueOf("1416"));
-    return placementHome;
+  private SubstituteCareProvider initSCP() {
+    final SubstituteCareProvider substituteCareProvider = new SubstituteCareProvider();
+    substituteCareProvider.setIdentifier("id");
+    return substituteCareProvider;
   }
 
 }

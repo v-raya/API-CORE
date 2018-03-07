@@ -4,7 +4,7 @@ import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 import gov.ca.cwds.drools.DroolsConfiguration;
 
 /**
- * @author CWDS TPT-3 Team
+ * @author CWDS TPT-2 Team
  */
 public final class PlacementHomeAuthorizationDroolsConfiguration extends DroolsConfiguration<PlacementHome> {
 
