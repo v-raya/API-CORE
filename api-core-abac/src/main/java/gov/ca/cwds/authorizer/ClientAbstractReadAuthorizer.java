@@ -12,6 +12,7 @@ import gov.ca.cwds.security.authorizer.BaseAuthorizer;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.realm.PerrySubject;
 import gov.ca.cwds.service.ClientCountyDeterminationService;
+import java.util.List;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.AuthorizationException;
@@ -53,9 +54,9 @@ public class ClientAbstractReadAuthorizer extends BaseAuthorizer<Client, String>
   }
 
   private ClientCondition getClientCondition(final Client client, final PerryAccount perryAccount) {
-    final Short clientCountyCode = countyDeterminationService.getClientCountyById(client.getIdentifier());
+    final List<Short> clientCountyCodes = countyDeterminationService.getClientCountiesById(client.getIdentifier());
     final Short staffPersonCountyCode = getStaffPersonCountyCode(perryAccount.getCountyCwsCode());
-    return toClientCondition(client, clientCountyCode, staffPersonCountyCode);
+    return toClientCondition(client, clientCountyCodes, staffPersonCountyCode);
   }
 
   private static Short getStaffPersonCountyCode(final String staffCountyCodeString) {

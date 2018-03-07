@@ -20,6 +20,7 @@ import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.rest.exception.IssueDetails;
+import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.io.Serializable;
@@ -27,6 +28,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import org.hibernate.Hibernate;
+
+import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
 
 /** @author CWDS TPT-3 Team */
 public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
@@ -41,6 +44,7 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
   @Inject private NearFatalityDao nearFatalityDao;
 
   @Override
+  @Authorize(CLIENT_READ_CLIENT)
   public Client find(Serializable primaryKey) {
     return clientDao.find(primaryKey);
   }

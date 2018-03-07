@@ -8,6 +8,8 @@ import static org.hamcrest.Matchers.is;
 import gov.ca.cwds.authorizer.ClientCondition;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.Test;
 
 /**
@@ -55,11 +57,11 @@ public class ClientConditionUtilsTest {
     // given
     final Client client = new Client();
     client.setSensitivity(Sensitivity.SENSITIVE);
-    final Short clientCountyCode = 1101;
+    final List<Short> clientCountyCodes = Arrays.asList(new Short[] {1101});
     final Short staffPersonCountyCode = 1101;
 
     // when
-    final ClientCondition actual = toClientCondition(client, clientCountyCode, staffPersonCountyCode);
+    final ClientCondition actual = toClientCondition(client, clientCountyCodes, staffPersonCountyCode);
 
     // then
     assertThat(actual, is(equalTo(ClientCondition.SAME_COUNTY_SENSITIVE)));
@@ -70,11 +72,11 @@ public class ClientConditionUtilsTest {
     // given
     final Client client = new Client();
     client.setSensitivity(Sensitivity.SENSITIVE);
-    final Short clientCountyCode = 1101;
+    final List<Short> clientCountyCodes = Arrays.asList(new Short[] {1101});
     final Short staffPersonCountyCode = 1;
 
     // when
-    final ClientCondition actual = toClientCondition(client, clientCountyCode, staffPersonCountyCode);
+    final ClientCondition actual = toClientCondition(client, clientCountyCodes, staffPersonCountyCode);
 
     // then
     assertThat(actual, is(equalTo(ClientCondition.DIFFERENT_COUNTY_SENSITIVE)));
@@ -98,11 +100,11 @@ public class ClientConditionUtilsTest {
     // given
     final Client client = new Client();
     client.setSensitivity(Sensitivity.SEALED);
-    final Short clientCountyCode = 1101;
+    final List<Short> clientCountyCodes = Arrays.asList(new Short[] {1101});
     final Short staffPersonCountyCode = 1101;
 
     // when
-    final ClientCondition actual = toClientCondition(client, clientCountyCode, staffPersonCountyCode);
+    final ClientCondition actual = toClientCondition(client, clientCountyCodes, staffPersonCountyCode);
 
     // then
     assertThat(actual, is(equalTo(ClientCondition.SAME_COUNTY_SEALED)));
@@ -113,11 +115,11 @@ public class ClientConditionUtilsTest {
     // given
     final Client client = new Client();
     client.setSensitivity(Sensitivity.SEALED);
-    final Short clientCountyCode = 1101;
+    final List<Short> clientCountyCodes = Arrays.asList(new Short[] {1101});
     final Short staffPersonCountyCode = 1;
 
     // when
-    final ClientCondition actual = toClientCondition(client, clientCountyCode, staffPersonCountyCode);
+    final ClientCondition actual = toClientCondition(client, clientCountyCodes, staffPersonCountyCode);
 
     // then
     assertThat(actual, is(equalTo(ClientCondition.DIFFERENT_COUNTY_SEALED)));
