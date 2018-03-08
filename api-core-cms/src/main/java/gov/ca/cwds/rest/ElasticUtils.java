@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import gov.ca.cwds.rest.api.ApiException;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
@@ -24,36 +25,44 @@ public class ElasticUtils {
 
   private ElasticUtils(){}
 
-  public static TransportClient makeESTransportClient(final ElasticsearchConfiguration config) {
+  public static TransportClient buildElasticsearchClient(final ElasticsearchConfiguration config){
     TransportClient client = null;
-    String cluster = config.getElasticsearchCluster();
-    String user = config.getUser();
-    String password = config.getPassword();
-    boolean secureClient = StringUtils.isNotBlank(user) && StringUtils.isNotBlank(password);
-    LOGGER.info("Create NEW ES client");
     try {
-      final Settings.Builder settings = Settings.builder().put("cluster.name", cluster);
-      settings.put("client.transport.sniff", true);
-      if (secureClient) {
-        LOGGER.info("ENABLE X-PACK - cluster: {}", cluster);
-        settings.put("xpack.security.user", user + ":" + password);
-        client = new PreBuiltXPackTransportClient(settings.build());
-      } else {
-        LOGGER.info("DISABLE X-PACK - cluster: {}", cluster);
-        client = new PreBuiltTransportClient(settings.build());
-      }
+      client = makeESTransportClient(config);
 
       for (InetSocketTransportAddress address : getValidatedESNodes(config)) {
         client.addTransportAddress(address);
       }
-
+      return client;
     } catch (Exception e) {
       LOGGER.error("Error initializing Elasticsearch client: {}", e.getMessage(), e);
       if (client != null) {
         client.close();
-        client = null;
       }
+      throw new ApiException(e);
     }
+  }
+
+
+  private static TransportClient makeESTransportClient(final ElasticsearchConfiguration config) {
+    TransportClient client;
+    final String cluster = config.getElasticsearchCluster();
+    final String user = config.getUser();
+    final String password = config.getPassword();
+    final boolean secureClient = StringUtils.isNotBlank(user) && StringUtils.isNotBlank(password);
+
+    final Settings.Builder settings = Settings.builder().put("cluster.name", cluster);
+    settings.put("client.transport.sniff", true);
+
+    if (secureClient) {
+      LOGGER.info("ENABLE X-PACK - cluster: {}", cluster);
+      settings.put("xpack.security.user", user + ":" + password);
+      client = new PreBuiltXPackTransportClient(settings.build());
+    } else {
+      LOGGER.info("DISABLE X-PACK - cluster: {}", cluster);
+      client = new PreBuiltTransportClient(settings.build());
+    }
+
     return client;
   }
 
