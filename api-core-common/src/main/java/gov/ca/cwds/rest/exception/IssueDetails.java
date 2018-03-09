@@ -110,7 +110,7 @@ public class IssueDetails implements Serializable {
   @Override
   public int hashCode() {
     return new HashCodeBuilder(17, 37)
-        .append(getCode()).append(getCode()).append(getType()).append(getUserMessage())
+        .append(getCode()).append(getCode()).append(getProperty()).append(getType()).append(getUserMessage())
         .toHashCode();
   }
 
@@ -128,6 +128,7 @@ public class IssueDetails implements Serializable {
     IssueDetails issueDetails = (IssueDetails) obj;
     EqualsBuilder equalsBuilder = new EqualsBuilder();
     equalsBuilder.append(getCode(), issueDetails.code);
+    equalsBuilder.append(getProperty(), issueDetails.property);
     equalsBuilder.append(getType(), issueDetails.getType());
     equalsBuilder.append(getUserMessage(), issueDetails.getUserMessage());
     return equalsBuilder.isEquals();
