@@ -3,10 +3,11 @@ package gov.ca.cwds.cms.data.access.service.impl.placementHome;
 import static org.junit.Assert.fail;
 
 import gov.ca.cwds.cms.data.access.Constants.StaffPersonPrivileges;
-import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
+import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.impl.BaseDocToolRulesTest;
 import gov.ca.cwds.cms.data.access.service.impl.PlacementHomeServiceImpl;
+import gov.ca.cwds.cms.data.access.service.rules.PlacementHomeDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.drools.DroolsException;
@@ -17,17 +18,19 @@ import org.junit.Before;
 public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRulesTest {
 
   protected PlacementHomeServiceImpl placementHomeService;
-
+  protected BusinessValidationService businessValidationService;
   protected PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO;
 
   @Before
   public void setUp() {
+    businessValidationService = new BusinessValidationService(droolsService);
     placementHomeService = new PlacementHomeServiceImpl();
-    placementHomeService.setDroolsService(droolsService);
     placementHomeEntityAwareDTO = prepareSuccessfulPlacementHomeEntityAwareDTO();
   }
 
-  protected void checkRuleViolatedOnce(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, String ruleName) throws DroolsException {
+  protected void checkRuleViolatedOnce(
+      PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, String ruleName)
+      throws DroolsException {
     try {
       runBusinessValidation(placementHomeEntityAwareDTO);
       fail();
@@ -36,7 +39,9 @@ public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRules
     }
   }
 
-  void checkRuleViolated(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, String ruleName, int count) throws DroolsException {
+  void checkRuleViolated(
+      PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, String ruleName, int count)
+      throws DroolsException {
     try {
       runBusinessValidation(placementHomeEntityAwareDTO);
       fail();
@@ -45,7 +50,8 @@ public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRules
     }
   }
 
-  void checkRuleValid(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, String ruleName) throws DroolsException {
+  void checkRuleValid(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, String ruleName)
+      throws DroolsException {
     try {
       runBusinessValidation(placementHomeEntityAwareDTO);
     } catch (BusinessValidationException e) {
@@ -53,8 +59,10 @@ public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRules
     }
   }
 
-  private void runBusinessValidation(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO) throws DroolsException {
-    placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
+  private void runBusinessValidation(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO)
+      throws DroolsException {
+    businessValidationService.runBusinessValidation(
+        placementHomeEntityAwareDTO, principal, PlacementHomeDroolsConfiguration.INSTANCE);
   }
 
   @Override
@@ -64,8 +72,12 @@ public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRules
 
   protected void check(String ruleCode) {
     try {
-      placementHomeService.runDataProcessing(placementHomeEntityAwareDTO, principal);
-      placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
+      businessValidationService.runDataProcessing(
+          placementHomeEntityAwareDTO,
+          principal,
+          PlacementHomeDroolsConfiguration.DATA_PROCESSING_INSTANCE);
+      businessValidationService.runBusinessValidation(
+          placementHomeEntityAwareDTO, principal, PlacementHomeDroolsConfiguration.INSTANCE);
       fail();
     } catch (BusinessValidationException e) {
       assert e.getValidationDetailsList()
@@ -80,10 +92,16 @@ public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRules
 
   protected void assertValid(String ruleCode) {
     try {
-      placementHomeService.runDataProcessing(placementHomeEntityAwareDTO, principal);
-      placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
+      businessValidationService.runDataProcessing(
+          placementHomeEntityAwareDTO,
+          principal,
+          PlacementHomeDroolsConfiguration.DATA_PROCESSING_INSTANCE);
+      businessValidationService.runBusinessValidation(
+          placementHomeEntityAwareDTO, principal, PlacementHomeDroolsConfiguration.INSTANCE);
     } catch (BusinessValidationException e) {
-      assert e.getValidationDetailsList().stream().noneMatch(issueDetails -> issueDetails.getCode().equals(ruleCode));
+      assert e.getValidationDetailsList()
+          .stream()
+          .noneMatch(issueDetails -> issueDetails.getCode().equals(ruleCode));
     } catch (Exception e) {
       fail(e.getMessage());
     }
@@ -91,7 +109,8 @@ public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRules
 
   protected void assertValid() {
     try {
-      placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
+      businessValidationService.runBusinessValidation(
+          placementHomeEntityAwareDTO, principal, PlacementHomeDroolsConfiguration.INSTANCE);
     } catch (Exception e) {
       fail(e.getMessage());
     }
@@ -109,7 +128,7 @@ public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRules
     placementHome.setPyeLstnm("PyeLstnm");
     placementHome.setPstreetNm("PstreetNm");
     placementHome.setpCityNm("pCityNm");
-    placementHome.setPayeeStateCode((short)1);
+    placementHome.setPayeeStateCode((short) 1);
 
     SubstituteCareProvider substituteCareProvider = new SubstituteCareProvider();
     substituteCareProvider.setZipNo("11111");

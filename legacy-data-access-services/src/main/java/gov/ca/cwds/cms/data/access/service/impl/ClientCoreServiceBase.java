@@ -2,6 +2,7 @@ package gov.ca.cwds.cms.data.access.service.impl;
 
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
+import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.ClientCoreService;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.rules.ClientDroolsConfiguration;
@@ -17,16 +18,11 @@ import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
 import gov.ca.cwds.data.legacy.cms.entity.NearFatality;
 import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;
 import gov.ca.cwds.drools.DroolsException;
-import gov.ca.cwds.drools.DroolsService;
-import gov.ca.cwds.rest.exception.BusinessValidationException;
-import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.security.annotations.Authorize;
-import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import org.hibernate.Hibernate;
 
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
@@ -35,13 +31,13 @@ import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT
 public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
     implements ClientCoreService {
 
-  @Inject private DroolsService droolsService;
   @Inject private ClientDao clientDao;
   @Inject private DeliveredServiceDao deliveredServiceDao;
   @Inject private NameTypeDao nameTypeDao;
   @Inject private SafetyAlertDao safetyAlertDao;
   @Inject private DasHistoryDao dasHistoryDao;
   @Inject private NearFatalityDao nearFatalityDao;
+  @Inject private BusinessValidationService businessValidationService;
 
   @Override
   @Authorize(CLIENT_READ_CLIENT)
@@ -62,9 +58,10 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
   }
 
   public void validate(ClientEntityAwareDTO clientEntityAwareDTO) throws DroolsException {
-    runBusinessValidation(
+    businessValidationService.runBusinessValidation(
         enrichValidationData(clientEntityAwareDTO),
-        PrincipalUtils.getPrincipal()
+        PrincipalUtils.getPrincipal(),
+        ClientDroolsConfiguration.INSTANCE
     );
   }
 
@@ -100,22 +97,12 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
     return clientEntityAwareDTO;
   }
 
-  @Override
-  public void runBusinessValidation(ClientEntityAwareDTO clientEntityAwareDTO, PerryAccount principal)
-      throws DroolsException {
-    Set<IssueDetails> detailsList = droolsService.performBusinessRules(
-        ClientDroolsConfiguration.INSTANCE, clientEntityAwareDTO, principal);
-    if (!detailsList.isEmpty()) {
-      throw new BusinessValidationException("Can't create Client", detailsList);
-    }
-  }
-
   private void updateClient(ClientEntityAwareDTO clientEntityAwareDTO) {
     final Client client = clientEntityAwareDTO.getEntity();
     clientDao.update(client);
   }
 
-  public void setDroolsService(DroolsService droolsService) {
-    this.droolsService = droolsService;
+  public BusinessValidationService getBusinessValidationService() {
+    return businessValidationService;
   }
 }

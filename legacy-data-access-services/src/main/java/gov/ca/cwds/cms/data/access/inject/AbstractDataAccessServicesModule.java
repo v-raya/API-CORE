@@ -6,6 +6,7 @@ import com.google.inject.Injector;
 import com.google.inject.Provides;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.mapper.ExternalInterfaceMapper;
+import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.ChildClientCoreService;
 import gov.ca.cwds.cms.data.access.service.ClientCoreService;
 import gov.ca.cwds.cms.data.access.service.PlacementHomeService;
@@ -42,6 +43,7 @@ public abstract class AbstractDataAccessServicesModule extends AbstractModule {
     bind(SubstituteCareProviderService.class).to(SubstituteCareProviderServiceImpl.class);
     bind(ClientCoreService.class).to(ClientCoreServiceImpl.class);
     bind(ChildClientCoreService.class).to(ChildClientCoreServiceImpl.class);
+    bind(BusinessValidationService.class).to(BusinessValidationService.class);
   }
 
   private void configureMappers() {

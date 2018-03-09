@@ -15,6 +15,7 @@ import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderDao;
 import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderUcDao;
 import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
+import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.impl.IdGenerator;
 import gov.ca.cwds.cms.data.access.service.impl.SubstituteCareProviderServiceImpl;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
@@ -42,7 +43,7 @@ public class R07045Test {
     scpService = new SubstituteCareProviderServiceImpl();
     mockedEthnicityDao = mock(ScpOtherEthnicityDao.class);
     scpService.setScpOtherEthnicityDao(mockedEthnicityDao);
-    scpService.setDroolsService(mock(DroolsService.class));
+    scpService.setBusinessValidationService(mock(BusinessValidationService.class));
     scpService.setSubstituteCareProviderDao(mock(SubstituteCareProviderDao.class));
     scpService.setSubstituteCareProviderUcDao(mock(SubstituteCareProviderUcDao.class));
     scpService.setPlacementHomeInformationDao(mock(PlacementHomeInformationDao.class));

@@ -10,6 +10,7 @@ import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.mapper.ExternalInterfaceMapper;
+import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.PlacementHomeService;
 import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
@@ -19,9 +20,6 @@ import gov.ca.cwds.cms.data.access.dao.PlacementFacilityTypeHistoryDao;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
 import gov.ca.cwds.data.legacy.cms.entity.*;
 import gov.ca.cwds.drools.DroolsException;
-import gov.ca.cwds.drools.DroolsService;
-import gov.ca.cwds.rest.exception.BusinessValidationException;
-import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -34,88 +32,42 @@ import static gov.ca.cwds.cms.data.access.service.impl.IdGenerator.generateId;
 import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
 import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
 
-/**
- * @author CWDS CALS API Team
- */
+/** @author CWDS CALS API Team */
 public class PlacementHomeServiceImpl implements PlacementHomeService {
 
-  @Inject
-  protected DroolsService droolsService;
+  @Inject private BusinessValidationService businessValidationService;
 
-  @Inject
-  private PlacementHomeDao placementHomeDao;
+  @Inject private PlacementHomeDao placementHomeDao;
 
-  @Inject
-  private PlacementHomeUcDao placementHomeUcDao;
+  @Inject private PlacementHomeUcDao placementHomeUcDao;
 
-  @Inject
-  private CountyOwnershipMapper countyOwnershipMapper;
+  @Inject private CountyOwnershipMapper countyOwnershipMapper;
 
-  @Inject
-  private CountyOwnershipDao countyOwnershipDao;
+  @Inject private CountyOwnershipDao countyOwnershipDao;
 
-  @Inject
-  private ExternalInterfaceDao externalInterfaceDao;
+  @Inject private ExternalInterfaceDao externalInterfaceDao;
 
-  @Inject
-  private ExternalInterfaceMapper externalInterfaceMapper;
+  @Inject private ExternalInterfaceMapper externalInterfaceMapper;
 
-  @Inject
-  private EmergencyContactDetailDao emergencyContactDetailDao;
+  @Inject private EmergencyContactDetailDao emergencyContactDetailDao;
 
-  @Inject
-  private PlacementHomeProfileDao placementHomeProfileDao;
+  @Inject private PlacementHomeProfileDao placementHomeProfileDao;
 
-  @Inject
-  private PlacementFacilityTypeHistoryDao placementFacilityTypeHistoryDao;
+  @Inject private PlacementFacilityTypeHistoryDao placementFacilityTypeHistoryDao;
 
-  @Inject
-  private SubstituteCareProviderService substituteCareProviderService;
+  @Inject private SubstituteCareProviderService substituteCareProviderService;
 
-  @Inject
-  private OtherChildrenInPlacementHomeDao otherChildrenInPlacementHomeDao;
+  @Inject private OtherChildrenInPlacementHomeDao otherChildrenInPlacementHomeDao;
 
-  @Inject
-  private OtherPeopleScpRelationshipDao otherPeopleScpRelationshipDao;
+  @Inject private OtherPeopleScpRelationshipDao otherPeopleScpRelationshipDao;
 
-  @Inject
-  private OtherAdultsInPlacementHomeDao otherAdultsInPlacementHomeDao;
+  @Inject private OtherAdultsInPlacementHomeDao otherAdultsInPlacementHomeDao;
 
-  @Inject
-  private OutOfStateCheckDao outOfStateCheckDao;
+  @Inject private OutOfStateCheckDao outOfStateCheckDao;
 
-  @Inject
-  private BackgroundCheckDao backgroundCheckDao;
+  @Inject private BackgroundCheckDao backgroundCheckDao;
 
-  @Inject
-  private SsaName3Dao ssaName3Dao;
-
-  @Override
-  public void runBusinessValidation(
-      PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, PerryAccount principal)
-      throws DroolsException {
-    runRulesAgendaGroup(placementHomeEntityAwareDTO, PlacementHomeDroolsConfiguration.INSTANCE,
-        principal);
-  }
-
-  @Override
-  public void runDataProcessing(
-      PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, PerryAccount principal)
-      throws DroolsException {
-    runRulesAgendaGroup(placementHomeEntityAwareDTO,
-        PlacementHomeDroolsConfiguration.DATA_PROCESSING_INSTANCE, principal);
-  }
-
-  private void runRulesAgendaGroup(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO,
-                                   PlacementHomeDroolsConfiguration dataProcessingInstance, PerryAccount principal2)
-      throws DroolsException {
-    Set<IssueDetails> detailsList =
-        droolsService.performBusinessRules(
-            dataProcessingInstance, placementHomeEntityAwareDTO, principal2);
-    if (!detailsList.isEmpty()) {
-      throw new BusinessValidationException("Can't create Placement Home", detailsList);
-    }
-  }
+  @Inject private SsaName3Dao ssaName3Dao;
 
   @Override
   public PlacementHome create(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO)
@@ -123,8 +75,12 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
     try {
       validateParameters(placementHomeEntityAwareDTO);
       PerryAccount perryAccount = PrincipalUtils.getPrincipal();
-      runDataProcessing(placementHomeEntityAwareDTO, perryAccount);
-      runBusinessValidation(placementHomeEntityAwareDTO, perryAccount);
+      businessValidationService.runDataProcessing(
+          placementHomeEntityAwareDTO,
+          perryAccount,
+          PlacementHomeDroolsConfiguration.DATA_PROCESSING_INSTANCE);
+      businessValidationService.runBusinessValidation(
+          placementHomeEntityAwareDTO, perryAccount, PlacementHomeDroolsConfiguration.INSTANCE);
       createPlacementHome(placementHomeEntityAwareDTO);
       createPlacementHomeUc(placementHomeEntityAwareDTO);
       createCountyOwnership(placementHomeEntityAwareDTO);
@@ -321,16 +277,14 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
   /**
    * Rule: R - 11179
    *
-   * Rule Txt
+   * <p>Rule Txt
    *
-   * If the placement home is being saved to the database for the first time then create
-   * a new Placement Facility Type History row.
+   * <p>If the placement home is being saved to the database for the first time then create a new
+   * Placement Facility Type History row.
    *
-   *  Logic
-   *  If (in focus) PLACEMENT_HOME is saved to the database for the first time then create
-   *  PLACEMENT_HOME > PLACEMENT_FACILITY_TYPE_HISTORY set
-   *  .Start_Timestamp = System Timestamp
-   *  AND .Placement_Facility_Type = (in focus) PLACEMENT_HOME.Placement_Facility_Type.
+   * <p>Logic If (in focus) PLACEMENT_HOME is saved to the database for the first time then create
+   * PLACEMENT_HOME > PLACEMENT_FACILITY_TYPE_HISTORY set .Start_Timestamp = System Timestamp AND
+   * .Placement_Facility_Type = (in focus) PLACEMENT_HOME.Placement_Facility_Type.
    */
   private void createPlacementFacilityTypeHistory(PlacementHomeEntityAwareDTO parameterObject) {
     final PlacementHome placementHome = parameterObject.getEntity();
@@ -359,7 +313,7 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
     ssaName3Dao.callStoredProc(parameterObject);
   }
 
-  public void setDroolsService(DroolsService droolsService) {
-    this.droolsService = droolsService;
+  public BusinessValidationService getBusinessValidationService() {
+    return businessValidationService;
   }
 }
