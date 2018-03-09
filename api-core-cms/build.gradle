@@ -17,6 +17,7 @@ dependencies {
     // ES 5.x:
     compile group: 'org.elasticsearch', name: 'elasticsearch', version: elasticsearchVersion
     compile group: 'org.elasticsearch.client', name: 'transport', version: elasticsearchVersion
+    compile group: 'org.elasticsearch.client', name: 'x-pack-transport', version: elasticsearchVersion
 
 	compile group: 'com.hubspot.dropwizard', name: 'dropwizard-guice', version: '1.0.6.0'
     
