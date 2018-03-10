@@ -2,7 +2,6 @@ package gov.ca.cwds.authorizer;
 
 import static gov.ca.cwds.authorizer.util.StaffPrivilegeUtil.toStaffPersonPrivilegeTypes;
 
-import com.google.inject.Inject;
 import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
 import gov.ca.cwds.authorizer.drools.configuration.DroolsAuthorizer;
 import gov.ca.cwds.drools.DroolsException;
@@ -25,7 +24,6 @@ public abstract class AbstractBaseAuthorizer<TYPE, ID> extends BaseAuthorizer<TY
 
   private DroolsAuthorizationService droolsAuthorizationService;
 
-  @Inject
   public AbstractBaseAuthorizer(DroolsAuthorizationService droolsAuthorizationService) {
     this.droolsAuthorizationService = droolsAuthorizationService;
   }
