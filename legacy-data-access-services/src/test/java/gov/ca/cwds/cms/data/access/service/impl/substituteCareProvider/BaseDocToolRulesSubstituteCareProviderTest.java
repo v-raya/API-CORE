@@ -1,12 +1,14 @@
 package gov.ca.cwds.cms.data.access.service.impl.substituteCareProvider;
 
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
 
+import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderDao;
 import gov.ca.cwds.cms.data.access.dto.ExtendedSCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
+import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderCoreService;
 import gov.ca.cwds.cms.data.access.service.impl.BaseDocToolRulesTest;
-import gov.ca.cwds.cms.data.access.service.impl.SubstituteCareProviderServiceImpl;
 import gov.ca.cwds.cms.data.access.service.rules.SubstituteCareProviderDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeInformation;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
@@ -18,7 +20,7 @@ import org.junit.Before;
 public abstract class BaseDocToolRulesSubstituteCareProviderTest extends BaseDocToolRulesTest {
 
   protected BusinessValidationService businessValidationService;
-  private SubstituteCareProviderServiceImpl scpService;
+  private SubstituteCareProviderCoreService scpService;
 
   ExtendedSCPEntityAwareDTO entityAwareDTO;
 
@@ -31,7 +33,7 @@ public abstract class BaseDocToolRulesSubstituteCareProviderTest extends BaseDoc
     PlacementHomeInformation placementHomeInformation = new PlacementHomeInformation();
     entityAwareDTO.setPlacementHomeInformation(placementHomeInformation);
 
-    scpService = new SubstituteCareProviderServiceImpl();
+    scpService = new SubstituteCareProviderCoreService(mock(SubstituteCareProviderDao.class));
 
     entityAwareDTO.setEntity(new SubstituteCareProvider());
   }

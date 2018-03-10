@@ -3,28 +3,32 @@ package gov.ca.cwds.cms.data.access.service.impl.placementHome;
 import static org.junit.Assert.fail;
 
 import gov.ca.cwds.cms.data.access.Constants.StaffPersonPrivileges;
+import gov.ca.cwds.cms.data.access.dao.PlacementHomeDao;
 import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
+import gov.ca.cwds.cms.data.access.service.PlacementHomeCoreService;
 import gov.ca.cwds.cms.data.access.service.impl.BaseDocToolRulesTest;
-import gov.ca.cwds.cms.data.access.service.impl.PlacementHomeServiceImpl;
 import gov.ca.cwds.cms.data.access.service.rules.PlacementHomeDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import org.junit.Before;
+import org.mockito.Mock;
 
 /** @author CWDS CALS API Team */
 public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRulesTest {
 
-  protected PlacementHomeServiceImpl placementHomeService;
+  protected PlacementHomeCoreService placementHomeService;
   protected BusinessValidationService businessValidationService;
   protected PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO;
+  @Mock
+  protected PlacementHomeDao placementHomeDao;
 
   @Before
   public void setUp() {
     businessValidationService = new BusinessValidationService(droolsService);
-    placementHomeService = new PlacementHomeServiceImpl();
+    placementHomeService = new PlacementHomeCoreService(placementHomeDao);
     placementHomeEntityAwareDTO = prepareSuccessfulPlacementHomeEntityAwareDTO();
   }
 

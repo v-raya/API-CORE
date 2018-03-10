@@ -2,10 +2,11 @@ package gov.ca.cwds.cms.data.access.service.impl.substituteCareProvider;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
 
+import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderDao;
 import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
-import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
-import gov.ca.cwds.cms.data.access.service.impl.SubstituteCareProviderServiceImpl;
+import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderCoreService;
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
 import gov.ca.cwds.data.legacy.cms.entity.PhoneContactDetail;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
@@ -22,7 +23,7 @@ public class SubstituteCareProviderServiceImplTest {
   @Test
   public void createValidateScpNotPersistent() throws Exception {
     try {
-      SubstituteCareProviderService service = new SubstituteCareProviderServiceImpl();
+      SubstituteCareProviderCoreService service = new SubstituteCareProviderCoreService(mock(SubstituteCareProviderDao.class));
       SubstituteCareProvider scp = new SubstituteCareProvider();
       scp.setIdentifier("1");
       SCPEntityAwareDTO parameterObject = new SCPEntityAwareDTO();
@@ -38,7 +39,7 @@ public class SubstituteCareProviderServiceImplTest {
   @Test
   public void createValidatePhoneNumberNotPersisted() throws Exception {
     try {
-      SubstituteCareProviderService service = new SubstituteCareProviderServiceImpl();
+      SubstituteCareProviderCoreService service = new SubstituteCareProviderCoreService(mock(SubstituteCareProviderDao.class));
       SubstituteCareProvider scp = new SubstituteCareProvider();
       SCPEntityAwareDTO parameterObject = new SCPEntityAwareDTO();
       parameterObject.setEntity(scp);

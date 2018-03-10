@@ -9,12 +9,8 @@ import gov.ca.cwds.cms.data.access.mapper.ExternalInterfaceMapper;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.ChildClientCoreService;
 import gov.ca.cwds.cms.data.access.service.ClientCoreService;
-import gov.ca.cwds.cms.data.access.service.PlacementHomeService;
-import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
-import gov.ca.cwds.cms.data.access.service.impl.ChildClientCoreServiceImpl;
-import gov.ca.cwds.cms.data.access.service.impl.ClientCoreServiceImpl;
-import gov.ca.cwds.cms.data.access.service.impl.PlacementHomeServiceImpl;
-import gov.ca.cwds.cms.data.access.service.impl.SubstituteCareProviderServiceImpl;
+import gov.ca.cwds.cms.data.access.service.PlacementHomeCoreService;
+import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderCoreService;
 import org.hibernate.SessionFactory;
 
 /**
@@ -39,11 +35,11 @@ public abstract class AbstractDataAccessServicesModule extends AbstractModule {
   protected abstract SessionFactory getDataAccessSercvicesSessionFactory(Injector injector);
 
   private void configureDataAccessServices() {
-    bind(PlacementHomeService.class).to(PlacementHomeServiceImpl.class);
-    bind(SubstituteCareProviderService.class).to(SubstituteCareProviderServiceImpl.class);
-    bind(ClientCoreService.class).to(ClientCoreServiceImpl.class);
-    bind(ChildClientCoreService.class).to(ChildClientCoreServiceImpl.class);
-    bind(BusinessValidationService.class).to(BusinessValidationService.class);
+    bind(PlacementHomeCoreService.class);
+    bind(SubstituteCareProviderCoreService.class);
+    bind(ClientCoreService.class);
+    bind(ChildClientCoreService.class);
+    bind(BusinessValidationService.class);
   }
 
   private void configureMappers() {

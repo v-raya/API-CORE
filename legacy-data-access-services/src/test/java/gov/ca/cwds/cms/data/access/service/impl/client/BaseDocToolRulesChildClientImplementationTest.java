@@ -1,8 +1,10 @@
 package gov.ca.cwds.cms.data.access.service.impl.client;
 
+import static org.mockito.Mockito.mock;
+
 import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
-import gov.ca.cwds.cms.data.access.service.impl.ChildClientCoreServiceImpl;
-import gov.ca.cwds.cms.data.access.service.impl.ClientCoreServiceBase;
+import gov.ca.cwds.cms.data.access.service.ChildClientCoreService;
+import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.entity.ChildClient;
 
 /**
@@ -11,8 +13,8 @@ import gov.ca.cwds.data.legacy.cms.entity.ChildClient;
 public abstract class BaseDocToolRulesChildClientImplementationTest extends BaseDocToolRulesClientTest<ChildClient, ChildClientEntityAwareDTO>{
 
   @Override
-  protected ClientCoreServiceBase<ChildClientEntityAwareDTO> getClientCoreService() {
-    return new ChildClientCoreServiceImpl();
+  protected ChildClientCoreService getClientCoreService() {
+    return new ChildClientCoreService(mock(ClientDao.class));
   }
 
   @Override

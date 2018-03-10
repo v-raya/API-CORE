@@ -1,115 +1,136 @@
-package gov.ca.cwds.cms.data.access.service.impl;
+package gov.ca.cwds.cms.data.access.service;
+
+import static gov.ca.cwds.cms.data.access.service.impl.IdGenerator.generateId;
+import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
+import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
 
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.cms.data.access.Constants.PhoneticSearchTables;
-import gov.ca.cwds.cms.data.access.dao.*;
+import gov.ca.cwds.cms.data.access.dao.BackgroundCheckDao;
+import gov.ca.cwds.cms.data.access.dao.CountyOwnershipDao;
+import gov.ca.cwds.cms.data.access.dao.EmergencyContactDetailDao;
+import gov.ca.cwds.cms.data.access.dao.ExternalInterfaceDao;
+import gov.ca.cwds.cms.data.access.dao.OtherAdultsInPlacementHomeDao;
+import gov.ca.cwds.cms.data.access.dao.OtherChildrenInPlacementHomeDao;
+import gov.ca.cwds.cms.data.access.dao.OtherPeopleScpRelationshipDao;
+import gov.ca.cwds.cms.data.access.dao.OutOfStateCheckDao;
+import gov.ca.cwds.cms.data.access.dao.PlacementFacilityTypeHistoryDao;
+import gov.ca.cwds.cms.data.access.dao.PlacementHomeDao;
+import gov.ca.cwds.cms.data.access.dao.PlacementHomeProfileDao;
+import gov.ca.cwds.cms.data.access.dao.PlacementHomeUcDao;
+import gov.ca.cwds.cms.data.access.dao.SsaName3Dao;
 import gov.ca.cwds.cms.data.access.dto.OtherAdultInHomeEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.OtherChildInHomeEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.mapper.ExternalInterfaceMapper;
-import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
-import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
-import gov.ca.cwds.cms.data.access.service.PlacementHomeService;
-import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderService;
+import gov.ca.cwds.cms.data.access.service.impl.IdGenerator;
 import gov.ca.cwds.cms.data.access.service.rules.PlacementHomeDroolsConfiguration;
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
-import gov.ca.cwds.cms.data.access.dao.PlacementFacilityTypeHistoryDao;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
-import gov.ca.cwds.data.legacy.cms.entity.*;
+import gov.ca.cwds.data.legacy.cms.entity.BackgroundCheck;
+import gov.ca.cwds.data.legacy.cms.entity.CountyOwnership;
+import gov.ca.cwds.data.legacy.cms.entity.EmergencyContactDetail;
+import gov.ca.cwds.data.legacy.cms.entity.ExternalInterface;
+import gov.ca.cwds.data.legacy.cms.entity.OtherAdultsInPlacementHome;
+import gov.ca.cwds.data.legacy.cms.entity.OtherChildrenInPlacementHome;
+import gov.ca.cwds.data.legacy.cms.entity.OtherPeopleScpRelationship;
+import gov.ca.cwds.data.legacy.cms.entity.OutOfStateCheck;
+import gov.ca.cwds.data.legacy.cms.entity.PlacementFacilityTypeHistory;
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeProfile;
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeUc;
+import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.realm.PerryAccount;
-import gov.ca.cwds.security.utils.PrincipalUtils;
-import org.apache.commons.lang3.StringUtils;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import org.apache.commons.lang3.StringUtils;
 
-import static gov.ca.cwds.cms.data.access.service.impl.IdGenerator.generateId;
-import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
-import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
-
-/** @author CWDS CALS API Team */
-public class PlacementHomeServiceImpl implements PlacementHomeService {
+/** @author CWDS TPT-3 Team */
+public class PlacementHomeCoreService
+    extends DataAccessServiceBase<PlacementHomeDao, PlacementHome, PlacementHomeEntityAwareDTO> {
 
   @Inject private BusinessValidationService businessValidationService;
-
-  @Inject private PlacementHomeDao placementHomeDao;
-
   @Inject private PlacementHomeUcDao placementHomeUcDao;
-
   @Inject private CountyOwnershipMapper countyOwnershipMapper;
-
   @Inject private CountyOwnershipDao countyOwnershipDao;
-
   @Inject private ExternalInterfaceDao externalInterfaceDao;
-
   @Inject private ExternalInterfaceMapper externalInterfaceMapper;
-
   @Inject private EmergencyContactDetailDao emergencyContactDetailDao;
-
   @Inject private PlacementHomeProfileDao placementHomeProfileDao;
-
   @Inject private PlacementFacilityTypeHistoryDao placementFacilityTypeHistoryDao;
-
-  @Inject private SubstituteCareProviderService substituteCareProviderService;
-
+  @Inject private SubstituteCareProviderCoreService substituteCareProviderService;
   @Inject private OtherChildrenInPlacementHomeDao otherChildrenInPlacementHomeDao;
-
   @Inject private OtherPeopleScpRelationshipDao otherPeopleScpRelationshipDao;
-
   @Inject private OtherAdultsInPlacementHomeDao otherAdultsInPlacementHomeDao;
-
   @Inject private OutOfStateCheckDao outOfStateCheckDao;
-
   @Inject private BackgroundCheckDao backgroundCheckDao;
-
   @Inject private SsaName3Dao ssaName3Dao;
 
-  @Override
-  public PlacementHome create(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO)
-      throws DataAccessServicesException {
-    try {
-      validateParameters(placementHomeEntityAwareDTO);
-      PerryAccount perryAccount = PrincipalUtils.getPrincipal();
-      businessValidationService.runDataProcessing(
-          placementHomeEntityAwareDTO,
-          perryAccount,
-          PlacementHomeDroolsConfiguration.DATA_PROCESSING_INSTANCE);
-      businessValidationService.runBusinessValidation(
-          placementHomeEntityAwareDTO, perryAccount, PlacementHomeDroolsConfiguration.INSTANCE);
-      createPlacementHome(placementHomeEntityAwareDTO);
-      createPlacementHomeUc(placementHomeEntityAwareDTO);
-      createCountyOwnership(placementHomeEntityAwareDTO);
-      createExternalInterface();
-      createBackgroundCheck();
-      createEmergencyContactDetail(placementHomeEntityAwareDTO);
-      createPlacementHomeProfile(placementHomeEntityAwareDTO);
-      createPlacementFacilityTypeHistory(placementHomeEntityAwareDTO);
-      createSubstituteCareProviders(placementHomeEntityAwareDTO);
-      createOtherAdultsInHome(placementHomeEntityAwareDTO);
-      createOtherChildrenInHome(placementHomeEntityAwareDTO);
-      prepareAddressPhoneticSearchKeywords(placementHomeEntityAwareDTO.getEntity());
-      return placementHomeEntityAwareDTO.getEntity();
-    } catch (DroolsException e) {
-      throw new DataAccessServicesException(e);
-    }
+  @Inject
+  public PlacementHomeCoreService(PlacementHomeDao crudDao) {
+    super(crudDao);
   }
 
   @Override
-  public PlacementHome update(PlacementHomeEntityAwareDTO entityAwareDTO) {
-    throw new UnsupportedOperationException();
+  public void beforeDataProcessing(DataAccessBundle bundle) {
+    validateParameters((PlacementHomeEntityAwareDTO) bundle.getAwareDto());
   }
 
-  private void createPlacementHome(PlacementHomeEntityAwareDTO parameterObject) {
-    final PlacementHome placementHome = parameterObject.getEntity();
+  @Override
+  public void afterBusinessValidation(DataAccessBundle bundle) {
+    final PlacementHome placementHome = (PlacementHome) bundle.getAwareDto().getEntity();
     placementHome.setIdentifier(generateId());
     placementHome.setLastUpdateId(getStaffPersonId());
     placementHome.setLastUpdateTime(LocalDateTime.now());
-    placementHomeDao.create(placementHome);
+  }
+
+  @Override
+  public void dataProcessing(DataAccessBundle bundle, PerryAccount perryAccount)
+      throws DroolsException {
+    businessValidationService.runDataProcessing(
+        bundle.getAwareDto(),
+        perryAccount,
+        PlacementHomeDroolsConfiguration.DATA_PROCESSING_INSTANCE);
+  }
+
+  @Override
+  public void businessValidation(DataAccessBundle bundle, PerryAccount perryAccount)
+      throws DroolsException {
+    businessValidationService.runBusinessValidation(
+        bundle.getAwareDto(), perryAccount, PlacementHomeDroolsConfiguration.INSTANCE);
+  }
+
+  @Override
+  public void afterCreate(DataAccessBundle bundle) throws DataAccessServicesException {
+    PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO =
+        (PlacementHomeEntityAwareDTO) bundle.getAwareDto();
+    createPlacementHomeUc(placementHomeEntityAwareDTO);
+    createCountyOwnership(placementHomeEntityAwareDTO);
+    createExternalInterface();
+    createBackgroundCheck();
+    createEmergencyContactDetail(placementHomeEntityAwareDTO);
+    createPlacementHomeProfile(placementHomeEntityAwareDTO);
+    createPlacementFacilityTypeHistory(placementHomeEntityAwareDTO);
+    createSubstituteCareProviders(placementHomeEntityAwareDTO);
+    createOtherAdultsInHome(placementHomeEntityAwareDTO);
+    createOtherChildrenInHome(placementHomeEntityAwareDTO);
+    prepareAddressPhoneticSearchKeywords(placementHomeEntityAwareDTO.getEntity());
+  }
+
+  private void validateParameters(PlacementHomeEntityAwareDTO placementHomeParameterObject) {
+    checkNotPersisted(placementHomeParameterObject.getEntity());
+    ParametersValidator.validateParameterObjects(
+        placementHomeParameterObject.getScpParameterObjects());
+    ParametersValidator.validateParameterObjects(
+        placementHomeParameterObject.getOtherAdultInHomeParameterObjects());
+    ParametersValidator.validateParameterObjects(
+        placementHomeParameterObject.getOtherChildrenInHomeParameterObjects());
   }
 
   private void createBackgroundCheck() {
@@ -208,16 +229,6 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
     }
   }
 
-  private void validateParameters(PlacementHomeEntityAwareDTO placementHomeParameterObject) {
-    checkNotPersisted(placementHomeParameterObject.getEntity());
-    ParametersValidator.validateParameterObjects(
-        placementHomeParameterObject.getScpParameterObjects());
-    ParametersValidator.validateParameterObjects(
-        placementHomeParameterObject.getOtherAdultInHomeParameterObjects());
-    ParametersValidator.validateParameterObjects(
-        placementHomeParameterObject.getOtherChildrenInHomeParameterObjects());
-  }
-
   private void createCountyOwnership(PlacementHomeEntityAwareDTO parameterObject) {
     final PlacementHome placementHome = parameterObject.getEntity();
     CountyOwnership countyOwnership =
@@ -311,9 +322,5 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
     parameterObject.setUpdateTimeStamp(new Date());
     parameterObject.setUpdateId(placementHome.getLastUpdateId());
     ssaName3Dao.callStoredProc(parameterObject);
-  }
-
-  public BusinessValidationService getBusinessValidationService() {
-    return businessValidationService;
   }
 }

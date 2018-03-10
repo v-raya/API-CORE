@@ -4,8 +4,8 @@ import static org.junit.Assert.fail;
 
 import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
+import gov.ca.cwds.cms.data.access.service.ClientCoreService;
 import gov.ca.cwds.cms.data.access.service.impl.BaseDocToolRulesTest;
-import gov.ca.cwds.cms.data.access.service.impl.ClientCoreServiceBase;
 import gov.ca.cwds.cms.data.access.service.rules.ClientDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.drools.DroolsException;
@@ -15,7 +15,7 @@ import org.junit.Before;
 public abstract class BaseDocToolRulesClientTest<T extends Client, E extends ClientEntityAwareDTO> extends
     BaseDocToolRulesTest {
 
-  private ClientCoreServiceBase<E> clientCoreService;
+  private ClientCoreService clientCoreService;
   E clientEntityAwareDTO;
   protected BusinessValidationService businessValidationService;
 
@@ -26,7 +26,7 @@ public abstract class BaseDocToolRulesClientTest<T extends Client, E extends Cli
     clientEntityAwareDTO = getAwareDTO();
   }
 
-  protected abstract ClientCoreServiceBase<E> getClientCoreService();
+  protected abstract ClientCoreService getClientCoreService();
 
   @Override
   public String getPrivilege() {
