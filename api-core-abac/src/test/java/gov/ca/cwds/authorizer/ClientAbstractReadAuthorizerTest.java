@@ -16,6 +16,7 @@ import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
+import gov.ca.cwds.authorizer.drools.configuration.ClientAuthorizationDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
@@ -53,9 +54,10 @@ public class ClientAbstractReadAuthorizerTest {
     MockitoAnnotations.initMocks(this);
     final DroolsService droolsService = new DroolsService();
     final DroolsAuthorizationService droolsAuthorizationService = new DroolsAuthorizationService(droolsService);
-    testSubject = new ClientAbstractReadAuthorizer();
+    testSubject = new ClientAbstractReadAuthorizer(droolsAuthorizationService);
     testSubject.setClientDao(clientDaoMock);
     testSubject.setDroolsAuthorizationService(droolsAuthorizationService);
+    testSubject.setDroolsConfiguration(new ClientAuthorizationDroolsConfiguration());
     testSubject.setCountyDeterminationService(clientCountyDeterminationServiceMock);
   }
 
@@ -84,8 +86,6 @@ public class ClientAbstractReadAuthorizerTest {
 
     // then
     assertThat(actual, is(expectedResult));
-    verifyStatic(PerrySubject.class, times(1));
-    PerrySubject.getPerryAccount();
   }
 
   @Test
@@ -104,7 +104,7 @@ public class ClientAbstractReadAuthorizerTest {
 
     // then
     assertThat(actual, is(true));
-    verifyStatic(PerrySubject.class, times(1));
+    verifyStatic(PerrySubject.class, times(2));
     PerrySubject.getPerryAccount();
     verify(clientCountyDeterminationServiceMock, times(1)).getClientCountyById(anyString());
   }
@@ -125,7 +125,7 @@ public class ClientAbstractReadAuthorizerTest {
 
     // then
     assertThat(actual, is(false));
-    verifyStatic(PerrySubject.class, times(1));
+    verifyStatic(PerrySubject.class, times(2));
     PerrySubject.getPerryAccount();
     verify(clientCountyDeterminationServiceMock, times(1)).getClientCountyById(anyString());
   }
@@ -146,7 +146,7 @@ public class ClientAbstractReadAuthorizerTest {
 
     // then
     assertThat(actual, is(true));
-    verifyStatic(PerrySubject.class, times(1));
+    verifyStatic(PerrySubject.class, times(2));
     PerrySubject.getPerryAccount();
     verify(clientDaoMock, times(1)).find(anyString());
     verify(clientCountyDeterminationServiceMock, times(1)).getClientCountyById(anyString());

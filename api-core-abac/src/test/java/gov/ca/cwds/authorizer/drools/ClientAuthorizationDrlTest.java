@@ -19,8 +19,10 @@ import static org.hamcrest.Matchers.is;
 
 import gov.ca.cwds.authorizer.ClientCondition;
 import gov.ca.cwds.authorizer.StaffPrivilegeType;
+import gov.ca.cwds.authorizer.drools.configuration.ClientAuthorizationDroolsConfiguration;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.drools.DroolsService;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
@@ -129,7 +131,10 @@ public class ClientAuthorizationDrlTest {
 
   private void assertClientAccessMatrixValue(ClientCondition condition,
       List<StaffPrivilegeType> privileges, boolean expectedResult) throws DroolsException {
-    final boolean actualResult = droolsAuthorizationService.authorizeClientRead(condition, privileges);
+    ClientAuthorizationDroolsConfiguration droolsConfiguration = new ClientAuthorizationDroolsConfiguration();
+    List instances = new ArrayList<>();
+    instances.add(condition);
+    final boolean actualResult = droolsAuthorizationService.authorizeObjectOperation(privileges, droolsConfiguration, instances);
     assertThat(actualResult, is(expectedResult));
   }
 
