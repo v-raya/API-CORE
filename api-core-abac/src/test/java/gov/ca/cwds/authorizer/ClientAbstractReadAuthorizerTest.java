@@ -87,7 +87,7 @@ public class ClientAbstractReadAuthorizerTest {
 
     // then
     assertThat(actual, is(expectedResult));
-    verifyStatic(PerrySubject.class, times(1));
+    verifyStatic(PerrySubject.class, times(0));
     PerrySubject.getPerryAccount();
   }
 
@@ -141,8 +141,8 @@ public class ClientAbstractReadAuthorizerTest {
     mockStatic(PerrySubject.class);
     when(PerrySubject.getPerryAccount()).thenReturn(perryAccount);
     when(clientDaoMock.find(anyString())).thenReturn(initClient(Sensitivity.SENSITIVE));
-    when(clientCountyDeterminationServiceMock.getClientCountyById(anyString()))
-        .thenReturn((short) 100);
+    when(clientCountyDeterminationServiceMock.getClientCountiesById(anyString()))
+        .thenReturn(Arrays.asList(new Short[]{100, 10}));
 
     // when
     final boolean actual = testSubject.checkId(CLIENT_ID);
@@ -152,7 +152,7 @@ public class ClientAbstractReadAuthorizerTest {
     verifyStatic(PerrySubject.class, times(2));
     PerrySubject.getPerryAccount();
     verify(clientDaoMock, times(1)).find(anyString());
-    verify(clientCountyDeterminationServiceMock, times(1)).getClientCountyById(anyString());
+    verify(clientCountyDeterminationServiceMock, times(1)).getClientCountiesById(anyString());
   }
 
   @Test
