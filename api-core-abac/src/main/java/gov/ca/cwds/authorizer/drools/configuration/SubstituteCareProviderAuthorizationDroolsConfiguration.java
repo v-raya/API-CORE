@@ -6,15 +6,20 @@ import gov.ca.cwds.drools.DroolsConfiguration;
 /**
  * @author CWDS TPT-2 Team
  */
-public final class SubstituteCareProviderAuthorizationDroolsConfiguration extends DroolsConfiguration<PlacementHome> {
+public final class SubstituteCareProviderAuthorizationDroolsConfiguration extends DroolsConfiguration<PlacementHome> implements DroolsAuthorizer {
 
-  public static final SubstituteCareProviderAuthorizationDroolsConfiguration INSTANCE = new SubstituteCareProviderAuthorizationDroolsConfiguration(
-      "substitute-care-provider-authorization-session",
-      "substitute-care-provider-authorization-agenda",
-      "substitute-care-provider"
-  );
+  private static final String SESSION_NAME = "substitute-care-provider-authorization-session";
+  private static final String AGENDA_GROUP = "substitute-care-provider-authorization-agenda";
+  private static final String PATH_TO_RULES_CONFIG = "substitute-care-provider";
+  private static final DroolsConfiguration INSTANCE = new SubstituteCareProviderAuthorizationDroolsConfiguration();
 
-  private SubstituteCareProviderAuthorizationDroolsConfiguration(String sessionName, String agendaGroup, String pathToRulesConfig) {
-    super(sessionName, agendaGroup, pathToRulesConfig);
+  public SubstituteCareProviderAuthorizationDroolsConfiguration() {
+    super(SESSION_NAME, AGENDA_GROUP, PATH_TO_RULES_CONFIG);
   }
+
+  @Override
+  public DroolsConfiguration getInstance() {
+    return INSTANCE;
+  }
+
 }

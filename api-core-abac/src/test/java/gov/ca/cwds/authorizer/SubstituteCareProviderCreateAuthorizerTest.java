@@ -9,6 +9,7 @@ import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
+import gov.ca.cwds.authorizer.drools.configuration.SubstituteCareProviderAuthorizationDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.drools.DroolsService;
@@ -38,6 +39,7 @@ public class SubstituteCareProviderCreateAuthorizerTest {
     testSubject = new SubstituteCareProviderCreateAuthorizer(
         droolsAuthorizationService
     );
+    testSubject.setDroolsConfiguration(new SubstituteCareProviderAuthorizationDroolsConfiguration());
   }
 
   @Test

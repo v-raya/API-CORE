@@ -26,7 +26,7 @@ rule "R - 04603 Foster Family Homes Security"
   dialect "mvel"
   agenda-group "placement-home-authorization-agenda"
 when
-    $placementHome: PlacementHome((facilityType == 1416 || facilityType == 6914), licensrCd == "CT")
+    $placementHome: PlacementHome(eval(facilityType == 1416 || facilityType == 6914), licensrCd == "CT")
     PerryAccount(privileges contains "Resource Mgmt Placement Facility Maint", countyName == "State of California")
 then
     kcontext.getKieRuntime().setGlobal("authorizationResult", true);

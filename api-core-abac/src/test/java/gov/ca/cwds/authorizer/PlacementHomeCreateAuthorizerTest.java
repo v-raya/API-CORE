@@ -11,6 +11,7 @@ import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
+import gov.ca.cwds.authorizer.drools.configuration.PlacementHomeAuthorizationDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
@@ -41,6 +42,7 @@ public class PlacementHomeCreateAuthorizerTest {
     testSubject = new PlacementHomeCreateAuthorizer(
         droolsAuthorizationService
     );
+    testSubject.setDroolsConfiguration(new PlacementHomeAuthorizationDroolsConfiguration());
   }
 
   @Test
