@@ -257,7 +257,7 @@ public final class CmsKeyIdGenerator {
    * @return CMS formatted timestamp
    * @throws ParseException on parsing error
    */
-  protected static String createTimestampStr() throws ParseException {
+  protected static String createTimestampStr() {
     double nTimestamp = 0;
     double nPreviousTimestamp = 0; // previous value - used for UNIQUENESS!
 

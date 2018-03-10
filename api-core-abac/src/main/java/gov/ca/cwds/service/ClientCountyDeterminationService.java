@@ -17,16 +17,12 @@ public class ClientCountyDeterminationService {
   }
 
   /**
-   * This method determines client county by Client ID
+   * This method determines client counties by Client ID
    *
    * @param clientId Client ID
-   * @return client county
+   * @return client counties
    */
-  public Short getClientCountyById(final String clientId) {
-    final List<Short> counties = countyDeterminationDao.getClientCounties(clientId);
-    final Short countyId = counties.isEmpty() ? null : counties.get(0);
-    return countyId == null || countyId == 0
-        ? null
-        : countyId;
+  public List<Short> getClientCountiesById(final String clientId) {
+    return countyDeterminationDao.getClientCounties(clientId);
   }
 }
