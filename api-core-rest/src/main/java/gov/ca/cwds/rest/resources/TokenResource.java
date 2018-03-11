@@ -14,6 +14,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 
+import com.google.inject.Inject;
+
 /**
  * @author TPT-2 team
  */
@@ -24,6 +26,7 @@ public class TokenResource {
     private SwaggerConfiguration swaggerConfiguration;
     private JerseyClient client;
 
+    @Inject
     public TokenResource(SwaggerConfiguration swaggerConfiguration) {
         this.swaggerConfiguration = swaggerConfiguration;
     }
