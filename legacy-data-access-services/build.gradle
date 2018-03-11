@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     compile project(':legacy-data-access')
+    compile project(':api-core-abac')
     compile project(':drools-engine')
     compile project (':api-core-cms')
 

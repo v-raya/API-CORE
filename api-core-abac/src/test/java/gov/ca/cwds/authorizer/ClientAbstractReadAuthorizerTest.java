@@ -16,7 +16,8 @@ import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
-import gov.ca.cwds.cms.data.access.service.ClientCoreService;
+import gov.ca.cwds.authorizer.drools.configuration.ClientAuthorizationDroolsConfiguration;
+import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
 import gov.ca.cwds.drools.DroolsService;
@@ -45,7 +46,7 @@ public class ClientAbstractReadAuthorizerTest {
   private ClientCountyDeterminationService clientCountyDeterminationServiceMock;
 
   @Mock
-  private ClientCoreService clientCoreServiceMock;
+  private ClientDao clientDaoMock;
 
   private ClientAbstractReadAuthorizer testSubject;
 
@@ -54,9 +55,10 @@ public class ClientAbstractReadAuthorizerTest {
     MockitoAnnotations.initMocks(this);
     final DroolsService droolsService = new DroolsService();
     final DroolsAuthorizationService droolsAuthorizationService = new DroolsAuthorizationService(droolsService);
-    testSubject = new ClientAbstractReadAuthorizer();
-    testSubject.setClientCoreService(clientCoreServiceMock);
+    testSubject = new ClientAbstractReadAuthorizer(droolsAuthorizationService);
+    testSubject.setClientDao(clientDaoMock);
     testSubject.setDroolsAuthorizationService(droolsAuthorizationService);
+    testSubject.setDroolsConfiguration(new ClientAuthorizationDroolsConfiguration());
     testSubject.setCountyDeterminationService(clientCountyDeterminationServiceMock);
   }
 
@@ -85,7 +87,7 @@ public class ClientAbstractReadAuthorizerTest {
 
     // then
     assertThat(actual, is(expectedResult));
-    verifyStatic(PerrySubject.class, times(1));
+    verifyStatic(PerrySubject.class, times(0));
     PerrySubject.getPerryAccount();
   }
 
@@ -105,7 +107,7 @@ public class ClientAbstractReadAuthorizerTest {
 
     // then
     assertThat(actual, is(true));
-    verifyStatic(PerrySubject.class, times(1));
+    verifyStatic(PerrySubject.class, times(2));
     PerrySubject.getPerryAccount();
     verify(clientCountyDeterminationServiceMock, times(1)).getClientCountiesById(anyString());
   }
@@ -126,7 +128,7 @@ public class ClientAbstractReadAuthorizerTest {
 
     // then
     assertThat(actual, is(false));
-    verifyStatic(PerrySubject.class, times(1));
+    verifyStatic(PerrySubject.class, times(2));
     PerrySubject.getPerryAccount();
     verify(clientCountyDeterminationServiceMock, times(1)).getClientCountiesById(anyString());
   }
@@ -138,7 +140,7 @@ public class ClientAbstractReadAuthorizerTest {
     perryAccount.setCountyCwsCode("100");
     mockStatic(PerrySubject.class);
     when(PerrySubject.getPerryAccount()).thenReturn(perryAccount);
-    when(clientCoreServiceMock.find(anyString())).thenReturn(initClient(Sensitivity.SENSITIVE));
+    when(clientDaoMock.find(anyString())).thenReturn(initClient(Sensitivity.SENSITIVE));
     when(clientCountyDeterminationServiceMock.getClientCountiesById(anyString()))
         .thenReturn(Arrays.asList(new Short[]{100, 10}));
 
@@ -147,23 +149,23 @@ public class ClientAbstractReadAuthorizerTest {
 
     // then
     assertThat(actual, is(true));
-    verifyStatic(PerrySubject.class, times(1));
+    verifyStatic(PerrySubject.class, times(2));
     PerrySubject.getPerryAccount();
-    verify(clientCoreServiceMock, times(1)).find(anyString());
+    verify(clientDaoMock, times(1)).find(anyString());
     verify(clientCountyDeterminationServiceMock, times(1)).getClientCountiesById(anyString());
   }
 
   @Test
   public void checkId_true_whenNoClientExists() {
     // given
-    when(clientCoreServiceMock.find(CLIENT_ID)).thenReturn(null);
+    when(clientDaoMock.find(CLIENT_ID)).thenReturn(null);
 
     // when
     final boolean actual = testSubject.checkId(CLIENT_ID);
 
     // then
     assertThat(actual, is(true));
-    verify(clientCoreServiceMock, times(1)).find(anyString());
+    verify(clientDaoMock, times(1)).find(anyString());
   }
 
   @Test
@@ -171,10 +173,10 @@ public class ClientAbstractReadAuthorizerTest {
     ClientAbstractReadAuthorizer spy = spy(testSubject);
 
     Client client = initClient(null);
-    when(clientCoreServiceMock.find(anyString())).thenReturn(client);
+    when(clientDaoMock.find(anyString())).thenReturn(client);
     doReturn(true).when(spy).checkInstance(any());
 
-    spy.setClientCoreService(clientCoreServiceMock);
+    spy.setClientDao(clientDaoMock);
 
     assertTrue(spy.checkId("-1"));
   }
@@ -184,10 +186,10 @@ public class ClientAbstractReadAuthorizerTest {
     ClientAbstractReadAuthorizer spy = spy(testSubject);
 
     Client client = initClient(null);
-    when(clientCoreServiceMock.find(anyString())).thenReturn(client);
+    when(clientDaoMock.find(anyString())).thenReturn(client);
     doReturn(false).when(spy).checkInstance(any());
 
-    spy.setClientCoreService(clientCoreServiceMock);
+    spy.setClientDao(clientDaoMock);
 
     assertFalse(spy.checkId("-1"));
   }

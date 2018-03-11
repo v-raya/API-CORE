@@ -35,6 +35,7 @@ import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.rest.exception.IssueDetails;
+import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.time.LocalDate;
@@ -116,7 +117,7 @@ public class SubstituteCareProviderServiceImpl implements SubstituteCareProvider
    * @throws DataAccessServicesException
    */
   @Override
-  public SubstituteCareProvider create(SCPEntityAwareDTO scpEntityAwareDTO)
+  public SubstituteCareProvider create(@Authorize("substituteCareProvider:create:scpEntityAwareDTO.entity") SCPEntityAwareDTO scpEntityAwareDTO)
       throws DataAccessServicesException {
     try {
       validateParameters(scpEntityAwareDTO);

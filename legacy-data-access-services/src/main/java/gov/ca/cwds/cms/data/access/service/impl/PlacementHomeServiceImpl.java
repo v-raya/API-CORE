@@ -22,6 +22,7 @@ import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.rest.exception.IssueDetails;
+import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -118,7 +119,7 @@ public class PlacementHomeServiceImpl implements PlacementHomeService {
   }
 
   @Override
-  public PlacementHome create(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO)
+  public PlacementHome create(@Authorize("placementHome:create:placementHomeEntityAwareDTO.entity") PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO)
       throws DataAccessServicesException {
     try {
       validateParameters(placementHomeEntityAwareDTO);
