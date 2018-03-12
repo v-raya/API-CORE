@@ -10,11 +10,13 @@ import gov.ca.cwds.data.legacy.cms.dao.DasHistoryDao;
 import gov.ca.cwds.data.legacy.cms.dao.DeliveredServiceDao;
 import gov.ca.cwds.data.legacy.cms.dao.NameTypeDao;
 import gov.ca.cwds.data.legacy.cms.dao.NearFatalityDao;
+import gov.ca.cwds.data.legacy.cms.dao.PlacementEpisodeDao;
 import gov.ca.cwds.data.legacy.cms.dao.SafetyAlertDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.DasHistory;
 import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
 import gov.ca.cwds.data.legacy.cms.entity.NearFatality;
+import gov.ca.cwds.data.legacy.cms.entity.PlacementEpisode;
 import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.drools.DroolsService;
@@ -42,6 +44,7 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
   @Inject private SafetyAlertDao safetyAlertDao;
   @Inject private DasHistoryDao dasHistoryDao;
   @Inject private NearFatalityDao nearFatalityDao;
+  @Inject private PlacementEpisodeDao placementEpisodeDao;
 
   @Override
   @Authorize(CLIENT_READ_CLIENT)
@@ -94,6 +97,9 @@ public abstract class ClientCoreServiceBase<T extends ClientEntityAwareDTO>
 
     final Collection<DasHistory> dasHistories = dasHistoryDao.findByClientId(clientId);
     clientEntityAwareDTO.getDasHistories().addAll(dasHistories);
+
+    final Collection<PlacementEpisode> placementEpisodes = placementEpisodeDao.findByClientId(clientId);
+    clientEntityAwareDTO.getPlacementEpisodes().addAll(placementEpisodes);
 
     enrichClientEntityAwareDto((T) clientEntityAwareDTO);
 
