@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest;
 
-import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -18,17 +17,14 @@ public class ElasticsearchConfiguration {
   @JsonProperty("elasticsearch.cluster")
   private String elasticsearchCluster;
 
-  @NotNull
   @JsonProperty("elasticsearch.host")
   private String elasticsearchHost;
 
-  @NotNull
   @JsonProperty("elasticsearch.port")
   private String elasticsearchPort;
 
-  @NotNull
-  @JsonProperty("elasticsearch.additional.nodes")
-  private List<String> nodes;
+  @JsonProperty("elasticsearch.nodes")
+  private String elasticsearchNodes;
 
   @NotNull
   @JsonProperty("elasticsearch.alias")
@@ -70,12 +66,11 @@ public class ElasticsearchConfiguration {
   public String getElasticsearchPort() {
     return elasticsearchPort;
   }
-
   /**
-   * @return the list of additional elasticsearch nodes for clustering environment support
+   * @return the elasticsearchNodes
    */
-  public List<String> getNodes() {
-    return nodes;
+  public String getElasticsearchNodes() {
+    return elasticsearchNodes;
   }
 
   /**
