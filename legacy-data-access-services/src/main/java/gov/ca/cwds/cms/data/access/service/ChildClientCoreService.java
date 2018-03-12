@@ -3,7 +3,6 @@ package gov.ca.cwds.cms.data.access.service;
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
 import gov.ca.cwds.data.legacy.cms.dao.ChildClientDao;
-import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.CreditReportHistoryDao;
 import gov.ca.cwds.data.legacy.cms.dao.CsecHistoryDao;
 import gov.ca.cwds.data.legacy.cms.dao.FCEligibilityDao;
@@ -46,10 +45,9 @@ public class ChildClientCoreService extends ClientCoreService {
   @Inject private HealthReferralDao healthReferralDao;
   @Inject private SchoolOriginHistoryDao schoolOriginHistoryDao;
   @Inject private HealthScreeningDao healthScreeningDao;
-  @Inject private ChildClientDao childClientDao;
 
   @Inject
-  public ChildClientCoreService(ClientDao crudDao) {
+  public ChildClientCoreService(ChildClientDao crudDao) {
     super(crudDao);
   }
 
@@ -102,4 +100,5 @@ public class ChildClientCoreService extends ClientCoreService {
     List<HealthScreening> healthScreenings = healthScreeningDao.findByChildClientId(childClientId);
     clientEntityAwareDTO.getHealthScreenings().addAll(healthScreenings);
   }
+
 }

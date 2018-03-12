@@ -19,7 +19,6 @@ import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderUcDao;
 import gov.ca.cwds.cms.data.access.dto.ExtendedSCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
-import gov.ca.cwds.cms.data.access.service.impl.IdGenerator;
 import gov.ca.cwds.cms.data.access.service.rules.SubstituteCareProviderDroolsConfiguration;
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;

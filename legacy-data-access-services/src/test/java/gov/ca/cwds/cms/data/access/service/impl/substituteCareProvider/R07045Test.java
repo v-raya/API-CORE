@@ -17,7 +17,7 @@ import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderCoreService;
-import gov.ca.cwds.cms.data.access.service.impl.IdGenerator;
+import gov.ca.cwds.cms.data.access.service.IdGenerator;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.util.Arrays;

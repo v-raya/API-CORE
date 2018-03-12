@@ -1,6 +1,6 @@
 package gov.ca.cwds.cms.data.access.service;
 
-import static gov.ca.cwds.cms.data.access.service.impl.IdGenerator.generateId;
+import static gov.ca.cwds.cms.data.access.service.IdGenerator.generateId;
 import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
 import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
 
@@ -26,7 +26,6 @@ import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.mapper.ExternalInterfaceMapper;
-import gov.ca.cwds.cms.data.access.service.impl.IdGenerator;
 import gov.ca.cwds.cms.data.access.service.rules.PlacementHomeDroolsConfiguration;
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
