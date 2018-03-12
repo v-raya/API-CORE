@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 /** @author CWDS TPT-3 Team */
 public abstract class DataAccessServiceBase<
-        E extends CrudsDao<T>, T extends PersistentObject, P extends BaseEntityAwareDTO<T>>
+    E extends CrudsDao<T>, T extends PersistentObject, P extends BaseEntityAwareDTO<T>>
     implements DataAccessService<T, P> {
 
   private final E crudDao;
@@ -23,7 +23,10 @@ public abstract class DataAccessServiceBase<
 
   protected DataAccessServiceBase(E crudDao) {
     this.crudDao = crudDao;
+    init();
+  }
 
+  private final void init() {
     updateLifecycle = getUpdateLifeCycle();
     createLifecycle = getCreateLifeCycle();
     deleteLifecycle = getDeleteLifeCycle();
