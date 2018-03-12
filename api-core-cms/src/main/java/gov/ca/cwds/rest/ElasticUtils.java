@@ -83,20 +83,17 @@ public class ElasticUtils {
         }
 
         //remove duplicates if any.
-        final Map<String,String[]> nodeMap = new HashMap<>();
+        final Map<String,String[]> nodesMap = new HashMap<>(nodesList.size());
         for (String node : nodesList) {
-          nodeMap.put(node, node.split(":"));
+          nodesMap.put(node, node.split(":"));
         }
 
-        String host;
-        String port;
-        for (Map.Entry<String, String[]> entry : nodeMap.entrySet()){
-          if (entry.getValue().length == 2){
-            host = entry.getValue()[0];
-            port = entry.getValue()[1];
-            LOGGER.info("Adding new ES Node host:[{}] port:[{}] to elasticsearch client", host, port);
+        for (Map.Entry<String, String[]> entry : nodesMap.entrySet()){
+          String[] hostPort = entry.getValue();
+          if (hostPort.length >= 2){
+            LOGGER.info("Adding new ES Node host:[{}] port:[{}] to elasticsearch client", hostPort[0], hostPort[1]);
             try {
-              addressList.add(new InetSocketTransportAddress(InetAddress.getByName(host), Integer.parseInt(port)));
+              addressList.add(new InetSocketTransportAddress(InetAddress.getByName(hostPort[0]), Integer.parseInt(hostPort[1])));
             } catch (UnknownHostException e) {
               LOGGER.error("Error adding Node: {}", e.getMessage(), e);
             }
