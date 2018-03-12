@@ -4,7 +4,7 @@ import static org.junit.Assert.fail;
 
 import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
-import gov.ca.cwds.cms.data.access.service.ClientCoreService;
+import gov.ca.cwds.cms.data.access.service.impl.ClientCoreService;
 import gov.ca.cwds.cms.data.access.service.impl.BaseDocToolRulesTest;
 import gov.ca.cwds.cms.data.access.service.rules.ClientDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.Client;

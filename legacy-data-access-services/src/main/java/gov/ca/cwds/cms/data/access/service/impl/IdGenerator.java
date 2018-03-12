@@ -1,4 +1,4 @@
-package gov.ca.cwds.cms.data.access.service;
+package gov.ca.cwds.cms.data.access.service.impl;
 
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.security.utils.PrincipalUtils;

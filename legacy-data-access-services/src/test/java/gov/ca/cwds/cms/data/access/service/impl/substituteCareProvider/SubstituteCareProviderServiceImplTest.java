@@ -6,7 +6,7 @@ import static org.mockito.Mockito.mock;
 
 import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderDao;
 import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
-import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderCoreService;
+import gov.ca.cwds.cms.data.access.service.impl.SubstituteCareProviderCoreService;
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
 import gov.ca.cwds.data.legacy.cms.entity.PhoneContactDetail;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;

@@ -6,7 +6,7 @@ import gov.ca.cwds.cms.data.access.Constants.StaffPersonPrivileges;
 import gov.ca.cwds.cms.data.access.dao.PlacementHomeDao;
 import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
-import gov.ca.cwds.cms.data.access.service.PlacementHomeCoreService;
+import gov.ca.cwds.cms.data.access.service.impl.PlacementHomeCoreService;
 import gov.ca.cwds.cms.data.access.service.impl.BaseDocToolRulesTest;
 import gov.ca.cwds.cms.data.access.service.rules.PlacementHomeDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;

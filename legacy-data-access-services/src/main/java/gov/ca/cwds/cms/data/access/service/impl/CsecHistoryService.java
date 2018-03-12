@@ -1,4 +1,4 @@
-package gov.ca.cwds.cms.data.access.service;
+package gov.ca.cwds.cms.data.access.service.impl;
 
 import com.google.inject.Inject;
 import gov.ca.cwds.data.legacy.cms.dao.CsecHistoryDao;

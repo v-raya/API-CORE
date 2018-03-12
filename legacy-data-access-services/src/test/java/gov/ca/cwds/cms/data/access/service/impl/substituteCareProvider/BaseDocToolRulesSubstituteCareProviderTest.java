@@ -7,7 +7,7 @@ import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderDao;
 import gov.ca.cwds.cms.data.access.dto.ExtendedSCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
-import gov.ca.cwds.cms.data.access.service.SubstituteCareProviderCoreService;
+import gov.ca.cwds.cms.data.access.service.impl.SubstituteCareProviderCoreService;
 import gov.ca.cwds.cms.data.access.service.impl.BaseDocToolRulesTest;
 import gov.ca.cwds.cms.data.access.service.rules.SubstituteCareProviderDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeInformation;
