@@ -1,4 +1,4 @@
-package gov.ca.cwds.cms.data.access.service;
+package gov.ca.cwds.cms.data.access.service.impl;
 
 import gov.ca.cwds.data.legacy.cms.dao.SafetyAlertDao;
 import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;

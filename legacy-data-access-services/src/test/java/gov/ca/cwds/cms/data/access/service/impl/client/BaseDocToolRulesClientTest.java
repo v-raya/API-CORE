@@ -3,8 +3,10 @@ package gov.ca.cwds.cms.data.access.service.impl.client;
 import static org.junit.Assert.fail;
 
 import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
+import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
+import gov.ca.cwds.cms.data.access.service.impl.ClientCoreService;
 import gov.ca.cwds.cms.data.access.service.impl.BaseDocToolRulesTest;
-import gov.ca.cwds.cms.data.access.service.impl.ClientCoreServiceBase;
+import gov.ca.cwds.cms.data.access.service.rules.ClientDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
@@ -13,17 +15,18 @@ import org.junit.Before;
 public abstract class BaseDocToolRulesClientTest<T extends Client, E extends ClientEntityAwareDTO> extends
     BaseDocToolRulesTest {
 
-  private ClientCoreServiceBase<E> clientCoreService;
+  private ClientCoreService clientCoreService;
   E clientEntityAwareDTO;
+  protected BusinessValidationService businessValidationService;
 
   @Before
   public void setUp() {
+    businessValidationService = new BusinessValidationService(droolsService);
     clientCoreService = getClientCoreService();
-    clientCoreService.setDroolsService(droolsService);
     clientEntityAwareDTO = getAwareDTO();
   }
 
-  protected abstract ClientCoreServiceBase<E> getClientCoreService();
+  protected abstract ClientCoreService getClientCoreService();
 
   @Override
   public String getPrivilege() {
@@ -88,7 +91,8 @@ public abstract class BaseDocToolRulesClientTest<T extends Client, E extends Cli
 
   private void runBusinessValidation(ClientEntityAwareDTO clientEntityAwareDTO)
       throws DroolsException {
-    clientCoreService.runBusinessValidation(clientEntityAwareDTO, principal);
+    businessValidationService.runBusinessValidation(clientEntityAwareDTO, principal,
+        ClientDroolsConfiguration.INSTANCE);
   }
 
   protected abstract E getAwareDTO();

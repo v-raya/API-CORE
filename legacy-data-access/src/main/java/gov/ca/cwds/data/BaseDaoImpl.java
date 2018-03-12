@@ -21,7 +21,7 @@ import gov.ca.cwds.data.std.BatchBucketDao;
 
 /**
  * Base class for DAO with some common methods.
- * 
+ *
  * @author CWDS API Team
  * @param <T> type of {@link PersistentObject}
  */
@@ -30,7 +30,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
 
   /**
    * Constructor
-   * 
+   *
    * @param sessionFactory The session factory
    */
   public BaseDaoImpl(SessionFactory sessionFactory) {
@@ -39,7 +39,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.data.BaseDao#findAll()
    */
   @SuppressWarnings("unchecked")
@@ -79,7 +79,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.data.BaseDao#findAllUpdatedAfter(java.util.Date)
    */
   @SuppressWarnings("unchecked")
@@ -90,9 +90,14 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
     final Transaction txn = session.beginTransaction();
     try {
       // Compatible with both DB2 z/OS and Linux.
-      final Query query = session.getNamedQuery(namedQueryName).setCacheable(false)
-          .setFlushMode(FlushMode.MANUAL).setReadOnly(true).setCacheMode(CacheMode.IGNORE)
-          .setTimestamp("after", new java.sql.Timestamp(datetime.getTime()));
+      final Query query =
+          session
+              .getNamedQuery(namedQueryName)
+              .setCacheable(false)
+              .setFlushMode(FlushMode.MANUAL)
+              .setReadOnly(true)
+              .setCacheMode(CacheMode.IGNORE)
+              .setTimestamp("after", new java.sql.Timestamp(datetime.getTime()));
 
       // Iterate, process, flush.
       int fetchSize = 5000;
@@ -122,12 +127,11 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
 
   /**
    * Builds named query by the naming convention of "entity class.suffix".
-   * 
+   *
    * @param suffix suffix of the named query
    * @return named query for lookup
    */
   protected String constructNamedQueryName(String suffix) {
     return getEntityClass().getName() + "." + suffix;
   }
-
 }

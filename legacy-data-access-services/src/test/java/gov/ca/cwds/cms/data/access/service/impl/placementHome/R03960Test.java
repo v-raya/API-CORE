@@ -1,16 +1,13 @@
 package gov.ca.cwds.cms.data.access.service.impl.placementHome;
 
-import gov.ca.cwds.cms.data.access.service.impl.placementHome.BaseDocToolRulesPlacementHomeTest;
+import gov.ca.cwds.cms.data.access.service.rules.PlacementHomeDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import org.junit.Test;
 
-/**
- * @author TPT-2
- */
+/** @author TPT-2 */
 public class R03960Test extends BaseDocToolRulesPlacementHomeTest {
-
 
   private void preparePlacementHome(int facilityType, String licenseCode, String facilityName) {
     final PlacementHome placementHome = placementHomeEntityAwareDTO.getEntity();
@@ -34,7 +31,8 @@ public class R03960Test extends BaseDocToolRulesPlacementHomeTest {
   @Test
   public void testFosterFamilyHomeOtherLicenceCode() throws Exception {
     preparePlacementHome(1416, "AA", null);
-    placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
+    businessValidationService.runBusinessValidation(
+        placementHomeEntityAwareDTO, principal, PlacementHomeDroolsConfiguration.INSTANCE);
   }
 
   @Test(expected = BusinessValidationException.class)
@@ -52,7 +50,8 @@ public class R03960Test extends BaseDocToolRulesPlacementHomeTest {
   @Test
   public void testResourceFamilyHomeOtherLicenceCode() throws Exception {
     preparePlacementHome(6914, "BB", null);
-    placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
+    businessValidationService.runBusinessValidation(
+        placementHomeEntityAwareDTO, principal, PlacementHomeDroolsConfiguration.INSTANCE);
   }
 
   @Test
@@ -62,7 +61,11 @@ public class R03960Test extends BaseDocToolRulesPlacementHomeTest {
   }
 
   private void runBusinessValidation() throws DroolsException {
-    placementHomeService.runDataProcessing(placementHomeEntityAwareDTO, principal);
-    placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
+    businessValidationService.runDataProcessing(
+        placementHomeEntityAwareDTO,
+        principal,
+        PlacementHomeDroolsConfiguration.DATA_PROCESSING_INSTANCE);
+    businessValidationService.runBusinessValidation(
+        placementHomeEntityAwareDTO, principal, PlacementHomeDroolsConfiguration.INSTANCE);
   }
 }
