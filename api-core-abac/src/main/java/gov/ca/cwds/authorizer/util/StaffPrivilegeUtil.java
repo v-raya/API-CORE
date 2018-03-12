@@ -16,6 +16,7 @@ public final class StaffPrivilegeUtil {
   private static final String STATE_OF_CALIFORNIA = "State of California";
   private static final String SENSITIVE_PERSONS = "Sensitive Persons";
   private static final String SEALED = "Sealed";
+  private static final String RESOURCE_MGMT_PLACEMENT_FACILITY_MAINT = "Resource Mgmt Placement Facility Maint";
 
   private StaffPrivilegeUtil() {
   }
@@ -32,6 +33,11 @@ public final class StaffPrivilegeUtil {
     for (final String privilege : privileges) {
       if (CWS_CASE_MANAGEMENT_SYSTEM.equals(privilege)) {
         results.add(StaffPrivilegeType.SOCIAL_WORKER_ONLY);
+        continue;
+      }
+
+      if (RESOURCE_MGMT_PLACEMENT_FACILITY_MAINT.equals(privilege)) {
+        results.add(StaffPrivilegeType.RESOURCE_MGMT_PLACEMENT_FACILITY_MAINT);
         continue;
       }
 

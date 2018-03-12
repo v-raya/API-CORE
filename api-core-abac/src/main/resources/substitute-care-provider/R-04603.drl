@@ -1,0 +1,36 @@
+/*
+ * DocTool Rule: R - 04603
+ *
+ * Rule Text
+ * A staff person with a government entity of State of California and a privilege of
+ * Resource Mgmt Placement Facility Maint can add, modify and delete Foster Family Homes
+ * and Resource Family Homes with a Licenser Code of 'Licensed by location county'. This
+ * same staff person can add, modify and delete all associated substitute case providers.
+ * They can also add, modify and delete the Special Project information for these Foster
+ * Family Homes and Resource Family Homes.
+ *
+ * Logic
+ * If STAFF_PERSON > CWS_OFFICE.Government_Entity_Type = 'State of California', and
+ * If (STAFF_PERSON (of the logged on worker) > USER_ID > STAFF_PERSON_PRIVILEGE.Level_Of_Auth_Privilege_Code = 'P',
+ * and STAFF_PERSON_PRIVILEGE.Level_Of_Auth_Privilege_Type = 'Resource Mgmt Placement Facility Maint'),
+ * allow Add, Modify and Delete of PLACEMENT_HOME (where .Placement_Facility_Type =
+ * 'Foster Family Home' or 'Resource Family Home' and .Licenser_Code = 'CT'). Also allow
+ * Add, Modify and Delete of corresponding SUBSTITUTE_CARE_PROVIDER. Allow Add, Update, Delete
+ * of SPECIAL_PROJECT_HOME.
+ */
+
+import gov.ca.cwds.security.realm.PerryAccount;
+import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
+
+global Boolean authorizationResult;
+
+rule "R - 04603 Foster Family Homes Security"
+  dialect "mvel"
+  agenda-group "substitute-care-provider-authorization-agenda"
+when
+    $substituteCareProvider: SubstituteCareProvider()
+    PerryAccount(privileges contains "Resource Mgmt Placement Facility Maint", countyName == "State of California")
+then
+    kcontext.getKieRuntime().setGlobal("authorizationResult", true);
+    retract($substituteCareProvider);
+end

@@ -6,15 +6,19 @@ import gov.ca.cwds.drools.DroolsConfiguration;
 /**
  * @author CWDS TPT-3 Team
  */
-public final class ClientAuthorizationDroolsConfiguration extends DroolsConfiguration<Client> {
+public final class ClientAuthorizationDroolsConfiguration extends DroolsConfiguration<Client> implements DroolsAuthorizer {
 
-  public static final ClientAuthorizationDroolsConfiguration INSTANCE = new ClientAuthorizationDroolsConfiguration(
-      "client-authorization-session",
-      "client-authorization-agenda",
-      "client-authorization-rules"
-  );
+  private static final String SESSION_NAME = "client-authorization-session";
+  private static final String AGENDA_GROUP = "client-authorization-agenda";
+  private static final String PATH_TO_RULES_CONFIG = "client-authorization-rules";
+  private static final DroolsConfiguration INSTANCE = new ClientAuthorizationDroolsConfiguration();
 
-  private ClientAuthorizationDroolsConfiguration(String sessionName, String agendaGroup, String pathToRulesConfig) {
-    super(sessionName, agendaGroup, pathToRulesConfig);
+  public ClientAuthorizationDroolsConfiguration() {
+    super(SESSION_NAME, AGENDA_GROUP, PATH_TO_RULES_CONFIG);
+  }
+
+  @Override
+  public DroolsConfiguration getInstance() {
+    return INSTANCE;
   }
 }
