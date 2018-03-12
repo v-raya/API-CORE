@@ -30,6 +30,7 @@ public abstract class DataAccessServiceBase<
       DataAccessBundle<P> dataAccessBundle = new DataAccessBundle<>(entityAwareDTO);
       beforeDataProcessing(dataAccessBundle);
       dataProcessing(dataAccessBundle, PrincipalUtils.getPrincipal());
+      afterDataProcessing(dataAccessBundle);
       beforeBusinessValidation(dataAccessBundle);
       businessValidation(dataAccessBundle, PrincipalUtils.getPrincipal());
       afterBusinessValidation(dataAccessBundle);
@@ -43,7 +44,20 @@ public abstract class DataAccessServiceBase<
 
   @Override
   public final T update(P entityAwareDTO) throws DataAccessServicesException, DroolsException {
-    return (T) crudDao.update(entityAwareDTO.getEntity());
+    try {
+      DataAccessBundle<P> dataAccessBundle = new DataAccessBundle<>(entityAwareDTO);
+      beforeDataProcessing(dataAccessBundle);
+      dataProcessing(dataAccessBundle, PrincipalUtils.getPrincipal());
+      afterDataProcessing(dataAccessBundle);
+      beforeBusinessValidation(dataAccessBundle);
+      businessValidation(dataAccessBundle, PrincipalUtils.getPrincipal());
+      afterBusinessValidation(dataAccessBundle);
+      T t = (T) crudDao.update(entityAwareDTO.getEntity());
+      afterCreate(dataAccessBundle);
+      return t;
+    } catch (DroolsException e) {
+      throw new DataAccessServicesException(e);
+    }
   }
 
   @Override
