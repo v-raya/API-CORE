@@ -30,6 +30,7 @@ import gov.ca.cwds.data.legacy.cms.entity.ScpOtherEthnicity;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProviderUc;
 import gov.ca.cwds.drools.DroolsException;
+import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -95,6 +96,14 @@ public class SubstituteCareProviderCoreService
     storeOutOfStateChecks(awareDTO);
 
     prepareSubstituteCareProviderPhoneticSearchKeywords(awareDTO.getEntity());
+  }
+
+  @Override
+  public SubstituteCareProvider create(
+      @Authorize("substituteCareProvider:create:scpEntityAwareDTO.entity")
+          SCPEntityAwareDTO entityAwareDTO)
+      throws DataAccessServicesException {
+    return super.create(entityAwareDTO);
   }
 
   /**

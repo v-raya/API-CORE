@@ -25,7 +25,7 @@ public abstract class DataAccessServiceBase<
   }
 
   @Override
-  public final T create(P entityAwareDTO) throws DataAccessServicesException {
+  public T create(P entityAwareDTO) throws DataAccessServicesException {
     try {
       DataAccessBundle<P> dataAccessBundle = new DataAccessBundle<>(entityAwareDTO);
       beforeDataProcessing(dataAccessBundle);
