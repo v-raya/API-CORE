@@ -1,0 +1,33 @@
+import gov.ca.cwds.rest.exception.IssueDetails;
+import gov.ca.cwds.data.legacy.cms.entity.Client;
+import gov.ca.cwds.data.legacy.cms.entity.PlacementEpisode;
+import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO
+
+global java.util.Set validationDetailsList
+
+rule "R-05814-2"
+  dialect "mvel"
+  agenda-group "client-agenda"
+  when
+      /*
+        Code: R - 05814
+
+        Rule Txt:
+        The Date of  Birth must be less than or equal to the earliest of the Removal From Home Date.
+
+        Logic:
+        CLIENT.DATE_OF_BIRTH must be < or = min(CLIENT>PLACEMENT_EPISODE.REMOVAL_DATE).
+      */
+      $clientAwareDTO: ClientEntityAwareDTO()
+      $client: Client($birthDate: birthDate != null) from $clientAwareDTO.entity
+      $placementEpisode: PlacementEpisode(petnFildt != null, petnFildt.isBefore($birthDate)) from $clientAwareDTO.placementEpisodes
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-05814");
+      details.setUserMessage(String.format("Petition Date cannot be less than the birth date (if it exists) of the Client."
+      + " Client ID:'%s', Client birth date: %tm/%<td/%<tY, Placement Episode ThirdID:'%s', Petition Date : %tm/%<td/%<tY",
+      $client.getIdentifier(), $client.getBirthDate(), $placementEpisode.getThirdId(), $placementEpisode.getPetnFildt()));
+      details.setTechnicalMessage("If Client.birthDate != null then for each PlacementEpisode should be: "
+      + "Client.birthDate >= HealthScreening.petitionDate");
+      validationDetailsList.add(details);
+end
