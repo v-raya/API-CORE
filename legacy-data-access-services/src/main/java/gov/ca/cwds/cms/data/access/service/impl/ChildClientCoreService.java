@@ -28,6 +28,7 @@ import gov.ca.cwds.data.legacy.cms.entity.ParentalRightsTermination;
 import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
 import gov.ca.cwds.data.legacy.cms.entity.SchoolOriginHistory;
 import gov.ca.cwds.data.legacy.cms.entity.SpecialEducation;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -49,6 +50,11 @@ public class ChildClientCoreService extends ClientCoreService {
   @Inject
   public ChildClientCoreService(ChildClientDao crudDao) {
     super(crudDao);
+  }
+
+  @Override
+  public ChildClient find(Serializable primaryKey) {
+    return (ChildClient) super.find(primaryKey);
   }
 
   @Override
