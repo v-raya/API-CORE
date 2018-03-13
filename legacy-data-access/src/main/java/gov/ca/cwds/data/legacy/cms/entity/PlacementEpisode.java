@@ -3,6 +3,7 @@ package gov.ca.cwds.data.legacy.cms.entity;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -37,7 +38,7 @@ public class PlacementEpisode extends BasePlacementEpisode {
 
   @Override
   @NotFound(action = NotFoundAction.IGNORE)
-  @OneToOne
+  @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "RMV_BY_ID", referencedColumnName = "IDENTIFIER")
   public StaffPerson getStaffPerson() {
     return staffPerson;
