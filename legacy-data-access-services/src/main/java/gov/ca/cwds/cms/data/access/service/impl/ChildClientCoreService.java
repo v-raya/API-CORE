@@ -1,5 +1,7 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
+import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
+
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessBundle;
@@ -28,6 +30,7 @@ import gov.ca.cwds.data.legacy.cms.entity.ParentalRightsTermination;
 import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
 import gov.ca.cwds.data.legacy.cms.entity.SchoolOriginHistory;
 import gov.ca.cwds.data.legacy.cms.entity.SpecialEducation;
+import gov.ca.cwds.security.annotations.Authorize;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -53,6 +56,7 @@ public class ChildClientCoreService extends ClientCoreService {
   }
 
   @Override
+  @Authorize(CLIENT_READ_CLIENT)
   public ChildClient find(Serializable primaryKey) {
     return (ChildClient) super.find(primaryKey);
   }
