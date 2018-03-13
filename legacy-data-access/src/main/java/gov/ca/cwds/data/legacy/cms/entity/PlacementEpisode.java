@@ -35,11 +35,10 @@ public class PlacementEpisode extends BasePlacementEpisode {
   public void setOutOfHomePlacements(Set<OutOfHomePlacement> outOfHomePlacements) {
     this.outOfHomePlacements = outOfHomePlacements;
   }
-
   @Override
-  @NotFound(action = NotFoundAction.IGNORE)
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "RMV_BY_ID", referencedColumnName = "IDENTIFIER")
+//  @NotFound(action = NotFoundAction.IGNORE)
+//  @OneToOne(fetch = FetchType.LAZY)
+//  @JoinColumn(name = "RMV_BY_ID", referencedColumnName = "IDENTIFIER")
   public StaffPerson getStaffPerson() {
     return staffPerson;
   }
