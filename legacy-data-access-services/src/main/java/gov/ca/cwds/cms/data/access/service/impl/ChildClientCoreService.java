@@ -19,6 +19,7 @@ import gov.ca.cwds.data.legacy.cms.dao.PaternityDetailDao;
 import gov.ca.cwds.data.legacy.cms.dao.SchoolOriginHistoryDao;
 import gov.ca.cwds.data.legacy.cms.dao.SpecialEducationDao;
 import gov.ca.cwds.data.legacy.cms.entity.ChildClient;
+import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.CreditReportHistory;
 import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
 import gov.ca.cwds.data.legacy.cms.entity.FCEligibility;
@@ -58,7 +59,11 @@ public class ChildClientCoreService extends ClientCoreService {
   @Override
   @Authorize(CLIENT_READ_CLIENT)
   public ChildClient find(Serializable primaryKey) {
-    return (ChildClient) super.find(primaryKey);
+    Client childClient =  super.find(primaryKey);
+    if (childClient != null && childClient instanceof ChildClient) {
+      return (ChildClient) childClient;
+    }
+    return null;
   }
 
   @Override
