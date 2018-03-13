@@ -1,8 +1,6 @@
 package gov.ca.cwds.data.legacy.cms.dao;
 
 import com.google.inject.Inject;
-
-import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.legacy.cms.entity.ChildClient;
 import gov.ca.cwds.inject.CmsSessionFactory;
 import org.hibernate.SessionFactory;
@@ -12,7 +10,7 @@ import org.hibernate.SessionFactory;
  *
  * @author CWDS API Team
  */
-public class ChildClientDao extends BaseDaoImpl<ChildClient> {
+public class ChildClientDao extends ClientDao {
 
   /**
    * Constructor

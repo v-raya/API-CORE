@@ -3,6 +3,7 @@ package gov.ca.cwds.cms.data.access.service.impl.placementHome;
 import static org.junit.Assert.fail;
 
 import gov.ca.cwds.cms.data.access.service.impl.placementHome.BaseDocToolRulesPlacementHomeTest;
+import gov.ca.cwds.cms.data.access.service.rules.PlacementHomeDroolsConfiguration;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import org.junit.Assert;
@@ -69,7 +70,8 @@ public class R00168Test extends BaseDocToolRulesPlacementHomeTest {
   private void assertInvalid(Runnable testCase) throws DroolsException {
     try {
       testCase.run();
-      placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
+      businessValidationService.runBusinessValidation(placementHomeEntityAwareDTO, principal,
+          PlacementHomeDroolsConfiguration.INSTANCE);
       fail();
     } catch (BusinessValidationException e) {
       Assert.assertEquals("R-00168", e.getValidationDetailsList().iterator().next().getCode());
@@ -79,7 +81,7 @@ public class R00168Test extends BaseDocToolRulesPlacementHomeTest {
   private void assertValid(Runnable testCase) {
     try {
       testCase.run();
-      placementHomeService.runBusinessValidation(placementHomeEntityAwareDTO, principal);
+      businessValidationService.runBusinessValidation(placementHomeEntityAwareDTO, principal,  PlacementHomeDroolsConfiguration.INSTANCE);
     } catch (Exception e) {
       e.printStackTrace();
       fail();

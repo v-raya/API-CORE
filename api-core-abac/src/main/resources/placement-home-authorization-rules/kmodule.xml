@@ -1,0 +1,5 @@
+<kmodule xmlns="http://www.drools.org/xsd/kmodule">
+  <kbase name="placementHomeAuthorization">
+    <ksession name="placement-home-authorization-session"/>
+  </kbase>
+</kmodule>

@@ -1,56 +1,55 @@
 package gov.ca.cwds.authorizer;
 
 import static gov.ca.cwds.authorizer.util.ClientConditionUtils.toClientCondition;
-import static gov.ca.cwds.authorizer.util.StaffPrivilegeUtil.toStaffPersonPrivilegeTypes;
 
 import com.google.inject.Inject;
 import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
-import gov.ca.cwds.cms.data.access.service.ClientCoreService;
+import gov.ca.cwds.authorizer.drools.configuration.ClientAuthorizationDroolsConfiguration;
+import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
-import gov.ca.cwds.drools.DroolsException;
-import gov.ca.cwds.security.authorizer.BaseAuthorizer;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.realm.PerrySubject;
 import gov.ca.cwds.service.ClientCountyDeterminationService;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authz.AuthorizationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author CWDS TPT-3 Team
  */
-public class ClientAbstractReadAuthorizer extends BaseAuthorizer<Client, String> {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(ClientAbstractReadAuthorizer.class);
+public class ClientAbstractReadAuthorizer extends AbstractBaseAuthorizer<Client, String> {
 
   @Inject
-  private ClientCoreService clientCoreService;
-
-  @Inject
-  private DroolsAuthorizationService droolsAuthorizationService;
+  private ClientDao clientDao;
 
   @Inject
   private ClientCountyDeterminationService countyDeterminationService;
 
+  @Inject
+  private ClientAuthorizationDroolsConfiguration droolsConfiguration;
+
+  @Inject
+  public ClientAbstractReadAuthorizer(
+      DroolsAuthorizationService droolsAuthorizationService) {
+    super(droolsAuthorizationService);
+  }
+
   @Override
   protected boolean checkId(final String clientId) {
-    final Client client = clientCoreService.find(clientId);
+    final Client client = clientDao.find(clientId);
     return client == null || checkInstance(client);
   }
 
   @Override
   protected boolean checkInstance(final Client client) {
-    final PerryAccount perryAccount = PerrySubject.getPerryAccount();
-    final Set<StaffPrivilegeType> staffPrivilegeTypes = toStaffPersonPrivilegeTypes(perryAccount);
-    if (staffPrivilegeTypes.isEmpty()) {
+    if (client == null) {
       return false;
     }
-
+    final PerryAccount perryAccount = PerrySubject.getPerryAccount();
     final ClientCondition clientCondition = getClientCondition(client, perryAccount);
-    return authorizeClientReadOperation(clientCondition, staffPrivilegeTypes, client, perryAccount);
+    List authorizationFacts = new ArrayList<>();
+    authorizationFacts.add(clientCondition);
+    return authorizeInstanceOperation(client, droolsConfiguration, authorizationFacts);
   }
 
   private ClientCondition getClientCondition(final Client client, final PerryAccount perryAccount) {
@@ -65,49 +64,16 @@ public class ClientAbstractReadAuthorizer extends BaseAuthorizer<Client, String>
           : null;
   }
 
-  private boolean authorizeClientReadOperation(
-      final ClientCondition clientCondition,
-      final Set<StaffPrivilegeType> staffPrivilegeTypes,
-      final Client client,
-      final PerryAccount perryAccount) {
-    try {
-      final boolean authorizationResult = droolsAuthorizationService
-          .authorizeClientRead(clientCondition, staffPrivilegeTypes);
-      logAuthorization(perryAccount, staffPrivilegeTypes, client, clientCondition, authorizationResult);
-      return authorizationResult;
-    } catch (DroolsException e) {
-      throw new AuthorizationException(e.getMessage(), e);
-    }
-  }
-
-  private static void logAuthorization(
-      final PerryAccount perryAccount,
-      final Set<StaffPrivilegeType> staffPrivilegeTypes,
-      final Client client,
-      final ClientCondition clientCondition,
-      final boolean authorizationResult) {
-    if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug(
-          "StaffPerson [{}] with staffPrivilegeTypes = {} is requesting Client [{}] with condition = [{}]. "
-              + "Authorization result = [{}]",
-          perryAccount.getStaffId(),
-          staffPrivilegeTypes,
-          client.getIdentifier(),
-          clientCondition,
-          authorizationResult
-      );
-    }
-  }
-
-  void setClientCoreService(ClientCoreService clientCoreService) {
-    this.clientCoreService = clientCoreService;
-  }
-
-  void setDroolsAuthorizationService(DroolsAuthorizationService droolsAuthorizationService) {
-    this.droolsAuthorizationService = droolsAuthorizationService;
+  void setClientDao(ClientDao clientDao) {
+    this.clientDao = clientDao;
   }
 
   void setCountyDeterminationService(ClientCountyDeterminationService countyDeterminationService) {
     this.countyDeterminationService = countyDeterminationService;
+  }
+
+  void setDroolsConfiguration(
+      ClientAuthorizationDroolsConfiguration droolsConfiguration) {
+    this.droolsConfiguration = droolsConfiguration;
   }
 }

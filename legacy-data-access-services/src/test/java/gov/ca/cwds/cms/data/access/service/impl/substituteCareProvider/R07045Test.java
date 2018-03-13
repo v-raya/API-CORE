@@ -15,10 +15,10 @@ import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderDao;
 import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderUcDao;
 import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
+import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
+import gov.ca.cwds.cms.data.access.service.impl.SubstituteCareProviderCoreService;
 import gov.ca.cwds.cms.data.access.service.impl.IdGenerator;
-import gov.ca.cwds.cms.data.access.service.impl.SubstituteCareProviderServiceImpl;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
-import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.util.Arrays;
 import org.junit.Before;
@@ -35,15 +35,15 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest({IdGenerator.class, PrincipalUtils.class})
 public class R07045Test {
 
-  private SubstituteCareProviderServiceImpl scpService;
+  private SubstituteCareProviderCoreService scpService;
   private ScpOtherEthnicityDao mockedEthnicityDao;
+
   @Before
   public void setup() {
-    scpService = new SubstituteCareProviderServiceImpl();
+    scpService = new SubstituteCareProviderCoreService(mock(SubstituteCareProviderDao.class));
     mockedEthnicityDao = mock(ScpOtherEthnicityDao.class);
     scpService.setScpOtherEthnicityDao(mockedEthnicityDao);
-    scpService.setDroolsService(mock(DroolsService.class));
-    scpService.setSubstituteCareProviderDao(mock(SubstituteCareProviderDao.class));
+    scpService.setBusinessValidationService(mock(BusinessValidationService.class));
     scpService.setSubstituteCareProviderUcDao(mock(SubstituteCareProviderUcDao.class));
     scpService.setPlacementHomeInformationDao(mock(PlacementHomeInformationDao.class));
     scpService.setCountyOwnershipMapper(CountyOwnershipMapper.INSTANCE);
