@@ -1,5 +1,7 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
+import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
+
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessBundle;
@@ -17,6 +19,7 @@ import gov.ca.cwds.data.legacy.cms.dao.PaternityDetailDao;
 import gov.ca.cwds.data.legacy.cms.dao.SchoolOriginHistoryDao;
 import gov.ca.cwds.data.legacy.cms.dao.SpecialEducationDao;
 import gov.ca.cwds.data.legacy.cms.entity.ChildClient;
+import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.CreditReportHistory;
 import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
 import gov.ca.cwds.data.legacy.cms.entity.FCEligibility;
@@ -28,6 +31,8 @@ import gov.ca.cwds.data.legacy.cms.entity.ParentalRightsTermination;
 import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
 import gov.ca.cwds.data.legacy.cms.entity.SchoolOriginHistory;
 import gov.ca.cwds.data.legacy.cms.entity.SpecialEducation;
+import gov.ca.cwds.security.annotations.Authorize;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -49,6 +54,16 @@ public class ChildClientCoreService extends ClientCoreService {
   @Inject
   public ChildClientCoreService(ChildClientDao crudDao) {
     super(crudDao);
+  }
+
+  @Override
+  @Authorize(CLIENT_READ_CLIENT)
+  public ChildClient find(Serializable primaryKey) {
+    Client childClient =  super.find(primaryKey);
+    if (childClient != null && childClient instanceof ChildClient) {
+      return (ChildClient) childClient;
+    }
+    return null;
   }
 
   @Override
