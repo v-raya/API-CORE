@@ -13,10 +13,10 @@ rule "R-05814-2"
         Code: R - 05814
 
         Rule Txt:
-        The Date of  Birth must be less than or equal to the earliest of the Removal From Home Date.
+        The Date of  Birth must be less than or equal to the earliest of the Petition Date.
 
         Logic:
-        CLIENT.DATE_OF_BIRTH must be < or = min(CLIENT>PLACEMENT_EPISODE.REMOVAL_DATE).
+        CLIENT.DATE_OF_BIRTH must be < or = min(CLIENT>PLACEMENT_EPISODE.PETITION_FILED_DATE).
       */
       $clientAwareDTO: ClientEntityAwareDTO()
       $client: Client($birthDate: birthDate != null) from $clientAwareDTO.entity
