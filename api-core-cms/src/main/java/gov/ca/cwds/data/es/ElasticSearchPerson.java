@@ -936,6 +936,49 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   }
 
   /**
+   * Getter for autocomplete_search_bar.
+   *
+   * @return autocomplete search bar
+   */
+  @JsonProperty("autocomplete_search_bar")
+  public String[] getAutocompleteSearchBar() {
+    String[] autocompleteSearchBar = null;
+    Set<String> autocompleteSearchValues = new HashSet<>();
+    if (!StringUtils.isBlank(this.ssn)) {
+      autocompleteSearchValues.add(this.ssn);
+    }
+    if (StringUtils.isNotBlank(this.dateOfBirth)) {
+      autocompleteSearchValues.addAll(getDobValues(this.dateOfBirth));
+    }
+    Set<String> allNames = getAllNames();
+    if (!allNames.isEmpty()) {
+      autocompleteSearchValues.addAll(getAllNames());
+    }
+    if (!autocompleteSearchValues.isEmpty()) {
+      autocompleteSearchBar =
+          autocompleteSearchValues.toArray(new String[autocompleteSearchValues.size()]);
+    }
+    return autocompleteSearchBar;
+  }
+
+
+  /**
+   * Getter for "date of birth as text.
+   *
+   * @return date of birth as text
+   */
+  @JsonProperty("date_of_birth_as_text")
+  public String[] getDateOfBirthAsText() {
+    String[] dobAsText = null;
+    if (StringUtils.isNotBlank(this.dateOfBirth)) {
+      Set<String> dobValues = getDobValues(this.dateOfBirth);
+      dobAsText = dobValues.toArray(new String[dobValues.size()]);
+    }
+    return dobAsText;
+  }
+
+
+  /**
    * Getter for searchable date of birth.
    *
    * @return searchable date of birth
@@ -944,46 +987,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   public String[] getSearchableDateOfBirth() {
     String[] searchableDob = null;
     if (StringUtils.isNotBlank(this.dateOfBirth)) {
-      Set<String> dobValues = new HashSet<>();
-      Date date = DomainChef.uncookDateString(this.dateOfBirth);
-
-      // With zeros, e.g. 01/09/1995
-      DateFormat df = new SimpleDateFormat("MMddyyyy");
-      String mmddyyyyDob = df.format(date);
-      dobValues.add(mmddyyyyDob);
-
-      // Month and Year only, e.g. 09/1995
-      df = new SimpleDateFormat("MMyyyy");
-      String mmyyyyDob = df.format(date);
-      dobValues.add(mmyyyyDob);
-
-      // Year only, e.g. 1995
-      df = new SimpleDateFormat("yyyy");
-      String yyyyDob = df.format(date);
-      dobValues.add(yyyyDob);
-
-      // Month and Day, e.g. 01/09
-      df = new SimpleDateFormat("MMdd");
-      String mmddDob = df.format(date);
-      dobValues.add(mmddDob);
-
-      // Remove leading zeros, e.g. 1/9/1995
-      df = new SimpleDateFormat("Mdyyyy");
-      String mdyyyyDob = df.format(date);
-      if (!mmddyyyyDob.equals(mdyyyyDob)) {
-        dobValues.add(mdyyyyDob);
-
-        // Month and year only without zeros, e.g. 9/1995
-        df = new SimpleDateFormat("Myyyy");
-        String myyyyDob = df.format(date);
-        dobValues.add(myyyyDob);
-
-        // Month and Day without zeros, e.g. 1/9
-        df = new SimpleDateFormat("Md");
-        String mdDob = df.format(date);
-        dobValues.add(mdDob);
-      }
-
+      Set<String> dobValues = getDobValues(this.dateOfBirth);
       searchableDob = dobValues.toArray(new String[dobValues.size()]);
     }
     return searchableDob;
@@ -997,32 +1001,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonProperty("searchable_name")
   public String[] getSearchableName() {
     String[] searchableName = null;
-    Set<String> names = new HashSet<>();
-
-    if (!StringUtils.isBlank(this.firstName)) {
-      names.add(this.firstName);
-    }
-
-    if (!StringUtils.isBlank(this.lastName)) {
-      names.add(this.lastName);
-    }
-
-    if (this.akas != null) {
-      for (ElasticSearchPersonAka aka : this.akas) {
-        if (!StringUtils.isBlank(aka.getFirstName())) {
-          names.add(aka.getFirstName());
-        }
-
-        if (!StringUtils.isBlank(aka.getLastName())) {
-          names.add(aka.getLastName());
-        }
-      }
-    }
-
+    Set<String> names = getAllNames();
     if (!names.isEmpty()) {
       searchableName = names.toArray(new String[names.size()]);
     }
-
     return searchableName;
   }
 
@@ -1195,6 +1177,76 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    */
   public void setHighlightFields(String highlightFields) {
     this.highlightFields = highlightFields;
+  }
+
+
+  private Set<String> getAllNames() {
+    Set<String> names = new HashSet<>();
+
+    if (!StringUtils.isBlank(this.firstName)) {
+      names.add(this.firstName);
+    }
+
+    if (!StringUtils.isBlank(this.lastName)) {
+      names.add(this.lastName);
+    }
+
+    if (this.akas != null) {
+      for (ElasticSearchPersonAka aka : this.akas) {
+        if (!StringUtils.isBlank(aka.getFirstName())) {
+          names.add(aka.getFirstName());
+        }
+
+        if (!StringUtils.isBlank(aka.getLastName())) {
+          names.add(aka.getLastName());
+        }
+      }
+    }
+    return names;
+  }
+
+
+  private Set<String> getDobValues(String dateOfBirth) {
+    Set<String> dobValues = new HashSet<>();
+    Date date = DomainChef.uncookDateString(dateOfBirth);
+
+    // With zeros, e.g. 01/09/1995
+    DateFormat df = new SimpleDateFormat("MMddyyyy");
+    String mmddyyyyDob = df.format(date);
+    dobValues.add(mmddyyyyDob);
+
+    // Month and Year only, e.g. 09/1995
+    df = new SimpleDateFormat("MMyyyy");
+    String mmyyyyDob = df.format(date);
+    dobValues.add(mmyyyyDob);
+
+    // Year only, e.g. 1995
+    df = new SimpleDateFormat("yyyy");
+    String yyyyDob = df.format(date);
+    dobValues.add(yyyyDob);
+
+    // Month and Day, e.g. 01/09
+    df = new SimpleDateFormat("MMdd");
+    String mmddDob = df.format(date);
+    dobValues.add(mmddDob);
+
+    // Remove leading zeros, e.g. 1/9/1995
+    df = new SimpleDateFormat("Mdyyyy");
+    String mdyyyyDob = df.format(date);
+    if (!mmddyyyyDob.equals(mdyyyyDob)) {
+      dobValues.add(mdyyyyDob);
+
+      // Month and year only without zeros, e.g. 9/1995
+      df = new SimpleDateFormat("Myyyy");
+      String myyyyDob = df.format(date);
+      dobValues.add(myyyyDob);
+
+      // Month and Day without zeros, e.g. 1/9
+      df = new SimpleDateFormat("Md");
+      String mdDob = df.format(date);
+      dobValues.add(mdDob);
+    }
+    return dobValues;
   }
 
   @Override

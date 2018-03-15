@@ -14,15 +14,11 @@
     },
     "first_name": {
       "type": "text",
-      "store": true,
-      "analyzer": "autocomplete",
-      "search_analyzer": "standard"
+      "store": true
     },
     "last_name": {
       "type": "text",
-      "store": true,
-      "analyzer": "autocomplete",
-      "search_analyzer": "standard"
+      "store": true
     },
     "middle_name": {
       "type": "text",
@@ -47,6 +43,10 @@
       "type": "date",
       "store": true
     },
+      "date_of_birth_as_text": {
+      "type": "text",
+      "store": true
+    },
     "searchable_date_of_birth": {
       "type": "text",
       "store": true,
@@ -54,6 +54,10 @@
       "search_analyzer": "standard"
     },
     "ssn": {
+      "type": "text",
+      "store": true
+    },
+    "autocomplete_search_bar": {
       "type": "text",
       "store": true,
       "analyzer": "autocomplete",
@@ -292,15 +296,11 @@
         },
         "first_name": {
           "type": "text",
-          "store": true,
-          "analyzer": "autocomplete",
-          "search_analyzer": "standard"
+          "store": true
         },
         "last_name": {
           "type": "text",
-          "store": true,
-          "analyzer": "autocomplete",
-          "search_analyzer": "standard"
+          "store": true
         },
         "middle_name": {
           "type": "text",
