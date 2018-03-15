@@ -944,7 +944,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   public String[] getAutocompleteSearchBar() {
     String[] autocompleteSearchBar = null;
     Set<String> autocompleteSearchValues = new HashSet<>();
-    if (!StringUtils.isBlank(this.ssn)) {
+    if (StringUtils.isNotBlank(this.ssn)) {
       autocompleteSearchValues.add(this.ssn);
     }
     if (StringUtils.isNotBlank(this.dateOfBirth)) {
@@ -1183,21 +1183,21 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   private Set<String> getAllNames() {
     Set<String> names = new HashSet<>();
 
-    if (!StringUtils.isBlank(this.firstName)) {
+    if (StringUtils.isNotBlank(this.firstName)) {
       names.add(this.firstName);
     }
 
-    if (!StringUtils.isBlank(this.lastName)) {
+    if (StringUtils.isNotBlank(this.lastName)) {
       names.add(this.lastName);
     }
 
     if (this.akas != null) {
       for (ElasticSearchPersonAka aka : this.akas) {
-        if (!StringUtils.isBlank(aka.getFirstName())) {
+        if (StringUtils.isNotBlank(aka.getFirstName())) {
           names.add(aka.getFirstName());
         }
 
-        if (!StringUtils.isBlank(aka.getLastName())) {
+        if (StringUtils.isNotBlank(aka.getLastName())) {
           names.add(aka.getLastName());
         }
       }
