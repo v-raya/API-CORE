@@ -14,20 +14,20 @@ import org.hibernate.SessionFactory;
 
 public class PlacementEpisodeDao extends BaseDaoImpl<PlacementEpisode> {
 
-    @Inject
-    public PlacementEpisodeDao(@CmsSessionFactory SessionFactory sessionFactory) {
-        super(sessionFactory);
-    }
+  @Inject
+  public PlacementEpisodeDao(@CmsSessionFactory SessionFactory sessionFactory) {
+    super(sessionFactory);
+  }
 
-    public List<PlacementEpisode> findByClientId(String clientId) {
+  public List<PlacementEpisode> findByClientId(String clientId) {
 
-        Require.requireNotNullAndNotEmpty(clientId);
+    Require.requireNotNullAndNotEmpty(clientId);
 
-        final List<PlacementEpisode> details = currentSession()
-            .createNamedQuery(FIND_BY_CLIENT_ID, PlacementEpisode.class)
-            .setParameter(PARAM_CLIENT_ID, clientId)
-            .list();
+    final List<PlacementEpisode> details = currentSession()
+        .createNamedQuery(FIND_BY_CLIENT_ID, PlacementEpisode.class)
+        .setParameter(PARAM_CLIENT_ID, clientId)
+        .list();
 
-        return ImmutableList.copyOf(details);
-    }
+    return ImmutableList.copyOf(details);
+  }
 }

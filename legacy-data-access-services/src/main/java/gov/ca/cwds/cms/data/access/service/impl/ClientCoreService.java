@@ -107,7 +107,8 @@ public class ClientCoreService
       final Collection<DasHistory> dasHistories = dasHistoryDao.findByClientId(clientId);
       clientEntityAwareDTO.getDasHistories().addAll(dasHistories);
 
-      final Collection<PlacementEpisode> placementEpisodes = placementEpisodeDao.findByClientId(clientId);
+      final Collection<PlacementEpisode> placementEpisodes =
+          placementEpisodeDao.findByClientId(clientId);
       clientEntityAwareDTO.getPlacementEpisodes().addAll(placementEpisodes);
     }
 
