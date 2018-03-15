@@ -64,7 +64,7 @@ public abstract class BaseStaffPerson implements PersistentObject {
     }
 
     @Id
-    @javax.persistence.Column(name = "IDENTIFIER", nullable = false, length = 10)
+    @javax.persistence.Column(name = "IDENTIFIER", nullable = false, length = 3)
     public String getIdentifier() {
         return identifier;
     }
