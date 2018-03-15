@@ -19,8 +19,7 @@ checks:
   return-statements:
     enabled: false
   identical-code:
-    enabled: false
-    
+    enabled: false    
  plugins:
   checkstyle:
     enabled: true
