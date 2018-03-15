@@ -19,6 +19,12 @@ public class PlacementEpisodeDao extends BaseDaoImpl<PlacementEpisode> {
     super(sessionFactory);
   }
 
+  /**
+   * Returns immutable list of PlacementEpisodes belonging to the client with given ID.
+   *
+   * @param clientId  Client ID.
+   * @return  PlacementEpisodes list.
+   */
   public List<PlacementEpisode> findByClientId(String clientId) {
 
     Require.requireNotNullAndNotEmpty(clientId);
