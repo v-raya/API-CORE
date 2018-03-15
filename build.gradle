@@ -81,6 +81,8 @@ allprojects {
     }
 
     dependencies {
+        compile group: 'com.ibm', name: 'db2jcc4', version: '4.0.0'
+        compile group: 'com.ibm', name: 'db2jcc_license_cisuz', version: '4.0.0'
         // LOGGING:
         compile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
         compile group: 'org.slf4j', name: 'slf4j-ext', version: slf4jVersion
