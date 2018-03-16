@@ -49,6 +49,7 @@ import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeProfile;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeUc;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.drools.DroolsException;
+import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -95,6 +96,12 @@ public class PlacementHomeCoreService
   @Override
   protected DataAccessServiceLifecycle getDeleteLifeCycle() {
     return new DefaultDataAccessLifeCycle();
+  }
+
+  @Override
+  public PlacementHome create(@Authorize("placementHome:create:entityAwareDTO.entity") PlacementHomeEntityAwareDTO entityAwareDTO)
+      throws DataAccessServicesException {
+    return super.create(entityAwareDTO);
   }
 
   protected class CreateLifecycle extends DefaultDataAccessLifeCycle<PlacementHomeEntityAwareDTO> {
