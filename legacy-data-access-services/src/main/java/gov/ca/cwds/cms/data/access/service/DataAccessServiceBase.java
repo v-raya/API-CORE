@@ -16,7 +16,7 @@ public abstract class DataAccessServiceBase<
     E extends CrudsDao<T>, T extends PersistentObject, P extends BaseEntityAwareDTO<T>>
     implements DataAccessService<T, P> {
 
-  private final E crudDao;
+  protected final E crudDao;
 
   private DataAccessServiceLifecycle<P> updateLifecycle;
   private DataAccessServiceLifecycle<P> createLifecycle;
@@ -72,7 +72,7 @@ public abstract class DataAccessServiceBase<
   }
 
   @Override
-  public final T update(P entityAwareDTO) throws DataAccessServicesException, DroolsException {
+  public T update(P entityAwareDTO) throws DataAccessServicesException, DroolsException {
     try {
       DataAccessBundle<P> dataAccessBundle = new DataAccessBundle<>(entityAwareDTO);
       updateLifecycle.beforeDataProcessing(dataAccessBundle);
