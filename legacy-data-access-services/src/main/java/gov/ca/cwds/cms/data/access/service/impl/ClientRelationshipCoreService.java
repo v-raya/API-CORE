@@ -19,6 +19,7 @@ import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT_ID;
@@ -88,7 +89,10 @@ public class ClientRelationshipCoreService
       String clientId = client.getIdentifier();
 
       List<ClientRelationship> otherRelationshipsForThisClient =
-          findRelationshipsByRightSide(clientId);
+          new ArrayList<>(findRelationshipsByRightSide(clientId));
+
+      otherRelationshipsForThisClient.removeIf(
+          e -> e.getIdentifier().equals(awareDTO.getEntity().getIdentifier()));
 
       awareDTO.getClientRelationshipList().addAll(otherRelationshipsForThisClient);
     }
