@@ -1,5 +1,8 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
+import static gov.ca.cwds.data.legacy.cms.entity.ClientServiceProvider.FIND_BY_CLIENT_ID;
+import static gov.ca.cwds.data.legacy.cms.entity.ClientServiceProvider.PARAM_CLIENT_ID;
+
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -10,6 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -19,10 +23,20 @@ import org.hibernate.annotations.FetchMode;
 
 @SuppressWarnings({"squid:S3437", "squid:S2160"})
 @Entity
+@NamedQuery(
+    name = FIND_BY_CLIENT_ID,
+    query = "SELECT csp FROM gov.ca.cwds.data.legacy.cms.entity.ClientServiceProvider csp "
+        + "where csp.client.identifier =:" + PARAM_CLIENT_ID
+)
 @Table(name = "CSRVPR_T")
 public class ClientServiceProvider extends CmsPersistentObject {
 
   private static final long serialVersionUID = 8252945680365006950L;
+
+  public static final String FIND_BY_CLIENT_ID =
+      "gov.ca.cwds.data.legacy.cms.entity.ClientServiceProvider.findByClientId";
+
+  public static final String PARAM_CLIENT_ID = "clientId";
 
   @Id
   @NotNull

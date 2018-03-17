@@ -1,0 +1,21 @@
+<dataset>
+  <CSRVPR_T
+    THIRD_ID="AaPp69g0Nu"
+    DESCR="                                                                                                                                                                                                                                                              "
+    END_DT="[NULL]"
+    START_DT="2004-12-23"
+    LST_UPD_ID="0Nu"
+    LST_UPD_TS="2004-12-23 16:15:26.732136"
+    FKSVC_PVRT="1zQXCSu0Nu"
+    FKCLIENT_T="DYPp05u0ND"/>
+
+  <CSRVPR_T THIRD_ID="CusTfx20ND"
+    DESCR="                                                                                                                                                                                                                                                              "
+    END_DT="2004-12-21"
+    START_DT="2004-12-01"
+    LST_UPD_ID="0ND"
+    LST_UPD_TS="2004-12-21 12:17:52.217416"
+    FKSVC_PVRT="4mGTx1X00Z"
+    FKCLIENT_T="EnWT7aS0ND"/>
+    />
+</dataset>
