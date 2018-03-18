@@ -27,18 +27,24 @@ import org.hibernate.annotations.Type;
 @Entity
 @Table(name = "CLN_RELT")
 @NamedQuery(
-    name = ClientRelationship.NQ_FIND_RELATIONSHIPS_BY_LEFT_SIDE,
-    query =
-        "SELECT r FROM gov.ca.cwds.data.legacy.cms.entity.ClientRelationship r left join fetch r.type WHERE r.leftSide.identifier = :"
-            + CLIENT_ID + " AND r.rightSide.identifier != :" + CLIENT_ID
-            + INACTIVE_IND_CONDITION + DATE_CONDITION
+  name = ClientRelationship.NQ_FIND_RELATIONSHIPS_BY_LEFT_SIDE,
+  query =
+      "SELECT r FROM gov.ca.cwds.data.legacy.cms.entity.ClientRelationship r left join fetch r.type WHERE r.leftSide.identifier = :"
+          + CLIENT_ID
+          + " AND r.rightSide.identifier != :"
+          + CLIENT_ID
+          + INACTIVE_IND_CONDITION
+          + DATE_CONDITION
 )
 @NamedQuery(
-    name = ClientRelationship.NQ_FIND_RELATIONSHIPS_BY_RIGHT_SIDE,
-    query =
-        "SELECT r FROM gov.ca.cwds.data.legacy.cms.entity.ClientRelationship r left join fetch r.type WHERE r.rightSide.identifier = :"
-            + CLIENT_ID + " AND r.leftSide.identifier != :" + CLIENT_ID
-            + INACTIVE_IND_CONDITION + DATE_CONDITION
+  name = ClientRelationship.NQ_FIND_RELATIONSHIPS_BY_RIGHT_SIDE,
+  query =
+      "SELECT r FROM gov.ca.cwds.data.legacy.cms.entity.ClientRelationship r left join fetch r.type WHERE r.rightSide.identifier = :"
+          + CLIENT_ID
+          + " AND r.leftSide.identifier != :"
+          + CLIENT_ID
+          + INACTIVE_IND_CONDITION
+          + DATE_CONDITION
 )
 @SuppressWarnings("squid:S3437")
 public class ClientRelationship extends CmsPersistentObject {
@@ -54,8 +60,12 @@ public class ClientRelationship extends CmsPersistentObject {
   public static final String INACTIVE_IND_CONDITION = " AND r.type.inactiveIndicator = FALSE";
 
   public static final String DATE_CONDITION =
-      " AND ((r.startDate is null) OR (r.startDate <= :" + NQ_PARAM_CURRENT_DATE + "))"
-          + " AND ((r.endDate is null) OR (r.endDate >= :" + NQ_PARAM_CURRENT_DATE + "))";
+      " AND ((r.startDate is null) OR (r.startDate <= :"
+          + NQ_PARAM_CURRENT_DATE
+          + "))"
+          + " AND ((r.endDate is null) OR (r.endDate >= :"
+          + NQ_PARAM_CURRENT_DATE
+          + "))";
 
   public static final String CLIENT_ID = "clientId";
 
@@ -67,12 +77,22 @@ public class ClientRelationship extends CmsPersistentObject {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "FKCLIENT_T", referencedColumnName = "IDENTIFIER")
+  @JoinColumn(
+    name = "FKCLIENT_T",
+    referencedColumnName = "IDENTIFIER",
+    updatable = false,
+    insertable = false
+  )
   private Client leftSide;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "FKCLIENT_0", referencedColumnName = "IDENTIFIER")
+  @JoinColumn(
+    name = "FKCLIENT_0",
+    referencedColumnName = "IDENTIFIER",
+    updatable = false,
+    insertable = false
+  )
   private Client rightSide;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -163,7 +183,6 @@ public class ClientRelationship extends CmsPersistentObject {
     this.rightSide = rightSide;
   }
 
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -173,18 +192,17 @@ public class ClientRelationship extends CmsPersistentObject {
       return false;
     }
     ClientRelationship that = (ClientRelationship) o;
-    return Objects.equals(getLeftSide(), that.getLeftSide()) &&
-        Objects.equals(getRightSide(), that.getRightSide()) &&
-        Objects.equals(getType(), that.getType()) &&
-        Objects.equals(getStartDate(), that.getStartDate()) &&
-        Objects.equals(getEndDate(), that.getEndDate());
+    return Objects.equals(getLeftSide(), that.getLeftSide())
+        && Objects.equals(getRightSide(), that.getRightSide())
+        && Objects.equals(getType(), that.getType())
+        && Objects.equals(getStartDate(), that.getStartDate())
+        && Objects.equals(getEndDate(), that.getEndDate());
   }
 
   @Override
   public int hashCode() {
 
-    return Objects
-        .hash(super.hashCode(), getLeftSide(), getRightSide(), getType(), getStartDate(),
-            getEndDate());
+    return Objects.hash(
+        super.hashCode(), getLeftSide(), getRightSide(), getType(), getStartDate(), getEndDate());
   }
 }

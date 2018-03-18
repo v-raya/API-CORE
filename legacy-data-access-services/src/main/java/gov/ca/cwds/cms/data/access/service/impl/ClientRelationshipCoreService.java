@@ -90,6 +90,7 @@ public class ClientRelationshipCoreService
 
       List<ClientRelationship> otherRelationshipsForThisClient =
           new ArrayList<>(findRelationshipsByRightSide(clientId));
+      otherRelationshipsForThisClient.addAll(findRelationshipsByRightSide(clientId));
 
       otherRelationshipsForThisClient.removeIf(
           e -> e.getIdentifier().equals(awareDTO.getEntity().getIdentifier()));
