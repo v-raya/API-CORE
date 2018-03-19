@@ -19,6 +19,12 @@ public class ClientServiceProviderDao extends BaseDaoImpl<ClientServiceProvider>
     super(sessionFactory);
   }
 
+  /**
+   * Returns immutable list of ClientServiceProviders belonging to the client with given ID.
+   *
+   * @param clientId  Client ID.
+   * @return  ClientServiceProviders list.
+   */
   public List<ClientServiceProvider> findByClientId(String clientId) {
 
     Require.requireNotNullAndNotEmpty(clientId);
