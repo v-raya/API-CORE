@@ -138,8 +138,8 @@ public class ClientServiceProvider extends CmsPersistentObject {
       return false;
     }
     ClientServiceProvider that = (ClientServiceProvider) o;
-    return Objects.equals(getClientId(getClient()), getClientId(that.getClient())) &&
-        Objects.equals(getServiceProviderId(), that.getServiceProviderId());
+    return Objects.equals(getClientId(getClient()), getClientId(that.getClient()))
+        && Objects.equals(getServiceProviderId(), that.getServiceProviderId());
   }
 
   @Override
