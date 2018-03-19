@@ -19,6 +19,7 @@ import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT_ID;
@@ -70,12 +71,12 @@ public class ClientRelationshipCoreService
 
   public List<ClientRelationship> findRelationshipsByLeftSide(
       @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
-    return crudDao.findRelationshipsByLeftSide(clientId, LocalDate.now());
+    return crudDao.findRelationshipsBySecondaryClientId(clientId, LocalDate.now());
   }
 
   public List<ClientRelationship> findRelationshipsByRightSide(
       @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
-    return crudDao.findRelationshipsByRightSide(clientId, LocalDate.now());
+    return crudDao.findRelationshipsByPrimaryClientId(clientId, LocalDate.now());
   }
 
   private class UpdateLificycle extends DefaultDataAccessLifeCycle {
@@ -84,11 +85,15 @@ public class ClientRelationshipCoreService
     public void beforeBusinessValidation(DataAccessBundle bundle) {
 
       ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
-      Client client = awareDTO.getEntity().getRightSide();
+      Client client = awareDTO.getEntity().getPrimaryClient();
       String clientId = client.getIdentifier();
 
       List<ClientRelationship> otherRelationshipsForThisClient =
-          findRelationshipsByRightSide(clientId);
+          new ArrayList<>(findRelationshipsByRightSide(clientId));
+      otherRelationshipsForThisClient.addAll(findRelationshipsByRightSide(clientId));
+
+      otherRelationshipsForThisClient.removeIf(
+          e -> e.getIdentifier().equals(awareDTO.getEntity().getIdentifier()));
 
       awareDTO.getClientRelationshipList().addAll(otherRelationshipsForThisClient);
     }
