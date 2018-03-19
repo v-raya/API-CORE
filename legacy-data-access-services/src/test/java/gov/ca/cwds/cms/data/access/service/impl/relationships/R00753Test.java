@@ -244,8 +244,8 @@ public class R00753Test extends BaseDocToolRulesChildClientRelationshipTest {
     Client clientSecondary = new Client();
     clientSecondary.setIdentifier(SECONDARY_ID);
 
-    clientRelationship.setRightSide(client);
-    clientRelationship.setLeftSide(clientSecondary);
+    clientRelationship.setPrimaryClient(client);
+    clientRelationship.setSecondaryClient(clientSecondary);
 
     return clientRelationship;
   }

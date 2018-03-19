@@ -71,12 +71,12 @@ public class ClientRelationshipCoreService
 
   public List<ClientRelationship> findRelationshipsByLeftSide(
       @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
-    return crudDao.findRelationshipsByLeftSide(clientId, LocalDate.now());
+    return crudDao.findRelationshipsByLeftSecondaryClientId(clientId, LocalDate.now());
   }
 
   public List<ClientRelationship> findRelationshipsByRightSide(
       @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
-    return crudDao.findRelationshipsByRightSide(clientId, LocalDate.now());
+    return crudDao.findRelationshipsByPrimaryClientId(clientId, LocalDate.now());
   }
 
   private class UpdateLificycle extends DefaultDataAccessLifeCycle {
@@ -85,7 +85,7 @@ public class ClientRelationshipCoreService
     public void beforeBusinessValidation(DataAccessBundle bundle) {
 
       ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
-      Client client = awareDTO.getEntity().getRightSide();
+      Client client = awareDTO.getEntity().getPrimaryClient();
       String clientId = client.getIdentifier();
 
       List<ClientRelationship> otherRelationshipsForThisClient =

@@ -27,21 +27,21 @@ import org.hibernate.annotations.Type;
 @Entity
 @Table(name = "CLN_RELT")
 @NamedQuery(
-  name = ClientRelationship.NQ_FIND_RELATIONSHIPS_BY_LEFT_SIDE,
+  name = ClientRelationship.NQ_FIND_RELATIONSHIPS_BY_SECONDARY_CLIENT_ID,
   query =
-      "SELECT r FROM gov.ca.cwds.data.legacy.cms.entity.ClientRelationship r left join fetch r.type WHERE r.leftSide.identifier = :"
+      "SELECT r FROM gov.ca.cwds.data.legacy.cms.entity.ClientRelationship r left join fetch r.type WHERE r.secondaryClient.identifier = :"
           + CLIENT_ID
-          + " AND r.rightSide.identifier != :"
+          + " AND r.primaryClient.identifier != :"
           + CLIENT_ID
           + INACTIVE_IND_CONDITION
           + DATE_CONDITION
 )
 @NamedQuery(
-  name = ClientRelationship.NQ_FIND_RELATIONSHIPS_BY_RIGHT_SIDE,
+  name = ClientRelationship.NQ_FIND_RELATIONSHIPS_BY_PRIMARY_CLIENT_ID,
   query =
-      "SELECT r FROM gov.ca.cwds.data.legacy.cms.entity.ClientRelationship r left join fetch r.type WHERE r.rightSide.identifier = :"
+      "SELECT r FROM gov.ca.cwds.data.legacy.cms.entity.ClientRelationship r left join fetch r.type WHERE r.primaryClient.identifier = :"
           + CLIENT_ID
-          + " AND r.leftSide.identifier != :"
+          + " AND r.secondaryClient.identifier != :"
           + CLIENT_ID
           + INACTIVE_IND_CONDITION
           + DATE_CONDITION
@@ -49,11 +49,11 @@ import org.hibernate.annotations.Type;
 @SuppressWarnings("squid:S3437")
 public class ClientRelationship extends CmsPersistentObject {
 
-  public static final String NQ_FIND_RELATIONSHIPS_BY_LEFT_SIDE =
-      "gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.findRelationshipsByLeftSide";
+  public static final String NQ_FIND_RELATIONSHIPS_BY_SECONDARY_CLIENT_ID =
+      "gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.findRelationshipsBySecondaryClientId";
 
-  public static final String NQ_FIND_RELATIONSHIPS_BY_RIGHT_SIDE =
-      "gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.findRelationshipsByRigtSide";
+  public static final String NQ_FIND_RELATIONSHIPS_BY_PRIMARY_CLIENT_ID =
+      "gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.findRelationshipsByPrimaryClientId";
 
   public static final String NQ_PARAM_CURRENT_DATE = "currentDate";
 
@@ -77,23 +77,13 @@ public class ClientRelationship extends CmsPersistentObject {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "FKCLIENT_T",
-    referencedColumnName = "IDENTIFIER",
-    updatable = false,
-    insertable = false
-  )
-  private Client leftSide;
+  @JoinColumn(name = "FKCLIENT_T", referencedColumnName = "IDENTIFIER")
+  private Client secondaryClient;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "FKCLIENT_0",
-    referencedColumnName = "IDENTIFIER",
-    updatable = false,
-    insertable = false
-  )
-  private Client rightSide;
+  @JoinColumn(name = "FKCLIENT_0", referencedColumnName = "IDENTIFIER")
+  private Client primaryClient;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
@@ -167,20 +157,20 @@ public class ClientRelationship extends CmsPersistentObject {
     this.startDate = startDt;
   }
 
-  public Client getLeftSide() {
-    return leftSide;
+  public Client getSecondaryClient() {
+    return secondaryClient;
   }
 
-  public void setLeftSide(Client leftSide) {
-    this.leftSide = leftSide;
+  public void setSecondaryClient(Client secondaryClient) {
+    this.secondaryClient = secondaryClient;
   }
 
-  public Client getRightSide() {
-    return rightSide;
+  public Client getPrimaryClient() {
+    return primaryClient;
   }
 
-  public void setRightSide(Client rightSide) {
-    this.rightSide = rightSide;
+  public void setPrimaryClient(Client primaryClient) {
+    this.primaryClient = primaryClient;
   }
 
   @Override
@@ -192,8 +182,8 @@ public class ClientRelationship extends CmsPersistentObject {
       return false;
     }
     ClientRelationship that = (ClientRelationship) o;
-    return Objects.equals(getLeftSide(), that.getLeftSide())
-        && Objects.equals(getRightSide(), that.getRightSide())
+    return Objects.equals(getSecondaryClient(), that.getSecondaryClient())
+        && Objects.equals(getPrimaryClient(), that.getPrimaryClient())
         && Objects.equals(getType(), that.getType())
         && Objects.equals(getStartDate(), that.getStartDate())
         && Objects.equals(getEndDate(), that.getEndDate());
@@ -203,6 +193,11 @@ public class ClientRelationship extends CmsPersistentObject {
   public int hashCode() {
 
     return Objects.hash(
-        super.hashCode(), getLeftSide(), getRightSide(), getType(), getStartDate(), getEndDate());
+        super.hashCode(),
+        getSecondaryClient(),
+        getPrimaryClient(),
+        getType(),
+        getStartDate(),
+        getEndDate());
   }
 }
