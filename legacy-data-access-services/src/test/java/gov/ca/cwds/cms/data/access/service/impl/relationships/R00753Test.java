@@ -18,7 +18,9 @@ public class R00753Test extends BaseDocToolRulesChildClientRelationshipTest {
 
   /**
    * @throws DroolsException
-   *     <p>x-------------x x-------------x
+   *
+   *      x-------------x
+   *        x-------------x
    */
   @Test
   public void overlap1() throws DroolsException {
@@ -46,7 +48,9 @@ public class R00753Test extends BaseDocToolRulesChildClientRelationshipTest {
 
   /**
    * @throws DroolsException
-   *     <p>x-------------x x------------x
+   *
+   *      x-------------x
+   *    x------------x
    */
   @Test
   public void overlap2() throws DroolsException {
@@ -74,7 +78,9 @@ public class R00753Test extends BaseDocToolRulesChildClientRelationshipTest {
 
   /**
    * @throws DroolsException
-   *     <p>x-------------x x-------------x
+   *
+   *      x-------------x
+   *      x-------------x
    */
   @Test
   public void overlap3() throws DroolsException {
@@ -100,7 +106,8 @@ public class R00753Test extends BaseDocToolRulesChildClientRelationshipTest {
 
   /**
    * @throws DroolsException
-   *     <p>x-------------x x--------x
+   *     <p>x-------------x
+   *          x--------x
    */
   @Test
   public void overlap4() throws DroolsException {
@@ -127,7 +134,9 @@ public class R00753Test extends BaseDocToolRulesChildClientRelationshipTest {
 
   /**
    * @throws DroolsException
-   *     <p>x-------------x x-----x
+   *
+   *         x-------------x
+   *   x-----x
    */
   @Test
   public void overlap5() throws DroolsException {
@@ -154,7 +163,8 @@ public class R00753Test extends BaseDocToolRulesChildClientRelationshipTest {
 
   /**
    * @throws DroolsException
-   *     <p>x-------------x x-------x
+   *     x-------------x
+   *                      x-------x
    */
   @Test
   public void overlap6() throws DroolsException {
@@ -181,7 +191,8 @@ public class R00753Test extends BaseDocToolRulesChildClientRelationshipTest {
 
   /**
    * @throws DroolsException
-   *     <p>x-------------x x-------------x
+   *     <p>x-------------x
+   *                        x-------------x
    */
   @Test
   public void noOverlap1() throws DroolsException {
@@ -208,7 +219,8 @@ public class R00753Test extends BaseDocToolRulesChildClientRelationshipTest {
 
   /**
    * @throws DroolsException
-   *     <p>x-------------x x-----x
+   *          x-------------x
+   *  x-----x
    */
   @Test
   public void noOverlap2() throws DroolsException {
