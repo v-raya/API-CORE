@@ -11,7 +11,7 @@ public class PlacementHomeReadAuthorizer implements StaticAuthorizer {
   @Override
   public void authorize(PerryAccount perryAccount, SimpleAuthorizationInfo simpleAuthorizationInfo) {
     if(perryAccount.getPrivileges().stream()
-        .anyMatch(priv-> priv.equals("Resource Management") || priv.equals("CWS Case Management"))) {
+        .anyMatch(priv-> priv.equals("Resource Management") || priv.equals("CWS Case Management System"))) {
       simpleAuthorizationInfo.addObjectPermission(new WildcardPermission(PLACEMENT_HOME_READ_PERMISSION));
     }
   }
