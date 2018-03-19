@@ -71,7 +71,7 @@ public class ClientRelationshipCoreService
 
   public List<ClientRelationship> findRelationshipsByLeftSide(
       @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
-    return crudDao.findRelationshipsByLeftSecondaryClientId(clientId, LocalDate.now());
+    return crudDao.findRelationshipsBySecondaryClientId(clientId, LocalDate.now());
   }
 
   public List<ClientRelationship> findRelationshipsByRightSide(

@@ -22,7 +22,7 @@ public class ClientRelationshipDao extends BaseDaoImpl<ClientRelationship> {
     super(sessionFactory);
   }
 
-  public List<ClientRelationship> findRelationshipsByLeftSecondaryClientId(String leftSideClientId,
+  public List<ClientRelationship> findRelationshipsBySecondaryClientId(String leftSideClientId,
       LocalDate localDate) {
     return findRelationships(NQ_FIND_RELATIONSHIPS_BY_SECONDARY_CLIENT_ID, leftSideClientId, localDate);
   }
