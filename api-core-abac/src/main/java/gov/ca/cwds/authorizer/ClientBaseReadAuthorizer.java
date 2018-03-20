@@ -14,10 +14,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * @author CWDS TPT-2 Team
- *
- * Base class for Cleint Result and Client Abstract Authorizer.
- *
+ * Base class for Client Result and Client Abstract Authorizer.
  */
 public class ClientBaseReadAuthorizer extends AbstractBaseAuthorizer<Client, String> {
 
@@ -61,8 +58,8 @@ public class ClientBaseReadAuthorizer extends AbstractBaseAuthorizer<Client, Str
 
   private static Short getStaffPersonCountyCode(final String staffCountyCodeString) {
     return StringUtils.isNotBlank(staffCountyCodeString)
-          ? Short.valueOf(staffCountyCodeString)
-          : null;
+        ? Short.valueOf(staffCountyCodeString)
+        : null;
   }
 
   void setClientDao(ClientDao clientDao) {

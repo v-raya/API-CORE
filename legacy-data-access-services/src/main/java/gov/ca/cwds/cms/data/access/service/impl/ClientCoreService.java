@@ -32,6 +32,7 @@ import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.hibernate.Hibernate;
 
@@ -65,18 +66,20 @@ public class ClientCoreService
   }
 
   @Authorize(CLIENT_RESULT_READ)
-  public Client findByLicNumAndChildId(String licenseNumber, String childId) {
+  public Client getClientByLicNumAndChildId(String licenseNumber, String childId) {
     return crudDao.findByLicNumAndChildId(licenseNumber, childId);
   }
 
   @Authorize(CLIENT_RESULT_READ)
-  public Stream<Client> streamByLicenseNumber(String licenseNumber) {
-    return crudDao.streamByLicenseNumber(licenseNumber);
+  public List<Client> getClientsByLicenseNumber(String licenseNumber) {
+    Stream<Client> clients = crudDao.streamByLicenseNumber(licenseNumber);
+    return clients.collect(Collectors.toList());
   }
 
   @Authorize(CLIENT_RESULT_READ)
-  public Stream<Client> streamByLicenseNumber(Integer licenseNumber) {
-    return crudDao.streamByLicenseNumber(licenseNumber);
+  public List<Client> getClientsByLicenseNumber(Integer licenseNumber) {
+    Stream<Client> clients = crudDao.streamByLicenseNumber(licenseNumber);
+    return clients.collect(Collectors.toList());
   }
 
   @Override

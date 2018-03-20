@@ -4,10 +4,7 @@ import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.drools.DroolsConfiguration;
 
 /**
- * @author CWDS TPT-2 Team
- *
  * Drools configuration for Client Result authorizer.
- *
  */
 public final class ClientResultAuthorizationDroolsConfiguration extends DroolsConfiguration<Client>
     implements DroolsAuthorizer {
@@ -15,7 +12,8 @@ public final class ClientResultAuthorizationDroolsConfiguration extends DroolsCo
   private static final String SESSION_NAME = "client-result-authorization-session";
   private static final String AGENDA_GROUP = "client-result-authorization-agenda";
   private static final String PATH_TO_RULES_CONFIG = "client-result-authorization-rules";
-  private static final DroolsConfiguration INSTANCE = new ClientResultAuthorizationDroolsConfiguration();
+  private static final DroolsConfiguration INSTANCE =
+      new ClientResultAuthorizationDroolsConfiguration();
 
   public ClientResultAuthorizationDroolsConfiguration() {
     super(SESSION_NAME, AGENDA_GROUP, PATH_TO_RULES_CONFIG);
