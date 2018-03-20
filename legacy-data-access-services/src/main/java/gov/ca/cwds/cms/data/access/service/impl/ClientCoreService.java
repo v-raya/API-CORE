@@ -1,5 +1,6 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
+import static gov.ca.cwds.authorizer.ClientResultReadAuthorizer.CLIENT_RESULT_READ;
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
 
 import com.google.inject.Inject;
@@ -63,14 +64,17 @@ public class ClientCoreService
     return super.find(primaryKey);
   }
 
+  @Authorize(CLIENT_RESULT_READ)
   public Client findByLicNumAndChildId(String licenseNumber, String childId) {
     return crudDao.findByLicNumAndChildId(licenseNumber, childId);
   }
 
+  @Authorize(CLIENT_RESULT_READ)
   public Stream<Client> streamByLicenseNumber(String licenseNumber) {
     return crudDao.streamByLicenseNumber(licenseNumber);
   }
 
+  @Authorize(CLIENT_RESULT_READ)
   public Stream<Client> streamByLicenseNumber(Integer licenseNumber) {
     return crudDao.streamByLicenseNumber(licenseNumber);
   }

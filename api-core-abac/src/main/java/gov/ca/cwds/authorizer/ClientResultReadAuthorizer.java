@@ -9,6 +9,8 @@ import gov.ca.cwds.authorizer.drools.configuration.ClientResultAuthorizationDroo
  */
 public class ClientResultReadAuthorizer extends ClientBaseReadAuthorizer {
 
+  public static final String CLIENT_RESULT_READ = "clientResult:read";
+
   @Inject
   private ClientResultAuthorizationDroolsConfiguration droolsConfiguration;
 
