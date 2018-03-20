@@ -87,6 +87,9 @@ allprojects {
         compile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
         compile group: 'org.slf4j', name: 'slf4j-ext', version: slf4jVersion
         compile group: 'org.slf4j', name: 'slf4j-simple', version: slf4jVersion
+        
+        //Authenticate:
+        compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.5' 
     }
 
     tasks.withType(Test) {
