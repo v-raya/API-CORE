@@ -64,7 +64,7 @@ public class AuthenticationUtils {
 
   private static String getToken(String loginType, UserGroup userType) {
     if ("REST".equals(loginType))
-      return cwdsLoginType.login("username", "password"); // will be updated to read from the
+      return cwdsLoginType.login("username", "password"); // will be updated to read the
                                                           // username/password from yml file
     else
       return cwdsLoginType.login("username.Json"); // will be updated
