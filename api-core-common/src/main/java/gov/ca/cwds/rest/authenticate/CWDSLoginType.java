@@ -15,8 +15,9 @@ public class CWDSLoginType {
     if (params != null) {
       if (params.length > 1) {
         return new CWDSAuthenticationClient(params[0], params[1]).getToken();
-      } else
+      } else {
         return new CWDSDevAuthenticationClient(params[0]).getToken();
+      }
     }
     return null;
   }

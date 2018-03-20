@@ -43,7 +43,6 @@ public class CWDSDevAuthenticationClient extends CWDSLoginType {
    * Constructor
    * 
    * @param userName - userName
-   * @param callbackurl - callbackurl
    */
   public CWDSDevAuthenticationClient(String userName) {
     this.userName = userName;
