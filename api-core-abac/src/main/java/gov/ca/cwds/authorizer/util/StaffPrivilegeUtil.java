@@ -12,11 +12,12 @@ import java.util.Set;
  */
 public final class StaffPrivilegeUtil {
 
-  private static final String CWS_CASE_MANAGEMENT_SYSTEM = "CWS Case Management System";
-  private static final String STATE_OF_CALIFORNIA = "State of California";
-  private static final String SENSITIVE_PERSONS = "Sensitive Persons";
-  private static final String SEALED = "Sealed";
-  private static final String RESOURCE_MGMT_PLACEMENT_FACILITY_MAINT = "Resource Mgmt Placement Facility Maint";
+  public static final String CWS_CASE_MANAGEMENT_SYSTEM = "CWS Case Management System";
+  public static final String STATE_OF_CALIFORNIA = "State of California";
+  public static final String SENSITIVE_PERSONS = "Sensitive Persons";
+  public static final String SEALED = "Sealed";
+  public static final String RESOURCE_MGMT_PLACEMENT_FACILITY_MAINT =
+      "Resource Mgmt Placement Facility Maint";
 
   private StaffPrivilegeUtil() {
   }
