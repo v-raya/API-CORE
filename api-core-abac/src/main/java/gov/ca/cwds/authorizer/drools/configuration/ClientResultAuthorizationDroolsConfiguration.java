@@ -5,8 +5,12 @@ import gov.ca.cwds.drools.DroolsConfiguration;
 
 /**
  * @author CWDS TPT-2 Team
+ *
+ * Drools configuration for Client Result authorizer.
+ *
  */
-public final class ClientResultAuthorizationDroolsConfiguration extends DroolsConfiguration<Client> implements DroolsAuthorizer {
+public final class ClientResultAuthorizationDroolsConfiguration extends DroolsConfiguration<Client>
+    implements DroolsAuthorizer {
 
   private static final String SESSION_NAME = "client-result-authorization-session";
   private static final String AGENDA_GROUP = "client-result-authorization-agenda";

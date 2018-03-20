@@ -15,6 +15,9 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author CWDS TPT-2 Team
+ *
+ * Base class for Cleint Result and Client Abstract Authorizer.
+ *
  */
 public class ClientBaseReadAuthorizer extends AbstractBaseAuthorizer<Client, String> {
 
@@ -50,7 +53,8 @@ public class ClientBaseReadAuthorizer extends AbstractBaseAuthorizer<Client, Str
   }
 
   private ClientCondition getClientCondition(final Client client, final PerryAccount perryAccount) {
-    final List<Short> clientCountyCodes = countyDeterminationService.getClientCountiesById(client.getIdentifier());
+    final List<Short> clientCountyCodes = countyDeterminationService
+        .getClientCountiesById(client.getIdentifier());
     final Short staffPersonCountyCode = getStaffPersonCountyCode(perryAccount.getCountyCwsCode());
     return toClientCondition(client, clientCountyCodes, staffPersonCountyCode);
   }

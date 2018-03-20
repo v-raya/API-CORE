@@ -16,7 +16,8 @@ public final class StaffPrivilegeUtil {
   public static final String STATE_OF_CALIFORNIA = "State of California";
   public static final String SENSITIVE_PERSONS = "Sensitive Persons";
   public static final String SEALED = "Sealed";
-  public static final String RESOURCE_MGMT_PLACEMENT_FACILITY_MAINT = "Resource Mgmt Placement Facility Maint";
+  public static final String RESOURCE_MGMT_PLACEMENT_FACILITY_MAINT =
+      "Resource Mgmt Placement Facility Maint";
 
   private StaffPrivilegeUtil() {
   }

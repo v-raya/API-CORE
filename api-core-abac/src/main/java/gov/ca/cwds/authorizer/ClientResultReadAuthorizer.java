@@ -6,6 +6,10 @@ import gov.ca.cwds.authorizer.drools.configuration.ClientResultAuthorizationDroo
 
 /**
  * @author CWDS TPT-2 Team
+ *
+ * ABAC Authorizer that implements Client Result portion of Client Search
+ * logic from IBM Security Guide
+ *
  */
 public class ClientResultReadAuthorizer extends ClientBaseReadAuthorizer {
 
