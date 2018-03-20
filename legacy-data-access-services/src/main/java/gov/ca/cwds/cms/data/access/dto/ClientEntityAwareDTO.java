@@ -2,9 +2,11 @@ package gov.ca.cwds.cms.data.access.dto;
 
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientOtherEthnicity;
+import gov.ca.cwds.data.legacy.cms.entity.ClientServiceProvider;
 import gov.ca.cwds.data.legacy.cms.entity.DasHistory;
 import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
 import gov.ca.cwds.data.legacy.cms.entity.NearFatality;
+import gov.ca.cwds.data.legacy.cms.entity.PlacementEpisode;
 import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,6 +20,8 @@ public class ClientEntityAwareDTO extends BaseEntityAwareDTO<Client> {
   private final List<SafetyAlert> safetyAlerts = new ArrayList<>();
   private final List<DasHistory> dasHistories = new ArrayList<>();
   private List<NearFatality> nearFatalities = new ArrayList<>();
+  private List<PlacementEpisode> placementEpisodes = new ArrayList<>();
+  private List<ClientServiceProvider> clientServiceProviders = new ArrayList<>();
 
   public Set<ClientOtherEthnicity> getOtherEthnicities() {
     return otherEthnicities;
@@ -49,5 +53,13 @@ public class ClientEntityAwareDTO extends BaseEntityAwareDTO<Client> {
 
   public List<NearFatality> getNearFatalities() {
     return nearFatalities;
+  }
+
+  public List<PlacementEpisode> getPlacementEpisodes() {
+    return placementEpisodes;
+  }
+
+  public List<ClientServiceProvider> getClientServiceProviders() {
+    return clientServiceProviders;
   }
 }

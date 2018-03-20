@@ -1,0 +1,31 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.Client
+import gov.ca.cwds.data.legacy.cms.entity.enums.Gender
+import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
+
+global java.util.Set<IssueDetails> validationDetailsList
+
+rule "R-05816"
+  dialect "mvel"
+  agenda-group "client-agenda"
+  when
+      /*
+        Code: R - 05816
+
+        Rule Txt:
+        The Gender must be either Male or Female (Unknown is not a valid Gender).
+
+        Logic:
+        CLIENT.GENDER must = 'M' or 'F'.
+      */
+      $clientAwareDTO: ClientEntityAwareDTO()
+      $client: Client(gender == Gender.UNKNOWN) from $clientAwareDTO.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-05816");
+      details.setUserMessage(String.format(
+          "The client's gender date must be either Male or Female. "
+          + "Client ID:'%s'", $client.getIdentifier()));
+      details.setTechnicalMessage("For each updated client should be: Client.gender != Gender.UNKNOWN");
+      validationDetailsList.add(details);
+end

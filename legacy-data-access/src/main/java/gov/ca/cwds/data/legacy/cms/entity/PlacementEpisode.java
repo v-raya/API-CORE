@@ -1,9 +1,13 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
+import static gov.ca.cwds.data.legacy.cms.entity.PlacementEpisode.FIND_BY_CLIENT_ID;
+import static gov.ca.cwds.data.legacy.cms.entity.PlacementEpisode.PARAM_CLIENT_ID;
+
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
@@ -13,10 +17,20 @@ import javax.persistence.Transient;
  * @author CWDS CALS API Team
  */
 @Entity
+@NamedQuery(
+    name = FIND_BY_CLIENT_ID,
+    query = "SELECT pe FROM gov.ca.cwds.data.legacy.cms.entity.PlacementEpisode pe "
+        + "where pe.fkclientT =:" + PARAM_CLIENT_ID
+)
 @Table(name = "PLC_EPST")
 public class PlacementEpisode extends BasePlacementEpisode {
 
   private static final long serialVersionUID = -3903845942588945920L;
+
+  public static final String FIND_BY_CLIENT_ID =
+      "gov.ca.cwds.data.legacy.cms.entity.PlacementEpisode.findByClientId";
+
+  public static final String PARAM_CLIENT_ID = "clientId";
 
   private Set<OutOfHomePlacement> outOfHomePlacements = new HashSet<>();
 

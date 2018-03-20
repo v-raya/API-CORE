@@ -12,8 +12,8 @@ import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import org.junit.Before;
 
-public abstract class BaseDocToolRulesClientTest<T extends Client, E extends ClientEntityAwareDTO> extends
-    BaseDocToolRulesTest {
+public abstract class BaseDocToolRulesClientTest<T extends Client, E extends ClientEntityAwareDTO>
+    extends BaseDocToolRulesTest {
 
   private ClientCoreService clientCoreService;
   E clientEntityAwareDTO;
@@ -91,8 +91,8 @@ public abstract class BaseDocToolRulesClientTest<T extends Client, E extends Cli
 
   private void runBusinessValidation(ClientEntityAwareDTO clientEntityAwareDTO)
       throws DroolsException {
-    businessValidationService.runBusinessValidation(clientEntityAwareDTO, principal,
-        ClientDroolsConfiguration.INSTANCE);
+    businessValidationService.runBusinessValidation(
+        clientEntityAwareDTO, principal, ClientDroolsConfiguration.INSTANCE);
   }
 
   protected abstract E getAwareDTO();
