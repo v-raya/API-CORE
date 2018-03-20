@@ -5,7 +5,7 @@ import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
 import gov.ca.cwds.authorizer.drools.configuration.ClientResultAuthorizationDroolsConfiguration;
 
 /**
- * ABAC Authorizer that implements Client Result portion of IBM Security Guide
+ * ABAC Authorizer that implements Client Result portion of IBM Security Guide.
  */
 public class ClientResultReadAuthorizer extends ClientBaseReadAuthorizer {
 
