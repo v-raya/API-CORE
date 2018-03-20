@@ -13,7 +13,7 @@ allprojects {
 
     project.ext {
         commonGroupId = "gov.ca.cwds.api"
-        apiSecurityVersion = "1.6.1_363-RC"
+        apiSecurityVersion = "1.6.1_399-RC"
         configPath = "$rootProject.projectDir/config/"
         dropwizardVersion = "1.1.0"
         dropwizardFlywayVersion = "1.0.0-1"
