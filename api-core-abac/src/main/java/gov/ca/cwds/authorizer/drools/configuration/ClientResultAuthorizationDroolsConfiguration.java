@@ -10,7 +10,7 @@ public final class ClientResultAuthorizationDroolsConfiguration extends DroolsCo
 
   private static final String SESSION_NAME = "client-result-authorization-session";
   private static final String AGENDA_GROUP = "client-result-authorization-agenda";
-  private static final String PATH_TO_RULES_CONFIG = "client-abstract-authorization-rules";
+  private static final String PATH_TO_RULES_CONFIG = "client-result-authorization-rules";
   private static final DroolsConfiguration INSTANCE = new ClientResultAuthorizationDroolsConfiguration();
 
   public ClientResultAuthorizationDroolsConfiguration() {

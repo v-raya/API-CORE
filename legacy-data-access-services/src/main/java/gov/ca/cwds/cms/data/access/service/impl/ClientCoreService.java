@@ -31,6 +31,7 @@ import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 import org.hibernate.Hibernate;
 
 /** @author CWDS TPT-3 Team */
@@ -60,6 +61,18 @@ public class ClientCoreService
   @Authorize(CLIENT_READ_CLIENT)
   public Client find(Serializable primaryKey) {
     return super.find(primaryKey);
+  }
+
+  public Client findByLicNumAndChildId(String licenseNumber, String childId) {
+    return crudDao.findByLicNumAndChildId(licenseNumber, childId);
+  }
+
+  public Stream<Client> streamByLicenseNumber(String licenseNumber) {
+    return crudDao.streamByLicenseNumber(licenseNumber);
+  }
+
+  public Stream<Client> streamByLicenseNumber(Integer licenseNumber) {
+    return crudDao.streamByLicenseNumber(licenseNumber);
   }
 
   @Override
