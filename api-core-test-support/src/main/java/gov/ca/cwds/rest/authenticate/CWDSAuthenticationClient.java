@@ -66,14 +66,6 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
     this.password = password;
   }
 
-  public static void main(String[] args) {
-    String userName = "TESTPA";
-    String password = "CWS1kids";
-    CWDSAuthenticationClient cwdsAuthenticationClient =
-        new CWDSAuthenticationClient(userName, password);
-    cwdsAuthenticationClient.getToken();
-  }
-
   /**
    * @return the valid token
    */
