@@ -54,11 +54,8 @@ public class CWDSDevAuthenticationClient extends HttpClientBuild implements CWDS
    */
   @Override
   public String getToken() {
-
     try {
-
       String redirectUrl;
-
       LOGGER.info(NEW_REQUEST_TO_BEGIN);
       LOGGER.info("GET: {}", configUtils.getYamlValues().getTokenCredentials().getAuthLoginUrl());
       postParams.add(new BasicNameValuePair("callback", CALL_BACK_URL));
@@ -80,14 +77,14 @@ public class CWDSDevAuthenticationClient extends HttpClientBuild implements CWDS
   }
 
   private String requestToken(String redirectUrl) throws IOException, URISyntaxException {
-
     LOGGER.info(NEW_REQUEST_TO_BEGIN);
     LOGGER.info("GET ACCESS CODE: {}", redirectUrl);
     httpGet = new HttpGet(redirectUrl);
     httpResponse = httpClient.execute(httpGet, httpContext);
     redirectUrl = httpResponse.getFirstHeader(LOCATION).getValue();
     String accessCodeParm = redirectUrl.substring(redirectUrl.indexOf(ACCESS_CODE));
-    int startIndex = accessCodeParm.indexOf(ACCESS_CODE) + 11;
+    int getOnlyAccessCodeValue = 11;
+    int startIndex = accessCodeParm.indexOf(ACCESS_CODE) + getOnlyAccessCodeValue;
     String accessCode = accessCodeParm.substring(startIndex);
 
     LOGGER.info(NEW_REQUEST_TO_BEGIN);
@@ -104,7 +101,6 @@ public class CWDSDevAuthenticationClient extends HttpClientBuild implements CWDS
   }
 
   private String giveUsernameCredentials() throws IOException {
-
     String redirectUrl;
     LOGGER.info(NEW_REQUEST_TO_BEGIN);
     LOGGER.info("POST: {}", PERRY_LOGIN_URL);

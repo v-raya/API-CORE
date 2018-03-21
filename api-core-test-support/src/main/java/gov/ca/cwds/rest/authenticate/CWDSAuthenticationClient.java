@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
  */
 public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSClientCommon {
 
+  private static final String RANDOM_VALUE = "123456";
   private static final Logger LOGGER = LoggerFactory.getLogger(CWDSAuthenticationClient.class);
   private static final String REDIRECT_URL_LOGGER = "Redirect URL: {}";
   private static final String POST_LOGGER = "POST : {}{}";
@@ -71,7 +72,6 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
    */
   @Override
   public String getToken() {
-
     try {
 
       // Login in expect 302 with redirect:
@@ -162,7 +162,7 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
       postParams.clear();
       postParams.add(new BasicNameValuePair(REQUEST_VERIFICATION_TOKEN, requestVerificationToken));
       postParams.add(new BasicNameValuePair(SELECTED_CONTACT, emailContact));
-      postParams.add(new BasicNameValuePair(ACCESS_CODE, "123456"));
+      postParams.add(new BasicNameValuePair(ACCESS_CODE, RANDOM_VALUE));
       postParams.add(new BasicNameValuePair(DEVICE_LOG_ID, deviceLogId));
       postParams.add(new BasicNameValuePair(SUBMIT_VALIDATE, null));
       httpPost.setEntity(new UrlEncodedFormEntity(postParams));
@@ -184,22 +184,30 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
   }
 
   private String continueToCwsIntegration(String location, String[] values) throws IOException {
-
     // expect 302 with redirectUrl
     LOGGER.info(NEW_REQUEST_TO_BEGIN);
     LOGGER.info("POST: {}", location);
     httpPost = new HttpPost(location);
-    postParams.add(new BasicNameValuePair(CLIENT_ID, getRedirectUrlParam(values[0])));
-    postParams.add(new BasicNameValuePair("redirect_uri", getRedirectUrlParam(values[1])));
-    postParams.add(new BasicNameValuePair(SCOPE, getRedirectUrlParam(values[2])));
-    postParams.add(new BasicNameValuePair("response_type", getRedirectUrlParam(values[3])));
-    postParams.add(new BasicNameValuePair(STATE, getRedirectUrlParam(values[4])));
+    String clientIdValue = getRedirectUrlParam(values[0]);
+    String redirectUrlValue = getRedirectUrlParam(values[1]);
+    String scopeValue = getRedirectUrlParam(values[2]);
+    String responseTypeValue = getRedirectUrlParam(values[3]);
+    String stateValue = getRedirectUrlParam(values[4]);
+    postParams.add(new BasicNameValuePair(CLIENT_ID, clientIdValue));
+    postParams.add(new BasicNameValuePair("redirect_uri", redirectUrlValue));
+    postParams.add(new BasicNameValuePair(SCOPE, scopeValue));
+    postParams.add(new BasicNameValuePair("response_type", responseTypeValue));
+    postParams.add(new BasicNameValuePair(STATE, stateValue));
     postParams.add(new BasicNameValuePair(SUBMIT_CONTINUE, "Continue+to+CWDS+-+Integration"));
     httpPost.setEntity(new UrlEncodedFormEntity(postParams));
     httpResponse = httpClient.execute(httpPost, httpContext);
     location = httpResponse.getFirstHeader(LOCATION).getValue();
     LOGGER.info(REDIRECT_URL_LOGGER, location);
 
+    return requestAccessCode(location);
+  }
+
+  private String requestAccessCode(String location) throws IOException {
     // expect 302 with redirectUrl to:
     LOGGER.info(NEW_REQUEST_TO_BEGIN);
     LOGGER.info("POST: {}", location);
@@ -220,7 +228,6 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
   }
 
   private String requestToken(String accessCode) throws URISyntaxException, IOException {
-
     // expect status code 200 with token
     LOGGER.info(NEW_REQUEST_TO_BEGIN);
     LOGGER.info("GET TOKEN: {}", TOKEN_URL);
@@ -245,7 +252,8 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
 
   private String getAccessCode(String location) {
     String accessCodeParm = location.substring(location.indexOf(ACCESS_CODE));
-    int startIndex = accessCodeParm.indexOf(ACCESS_CODE) + 11;
+    int getAccessCodeValueOnly = 11;
+    int startIndex = accessCodeParm.indexOf(ACCESS_CODE) + getAccessCodeValueOnly;
     return accessCodeParm.substring(startIndex);
   }
 
@@ -255,16 +263,18 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
 
   private String getDeviceLogicId(String response) {
     String deviceId = response.substring(response.indexOf(DEVICE_LOG_ID));
-    int startIndex = deviceId.indexOf(VALUE) + 7;
+    int getDeviceLogicIdValue = 7;
+    int startIndex = deviceId.indexOf(VALUE) + getDeviceLogicIdValue;
     int endIndex = deviceId.indexOf("/>") - 2;
     return deviceId.substring(startIndex, endIndex);
   }
 
   private String getRequestVerificationToken(String response) {
-    String verfiricationToken = response.substring(response.indexOf(REQUEST_VERIFICATION_TOKEN));
-    int startIndex = verfiricationToken.indexOf(VALUE) + 7;
-    int endIndex = verfiricationToken.indexOf("/>") - 2;
-    return verfiricationToken.substring(startIndex, endIndex);
+    String verifiricationToken = response.substring(response.indexOf(REQUEST_VERIFICATION_TOKEN));
+    int getOnlyRequestVerificationValue = 7;
+    int startIndex = verifiricationToken.indexOf(VALUE) + getOnlyRequestVerificationValue;
+    int endIndex = verifiricationToken.indexOf("/>") - 2;
+    return verifiricationToken.substring(startIndex, endIndex);
   }
 
 }
