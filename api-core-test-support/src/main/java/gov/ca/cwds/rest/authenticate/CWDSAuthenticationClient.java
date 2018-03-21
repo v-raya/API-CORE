@@ -15,13 +15,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * This class is used to generate the token using username and password with perry, and handles all
+ * the redirect from clicking the login to the end to get the token.
+ * 
  * @author CWDS TPT-4 Team
  *
  */
 public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSClientCommon {
 
-  private static final String RANDOM_VALUE = "123456";
   private static final Logger LOGGER = LoggerFactory.getLogger(CWDSAuthenticationClient.class);
+
+  private static final int GET_STATE_VALUE = 4;
+  private static final int GET_RESPONE_TYPE_VALUE = 3;
+  private static final int GET_SCOPE_VALUE = 2;
+  private static final int GET_REDIRECT_URL_VALUE = 1;
+  private static final int GET_CLIENT_ID_VALUE = 0;
+  private static final int GET_ONLY_ACCESS_CODE_VALUE = 11;
+  private static final int GET_ONLY_THE_VALUE = 7;
+  private static final String RANDOM_VALUE = "123456";
+
   private static final String REDIRECT_URL_LOGGER = "Redirect URL: {}";
   private static final String POST_LOGGER = "POST : {}{}";
 
@@ -188,16 +200,14 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
     LOGGER.info(NEW_REQUEST_TO_BEGIN);
     LOGGER.info("POST: {}", location);
     httpPost = new HttpPost(location);
-    String clientIdValue = getRedirectUrlParam(values[0]);
-    String redirectUrlValue = getRedirectUrlParam(values[1]);
-    String scopeValue = getRedirectUrlParam(values[2]);
-    String responseTypeValue = getRedirectUrlParam(values[3]);
-    String stateValue = getRedirectUrlParam(values[4]);
-    postParams.add(new BasicNameValuePair(CLIENT_ID, clientIdValue));
-    postParams.add(new BasicNameValuePair("redirect_uri", redirectUrlValue));
-    postParams.add(new BasicNameValuePair(SCOPE, scopeValue));
-    postParams.add(new BasicNameValuePair("response_type", responseTypeValue));
-    postParams.add(new BasicNameValuePair(STATE, stateValue));
+    postParams
+        .add(new BasicNameValuePair(CLIENT_ID, getRedirectUrlParam(values[GET_CLIENT_ID_VALUE])));
+    postParams.add(new BasicNameValuePair("redirect_uri",
+        getRedirectUrlParam(values[GET_REDIRECT_URL_VALUE])));
+    postParams.add(new BasicNameValuePair(SCOPE, getRedirectUrlParam(values[GET_SCOPE_VALUE])));
+    postParams.add(new BasicNameValuePair("response_type",
+        getRedirectUrlParam(values[GET_RESPONE_TYPE_VALUE])));
+    postParams.add(new BasicNameValuePair(STATE, getRedirectUrlParam(values[GET_STATE_VALUE])));
     postParams.add(new BasicNameValuePair(SUBMIT_CONTINUE, "Continue+to+CWDS+-+Integration"));
     httpPost.setEntity(new UrlEncodedFormEntity(postParams));
     httpResponse = httpClient.execute(httpPost, httpContext);
@@ -244,7 +254,7 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
 
   private String getEmailContact(String response) {
     String emailId = response.substring(response.indexOf("input id=\"emailContact\""));
-    int startIndex = emailId.indexOf(VALUE) + 7;
+    int startIndex = emailId.indexOf(VALUE) + GET_ONLY_THE_VALUE;
     int endIndex = emailId.indexOf('}') + 1;
     String actualEmailId = emailId.substring(startIndex, endIndex);
     return actualEmailId.replaceAll("&quot;", "\"");
@@ -252,8 +262,7 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
 
   private String getAccessCode(String location) {
     String accessCodeParm = location.substring(location.indexOf(ACCESS_CODE));
-    int getAccessCodeValueOnly = 11;
-    int startIndex = accessCodeParm.indexOf(ACCESS_CODE) + getAccessCodeValueOnly;
+    int startIndex = accessCodeParm.indexOf(ACCESS_CODE) + GET_ONLY_ACCESS_CODE_VALUE;
     return accessCodeParm.substring(startIndex);
   }
 
@@ -263,16 +272,14 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
 
   private String getDeviceLogicId(String response) {
     String deviceId = response.substring(response.indexOf(DEVICE_LOG_ID));
-    int getDeviceLogicIdValue = 7;
-    int startIndex = deviceId.indexOf(VALUE) + getDeviceLogicIdValue;
+    int startIndex = deviceId.indexOf(VALUE) + GET_ONLY_THE_VALUE;
     int endIndex = deviceId.indexOf("/>") - 2;
     return deviceId.substring(startIndex, endIndex);
   }
 
   private String getRequestVerificationToken(String response) {
     String verifiricationToken = response.substring(response.indexOf(REQUEST_VERIFICATION_TOKEN));
-    int getOnlyRequestVerificationValue = 7;
-    int startIndex = verifiricationToken.indexOf(VALUE) + getOnlyRequestVerificationValue;
+    int startIndex = verifiricationToken.indexOf(VALUE) + GET_ONLY_THE_VALUE;
     int endIndex = verifiricationToken.indexOf("/>") - 2;
     return verifiricationToken.substring(startIndex, endIndex);
   }

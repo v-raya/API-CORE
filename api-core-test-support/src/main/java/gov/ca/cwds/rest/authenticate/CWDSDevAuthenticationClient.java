@@ -16,12 +16,17 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 
+ * This class is used to generate the token using json for Perry dev mode, and handles all the
+ * redirect from clicking the login to the end to get the token.
+ * 
  * @author CWDS TPT-4 Team
  *
  */
 public class CWDSDevAuthenticationClient extends HttpClientBuild implements CWDSClientCommon {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CWDSDevAuthenticationClient.class);
+
+  private static final int GET_ONLY_ACCESS_CODE_VALUE = 11;
 
   private static final String NEW_REQUEST_TO_BEGIN = "=========================================";
   private static final String TOKEN_URL = "https://web.preint.cwds.io/perry/authn/token";
@@ -83,8 +88,7 @@ public class CWDSDevAuthenticationClient extends HttpClientBuild implements CWDS
     httpResponse = httpClient.execute(httpGet, httpContext);
     redirectUrl = httpResponse.getFirstHeader(LOCATION).getValue();
     String accessCodeParm = redirectUrl.substring(redirectUrl.indexOf(ACCESS_CODE));
-    int getOnlyAccessCodeValue = 11;
-    int startIndex = accessCodeParm.indexOf(ACCESS_CODE) + getOnlyAccessCodeValue;
+    int startIndex = accessCodeParm.indexOf(ACCESS_CODE) + GET_ONLY_ACCESS_CODE_VALUE;
     String accessCode = accessCodeParm.substring(startIndex);
 
     LOGGER.info(NEW_REQUEST_TO_BEGIN);
