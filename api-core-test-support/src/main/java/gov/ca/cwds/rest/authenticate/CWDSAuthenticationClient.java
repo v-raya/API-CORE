@@ -1,6 +1,8 @@
 package gov.ca.cwds.rest.authenticate;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -49,6 +51,12 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
   private String userName;
   private String password;
 
+  private String token = null;
+  private HttpGet httpGet;
+  private URI uri;
+  private HttpResponse httpResponse;
+  private HttpPost httpPost;
+
   /**
    * @param userName - userName
    * @param password - password
@@ -58,12 +66,19 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
     this.password = password;
   }
 
+  public static void main(String[] args) {
+    String userName = "TESTPA";
+    String password = "CWS1kids";
+    CWDSAuthenticationClient cwdsAuthenticationClient =
+        new CWDSAuthenticationClient(userName, password);
+    cwdsAuthenticationClient.getToken();
+  }
+
   /**
    * @return the valid token
    */
   @Override
   public String getToken() {
-    String token = null;
 
     try {
 
@@ -73,10 +88,10 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
       LOGGER.info(GET_LOGGER, AUTH_LOGIN_URL);
       postParams.add(new BasicNameValuePair("callback", CALL_BACK_URL));
       postParams.add(new BasicNameValuePair("sp_id", null));
-      HttpGet httpGet = new HttpGet(AUTH_LOGIN_URL);
-      URI uri = new URIBuilder(AUTH_LOGIN_URL).addParameters(postParams).build();
+      httpGet = new HttpGet(AUTH_LOGIN_URL);
+      uri = new URIBuilder(AUTH_LOGIN_URL).addParameters(postParams).build();
       httpGet.setURI(uri);
-      HttpResponse httpResponse = httpClient.execute(httpGet, httpContext);
+      httpResponse = httpClient.execute(httpGet, httpContext);
       String redirectUrl = httpResponse.getFirstHeader(LOCATION).getValue();
       LOGGER.info(REDIRECT_URL_LOGGER, redirectUrl);
 
@@ -105,7 +120,7 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
 
       LOGGER.info(NEW_REQUEST_TO_BEGIN);
       LOGGER.info(POST_LOGGER, BASE_URL, location);
-      HttpPost httpPost = new HttpPost(BASE_URL + location);
+      httpPost = new HttpPost(BASE_URL + location);
       postParams.clear();
       postParams.add(new BasicNameValuePair(REQUEST_VERIFICATION_TOKEN, requestVerificationToken));
       postParams.add(new BasicNameValuePair(USERNAME, userName));
@@ -166,55 +181,66 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
       LOGGER.info(REDIRECT_URL_LOGGER, location);
       httpPost.releaseConnection();
 
-      // expect 302 with redirectUrl
-      LOGGER.info(NEW_REQUEST_TO_BEGIN);
-      LOGGER.info("POST: {}", location);
-      httpPost = new HttpPost(location);
-      postParams.add(new BasicNameValuePair(CLIENT_ID, getRedirectUrlParam(values[0])));
-      postParams.add(new BasicNameValuePair("redirect_uri", getRedirectUrlParam(values[1])));
-      postParams.add(new BasicNameValuePair(SCOPE, getRedirectUrlParam(values[2])));
-      postParams.add(new BasicNameValuePair("response_type", getRedirectUrlParam(values[3])));
-      postParams.add(new BasicNameValuePair(STATE, getRedirectUrlParam(values[4])));
-      postParams.add(new BasicNameValuePair(SUBMIT_CONTINUE, "Continue+to+CWDS+-+Integration"));
-      httpPost.setEntity(new UrlEncodedFormEntity(postParams));
-      httpResponse = httpClient.execute(httpPost, httpContext);
-      location = httpResponse.getFirstHeader(LOCATION).getValue();
-      LOGGER.info(REDIRECT_URL_LOGGER, location);
-
-      // expect 302 with redirectUrl to:
-      LOGGER.info(NEW_REQUEST_TO_BEGIN);
-      LOGGER.info("POST: {}", location);
-      httpPost = new HttpPost(location);
-      httpResponse = httpClient.execute(httpPost, httpContext);
-      location = httpResponse.getFirstHeader(LOCATION).getValue();
-      LOGGER.info(REDIRECT_URL_LOGGER, location);
-
-      // expect 302 with accessCode in the redirectUrl
-      LOGGER.info(NEW_REQUEST_TO_BEGIN);
-      LOGGER.info("GET : {}", location);
-      httpGet = new HttpGet(location);
-      httpResponse = httpClient.execute(httpGet, httpContext);
-      location = httpResponse.getFirstHeader(LOCATION).getValue();
-      String accessCode = getAccessCode(location);
-      LOGGER.info(REDIRECT_URL_LOGGER, location);
-
-      // expect status code 200 with token
-      LOGGER.info(NEW_REQUEST_TO_BEGIN);
-      LOGGER.info("GET TOKEN: {}", TOKEN_URL);
-      postParams.clear();
-      postParams.add(new BasicNameValuePair(ACCESS_CODE, accessCode));
-      httpGet = new HttpGet(TOKEN_URL);
-      uri = new URIBuilder(TOKEN_URL).addParameters(postParams).build();
-      httpGet.setURI(uri);
-      httpResponse = httpClient.execute(httpGet, httpContext);
-      token = EntityUtils.toString(httpResponse.getEntity());
-      LOGGER.info("TOKEN: {}", token);
+      String accessCode = continueToCwsIntegration(location, values);
+      token = requestToken(accessCode);
 
     } catch (Exception e) {
       LOGGER.error("Unable to create the token", e);
     }
     return token;
 
+  }
+
+  private String continueToCwsIntegration(String location, String[] values) throws IOException {
+
+    // expect 302 with redirectUrl
+    LOGGER.info(NEW_REQUEST_TO_BEGIN);
+    LOGGER.info("POST: {}", location);
+    httpPost = new HttpPost(location);
+    postParams.add(new BasicNameValuePair(CLIENT_ID, getRedirectUrlParam(values[0])));
+    postParams.add(new BasicNameValuePair("redirect_uri", getRedirectUrlParam(values[1])));
+    postParams.add(new BasicNameValuePair(SCOPE, getRedirectUrlParam(values[2])));
+    postParams.add(new BasicNameValuePair("response_type", getRedirectUrlParam(values[3])));
+    postParams.add(new BasicNameValuePair(STATE, getRedirectUrlParam(values[4])));
+    postParams.add(new BasicNameValuePair(SUBMIT_CONTINUE, "Continue+to+CWDS+-+Integration"));
+    httpPost.setEntity(new UrlEncodedFormEntity(postParams));
+    httpResponse = httpClient.execute(httpPost, httpContext);
+    location = httpResponse.getFirstHeader(LOCATION).getValue();
+    LOGGER.info(REDIRECT_URL_LOGGER, location);
+
+    // expect 302 with redirectUrl to:
+    LOGGER.info(NEW_REQUEST_TO_BEGIN);
+    LOGGER.info("POST: {}", location);
+    httpPost = new HttpPost(location);
+    httpResponse = httpClient.execute(httpPost, httpContext);
+    location = httpResponse.getFirstHeader(LOCATION).getValue();
+    LOGGER.info(REDIRECT_URL_LOGGER, location);
+
+    // expect 302 with accessCode in the redirectUrl
+    LOGGER.info(NEW_REQUEST_TO_BEGIN);
+    LOGGER.info("GET : {}", location);
+    httpGet = new HttpGet(location);
+    httpResponse = httpClient.execute(httpGet, httpContext);
+    location = httpResponse.getFirstHeader(LOCATION).getValue();
+    String accessCode = getAccessCode(location);
+    LOGGER.info(REDIRECT_URL_LOGGER, location);
+    return accessCode;
+  }
+
+  private String requestToken(String accessCode) throws URISyntaxException, IOException {
+
+    // expect status code 200 with token
+    LOGGER.info(NEW_REQUEST_TO_BEGIN);
+    LOGGER.info("GET TOKEN: {}", TOKEN_URL);
+    postParams.clear();
+    postParams.add(new BasicNameValuePair(ACCESS_CODE, accessCode));
+    httpGet = new HttpGet(TOKEN_URL);
+    uri = new URIBuilder(TOKEN_URL).addParameters(postParams).build();
+    httpGet.setURI(uri);
+    httpResponse = httpClient.execute(httpGet, httpContext);
+    token = EntityUtils.toString(httpResponse.getEntity());
+    LOGGER.info("TOKEN: {}", token);
+    return token;
   }
 
   private String getEmailContact(String response) {
