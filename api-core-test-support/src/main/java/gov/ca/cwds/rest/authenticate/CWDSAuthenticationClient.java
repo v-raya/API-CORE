@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  * @author CWDS TPT-4 Team
  *
  */
-public class CWDSAuthenticationClient extends CWDSCommonProperties implements CWDSClientCommon {
+public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSClientCommon {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CWDSAuthenticationClient.class);
   private static final String REDIRECT_URL_LOGGER = "Redirect URL: {}";
@@ -33,7 +33,7 @@ public class CWDSAuthenticationClient extends CWDSCommonProperties implements CW
   private static final String EMAIL_CONTACT = "emailContact";
   private static final String VIEW = "View";
   private static final String SUBMIT_SIGNIN_RACF = "submit.Signin.RACF";
-  private static final String PASSWORD = "Password";
+  private static final String PASSWORD = "Password"; // It's a query parameter, not password
   private static final String USERNAME = "Username";
   private static final String LOCATION = "Location";
   private static final String DEVICE_LOG_ID = "deviceLogID";

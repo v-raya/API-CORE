@@ -13,7 +13,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
  * @author CWDS TPT-4 Team
  *
  */
-public class CWDSCommonProperties {
+public class HttpClientBuild {
 
   RequestConfig requestConfig =
       RequestConfig.custom().setRedirectsEnabled(false).setCookieSpec(CookieSpecs.STANDARD).build();

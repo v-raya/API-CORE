@@ -8,6 +8,10 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
+/**
+ * @author CWDS TPT-4 Team
+ *
+ */
 public class ConfigUtils {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ConfigUtils.class);
@@ -16,17 +20,16 @@ public class ConfigUtils {
   private CWDSAuthenticationClientConfig cwdsAuthenticationClientConfig;
 
   /**
-   * @return
+   * @return the yaml file values
    */
   public CWDSAuthenticationClientConfig getYamlValues() {
     try {
       cwdsAuthenticationClientConfig =
           mapper.readValue(new File("config/config.yml"), CWDSAuthenticationClientConfig.class);
     } catch (Exception e) {
-      e.printStackTrace();
+      LOGGER.error("Unable to read the yml file {}", e);
     }
     return cwdsAuthenticationClientConfig;
   }
-
 
 }

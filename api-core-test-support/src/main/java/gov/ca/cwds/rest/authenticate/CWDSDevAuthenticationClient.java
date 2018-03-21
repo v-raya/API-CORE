@@ -1,6 +1,8 @@
 package gov.ca.cwds.rest.authenticate;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -17,7 +19,7 @@ import org.slf4j.LoggerFactory;
  * @author CWDS TPT-4 Team
  *
  */
-public class CWDSDevAuthenticationClient extends CWDSCommonProperties implements CWDSClientCommon {
+public class CWDSDevAuthenticationClient extends HttpClientBuild implements CWDSClientCommon {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CWDSDevAuthenticationClient.class);
 
@@ -30,6 +32,11 @@ public class CWDSDevAuthenticationClient extends CWDSCommonProperties implements
   private static final String ACCESS_CODE = "accessCode";
   private static final String LOCATION = "Location";
   private ConfigUtils configUtils = new ConfigUtils();
+
+  private HttpGet httpGet;
+  private URI uri;
+  private HttpResponse httpResponse;
+  private String token = null;
 
   private String userName;
 
@@ -47,56 +54,69 @@ public class CWDSDevAuthenticationClient extends CWDSCommonProperties implements
    */
   @Override
   public String getToken() {
-    String token = null;
 
     try {
+
+      String redirectUrl;
 
       LOGGER.info(NEW_REQUEST_TO_BEGIN);
       LOGGER.info("GET: {}", configUtils.getYamlValues().getTokenCredentials().getAuthLoginUrl());
       postParams.add(new BasicNameValuePair("callback", CALL_BACK_URL));
       postParams.add(new BasicNameValuePair("sp_id", null));
-      HttpGet httpGet = new HttpGet(AUTH_LOGIN_URL);
-      URI uri = new URIBuilder(AUTH_LOGIN_URL).addParameters(postParams).build();
+      httpGet = new HttpGet(AUTH_LOGIN_URL);
+      uri = new URIBuilder(AUTH_LOGIN_URL).addParameters(postParams).build();
       httpGet.setURI(uri);
-      HttpResponse httpResponse = httpClient.execute(httpGet, httpContext);
-      String redirectUrl = httpResponse.getFirstHeader(LOCATION).getValue();
-      LOGGER.info("Redirect URL: {}", redirectUrl);
-
-      LOGGER.info(NEW_REQUEST_TO_BEGIN);
-      LOGGER.info("POST: {}", PERRY_LOGIN_URL);
-      HttpPost httpPost = new HttpPost(PERRY_LOGIN_URL);
-      postParams.clear();
-      postParams.add(new BasicNameValuePair("username", userName));
-      httpPost.setEntity(new UrlEncodedFormEntity(postParams));
-      httpResponse = httpClient.execute(httpPost, httpContext);
-      LOGGER.info("Status: {}", httpResponse.getStatusLine());
+      httpResponse = httpClient.execute(httpGet, httpContext);
       redirectUrl = httpResponse.getFirstHeader(LOCATION).getValue();
       LOGGER.info("Redirect URL: {}", redirectUrl);
 
-      LOGGER.info(NEW_REQUEST_TO_BEGIN);
-      LOGGER.info("GET ACCESS CODE: {}", redirectUrl);
-      httpGet = new HttpGet(redirectUrl);
-      httpResponse = httpClient.execute(httpGet, httpContext);
-      redirectUrl = httpResponse.getFirstHeader(LOCATION).getValue();
-      String accessCodeParm = redirectUrl.substring(redirectUrl.indexOf(ACCESS_CODE));
-      int startIndex = accessCodeParm.indexOf(ACCESS_CODE) + 11;
-      String accessCode = accessCodeParm.substring(startIndex);
-
-      LOGGER.info(NEW_REQUEST_TO_BEGIN);
-      LOGGER.info("GET TOKEN: {}", TOKEN_URL);
-      postParams.clear();
-      postParams.add(new BasicNameValuePair(ACCESS_CODE, accessCode));
-      httpGet = new HttpGet(TOKEN_URL);
-      uri = new URIBuilder(TOKEN_URL).addParameters(postParams).build();
-      httpGet.setURI(uri);
-      httpResponse = httpClient.execute(httpGet, httpContext);
-      token = EntityUtils.toString(httpResponse.getEntity());
-      LOGGER.info("TOKEN: {}", token);
+      redirectUrl = giveUsernameCredentials();
+      token = requestToken(redirectUrl);
 
     } catch (Exception e) {
       LOGGER.error("Unable to create the token", e);
     }
     return token;
+  }
+
+  private String requestToken(String redirectUrl) throws IOException, URISyntaxException {
+
+    LOGGER.info(NEW_REQUEST_TO_BEGIN);
+    LOGGER.info("GET ACCESS CODE: {}", redirectUrl);
+    httpGet = new HttpGet(redirectUrl);
+    httpResponse = httpClient.execute(httpGet, httpContext);
+    redirectUrl = httpResponse.getFirstHeader(LOCATION).getValue();
+    String accessCodeParm = redirectUrl.substring(redirectUrl.indexOf(ACCESS_CODE));
+    int startIndex = accessCodeParm.indexOf(ACCESS_CODE) + 11;
+    String accessCode = accessCodeParm.substring(startIndex);
+
+    LOGGER.info(NEW_REQUEST_TO_BEGIN);
+    LOGGER.info("GET TOKEN: {}", TOKEN_URL);
+    postParams.clear();
+    postParams.add(new BasicNameValuePair(ACCESS_CODE, accessCode));
+    httpGet = new HttpGet(TOKEN_URL);
+    uri = new URIBuilder(TOKEN_URL).addParameters(postParams).build();
+    httpGet.setURI(uri);
+    httpResponse = httpClient.execute(httpGet, httpContext);
+    token = EntityUtils.toString(httpResponse.getEntity());
+    LOGGER.info("TOKEN: {}", token);
+    return token;
+  }
+
+  private String giveUsernameCredentials() throws IOException {
+
+    String redirectUrl;
+    LOGGER.info(NEW_REQUEST_TO_BEGIN);
+    LOGGER.info("POST: {}", PERRY_LOGIN_URL);
+    HttpPost httpPost = new HttpPost(PERRY_LOGIN_URL);
+    postParams.clear();
+    postParams.add(new BasicNameValuePair("username", userName));
+    httpPost.setEntity(new UrlEncodedFormEntity(postParams));
+    httpResponse = httpClient.execute(httpPost, httpContext);
+    LOGGER.info("Status: {}", httpResponse.getStatusLine());
+    redirectUrl = httpResponse.getFirstHeader(LOCATION).getValue();
+    LOGGER.info("Redirect URL: {}", redirectUrl);
+    return redirectUrl;
   }
 
 }

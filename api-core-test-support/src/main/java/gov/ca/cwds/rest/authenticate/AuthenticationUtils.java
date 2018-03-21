@@ -13,6 +13,7 @@ public class AuthenticationUtils {
   private String stateSealedToken;
 
   CWDSLoginType cwdsLoginType = new CWDSLoginType();
+  private ConfigUtils configUtils = new ConfigUtils();
 
   /**
    * @param userType - Type user to get the token {@link UserGroup}
@@ -21,40 +22,53 @@ public class AuthenticationUtils {
   public String getToken(UserGroup userType) {
 
     if (userType != null) {
-      String loginType = ""; // config read to TEST or not
+      String loginType = configUtils.getYamlValues().getTokenCredentials().getAuthenticationMode();
       switch (userType) {
         case SOCIAL_WORKER:
           return getSocialWorkerToken(loginType, userType);
 
         case COUNTY_SENSITIVE:
-          if (countySensitiveToken == null) {
-            countySensitiveToken = getToken(loginType, userType);
-          }
-          return countySensitiveToken;
+          return getCountySensitiveToken(userType, loginType);
 
         case COUNTY_SEALED:
-          if (countySealedToken == null) {
-            countySealedToken = getToken(loginType, userType);
-          }
-          return countySealedToken;
+          return getCountySealedToken(userType, loginType);
 
         case STATE_SENSITIVE:
-          if (stateSensitiveToken == null) {
-            stateSensitiveToken = getToken(loginType, userType);
-          }
-          return stateSensitiveToken;
+          return getStateSenstiveToken(userType, loginType);
 
         case STATE_SEALED:
-          if (stateSealedToken == null) {
-            stateSealedToken = getToken(loginType, userType);
-          }
-          return stateSealedToken;
+          return getStateSealedToken(userType, loginType);
       }
-
     }
-
     return null;
+  }
 
+  private String getStateSealedToken(UserGroup userType, String loginType) {
+    if (stateSealedToken == null) {
+      stateSealedToken = getToken(loginType, userType);
+    }
+    return stateSealedToken;
+  }
+
+  private String getStateSenstiveToken(UserGroup userType, String loginType) {
+    if (stateSensitiveToken == null) {
+      stateSensitiveToken = getToken(loginType, userType);
+    }
+    return stateSensitiveToken;
+  }
+
+  private String getCountySealedToken(UserGroup userType, String loginType) {
+    if (countySealedToken == null) {
+      countySealedToken = getToken(loginType, userType);
+    }
+    return countySealedToken;
+  }
+
+  private String getCountySensitiveToken(UserGroup userType, String loginType) {
+    if (countySensitiveToken == null) {
+      countySensitiveToken = getToken(loginType, userType);
+    }
+    return countySensitiveToken;
   }
 
   private String getSocialWorkerToken(String loginType, UserGroup userType) {
@@ -65,7 +79,7 @@ public class AuthenticationUtils {
   }
 
   private String getToken(String loginType, UserGroup userType) {
-    if ("REST".equals(loginType))
+    if ("TEST".equals(loginType))
       return cwdsLoginType.login("username", "password"); // will be updated to read the
                                                           // username/password from yml file
     else {
