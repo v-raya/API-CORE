@@ -11,7 +11,7 @@ rule "R-02769"
   dialect "mvel"
   agenda-group "client-agenda"
      /*
-        Code: R - 02967
+        Code: R - 02769
 
         Rule text:
           If the client's common name type is 'Doe' and the common name itself is changed,

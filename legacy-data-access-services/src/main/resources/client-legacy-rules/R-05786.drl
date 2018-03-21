@@ -1,0 +1,42 @@
+import gov.ca.cwds.data.legacy.cms.entity.Client
+import gov.ca.cwds.data.legacy.cms.entity.OtherClientName
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType
+import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
+import java.util.Objects
+import gov.ca.cwds.cms.data.access.dto.OtherClientNameDTO
+
+global java.util.Set<IssueDetails> validationDetailsList
+
+rule "R-05786"
+  dialect "mvel"
+  agenda-group "client-agenda"
+     /*
+        Code: R - 05786
+
+        Rule text:
+          Once the client has been saved to the database, if the last name changes create an OTHER_CLIENT_NAME
+          row from the exsisting client name with a Name Type of AKA.  The new name that is keyed will stay on
+          the client record.
+
+        Logic:
+          If oldCLIENT.COMMON_LAST_NAME != newCLIENT.COMMON_LAST_NAME create OTHER_CLIENT_NAME
+          from oldCLIENT.COMMON_FIRST_NAME, COMMON_LAST_NAME, COMMON_MIDDLE_NAMEwhere NAME_TYPE = 'AKA'.
+
+      */
+  when
+        $clientAwareDTO: ClientEntityAwareDTO()
+        $persistentClient: Client() from $clientAwareDTO.persistentClientState
+        $client: Client(
+            $persistentClient != null, !Objects.equals(commonLastName, $persistentClient.commonLastName)
+        )
+        from $clientAwareDTO.entity
+
+ then
+        OtherClientNameDTO otherClientName = new OtherClientNameDTO();
+        otherClientName.setClientId($persistentClient.getIdentifier());
+        otherClientName.setFirstName($persistentClient.getCommonFirstName());
+        otherClientName.setLastName(($persistentClient.getCommonLastName()));
+        otherClientName.setMiddleName($persistentClient.getCommonMiddleName());
+        otherClientName.setNameType(1311);
+        $clientAwareDTO.setOtherClientName(otherClientName);
+end
