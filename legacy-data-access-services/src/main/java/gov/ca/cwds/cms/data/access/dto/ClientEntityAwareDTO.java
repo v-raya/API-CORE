@@ -8,6 +8,7 @@ import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
 import gov.ca.cwds.data.legacy.cms.entity.NearFatality;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementEpisode;
 import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +23,7 @@ public class ClientEntityAwareDTO extends BaseEntityAwareDTO<Client> {
   private List<NearFatality> nearFatalities = new ArrayList<>();
   private List<PlacementEpisode> placementEpisodes = new ArrayList<>();
   private List<ClientServiceProvider> clientServiceProviders = new ArrayList<>();
+  private OtherClientNameDTO otherClientName;
 
   public Set<ClientOtherEthnicity> getOtherEthnicities() {
     return otherEthnicities;
@@ -61,5 +63,13 @@ public class ClientEntityAwareDTO extends BaseEntityAwareDTO<Client> {
 
   public List<ClientServiceProvider> getClientServiceProviders() {
     return clientServiceProviders;
+  }
+
+  public OtherClientNameDTO getOtherClientName() {
+    return otherClientName;
+  }
+
+  public void setOtherClientName(OtherClientNameDTO otherClientName) {
+    this.otherClientName = otherClientName;
   }
 }
