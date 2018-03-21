@@ -47,6 +47,9 @@ public abstract class BaseCwsCmsInMemoryPersistenceTest  {
   private static final Logger LOGGER = LoggerFactory
       .getLogger(gov.ca.cwds.data.legacy.cms.persistence.BaseCwsCmsInMemoryPersistenceTest.class);
 
+  @ClassRule
+  public static final InMemoryTestResources inMemoryTestResources = InMemoryTestResources.getInstance();
+
   @Before
   public void superBefore() throws Exception {
 //    PowerMockito.mockStatic(PrincipalUtils.class);
