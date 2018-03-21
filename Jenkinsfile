@@ -40,12 +40,13 @@ node ('tpt2-slave'){
    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')), disableConcurrentBuilds(), [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
    parameters([
       string(defaultValue: 'master', description: '', name: 'branch'),
+      string(defaultValue: '', description: 'Used for mergerequest default is empty', name: 'refspec'),
       booleanParam(defaultValue: false, description: 'Default release version template is: <majorVersion>_<buildNumber>-RC', name: 'RELEASE_PROJECT'),
       string(defaultValue: "", description: 'Fill this field if need to specify custom version ', name: 'OVERRIDE_VERSION'),
-      ]), pipelineTriggers([pollSCM('H/5 * * * *')])])
+      ])])
   try {
    stage('Preparation') {
-		  git branch: '$branch', url: 'https://github.com/ca-cwds/api-core.git'
+		  checkout([$class: 'GitSCM', branches: [[name: '$branch']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '433ac100-b3c2-4519-b4d6-207c029a103b', refspec: '$refspec', url: 'git@github.com:ca-cwds/api-core.git']]])
 		  rtGradle.tool = "Gradle_35"
 		  rtGradle.resolver repo:'repo', server: serverArti
 		  rtGradle.useWrapper = true
@@ -61,16 +62,10 @@ node ('tpt2-slave'){
    }
    stage('Unit Tests') {
        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test jacocoTestReport', switches: '--stacktrace'
-	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'api-core-common/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report Common', reportTitles: 'JUnit Report Common'])
-	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'api-core-rest/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report REST', reportTitles: 'JUnit Report REST'])
-	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'api-core-cms/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report CMS', reportTitles: 'JUnit Report CMS'])
-	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'api-core-abac/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report ABAC', reportTitles: 'JUnit Report ABAC'])
-	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'legacy-data-access/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report legacy-data-access', reportTitles: 'JUnit Report Legacy Data Access'])
-	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'legacy-data-access-services/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report legacy-data-access-services', reportTitles: 'JUnit Report Legacy Data Access Services'])
    }
    stage('License Report') {
       		buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'libLicenseReport -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
-      		publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/dependency-license', reportFiles: 'licenses.html', reportName: 'License Report', reportTitles: 'License summary'])
+
       }
    stage('SonarQube analysis'){
 		withSonarQubeEnv('Core-SonarQube') {
@@ -97,7 +92,14 @@ node ('tpt2-slave'){
   	   notifyBuild(currentBuild.result,errorcode)
   	   throw e;
  } finally {
-	   cleanWs()
+     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'api-core-common/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report Common', reportTitles: 'JUnit Report Common'])
+     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'api-core-rest/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report REST', reportTitles: 'JUnit Report REST'])
+     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'api-core-cms/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report CMS', reportTitles: 'JUnit Report CMS'])
+     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'api-core-abac/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report ABAC', reportTitles: 'JUnit Report ABAC'])
+     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'legacy-data-access/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report legacy-data-access', reportTitles: 'JUnit Report Legacy Data Access'])
+     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'legacy-data-access-services/build/reports/tests', reportFiles: 'index.html', reportName: 'JUnit Report legacy-data-access-services', reportTitles: 'JUnit Report Legacy Data Access Services'])
+     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/dependency-license', reportFiles: 'licenses.html', reportName: 'License Report', reportTitles: 'License summary'])
+     cleanWs()
  }
 }
 
