@@ -6,27 +6,25 @@ package gov.ca.cwds.rest.authenticate;
  */
 public class AuthenticationUtils {
 
-  private static String token;
-  private static String countySensitiveToken;
-  private static String countySealedToken;
-  private static String stateSensitiveToken;
-  private static String stateSealedToken;
-  private static CWDSLoginType cwdsLoginType = new CWDSLoginType();
+  private String token;
+  private String countySensitiveToken;
+  private String countySealedToken;
+  private String stateSensitiveToken;
+  private String stateSealedToken;
+
+  CWDSLoginType cwdsLoginType = new CWDSLoginType();
 
   /**
    * @param userType - Type user to get the token {@link UserGroup}
    * @return the user based token
    */
-  public static String getToken(UserGroup userType) {
+  public String getToken(UserGroup userType) {
 
     if (userType != null) {
       String loginType = ""; // config read to TEST or not
       switch (userType) {
         case SOCIAL_WORKER:
-          if (token == null) {
-            token = getToken(loginType, userType);
-          }
-          return token;
+          return getSocialWorkerToken(loginType, userType);
 
         case COUNTY_SENSITIVE:
           if (countySensitiveToken == null) {
@@ -54,11 +52,19 @@ public class AuthenticationUtils {
       }
 
     }
+
     return null;
 
   }
 
-  private static String getToken(String loginType, UserGroup userType) {
+  private String getSocialWorkerToken(String loginType, UserGroup userType) {
+    if (token == null) {
+      token = getToken(loginType, userType);
+    }
+    return token;
+  }
+
+  private String getToken(String loginType, UserGroup userType) {
     if ("REST".equals(loginType))
       return cwdsLoginType.login("username", "password"); // will be updated to read the
                                                           // username/password from yml file

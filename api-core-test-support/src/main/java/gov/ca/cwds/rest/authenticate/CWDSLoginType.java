@@ -6,6 +6,8 @@ package gov.ca.cwds.rest.authenticate;
  */
 public class CWDSLoginType {
 
+  CWDSClientCommon cwdsClientCommon = null;
+
   /**
    * @param params - params
    * @return the token based the type of login
@@ -14,12 +16,12 @@ public class CWDSLoginType {
 
     if (params != null) {
       if (params.length > 1) {
-        return new CWDSAuthenticationClient(params[0], params[1]).getToken();
+        cwdsClientCommon = new CWDSAuthenticationClient(params[0], params[1]);
       } else {
-        return new CWDSDevAuthenticationClient(params[0]).getToken();
+        cwdsClientCommon = new CWDSDevAuthenticationClient(params[0]);
       }
     }
-    return null;
+    return cwdsClientCommon.getToken();
   }
 
 }

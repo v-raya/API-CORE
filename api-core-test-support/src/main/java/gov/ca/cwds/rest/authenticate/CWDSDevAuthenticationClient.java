@@ -1,19 +1,12 @@
 package gov.ca.cwds.rest.authenticate;
 
 import java.net.URI;
-import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.CookieSpecs;
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
@@ -24,7 +17,7 @@ import org.slf4j.LoggerFactory;
  * @author CWDS TPT-4 Team
  *
  */
-public class CWDSDevAuthenticationClient extends CWDSLoginType {
+public class CWDSDevAuthenticationClient extends CWDSCommonProperties implements CWDSClientCommon {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CWDSDevAuthenticationClient.class);
 
@@ -36,6 +29,7 @@ public class CWDSDevAuthenticationClient extends CWDSLoginType {
 
   private static final String ACCESS_CODE = "accessCode";
   private static final String LOCATION = "Location";
+  private ConfigUtils configUtils = new ConfigUtils();
 
   private String userName;
 
@@ -51,20 +45,14 @@ public class CWDSDevAuthenticationClient extends CWDSLoginType {
   /**
    * @return the valid token
    */
+  @Override
   public String getToken() {
     String token = null;
 
     try {
-      RequestConfig requestConfig = RequestConfig.custom().setRedirectsEnabled(false)
-          .setCookieSpec(CookieSpecs.STANDARD).build();
-
-      HttpClient httpClient =
-          HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).build();
-      HttpClientContext httpContext = HttpClientContext.create();
-      ArrayList<NameValuePair> postParams = new ArrayList<>();
 
       LOGGER.info(NEW_REQUEST_TO_BEGIN);
-      LOGGER.info("GET: {}", AUTH_LOGIN_URL);
+      LOGGER.info("GET: {}", configUtils.getYamlValues().getTokenCredentials().getAuthLoginUrl());
       postParams.add(new BasicNameValuePair("callback", CALL_BACK_URL));
       postParams.add(new BasicNameValuePair("sp_id", null));
       HttpGet httpGet = new HttpGet(AUTH_LOGIN_URL);
