@@ -93,6 +93,7 @@ allprojects {
 
     test {
         exclude '**/*IT*'
+        exclude 'gov/ca/cwds/data/legacy/cms/dao/**'
         jacoco {
             excludes = ["**org/drools/**/*"]
         }
