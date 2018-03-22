@@ -2,7 +2,12 @@ package gov.ca.cwds.cms.data.access.service.impl;
 
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
 
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessBundle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
@@ -32,24 +37,32 @@ import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
 import gov.ca.cwds.data.legacy.cms.entity.SchoolOriginHistory;
 import gov.ca.cwds.data.legacy.cms.entity.SpecialEducation;
 import gov.ca.cwds.security.annotations.Authorize;
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
 
 /** @author CWDS TPT-3 Team */
 public class ChildClientCoreService extends ClientCoreService {
 
-  @Inject private HealthInterventionPlanDao healthInterventionPlanDao;
-  @Inject private ParentalRightsTerminationDao parentalRightsTerminationDao;
-  @Inject private MedicalEligibilityApplicationDao medicalEligibilityApplicationDao;
-  @Inject private FCEligibilityDao fcEligibilityDao;
-  @Inject private CsecHistoryDao csecHistoryDao;
-  @Inject private PaternityDetailDao paternityDetailDao;
-  @Inject private CreditReportHistoryDao creditReportHistoryDao;
-  @Inject private SpecialEducationDao specialEducationDao;
-  @Inject private HealthReferralDao healthReferralDao;
-  @Inject private SchoolOriginHistoryDao schoolOriginHistoryDao;
-  @Inject private HealthScreeningDao healthScreeningDao;
+  @Inject
+  private HealthInterventionPlanDao healthInterventionPlanDao;
+  @Inject
+  private ParentalRightsTerminationDao parentalRightsTerminationDao;
+  @Inject
+  private MedicalEligibilityApplicationDao medicalEligibilityApplicationDao;
+  @Inject
+  private FCEligibilityDao fcEligibilityDao;
+  @Inject
+  private CsecHistoryDao csecHistoryDao;
+  @Inject
+  private PaternityDetailDao paternityDetailDao;
+  @Inject
+  private CreditReportHistoryDao creditReportHistoryDao;
+  @Inject
+  private SpecialEducationDao specialEducationDao;
+  @Inject
+  private HealthReferralDao healthReferralDao;
+  @Inject
+  private SchoolOriginHistoryDao schoolOriginHistoryDao;
+  @Inject
+  private HealthScreeningDao healthScreeningDao;
 
   @Inject
   public ChildClientCoreService(ChildClientDao crudDao) {
@@ -59,8 +72,8 @@ public class ChildClientCoreService extends ClientCoreService {
   @Override
   @Authorize(CLIENT_READ_CLIENT)
   public ChildClient find(Serializable primaryKey) {
-    Client childClient =  super.find(primaryKey);
-    if (childClient != null && childClient instanceof ChildClient) {
+    Client childClient = super.find(primaryKey);
+    if (childClient instanceof ChildClient) {
       return (ChildClient) childClient;
     }
     return null;
@@ -98,8 +111,7 @@ public class ChildClientCoreService extends ClientCoreService {
 
       List<MedicalEligibilityApplication> medicalEligibilityApplications =
           medicalEligibilityApplicationDao.findByChildClientId(childClientId);
-      clientEntityAwareDTO
-          .getMedicalEligibilityApplications()
+      clientEntityAwareDTO.getMedicalEligibilityApplications()
           .addAll(medicalEligibilityApplications);
 
       List<CsecHistory> csecHistories = csecHistoryDao.findByClientId(childClientId);

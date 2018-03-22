@@ -1,12 +1,8 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
-import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
-import gov.ca.cwds.data.legacy.cms.entity.converter.NullableBooleanConverter;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.ApprovalStatusType;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.County;
-import gov.ca.cwds.data.persistence.CompositeKey;
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
@@ -16,34 +12,34 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
 
+import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.legacy.cms.entity.converter.NullableBooleanConverter;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.ApprovalStatusType;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.County;
+import gov.ca.cwds.data.persistence.CompositeKey;
+
 /** @author CWDS TPT-3 Team */
 @Entity
 @Table(name = "REFR_CLT")
 public class ReferralClient extends CmsPersistentObject {
 
-  @EmbeddedId private ReferralId embeded = new ReferralId();
+  @EmbeddedId
+  private ReferralId embeded = new ReferralId();
 
-  @JoinColumn(
-    name = "FKREFERL_T",
-    insertable = false,
-    updatable = false,
-    referencedColumnName = "IDENTIFIER"
-  )
+  @JoinColumn(name = "FKREFERL_T", insertable = false, updatable = false,
+      referencedColumnName = "IDENTIFIER")
   @ManyToOne
   private Referral referral;
 
-  @JoinColumn(
-    name = "FKCLIENT_T",
-    insertable = false,
-    updatable = false,
-    referencedColumnName = "IDENTIFIER"
-  )
+  @JoinColumn(name = "FKCLIENT_T", insertable = false, updatable = false,
+      referencedColumnName = "IDENTIFIER")
   @ManyToOne
   private Client client;
 
@@ -258,8 +254,9 @@ public class ReferralClient extends CmsPersistentObject {
       this.clientId = clientId;
     }
 
+    @Override
     public boolean equals(Object o) {
-      if (o != null && o instanceof ReferralId) {
+      if (o instanceof ReferralId) {
         ReferralId that = (ReferralId) o;
         return this.referralId.equals(that.referralId) && this.clientId.equals(that.clientId);
       } else {
@@ -267,6 +264,7 @@ public class ReferralClient extends CmsPersistentObject {
       }
     }
 
+    @Override
     public int hashCode() {
       return clientId.hashCode() + referralId.hashCode();
     }
