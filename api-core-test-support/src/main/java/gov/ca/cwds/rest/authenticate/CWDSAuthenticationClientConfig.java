@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class CWDSAuthenticationClientConfig {
 
-  class TokenCredentials {
+  static class TokenCredentials {
 
     public TokenCredentials() {
       // no-opt
