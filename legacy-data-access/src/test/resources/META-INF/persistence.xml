@@ -54,6 +54,8 @@
     <class>gov.ca.cwds.data.legacy.cms.entity.HealthScreening</class>
     <class>gov.ca.cwds.data.legacy.cms.entity.SchoolOriginHistory</class>
     <class>gov.ca.cwds.data.legacy.cms.entity.PlacementFacilityTypeHistory</class>
+    <class>gov.ca.cwds.data.legacy.cms.entity.ClientServiceProvider</class>
+    <class>gov.ca.cwds.data.legacy.cms.entity.OtherClientName</class>
 
     <class>gov.ca.cwds.data.legacy.cms.entity.syscodes.ActiveServiceComponentType</class>
     <class>gov.ca.cwds.data.legacy.cms.entity.syscodes.ApprovalStatusType</class>
@@ -94,11 +96,11 @@
       <property name="hibernate.current_session_context_class" value="thread"/>
       <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
       <property name="hibernate.connection.driver_class" value="org.h2.Driver"/>
-      <property name="hibernate.show_sql" value="true"/>
       <property name="hibernate.connection.url" value="jdbc:h2:mem:cwscms;INIT=create schema if not exists CWSCMS\;set schema CWSCMS;DB_CLOSE_DELAY=-1"/>
       <property name="hibernate.connection.username" value=""/>
       <property name="hibernate.connection.password" value=""/>
       <property name="hibernate.default_schema" value="CWSCMS"/>
+      <property name="hibernate.show_sql" value="true"/>
     </properties>
   </persistence-unit>
 </persistence>

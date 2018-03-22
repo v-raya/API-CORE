@@ -4,6 +4,7 @@ import gov.ca.cwds.data.legacy.cms.dao.CaseDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.ClientOtherEthnicitiesTest;
 import gov.ca.cwds.data.legacy.cms.dao.ClientRelationshipDaoTest;
+import gov.ca.cwds.data.legacy.cms.dao.ClientServiceProviderDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.CreditReportHistoryDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.CsecHistoryDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.DasHistoryDaoTest;
@@ -16,6 +17,7 @@ import gov.ca.cwds.data.legacy.cms.dao.MedicalEligibilityApplicationDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.NearFatalityDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.ParentalRightsTerminationDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.PaternityDetailDaoTest;
+import gov.ca.cwds.data.legacy.cms.dao.PlacementEpisodeDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.ReferralDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.SafetyAlertDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.SchoolOriginHistoryDaoTest;
@@ -32,6 +34,7 @@ import org.junit.runners.Suite;
     ClientOtherEthnicitiesTest.class,
     ClientRelationshipDaoTest.class,
     CreditReportHistoryDaoTest.class,
+    ClientServiceProviderDaoTest.class,
     CsecHistoryDaoTest.class,
     DasHistoryDaoTest.class,
     DeliveredServiceDaoTest.class,
@@ -43,6 +46,7 @@ import org.junit.runners.Suite;
     NearFatalityDaoTest.class,
     ParentalRightsTerminationDaoTest.class,
     PaternityDetailDaoTest.class,
+    PlacementEpisodeDaoTest.class,
     ReferralDaoTest.class,
     SafetyAlertDaoTest.class,
     SchoolOriginHistoryDaoTest.class,

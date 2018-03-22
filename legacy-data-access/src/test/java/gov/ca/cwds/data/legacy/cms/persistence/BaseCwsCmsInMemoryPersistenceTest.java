@@ -1,9 +1,5 @@
 package gov.ca.cwds.data.legacy.cms.persistence;
 
-//import static org.powermock.api.mockito.PowerMockito.when;
-
-//import gov.ca.cwds.security.utils.PrincipalUtils;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,18 +17,10 @@ import org.dbunit.util.fileloader.FlatXmlDataFileLoader;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.ClassRule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//import org.powermock.api.mockito.PowerMockito;
-//import org.powermock.core.classloader.annotations.PrepareForTest;
-//import org.powermock.modules.junit4.PowerMockRunner;
-
-//@RunWith(PowerMockRunner.class)
-//@PrepareForTest({PrincipalUtils.class})
 public abstract class BaseCwsCmsInMemoryPersistenceTest  {
 
   private final static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
@@ -49,16 +37,6 @@ public abstract class BaseCwsCmsInMemoryPersistenceTest  {
 
   @ClassRule
   public static final InMemoryTestResources inMemoryTestResources = InMemoryTestResources.getInstance();
-
-  @Before
-  public void superBefore() throws Exception {
-//    PowerMockito.mockStatic(PrincipalUtils.class);
-//    when(PrincipalUtils.getStaffPersonId()).thenReturn("0X5");
-  }
-
-  @After
-  public void superAfter() throws Exception {
-  }
 
   protected void executeInTransaction(SessionFactory sessionFactory,
       Consumer<SessionFactory> consumer) {
@@ -79,7 +57,7 @@ public abstract class BaseCwsCmsInMemoryPersistenceTest  {
     }
   }
 
-  protected IDataSet readXmlDataSet(String dataSetFilePath) throws Exception {
+  protected IDataSet readXmlDataSet(String dataSetFilePath) {
     DataFileLoader loader = new FlatXmlDataFileLoader();
     IDataSet dataSet = loader.load(dataSetFilePath);
     ReplacementDataSet replacementDataSet = new ReplacementDataSet(dataSet);
@@ -96,7 +74,7 @@ public abstract class BaseCwsCmsInMemoryPersistenceTest  {
   }
 
   /**
-   * //Cleans all tables mentioned in XML dataset
+   * Cleans all tables mentioned in XML dataset
    */
   protected void cleanAll(String dataSetFilePath) throws Exception {
     IDataSet dataSet = readXmlDataSet(dataSetFilePath);
