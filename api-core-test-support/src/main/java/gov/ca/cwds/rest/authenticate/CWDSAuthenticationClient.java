@@ -139,6 +139,10 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
     location = httpResponse.getFirstHeader(LOCATIONFIELD).getValue();
     LOGGER.info(REDIRECT_URL_LOGGER, location);
 
+    loginToPerryRedirect();
+  }
+
+  private void loginToPerryRedirect() throws IOException, URISyntaxException {
     LOGGER.info(NEW_REQUEST_TO_BEGIN);
     LOGGER.info(GET_LOGGER, location);
     httpGet = new HttpGet(location);
