@@ -53,7 +53,8 @@ public class ClientAbstractReadAuthorizer extends AbstractBaseAuthorizer<Client,
   }
 
   private ClientCondition getClientCondition(final Client client, final PerryAccount perryAccount) {
-    final List<Short> clientCountyCodes = countyDeterminationService.getClientCountiesById(client.getIdentifier());
+    final List<Short> clientCountyCodes = countyDeterminationService
+        .getClientCountiesById(client.getIdentifier());
     final Short staffPersonCountyCode = getStaffPersonCountyCode(perryAccount.getCountyCwsCode());
     return toClientCondition(client, clientCountyCodes, staffPersonCountyCode);
   }
