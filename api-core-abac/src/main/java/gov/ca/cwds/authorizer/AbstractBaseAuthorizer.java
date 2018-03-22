@@ -1,6 +1,8 @@
 package gov.ca.cwds.authorizer;
 
 import static gov.ca.cwds.authorizer.util.StaffPrivilegeUtil.toStaffPersonPrivilegeTypes;
+
+import gov.ca.cwds.drools.DroolsConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +25,9 @@ public abstract class AbstractBaseAuthorizer<T, ID> extends BaseAuthorizer<T, ID
 
   private DroolsAuthorizationService droolsAuthorizationService;
 
+  private DroolsAuthorizer droolsConfiguration;
+
+
   public AbstractBaseAuthorizer(DroolsAuthorizationService droolsAuthorizationService) {
     this.droolsAuthorizationService = droolsAuthorizationService;
   }
@@ -33,7 +38,7 @@ public abstract class AbstractBaseAuthorizer<T, ID> extends BaseAuthorizer<T, ID
       final T instance,
       final boolean authorizationResult) {
     LOGGER.info(
-        "StaffPerson [{}] with staffPrivilegeTypes = {} is creating object [{}]. "
+        "StaffPerson [{}] with staffPrivilegeTypes = {} is performing action on object [{}]. "
             + "Authorization result = [{}]",
         perryAccount.getStaffId(),
         staffPrivilegeTypes,
@@ -73,4 +78,11 @@ public abstract class AbstractBaseAuthorizer<T, ID> extends BaseAuthorizer<T, ID
     this.droolsAuthorizationService = droolsAuthorizationService;
   }
 
+  public void setDroolsConfiguration(DroolsAuthorizer droolsConfiguration) {
+    this.droolsConfiguration = droolsConfiguration;
+  }
+
+  public DroolsAuthorizer getDroolsConfiguration() {
+    return droolsConfiguration;
+  }
 }

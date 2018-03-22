@@ -1,9 +1,8 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
-import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
-
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
+import gov.ca.cwds.cms.data.access.dto.OtherClientNameDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.DataAccessServiceBase;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
@@ -12,24 +11,34 @@ import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
 import gov.ca.cwds.cms.data.access.service.rules.ClientDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
+import gov.ca.cwds.data.legacy.cms.dao.ClientServiceProviderDao;
 import gov.ca.cwds.data.legacy.cms.dao.DasHistoryDao;
 import gov.ca.cwds.data.legacy.cms.dao.DeliveredServiceDao;
 import gov.ca.cwds.data.legacy.cms.dao.NameTypeDao;
 import gov.ca.cwds.data.legacy.cms.dao.NearFatalityDao;
+import gov.ca.cwds.data.legacy.cms.dao.PlacementEpisodeDao;
 import gov.ca.cwds.data.legacy.cms.dao.SafetyAlertDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
+import gov.ca.cwds.data.legacy.cms.entity.ClientServiceProvider;
 import gov.ca.cwds.data.legacy.cms.entity.DasHistory;
 import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
 import gov.ca.cwds.data.legacy.cms.entity.NearFatality;
+import gov.ca.cwds.data.legacy.cms.entity.PlacementEpisode;
 import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
+import org.hibernate.Hibernate;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
-import org.hibernate.Hibernate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static gov.ca.cwds.authorizer.ClientResultReadAuthorizer.CLIENT_RESULT_READ;
+import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
 
 /** @author CWDS TPT-3 Team */
 public class ClientCoreService
@@ -41,6 +50,9 @@ public class ClientCoreService
   @Inject private SafetyAlertDao safetyAlertDao;
   @Inject private DasHistoryDao dasHistoryDao;
   @Inject private NearFatalityDao nearFatalityDao;
+  @Inject private PlacementEpisodeDao placementEpisodeDao;
+  @Inject private OtherClientNameService otherClientNameService;
+  @Inject private ClientServiceProviderDao clientServiceProviderDao;
   @Inject private BusinessValidationService businessValidationService;
 
   @Override
@@ -57,6 +69,23 @@ public class ClientCoreService
   @Authorize(CLIENT_READ_CLIENT)
   public Client find(Serializable primaryKey) {
     return super.find(primaryKey);
+  }
+
+  @Authorize(CLIENT_RESULT_READ)
+  public Client getClientByLicNumAndChildId(String licenseNumber, String childId) {
+    return crudDao.findByLicNumAndChildId(licenseNumber, childId);
+  }
+
+  @Authorize(CLIENT_RESULT_READ)
+  public List<Client> getClientsByLicenseNumber(String licenseNumber) {
+    Stream<Client> clients = crudDao.streamByLicenseNumber(licenseNumber);
+    return clients.collect(Collectors.toList());
+  }
+
+  @Authorize(CLIENT_RESULT_READ)
+  public List<Client> getClientsByLicenseNumber(Integer licenseNumber) {
+    Stream<Client> clients = crudDao.streamByLicenseNumber(licenseNumber);
+    return clients.collect(Collectors.toList());
   }
 
   @Override
@@ -103,6 +132,14 @@ public class ClientCoreService
 
       final Collection<DasHistory> dasHistories = dasHistoryDao.findByClientId(clientId);
       clientEntityAwareDTO.getDasHistories().addAll(dasHistories);
+
+      final Collection<PlacementEpisode> placementEpisodes =
+          placementEpisodeDao.findByClientId(clientId);
+      clientEntityAwareDTO.getPlacementEpisodes().addAll(placementEpisodes);
+
+      final Collection<ClientServiceProvider> clientServiceProviders =
+          clientServiceProviderDao.findByClientId(clientId);
+      clientEntityAwareDTO.getClientServiceProviders().addAll(clientServiceProviders);
     }
 
     @Override
@@ -112,5 +149,13 @@ public class ClientCoreService
           bundle.getAwareDto(), PrincipalUtils.getPrincipal(), ClientDroolsConfiguration.INSTANCE);
     }
 
+    @Override
+    public void afterStore(DataAccessBundle bundle) throws DataAccessServicesException {
+      OtherClientNameDTO otherClientName =
+          ((ClientEntityAwareDTO) bundle.getAwareDto()).getOtherClientName();
+      if (otherClientName != null) {
+        otherClientNameService.createOtherClientName(otherClientName);
+      }
+    }
   }
 }

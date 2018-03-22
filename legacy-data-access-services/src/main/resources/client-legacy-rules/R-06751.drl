@@ -1,0 +1,37 @@
+import gov.ca.cwds.rest.exception.IssueDetails;
+import gov.ca.cwds.data.legacy.cms.entity.Client;
+import gov.ca.cwds.data.legacy.cms.entity.ClientServiceProvider;
+import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO
+
+global java.util.Set validationDetailsList
+
+rule "R-06751"
+  dialect "mvel"
+  agenda-group "client-agenda"
+  when
+      /*
+        Code: R - 06751
+
+        Rule Txt:
+        The start date of an association between a client and service provider must be greater than
+        the birth date of the client.
+
+        Logic:
+        CLIENT_SERVICE_PROVIDER.Start_Date >= CLIENT.Birth_Date.
+      */
+      $clientAwareDTO: ClientEntityAwareDTO()
+      $client: Client($birthDate: birthDate != null) from $clientAwareDTO.entity
+      $clientServiceProvider: ClientServiceProvider(startDate != null, startDate.isBefore($birthDate)) from $clientAwareDTO.clientServiceProviders
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-06751");
+      details.setUserMessage(String.format("The start date of an association between a client and "
+      + "service provider cannot be less than the birth date (if it exists) of the Client."
+      + " Client ID:'%s', Client birth date: %tm/%<td/%<tY, "
+      + "ClientServiceProvider ID:'%s', ClientServiceProvider Start Date: %tm/%<td/%<tY",
+      $client.getIdentifier(), $client.getBirthDate(),
+      $clientServiceProvider.getId(), $clientServiceProvider.getStartDate()));
+      details.setTechnicalMessage("If Client.birthDate != null then for each ClientServiceProvider "
+      + "should be: Client.birthDate >= ClientServiceProvider.startDate");
+      validationDetailsList.add(details);
+end
