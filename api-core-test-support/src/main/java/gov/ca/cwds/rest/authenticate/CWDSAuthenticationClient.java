@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class is used to generate the token using username and password with perry, and handles all
+ * This class is used to generate the token using username and password with Perry, and handles all
  * the redirect from clicking the login to the end to get the token.
  * 
  * @author CWDS TPT-4 Team
@@ -48,8 +48,8 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
   private static final String EMAIL_CONTACT = "emailContact";
   private static final String VIEW = "View";
   private static final String SUBMIT_SIGNIN_RACF = "submit.Signin.RACF";
-  private static final String PASSWORD = "Password"; // It's a query parameter, not password
-  private static final String USERNAME = "Username";
+  private static final String PASSWORDFIELD = "Password"; // It's a query parameter, not password
+  private static final String USERNAMEFIELD = "Username";
   private static final String LOCATION = "Location";
   private static final String DEVICE_LOG_ID = "deviceLogID";
   private static final String VALUE = "value=";
@@ -127,8 +127,8 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
       httpPost = new HttpPost(BASE_URL + location);
       postParams.clear();
       postParams.add(new BasicNameValuePair(REQUEST_VERIFICATION_TOKEN, requestVerificationToken));
-      postParams.add(new BasicNameValuePair(USERNAME, userName));
-      postParams.add(new BasicNameValuePair(PASSWORD, password));
+      postParams.add(new BasicNameValuePair(USERNAMEFIELD, userName));
+      postParams.add(new BasicNameValuePair(PASSWORDFIELD, password));
       postParams.add(new BasicNameValuePair(SUBMIT_SIGNIN_RACF, "RACF"));
       postParams.add(new BasicNameValuePair(VIEW, "None"));
       httpPost.setEntity(new UrlEncodedFormEntity(postParams));
@@ -190,6 +190,8 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
 
     } catch (Exception e) {
       LOGGER.error("Unable to create the token", e);
+    } finally {
+      this.httpGet.reset();
     }
     return token;
 

@@ -41,6 +41,7 @@ public class CWDSDevAuthenticationClient extends HttpClientBuild implements CWDS
   private HttpGet httpGet;
   private URI uri;
   private HttpResponse httpResponse;
+  private String redirectUrl;
   private String token = null;
 
   private String userName;
@@ -60,7 +61,6 @@ public class CWDSDevAuthenticationClient extends HttpClientBuild implements CWDS
   @Override
   public String getToken() {
     try {
-      String redirectUrl;
       LOGGER.info(NEW_REQUEST_TO_BEGIN);
       LOGGER.info("GET: {}", configUtils.getYamlValues().getTokenCredentials().getAuthLoginUrl());
       postParams.add(new BasicNameValuePair("callback", CALL_BACK_URL));
@@ -71,15 +71,19 @@ public class CWDSDevAuthenticationClient extends HttpClientBuild implements CWDS
       httpResponse = httpClient.execute(httpGet, httpContext);
       redirectUrl = httpResponse.getFirstHeader(LOCATION).getValue();
       LOGGER.info("Redirect URL: {}", redirectUrl);
+      httpGet.releaseConnection();
 
       redirectUrl = giveUsernameCredentials();
       token = requestToken(redirectUrl);
 
     } catch (Exception e) {
       LOGGER.error("Unable to create the token", e);
+    } finally {
+      this.httpGet.reset();
     }
     return token;
   }
+
 
   private String requestToken(String redirectUrl) throws IOException, URISyntaxException {
     LOGGER.info(NEW_REQUEST_TO_BEGIN);
@@ -105,7 +109,6 @@ public class CWDSDevAuthenticationClient extends HttpClientBuild implements CWDS
   }
 
   private String giveUsernameCredentials() throws IOException {
-    String redirectUrl;
     LOGGER.info(NEW_REQUEST_TO_BEGIN);
     LOGGER.info("POST: {}", PERRY_LOGIN_URL);
     HttpPost httpPost = new HttpPost(PERRY_LOGIN_URL);
