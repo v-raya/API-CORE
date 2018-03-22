@@ -78,9 +78,12 @@ public class CWDSDevAuthenticationClient extends HttpClientBuild implements CWDS
 
     } catch (Exception e) {
       LOGGER.error("Unable to create the token", e);
+    } finally {
+      this.httpGet.reset();
     }
     return token;
   }
+
 
   private String requestToken(String redirectUrl) throws IOException, URISyntaxException {
     LOGGER.info(NEW_REQUEST_TO_BEGIN);
