@@ -5,13 +5,7 @@ import static gov.ca.cwds.data.legacy.cms.entity.PlacementEpisode.PARAM_CLIENT_I
 
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 /**
  * @author CWDS CALS API Team
@@ -36,7 +30,10 @@ public class PlacementEpisode extends BasePlacementEpisode {
 
   @Override
   @OneToMany
-  @JoinColumn(name = "FKPLC_EPS0", referencedColumnName = "THIRD_ID")
+  @JoinColumns({
+     @JoinColumn(name = "FKPLC_EPS0", referencedColumnName = "THIRD_ID"),
+     @JoinColumn(name = "FKPLC_EPST", referencedColumnName = "FKCLIENT_T")
+  })
   @OrderBy("startDt DESC")
   public Set<OutOfHomePlacement> getOutOfHomePlacements() {
     return outOfHomePlacements;
