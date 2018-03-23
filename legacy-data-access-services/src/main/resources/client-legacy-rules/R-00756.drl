@@ -31,6 +31,6 @@ rule "R-00756"
       + " Client ID:'%s' , Client birth date: %tm/%<td/%<tY, ClientRelationship ID:'%s', ClientRelationship Start Date: %tm/%<td/%<tY",
       $client.getIdentifier(), $client.getBirthDate(), $relationship.getIdentifier(), $relationship.getStartDate()));
       details.setTechnicalMessage("If Client.birthDate != null then for each Client's ClientRelationship should be: "
-      + "ClientRelationship.startDate >= Client.birthDate");
+      + "if ClientRelationship.startDate != null then ClientRelationship.startDate >= Client.birthDate");
       validationDetailsList.add(details);
 end
