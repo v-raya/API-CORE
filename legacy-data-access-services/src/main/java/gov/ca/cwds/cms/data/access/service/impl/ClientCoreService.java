@@ -11,6 +11,7 @@ import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
 import gov.ca.cwds.cms.data.access.service.rules.ClientDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
+import gov.ca.cwds.data.legacy.cms.dao.ClientRelationshipDao;
 import gov.ca.cwds.data.legacy.cms.dao.ClientServiceProviderDao;
 import gov.ca.cwds.data.legacy.cms.dao.DasHistoryDao;
 import gov.ca.cwds.data.legacy.cms.dao.DeliveredServiceDao;
@@ -19,6 +20,7 @@ import gov.ca.cwds.data.legacy.cms.dao.NearFatalityDao;
 import gov.ca.cwds.data.legacy.cms.dao.PlacementEpisodeDao;
 import gov.ca.cwds.data.legacy.cms.dao.SafetyAlertDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
+import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import gov.ca.cwds.data.legacy.cms.entity.ClientServiceProvider;
 import gov.ca.cwds.data.legacy.cms.entity.DasHistory;
 import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
@@ -29,6 +31,7 @@ import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
+import java.time.LocalDate;
 import org.hibernate.Hibernate;
 
 import java.io.Serializable;
@@ -53,6 +56,7 @@ public class ClientCoreService
   @Inject private PlacementEpisodeDao placementEpisodeDao;
   @Inject private OtherClientNameService otherClientNameService;
   @Inject private ClientServiceProviderDao clientServiceProviderDao;
+  @Inject private ClientRelationshipDao сlientRelationshipDao;
   @Inject private BusinessValidationService businessValidationService;
 
   @Override
@@ -140,6 +144,14 @@ public class ClientCoreService
       final Collection<ClientServiceProvider> clientServiceProviders =
           clientServiceProviderDao.findByClientId(clientId);
       clientEntityAwareDTO.getClientServiceProviders().addAll(clientServiceProviders);
+
+      LocalDate now = LocalDate.now();
+      final Collection<ClientRelationship> relationshipsByPrimaryClientId =
+          сlientRelationshipDao.findRelationshipsByPrimaryClientId(clientId, now);
+      final Collection<ClientRelationship> relationshipsBySecondaryClientId =
+          сlientRelationshipDao.findRelationshipsBySecondaryClientId(clientId, now);
+      clientEntityAwareDTO.getClientRelationships().addAll(relationshipsByPrimaryClientId);
+      clientEntityAwareDTO.getClientRelationships().addAll(relationshipsBySecondaryClientId);
     }
 
     @Override

@@ -2,6 +2,7 @@ package gov.ca.cwds.cms.data.access.dto;
 
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientOtherEthnicity;
+import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import gov.ca.cwds.data.legacy.cms.entity.ClientServiceProvider;
 import gov.ca.cwds.data.legacy.cms.entity.DasHistory;
 import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
@@ -24,6 +25,7 @@ public class ClientEntityAwareDTO extends BaseEntityAwareDTO<Client> {
   private List<PlacementEpisode> placementEpisodes = new ArrayList<>();
   private List<ClientServiceProvider> clientServiceProviders = new ArrayList<>();
   private OtherClientNameDTO otherClientName;
+  private List<ClientRelationship> сlientRelationships = new ArrayList<>();
 
   public Set<ClientOtherEthnicity> getOtherEthnicities() {
     return otherEthnicities;
@@ -71,5 +73,9 @@ public class ClientEntityAwareDTO extends BaseEntityAwareDTO<Client> {
 
   public void setOtherClientName(OtherClientNameDTO otherClientName) {
     this.otherClientName = otherClientName;
+  }
+
+  public List<ClientRelationship> getClientRelationships() {
+    return сlientRelationships;
   }
 }
