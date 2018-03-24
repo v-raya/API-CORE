@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static gov.ca.cwds.authorizer.ClientResultReadAuthorizer.CLIENT_RESULT_READ;
+import static gov.ca.cwds.authorizer.ClientResultReadAuthorizer.CLIENT_RESULT_READ_OBJECT;
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
 
 /** @author CWDS TPT-3 Team */
@@ -71,18 +72,18 @@ public class ClientCoreService
     return super.find(primaryKey);
   }
 
-  @Authorize(CLIENT_RESULT_READ + ":client")
+  @Authorize(CLIENT_RESULT_READ_OBJECT)
   public Client getClientByLicNumAndChildId(String licenseNumber, String childId) {
     return crudDao.findByLicNumAndChildId(licenseNumber, childId);
   }
 
-  @Authorize(CLIENT_RESULT_READ + ":client")
+  @Authorize(CLIENT_RESULT_READ_OBJECT)
   public List<Client> getClientsByLicenseNumber(String licenseNumber) {
     Stream<Client> clients = crudDao.streamByLicenseNumber(licenseNumber);
     return clients.collect(Collectors.toList());
   }
 
-  @Authorize(CLIENT_RESULT_READ + ":client")
+  @Authorize(CLIENT_RESULT_READ_OBJECT)
   public List<Client> getClientsByLicenseNumber(Integer licenseNumber) {
     Stream<Client> clients = crudDao.streamByLicenseNumber(licenseNumber);
     return clients.collect(Collectors.toList());
