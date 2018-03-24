@@ -1,5 +1,4 @@
 ### JIRA Issue Link
-
 - [CALS-NNNN: Name of Story](https://osi-cwds.atlassian.net/browse/CALS-NNNN)
 
 ### Technical Description
@@ -19,6 +18,13 @@ What types of changes does your code introduce? Put an `x` in all the boxes that
 - [ ] Refactoring (No behavioral changes)
 - [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+
+### Configuration changes
+Please list all new configuration parameters introduced by this pull request and describe meaning.
+Describe impact on automated deployment if any. Put N/A if not applicable.
+
+### Technical debt
+If this pull request introduces some technical debt, please describe details and reference JIRA issues created to address this technical debt. Put N/A if not applicable.
 
 ### Checklist:
 Go over all the following points, and put an `x` in all the boxes that apply.
