@@ -71,18 +71,18 @@ public class ClientCoreService
     return super.find(primaryKey);
   }
 
-  @Authorize(CLIENT_RESULT_READ)
+  @Authorize(CLIENT_RESULT_READ + ":client")
   public Client getClientByLicNumAndChildId(String licenseNumber, String childId) {
     return crudDao.findByLicNumAndChildId(licenseNumber, childId);
   }
 
-  @Authorize(CLIENT_RESULT_READ)
+  @Authorize(CLIENT_RESULT_READ + ":client")
   public List<Client> getClientsByLicenseNumber(String licenseNumber) {
     Stream<Client> clients = crudDao.streamByLicenseNumber(licenseNumber);
     return clients.collect(Collectors.toList());
   }
 
-  @Authorize(CLIENT_RESULT_READ)
+  @Authorize(CLIENT_RESULT_READ + ":client")
   public List<Client> getClientsByLicenseNumber(Integer licenseNumber) {
     Stream<Client> clients = crudDao.streamByLicenseNumber(licenseNumber);
     return clients.collect(Collectors.toList());
