@@ -1,5 +1,8 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
+import static gov.ca.cwds.authorizer.ClientResultReadAuthorizer.CLIENT_RESULT_READ_OBJECT;
+import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
+
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.OtherClientNameDTO;
@@ -29,17 +32,12 @@ import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
-import org.hibernate.Hibernate;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static gov.ca.cwds.authorizer.ClientResultReadAuthorizer.CLIENT_RESULT_READ;
-import static gov.ca.cwds.authorizer.ClientResultReadAuthorizer.CLIENT_RESULT_READ_OBJECT;
-import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
+import org.hibernate.Hibernate;
 
 /** @author CWDS TPT-3 Team */
 public class ClientCoreService
