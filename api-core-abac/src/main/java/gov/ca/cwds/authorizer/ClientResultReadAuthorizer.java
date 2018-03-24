@@ -13,7 +13,8 @@ public class ClientResultReadAuthorizer extends ClientBaseReadAuthorizer {
 
   @Inject
   public ClientResultReadAuthorizer(
-      DroolsAuthorizationService droolsAuthorizationService, ClientResultAuthorizationDroolsConfiguration droolsConfiguration) {
+      DroolsAuthorizationService droolsAuthorizationService,
+      ClientResultAuthorizationDroolsConfiguration droolsConfiguration) {
     super(droolsAuthorizationService);
     setDroolsConfiguration(droolsConfiguration);
   }
