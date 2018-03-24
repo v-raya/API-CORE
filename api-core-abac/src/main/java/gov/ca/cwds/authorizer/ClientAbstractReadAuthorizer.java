@@ -11,7 +11,8 @@ public class ClientAbstractReadAuthorizer extends ClientBaseReadAuthorizer {
 
   @Inject
   public ClientAbstractReadAuthorizer(
-      DroolsAuthorizationService droolsAuthorizationService, ClientAuthorizationDroolsConfiguration droolsConfiguration) {
+      DroolsAuthorizationService droolsAuthorizationService,
+      ClientAuthorizationDroolsConfiguration droolsConfiguration) {
     super(droolsAuthorizationService);
     setDroolsConfiguration(droolsConfiguration);
   }
