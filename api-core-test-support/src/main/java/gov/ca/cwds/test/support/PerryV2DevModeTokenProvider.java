@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author CWDS TPT-2 Team
  */
-public class PerryV2DevModeTokenProvider extends BasePerryV2TokenProvider<PerryV2DevModeParams> {
+public class PerryV2DevModeTokenProvider extends BasePerryV2TokenProvider<JsonIdentityAuthParams> {
 
   private static final String FORM_PARAM_USERNAME = "username";
 
@@ -17,7 +17,7 @@ public class PerryV2DevModeTokenProvider extends BasePerryV2TokenProvider<PerryV
 
 
   @Override
-  protected Form prepareLoginForm(PerryV2DevModeParams params) {
+  protected Form prepareLoginForm(JsonIdentityAuthParams params) {
     final Form form = new Form();
     form.param(FORM_PARAM_USERNAME, params.getIdentityJson().replaceAll("\n", StringUtils.EMPTY));
     return form;

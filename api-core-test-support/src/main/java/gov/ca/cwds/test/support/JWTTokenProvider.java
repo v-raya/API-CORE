@@ -10,10 +10,10 @@ import java.util.Properties;
 /**
  * @author CWDS TPT-2 Team
  */
-public class JWTTokenProvider implements TokenProvider<JWTTokenProviderConf> {
+public class JWTTokenProvider implements TokenProvider<JsonIdentityAuthParams> {
 
   @Override
-  public String doGetToken(JWTTokenProviderConf config) {
+  public String doGetToken(JsonIdentityAuthParams config) {
     JwtConfiguration configuration = null;
 
     try {
@@ -23,7 +23,7 @@ public class JWTTokenProvider implements TokenProvider<JWTTokenProviderConf> {
     }
 
     JwtService jwtService = new JwtService(configuration);
-    return jwtService.generate("id", "subject", config.getIdentity());
+    return jwtService.generate("id", "subject", config.getIdentityJson());
   }
 
   private JwtConfiguration getJwtConfiguration() throws IOException {
