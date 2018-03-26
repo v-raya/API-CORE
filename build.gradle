@@ -43,7 +43,7 @@ allprojects {
         h2Version = "1.4.194"
         liquibaseVersion = "3.5.3"
 
-        projectMajorVersion = "1.6.1"
+        projectMajorVersion = "1.6.2"
 
         isRelease = System.getProperty("Release") == "true"
         buildNumber = System.getProperty('BuildNumber')

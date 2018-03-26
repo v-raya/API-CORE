@@ -48,9 +48,8 @@ public class ClientResultReadAuthorizerTest {
     MockitoAnnotations.initMocks(this);
     final DroolsService droolsService = new DroolsService();
     final DroolsAuthorizationService droolsAuthorizationService = new DroolsAuthorizationService(droolsService);
-    testSubject = new ClientResultReadAuthorizer(droolsAuthorizationService);
+    testSubject = new ClientResultReadAuthorizer(droolsAuthorizationService, new ClientResultAuthorizationDroolsConfiguration());
     testSubject.setDroolsAuthorizationService(droolsAuthorizationService);
-    testSubject.setDroolsConfiguration(new ClientResultAuthorizationDroolsConfiguration());
     testSubject.setCountyDeterminationService(clientCountyDeterminationServiceMock);
   }
 
