@@ -1,12 +1,12 @@
 #applicationName: CWDS API FUNCTIONAL TESTING
 
 tokenCredentials:
-   baseUrl: https://sectest.dss.ca.gov
-   perryLoginUrl: https://web.preint.cwds.io/perry/login
-   authLoginUrl: https://web.preint.cwds.io/perry/authn/login
-   tokenUrl: https://web.preint.cwds.io/perry/authn/token
-   callBackUrl: https://ferbapi.preint.cwds.io/swagger
-   logOutUrl: https://web.preint.cwds.io/perry/authn/logout
+   baseUrl: ${BASE_URL}
+   perryLoginUrl: ${PERRY_LOGIN_URL}
+   authLoginUrl: ${AUTH_LOGIN_URL}
+   tokenUrl: ${TOKEN_URL}
+   callBackUrl: ${CALL_BACK_URL}
+   logOutUrl: ${LOG_OUT_URL}
    authenticationMode: TEST
    
 socialWorkerOnly:
