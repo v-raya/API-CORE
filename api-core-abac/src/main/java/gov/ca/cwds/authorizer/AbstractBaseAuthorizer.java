@@ -2,7 +2,6 @@ package gov.ca.cwds.authorizer;
 
 import static gov.ca.cwds.authorizer.util.StaffPrivilegeUtil.toStaffPersonPrivilegeTypes;
 
-import gov.ca.cwds.drools.DroolsConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -39,11 +38,12 @@ public abstract class AbstractBaseAuthorizer<T, ID> extends BaseAuthorizer<T, ID
       final boolean authorizationResult) {
     LOGGER.info(
         "StaffPerson [{}] with staffPrivilegeTypes = {} is performing action on object [{}]. "
-            + "Authorization result = [{}]",
+            + "Authorization result = [{}]. {}",
         perryAccount.getStaffId(),
         staffPrivilegeTypes,
-        instance,
-        authorizationResult
+        instance.getClass().getSimpleName(),
+        authorizationResult,
+        perryAccount
     );
   }
 

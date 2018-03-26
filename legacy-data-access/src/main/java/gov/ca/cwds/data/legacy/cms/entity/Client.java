@@ -92,7 +92,6 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     insertable = false,
     updatable = false
   )
-  @OrderBy("removalDt DESC")
   private Set<PlacementEpisode> placementEpisodes = new HashSet<>();
 
   @OneToMany(
