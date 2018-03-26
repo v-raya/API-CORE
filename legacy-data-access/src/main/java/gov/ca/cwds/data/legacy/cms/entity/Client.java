@@ -52,6 +52,7 @@ import org.hibernate.annotations.Type;
           + " JOIN pe.outOfHomePlacements ohp"
           + " JOIN ohp.placementHome ph"
           + " WHERE ph.licenseNo = :licenseNumber AND c.identifier = :childId"
+          + " AND ohp.endDt is not null"
 )
 @NamedQuery(
   name = "Client.findAll",
@@ -61,6 +62,7 @@ import org.hibernate.annotations.Type;
           + " JOIN pe.outOfHomePlacements ohp"
           + " JOIN ohp.placementHome ph"
           + " WHERE ph.licenseNo = :licenseNumber"
+          + " AND ohp.endDt is not null"
           + " ORDER BY c.identifier "
 )
 @NamedQuery(
@@ -71,6 +73,7 @@ import org.hibernate.annotations.Type;
           + " JOIN pe.outOfHomePlacements ohp"
           + " JOIN ohp.placementHome ph"
           + " WHERE ph.id = :facilityId"
+          + " AND ohp.endDt is not null"
 )
 @SuppressWarnings({"squid:S3437", "squid:S2160"})
 @Entity
