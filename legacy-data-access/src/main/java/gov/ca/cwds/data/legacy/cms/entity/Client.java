@@ -33,7 +33,6 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -46,38 +45,27 @@ import org.hibernate.annotations.Type;
 /** @author CWDS CALS API Team */
 @NamedQuery(
   name = "Client.find",
-  query =
-      "SELECT c FROM gov.ca.cwds.data.legacy.cms.entity.Client c"
-          + " JOIN c.placementEpisodes pe"
-          + " JOIN pe.outOfHomePlacements ohp"
-          + " JOIN ohp.placementHome ph"
-          + " WHERE ph.licenseNo = :licenseNumber AND c.identifier = :childId"
-          + " AND ohp.endDt is null"
-          + " AND pe.plepsEndt is null"
+    query = Client.CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY +
+        " AND c.identifier = :childId"
 )
+
 @NamedQuery(
   name = "Client.findAll",
-  query =
-      "SELECT c FROM gov.ca.cwds.data.legacy.cms.entity.Client c"
-          + " JOIN c.placementEpisodes pe"
-          + " JOIN pe.outOfHomePlacements ohp"
-          + " JOIN ohp.placementHome ph"
-          + " WHERE ph.licenseNo = :licenseNumber"
-          + " AND ohp.endDt is null"
-          + " AND pe.plepsEndt is null"
-          + " ORDER BY c.identifier "
+    query = Client.CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY
+        + " ORDER BY c.identifier "
 )
+
 @NamedQuery(
   name = "Client.findByFacilityId",
-  query =
-      "SELECT c FROM gov.ca.cwds.data.legacy.cms.entity.Client c"
-          + " JOIN c.placementEpisodes pe"
-          + " JOIN pe.outOfHomePlacements ohp"
-          + " JOIN ohp.placementHome ph"
-          + " WHERE ph.id = :facilityId"
-          + " AND ohp.endDt is null"
-          + " AND pe.plepsEndt is null"
+    query = Client.CHILDREN_BY_FACILITY_ID_BASE_QUERY
+        + " ORDER BY c.identifier "
 )
+@NamedQuery(
+    name = "Client.findByFacilityIdAndChildId",
+    query = Client.CHILDREN_BY_FACILITY_ID_BASE_QUERY +
+        " AND c.identifier = :childId"
+)
+
 @SuppressWarnings({"squid:S3437", "squid:S2160"})
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -85,6 +73,25 @@ import org.hibernate.annotations.Type;
 public class Client extends CmsPersistentObject implements IClient, PersistentObject {
 
   private static final long serialVersionUID = 783532074047017463L;
+
+  public static final String CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY =
+      "SELECT c FROM gov.ca.cwds.data.legacy.cms.entity.Client c"
+          + " JOIN c.placementEpisodes pe"
+          + " JOIN pe.outOfHomePlacements ohp"
+          + " JOIN ohp.placementHome ph"
+          + " WHERE ph.licenseNo = :licenseNumber"
+          + " AND ohp.endDt is null"
+          + " AND pe.plepsEndt is null";
+
+  public static final String CHILDREN_BY_FACILITY_ID_BASE_QUERY =
+      "SELECT c FROM gov.ca.cwds.data.legacy.cms.entity.Client c"
+          + " JOIN c.placementEpisodes pe"
+          + " JOIN pe.outOfHomePlacements ohp"
+          + " JOIN ohp.placementHome ph"
+          + " WHERE ph.id = :facilityId"
+          + " AND ohp.endDt is null"
+          + " AND pe.plepsEndt is null";
+
 
   @Id
   @Column(name = "IDENTIFIER", nullable = false, length = 10)

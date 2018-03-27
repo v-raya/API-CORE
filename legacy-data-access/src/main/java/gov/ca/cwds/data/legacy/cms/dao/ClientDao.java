@@ -26,6 +26,29 @@ public class ClientDao extends BaseDaoImpl<Client> {
     super(sessionFactory);
   }
 
+  public Client findByFacilityIdAndChildId(String facilityId, String childId) {
+    Session session = getSessionFactory().getCurrentSession();
+    Class<Client> entityClass = getEntityClass();
+    Query<Client> query =
+        session.createNamedQuery(entityClass.getSimpleName() + ".findByFacilityIdAndChildId",
+            entityClass);
+
+    query.setParameter("facilityId", facilityId);
+    query.setParameter("childId", childId);
+    query.setMaxResults(1);
+
+    Client client = null;
+    try {
+      client = query.getSingleResult();
+    } catch (NoResultException e) {
+      LOG.warn(
+          "There is no result for facilityId = {} and childId = {}", facilityId, childId);
+      LOG.debug(e.getMessage(), e);
+    }
+
+    return client;
+  }
+
   public Client findByLicNumAndChildId(String licenseNumber, String childId) {
     Session session = getSessionFactory().getCurrentSession();
     Class<Client> entityClass = getEntityClass();
