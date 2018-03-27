@@ -39,7 +39,7 @@ public abstract class BasePerryV2TokenProvider<T extends AuthParams> implements
     this.perryUrl = perryUrl;
     this.loginFormTargetUrl = loginFormTargetUrl;
     LOG.info("BasePerryV2TokenProvider was created");
-    LOG.info("BasePerryV2TokenProvider: perryUrl: ["+perryUrl+"], loginFormTargetUrl: ["+loginFormTargetUrl+"]");
+    LOG.info("BasePerryV2TokenProvider: perryUrl: [{}], loginFormTargetUrl: [{}]", perryUrl, loginFormTargetUrl);
   }
 
   abstract Form prepareLoginForm(T config);
@@ -59,7 +59,7 @@ public abstract class BasePerryV2TokenProvider<T extends AuthParams> implements
         .request()
         .header(CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED)
         .post(entity);
-    LOG.info("PostLoginForm with result ["+response.getStatusInfo()+"]");
+    LOG.info("PostLoginForm with result [{}]", response.getStatusInfo());
     return response.getCookies();
   }
 
@@ -72,7 +72,7 @@ public abstract class BasePerryV2TokenProvider<T extends AuthParams> implements
     cookies.forEach((key, value) -> request.cookie(key, value.getValue()));
     final Response response = request.get();
     URI location = response.getLocation();
-    LOG.info("Get AccessCode location ["+location+"]");
+    LOG.info("Get AccessCode location [{}]", location);
     return parseAccessCode(location);
   }
 
@@ -81,7 +81,7 @@ public abstract class BasePerryV2TokenProvider<T extends AuthParams> implements
         .split("&"))
         .filter(paramStr -> paramStr.startsWith(ACCESS_CODE))
         .findFirst()
-        .map(s -> s.substring(s.indexOf("=") + 1))
+        .map(s -> s.substring(s.indexOf('=') + 1))
         .orElse(null);
   }
 
