@@ -3,18 +3,14 @@ package gov.ca.cwds.authorizer;
 import static gov.ca.cwds.util.PerryAccountUtils.initPerryAccountWithPrivileges;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
 import gov.ca.cwds.authorizer.drools.configuration.PlacementHomeAuthorizationDroolsConfiguration;
-import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
-import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
 import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.realm.PerrySubject;
@@ -40,9 +36,8 @@ public class PlacementHomeCreateAuthorizerTest {
     final DroolsService droolsService = new DroolsService();
     final DroolsAuthorizationService droolsAuthorizationService = new DroolsAuthorizationService(droolsService);
     testSubject = new PlacementHomeCreateAuthorizer(
-        droolsAuthorizationService
+        droolsAuthorizationService, new PlacementHomeAuthorizationDroolsConfiguration()
     );
-    testSubject.setDroolsConfiguration(new PlacementHomeAuthorizationDroolsConfiguration());
   }
 
   @Test

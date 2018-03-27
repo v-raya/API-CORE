@@ -11,20 +11,13 @@ import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 public class PlacementHomeCreateAuthorizer extends AbstractBaseAuthorizer<PlacementHome, String> {
 
   @Inject
-  private PlacementHomeAuthorizationDroolsConfiguration droolsConfiguration;
-
-  @Inject
-  public PlacementHomeCreateAuthorizer(DroolsAuthorizationService droolsAuthorizationService) {
-    super(droolsAuthorizationService);
+  public PlacementHomeCreateAuthorizer(DroolsAuthorizationService droolsAuthorizationService,
+      PlacementHomeAuthorizationDroolsConfiguration droolsConfiguration) {
+    super(droolsAuthorizationService, droolsConfiguration);
   }
 
   @Override
   protected boolean checkInstance(final PlacementHome placementHome) {
-    return authorizeInstanceOperation(placementHome, droolsConfiguration, null);
-  }
-
-  public void setDroolsConfiguration(
-      PlacementHomeAuthorizationDroolsConfiguration droolsConfiguration) {
-    this.droolsConfiguration = droolsConfiguration;
+    return authorizeInstanceOperation(placementHome, null);
   }
 }

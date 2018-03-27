@@ -1,29 +1,24 @@
 package gov.ca.cwds.authorizer;
 
+import static gov.ca.cwds.authorizer.util.StaffPrivilegeUtil.CWS_CASE_MANAGEMENT_SYSTEM;
+import static gov.ca.cwds.authorizer.util.StaffPrivilegeUtil.SEALED;
+import static gov.ca.cwds.authorizer.util.StaffPrivilegeUtil.SENSITIVE_PERSONS;
 import static gov.ca.cwds.util.PerryAccountUtils.initPerryAccountWithPrivileges;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.spy;
-import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
-import gov.ca.cwds.authorizer.drools.configuration.ClientAuthorizationDroolsConfiguration;
-import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
+import gov.ca.cwds.authorizer.drools.configuration.ClientAbstractAuthorizationDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
 import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.realm.PerrySubject;
 import gov.ca.cwds.service.ClientCountyDeterminationService;
+import gov.ca.cwds.service.ClientSensitivityDeterminationService;
 import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,10 +38,10 @@ public class ClientAbstractReadAuthorizerTest {
   private static final String CLIENT_ID = "id";
 
   @Mock
-  private ClientCountyDeterminationService clientCountyDeterminationServiceMock;
+  private ClientSensitivityDeterminationService clientSensitivityDeterminationService;
 
   @Mock
-  private ClientDao clientDaoMock;
+  private ClientCountyDeterminationService clientCountyDeterminationService;
 
   private ClientAbstractReadAuthorizer testSubject;
 
@@ -55,143 +50,127 @@ public class ClientAbstractReadAuthorizerTest {
     MockitoAnnotations.initMocks(this);
     final DroolsService droolsService = new DroolsService();
     final DroolsAuthorizationService droolsAuthorizationService = new DroolsAuthorizationService(droolsService);
-    final ClientAuthorizationDroolsConfiguration droolsConfiguration = new ClientAuthorizationDroolsConfiguration();
+    final ClientAbstractAuthorizationDroolsConfiguration droolsConfiguration = new ClientAbstractAuthorizationDroolsConfiguration();
     testSubject = new ClientAbstractReadAuthorizer(droolsAuthorizationService, droolsConfiguration);
-    testSubject.setClientDao(clientDaoMock);
-    testSubject.setDroolsAuthorizationService(droolsAuthorizationService);
-    testSubject.setCountyDeterminationService(clientCountyDeterminationServiceMock);
+    testSubject.setSensitivityDeterminationService(clientSensitivityDeterminationService);
+    testSubject.setCountyDeterminationService(clientCountyDeterminationService);
   }
 
   @Test
-  public void checkInstance_returnFalse_whenPerryPrivilegesAreNull() {
-    final PerryAccount perryAccount = new PerryAccount();
-    final boolean expectedResult = false;
-    checkInstance_returnExpected_withPreparedPerryAccount(perryAccount, expectedResult);
+  public void checkNullInstance() {
+    assertTrue(testSubject.checkInstance(null));
   }
 
   @Test
-  public void checkInstance_returnFalse_whenPerryPrivilegesAreEmpty() {
-    final PerryAccount perryAccount = initPerryAccountWithPrivileges();
-    final boolean expectedResult = false;
-    checkInstance_returnExpected_withPreparedPerryAccount(perryAccount, expectedResult);
-  }
-
-  private void checkInstance_returnExpected_withPreparedPerryAccount(PerryAccount perryAccount,
-      boolean expectedResult) {
-    // given
-    mockStatic(PerrySubject.class);
-    when(PerrySubject.getPerryAccount()).thenReturn(perryAccount);
-
-    // when
-    final boolean actual = testSubject.checkInstance(null);
-
-    // then
-    assertThat(actual, is(expectedResult));
-    verifyStatic(PerrySubject.class, times(0));
-    PerrySubject.getPerryAccount();
+  public void checkNullSensitivity() {
+    when(clientSensitivityDeterminationService.getClientSensitivityById(anyString())).thenReturn(null);
+    assertTrue(testSubject.checkId("1"));
   }
 
   @Test
-  public void checkInstance_true_fullHappyPath() {
-    // given
-    final PerryAccount perryAccount = initPerryAccountWithPrivileges("Sensitive Persons");
-    perryAccount.setCountyCwsCode("100");
-    mockStatic(PerrySubject.class);
-    when(PerrySubject.getPerryAccount()).thenReturn(perryAccount);
-    when(clientCountyDeterminationServiceMock.getClientCountiesById(anyString()))
-        .thenReturn(Arrays.asList(new Short[]{100, 10}));
+  public void clientNoConditionsTest() {
+    when(clientSensitivityDeterminationService.getClientSensitivityById(CLIENT_ID))
+        .thenReturn(Sensitivity.NOT_APPLICABLE);
+    when(clientCountyDeterminationService.getClientCountiesById(anyString()))
+        .thenReturn(Arrays.asList(new Short[]{1023, 1034}));
+    final Client client = initClient(Sensitivity.NOT_APPLICABLE);
+    checkAllCases(client, "1073", "Colusa", true, true, true, true, true);
+  }
+
+  @Test
+  public void clientSameCountySensitiveTest() {
+    when(clientSensitivityDeterminationService.getClientSensitivityById(CLIENT_ID))
+        .thenReturn(Sensitivity.SENSITIVE);
+    when(clientCountyDeterminationService.getClientCountiesById(anyString()))
+        .thenReturn(Arrays.asList(new Short[]{1073, 1126}));
     final Client client = initClient(Sensitivity.SENSITIVE);
-
-    // when
-    final boolean actual = testSubject.checkInstance(client);
-
-    // then
-    assertThat(actual, is(true));
-    verifyStatic(PerrySubject.class, times(2));
-    PerrySubject.getPerryAccount();
-    verify(clientCountyDeterminationServiceMock, times(1)).getClientCountiesById(anyString());
+    checkAllCases(client, "1073", "Colusa", false, true, false, true, false);
   }
 
   @Test
-  public void checkInstance_false_fullHappyPath() {
-    // given
-    final PerryAccount perryAccount = initPerryAccountWithPrivileges("Sensitive Persons");
-    perryAccount.setCountyCwsCode("1");
-    mockStatic(PerrySubject.class);
-    when(PerrySubject.getPerryAccount()).thenReturn(perryAccount);
-    when(clientCountyDeterminationServiceMock.getClientCountiesById(anyString()))
-        .thenReturn(Arrays.asList(new Short[]{100, 10}));
+  public void clientSameCountySealedTest() {
+    when(clientSensitivityDeterminationService.getClientSensitivityById(CLIENT_ID))
+        .thenReturn(Sensitivity.SEALED);
+    when(clientCountyDeterminationService.getClientCountiesById(anyString()))
+        .thenReturn(Arrays.asList(new Short[]{1073, 1126}));
+    final Client client = initClient(Sensitivity.SEALED);
+    checkAllCases(client, "1073", "Colusa", false, false, true, false, true);
+  }
+
+  @Test
+  public void clientDifferentCountySensitiveTest() {
+    when(clientSensitivityDeterminationService.getClientSensitivityById(CLIENT_ID))
+        .thenReturn(Sensitivity.SENSITIVE);
+    when(clientCountyDeterminationService.getClientCountiesById(anyString()))
+        .thenReturn(Arrays.asList(new Short[]{1034, 1012}));
     final Client client = initClient(Sensitivity.SENSITIVE);
-
-    // when
-    final boolean actual = testSubject.checkInstance(client);
-
-    // then
-    assertThat(actual, is(false));
-    verifyStatic(PerrySubject.class, times(2));
-    PerrySubject.getPerryAccount();
-    verify(clientCountyDeterminationServiceMock, times(1)).getClientCountiesById(anyString());
+    checkAllCases(client, "1073", "Colusa", false, false, false, false, false);
   }
 
   @Test
-  public void checkId_true_fullHappyPath() {
-    // given
-    final PerryAccount perryAccount = initPerryAccountWithPrivileges("Sensitive Persons");
-    perryAccount.setCountyCwsCode("100");
+  public void clientDifferentCountySealedTest() {
+    when(clientSensitivityDeterminationService.getClientSensitivityById(CLIENT_ID))
+        .thenReturn(Sensitivity.SEALED);
+    when(clientCountyDeterminationService.getClientCountiesById(anyString()))
+        .thenReturn(Arrays.asList(new Short[]{1034, 1012}));
+    final Client client = initClient(Sensitivity.SEALED);
+    checkAllCases(client, "1073", "Colusa", false, false, false, false, false);
+  }
+
+  @Test
+  public void clientNoCountySensitiveTest() {
+    when(clientSensitivityDeterminationService.getClientSensitivityById(CLIENT_ID))
+        .thenReturn(Sensitivity.SENSITIVE);
+    when(clientCountyDeterminationService.getClientCountiesById(anyString()))
+        .thenReturn(null);
+    final Client client = initClient(Sensitivity.SENSITIVE);
+    checkAllCases(client, "1073", "Colusa", false, true, false, false, false);
+  }
+
+  @Test
+  public void clientNoCountySealedTest() {
+    when(clientSensitivityDeterminationService.getClientSensitivityById(CLIENT_ID))
+        .thenReturn(Sensitivity.SEALED);
+    when(clientCountyDeterminationService.getClientCountiesById(anyString()))
+        .thenReturn(null);
+    final Client client = initClient(Sensitivity.SEALED);
+    checkAllCases(client, "1073", "Colusa", false, false, true, false, true);
+  }
+
+  private void checkAllCases(Client client, String userCountyCwsCode, String userCountyName, boolean socialWorkerOnly, boolean countySensitive, boolean countySealed, boolean stateSensitive, boolean stateSealed) {
+    // Social Worker Only
+    initUserAccount(userCountyCwsCode, userCountyName, CWS_CASE_MANAGEMENT_SYSTEM);
+    validateInstance(client, socialWorkerOnly);
+
+    // County Sensitive
+    initUserAccount(userCountyCwsCode, userCountyName, SENSITIVE_PERSONS);
+    validateInstance(client, countySensitive);
+
+    // County Sealed
+    initUserAccount(userCountyCwsCode, userCountyName, SEALED);
+    validateInstance(client, countySealed);
+
+    // State Sensitive
+    initUserAccount("1126","State of California", SENSITIVE_PERSONS);
+    validateInstance(client, stateSensitive);
+
+    // State Sealed
+    initUserAccount("1126", "State of California", SEALED);
+    validateInstance(client, stateSealed);
+  }
+
+  private void initUserAccount(String userCountyCwsCode, String userCountyName, String... privileges) {
+    final PerryAccount perryAccount = initPerryAccountWithPrivileges(privileges);
+    perryAccount.setCountyCwsCode(userCountyCwsCode);
+    perryAccount.setCountyName(userCountyName);
     mockStatic(PerrySubject.class);
     when(PerrySubject.getPerryAccount()).thenReturn(perryAccount);
-    when(clientDaoMock.find(anyString())).thenReturn(initClient(Sensitivity.SENSITIVE));
-    when(clientCountyDeterminationServiceMock.getClientCountiesById(anyString()))
-        .thenReturn(Arrays.asList(new Short[]{100, 10}));
+  }
 
-    // when
-    final boolean actual = testSubject.checkId(CLIENT_ID);
-
-    // then
-    assertThat(actual, is(true));
-    verifyStatic(PerrySubject.class, times(2));
+  private void validateInstance(Client client, boolean result) {
+    assertEquals(result, testSubject.checkId(client.getIdentifier()));
+    assertEquals(result, testSubject.checkInstance(client));
     PerrySubject.getPerryAccount();
-    verify(clientDaoMock, times(1)).find(anyString());
-    verify(clientCountyDeterminationServiceMock, times(1)).getClientCountiesById(anyString());
-  }
-
-  @Test
-  public void checkId_true_whenNoClientExists() {
-    // given
-    when(clientDaoMock.find(CLIENT_ID)).thenReturn(null);
-
-    // when
-    final boolean actual = testSubject.checkId(CLIENT_ID);
-
-    // then
-    assertThat(actual, is(true));
-    verify(clientDaoMock, times(1)).find(anyString());
-  }
-
-  @Test
-  public void testCheckIdAuthorized() throws Exception {
-    ClientAbstractReadAuthorizer spy = spy(testSubject);
-
-    Client client = initClient(null);
-    when(clientDaoMock.find(anyString())).thenReturn(client);
-    doReturn(true).when(spy).checkInstance(any());
-
-    spy.setClientDao(clientDaoMock);
-
-    assertTrue(spy.checkId("-1"));
-  }
-
-  @Test
-  public void testCheckIdUnauthorized() throws Exception {
-    ClientAbstractReadAuthorizer spy = spy(testSubject);
-
-    Client client = initClient(null);
-    when(clientDaoMock.find(anyString())).thenReturn(client);
-    doReturn(false).when(spy).checkInstance(any());
-
-    spy.setClientDao(clientDaoMock);
-
-    assertFalse(spy.checkId("-1"));
   }
 
   private Client initClient(Sensitivity sensitivity) {

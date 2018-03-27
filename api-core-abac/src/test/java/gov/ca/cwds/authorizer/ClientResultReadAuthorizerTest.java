@@ -6,10 +6,9 @@ import static gov.ca.cwds.authorizer.util.StaffPrivilegeUtil.SENSITIVE_PERSONS;
 import static gov.ca.cwds.util.PerryAccountUtils.initPerryAccountWithPrivileges;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
@@ -49,37 +48,12 @@ public class ClientResultReadAuthorizerTest {
     final DroolsService droolsService = new DroolsService();
     final DroolsAuthorizationService droolsAuthorizationService = new DroolsAuthorizationService(droolsService);
     testSubject = new ClientResultReadAuthorizer(droolsAuthorizationService, new ClientResultAuthorizationDroolsConfiguration());
-    testSubject.setDroolsAuthorizationService(droolsAuthorizationService);
     testSubject.setCountyDeterminationService(clientCountyDeterminationServiceMock);
   }
 
   @Test
-  public void checkInstance_returnFalse_whenPerryPrivilegesAreNull() {
-    final PerryAccount perryAccount = new PerryAccount();
-    final boolean expectedResult = false;
-    checkInstance_returnExpected_withPreparedPerryAccount(perryAccount, expectedResult);
-  }
-
-  @Test
-  public void checkInstance_returnFalse_whenPerryPrivilegesAreEmpty() {
-    final PerryAccount perryAccount = initPerryAccountWithPrivileges();
-    final boolean expectedResult = false;
-    checkInstance_returnExpected_withPreparedPerryAccount(perryAccount, expectedResult);
-  }
-
-  private void checkInstance_returnExpected_withPreparedPerryAccount(PerryAccount perryAccount,
-      boolean expectedResult) {
-    // given
-    mockStatic(PerrySubject.class);
-    when(PerrySubject.getPerryAccount()).thenReturn(perryAccount);
-
-    // when
-    final boolean actual = testSubject.checkInstance(null);
-
-    // then
-    assertThat(actual, is(expectedResult));
-    verifyStatic(PerrySubject.class, times(0));
-    PerrySubject.getPerryAccount();
+  public void checkNullInstance() {
+    assertTrue(testSubject.checkInstance(null));
   }
 
   @Test
