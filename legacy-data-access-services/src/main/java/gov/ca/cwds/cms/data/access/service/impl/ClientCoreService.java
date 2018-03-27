@@ -34,10 +34,8 @@ import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
-import java.time.LocalDate;
-import org.hibernate.Hibernate;
-
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -79,6 +77,11 @@ public class ClientCoreService
   @Authorize(CLIENT_RESULT_READ_OBJECT)
   public Client getClientByLicNumAndChildId(String licenseNumber, String childId) {
     return crudDao.findByLicNumAndChildId(licenseNumber, childId);
+  }
+
+  @Authorize(CLIENT_RESULT_READ_OBJECT)
+  public Client getClientByFAcilityIdAndChildId(String facilityId, String childId) {
+    return crudDao.findByFacilityIdAndChildId(facilityId, childId);
   }
 
   @Authorize(CLIENT_RESULT_READ_OBJECT)
