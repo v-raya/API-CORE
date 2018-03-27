@@ -93,6 +93,13 @@ public class ClientCoreService
     return clients.collect(Collectors.toList());
   }
 
+  @Authorize(CLIENT_RESULT_READ_OBJECT)
+  public List<Client> streamByFacilityId(String facilityId) {
+    Stream<Client> clients = crudDao.streamByFacilityId(facilityId);
+    return clients.collect(Collectors.toList());
+  }
+
+
   @Override
   protected DataAccessServiceLifecycle getUpdateLifeCycle() {
     return new UpdateLifecycle();
