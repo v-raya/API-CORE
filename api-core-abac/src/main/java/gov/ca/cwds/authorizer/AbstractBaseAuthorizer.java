@@ -27,8 +27,10 @@ public abstract class AbstractBaseAuthorizer<T, ID> extends BaseAuthorizer<T, ID
   private DroolsAuthorizer droolsConfiguration;
 
 
-  public AbstractBaseAuthorizer(DroolsAuthorizationService droolsAuthorizationService) {
+  public AbstractBaseAuthorizer(DroolsAuthorizationService droolsAuthorizationService,
+      DroolsAuthorizer droolsConfiguration) {
     this.droolsAuthorizationService = droolsAuthorizationService;
+    this.droolsConfiguration = droolsConfiguration;
   }
 
   private void logAuthorization(
@@ -49,7 +51,6 @@ public abstract class AbstractBaseAuthorizer<T, ID> extends BaseAuthorizer<T, ID
 
   protected boolean authorizeInstanceOperation(
       final T instance,
-      final DroolsAuthorizer droolsConfiguration,
       List<Object> authorizationFacts) {
     try {
       final PerryAccount perryAccount = PerrySubject.getPerryAccount();
@@ -73,16 +74,4 @@ public abstract class AbstractBaseAuthorizer<T, ID> extends BaseAuthorizer<T, ID
 
   @Override
   protected abstract boolean checkInstance(T instance);
-
-  void setDroolsAuthorizationService(DroolsAuthorizationService droolsAuthorizationService) {
-    this.droolsAuthorizationService = droolsAuthorizationService;
-  }
-
-  public void setDroolsConfiguration(DroolsAuthorizer droolsConfiguration) {
-    this.droolsConfiguration = droolsConfiguration;
-  }
-
-  public DroolsAuthorizer getDroolsConfiguration() {
-    return droolsConfiguration;
-  }
 }

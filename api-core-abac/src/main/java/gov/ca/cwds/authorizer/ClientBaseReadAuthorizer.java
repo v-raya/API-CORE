@@ -4,14 +4,13 @@ import static gov.ca.cwds.authorizer.util.ClientConditionUtils.toClientCondition
 
 import com.google.inject.Inject;
 import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
-import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
+import gov.ca.cwds.authorizer.drools.configuration.DroolsAuthorizer;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
-import gov.ca.cwds.security.realm.PerryAccount;
-import gov.ca.cwds.security.realm.PerrySubject;
+import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
 import gov.ca.cwds.service.ClientCountyDeterminationService;
+import gov.ca.cwds.service.ClientSensitivityDeterminationService;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Base class for Client Result and Client Abstract Authorizer.
@@ -19,55 +18,59 @@ import org.apache.commons.lang3.StringUtils;
 public class ClientBaseReadAuthorizer extends AbstractBaseAuthorizer<Client, String> {
 
   @Inject
-  private ClientDao clientDao;
+  private ClientSensitivityDeterminationService sensitivityDeterminationService;
 
   @Inject
   private ClientCountyDeterminationService countyDeterminationService;
 
-
   @Inject
-  public ClientBaseReadAuthorizer(
-      DroolsAuthorizationService droolsAuthorizationService) {
-    super(droolsAuthorizationService);
+  public ClientBaseReadAuthorizer(DroolsAuthorizationService droolsAuthorizationService,
+      DroolsAuthorizer droolsConfiguration) {
+    super(droolsAuthorizationService, droolsConfiguration);
   }
 
   @Override
   protected boolean checkId(final String clientId) {
-    final Client client = clientDao.find(clientId);
-    return client == null || checkInstance(client);
+    Sensitivity sensitivity = sensitivityDeterminationService.getClientSensitivityById(clientId);
+    if (sensitivity == null) {
+      return true;
+    }
+    final ClientCondition clientCondition = getClientCondition(clientId, sensitivity);
+    List<Object> authorizationFacts = new ArrayList<>();
+    authorizationFacts.add(clientCondition);
+
+    Client client = new Client();
+    client.setIdentifier(clientId);
+    client.setSensitivity(sensitivity);
+    return authorizeInstanceOperation(client, authorizationFacts);
   }
 
   @Override
   protected boolean checkInstance(final Client client) {
     if (client == null) {
-      return false;
+      return true;
     }
-    final PerryAccount perryAccount = PerrySubject.getPerryAccount();
-    final ClientCondition clientCondition = getClientCondition(client, perryAccount);
-    List authorizationFacts = new ArrayList<>();
+
+    final ClientCondition clientCondition = getClientCondition(client.getIdentifier(),
+        client.getSensitivity());
+    List<Object> authorizationFacts = new ArrayList<>();
     authorizationFacts.add(clientCondition);
-    return authorizeInstanceOperation(client, getDroolsConfiguration(), authorizationFacts);
+    return authorizeInstanceOperation(client, authorizationFacts);
   }
 
-  private ClientCondition getClientCondition(final Client client, final PerryAccount perryAccount) {
-    final List<Short> clientCountyCodes = countyDeterminationService
-        .getClientCountiesById(client.getIdentifier());
-    final Short staffPersonCountyCode = getStaffPersonCountyCode(perryAccount.getCountyCwsCode());
-    return toClientCondition(client, clientCountyCodes, staffPersonCountyCode);
+  private ClientCondition getClientCondition(final String identifier, Sensitivity sensitivity) {
+    final List<Short> clientCountyCodes =
+        countyDeterminationService.getClientCountiesById(identifier);
+
+    return toClientCondition(sensitivity, clientCountyCodes);
   }
 
-  private static Short getStaffPersonCountyCode(final String staffCountyCodeString) {
-    return StringUtils.isNotBlank(staffCountyCodeString)
-        ? Short.valueOf(staffCountyCodeString)
-        : null;
-  }
-
-  void setClientDao(ClientDao clientDao) {
-    this.clientDao = clientDao;
+  void setSensitivityDeterminationService(
+      ClientSensitivityDeterminationService sensitivityDeterminationService) {
+    this.sensitivityDeterminationService = sensitivityDeterminationService;
   }
 
   void setCountyDeterminationService(ClientCountyDeterminationService countyDeterminationService) {
     this.countyDeterminationService = countyDeterminationService;
   }
-
 }

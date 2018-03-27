@@ -8,23 +8,18 @@ import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 /**
  * @author CWDS TPT-2 Team
  */
-public class SubstituteCareProviderCreateAuthorizer extends AbstractBaseAuthorizer<SubstituteCareProvider, String> {
+public class SubstituteCareProviderCreateAuthorizer extends
+    AbstractBaseAuthorizer<SubstituteCareProvider, String> {
 
   @Inject
-  private SubstituteCareProviderAuthorizationDroolsConfiguration droolsConfiguration;
-
-  @Inject
-  public SubstituteCareProviderCreateAuthorizer(DroolsAuthorizationService droolsAuthorizationService) {
-    super(droolsAuthorizationService);
+  public SubstituteCareProviderCreateAuthorizer(
+      DroolsAuthorizationService droolsAuthorizationService,
+      SubstituteCareProviderAuthorizationDroolsConfiguration droolsConfiguration) {
+    super(droolsAuthorizationService, droolsConfiguration);
   }
 
   @Override
   protected boolean checkInstance(final SubstituteCareProvider substituteCareProvider) {
-    return authorizeInstanceOperation(substituteCareProvider, droolsConfiguration, null);
-  }
-
-  public void setDroolsConfiguration(
-      SubstituteCareProviderAuthorizationDroolsConfiguration droolsConfiguration) {
-    this.droolsConfiguration = droolsConfiguration;
+    return authorizeInstanceOperation(substituteCareProvider, null);
   }
 }

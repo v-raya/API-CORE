@@ -16,7 +16,6 @@ public class ClientResultReadAuthorizer extends ClientBaseReadAuthorizer {
   public ClientResultReadAuthorizer(
       DroolsAuthorizationService droolsAuthorizationService,
       ClientResultAuthorizationDroolsConfiguration droolsConfiguration) {
-    super(droolsAuthorizationService);
-    setDroolsConfiguration(droolsConfiguration);
+    super(droolsAuthorizationService, droolsConfiguration);
   }
 }
