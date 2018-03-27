@@ -4,9 +4,9 @@ version: local
 server:
   applicationConnectors:
   - type: http
-    port: 9080
+    port: 8090
   - type: https
-    port: 9433
+    port: 8433
     keyStorePath: "./config/testKeyStore.jks"
     keyStorePassword: testPass
     keyStoreType: JKS
