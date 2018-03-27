@@ -13,12 +13,16 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author CWDS TPT-2 Team
  */
 public abstract class BasePerryV2TokenProvider<T extends AuthParams> implements
     TokenProvider<T> {
+
+  private final Logger LOG = LoggerFactory.getLogger(BasePerryV2TokenProvider.class);
 
   private static final String PATH_PERRY_AUTHN_LOGIN = "/perry/authn/login";
   private static final String PATH_PERRY_AUTHN_TOKEN = "/perry/authn/token";
@@ -31,10 +35,11 @@ public abstract class BasePerryV2TokenProvider<T extends AuthParams> implements
   private Client client;
 
   BasePerryV2TokenProvider(Client client, String perryUrl, String loginFormTargetUrl) {
-
     this.client = client;
     this.perryUrl = perryUrl;
     this.loginFormTargetUrl = loginFormTargetUrl;
+    LOG.info("BasePerryV2TokenProvider was created");
+    LOG.info("BasePerryV2TokenProvider: perryUrl: ["+perryUrl+"], loginFormTargetUrl: ["+loginFormTargetUrl+"]");
   }
 
   abstract Form prepareLoginForm(T config);
@@ -54,6 +59,7 @@ public abstract class BasePerryV2TokenProvider<T extends AuthParams> implements
         .request()
         .header(CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED)
         .post(entity);
+    LOG.info("PostLoginForm with result ["+response.getStatusInfo()+"]");
     return response.getCookies();
   }
 
@@ -65,7 +71,9 @@ public abstract class BasePerryV2TokenProvider<T extends AuthParams> implements
         .request();
     cookies.forEach((key, value) -> request.cookie(key, value.getValue()));
     final Response response = request.get();
-    return parseAccessCode(response.getLocation());
+    URI location = response.getLocation();
+    LOG.info("Get AccessCode location ["+location+"]");
+    return parseAccessCode(location);
   }
 
   private String parseAccessCode(URI uri) {
