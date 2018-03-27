@@ -139,6 +139,10 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
     location = httpResponse.getFirstHeader(LOCATIONFIELD).getValue();
     LOGGER.info(REDIRECT_URL_LOGGER, location);
 
+    loginToPerryRedirect();
+  }
+
+  private void loginToPerryRedirect() throws IOException, URISyntaxException {
     LOGGER.info(NEW_REQUEST_TO_BEGIN);
     LOGGER.info(GET_LOGGER, location);
     httpGet = new HttpGet(location);
@@ -165,6 +169,10 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
     postParams.add(new BasicNameValuePair("Password", password)); // Query Param field, not value
     postParams.add(new BasicNameValuePair(SUBMIT_SIGNIN_RACF, "RACF"));
     postParams.add(new BasicNameValuePair(VIEW, "None"));
+    return requestCommonBuild();
+  }
+
+  private HttpResponse requestCommonBuild() throws IOException {
     httpPost.setEntity(new UrlEncodedFormEntity(postParams));
     httpResponse = httpClient.execute(httpPost, httpContext);
 
@@ -206,17 +214,7 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
     postParams.add(new BasicNameValuePair(EMAIL_CONTACT, emailContact));
     postParams.add(new BasicNameValuePair(ACCESS_CODE, emailContact));
     postParams.add(new BasicNameValuePair("submit.SendAccessCode", null));
-    httpPost.setEntity(new UrlEncodedFormEntity(postParams));
-    httpResponse = httpClient.execute(httpPost, httpContext);
-    location = httpResponse.getFirstHeader(LOCATIONFIELD).getValue();
-    LOGGER.info(REDIRECT_URL_LOGGER, location);
-    httpPost.releaseConnection();
-
-    LOGGER.info(NEW_REQUEST_TO_BEGIN);
-    LOGGER.info("GET : {}{}", BASE_URL, location);
-    httpGet = new HttpGet(BASE_URL + location);
-    httpResponse = httpClient.execute(httpGet, httpContext);
-    return httpResponse;
+    return requestCommonBuild();
   }
 
   private String continueToCwsIntegration(String location, String[] values) throws IOException {
