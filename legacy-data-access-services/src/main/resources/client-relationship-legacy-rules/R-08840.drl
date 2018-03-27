@@ -1,0 +1,54 @@
+import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.Client
+import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship
+import gov.ca.cwds.cms.data.access.dto.ClientRelationshipAwareDTO;
+
+global java.util.Set validationDetailsList
+
+rule "R-08840-CT"
+  dialect "mvel"
+  agenda-group "client-relationship-data-processing-agenda"
+  when
+      /*
+      Code: R - 08840
+
+      Fields: isNeedMembershipVerification
+
+      Rule Txt
+
+      When a relationship of Birth Mother, Alleged Mother, Presumed Mother, Birth Father,
+      Alleged Father or Presumed Father is selected and the parent has Tribal
+      Membership Verification data, create a duplicate Tribal Membership Verification
+      row for all of their children.
+      If the child already has a Tribal Membership row that was created prior to R5.5 with the same
+      Tribal Affiliation/Tribe combination as the new row being added from the parent,
+      then overwrite the child's existing Tribal Membership row with the new
+      Tribal Membership row created by the parent and display error message. Keep the Membership
+      Status, Status Date, and Enrollment Number from the child's existing row if they exist.
+
+      If cboRelationship =
+      'Mother/Daughter (Birth)', 'Mother/Son (Birth)', 'Mother/Daughter (Alleged)',
+      OR 'Mother/Son (Alleged)', 'Mother/Daughter (Presumed)', 'Mother/Son (Presumed)',
+      'Father/Daughter (Birth)', 'Father/Son (Birth)', 'Father/Daughter (Alleged)',
+      'Father/Son (Alleged)', 'Father/Daughter (Presumed)' OR 'Father/Son (Presumed)',
+      'Daughter/Mother (Birth)', 'Son/Mother (Birth)', 'Daughter/Mother (Alleged)',
+      'Son/Mother (Alleged)', 'Daughter/Mother (Presumed)', 'Son/Mother (Presumed)',
+      'Daughter/Father (Birth)', 'Son/Father (Birth)', 'Daughter/Father (Alleged)',
+      'Son/Father (Alleged)', 'Daughter/Father (Presumed)', or 'Son/Father (Presumed)'
+
+      set isNeedMembershipVerification = true
+      */
+
+//       $collection: ArrayList(Arrays.asList(, 192, 195, 196, 198, 204, 205, 207, 210, 211,
+//                                            213, 246, 247, 251, 252, 284, 285, 287,290, 291, 5620,
+//                                            6360, 6361));
+       $relationshipEntityAwareDto: ClientRelationshipAwareDTO()
+//       $clientRelationship : ClientRelationship(type.systemId == 189 || type.systemId == 190) from $relationshipEntityAwareDto.entity
+  then
+      $relationshipEntityAwareDto.setNeedMembershipVerification(true);
+      update($relationshipEntityAwareDto)
+end
