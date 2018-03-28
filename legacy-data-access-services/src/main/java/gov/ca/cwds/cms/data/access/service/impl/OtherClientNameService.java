@@ -2,9 +2,9 @@ package gov.ca.cwds.cms.data.access.service.impl;
 
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.Constants;
-import gov.ca.cwds.cms.data.access.dao.SsaName3Dao;
 import gov.ca.cwds.cms.data.access.dto.OtherClientNameDTO;
 import gov.ca.cwds.data.legacy.cms.dao.OtherClientNameDao;
+import gov.ca.cwds.data.legacy.cms.dao.SsaName3Dao;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
 import gov.ca.cwds.data.legacy.cms.entity.OtherClientName;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType;
