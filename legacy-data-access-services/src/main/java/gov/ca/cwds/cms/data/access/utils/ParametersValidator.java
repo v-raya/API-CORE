@@ -6,7 +6,9 @@ import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-/** @author CWDS CALS API Team */
+/**
+ * @author CWDS CALS API Team
+ **/
 public final class ParametersValidator {
 
   public static final String INSTANCE_MUST_NOT_BE_PERSISTED =
