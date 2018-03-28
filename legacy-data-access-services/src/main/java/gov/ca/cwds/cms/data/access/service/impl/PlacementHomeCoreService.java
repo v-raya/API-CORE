@@ -1,5 +1,11 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
+import static gov.ca.cwds.cms.data.access.Constants.PhoneticPrimaryNameCode.PLACEMENT_HOME_ADDRESS;
+import static gov.ca.cwds.cms.data.access.Constants.SsaName3StoredProcedureCrudOperationCode.INSERT_OPERATION_CODE;
+import static gov.ca.cwds.cms.data.access.service.impl.IdGenerator.generateId;
+import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
+import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
+
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.cms.data.access.Constants.PhoneticSearchTables;
@@ -54,13 +60,10 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
 
-import static gov.ca.cwds.cms.data.access.Constants.PhoneticPrimaryNameCode.PLACEMENT_HOME_ADDRESS;
-import static gov.ca.cwds.cms.data.access.Constants.SsaName3StoredProcedureCrudOperationCode.INSERT_OPERATION_CODE;
-import static gov.ca.cwds.cms.data.access.service.impl.IdGenerator.generateId;
-import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
-import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
-
-/** @author CWDS TPT-3 Team */
+/**
+ * Service for create/update/find PlacementHome with business validation and data processing.
+ * @author CWDS TPT-3 Team
+ */
 public class PlacementHomeCoreService
     extends DataAccessServiceBase<PlacementHomeDao, PlacementHome, PlacementHomeEntityAwareDTO> {
 
@@ -81,6 +84,9 @@ public class PlacementHomeCoreService
   @Inject private BackgroundCheckDao backgroundCheckDao;
   @Inject private SsaName3Dao ssaName3Dao;
 
+  /**
+   * Constructor with injected services.
+   */
   @Inject
   public PlacementHomeCoreService(PlacementHomeDao crudDao) {
     super(crudDao);
@@ -104,9 +110,9 @@ public class PlacementHomeCoreService
   @Override
   public PlacementHome create(
       @Authorize("placementHome:create:entityAwareDTO.entity")
-          PlacementHomeEntityAwareDTO entityAwareDTO)
+          PlacementHomeEntityAwareDTO entityAwareDto)
       throws DataAccessServicesException {
-    return super.create(entityAwareDTO);
+    return super.create(entityAwareDto);
   }
 
   protected class CreateLifecycle extends DefaultDataAccessLifeCycle<PlacementHomeEntityAwareDTO> {
@@ -141,19 +147,19 @@ public class PlacementHomeCoreService
 
     @Override
     public void afterStore(DataAccessBundle bundle) throws DataAccessServicesException {
-      PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO =
+      PlacementHomeEntityAwareDTO placementHomeEntityAwareDto =
           (PlacementHomeEntityAwareDTO) bundle.getAwareDto();
-      createPlacementHomeUc(placementHomeEntityAwareDTO);
-      createCountyOwnership(placementHomeEntityAwareDTO);
+      createPlacementHomeUc(placementHomeEntityAwareDto);
+      createCountyOwnership(placementHomeEntityAwareDto);
       createExternalInterface();
       createBackgroundCheck();
-      createEmergencyContactDetail(placementHomeEntityAwareDTO);
-      createPlacementHomeProfile(placementHomeEntityAwareDTO);
-      createPlacementFacilityTypeHistory(placementHomeEntityAwareDTO);
-      createSubstituteCareProviders(placementHomeEntityAwareDTO);
-      createOtherAdultsInHome(placementHomeEntityAwareDTO);
-      createOtherChildrenInHome(placementHomeEntityAwareDTO);
-      prepareAddressPhoneticSearchKeywords(placementHomeEntityAwareDTO.getEntity());
+      createEmergencyContactDetail(placementHomeEntityAwareDto);
+      createPlacementHomeProfile(placementHomeEntityAwareDto);
+      createPlacementFacilityTypeHistory(placementHomeEntityAwareDto);
+      createSubstituteCareProviders(placementHomeEntityAwareDto);
+      createOtherAdultsInHome(placementHomeEntityAwareDto);
+      createOtherChildrenInHome(placementHomeEntityAwareDto);
+      prepareAddressPhoneticSearchKeywords(placementHomeEntityAwareDto.getEntity());
     }
 
     private void validateParameters(PlacementHomeEntityAwareDTO placementHomeParameterObject) {
