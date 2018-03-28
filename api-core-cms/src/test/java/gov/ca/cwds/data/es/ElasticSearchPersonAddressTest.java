@@ -258,7 +258,6 @@ public class ElasticSearchPersonAddressTest {
   public void test_toJson_full_address_type() throws Exception {
     target.setType(new ElasticSearchSystemCode("32", "Residence"));
     final String actual = JsonUtils.to(target);
-    System.out.println(actual);
     assertTrue(actual.contains(",\"type\":{\"id\":\"32\",\"description\":\"Residence\"},"));
   }
 
@@ -266,7 +265,6 @@ public class ElasticSearchPersonAddressTest {
   public void test_toJson_simple_address_type() throws Exception {
     target.setType(new SimpleElasticSearchSystemCode("32", "Residence"));
     final String actual = JsonUtils.to(target);
-    System.out.println(actual);
     assertTrue(actual.contains(",\"type\":\"Residence\","));
   }
 
