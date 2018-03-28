@@ -9,8 +9,11 @@ import gov.ca.cwds.cms.data.access.service.impl.ClientCoreService;
 import gov.ca.cwds.cms.data.access.service.impl.ClientRelationshipCoreService;
 import gov.ca.cwds.cms.data.access.service.rules.ClientRelationshipDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
+import gov.ca.cwds.data.legacy.cms.entity.Client;
+import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
+import java.time.LocalDate;
 import org.junit.Before;
 import org.mockito.Mock;
 
@@ -18,6 +21,9 @@ import org.mockito.Mock;
  * @author CWDS TPT-3 Team
  */
 public abstract class BaseDocToolRulesChildClientRelationshipTest extends BaseDocToolRulesTest {
+
+  private String PRIMARY_ID = "0001112223";
+  private String SECONDARY_ID = "0001112224";
 
   protected BusinessValidationService businessValidationService;
   protected ClientCoreService clientCoreService;
@@ -59,5 +65,22 @@ public abstract class BaseDocToolRulesChildClientRelationshipTest extends BaseDo
     } catch (BusinessValidationException e) {
       assertRuleSatisfied(ruleName, e);
     }
+  }
+
+  protected ClientRelationship getRelationship(LocalDate startDate, LocalDate endDate) {
+    ClientRelationship clientRelationship = new ClientRelationship();
+    clientRelationship.setStartDate(startDate);
+    clientRelationship.setEndDate(endDate);
+
+    Client client = new Client();
+    client.setIdentifier(PRIMARY_ID);
+
+    Client clientSecondary = new Client();
+    clientSecondary.setIdentifier(SECONDARY_ID);
+
+    clientRelationship.setPrimaryClient(client);
+    clientRelationship.setSecondaryClient(clientSecondary);
+
+    return clientRelationship;
   }
 }
