@@ -9,6 +9,7 @@ import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessBundle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
 import gov.ca.cwds.cms.data.access.service.rules.ClientRelationshipDroolsConfiguration;
+import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.ClientRelationshipDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
@@ -23,19 +24,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT_ID;
+import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
 
 public class ClientRelationshipCoreService
     extends DataAccessServiceBase<
         ClientRelationshipDao, ClientRelationship, ClientRelationshipAwareDTO> {
 
   private final BusinessValidationService businessValidationService;
+  private final ClientDao clientDao;
 
   @Inject
   public ClientRelationshipCoreService(
       final ClientRelationshipDao clientRelationshipDao,
-      BusinessValidationService businessValidationService) {
+      BusinessValidationService businessValidationService,
+      ClientDao clientDao) {
     super(clientRelationshipDao);
     this.businessValidationService = businessValidationService;
+    this.clientDao = clientDao;
   }
 
   @Override
@@ -80,6 +85,24 @@ public class ClientRelationshipCoreService
   }
 
   private class UpdateLificycle extends DefaultDataAccessLifeCycle {
+
+    @Override
+    public void beforeDataProcessing(DataAccessBundle bundle) {
+      super.beforeDataProcessing(bundle);
+      enrichWithPrimaryAndSecondaryClients(bundle);
+    }
+
+    private void enrichWithPrimaryAndSecondaryClients(DataAccessBundle bundle) {
+      ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
+      checkNotPersisted(awareDTO.getEntity().getPrimaryClient());
+      Client primaryClient =
+          clientDao.find(awareDTO.getEntity().getPrimaryClient().getPrimaryKey());
+      checkNotPersisted(awareDTO.getEntity().getSecondaryClient());
+      Client secondaryClient =
+          clientDao.find(awareDTO.getEntity().getSecondaryClient().getPrimaryKey());
+      awareDTO.getEntity().setPrimaryClient(primaryClient);
+      awareDTO.getEntity().setSecondaryClient(secondaryClient);
+    }
 
     @Override
     public void beforeBusinessValidation(DataAccessBundle bundle) {
