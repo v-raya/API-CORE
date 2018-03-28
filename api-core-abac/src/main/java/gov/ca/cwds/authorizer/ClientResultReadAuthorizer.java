@@ -9,15 +9,13 @@ import gov.ca.cwds.authorizer.drools.configuration.ClientResultAuthorizationDroo
  */
 public class ClientResultReadAuthorizer extends ClientBaseReadAuthorizer {
 
-  public static final String CLIENT_RESULT_READ = "clientResult:read";
-
-  @Inject
-  private ClientResultAuthorizationDroolsConfiguration droolsConfiguration;
+  public static final String CLIENT_RESULT_READ = "client:readResult";
+  public static final String CLIENT_RESULT_READ_OBJECT = CLIENT_RESULT_READ + ":client";
 
   @Inject
   public ClientResultReadAuthorizer(
-      DroolsAuthorizationService droolsAuthorizationService) {
-    super(droolsAuthorizationService);
-    setDroolsConfiguration(droolsConfiguration);
+      DroolsAuthorizationService droolsAuthorizationService,
+      ClientResultAuthorizationDroolsConfiguration droolsConfiguration) {
+    super(droolsAuthorizationService, droolsConfiguration);
   }
 }

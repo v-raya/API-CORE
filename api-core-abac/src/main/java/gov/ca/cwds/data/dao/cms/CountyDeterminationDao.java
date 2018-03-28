@@ -30,8 +30,8 @@ public class CountyDeterminationDao {
    */
   public List<Short> getClientCounties(final String clientId) {
     final String nativeQuery = "SELECT GVR_ENTC "
-        + " FROM {h-schema}CLIENT_CNTY A "
-        + " WHERE A.CLIENT_ID = :" + NQ_PARAM_CLIENT_ID;
+        + " FROM {h-schema}CLIENT_CNTY "
+        + " WHERE CLIENT_ID = :" + NQ_PARAM_CLIENT_ID;
     return executeNativeQuery(nativeQuery, clientId);
   }
 

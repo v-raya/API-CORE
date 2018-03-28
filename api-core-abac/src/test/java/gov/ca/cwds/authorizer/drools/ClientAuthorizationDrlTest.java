@@ -19,7 +19,7 @@ import static org.hamcrest.Matchers.is;
 
 import gov.ca.cwds.authorizer.ClientCondition;
 import gov.ca.cwds.authorizer.StaffPrivilegeType;
-import gov.ca.cwds.authorizer.drools.configuration.ClientAuthorizationDroolsConfiguration;
+import gov.ca.cwds.authorizer.drools.configuration.ClientAbstractAuthorizationDroolsConfiguration;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.drools.DroolsService;
 import java.util.ArrayList;
@@ -131,7 +131,7 @@ public class ClientAuthorizationDrlTest {
 
   private void assertClientAccessMatrixValue(ClientCondition condition,
       List<StaffPrivilegeType> privileges, boolean expectedResult) throws DroolsException {
-    ClientAuthorizationDroolsConfiguration droolsConfiguration = new ClientAuthorizationDroolsConfiguration();
+    ClientAbstractAuthorizationDroolsConfiguration droolsConfiguration = new ClientAbstractAuthorizationDroolsConfiguration();
     List instances = new ArrayList<>();
     instances.add(condition);
     final boolean actualResult = droolsAuthorizationService.authorizeObjectOperation(privileges, droolsConfiguration, instances);
