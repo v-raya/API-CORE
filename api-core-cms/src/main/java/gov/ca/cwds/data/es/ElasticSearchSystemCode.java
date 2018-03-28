@@ -27,6 +27,13 @@ public class ElasticSearchSystemCode extends ApiObjectIdentity
    */
   public ElasticSearchSystemCode() {
     // Default ctor
+    super();
+  }
+
+  public ElasticSearchSystemCode(String id, String description) {
+    super();
+    this.id = id;
+    this.description = description;
   }
 
   /**
@@ -35,6 +42,7 @@ public class ElasticSearchSystemCode extends ApiObjectIdentity
    * @param old object to copy from
    */
   public ElasticSearchSystemCode(ElasticSearchSystemCode old) {
+    super();
     this.id = old.id;
     this.description = old.description;
   }

@@ -11,6 +11,10 @@ public class SimpleElasticSearchSystemCode extends ElasticSearchSystemCode {
     super();
   }
 
+  public SimpleElasticSearchSystemCode(String id, String description) {
+    super(id, description);
+  }
+
   public SimpleElasticSearchSystemCode(ElasticSearchSystemCode old) {
     super(old);
   }
