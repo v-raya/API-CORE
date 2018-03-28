@@ -93,7 +93,7 @@ public class ClientCoreService
   }
 
   @Authorize(CLIENT_RESULT_READ_OBJECT)
-  public Client getClientByFAcilityIdAndChildId(String facilityId, String childId) {
+  public Client getClientByFacilityIdAndChildId(String facilityId, String childId) {
     return crudDao.findByFacilityIdAndChildId(facilityId, childId);
   }
 
