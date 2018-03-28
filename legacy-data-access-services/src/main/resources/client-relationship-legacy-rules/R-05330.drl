@@ -1,0 +1,48 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.Client
+import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship
+import gov.ca.cwds.cms.data.access.dto.ClientRelationshipAwareDTO;
+
+global java.util.Set<IssueDetails> validationDetailsList
+
+rule "R-05330"
+  dialect "mvel"
+  agenda-group "client-relationship-agenda"
+  when
+      /*
+        Code: R - 05330
+
+        Rule Txt:
+          For all Client Relationships, if two or more have the same primary Client and secondary
+          Client - then only one of the Client Relationships can exist.
+
+        Logic:
+          For all CLIENT_RELATIONSHIP, if two or more have the same primary CLIENT and secondary CLIENT - then only one of the
+          CLIENT_RELATIONSHIP.End_Date may be null
+      */
+      $relationshipEntityAwareDto: ClientRelationshipAwareDTO()
+      $clientRelationship : ClientRelationship($endDate1 : endDate, $startDate1 : startDate) from $relationshipEntityAwareDto.clientRelationshipList
+      $relationshipForUpdate : ClientRelationship(
+            endDate == null
+        &&  $clientRelationship.primaryClient.identifier == primaryClient.identifier
+        &&  $clientRelationship.secondaryClient.identifier == secondaryClient.identifier
+        &&  $clientRelationship.endDate == null
+      ) from $relationshipEntityAwareDto.entity
+  then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-05330");
+        details.setUserMessage(
+            String.format(
+              "Only one of the Client Relationships can exist."
+                  + " existing open relationship id: '%s';"
+                  + " startDate: %tm/%<td/%<tY;"
+                  + " endDate: %tm/%<td/%<tY;",
+              $clientRelationship.getIdentifier(),
+              $clientRelationship.getStartDate(),
+              $clientRelationship.getEndDate()
+            )
+          );
+      details.setTechnicalMessage("For all CLIENT_RELATIONSHIP, if two or more have the same primary CLIENT and secondary CLIENT - then only one of the\n"
+                                   + " CLIENT_RELATIONSHIP.End_Date may be null.");
+      validationDetailsList.add(details);
+end
