@@ -1,9 +1,5 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
-import static gov.ca.cwds.cms.data.access.service.impl.IdGenerator.generateId;
-import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
-import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
-
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.cms.data.access.Constants.PhoneticSearchTables;
@@ -51,11 +47,18 @@ import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
+import org.apache.commons.lang3.StringUtils;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
-import org.apache.commons.lang3.StringUtils;
+
+import static gov.ca.cwds.cms.data.access.Constants.PhoneticPrimaryNameCode.PLACEMENT_HOME_ADDRESS;
+import static gov.ca.cwds.cms.data.access.Constants.SsaName3StoredProcedureCrudOperationCode.INSERT_OPERATION_CODE;
+import static gov.ca.cwds.cms.data.access.service.impl.IdGenerator.generateId;
+import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
+import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
 
 /** @author CWDS TPT-3 Team */
 public class PlacementHomeCoreService
@@ -99,7 +102,9 @@ public class PlacementHomeCoreService
   }
 
   @Override
-  public PlacementHome create(@Authorize("placementHome:create:entityAwareDTO.entity") PlacementHomeEntityAwareDTO entityAwareDTO)
+  public PlacementHome create(
+      @Authorize("placementHome:create:entityAwareDTO.entity")
+          PlacementHomeEntityAwareDTO entityAwareDTO)
       throws DataAccessServicesException {
     return super.create(entityAwareDTO);
   }
@@ -342,9 +347,9 @@ public class PlacementHomeCoreService
     private void prepareAddressPhoneticSearchKeywords(PlacementHome placementHome) {
       SsaName3ParameterObject parameterObject = new SsaName3ParameterObject();
       parameterObject.setTableName(PhoneticSearchTables.ADR_PHTT);
-      parameterObject.setCrudOper("I");
+      parameterObject.setCrudOper(INSERT_OPERATION_CODE);
       parameterObject.setIdentifier(placementHome.getIdentifier());
-      parameterObject.setNameCd("P");
+      parameterObject.setNameCd(PLACEMENT_HOME_ADDRESS);
       parameterObject.setStreetNumber(placementHome.getStreetNo());
       parameterObject.setStreetName(placementHome.getStreetNm());
       parameterObject.setGvrEntc(placementHome.getGvrEntc());
