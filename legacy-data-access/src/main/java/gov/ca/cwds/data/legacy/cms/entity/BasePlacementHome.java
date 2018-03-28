@@ -121,8 +121,8 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private List<PlacementHomeNotes> placementHomeNotes;
 
   /**
-   * Historic information on when
-   * a Placement Home Facility Type is changed and the dates the Placement Home Facility type was of a specific type
+   * Historic information on when a Placement Home Facility Type is changed and the dates the
+   * Placement Home Facility type was of a specific type
    */
   @OneToMany
   @JoinColumn(name = "FKPLC_HM_T")
@@ -474,10 +474,18 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * PRIMARY_SUBS_CARE_PROVIDER_ID - The logical foreign key representing the ID from the source
    * entity of the Primary Care Provider for a particular PLACEMENT HOME.
    *
-   * @Basic
-   * @Column(name = "PRM_SUBSID", nullable = true, length = 10) private String prmSubsid;
+   * <p>
+   * <blockquote>
+   * 
+   * <pre>
+   * &#64;Basic
+   * &#64;Column(name = "PRM_SUBSID", nullable = true, length = 10)
+   * private String prmSubsid;
+   * </pre>
+   * 
+   * </blockquote>
+   * </p>
    */
-
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne
   @Fetch(FetchMode.SELECT)
@@ -692,8 +700,17 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * LA_PAYEE_STATE_CODE_TYPE - The system generated number which identifies the State for the
    * Designated Payee's mailing address (e.g., California, Nevada, Texas, etc.).
    *
-   * @Basic
-   * @Column(name = "LP_STATE_C", nullable = false) private Short lpStateC;
+   * <p>
+   * <blockquote>
+   * 
+   * <pre>
+   * &#64;Basic
+   * &#64;Column(name = "LP_STATE_C", nullable = false)
+   * private Short lpStateC;
+   * </pre>
+   * 
+   * </blockquote>
+   * </p>
    */
   @Basic
   @Column(name = "LP_STATE_C")
@@ -826,14 +843,16 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private String trnhsgFac;
 
   /**
-   * NEW_LICENSE_NUMBER - This field is populated when a change of ownership or location takes place for a specific
-   * Placement Facility. It identifies what the license number of the new facility will be.
-   * The new License Number is issued by the State of California (CCL) or can be entered by the user when processing
-   * a Placement Home Move online. After both the old facility is closed and the new facility has been added to the
-   * system, any active links to the closed facility (e.g. FFA-Certified Homes, SCPs, and placements) will be ended and
-   * links to the facility with the new license number will be established. This field works in conjunction with
-   * Process_Placement_Home_Move_Ind to show when the new license number has been added and the reconnections
-   * are complete. Both the LIS Interface and the online application will set this attribute.
+   * NEW_LICENSE_NUMBER - This field is populated when a change of ownership or location takes place
+   * for a specific Placement Facility. It identifies what the license number of the new facility
+   * will be. The new License Number is issued by the State of California (CCL) or can be entered by
+   * the user when processing a Placement Home Move online. After both the old facility is closed
+   * and the new facility has been added to the system, any active links to the closed facility
+   * (e.g. FFA-Certified Homes, SCPs, and placements) will be ended and links to the facility with
+   * the new license number will be established. This field works in conjunction with
+   * Process_Placement_Home_Move_Ind to show when the new license number has been added and the
+   * reconnections are complete. Both the LIS Interface and the online application will set this
+   * attribute.
    */
   @Basic
   @Column(name = "NEWLIC_NO", nullable = true, length = 9)
@@ -841,14 +860,13 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
 
   /**
    * PROCESS_PLACEMENT_HOME_MOVE_IND - This field is used internally in conjunction with
-   * New_License_Number for licensed homes to show when a facility has a new license number
-   * and that any necessary pointers for homes and/or providers have been reset.
-   * For non licensed homes this indicator is set once the Placement.
-   * Home is moved via the Process Placement Home Move function.
-   * It also indicates all active out-of-home and adoptive placements have been re-pointed
-   * to the new version of the home, when applicable.
-   * It will be set to ˆY‰ on the old facility after the updates are complete.
-   * Both the LIS Interface and the online application will set this attribute.
+   * New_License_Number for licensed homes to show when a facility has a new license number and that
+   * any necessary pointers for homes and/or providers have been reset. For non licensed homes this
+   * indicator is set once the Placement. Home is moved via the Process Placement Home Move
+   * function. It also indicates all active out-of-home and adoptive placements have been re-pointed
+   * to the new version of the home, when applicable. It will be set to Y on the old facility after
+   * the updates are complete. Both the LIS Interface and the online application will set this
+   * attribute.
    */
   @Basic
   @Column(name = "NEWLIC_UPD", nullable = false, length = 1)
@@ -965,7 +983,8 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
     return placementFacilityTypeHistory;
   }
 
-  public void setPlacementFacilityTypeHistory(List<PlacementFacilityTypeHistory> placementFacilityTypeHistory) {
+  public void setPlacementFacilityTypeHistory(
+      List<PlacementFacilityTypeHistory> placementFacilityTypeHistory) {
     this.placementFacilityTypeHistory = placementFacilityTypeHistory;
   }
 
