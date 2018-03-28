@@ -13,9 +13,6 @@ public class R00753Test extends BaseDocToolRulesChildClientRelationshipTest {
 
   private static final String RULE_NAME = "R-00753";
 
-  private String PRIMARY_ID = "0001112223";
-  private String SECONDARY_ID = "0001112224";
-
   /**
    * @throws DroolsException
    *
@@ -64,7 +61,7 @@ public class R00753Test extends BaseDocToolRulesChildClientRelationshipTest {
 
     ClientRelationship overlapRelationship1 =
         getRelationship(localDateStartA.minusYears(1), localDateEndA.minusYears(1));
-    ;
+
     relationships.add(overlapRelationship1);
 
     relationships.add(
@@ -243,22 +240,5 @@ public class R00753Test extends BaseDocToolRulesChildClientRelationshipTest {
     awareDTO.getClientRelationshipList().addAll(relationships);
 
     checkRuleSatisfied(RULE_NAME);
-  }
-
-  private ClientRelationship getRelationship(LocalDate startDate, LocalDate endDate) {
-    ClientRelationship clientRelationship = new ClientRelationship();
-    clientRelationship.setStartDate(startDate);
-    clientRelationship.setEndDate(endDate);
-
-    Client client = new Client();
-    client.setIdentifier(PRIMARY_ID);
-
-    Client clientSecondary = new Client();
-    clientSecondary.setIdentifier(SECONDARY_ID);
-
-    clientRelationship.setPrimaryClient(client);
-    clientRelationship.setSecondaryClient(clientSecondary);
-
-    return clientRelationship;
   }
 }
