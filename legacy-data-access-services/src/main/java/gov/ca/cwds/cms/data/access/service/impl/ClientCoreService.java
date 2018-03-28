@@ -3,7 +3,17 @@ package gov.ca.cwds.cms.data.access.service.impl;
 import static gov.ca.cwds.authorizer.ClientResultReadAuthorizer.CLIENT_RESULT_READ_OBJECT;
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.hibernate.Hibernate;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.OtherClientNameDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
@@ -34,13 +44,6 @@ import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import org.hibernate.Hibernate;
 
 /**
  * @author CWDS TPT-3 Team
@@ -67,7 +70,7 @@ public class ClientCoreService
   @Inject
   private ClientServiceProviderDao clientServiceProviderDao;
   @Inject
-  private ClientRelationshipDao сlientRelationshipDao;
+  private ClientRelationshipDao clientRelationshipDao;
   @Inject
   private BusinessValidationService businessValidationService;
 
@@ -171,9 +174,9 @@ public class ClientCoreService
 
       LocalDate now = LocalDate.now();
       final Collection<ClientRelationship> relationshipsByPrimaryClientId =
-          сlientRelationshipDao.findRelationshipsByPrimaryClientId(clientId, now);
+          clientRelationshipDao.findRelationshipsByPrimaryClientId(clientId, now);
       final Collection<ClientRelationship> relationshipsBySecondaryClientId =
-          сlientRelationshipDao.findRelationshipsBySecondaryClientId(clientId, now);
+          clientRelationshipDao.findRelationshipsBySecondaryClientId(clientId, now);
       clientEntityAwareDTO.getClientRelationships().addAll(relationshipsByPrimaryClientId);
       clientEntityAwareDTO.getClientRelationships().addAll(relationshipsBySecondaryClientId);
     }
@@ -181,8 +184,8 @@ public class ClientCoreService
     @Override
     public void businessValidation(DataAccessBundle bundle, PerryAccount perryAccount)
         throws DroolsException {
-      businessValidationService.runBusinessValidation(
-          bundle.getAwareDto(), PrincipalUtils.getPrincipal(), ClientDroolsConfiguration.INSTANCE);
+      businessValidationService.runBusinessValidation(bundle.getAwareDto(),
+          PrincipalUtils.getPrincipal(), ClientDroolsConfiguration.INSTANCE);
     }
 
     @Override
