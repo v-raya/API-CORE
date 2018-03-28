@@ -34,31 +34,42 @@ import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
-import java.time.LocalDate;
-import org.hibernate.Hibernate;
-
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.hibernate.Hibernate;
 
-/** @author CWDS TPT-3 Team */
+/**
+ * @author CWDS TPT-3 Team
+ */
 public class ClientCoreService
     extends DataAccessServiceBase<ClientDao, Client, ClientEntityAwareDTO> {
 
-  @Inject private ClientDao clientDao;
-  @Inject private DeliveredServiceDao deliveredServiceDao;
-  @Inject private NameTypeDao nameTypeDao;
-  @Inject private SafetyAlertDao safetyAlertDao;
-  @Inject private DasHistoryDao dasHistoryDao;
-  @Inject private NearFatalityDao nearFatalityDao;
-  @Inject private PlacementEpisodeDao placementEpisodeDao;
-  @Inject private OtherClientNameService otherClientNameService;
-  @Inject private ClientServiceProviderDao clientServiceProviderDao;
-  @Inject private ClientRelationshipDao сlientRelationshipDao;
-  @Inject private BusinessValidationService businessValidationService;
+  @Inject
+  private ClientDao clientDao;
+  @Inject
+  private DeliveredServiceDao deliveredServiceDao;
+  @Inject
+  private NameTypeDao nameTypeDao;
+  @Inject
+  private SafetyAlertDao safetyAlertDao;
+  @Inject
+  private DasHistoryDao dasHistoryDao;
+  @Inject
+  private NearFatalityDao nearFatalityDao;
+  @Inject
+  private PlacementEpisodeDao placementEpisodeDao;
+  @Inject
+  private OtherClientNameService otherClientNameService;
+  @Inject
+  private ClientServiceProviderDao clientServiceProviderDao;
+  @Inject
+  private ClientRelationshipDao сlientRelationshipDao;
+  @Inject
+  private BusinessValidationService businessValidationService;
 
   @Override
   public Client create(ClientEntityAwareDTO entityAwareDTO) throws DataAccessServicesException {
@@ -79,6 +90,11 @@ public class ClientCoreService
   @Authorize(CLIENT_RESULT_READ_OBJECT)
   public Client getClientByLicNumAndChildId(String licenseNumber, String childId) {
     return crudDao.findByLicNumAndChildId(licenseNumber, childId);
+  }
+
+  @Authorize(CLIENT_RESULT_READ_OBJECT)
+  public Client getClientByFacilityIdAndChildId(String facilityId, String childId) {
+    return crudDao.findByFacilityIdAndChildId(facilityId, childId);
   }
 
   @Authorize(CLIENT_RESULT_READ_OBJECT)
