@@ -62,7 +62,10 @@ import java.util.Date;
 
 /**
  * @author CWDS TPT-3 Team
- * */
+ *
+ * Service for create/update/find
+ * PlacementHome with business validation and data processing
+ */
 public class PlacementHomeCoreService
     extends DataAccessServiceBase<PlacementHomeDao, PlacementHome, PlacementHomeEntityAwareDTO> {
 
@@ -106,9 +109,9 @@ public class PlacementHomeCoreService
   @Override
   public PlacementHome create(
       @Authorize("placementHome:create:entityAwareDTO.entity")
-          PlacementHomeEntityAwareDTO entityAwareDTO)
+          PlacementHomeEntityAwareDTO entityAwareDto)
       throws DataAccessServicesException {
-    return super.create(entityAwareDTO);
+    return super.create(entityAwareDto);
   }
 
   protected class CreateLifecycle extends DefaultDataAccessLifeCycle<PlacementHomeEntityAwareDTO> {
@@ -143,19 +146,19 @@ public class PlacementHomeCoreService
 
     @Override
     public void afterStore(DataAccessBundle bundle) throws DataAccessServicesException {
-      PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO =
+      PlacementHomeEntityAwareDTO placementHomeEntityAwareDto =
           (PlacementHomeEntityAwareDTO) bundle.getAwareDto();
-      createPlacementHomeUc(placementHomeEntityAwareDTO);
-      createCountyOwnership(placementHomeEntityAwareDTO);
+      createPlacementHomeUc(placementHomeEntityAwareDto);
+      createCountyOwnership(placementHomeEntityAwareDto);
       createExternalInterface();
       createBackgroundCheck();
-      createEmergencyContactDetail(placementHomeEntityAwareDTO);
-      createPlacementHomeProfile(placementHomeEntityAwareDTO);
-      createPlacementFacilityTypeHistory(placementHomeEntityAwareDTO);
-      createSubstituteCareProviders(placementHomeEntityAwareDTO);
-      createOtherAdultsInHome(placementHomeEntityAwareDTO);
-      createOtherChildrenInHome(placementHomeEntityAwareDTO);
-      prepareAddressPhoneticSearchKeywords(placementHomeEntityAwareDTO.getEntity());
+      createEmergencyContactDetail(placementHomeEntityAwareDto);
+      createPlacementHomeProfile(placementHomeEntityAwareDto);
+      createPlacementFacilityTypeHistory(placementHomeEntityAwareDto);
+      createSubstituteCareProviders(placementHomeEntityAwareDto);
+      createOtherAdultsInHome(placementHomeEntityAwareDto);
+      createOtherChildrenInHome(placementHomeEntityAwareDto);
+      prepareAddressPhoneticSearchKeywords(placementHomeEntityAwareDto.getEntity());
     }
 
     private void validateParameters(PlacementHomeEntityAwareDTO placementHomeParameterObject) {
