@@ -42,21 +42,34 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.hibernate.Hibernate;
 
-/** @author CWDS TPT-3 Team */
+/**
+ * @author CWDS TPT-3 Team
+ */
 public class ClientCoreService
     extends DataAccessServiceBase<ClientDao, Client, ClientEntityAwareDTO> {
 
-  @Inject private ClientDao clientDao;
-  @Inject private DeliveredServiceDao deliveredServiceDao;
-  @Inject private NameTypeDao nameTypeDao;
-  @Inject private SafetyAlertDao safetyAlertDao;
-  @Inject private DasHistoryDao dasHistoryDao;
-  @Inject private NearFatalityDao nearFatalityDao;
-  @Inject private PlacementEpisodeDao placementEpisodeDao;
-  @Inject private OtherClientNameService otherClientNameService;
-  @Inject private ClientServiceProviderDao clientServiceProviderDao;
-  @Inject private ClientRelationshipDao сlientRelationshipDao;
-  @Inject private BusinessValidationService businessValidationService;
+  @Inject
+  private ClientDao clientDao;
+  @Inject
+  private DeliveredServiceDao deliveredServiceDao;
+  @Inject
+  private NameTypeDao nameTypeDao;
+  @Inject
+  private SafetyAlertDao safetyAlertDao;
+  @Inject
+  private DasHistoryDao dasHistoryDao;
+  @Inject
+  private NearFatalityDao nearFatalityDao;
+  @Inject
+  private PlacementEpisodeDao placementEpisodeDao;
+  @Inject
+  private OtherClientNameService otherClientNameService;
+  @Inject
+  private ClientServiceProviderDao clientServiceProviderDao;
+  @Inject
+  private ClientRelationshipDao сlientRelationshipDao;
+  @Inject
+  private BusinessValidationService businessValidationService;
 
   @Override
   public Client create(ClientEntityAwareDTO entityAwareDTO) throws DataAccessServicesException {

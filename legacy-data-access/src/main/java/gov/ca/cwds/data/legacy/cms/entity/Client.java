@@ -42,21 +42,23 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
-/** @author CWDS CALS API Team */
+/**
+ * @author CWDS CALS API Team
+ */
 @NamedQuery(
-  name = "Client.find",
+    name = "Client.find",
     query = Client.CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY +
         " AND c.identifier = :childId"
 )
 
 @NamedQuery(
-  name = "Client.findAll",
+    name = "Client.findAll",
     query = Client.CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY
         + " ORDER BY c.identifier "
 )
 
 @NamedQuery(
-  name = "Client.findByFacilityId",
+    name = "Client.findByFacilityId",
     query = Client.CHILDREN_BY_FACILITY_ID_BASE_QUERY
         + " ORDER BY c.identifier "
 )
@@ -100,18 +102,18 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
 
   @OneToMany(fetch = FetchType.LAZY)
   @JoinColumn(
-    name = "FKCLIENT_T",
-    referencedColumnName = "IDENTIFIER",
-    insertable = false,
-    updatable = false
+      name = "FKCLIENT_T",
+      referencedColumnName = "IDENTIFIER",
+      insertable = false,
+      updatable = false
   )
   private Set<PlacementEpisode> placementEpisodes = new HashSet<>();
 
   @OneToMany(
-    mappedBy = "client",
-    fetch = FetchType.LAZY,
-    cascade = CascadeType.ALL,
-    orphanRemoval = true)
+      mappedBy = "client",
+      fetch = FetchType.LAZY,
+      cascade = CascadeType.ALL,
+      orphanRemoval = true)
   private Set<ClientOtherEthnicity> otherEthnicities = new HashSet<>();
 
   @Column(name = "ADJDEL_IND", length = 1)
@@ -912,13 +914,17 @@ public class Client extends CmsPersistentObject implements IClient, PersistentOb
     this.emailAddress = emailAddress;
   }
 
-  /** @return adjudicatedDelinquentIndicator (Boolean value or null) */
+  /**
+   * @return adjudicatedDelinquentIndicator (Boolean value or null)
+   */
   @SuppressWarnings("squid:S2447")
   public Boolean getAdjudicatedDelinquentIndicator() {
     return adjudicatedDelinquentIndicator;
   }
 
-  /** @param adjudicatedDelinquentIndicator (may be null) */
+  /**
+   * @param adjudicatedDelinquentIndicator (may be null)
+   */
   public void setAdjudicatedDelinquentIndicator(Boolean adjudicatedDelinquentIndicator) {
     this.adjudicatedDelinquentIndicator = adjudicatedDelinquentIndicator;
   }
