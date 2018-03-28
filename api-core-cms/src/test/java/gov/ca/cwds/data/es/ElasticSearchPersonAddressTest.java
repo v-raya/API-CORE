@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import org.junit.Before;
@@ -256,13 +257,17 @@ public class ElasticSearchPersonAddressTest {
   @Test
   public void test_toJson_full_address_type() throws Exception {
     target.setType(new ElasticSearchSystemCode("32", "Residence"));
-    System.out.println(JsonUtils.to(target));
+    final String actual = JsonUtils.to(target);
+    System.out.println(actual);
+    assertTrue(actual.contains(",\"type\":{\"id\":\"32\",\"description\":\"Residence\"},"));
   }
 
   @Test
   public void test_toJson_simple_address_type() throws Exception {
     target.setType(new SimpleElasticSearchSystemCode("32", "Residence"));
-    System.out.println(JsonUtils.to(target));
+    final String actual = JsonUtils.to(target);
+    System.out.println(actual);
+    assertTrue(actual.contains(",\"type\":\"Residence\","));
   }
 
 }
