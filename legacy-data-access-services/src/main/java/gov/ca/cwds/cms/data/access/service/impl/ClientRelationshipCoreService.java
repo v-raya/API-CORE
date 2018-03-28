@@ -27,9 +27,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author CWDS TPT-3 Team
- *     Service for create/update/find ClientRelationship with business validation and
+ *
+ * Service for create/update/find ClientRelationship with business validation and
  *     data processing
+ *
+ * @author CWDS TPT-3 Team
  */
 public class ClientRelationshipCoreService
     extends DataAccessServiceBase<
@@ -39,10 +41,7 @@ public class ClientRelationshipCoreService
   private final ClientDao clientDao;
 
   /**
-   *
-   * @param clientRelationshipDao
-   * @param businessValidationService
-   * @param clientDao
+   *  Constructor with injected services
    */
   @Inject
   public ClientRelationshipCoreService(

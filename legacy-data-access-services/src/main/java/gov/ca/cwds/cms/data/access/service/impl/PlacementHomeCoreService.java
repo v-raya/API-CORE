@@ -61,10 +61,8 @@ import java.util.Collections;
 import java.util.Date;
 
 /**
+ * <p>Service for create/update/find PlacementHome with business validation and data processing
  * @author CWDS TPT-3 Team
- *
- * Service for create/update/find
- * PlacementHome with business validation and data processing
  */
 public class PlacementHomeCoreService
     extends DataAccessServiceBase<PlacementHomeDao, PlacementHome, PlacementHomeEntityAwareDTO> {
@@ -86,6 +84,9 @@ public class PlacementHomeCoreService
   @Inject private BackgroundCheckDao backgroundCheckDao;
   @Inject private SsaName3Dao ssaName3Dao;
 
+  /**
+   * Constructor with injected services
+   */
   @Inject
   public PlacementHomeCoreService(PlacementHomeDao crudDao) {
     super(crudDao);
