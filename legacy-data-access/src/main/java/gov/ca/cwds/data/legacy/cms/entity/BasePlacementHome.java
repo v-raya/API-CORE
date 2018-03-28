@@ -474,7 +474,6 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * PRIMARY_SUBS_CARE_PROVIDER_ID - The logical foreign key representing the ID from the source
    * entity of the Primary Care Provider for a particular PLACEMENT HOME.
    *
-   * <p>
    * <blockquote>
    * 
    * <pre>
@@ -484,7 +483,6 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * </pre>
    * 
    * </blockquote>
-   * </p>
    */
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne
@@ -700,7 +698,6 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * LA_PAYEE_STATE_CODE_TYPE - The system generated number which identifies the State for the
    * Designated Payee's mailing address (e.g., California, Nevada, Texas, etc.).
    *
-   * <p>
    * <blockquote>
    * 
    * <pre>
@@ -710,7 +707,6 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * </pre>
    * 
    * </blockquote>
-   * </p>
    */
   @Basic
   @Column(name = "LP_STATE_C")

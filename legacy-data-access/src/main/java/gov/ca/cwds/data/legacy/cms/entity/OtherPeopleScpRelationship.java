@@ -88,9 +88,7 @@ public class OtherPeopleScpRelationship implements PersistentObject {
 
   /**
    * FKSB_PVDRT - Mandatory Foreign key that RELATES_ADULT_OR_CHILD_TO_SCP_IN a
-   * SUBSTITUTE_CARE_PROVIDER.
-   * <p>
-   * <blockquote>
+   * SUBSTITUTE_CARE_PROVIDER. <blockquote>
    * 
    * <pre>
    * &#64;Basic
@@ -99,7 +97,6 @@ public class OtherPeopleScpRelationship implements PersistentObject {
    * </pre>
    * 
    * </blockquote>
-   * </p>
    */
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne
