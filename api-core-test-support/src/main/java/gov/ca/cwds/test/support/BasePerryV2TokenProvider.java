@@ -4,7 +4,9 @@ import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 
 import java.net.URI;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
@@ -12,6 +14,8 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.glassfish.jersey.client.ClientProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +26,11 @@ import org.slf4j.LoggerFactory;
 public abstract class BasePerryV2TokenProvider<T extends AuthParams> implements
     TokenProvider<T> {
 
+  public static final String TOKEN_PARAM_NAME = "token";
   private final Logger LOG = LoggerFactory.getLogger(BasePerryV2TokenProvider.class);
 
   private static final String PATH_PERRY_AUTHN_LOGIN = "/perry/authn/login";
+  private static final String PATH_PERRY_AUTHN_VALIDATE = "/perry/authn/validate";
   private static final String PATH_PERRY_AUTHN_TOKEN = "/perry/authn/token";
   private static final String CALLBACK = "callback";
   private static final String ACCESS_CODE = "accessCode";
@@ -34,18 +40,31 @@ public abstract class BasePerryV2TokenProvider<T extends AuthParams> implements
 
   private Client client;
 
+  private static final Map<String, String> tokenCache = new HashMap<>();
+
   BasePerryV2TokenProvider(Client client, String perryUrl, String loginFormTargetUrl) {
     this.client = client;
     this.perryUrl = perryUrl;
     this.loginFormTargetUrl = loginFormTargetUrl;
     LOG.info("BasePerryV2TokenProvider was created");
-    LOG.info("BasePerryV2TokenProvider: perryUrl: [{}], loginFormTargetUrl: [{}]", perryUrl, loginFormTargetUrl);
+    LOG.info("BasePerryV2TokenProvider: perryUrl: [{}], loginFormTargetUrl: [{}]", perryUrl,
+        loginFormTargetUrl);
   }
 
   abstract Form prepareLoginForm(T config);
 
   @Override
   public String doGetToken(T params) {
+    String paramsToString = ToStringBuilder.reflectionToString(params, ToStringStyle.JSON_STYLE);
+    return Optional.ofNullable(tokenCache.get(paramsToString)).orElseGet(() -> {
+      String token = getTokenFromPerry(params);
+      tokenCache.put(paramsToString, token);
+      LOG.info("New token [{}] for params [{}]", token, paramsToString);
+      return token;
+    });
+  }
+
+  private String getTokenFromPerry(T params) {
     final Map<String, NewCookie> cookies = postLoginFormAndGetJSessionIdCookie(params);
     final String accessCode = getAccessCodeFromPerry(cookies);
     return getTokenFromPerry(accessCode);
@@ -61,6 +80,16 @@ public abstract class BasePerryV2TokenProvider<T extends AuthParams> implements
         .post(entity);
     LOG.info("PostLoginForm with result [{}]", response.getStatusInfo());
     return response.getCookies();
+  }
+
+  private boolean isTokenValid(String token) {
+    final Response response = client.target(perryUrl)
+        .path(PATH_PERRY_AUTHN_VALIDATE)
+        .queryParam(TOKEN_PARAM_NAME, token)
+        .property(ClientProperties.FOLLOW_REDIRECTS, Boolean.FALSE)
+        .request()
+        .get();
+    return response.getStatus() == 200;
   }
 
   private String getAccessCodeFromPerry(Map<String, NewCookie> cookies) {
