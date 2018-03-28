@@ -27,9 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * Service for create/update/find ClientRelationship with business validation and
- *     data processing
+ *     data processing.
  *
  * @author CWDS TPT-3 Team
  */
@@ -41,7 +40,7 @@ public class ClientRelationshipCoreService
   private final ClientDao clientDao;
 
   /**
-   *  Constructor with injected services
+   * Constructor with injected services.
    */
   @Inject
   public ClientRelationshipCoreService(

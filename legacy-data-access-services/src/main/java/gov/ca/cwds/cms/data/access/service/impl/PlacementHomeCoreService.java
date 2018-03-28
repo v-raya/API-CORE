@@ -61,7 +61,7 @@ import java.util.Collections;
 import java.util.Date;
 
 /**
- * <p>Service for create/update/find PlacementHome with business validation and data processing
+ * Service for create/update/find PlacementHome with business validation and data processing.
  * @author CWDS TPT-3 Team
  */
 public class PlacementHomeCoreService
@@ -85,7 +85,7 @@ public class PlacementHomeCoreService
   @Inject private SsaName3Dao ssaName3Dao;
 
   /**
-   * Constructor with injected services
+   * Constructor with injected services.
    */
   @Inject
   public PlacementHomeCoreService(PlacementHomeDao crudDao) {
