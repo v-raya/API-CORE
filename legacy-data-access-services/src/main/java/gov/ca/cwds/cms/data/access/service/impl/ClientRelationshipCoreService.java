@@ -32,22 +32,25 @@ import gov.ca.cwds.security.utils.PrincipalUtils;
  *
  * @author CWDS TPT-3 Team
  */
-public class ClientRelationshipCoreService extends
-    DataAccessServiceBase<ClientRelationshipDao, ClientRelationship, ClientRelationshipAwareDTO> {
+public class ClientRelationshipCoreService
+    extends DataAccessServiceBase<
+        ClientRelationshipDao, ClientRelationship, ClientRelationshipAwareDTO> {
 
   private final BusinessValidationService businessValidationService;
   private final ClientDao clientDao;
 
   /**
    * Constructor with injected services.
-   * 
+   *
    * @param clientRelationshipDao client relationship DAO
    * @param businessValidationService business validator
    * @param clientDao client DAO
    */
   @Inject
-  public ClientRelationshipCoreService(final ClientRelationshipDao clientRelationshipDao,
-      BusinessValidationService businessValidationService, ClientDao clientDao) {
+  public ClientRelationshipCoreService(
+      final ClientRelationshipDao clientRelationshipDao,
+      BusinessValidationService businessValidationService,
+      ClientDao clientDao) {
     super(clientRelationshipDao);
     this.businessValidationService = businessValidationService;
     this.clientDao = clientDao;
@@ -104,10 +107,12 @@ public class ClientRelationshipCoreService extends
 
     private void enrichWithPrimaryAndSecondaryClients(DataAccessBundle bundle) {
       ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
-      ParametersValidator.checkNotPersisted(awareDTO.getEntity().getPrimaryClient());
+      ParametersValidator.checkEntityId(
+          awareDTO.getEntity().getPrimaryClient(), awareDTO.getEntity().getClass().getName());
       Client primaryClient =
           clientDao.find(awareDTO.getEntity().getPrimaryClient().getPrimaryKey());
-      ParametersValidator.checkNotPersisted(awareDTO.getEntity().getSecondaryClient());
+      ParametersValidator.checkEntityId(
+          awareDTO.getEntity().getSecondaryClient(), awareDTO.getEntity().getClass().getName());
       Client secondaryClient =
           clientDao.find(awareDTO.getEntity().getSecondaryClient().getPrimaryKey());
       awareDTO.getEntity().setPrimaryClient(primaryClient);
@@ -125,8 +130,8 @@ public class ClientRelationshipCoreService extends
           new ArrayList<>(findRelationshipsByRightSide(clientId));
       otherRelationshipsForThisClient.addAll(findRelationshipsByRightSide(clientId));
 
-      otherRelationshipsForThisClient
-          .removeIf(e -> e.getIdentifier().equals(awareDTO.getEntity().getIdentifier()));
+      otherRelationshipsForThisClient.removeIf(
+          e -> e.getIdentifier().equals(awareDTO.getEntity().getIdentifier()));
 
       awareDTO.getClientRelationshipList().addAll(otherRelationshipsForThisClient);
     }
@@ -134,8 +139,10 @@ public class ClientRelationshipCoreService extends
     @Override
     public void businessValidation(DataAccessBundle bundle, PerryAccount perryAccount)
         throws DroolsException {
-      businessValidationService.runBusinessValidation(bundle.getAwareDto(),
-          PrincipalUtils.getPrincipal(), ClientRelationshipDroolsConfiguration.INSTANCE);
+      businessValidationService.runBusinessValidation(
+          bundle.getAwareDto(),
+          PrincipalUtils.getPrincipal(),
+          ClientRelationshipDroolsConfiguration.INSTANCE);
     }
   }
 }
