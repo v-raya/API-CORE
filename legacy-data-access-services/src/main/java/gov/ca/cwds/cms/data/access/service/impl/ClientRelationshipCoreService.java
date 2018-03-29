@@ -2,7 +2,13 @@ package gov.ca.cwds.cms.data.access.service.impl;
 
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT_ID;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.cms.data.access.dto.ClientRelationshipAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.DataAccessServiceBase;
@@ -18,35 +24,30 @@ import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.annotations.Authorize;
-
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Service for create/update/find ClientRelationship with business validation and
- *     data processing.
+ * Service for create/update/find ClientRelationship with business validation and data processing.
  *
  * @author CWDS TPT-3 Team
  */
-public class ClientRelationshipCoreService
-    extends DataAccessServiceBase<
-        ClientRelationshipDao, ClientRelationship, ClientRelationshipAwareDTO> {
+public class ClientRelationshipCoreService extends
+    DataAccessServiceBase<ClientRelationshipDao, ClientRelationship, ClientRelationshipAwareDTO> {
 
   private final BusinessValidationService businessValidationService;
   private final ClientDao clientDao;
 
   /**
    * Constructor with injected services.
+   * 
+   * @param clientRelationshipDao client relationship DAO
+   * @param businessValidationService business validator
+   * @param clientDao client DAO
    */
   @Inject
-  public ClientRelationshipCoreService(
-      final ClientRelationshipDao clientRelationshipDao,
-      BusinessValidationService businessValidationService,
-      ClientDao clientDao) {
+  public ClientRelationshipCoreService(final ClientRelationshipDao clientRelationshipDao,
+      BusinessValidationService businessValidationService, ClientDao clientDao) {
     super(clientRelationshipDao);
     this.businessValidationService = businessValidationService;
     this.clientDao = clientDao;
@@ -124,8 +125,8 @@ public class ClientRelationshipCoreService
           new ArrayList<>(findRelationshipsByRightSide(clientId));
       otherRelationshipsForThisClient.addAll(findRelationshipsByRightSide(clientId));
 
-      otherRelationshipsForThisClient.removeIf(
-          e -> e.getIdentifier().equals(awareDTO.getEntity().getIdentifier()));
+      otherRelationshipsForThisClient
+          .removeIf(e -> e.getIdentifier().equals(awareDTO.getEntity().getIdentifier()));
 
       awareDTO.getClientRelationshipList().addAll(otherRelationshipsForThisClient);
     }
@@ -133,10 +134,8 @@ public class ClientRelationshipCoreService
     @Override
     public void businessValidation(DataAccessBundle bundle, PerryAccount perryAccount)
         throws DroolsException {
-      businessValidationService.runBusinessValidation(
-          bundle.getAwareDto(),
-          PrincipalUtils.getPrincipal(),
-          ClientRelationshipDroolsConfiguration.INSTANCE);
+      businessValidationService.runBusinessValidation(bundle.getAwareDto(),
+          PrincipalUtils.getPrincipal(), ClientRelationshipDroolsConfiguration.INSTANCE);
     }
   }
 }

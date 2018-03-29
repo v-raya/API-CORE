@@ -30,10 +30,16 @@ public class ApiFileAssistant implements ApiMarker {
    * @throws IOException on file read error
    */
   public String readFile(String sourceFile) throws IOException {
-    final ByteArrayOutputStream out = new ByteArrayOutputStream();
-    IOUtils.copy(this.getClass().getResourceAsStream(sourceFile), out);
-    out.flush();
-    return out.toString();
+    String ret;
+    try (final ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+      IOUtils.copy(this.getClass().getResourceAsStream(sourceFile), out);
+      out.flush();
+      ret = out.toString();
+    } finally {
+      // auto-close.
+    }
+
+    return ret;
   }
 
   /**
