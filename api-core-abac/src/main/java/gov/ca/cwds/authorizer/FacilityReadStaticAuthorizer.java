@@ -7,7 +7,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.authz.permission.WildcardPermission;
 
 /**
- * Implementation of StaticAuthorizer
+ * Implementation of StaticAuthorizer.
  * @author CWDS TPT-2 Team
  */
 public class FacilityReadStaticAuthorizer implements StaticAuthorizer {
@@ -15,7 +15,7 @@ public class FacilityReadStaticAuthorizer implements StaticAuthorizer {
   public static final String FACILITY_READ_PERMISSION = "facility:read";
 
   /**
-   * Implementation of StaticAuthorizer
+   * Implementation of StaticAuthorizer.
    * @param perryAccount Perry Account
    * @param simpleAuthInfo Simple Authorization information
    */
