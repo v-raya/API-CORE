@@ -12,21 +12,30 @@ import org.junit.Test;
 /** @author CWDS TPT-3 Team */
 public class R08840Test extends BaseDocToolRulesChildClientRelationshipTest {
 
-  private static final String RULE_NAME = "R-08840-CT";
+  private static final String RULE_NAME = "R-08840";
 
   @Test
   public void testRelationshipTypeIsMatch() throws DroolsException {
-    enrichRelationshipWithMatchedType();
+    enrichRelationshipWithType((short) 190);
     businessValidationService.runDataProcessing(
         awareDTO, principal, ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
 
     assertEquals(awareDTO.isNeedMembershipVerification(), true);
   }
 
-  private void enrichRelationshipWithMatchedType() {
+  @Test
+  public void testRelationshipTypeIsNotMatch() throws DroolsException {
+    enrichRelationshipWithType((short) 191);
+    businessValidationService.runDataProcessing(
+        awareDTO, principal, ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
+
+    assertEquals(awareDTO.isNeedMembershipVerification(), false);
+  }
+
+  private void enrichRelationshipWithType(short type) {
     ClientRelationship entity = new ClientRelationship();
     ClientRelationshipType clientRelationshipType = new ClientRelationshipType();
-    clientRelationshipType.setSystemId((short) 190);
+    clientRelationshipType.setSystemId(type);
     entity.setType(clientRelationshipType);
     awareDTO.setEntity(entity);
   }

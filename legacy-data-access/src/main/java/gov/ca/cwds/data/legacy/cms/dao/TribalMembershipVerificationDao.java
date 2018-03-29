@@ -16,7 +16,7 @@ public class TribalMembershipVerificationDao extends BaseDaoImpl<TribalMembershi
     super(sessionFactory);
   }
 
-  public List<TribalMembershipVerification> findByClientIdNoTribalReferenced(String clientId) {
+  public List<TribalMembershipVerification> findParensByClientId(String clientId) {
     final List<TribalMembershipVerification> membershipVerifications =
         currentSession()
             .createNamedQuery(

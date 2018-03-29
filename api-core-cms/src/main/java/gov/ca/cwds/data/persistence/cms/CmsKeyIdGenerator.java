@@ -4,9 +4,15 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Calendar;
 import java.util.Date;
 
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -305,10 +311,46 @@ public final class CmsKeyIdGenerator {
     ret += (double) (cal.get(Calendar.MONTH)) * nSHIFT_MONTH;
     LOGGER.debug("MONTH:       {}", fmt.format(ret));
 
-    ret += (double) (cal.get(Calendar.YEAR) - 1900) * nSHIFT_YEAR;
+    ret = ret + (double) (cal.get(Calendar.YEAR) - 1900) * nSHIFT_YEAR;
     LOGGER.debug("YEAR:        {}", fmt.format(ret));
 
     return ret;
+  }
+
+  public static long doubleToTimestamp(double doubleTimestamp) {
+    long timestamp = 0;
+
+    Calendar cal = Calendar.getInstance();
+
+    long mseconds = (long) (doubleTimestamp/nSHIFT_HSECOND);
+    cal.set(Calendar.MILLISECOND, (int) (mseconds*10));
+    doubleTimestamp -= mseconds*nSHIFT_HSECOND;
+
+    long seconds = (long) (doubleTimestamp/nSHIFT_SECOND);
+    cal.set(Calendar.SECOND, (int) seconds);
+    doubleTimestamp -= seconds*nSHIFT_SECOND;
+
+    long min = (long) (doubleTimestamp/nSHIFT_MINUTE);
+    cal.set(Calendar.MINUTE, (int) min);
+    doubleTimestamp -= min*nSHIFT_MINUTE;
+
+    long hours = (long) (doubleTimestamp/nSHIFT_HOUR);
+    cal.set(Calendar.HOUR_OF_DAY, (int) hours);
+    doubleTimestamp -= hours*nSHIFT_HOUR;
+
+    long day = (long) (doubleTimestamp/nSHIFT_DAY);
+    cal.set(Calendar.DATE, (int) day);
+    doubleTimestamp -= day*nSHIFT_DAY;
+
+    long month = (long) (doubleTimestamp/nSHIFT_MONTH);
+    cal.set(Calendar.MONTH, (int) month);
+    doubleTimestamp -= month*nSHIFT_MONTH;
+
+    long year = (long) ((doubleTimestamp)/nSHIFT_YEAR);
+    cal.set(Calendar.YEAR, (int) year);
+    doubleTimestamp -= year*nSHIFT_YEAR;
+
+    return timestamp;
   }
 
   /**
@@ -365,7 +407,7 @@ public final class CmsKeyIdGenerator {
    * @param powers powers values of this base
    * @return double representation of the string
    */
-  protected double strToDouble(String src, int base, final BigDecimal[] powers) {
+  protected static double strToDouble(String src, int base, final BigDecimal[] powers) {
     double ret = 0;
     final int nLen = src.length();
     int power;
@@ -426,7 +468,7 @@ public final class CmsKeyIdGenerator {
    */
   protected static String makeKey(final StringKey wrap, final Date ts) {
     try {
-      ResourceParamValidator.<StringKey>validate(wrap);
+      ResourceParamValidator.validate(wrap);
       return createTimestampStr(ts).trim() + wrap.getValue();
     } catch (Exception e) {
       throw new ServiceException(e);
@@ -475,7 +517,23 @@ public final class CmsKeyIdGenerator {
     return buf.toString();
   }
 
+//  public static String getKeyFromUIIdentifier(String identifier) {
+//    // 0655-6172-8267-8039134
+//
+//  }
 
+  public static Date getDateFromKey(String key) {
+    if (StringUtils.isBlank(key)) {
+      return null;
+    }
+
+    final String tsB62 = key.substring(0, LEN_KEYTIMESTAMP);
+
+    double sdouble = strToDouble(tsB62, 62, POWER_BASE62);
+    Long timestamp = doubleToTimestamp(sdouble);
+    return new Date(timestamp);
+
+  }
 
 
 }

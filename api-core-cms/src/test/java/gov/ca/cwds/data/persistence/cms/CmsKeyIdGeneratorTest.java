@@ -4,12 +4,17 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -200,7 +205,7 @@ public final class CmsKeyIdGeneratorTest {
   public void testDecomposeKeyNull() {
     // Null staff id.
     KeyDetail kd = new KeyDetail();
-    // CmsKeyIdGenerator.decomposeKey(null, kd);
+//    CmsKeyIdGenerator.decomposeKey(null, kd);
     // assertTrue("Staff ID not empty", kd.staffId == null || "".equals(kd.staffId));
   }
 
@@ -215,17 +220,6 @@ public final class CmsKeyIdGeneratorTest {
     String actual = CmsKeyIdGenerator.createTimestampStr(ts);
     assertTrue("bad generated timestamp", RGX_LEGACY_TIMESTAMP.matcher(actual).matches());
   }
-
-  // public void createTimestampStr_Args__Date_T__ParseException() throws Exception {
-  // Date ts = mock(Date.class);
-  //
-  // try {
-  // target.createTimestampStr(ts);
-  // fail("Expected exception was not thrown!");
-  // } catch (ParseException e) {
-  // // then
-  // }
-  // }
 
   @Test
   public void createTimestampStr_Args__() throws Exception {
@@ -244,49 +238,6 @@ public final class CmsKeyIdGeneratorTest {
     assertThat(actual, is(not(0)));
   }
 
-  // public void doubleToStrN_Args__int__double__BigDecimalArray() throws Exception {
-  // final CmsKeyIdGenerator target = null;
-  // int dstLen = 0;
-  // double src = 0.0;
-  // BigDecimal[] powers = new BigDecimal[] {};
-  // String actual = target.doubleToStrN(dstLen, src, powers);
-  // String expected = null;
-  // assertThat(actual, is(equalTo(expected)));
-  // }
-
-  // @Test @Ignore
-  // public void strToDouble_Args__String__int__BigDecimalArray() throws Exception {
-  // final CmsKeyIdGenerator target = null;
-  //
-  // String src = null;
-  // int base = 0;
-  // BigDecimal[] powers = new BigDecimal[] {};
-  // double actual = target.strToDouble(src, base, powers);
-  // double expected = 0.0;
-  // assertThat(actual, is(equalTo(expected)));
-  // }
-
-  // @Test @Ignore
-  // public void getTimestampSeed_Args__Date() throws Exception {
-  //
-  //
-  // final Date ts = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2017-06-09 13:04:22");
-  // final Calendar actual = target.getTimestampSeed(ts);
-  // Calendar expected = null;
-  // assertThat(actual, is(equalTo(expected)));
-  // }
-
-  // @Test @Ignore
-  // public void getTimestampSeed_Args__Date_T__ParseException() throws Exception {
-  //
-  //
-  // Date ts = mock(Date.class);
-  // try {
-  // target.getTimestampSeed(ts);
-  // fail("Expected exception was not thrown!");
-  // } catch (ParseException e) {
-  // // then
-  // }
 
   @Test(expected = ServiceException.class)
   public void makeKey_Args__String__Date__null_staff() throws Exception {
@@ -316,6 +267,18 @@ public final class CmsKeyIdGeneratorTest {
     final String actual = CmsKeyIdGenerator.getUIIdentifierFromKey(key);
     final String expected = "0315-2076-8676-8002051";
     assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void testGetDateFromThirdId() throws Exception {
+    Date date = new Date(2000,11,22, 12,11,11);
+    String thirdId = CmsKeyIdGenerator.generate("OX5", date);
+    Date localDate = CmsKeyIdGenerator.getDateFromKey(thirdId);//("Cr0tFu2ABC");
+
+//    ZonedDateTime zdt = localDate.atZone(ZoneId.systemDefault());
+
+//    assertEquals(date.getTime(), zdt.toInstant().toEpochMilli());
+    assertEquals(date.getTime(), localDate.getTime());
   }
 
 }

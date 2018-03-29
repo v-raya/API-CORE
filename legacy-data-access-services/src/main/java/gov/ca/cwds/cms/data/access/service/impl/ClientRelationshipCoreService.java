@@ -18,6 +18,7 @@ import gov.ca.cwds.data.legacy.cms.dao.TribalMembershipVerificationDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification;
+import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.annotations.Authorize;
 
@@ -25,8 +26,10 @@ import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Service for create/update/find ClientRelationship with business validation and
@@ -112,6 +115,10 @@ public class ClientRelationshipCoreService
     public void dataProcessing(DataAccessBundle bundle, PerryAccount perryAccount)
         throws DroolsException {
       super.dataProcessing(bundle, perryAccount);
+      businessValidationService.runBusinessValidation(
+          bundle.getAwareDto(),
+          PrincipalUtils.getPrincipal(),
+          ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
     }
 
     @Override
@@ -153,7 +160,9 @@ public class ClientRelationshipCoreService
     }
 
     /**
-     * Rule-08840 If cboRelationship = 'Mother/Daughter (Birth)', 'Mother/Son (Birth)',
+     * Rule-08840
+     *
+     * If cboRelationship = 'Mother/Daughter (Birth)', 'Mother/Son (Birth)',
      * 'Mother/Daughter (Alleged)', OR 'Mother/Son (Alleged)', 'Mother/Daughter (Presumed)',
      * 'Mother/Son (Presumed)', 'Father/Daughter (Birth)', 'Father/Son (Birth)', 'Father/Daughter
      * (Alleged)', 'Father/Son (Alleged)', 'Father/Daughter (Presumed)' OR 'Father/Son (Presumed)',
@@ -167,13 +176,45 @@ public class ClientRelationshipCoreService
      * TRIBAL_MEMBERSHIP_VERIFICATION.Indian_Tribe_Type, .Fktrb_Orgt.
      */
     private void validateAndAddIfNeededTribalMembershipVerification(DataAccessBundle bundle) {
+
+      // get list tribal membership verifications
       ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
 
-      Client client = awareDTO.getEntity().getPrimaryClient();
-      String clientId = client.getIdentifier();
+      ParametersValidator.checkNotPersisted(awareDTO.getEntity().getPrimaryClient());
+      Client client = clientDao.find(awareDTO.getEntity().getPrimaryClient().getIdentifier());
 
       List<TribalMembershipVerification> tribalMembershipVerifications =
-          tribalMembershipVerificationDao.queryImmutableList(clientId);
+          tribalMembershipVerificationDao.findParensByClientId(client.getIdentifier());
+
+      // add extra rows for tribal verifications membership if needed
+      tribalMembershipVerifications.forEach(e -> addRowIfNeedForTribalMembershipVerifications(e, awareDTO));
+    }
+
+    private void addRowIfNeedForTribalMembershipVerifications(TribalMembershipVerification parentRow, ClientRelationshipAwareDTO awareDTO) {
+      if (StringUtils.isEmpty(parentRow.getFkFromTribalMembershipVerification())) {
+        createRowForTribalMembershipVerification(parentRow);
+      }
+    }
+
+    private void createRowForTribalMembershipVerification(TribalMembershipVerification parentRow) {
+      TribalMembershipVerification child = new TribalMembershipVerification();
+      LocalDate dateFromThirdId = extractDate(parentRow.getThirdId());
+      if (dateFromThirdId.isBefore(LocalDate.of(2005, Month.NOVEMBER , 19))) {
+
+      } else {
+        child.setFkFromTribalMembershipVerification(parentRow.getThirdId());
+        child.setFkSentTotribalOrganization(parentRow.getFkSentTotribalOrganization());
+        child.setIndianEnrollmentStatus(parentRow.getIndianEnrollmentStatus());
+        child.setIndianTribeType(parentRow.getIndianTribeType());
+        child.setThirdId(IdGenerator.generateId());
+        child.setClientId(parentRow.getClientId());
+        child.setLastUpdateId(PrincipalUtils.getStaffPersonId());
+        child.setLastUpdateTime(LocalDateTime.now());
+      }
+    }
+
+    private LocalDate extractDate(String thirdId) {
+      return null;//CmsKeyIdGenerator.getDateFromKey(thirdId).toLocalDate();
     }
   }
 }

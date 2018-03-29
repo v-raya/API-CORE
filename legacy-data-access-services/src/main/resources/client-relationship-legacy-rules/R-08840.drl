@@ -5,6 +5,7 @@ import java.util.Arrays;
 import gov.ca.cwds.rest.exception.IssueDetails
 import gov.ca.cwds.data.legacy.cms.entity.Client
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.ClientRelationshipType
 import gov.ca.cwds.cms.data.access.dto.ClientRelationshipAwareDTO;
 
 global java.util.Set validationDetailsList
@@ -43,12 +44,16 @@ rule "R-08840-CT"
       set isNeedMembershipVerification = true
       */
 
-//       $collection: ArrayList(Arrays.asList(, 192, 195, 196, 198, 204, 205, 207, 210, 211,
-//                                            213, 246, 247, 251, 252, 284, 285, 287,290, 291, 5620,
-//                                            6360, 6361));
        $relationshipEntityAwareDto: ClientRelationshipAwareDTO()
-//       $clientRelationship : ClientRelationship(type.systemId == 189 || type.systemId == 190) from $relationshipEntityAwareDto.entity
+       $clientRelationship : ClientRelationship() from $relationshipEntityAwareDto.entity
+       $relationshipType: ClientRelationshipType(systemId == 189
+                      || systemId == 190 || systemId == 251 || systemId == 192 || systemId == 252
+                      || systemId == 195 || systemId == 284 || systemId == 196 || systemId == 285
+                      || systemId == 198 || systemId == 287 || systemId == 204 || systemId == 290
+                      || systemId == 205 || systemId == 291 || systemId == 207 || systemId == 5620
+                      || systemId == 210 || systemId == 6360 || systemId == 211 || systemId == 6361
+                      || systemId == 213 || systemId == 190 || systemId == 246 || systemId == 247)
+                                              from $clientRelationship.type
   then
       $relationshipEntityAwareDto.setNeedMembershipVerification(true);
-      update($relationshipEntityAwareDto)
 end
