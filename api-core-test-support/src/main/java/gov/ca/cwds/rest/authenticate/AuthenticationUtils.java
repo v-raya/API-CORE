@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.authenticate;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -96,7 +97,8 @@ public class AuthenticationUtils {
         jsonFile = "/LoginUser/" + userType.getName() + ".json";
       }
       try {
-        userJson = new String(IOUtils.toByteArray(getClass().getResourceAsStream(jsonFile)));
+        userJson = new String(IOUtils.toByteArray(getClass().getResourceAsStream(jsonFile)),
+            StandardCharsets.UTF_8);
       } catch (IOException e) {
         LOGGER.error("Unable to parse the json into String {}", e);
       }
