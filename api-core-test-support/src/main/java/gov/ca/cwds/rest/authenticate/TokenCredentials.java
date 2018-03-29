@@ -3,6 +3,8 @@ package gov.ca.cwds.rest.authenticate;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
+ * This class provide all the values of the url's to get the token.
+ * 
  * @author CWDS TPT4 Team
  *
  */
@@ -30,6 +32,8 @@ public class TokenCredentials {
   private String authenticationMode;
 
   /**
+   * getBaseUrl.
+   * 
    * @return the baseUrl
    */
   public String getBaseUrl() {
@@ -37,6 +41,8 @@ public class TokenCredentials {
   }
 
   /**
+   * getPerryLoginUrl.
+   * 
    * @return the perryLoginUrl
    */
   public String getPerryLoginUrl() {
@@ -44,6 +50,8 @@ public class TokenCredentials {
   }
 
   /**
+   * getAuthLoginUrl.
+   * 
    * @return the authLoginUrl
    */
   public String getAuthLoginUrl() {
@@ -51,6 +59,8 @@ public class TokenCredentials {
   }
 
   /**
+   * getTokenUrl.
+   * 
    * @return the tokenUrl
    */
   public String getTokenUrl() {
@@ -58,6 +68,8 @@ public class TokenCredentials {
   }
 
   /**
+   * getCallBackUrl.
+   * 
    * @return the callBackUrl
    */
   public String getCallBackUrl() {
@@ -65,6 +77,8 @@ public class TokenCredentials {
   }
 
   /**
+   * getLogOutUrl.
+   * 
    * @return the logOutUrl
    */
   public String getLogOutUrl() {
@@ -72,6 +86,8 @@ public class TokenCredentials {
   }
 
   /**
+   * getAuthenticationMode.
+   * 
    * @return the authenticationMode
    */
   public String getAuthenticationMode() {
