@@ -13,6 +13,13 @@ public class FacilityReadStaticAuthorizer implements StaticAuthorizer {
 
   public static final String FACILITY_READ_PERMISSION = "facility:read";
 
+  /**
+   *
+   * Implementation of StaticAuthorizer
+   * 
+   * @param perryAccount
+   * @param simpleAuthInfo
+   */
   @Override
   public void authorize(PerryAccount perryAccount, SimpleAuthorizationInfo simpleAuthInfo) {
     if (perryAccount.getPrivileges().stream()
