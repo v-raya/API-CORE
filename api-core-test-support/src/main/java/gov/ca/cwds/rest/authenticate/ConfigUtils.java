@@ -23,7 +23,7 @@ public class ConfigUtils {
   public CWDSAuthenticationClientConfig getYamlValues() {
     try {
       cwdsAuthenticationClientConfig = mapper.readValue(
-          getClass().getResourceAsStream("/config.yml"), CWDSAuthenticationClientConfig.class);
+          getClass().getResourceAsStream("/testConfig.yml"), CWDSAuthenticationClientConfig.class);
     } catch (Exception e) {
       LOGGER.error("Unable to read the yml file {}", e);
     }
