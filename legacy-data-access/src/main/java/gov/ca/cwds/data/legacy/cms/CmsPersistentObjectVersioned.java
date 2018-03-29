@@ -3,6 +3,7 @@ package gov.ca.cwds.data.legacy.cms;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -41,7 +42,7 @@ public abstract class CmsPersistentObjectVersioned extends ApiObjectIdentity imp
    */
   @Version
   @Column(name = "LST_UPD_TS", nullable = false)
-  private LocalDateTime lastUpdatedTime;
+  private Timestamp lastUpdatedTime;
 
   /**
    * {@inheritDoc}
@@ -62,7 +63,7 @@ public abstract class CmsPersistentObjectVersioned extends ApiObjectIdentity imp
   /**
    * @return the time and date of the most recent update to an occurrence of this entity type.
    */
-  public LocalDateTime getLastUpdateTime() {
+  public Timestamp getLastUpdateTime() {
     return lastUpdatedTime;
   }
 
@@ -72,7 +73,7 @@ public abstract class CmsPersistentObjectVersioned extends ApiObjectIdentity imp
   }
 
   @SuppressWarnings("javadoc")
-  public void setLastUpdateTime(LocalDateTime lastUpdatedTime) {
+  public void setLastUpdateTime(Timestamp lastUpdatedTime) {
     this.lastUpdatedTime = lastUpdatedTime;
   }
 }
