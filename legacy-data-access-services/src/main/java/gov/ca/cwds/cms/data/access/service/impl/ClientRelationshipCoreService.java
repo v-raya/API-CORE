@@ -2,7 +2,13 @@ package gov.ca.cwds.cms.data.access.service.impl;
 
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT_ID;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.cms.data.access.dto.ClientRelationshipAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.DataAccessServiceBase;
@@ -18,17 +24,11 @@ import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.annotations.Authorize;
-
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Service for create/update/find ClientRelationship with business validation and
- *     data processing.
+ * Service for create/update/find ClientRelationship with business validation and data processing.
  *
  * @author CWDS TPT-3 Team
  */
@@ -41,6 +41,10 @@ public class ClientRelationshipCoreService
 
   /**
    * Constructor with injected services.
+   *
+   * @param clientRelationshipDao client relationship DAO
+   * @param businessValidationService business validator
+   * @param clientDao client DAO
    */
   @Inject
   public ClientRelationshipCoreService(
@@ -103,10 +107,12 @@ public class ClientRelationshipCoreService
 
     private void enrichWithPrimaryAndSecondaryClients(DataAccessBundle bundle) {
       ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
-      ParametersValidator.checkNotPersisted(awareDTO.getEntity().getPrimaryClient());
+      ParametersValidator.checkEntityId(
+          awareDTO.getEntity().getPrimaryClient(), awareDTO.getEntity().getClass().getName());
       Client primaryClient =
           clientDao.find(awareDTO.getEntity().getPrimaryClient().getPrimaryKey());
-      ParametersValidator.checkNotPersisted(awareDTO.getEntity().getSecondaryClient());
+      ParametersValidator.checkEntityId(
+          awareDTO.getEntity().getSecondaryClient(), awareDTO.getEntity().getClass().getName());
       Client secondaryClient =
           clientDao.find(awareDTO.getEntity().getSecondaryClient().getPrimaryKey());
       awareDTO.getEntity().setPrimaryClient(primaryClient);

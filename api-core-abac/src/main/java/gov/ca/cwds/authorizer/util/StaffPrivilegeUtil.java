@@ -13,6 +13,7 @@ import java.util.Set;
 public final class StaffPrivilegeUtil {
 
   public static final String CWS_CASE_MANAGEMENT_SYSTEM = "CWS Case Management System";
+  public static final String RESOURCE_MANAGEMENT = "Resource Management";
   public static final String STATE_OF_CALIFORNIA = "State of California";
   public static final String SENSITIVE_PERSONS = "Sensitive Persons";
   public static final String SEALED = "Sealed";

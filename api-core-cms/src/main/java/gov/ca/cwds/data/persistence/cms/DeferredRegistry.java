@@ -10,9 +10,7 @@ import gov.ca.cwds.inject.SystemCodeCache;
  * Store singleton, typed instances for easy retrieval. Useful where dependency injection into
  * short-lived beans is overly complicated or unwieldy.
  * 
- * <p>
  * <h3>Usage:</h3>
- * </p>
  * 
  * <p>
  * See {@link SystemCodeCache} for usage. An implementation calls {@code SystemCodeCache.register()}
@@ -20,9 +18,7 @@ import gov.ca.cwds.inject.SystemCodeCache;
  * {@code SystemCodeCache.global()} to retrieve the singleton instance.
  * </p>
  * 
- * <p>
  * <h3>Note on static generics:</h3>
- * </p>
  * 
  * <p>
  * Java Generics are <strong>NOT</strong> C++ templates. That is, Java does not compile a class type

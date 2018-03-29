@@ -218,6 +218,12 @@ public final class CmsKeyIdGenerator {
 
   /**
    * Generate next identifier with the given staff id.
+   * 
+   * <p>
+   * TODO: This approach does not scale. Implement the Iterator and/or interfaces instead. Lock on a
+   * unique staff id instead of blocking all users. Construct an object for a given staff id and
+   * generate keys.
+   * </p>
    *
    * @param staffId the staffId
    * @return the unique key from staffId
@@ -255,7 +261,6 @@ public final class CmsKeyIdGenerator {
    * </p>
    * 
    * @return CMS formatted timestamp
-   * @throws ParseException on parsing error
    */
   protected static String createTimestampStr() {
     double nTimestamp = 0;

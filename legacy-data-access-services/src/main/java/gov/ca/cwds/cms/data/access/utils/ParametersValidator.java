@@ -6,9 +6,7 @@ import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-/**
- * @author CWDS CALS API Team
- **/
+/** @author CWDS CALS API Team */
 public final class ParametersValidator {
 
   public static final String INSTANCE_MUST_NOT_BE_PERSISTED =
@@ -39,6 +37,13 @@ public final class ParametersValidator {
       String className =
           persistentObject == null ? "null" : persistentObject.getClass().getSimpleName();
       throw new IllegalStateException(String.format(INSTANCE_MUST_NOT_BE_PERSISTED, className));
+    }
+  }
+
+  public static void checkEntityId(PersistentObject persistentObject, String entityName) {
+    if (persistentObject == null
+        || StringUtils.isEmpty((String) persistentObject.getPrimaryKey())) {
+      throw new IllegalStateException(String.format(INSTANCE_MUST_NOT_BE_PERSISTED, entityName));
     }
   }
 }
