@@ -11,6 +11,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -271,14 +272,15 @@ public final class CmsKeyIdGeneratorTest {
 
   @Test
   public void testGetDateFromThirdId() throws Exception {
-    Date date = new Date(2000,11,22, 12,11,11);
-    String thirdId = CmsKeyIdGenerator.generate("OX5", date);
-    Date localDate = CmsKeyIdGenerator.getDateFromKey(thirdId);//("Cr0tFu2ABC");
+    SimpleDateFormat sdf =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
+    Date dateFromXtools = sdf.parse("2018-03-30 10:45:40:260" );
+    String thirdIdFromXTools = "83UiZBWABC";
+    String userIdFromXTools = "ABC";
 
-//    ZonedDateTime zdt = localDate.atZone(ZoneId.systemDefault());
-
-//    assertEquals(date.getTime(), zdt.toInstant().toEpochMilli());
-    assertEquals(date.getTime(), localDate.getTime());
+    String thirdId = CmsKeyIdGenerator.generate(userIdFromXTools, dateFromXtools);
+    assertEquals(thirdId, thirdIdFromXTools);
+    Date localDate = CmsKeyIdGenerator.getDateFromKey(thirdId);
+    assertEquals(dateFromXtools.getTime(), localDate.getTime());
   }
 
 }
