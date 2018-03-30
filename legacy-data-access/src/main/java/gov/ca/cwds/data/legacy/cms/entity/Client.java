@@ -1,6 +1,6 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
-import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.legacy.cms.CmsPersistentObjectVersioned;
 import gov.ca.cwds.data.legacy.cms.entity.converter.NullableBooleanConverter;
 import gov.ca.cwds.data.legacy.cms.entity.enums.AdoptionStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.DateOfBirthStatus;
@@ -72,7 +72,7 @@ import org.hibernate.annotations.Type;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "CLIENT_T")
-public class Client extends CmsPersistentObject implements IClient, PersistentObject {
+public class Client extends CmsPersistentObjectVersioned implements IClient, PersistentObject {
 
   private static final long serialVersionUID = 783532074047017463L;
 
