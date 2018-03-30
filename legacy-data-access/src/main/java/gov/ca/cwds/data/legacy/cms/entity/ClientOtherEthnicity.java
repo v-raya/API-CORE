@@ -22,7 +22,6 @@ public class ClientOtherEthnicity extends OtherEthnicity {
   @JoinColumn(
       name = "ESTBLSH_ID",
       referencedColumnName = "IDENTIFIER",
-      insertable = false,
       updatable = false,
       nullable = false
   )
