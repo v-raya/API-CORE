@@ -1,11 +1,9 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
-import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
-import gov.ca.cwds.data.legacy.cms.entity.enums.InterventionPlanType;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.HealthPlanTerminationType;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
@@ -17,20 +15,21 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
+import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.legacy.cms.entity.enums.InterventionPlanType;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.HealthPlanTerminationType;
+
 @SuppressWarnings({"squid:S3437", "squid:S2160"})
 @Entity
-@NamedQuery(
-  name = HealthInterventionPlan.FIND_ACTIVE_PLANS_BY_CLIENT_ID,
-  query =
-      "SELECT plan FROM gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan plan where plan.childClient.id =:"
-          + HealthInterventionPlan.PARAM_CLIENT_ID
-          + " and plan.endDate is null"
-)
+@NamedQuery(name = HealthInterventionPlan.FIND_ACTIVE_PLANS_BY_CLIENT_ID,
+    query = "SELECT plan FROM gov.ca.cwds.data.legacy.cms.entity.HealthInterventionPlan plan where plan.childClient.id =:"
+        + HealthInterventionPlan.PARAM_CLIENT_ID + " and plan.endDate is null")
 @Table(name = "HLTH_PLT")
 public class HealthInterventionPlan extends CmsPersistentObject {
 
@@ -40,27 +39,19 @@ public class HealthInterventionPlan extends CmsPersistentObject {
       "HealthInterventionPlan.findActivePlansByClientId";
   public static final String PARAM_CLIENT_ID = "reclientId";
 
-  @EmbeddedId private Id id = new Id();
+  @EmbeddedId
+  private Id id = new Id();
 
   @NotNull
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "FKCHLD_CLT",
-    referencedColumnName = "FKCLIENT_T",
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = "FKCHLD_CLT", referencedColumnName = "FKCLIENT_T", insertable = false,
+      updatable = false)
   private ChildClient childClient;
 
   @NotNull
-  @Column(
-    name = "THIRD_ID",
-    nullable = false,
-    length = CMS_ID_LEN,
-    insertable = false,
-    updatable = false
-  )
+  @Column(name = "THIRD_ID", nullable = false, length = CMS_ID_LEN, insertable = false,
+      updatable = false)
   private String thirdId;
 
   @NotNull
@@ -88,14 +79,15 @@ public class HealthInterventionPlan extends CmsPersistentObject {
   private LocalDate endDate;
 
   /**
-   * MEDICAL_NECESSITY_DATE - The date the Childs mental health needs were determined to be a Medical Necessity.
+   * MEDICAL_NECESSITY_DATE -- The date the Childs mental health needs were determined to be a
+   * Medical Necessity.
    */
   @Column(name = "MEDNCST_DT")
   private LocalDate medicalNecessityDate;
 
   /**
-   * MEDICAL_NECESSITY_CODE - Indicates whether a Child’s Mental Health needs meet the definition of medical necessity.
-   * Yes (Y) or No (N) or Unknown (U).
+   * MEDICAL_NECESSITY_CODE -- Indicates whether a Child's Mental Health needs meet the definition
+   * of medical necessity. Yes (Y) or No (N) or Unknown (U).
    */
   @Column(name = "MEDNCST_CD", length = 1, nullable = false)
   private String medicalNecessityCode;

@@ -18,7 +18,6 @@ import gov.ca.cwds.inject.CmsSessionFactory;
 /**
  * @author CWDS CALS API Team
  */
-
 public class SsaName3Dao {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SsaName3Dao.class);
@@ -34,18 +33,7 @@ public class SsaName3Dao {
    * Call DB2 stored procedure SPSSANAME3 to insert soundex records for client search. Story
    * #146481759.
    *
-   * @param parameterObject table name
-   * @param crudOper CRUD operation (I/U/D)
-   * @param identifier legacy identifier
-   * @param nameCd name code
-   * @param firstName first name
-   * @param middleName middle name
-   * @param lastName last name
-   * @param streettNumber street number
-   * @param streetName street name
-   * @param gvrEntc government entity code
-   * @param updateTimeStamp update timestamp
-   * @param updateId updated by user id
+   * @param parameterObject stored procedure parameters
    */
   public void callStoredProc(SsaName3ParameterObject parameterObject) {
     Session session = sessionFactory.getCurrentSession();
@@ -122,6 +110,5 @@ public class SsaName3Dao {
       throw new DaoException("Call to Stored Procedure failed - " + h, h);
     }
   }
-
 
 }

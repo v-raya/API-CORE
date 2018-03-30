@@ -402,7 +402,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   private List<ElasticSearchSystemCode> clientCounties;
 
   @JsonProperty("race_ethnicity")
-  private ElasticSearchRaceAndEthnicity cleintRace;
+  private ElasticSearchRaceAndEthnicity clientRace;
 
   @JsonProperty("source")
   private transient String source;
@@ -961,7 +961,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     return autocompleteSearchBar;
   }
 
-
   /**
    * Getter for "date of birth as text.
    *
@@ -976,7 +975,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     }
     return dobAsText;
   }
-
 
   /**
    * Getter for searchable date of birth.
@@ -1204,7 +1202,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     }
     return names;
   }
-
 
   private Set<String> getDobValues(String dateOfBirth) {
     Set<String> dobValues = new HashSet<>();
@@ -1479,16 +1476,16 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @return The client race
    */
-  public ElasticSearchRaceAndEthnicity getCleintRace() {
-    return cleintRace;
+  public ElasticSearchRaceAndEthnicity getClientRace() {
+    return clientRace;
   }
 
   /**
    * Set client race
    * 
-   * @param cleintRace The client race
+   * @param clientRace The client race
    */
-  public void setCleintRace(ElasticSearchRaceAndEthnicity cleintRace) {
-    this.cleintRace = cleintRace;
+  public void setCleintRace(ElasticSearchRaceAndEthnicity clientRace) {
+    this.clientRace = clientRace;
   }
 }
