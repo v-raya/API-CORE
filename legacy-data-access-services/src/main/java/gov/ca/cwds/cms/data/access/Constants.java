@@ -20,6 +20,10 @@ public final class Constants {
     private PhoneticSearchTables() {}
   }
 
+  public static class ClientUcSourceTableCode {
+    public static final String OTHER_CLIENT_NAME = "N";
+  }
+
   public static class PhoneticPrimaryNameCode {
     public static final String OTHER_CLIENT_NAME = "N";
     public static final String PLACEMENT_HOME_ADDRESS = "P";
