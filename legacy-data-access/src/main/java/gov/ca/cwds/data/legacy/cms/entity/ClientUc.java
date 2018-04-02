@@ -4,6 +4,7 @@ import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Objects;
@@ -50,6 +51,7 @@ public class ClientUc extends CmsPersistentObject {
   /*
   SOURCE_TABLE_ID - The logical foreign key representing the ID from the entity which contains the complete client
   name for which the uppercase client name was defined (e.g., the ID from the CLIENT entity). */
+  @Id
   @Column(name = "PKTBL_ID", nullable = false, length = 10)
   private String sourceTableId;
 
@@ -120,6 +122,6 @@ public class ClientUc extends CmsPersistentObject {
 
   @Override
   public Serializable getPrimaryKey() {
-    return null;
+    return getSourceTableId();
   }
 }
