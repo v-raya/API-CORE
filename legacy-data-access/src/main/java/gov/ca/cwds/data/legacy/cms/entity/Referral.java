@@ -25,8 +25,10 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
 
-/** Referral entity with related named queries;
- *  @author CWDS TPT-3 Team
+/**
+ * Referral entity with related named queries;
+ *
+ * @author CWDS TPT-3 Team
  */
 @Entity
 @Table(name = "REFERL_T")
