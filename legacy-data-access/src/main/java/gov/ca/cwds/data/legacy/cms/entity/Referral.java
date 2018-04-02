@@ -25,47 +25,50 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
 
-/** @author CWDS TPT-3 Team */
+/**
+ * Referral entity with related named queries.
+ *
+ * @author CWDS TPT-3 Team
+ */
 @Entity
 @Table(name = "REFERL_T")
 @NamedQueries({
-  @NamedQuery(
-    name = Referral.FIND_ACTIVE_BY_STAFF_ID,
-    query =
-        "select distinct assignment.referral from gov.ca.cwds.data.legacy.cms.entity.CaseLoad cl"
-            + " left join cl.referralAssignments assignment"
-            + " where cl.caseLoadWeighting.fkstfperst = :"
-            + Referral.PARAM_STAFF_ID
-            + " and assignment.startDate < :"
-            + Referral.PARAM_ACTIVE_DATE
-            + " and (assignment.endDate is null or assignment.endDate > :"
-            + Referral.PARAM_ACTIVE_DATE
-            + ")"
-            + " and assignment.referral.originalClosureDate is null"
-  ),
-  @NamedQuery(
-    name = Referral.FIND_ACTIVE_BY_CLIENT,
-    query =
-        "SELECT DISTINCT rclient.referral from gov.ca.cwds.data.legacy.cms.entity.ReferralClient rclient"
-            + "  left join rclient.referral where rclient.client.identifier = :"
-            + Referral.PARAM_CLIENT_ID
-            + " and rclient.referral.closureDate is null"
-  ),
-  @NamedQuery(
-    name = Referral.FIND_CLOSED_BY_CLIENT,
-    query =
-        "SELECT DISTINCT rclient.referral from gov.ca.cwds.data.legacy.cms.entity.ReferralClient rclient"
-            + "  left join Referral referral where rclient.client.identifier = :"
-            + Referral.PARAM_CLIENT_ID
-            + " and rclient.referral.closureDate is not null"
-  ),
-  @NamedQuery(
-    name = Referral.FIND_BY_CLIENT,
-    query =
-        "SELECT DISTINCT rclient.referral from gov.ca.cwds.data.legacy.cms.entity.ReferralClient rclient"
-            + "  left join rclient.referral where rclient.client.identifier = :"
-            + Referral.PARAM_CLIENT_ID
-  )
+    @NamedQuery(
+        name = Referral.FIND_ACTIVE_BY_STAFF_ID,
+        query =
+            "select distinct assignment.referral from gov.ca.cwds.data.legacy.cms.entity.CaseLoad cl"
+                + " left join cl.referralAssignments assignment"
+                + " where cl.caseLoadWeighting.fkstfperst = :"
+                + Referral.PARAM_STAFF_ID
+                + " and assignment.startDate < :"
+                + Referral.PARAM_ACTIVE_DATE
+                + " and (assignment.endDate is null or assignment.endDate > :"
+                + Referral.PARAM_ACTIVE_DATE
+                + ")"
+                + " and assignment.referral.originalClosureDate is null"
+    ),
+    @NamedQuery(
+        name = Referral.FIND_ACTIVE_BY_CLIENT,
+        query =
+            "SELECT DISTINCT rclient.referral from gov.ca.cwds.data.legacy.cms.entity.ReferralClient rclient"
+                + "  left join rclient.referral where rclient.client.identifier = :"
+                + Referral.PARAM_CLIENT_ID
+                + " and rclient.referral.closureDate is null"
+    ),
+    @NamedQuery(
+        name = Referral.FIND_CLOSED_BY_CLIENT,
+        query =
+            "SELECT DISTINCT rclient.referral from gov.ca.cwds.data.legacy.cms.entity.ReferralClient rclient"
+                + "  left join Referral referral where rclient.client.identifier = :"
+                + Referral.PARAM_CLIENT_ID
+                + " and rclient.referral.closureDate is not null"
+    ),
+    @NamedQuery(
+        name = Referral.FIND_BY_CLIENT,
+        query =
+            "SELECT DISTINCT r.referral FROM gov.ca.cwds.data.legacy.cms.entity.ReferralClient r LEFT JOIN r.referral WHERE r.client.identifier=:"
+                + Referral.PARAM_CLIENT_ID
+    )
 })
 @SuppressWarnings("squid:S3437")
 public class Referral extends CmsPersistentObject {
