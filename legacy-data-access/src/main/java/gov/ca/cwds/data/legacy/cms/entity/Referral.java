@@ -66,7 +66,7 @@ import org.hibernate.annotations.Type;
     @NamedQuery(
         name = Referral.FIND_BY_CLIENT,
         query =
-            "SELECT DISTINCT r.referral FROM ReferralClient r LEFT JOIN r.referral WHERE r.client.identifier=:clientId"
+            "SELECT DISTINCT r.referral FROM gov.ca.cwds.data.legacy.cms.entity.ReferralClient r LEFT JOIN r.referral WHERE r.client.identifier=:clientId"
     )
 })
 @SuppressWarnings("squid:S3437")
