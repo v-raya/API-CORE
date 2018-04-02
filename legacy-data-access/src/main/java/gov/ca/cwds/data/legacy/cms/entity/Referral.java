@@ -26,7 +26,7 @@ import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
 
 /**
- * Referral entity with related named queries;
+ * Referral entity with related named queries.
  *
  * @author CWDS TPT-3 Team
  */
