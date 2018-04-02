@@ -13,45 +13,57 @@ public enum LegacyTable {
   // CHECKSTYLE:OFF
   //
 
+  ADULT_IN_PLACEMENT_HOME("OTH_ADLT", "Adult in placement home"),
+
+  ADDRESS("ADDRS_T", "Address"),
+
+  ADDRESS_PHONETIC("ADR_PHTT", "Address Phonetic"),
+
+  ALLEGATION("ALLGTN_T", "Allegation"),
+
+  ALIAS_OR_OTHER_CLIENT_NAME("OCL_NM_T", "Alias or other client name"),
+
+  ASSIGNMENT("ASGNM_T", "Assignment"),
+
+  ATTORNEY("ATTRNY_T", "Attorney"),
+
+  CASE("CASE_T", "Case"),
+
   CLIENT("CLIENT_T", "Client"),
 
+  CLIENT_ADDRESS("CL_ADDRT", "Client Address"),
+
+  CLINET_PHONETIC("CLT_PHTT", "Client Phonetic"),
+
+  CROSS_REPORT("CRSS_RPT", "Cross Report"),
+
   COLLATERAL_INDIVIDUAL("COLTRL_T", "Collateral individual"),
+
+  CLIENT_RELATIONSHIP("CLN_RELT", "Client Relationship"),
+
+  CHILD_IN_PLACEMENT_HOME("OTH_KIDT", "Child in placement home"),
 
   DELIVERED_SERVICE("DL_SVC_T", "Delivered Service"),
 
   EDUCATION_PROVIDER("EDPRVCNT", "Education provider"),
 
-  ATTORNEY("ATTRNY_T", "Attorney"),
+  GOVERNMENT_ORGANIZATION_ENTITY("GVR_ENTC", "Government Organization Entity"),
 
-  CLIENT_RELATIONSHIP("CLN_RELT", "Client Relationship"),
-
-  ADULT_IN_PLACEMENT_HOME("OTH_ADLT", "Adult in placement home"),
-
-  CHILD_IN_PLACEMENT_HOME("OTH_KIDT", "Child in placement home"),
-
-  ALIAS_OR_OTHER_CLIENT_NAME("OCL_NM_T", "Alias or other client name"),
+  REFERRAL("REFERL_T", "Referral"),
 
   REPORTER("REPTR_T", "Reporter"),
+
+  REFERRAL_CLIENT("REFR_CLT", "Referral Client"),
 
   SERVICE_PROVIDER("SVC_PVRT", "Service provider"),
 
   SUBSTITUTE_CARE_PROVIDER("SB_PVDRT", "Substitute care provider"),
 
-  CASE("CASE_T", "Case"),
+  SUBSTITUTE_CARE_PROVIDER_PHONETIC("SCP_PHTT", "Substitute care provider phonetic"),
 
   STAFF_PERSON("STFPERST", "Staff"),
 
-  REFERRAL("REFERL_T", "Referral"),
-
-  ALLEGATION("ALLGTN_T", "Allegation"),
-
-  ADDRESS("ADDRS_T", "Address"),
-
-  SAFETY_ALERT("SAF_ALRT", "Safety Alert"),
-
-  REFERRAL_CLIENT("REFR_CLT", "Referral Client"),
-
-  CLIENT_ADDRESS("CL_ADDRT", "Client Address");
+  SAFETY_ALERT("SAF_ALRT", "Safety Alert");
 
   //
   // CHECKSTYLE:ON
