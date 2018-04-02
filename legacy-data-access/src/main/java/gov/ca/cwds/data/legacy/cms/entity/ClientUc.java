@@ -1,18 +1,16 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
- * @author TPT3 team
- *     The converted (uppercase) Common or Other Name of the Client or Archived Client to be used
- *     for Client Search.
+ * @author TPT3 team The converted (uppercase) Common or Other Name of the Client or Archived Client
+ *     to be used for Client Search.
  */
 @Entity
 @Table(name = "CLINT_UC")
@@ -97,12 +95,27 @@ public class ClientUc extends CmsPersistentObject {
 
   @Override
   public boolean equals(Object o) {
-    return EqualsBuilder.reflectionEquals(this, o);
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    if (!super.equals(o)) return false;
+    ClientUc clientUc = (ClientUc) o;
+    return Objects.equals(commonFirstName, clientUc.commonFirstName)
+        && Objects.equals(commonLastName, clientUc.commonLastName)
+        && Objects.equals(commonMiddleName, clientUc.commonMiddleName)
+        && Objects.equals(sourceTableCode, clientUc.sourceTableCode)
+        && Objects.equals(sourceTableId, clientUc.sourceTableId);
   }
 
   @Override
   public int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this);
+
+    return Objects.hash(
+        super.hashCode(),
+        commonFirstName,
+        commonLastName,
+        commonMiddleName,
+        sourceTableCode,
+        sourceTableId);
   }
 
   @Override
