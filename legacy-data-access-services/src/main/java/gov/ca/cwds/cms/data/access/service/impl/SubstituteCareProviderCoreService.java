@@ -1,5 +1,6 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
+import static gov.ca.cwds.cms.data.access.Constants.SsaName3StoredProcedureCrudOperationCode.INSERT_OPERATION_CODE;
 import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
 import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
 import static org.apache.commons.lang3.StringUtils.upperCase;
@@ -218,7 +219,7 @@ public class SubstituteCareProviderCoreService
       SubstituteCareProvider substituteCareProvider) {
     SsaName3ParameterObject parameterObject = new SsaName3ParameterObject();
     parameterObject.setTableName(PhoneticSearchTables.SCP_PHTT);
-    parameterObject.setCrudOper("I");
+    parameterObject.setCrudOper(INSERT_OPERATION_CODE);
     parameterObject.setIdentifier(substituteCareProvider.getIdentifier());
     parameterObject.setFirstName(substituteCareProvider.getFirstNm());
     parameterObject.setMiddleName(substituteCareProvider.getMidIniNm());

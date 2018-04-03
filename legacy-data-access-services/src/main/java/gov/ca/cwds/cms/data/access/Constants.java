@@ -26,11 +26,13 @@ public final class Constants {
 
   public static class PhoneticPrimaryNameCode {
     public static final String OTHER_CLIENT_NAME = "N";
+    public static final String CLIENT_NAME = "C";
     public static final String PLACEMENT_HOME_ADDRESS = "P";
   }
 
   public static class SsaName3StoredProcedureCrudOperationCode {
     public static final String INSERT_OPERATION_CODE = "I";
+    public static final String UPDATE_OPERATION_CODE = "U";
   }
 
   public static class StaffPersonPrivileges {

@@ -1,19 +1,7 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
-import static gov.ca.cwds.authorizer.ClientResultReadAuthorizer.CLIENT_RESULT_READ_OBJECT;
-import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
-
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.hibernate.Hibernate;
-
 import com.google.inject.Inject;
-
+import gov.ca.cwds.cms.data.access.Constants;
 import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.OtherClientNameDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
@@ -32,6 +20,8 @@ import gov.ca.cwds.data.legacy.cms.dao.NameTypeDao;
 import gov.ca.cwds.data.legacy.cms.dao.NearFatalityDao;
 import gov.ca.cwds.data.legacy.cms.dao.PlacementEpisodeDao;
 import gov.ca.cwds.data.legacy.cms.dao.SafetyAlertDao;
+import gov.ca.cwds.data.legacy.cms.dao.SsaName3Dao;
+import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import gov.ca.cwds.data.legacy.cms.entity.ClientServiceProvider;
@@ -44,35 +34,35 @@ import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
+import org.hibernate.Hibernate;
 
-/**
- * @author CWDS TPT-3 Team
- */
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static gov.ca.cwds.authorizer.ClientResultReadAuthorizer.CLIENT_RESULT_READ_OBJECT;
+import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
+
+/** @author CWDS TPT-3 Team */
 public class ClientCoreService
     extends DataAccessServiceBase<ClientDao, Client, ClientEntityAwareDTO> {
 
-  @Inject
-  private ClientDao clientDao;
-  @Inject
-  private DeliveredServiceDao deliveredServiceDao;
-  @Inject
-  private NameTypeDao nameTypeDao;
-  @Inject
-  private SafetyAlertDao safetyAlertDao;
-  @Inject
-  private DasHistoryDao dasHistoryDao;
-  @Inject
-  private NearFatalityDao nearFatalityDao;
-  @Inject
-  private PlacementEpisodeDao placementEpisodeDao;
-  @Inject
-  private OtherClientNameService otherClientNameService;
-  @Inject
-  private ClientServiceProviderDao clientServiceProviderDao;
-  @Inject
-  private ClientRelationshipDao clientRelationshipDao;
-  @Inject
-  private BusinessValidationService businessValidationService;
+  @Inject private ClientDao clientDao;
+  @Inject private DeliveredServiceDao deliveredServiceDao;
+  @Inject private NameTypeDao nameTypeDao;
+  @Inject private SafetyAlertDao safetyAlertDao;
+  @Inject private DasHistoryDao dasHistoryDao;
+  @Inject private NearFatalityDao nearFatalityDao;
+  @Inject private PlacementEpisodeDao placementEpisodeDao;
+  @Inject private OtherClientNameService otherClientNameService;
+  @Inject private ClientServiceProviderDao clientServiceProviderDao;
+  @Inject private ClientRelationshipDao clientRelationshipDao;
+  @Inject private BusinessValidationService businessValidationService;
+  @Inject private SsaName3Dao ssaName3Dao;
 
   @Override
   public Client create(ClientEntityAwareDTO entityAwareDTO) throws DataAccessServicesException {
@@ -117,7 +107,6 @@ public class ClientCoreService
     Stream<Client> clients = crudDao.streamByFacilityId(facilityId);
     return clients.collect(Collectors.toList());
   }
-
 
   @Override
   protected DataAccessServiceLifecycle getUpdateLifeCycle() {
@@ -184,16 +173,39 @@ public class ClientCoreService
     @Override
     public void businessValidation(DataAccessBundle bundle, PerryAccount perryAccount)
         throws DroolsException {
-      businessValidationService.runBusinessValidation(bundle.getAwareDto(),
-          PrincipalUtils.getPrincipal(), ClientDroolsConfiguration.INSTANCE);
+      businessValidationService.runBusinessValidation(
+          bundle.getAwareDto(), PrincipalUtils.getPrincipal(), ClientDroolsConfiguration.INSTANCE);
     }
 
     @Override
-    public void afterStore(DataAccessBundle bundle) throws DataAccessServicesException {
-      OtherClientNameDTO otherClientName =
-          ((ClientEntityAwareDTO) bundle.getAwareDto()).getOtherClientName();
+    public void afterStore(DataAccessBundle bundle) {
+      ClientEntityAwareDTO clientEntityAwareDTO = (ClientEntityAwareDTO) bundle.getAwareDto();
+      createOtherNameIfNeeded(clientEntityAwareDTO);
+      updatePhoneticNameIfNeeded(clientEntityAwareDTO);
+    }
+
+    private void createOtherNameIfNeeded(ClientEntityAwareDTO clientEntityAwareDTO) {
+      OtherClientNameDTO otherClientName = clientEntityAwareDTO.getOtherClientName();
       if (otherClientName != null) {
         otherClientNameService.createOtherClientName(otherClientName);
+      }
+    }
+
+    private void updatePhoneticNameIfNeeded(ClientEntityAwareDTO clientEntityAwareDTO) {
+      if (clientEntityAwareDTO.isUpdateClientPhoneticName()) {
+        Client client = clientEntityAwareDTO.getEntity();
+        SsaName3ParameterObject parameterObject = new SsaName3ParameterObject();
+        parameterObject.setTableName(Constants.PhoneticSearchTables.CLT_PHNT);
+        parameterObject.setCrudOper(
+            Constants.SsaName3StoredProcedureCrudOperationCode.UPDATE_OPERATION_CODE);
+        parameterObject.setNameCd(Constants.PhoneticPrimaryNameCode.CLIENT_NAME);
+        parameterObject.setIdentifier(client.getIdentifier());
+        parameterObject.setFirstName(client.getCommonFirstName());
+        parameterObject.setLastName(client.getCommonLastName());
+        parameterObject.setMiddleName(client.getCommonMiddleName());
+        parameterObject.setUpdateTimeStamp(new Date());
+        parameterObject.setUpdateId(client.getLastUpdateId());
+        ssaName3Dao.callStoredProc(parameterObject);
       }
     }
   }
