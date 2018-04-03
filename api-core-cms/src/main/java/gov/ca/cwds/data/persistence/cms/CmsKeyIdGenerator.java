@@ -305,6 +305,11 @@ public final class CmsKeyIdGenerator {
     return ret;
   }
 
+  /**
+   *
+   * @param doubleTimestamp date decoded from Base62 to double
+   * @return date
+   */
   public static long doubleToTimestamp(double doubleTimestamp) {
 
     Calendar cal = Calendar.getInstance();
@@ -508,6 +513,11 @@ public final class CmsKeyIdGenerator {
     return buf.toString();
   }
 
+  /**
+   *
+   * @param key - Third Id
+   * @return date extracted from third id
+   */
   public static Date getDateFromKey(String key) {
     if (StringUtils.isBlank(key) || key.length() < LEN_KEYTIMESTAMP) {
       return null;
