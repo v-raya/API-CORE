@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.authenticate;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import gov.ca.cwds.authenticate.config.SocialWorkerOnly;
+import gov.ca.cwds.authenticate.config.TokenCredentials;
 
 /**
  * Get the values of the token credentials.
@@ -10,8 +11,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class CWDSAuthenticationClientConfig {
 
-  @JsonProperty
+  private String authenticationMode;
   private TokenCredentials tokenCredentials;
+  private SocialWorkerOnly socialWorkerOnly;
+
+  public String getAuthenticationMode() {
+    return authenticationMode;
+  }
+
+  public void setAuthenticationMode(String authenticationMode) {
+    this.authenticationMode = authenticationMode;
+  }
 
   /**
    * @return the tokenCredentials
@@ -20,5 +30,19 @@ public class CWDSAuthenticationClientConfig {
     return tokenCredentials;
   }
 
-}
+  /**
+   * @param tokenCredentials - tokenCredentials
+   */
+  public void setTokenCredentials(TokenCredentials tokenCredentials) {
+    this.tokenCredentials = tokenCredentials;
+  }
 
+  public SocialWorkerOnly getSocialWorkerOnly() {
+    return socialWorkerOnly;
+  }
+
+  public void setSocialWorkerOnly(SocialWorkerOnly socialWorkerOnly) {
+    this.socialWorkerOnly = socialWorkerOnly;
+  }
+
+}

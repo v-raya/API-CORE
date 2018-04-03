@@ -1,10 +1,14 @@
 #applicationName: CWDS API FUNCTIONAL TESTING
 
+authenticationMode: TEST
 tokenCredentials:
-   baseUrl: Adarsh
-   perryLoginUrl: ${PERRY_LOGIN_URL:-}
-   authLoginUrl: ${AUTH_LOGIN_URL:-}
-   tokenUrl: ${TOKEN_URL:-}
-   callBackUrl: ${CALL_BACK_URL:-}
+   authenticationBaseUrl: ${BASE_URL:-https://sectest.dss.ca.gov}
+   perryLoginUrl: ${PERRY_LOGIN_URL:-https://web.preint.cwds.io/perry/login}
+   authLoginUrl: ${AUTH_LOGIN_URL:-https://web.preint.cwds.io/perry/authn/login}
+   tokenUrl: ${TOKEN_URL:-https://web.preint.cwds.io/perry/authn/token}
+   callBackUrl: ${CALL_BACK_URL:-https://ferbapi.preint.cwds.io/swagger}
    logOutUrl: ${LOG_OUT_URL:-}
-   authenticationMode: TEST       
+
+socialWorkerOnly:
+   username: ${USERNAME:-TESTPA}
+   password: ${PASSWORD:-CWS1kids}

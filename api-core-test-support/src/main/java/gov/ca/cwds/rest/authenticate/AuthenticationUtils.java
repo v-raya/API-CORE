@@ -31,7 +31,7 @@ public class AuthenticationUtils {
   public String getToken(UserGroup userType) {
 
     if (userType != null) {
-      String loginType = configUtils.getYamlValues().getTokenCredentials().getAuthenticationMode();
+      String loginType = configUtils.getYamlValues().getAuthenticationMode();
       switch (userType) {
         case SOCIAL_WORKER:
           return getSocialWorkerToken(loginType, userType);
