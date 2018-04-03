@@ -13,13 +13,14 @@ rule "R-10841"
         Code: R - 10841
 
         Rule text:
-          Once the client has been saved to the database, if the last name changes create an OTHER_CLIENT_NAME
-          row from the exsisting client name with a Name Type of AKA.  The new name that is keyed will stay on
-          the client record.
+          When a Client first, middle or last name field or Other Names first, middle or last name field is added,
+          modified, or deleted, make the appropriate update to the corresponding Client Phonetic rows.
 
         Logic:
-          If oldCLIENT.COMMON_LAST_NAME != newCLIENT.COMMON_LAST_NAME create OTHER_CLIENT_NAME
-          from oldCLIENT.COMMON_FIRST_NAME, COMMON_LAST_NAME, COMMON_MIDDLE_NAMEwhere NAME_TYPE = 'AKA'.
+          If adding, modifying, or deleting CLIENT.Common_First_Name, .Common_Middle_Name or .Common_Last_Name or
+          OTHER_CLIENT_NAME.First_Name, .Middle_Name or .Last_Name, then add, modify, or delete corresponding
+          CLIENT_PHONETIC_NAME and CLIENT_PHONETIC_NAME2 rows.
+
 
       */
   when
