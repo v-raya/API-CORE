@@ -14,6 +14,8 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.ca.cwds.authenticate.config.ConfigUtils;
+
 /**
  * 
  * This class is used to generate the token using json for Perry dev mode, and handles all the

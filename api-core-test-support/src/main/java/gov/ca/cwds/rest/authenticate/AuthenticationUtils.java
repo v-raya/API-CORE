@@ -7,6 +7,8 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.ca.cwds.authenticate.config.ConfigUtils;
+
 /**
  * @author CWDS TPT-4 Team
  *

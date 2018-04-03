@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.authenticate;
+package gov.ca.cwds.authenticate.config;
 
 import java.io.IOException;
 import java.io.InputStream;
