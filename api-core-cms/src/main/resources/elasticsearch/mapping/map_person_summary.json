@@ -14,11 +14,31 @@
     },
     "first_name": {
       "type": "text",
-      "store": true
+      "store": true,
+      "fields": {
+            "phonetic": {
+              "type": "text",
+              "analyzer": "dbl_metaphone"
+            },
+            "diminutive": {
+              "type": "text",
+              "analyzer": "names_synonyms"
+            }
+          }
     },
     "last_name": {
       "type": "text",
-      "store": true
+      "store": true,
+      "fields": {
+            "phonetic": {
+              "type": "text",
+              "analyzer": "dbl_metaphone"
+            },
+            "diminutive": {
+              "type": "text",
+              "analyzer": "names_synonyms"
+            }
+          }
     },
     "middle_name": {
       "type": "text",
@@ -61,7 +81,17 @@
       "type": "text",
       "store": true,
       "analyzer": "autocomplete",
-      "search_analyzer": "standard"
+      "search_analyzer": "standard",
+      "fields": {
+            "phonetic": {
+              "type": "text",
+              "analyzer": "dbl_metaphone"
+            },
+            "diminutive": {
+              "type": "text",
+              "analyzer": "names_synonyms"
+            }
+          }
     },
     "sensitivity_indicator": {
       "type": "text",

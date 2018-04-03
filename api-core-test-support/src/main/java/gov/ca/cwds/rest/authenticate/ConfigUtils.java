@@ -1,7 +1,5 @@
 package gov.ca.cwds.rest.authenticate;
 
-import java.io.File;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,12 +22,13 @@ public class ConfigUtils {
    */
   public CWDSAuthenticationClientConfig getYamlValues() {
     try {
-      cwdsAuthenticationClientConfig =
-          mapper.readValue(new File("config/config.yml"), CWDSAuthenticationClientConfig.class);
+      cwdsAuthenticationClientConfig = mapper.readValue(
+          getClass().getResourceAsStream("/testConfig.yml"), CWDSAuthenticationClientConfig.class);
     } catch (Exception e) {
       LOGGER.error("Unable to read the yml file {}", e);
     }
     return cwdsAuthenticationClientConfig;
+
   }
 
 }

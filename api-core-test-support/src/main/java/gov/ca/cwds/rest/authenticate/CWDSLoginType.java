@@ -6,6 +6,8 @@ package gov.ca.cwds.rest.authenticate;
  */
 public class CWDSLoginType {
 
+  private static final int PASSWORD_FIELD = 1;
+  private static final int USERNAME_FIELD = 0;
   CWDSClientCommon cwdsClientCommon = null;
 
   /**
@@ -16,7 +18,7 @@ public class CWDSLoginType {
 
     if (params != null) {
       if (params.length > 1) {
-        cwdsClientCommon = new CWDSAuthenticationClient(params[0], params[1]);
+        cwdsClientCommon = new CWDSAuthenticationClient(params[USERNAME_FIELD], params[PASSWORD_FIELD]);
       } else {
         cwdsClientCommon = new CWDSDevAuthenticationClient(params[0]);
       }

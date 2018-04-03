@@ -21,7 +21,6 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.Soc158placementsStatus;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType;
 import gov.ca.cwds.data.legacy.cms.persistence.BaseCwsCmsInMemoryPersistenceTest;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.junit.Before;
@@ -125,7 +124,6 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
           c.setPreviousOtherDescription("PreviousOtherDescription");
           c.setSoc158placementsStatus(Soc158placementsStatus.NO_SOC_158_PLACEMENTS); // SOCPLC_CD
           c.setLastUpdateId("0Rt"); // LST_UPD_ID
-          c.setLastUpdateTime(LocalDateTime.now()); // LST_UPD_TS
 
           c.setBirthStateCode((short)0);//B_STATE_C
           c.setBirthCountryCode((short)0); // B_CNTRY_C

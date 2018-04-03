@@ -1,10 +1,19 @@
 package gov.ca.cwds.rest.authenticate;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author CWDS TPT-4 Team
  *
  */
 public class AuthenticationUtils {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationUtils.class);
 
   private String token;
   private String countySensitiveToken;
@@ -79,11 +88,21 @@ public class AuthenticationUtils {
   }
 
   private String getToken(String loginType, UserGroup userType) {
-    if ("TEST".equals(loginType))
-      return cwdsLoginType.login("username", "password"); // will be updated to read the
-                                                          // username/password from yml file
-    else {
-      return cwdsLoginType.login("username.Json"); // will be updated
+    if (!"TEST".equals(loginType)) {
+      return cwdsLoginType.login("username", "password");
+    } else {
+      String jsonFile = "";
+      String userJson = "";
+      if (userType != null) {
+        jsonFile = "/LoginUser/" + userType.getName() + ".json";
+      }
+      try {
+        userJson = new String(IOUtils.toByteArray(getClass().getResourceAsStream(jsonFile)),
+            StandardCharsets.UTF_8);
+      } catch (IOException e) {
+        LOGGER.error("Unable to parse the json into String {}", e);
+      }
+      return cwdsLoginType.login(userJson);
     }
   }
 

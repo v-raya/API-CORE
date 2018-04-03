@@ -19,18 +19,14 @@ import gov.ca.cwds.rest.resources.ResourceParamValidator;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
- * <p>
  * Java port of gov.ca.cwds.rest.util.jni.KeyJNI and underlying shared library, cws_randgen.cpp.
- * </p>
- * 
- * <p>
- * To generateXYZ an identifier, the current date/timestamp is rearranged as shown below, placing
+ *
+ * <p>To generateXYZ an identifier, the current date/timestamp is rearranged as shown below, placing
  * less-significant time units into more-significant fields. This convolution provides better
  * "hashing" into cache and the database.
- * </p>
  *
  * <blockquote>
- * 
+ *
  * <pre>
  *   !   ~8 bits     !   6 bits  !   6 bits  ! 5 bits  ! 5 bits  !4 bits !    8 bits     !
  *   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -38,7 +34,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  *   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  * bytes !       :       !       :       !       :       !       :       !       :       !
  * </pre>
- * 
+ *
  * </blockquote>
  *
  * As shown above, some bit values would produce unrealistic dates/times. For example, month values
@@ -47,7 +43,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * special interest.
  *
  * <blockquote>
- * 
+ *
  * <pre>
  *   hundredths:  Although shown as an 8-bit field here, not all unrealistic values are usable,
  *                since the overall number must fit into seven base-62 characters. That limits
@@ -55,11 +51,10 @@ import gov.ca.cwds.rest.services.ServiceException;
  *
  *   year:        This algorithm supports years from 1900 to 2155.
  * </pre>
- * 
+ *
  * </blockquote>
  *
- * <p>
- * Note that CWS/CMS has made use of <strong>unrealistic</strong> values on some occasions. For
+ * <p>Note that CWS/CMS has made use of <strong>unrealistic</strong> values on some occasions. For
  * example, the project may need to generateXYZ many identifiers during a minimum outage window. In
  * order to make all of those generated identifiers correspond to the date/hour range of the outage,
  * project-generated identifiers may coerce unrealistic values for minutes, seconds, and hundredths.
@@ -67,33 +62,24 @@ import gov.ca.cwds.rest.services.ServiceException;
  * usual 6) after the final decimal point -- It may be showing more than 99 "hundredths"! This also
  * means that the longest formatted date/timestamp output is 27 characters (including punctuation),
  * although it will usually fit in 26.
- * </p>
  *
- * <p>
- * Once packed into the bit arrangement shown above, the number is converted to seven base-62
+ * <p>Once packed into the bit arrangement shown above, the number is converted to seven base-62
  * characters, using first the digits 0-9, then uppercase letters, then lowercase letters.
- * </p>
  *
- * <p>
- * The final 3 characters of the identifier indicate the staffperson (or project process) which
+ * <p>The final 3 characters of the identifier indicate the staffperson (or project process) which
  * created the row.
- * </p>
  *
- * <p>
- * For the User Interface, the identifier can also be converted into a formatted 19-digit decimal
+ * <p>For the User Interface, the identifier can also be converted into a formatted 19-digit decimal
  * number. In the 19-digit format, the first 13 decimal digits are a conversion of the first seven
  * base-62 characters, while the last 6 decimal digits are an independent conversion of the last 3
  * base-62 characters (ie, staffperson ID) from the identifier. The 19 digits are formatted into
  * three groups of four digits, followed by a final group of seven digits, so the full string length
  * is 22 characters with punctuation.
- * </p>
  *
- * <p>
- * In this source file, the 3 formats are referred to as:
- * </p>
- * 
+ * <p>In this source file, the 3 formats are referred to as:
+ *
  * <blockquote>
- * 
+ *
  * <pre>
  *   Key:            10 base-62 characters (0-9, A-Z, a-z):               tttttttppp
  *   UI Identifier:  19 decimal digits (22 characters with punctuation):  tttt-tttt-tttt-tpppppp
@@ -111,9 +97,9 @@ import gov.ca.cwds.rest.services.ServiceException;
  *   ss   represents seconds
  *   x... represents hundredths of seconds
  * </pre>
- * 
+ *
  * </blockquote>
- * 
+ *
  * @author CWDS API Team
  */
 public final class CmsKeyIdGenerator {
@@ -124,13 +110,11 @@ public final class CmsKeyIdGenerator {
 
   /**
    * Self-validating bean class for staff id.
-   * 
-   * <p>
-   * javax.validation only works on real "bean" classes, not Java native classes like String or
+   *
+   * <p>javax.validation only works on real "bean" classes, not Java native classes like String or
    * Long. Therefore, wrap the incoming staff id in a small class, which follows the Java Bean
    * specification (i.e., getters and setters).
-   * </p>
-   * 
+   *
    * @author CWDS API Team
    */
   public static final class StringKey {
@@ -142,7 +126,7 @@ public final class CmsKeyIdGenerator {
 
     /**
      * Constructor.
-     * 
+     *
      * @param value String to evaluate
      */
     public StringKey(String value) {
@@ -160,9 +144,7 @@ public final class CmsKeyIdGenerator {
     }
   }
 
-  /**
-   * Utility struct class stores details of CWDS key decomposition.
-   */
+  /** Utility struct class stores details of CWDS key decomposition. */
   @SuppressWarnings("javadoc")
   public static final class KeyDetail {
     public String key; // NOSONAR
@@ -190,34 +172,48 @@ public final class CmsKeyIdGenerator {
 
   private static final float nSHIFT_YEAR = 1; // NOSONAR 0 bit shift (2 ^ 0)
 
-  private static final BigDecimal[] POWER_BASE62 = {BigDecimal.valueOf(1.000000000000000e+000),
-      BigDecimal.valueOf(6.200000000000000e+001), BigDecimal.valueOf(3.844000000000000e+003),
-      BigDecimal.valueOf(2.383280000000000e+005), BigDecimal.valueOf(1.477633600000000e+007),
-      BigDecimal.valueOf(9.161328320000000e+008), BigDecimal.valueOf(5.680023558400000e+010),
-      BigDecimal.valueOf(3.521614606208000e+012), BigDecimal.valueOf(2.183401055848960e+014),
-      BigDecimal.valueOf(1.353708654626355e+016), BigDecimal.valueOf(8.392993658683402e+017),
-      BigDecimal.valueOf(5.203656068383710e+019), BigDecimal.valueOf(3.226266762397900e+021),
-      BigDecimal.valueOf(2.000285392686698e+023), BigDecimal.valueOf(1.240176943465753e+025),
-      BigDecimal.valueOf(7.689097049487666e+026), BigDecimal.valueOf(4.767240170682353e+028),
-      BigDecimal.valueOf(2.955688905823059e+030), BigDecimal.valueOf(1.832527121610297e+032)};
+  private static final BigDecimal[] POWER_BASE62 = {
+      BigDecimal.valueOf(1.000000000000000e+000),
+      BigDecimal.valueOf(6.200000000000000e+001),
+      BigDecimal.valueOf(3.844000000000000e+003),
+      BigDecimal.valueOf(2.383280000000000e+005),
+      BigDecimal.valueOf(1.477633600000000e+007),
+      BigDecimal.valueOf(9.161328320000000e+008),
+      BigDecimal.valueOf(5.680023558400000e+010),
+      BigDecimal.valueOf(3.521614606208000e+012),
+      BigDecimal.valueOf(2.183401055848960e+014),
+      BigDecimal.valueOf(1.353708654626355e+016),
+      BigDecimal.valueOf(8.392993658683402e+017),
+      BigDecimal.valueOf(5.203656068383710e+019),
+      BigDecimal.valueOf(3.226266762397900e+021),
+      BigDecimal.valueOf(2.000285392686698e+023),
+      BigDecimal.valueOf(1.240176943465753e+025),
+      BigDecimal.valueOf(7.689097049487666e+026),
+      BigDecimal.valueOf(4.767240170682353e+028),
+      BigDecimal.valueOf(2.955688905823059e+030),
+      BigDecimal.valueOf(1.832527121610297e+032)
+  };
 
-  private static final char[] ALPHABET = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
-      'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-      'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-      'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+  private static final char[] ALPHABET = {
+      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
+      'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b',
+      'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+      'v', 'w', 'x', 'y', 'z'
+  };
 
   private static String currentValue;
 
-  /**
-   * Static class only, do not instantiate.
-   */
+  /** Static class only, do not instantiate. */
   private CmsKeyIdGenerator() {
     // Static class only, do not instantiate.
   }
 
-
   /**
    * Generate next identifier with the given staff id.
+   *
+   * <p>TODO: This approach does not scale. Implement the Iterator and/or interfaces instead. Lock
+   * on a unique staff id instead of blocking all users. Construct an object for a given staff id
+   * and generate keys.
    *
    * @param staffId the staffId
    * @return the unique key from staffId
@@ -234,28 +230,26 @@ public final class CmsKeyIdGenerator {
 
   /**
    * Format CMS timestamp String, the last 7 characters of the key.
-   * 
+   *
    * @param ts seed timestamp
    * @return CMS formatted timestamp
    * @throws ParseException on parsing error
    */
   protected static String createTimestampStr(final Date ts) throws ParseException {
-    return ts == null ? createTimestampStr()
+    return ts == null
+        ? createTimestampStr()
         : doubleToStrN(7, timestampToDouble(getTimestampSeed(ts)), POWER_BASE62);
   }
 
   /**
    * Format the CMS timestamp String, the last 7 characters of the key.
-   * 
-   * <p>
-   * Code taken originally from the original C++ algorithm, designed for legacy fat client Visual
+   *
+   * <p>Code taken originally from the original C++ algorithm, designed for legacy fat client Visual
    * Basic application. In that world of dial-up modems, the inefficiency of waiting on hundredths
    * of a second for a single user was acceptable. Obviously, this approach makes little sense today
    * in the age of web servers and pervasive, wireless internet connections.
-   * </p>
-   * 
+   *
    * @return CMS formatted timestamp
-   * @throws ParseException on parsing error
    */
   protected static String createTimestampStr() {
     double nTimestamp = 0;
@@ -305,10 +299,49 @@ public final class CmsKeyIdGenerator {
     ret += (double) (cal.get(Calendar.MONTH)) * nSHIFT_MONTH;
     LOGGER.debug("MONTH:       {}", fmt.format(ret));
 
-    ret += (double) (cal.get(Calendar.YEAR) - 1900) * nSHIFT_YEAR;
+    ret = ret + (double) (cal.get(Calendar.YEAR) - 1900) * nSHIFT_YEAR;
     LOGGER.debug("YEAR:        {}", fmt.format(ret));
 
     return ret;
+  }
+
+  /**
+   *
+   * @param doubleTimestamp date decoded from Base62 to double
+   * @return date
+   */
+  public static long doubleToTimestamp(double doubleTimestamp) {
+
+    Calendar cal = Calendar.getInstance();
+
+    long mseconds = (long) (doubleTimestamp / nSHIFT_HSECOND);
+    cal.set(Calendar.MILLISECOND, (int) (mseconds * 10));
+    doubleTimestamp -= mseconds * nSHIFT_HSECOND;
+
+    long seconds = (long) (doubleTimestamp / nSHIFT_SECOND);
+    cal.set(Calendar.SECOND, (int) seconds);
+    doubleTimestamp -= seconds * nSHIFT_SECOND;
+
+    long min = (long) (doubleTimestamp / nSHIFT_MINUTE);
+    cal.set(Calendar.MINUTE, (int) min);
+    doubleTimestamp -= min * nSHIFT_MINUTE;
+
+    long hours = (long) (doubleTimestamp / nSHIFT_HOUR);
+    cal.set(Calendar.HOUR_OF_DAY, (int) hours);
+    doubleTimestamp -= hours * nSHIFT_HOUR;
+
+    long day = (long) (doubleTimestamp / nSHIFT_DAY);
+    cal.set(Calendar.DATE, (int) day);
+    doubleTimestamp -= day * nSHIFT_DAY;
+
+    long month = (long) (doubleTimestamp / nSHIFT_MONTH);
+    cal.set(Calendar.MONTH, (int) month);
+    doubleTimestamp -= month * nSHIFT_MONTH;
+
+    long year = (long) ((doubleTimestamp) / nSHIFT_YEAR);
+    cal.set(Calendar.YEAR, (int) year + 1900);
+
+    return cal.getTimeInMillis();
   }
 
   /**
@@ -327,7 +360,7 @@ public final class CmsKeyIdGenerator {
     final BigDecimal bdSrc = BigDecimal.valueOf(src);
 
     // Determine the largest power of the number.
-    for (i = 0; bdSrc.doubleValue() >= powers[i].doubleValue(); i++, p++); // NOSONAR
+    for (i = 0; bdSrc.doubleValue() >= powers[i].doubleValue(); i++, p++) ; // NOSONAR
 
     // Left-pad the string with the destination string width.
     final int pad = dstLen - p;
@@ -365,7 +398,7 @@ public final class CmsKeyIdGenerator {
    * @param powers powers values of this base
    * @return double representation of the string
    */
-  protected double strToDouble(String src, int base, final BigDecimal[] powers) {
+  protected static double strToDouble(String src, int base, final BigDecimal[] powers) {
     double ret = 0;
     final int nLen = src.length();
     int power;
@@ -392,7 +425,7 @@ public final class CmsKeyIdGenerator {
 
   /**
    * Get preferred timestamp seed, either provided or current date/time if null.
-   * 
+   *
    * @param ts timestamp to use or null for current date/time
    * @return Calendar set to preferred timestamp
    */
@@ -408,7 +441,7 @@ public final class CmsKeyIdGenerator {
 
   /**
    * Overload. Generate 10 character, base-62 key from given staff id and timestamp.
-   * 
+   *
    * @param staffId 3-char, base-62 staff id
    * @param ts timestamp to use or null for current date/time
    * @return generated 10 character, base-62 key
@@ -419,14 +452,14 @@ public final class CmsKeyIdGenerator {
 
   /**
    * Generate 10 character, base-62 key from given staff id and timestamp.
-   * 
+   *
    * @param wrap the wrap
    * @param ts timestamp to use or null for current date/time
    * @return the key from staffID
    */
   protected static String makeKey(final StringKey wrap, final Date ts) {
     try {
-      ResourceParamValidator.<StringKey>validate(wrap);
+      ResourceParamValidator.validate(wrap);
       return createTimestampStr(ts).trim() + wrap.getValue();
     } catch (Exception e) {
       throw new ServiceException(e);
@@ -435,7 +468,7 @@ public final class CmsKeyIdGenerator {
 
   /**
    * Generate an identifier with the given staff id and current timestamp.
-   * 
+   *
    * @param staffId three char staff id
    * @param ts timestamp to use
    * @return unique key from staff id and timestamp
@@ -447,10 +480,10 @@ public final class CmsKeyIdGenerator {
   /**
    * Convert a 10 character, base 62 legacy key to base 10 in format 0000-0000-0000-0000000. Legacy
    * code refers to this as a UI identifier.
-   * 
+   *
    * @param key 10 character, base-62 legacy key
    * @return UI identifier in format 0000-0000-0000-0000000. If provided key is null or enpty, then
-   *         null is returned.
+   *     null is returned.
    */
   public static String getUIIdentifierFromKey(String key) {
     if (StringUtils.isBlank(key)) {
@@ -468,11 +501,32 @@ public final class CmsKeyIdGenerator {
     LOGGER.trace("tsB10={}, staffB10={}", tsB10, staffB10);
 
     final StringBuilder buf = new StringBuilder();
-    buf.append(tsB10.substring(0, 4)).append('-').append(tsB10.substring(4, 8)).append('-')
-        .append(tsB10.substring(8, 12)).append('-').append(tsB10.substring(12))
+    buf.append(tsB10.substring(0, 4))
+        .append('-')
+        .append(tsB10.substring(4, 8))
+        .append('-')
+        .append(tsB10.substring(8, 12))
+        .append('-')
+        .append(tsB10.substring(12))
         .append(staffB10.substring(0));
 
     return buf.toString();
   }
 
+  /**
+   *
+   * @param key - Third Id
+   * @return date extracted from third id
+   */
+  public static Date getDateFromKey(String key) {
+    if (StringUtils.isBlank(key) || key.length() < LEN_KEYTIMESTAMP) {
+      return null;
+    }
+
+    final String tsB62 = key.substring(0, LEN_KEYTIMESTAMP);
+
+    double sdouble = strToDouble(tsB62, 62, POWER_BASE62);
+    Long timestamp = doubleToTimestamp(sdouble);
+    return new Date(timestamp);
+  }
 }

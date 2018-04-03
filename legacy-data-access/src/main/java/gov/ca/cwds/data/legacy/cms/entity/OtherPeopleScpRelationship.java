@@ -1,8 +1,8 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
-import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Fetch;
@@ -17,16 +18,18 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
+import gov.ca.cwds.data.persistence.PersistentObject;
+
 /**
  * @author CWDS CALS API Team
  *
- * This entity type describes the relationship between a SUBSTITUTE CARE PROVIDER and other people
- * in the PLACEMENT HOME.  These other people can be OTHER CHILDREN IN PLACEMENT or OTHER ADULTS IN
- * PLACEMENT HOME.
+ *         This entity type describes the relationship between a SUBSTITUTE CARE PROVIDER and other
+ *         people in the PLACEMENT HOME. These other people can be OTHER CHILDREN IN PLACEMENT or
+ *         OTHER ADULTS IN PLACEMENT HOME.
  */
 @Entity
 @Table(name = "OPSCPRLT")
-@SuppressWarnings({"squid:S3437"}) //LocalDate is serializable
+@SuppressWarnings({"squid:S3437"}) // LocalDate is serializable
 public class OtherPeopleScpRelationship implements PersistentObject {
 
   private static final long serialVersionUID = 1707693062140240447L;
@@ -85,10 +88,15 @@ public class OtherPeopleScpRelationship implements PersistentObject {
 
   /**
    * FKSB_PVDRT - Mandatory Foreign key that RELATES_ADULT_OR_CHILD_TO_SCP_IN a
-   * SUBSTITUTE_CARE_PROVIDER.
-   * @Basic
-   * @Column(name = "FKSB_PVDRT", nullable = false, length = 10)
+   * SUBSTITUTE_CARE_PROVIDER. <blockquote>
+   * 
+   * <pre>
+   * &#64;Basic
+   * &#64;Column(name = "FKSB_PVDRT", nullable = false, length = 10)
    * private String fksbPvdrt;
+   * </pre>
+   * 
+   * </blockquote>
    */
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne
@@ -149,8 +157,7 @@ public class OtherPeopleScpRelationship implements PersistentObject {
     return substituteCareProvider;
   }
 
-  public void setSubstituteCareProvider(
-      SubstituteCareProvider substituteCareProvider) {
+  public void setSubstituteCareProvider(SubstituteCareProvider substituteCareProvider) {
     this.substituteCareProvider = substituteCareProvider;
   }
 

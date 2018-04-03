@@ -2,7 +2,7 @@ package gov.ca.cwds.authorizer;
 
 import com.google.inject.Inject;
 import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
-import gov.ca.cwds.authorizer.drools.configuration.ClientAuthorizationDroolsConfiguration;
+import gov.ca.cwds.authorizer.drools.configuration.ClientAbstractAuthorizationDroolsConfiguration;
 
 /**
  * @author CWDS TPT-3 Team
@@ -10,12 +10,9 @@ import gov.ca.cwds.authorizer.drools.configuration.ClientAuthorizationDroolsConf
 public class ClientAbstractReadAuthorizer extends ClientBaseReadAuthorizer {
 
   @Inject
-  private ClientAuthorizationDroolsConfiguration droolsConfiguration;
-
-  @Inject
   public ClientAbstractReadAuthorizer(
-      DroolsAuthorizationService droolsAuthorizationService) {
-    super(droolsAuthorizationService);
-    setDroolsConfiguration(droolsConfiguration);
+      DroolsAuthorizationService droolsAuthorizationService,
+      ClientAbstractAuthorizationDroolsConfiguration droolsConfiguration) {
+    super(droolsAuthorizationService, droolsConfiguration);
   }
 }

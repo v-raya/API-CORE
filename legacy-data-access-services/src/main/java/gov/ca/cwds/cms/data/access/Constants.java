@@ -15,7 +15,22 @@ public final class Constants {
 
     public static final String ADR_PHTT = "ADR_PHTT";
 
+    public static final String CLT_PHNT = "CLT_PHNT";
+
     private PhoneticSearchTables() {}
+  }
+
+  public static class ClientUcSourceTableCode {
+    public static final String OTHER_CLIENT_NAME = "N";
+  }
+
+  public static class PhoneticPrimaryNameCode {
+    public static final String OTHER_CLIENT_NAME = "N";
+    public static final String PLACEMENT_HOME_ADDRESS = "P";
+  }
+
+  public static class SsaName3StoredProcedureCrudOperationCode {
+    public static final String INSERT_OPERATION_CODE = "I";
   }
 
   public static class StaffPersonPrivileges {

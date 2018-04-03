@@ -35,11 +35,11 @@ public class ReferralDao extends BaseDaoImpl<Referral> {
   }
 
   public List<Referral> getActiveReferralsByClientId(String clientId) {
-    return getReferralsByClientId(clientId, true);
+    return getReferralsByClientId(clientId, Boolean.TRUE);
   }
 
   public List<Referral> getClosedReferralsByClientId(String clientId) {
-    return getReferralsByClientId(clientId, false);
+    return getReferralsByClientId(clientId, Boolean.FALSE);
   }
 
   public List<Referral> getReferralsByClientId(String clientId) {

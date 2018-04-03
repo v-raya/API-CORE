@@ -2,7 +2,6 @@ package gov.ca.cwds.authorizer;
 
 import static gov.ca.cwds.authorizer.util.StaffPrivilegeUtil.toStaffPersonPrivilegeTypes;
 
-import gov.ca.cwds.drools.DroolsConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -28,8 +27,10 @@ public abstract class AbstractBaseAuthorizer<T, ID> extends BaseAuthorizer<T, ID
   private DroolsAuthorizer droolsConfiguration;
 
 
-  public AbstractBaseAuthorizer(DroolsAuthorizationService droolsAuthorizationService) {
+  public AbstractBaseAuthorizer(DroolsAuthorizationService droolsAuthorizationService,
+      DroolsAuthorizer droolsConfiguration) {
     this.droolsAuthorizationService = droolsAuthorizationService;
+    this.droolsConfiguration = droolsConfiguration;
   }
 
   private void logAuthorization(
@@ -39,17 +40,17 @@ public abstract class AbstractBaseAuthorizer<T, ID> extends BaseAuthorizer<T, ID
       final boolean authorizationResult) {
     LOGGER.info(
         "StaffPerson [{}] with staffPrivilegeTypes = {} is performing action on object [{}]. "
-            + "Authorization result = [{}]",
+            + "Authorization result = [{}]. {}",
         perryAccount.getStaffId(),
         staffPrivilegeTypes,
-        instance,
-        authorizationResult
+        instance.getClass().getSimpleName(),
+        authorizationResult,
+        perryAccount
     );
   }
 
   protected boolean authorizeInstanceOperation(
       final T instance,
-      final DroolsAuthorizer droolsConfiguration,
       List<Object> authorizationFacts) {
     try {
       final PerryAccount perryAccount = PerrySubject.getPerryAccount();
@@ -73,16 +74,4 @@ public abstract class AbstractBaseAuthorizer<T, ID> extends BaseAuthorizer<T, ID
 
   @Override
   protected abstract boolean checkInstance(T instance);
-
-  void setDroolsAuthorizationService(DroolsAuthorizationService droolsAuthorizationService) {
-    this.droolsAuthorizationService = droolsAuthorizationService;
-  }
-
-  public void setDroolsConfiguration(DroolsAuthorizer droolsConfiguration) {
-    this.droolsConfiguration = droolsConfiguration;
-  }
-
-  public DroolsAuthorizer getDroolsConfiguration() {
-    return droolsConfiguration;
-  }
 }

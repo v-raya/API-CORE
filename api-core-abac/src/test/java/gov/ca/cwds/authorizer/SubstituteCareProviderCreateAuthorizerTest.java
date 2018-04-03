@@ -10,7 +10,6 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
 import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
 import gov.ca.cwds.authorizer.drools.configuration.SubstituteCareProviderAuthorizationDroolsConfiguration;
-import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.security.realm.PerryAccount;
@@ -37,9 +36,8 @@ public class SubstituteCareProviderCreateAuthorizerTest {
     final DroolsService droolsService = new DroolsService();
     final DroolsAuthorizationService droolsAuthorizationService = new DroolsAuthorizationService(droolsService);
     testSubject = new SubstituteCareProviderCreateAuthorizer(
-        droolsAuthorizationService
+        droolsAuthorizationService, new SubstituteCareProviderAuthorizationDroolsConfiguration()
     );
-    testSubject.setDroolsConfiguration(new SubstituteCareProviderAuthorizationDroolsConfiguration());
   }
 
   @Test

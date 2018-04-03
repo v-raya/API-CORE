@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -15,7 +16,6 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
 
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -25,57 +25,57 @@ import gov.ca.cwds.rest.services.ServiceException;
 /**
  * This JNI native library runs correctly on Linux Jenkins when libLZW.so and libstdc++.so.6 are
  * installed into /usr/local/lib/.
- * 
+ *
  * <p>
  * The library does build and run on OS X and Linux environments with current compilers installed.
  * </p>
- * 
+ *
  * <p>
  * The following JUnit test runs manually on the clone Jenkins server but not through Gradle on
  * Linux. However, Gradle runs successfully on OS X and Windows. Switch to the Jenkins user with:
  * </p>
- * 
+ *
  * <p>
  * <blockquote>
- * 
+ *
  * <pre>
  * {@code sudo -u jenkins bash}.
  * </pre>
- * 
+ *
  * </blockquote>
  * </p>
- * 
+ *
  * <p>
  * Run the JUnit manually with the sample command below. Note that jars are copied manually with the
  * sample script, cp_api_libs.sh.
  * </p>
- * 
+ *
  * <p>
  * <blockquote>
- * 
+ *
  * <pre>
  * {@code java -Djava.library.path=.:/usr/local/lib/ -cp .:/var/lib/jenkins/workspace/API/build/classes/main:/var/lib/jenkins/workspace/API/build/classes/test:/var/lib/jenkins/workspace/API/build/resources/test:/var/lib/jenkins/test_lib/junit-4.12.jar:/var/lib/jenkins/test_lib/hamcrest-core-1.3.jar:/var/lib/jenkins/test_lib/* org.junit.runner.JUnitCore gov.ca.cwds.rest.util.jni.KeyGenTest}
- * 
+ *
  * </pre>
- * 
+ *
  * </blockquote>
  * </p>
- * 
+ *
  * <p>
  * Force JUnit tests to run against native libraries, loaded or not, with JVM argument
  * </p>
- * 
+ *
  * <p>
  * <blockquote>
- * 
+ *
  * <pre>
  * {@code -Dcwds.jni.force=Y}
- * 
+ *
  * </pre>
- * 
+ *
  * </blockquote>
  * </p>
- * 
+ *
  * @author CWDS API Team
  */
 public final class CmsKeyIdGeneratorTest {
@@ -200,7 +200,7 @@ public final class CmsKeyIdGeneratorTest {
   public void testDecomposeKeyNull() {
     // Null staff id.
     KeyDetail kd = new KeyDetail();
-    // CmsKeyIdGenerator.decomposeKey(null, kd);
+//    CmsKeyIdGenerator.decomposeKey(null, kd);
     // assertTrue("Staff ID not empty", kd.staffId == null || "".equals(kd.staffId));
   }
 
@@ -215,17 +215,6 @@ public final class CmsKeyIdGeneratorTest {
     String actual = CmsKeyIdGenerator.createTimestampStr(ts);
     assertTrue("bad generated timestamp", RGX_LEGACY_TIMESTAMP.matcher(actual).matches());
   }
-
-  // public void createTimestampStr_Args__Date_T__ParseException() throws Exception {
-  // Date ts = mock(Date.class);
-  //
-  // try {
-  // target.createTimestampStr(ts);
-  // fail("Expected exception was not thrown!");
-  // } catch (ParseException e) {
-  // // then
-  // }
-  // }
 
   @Test
   public void createTimestampStr_Args__() throws Exception {
@@ -244,49 +233,6 @@ public final class CmsKeyIdGeneratorTest {
     assertThat(actual, is(not(0)));
   }
 
-  // public void doubleToStrN_Args__int__double__BigDecimalArray() throws Exception {
-  // final CmsKeyIdGenerator target = null;
-  // int dstLen = 0;
-  // double src = 0.0;
-  // BigDecimal[] powers = new BigDecimal[] {};
-  // String actual = target.doubleToStrN(dstLen, src, powers);
-  // String expected = null;
-  // assertThat(actual, is(equalTo(expected)));
-  // }
-
-  // @Test @Ignore
-  // public void strToDouble_Args__String__int__BigDecimalArray() throws Exception {
-  // final CmsKeyIdGenerator target = null;
-  //
-  // String src = null;
-  // int base = 0;
-  // BigDecimal[] powers = new BigDecimal[] {};
-  // double actual = target.strToDouble(src, base, powers);
-  // double expected = 0.0;
-  // assertThat(actual, is(equalTo(expected)));
-  // }
-
-  // @Test @Ignore
-  // public void getTimestampSeed_Args__Date() throws Exception {
-  //
-  //
-  // final Date ts = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2017-06-09 13:04:22");
-  // final Calendar actual = target.getTimestampSeed(ts);
-  // Calendar expected = null;
-  // assertThat(actual, is(equalTo(expected)));
-  // }
-
-  // @Test @Ignore
-  // public void getTimestampSeed_Args__Date_T__ParseException() throws Exception {
-  //
-  //
-  // Date ts = mock(Date.class);
-  // try {
-  // target.getTimestampSeed(ts);
-  // fail("Expected exception was not thrown!");
-  // } catch (ParseException e) {
-  // // then
-  // }
 
   @Test(expected = ServiceException.class)
   public void makeKey_Args__String__Date__null_staff() throws Exception {
@@ -316,6 +262,19 @@ public final class CmsKeyIdGeneratorTest {
     final String actual = CmsKeyIdGenerator.getUIIdentifierFromKey(key);
     final String expected = "0315-2076-8676-8002051";
     assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void testGetDateFromThirdId() throws Exception {
+    SimpleDateFormat sdf =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
+    Date dateFromXtools = sdf.parse("2018-03-30 10:45:40:260" );
+    String thirdIdFromXTools = "83UiZBWABC";
+    String userIdFromXTools = "ABC";
+
+    String thirdId = CmsKeyIdGenerator.generate(userIdFromXTools, dateFromXtools);
+    assertEquals(thirdId, thirdIdFromXTools);
+    Date localDate = CmsKeyIdGenerator.getDateFromKey(thirdId);
+    assertEquals(dateFromXtools.getTime(), localDate.getTime());
   }
 
 }

@@ -1,7 +1,13 @@
 package gov.ca.cwds.cms.data.access.dto;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientOtherEthnicity;
+import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import gov.ca.cwds.data.legacy.cms.entity.ClientServiceProvider;
 import gov.ca.cwds.data.legacy.cms.entity.DasHistory;
 import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
@@ -9,12 +15,8 @@ import gov.ca.cwds.data.legacy.cms.entity.NearFatality;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementEpisode;
 import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 public class ClientEntityAwareDTO extends BaseEntityAwareDTO<Client> {
+
   private Client persistentClientState;
   private Set<ClientOtherEthnicity> otherEthnicities = new HashSet<>();
   private List<DeliveredService> deliveredService;
@@ -24,6 +26,7 @@ public class ClientEntityAwareDTO extends BaseEntityAwareDTO<Client> {
   private List<PlacementEpisode> placementEpisodes = new ArrayList<>();
   private List<ClientServiceProvider> clientServiceProviders = new ArrayList<>();
   private OtherClientNameDTO otherClientName;
+  private List<ClientRelationship> clientRelationships = new ArrayList<>();
 
   public Set<ClientOtherEthnicity> getOtherEthnicities() {
     return otherEthnicities;
@@ -72,4 +75,9 @@ public class ClientEntityAwareDTO extends BaseEntityAwareDTO<Client> {
   public void setOtherClientName(OtherClientNameDTO otherClientName) {
     this.otherClientName = otherClientName;
   }
+
+  public List<ClientRelationship> getClientRelationships() {
+    return clientRelationships;
+  }
+
 }
