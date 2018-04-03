@@ -15,6 +15,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Set;
 import javax.persistence.OptimisticLockException;
+import javax.persistence.RollbackException;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.junit.Before;
@@ -22,7 +23,7 @@ import org.junit.Test;
 
 public class OptimisticLockingTest extends BaseCwsCmsInMemoryPersistenceTest {
 
-  public static final String ID = "AapJGAU04Z";
+  private static final String ID = "AapJGAU04Z";
   private ClientDao dao = null;
 
   @Before
@@ -125,9 +126,8 @@ public class OptimisticLockingTest extends BaseCwsCmsInMemoryPersistenceTest {
     //persist in new transaction
     executeInTransaction(
         sessionFactory,
-        (sessionFactory) -> {
-          dao.update(childClientHolder.getChildClient());
-        });
+        sessionFactory -> dao.update(childClientHolder.getChildClient())
+        );
   }
 
   @Test
@@ -170,12 +170,12 @@ public class OptimisticLockingTest extends BaseCwsCmsInMemoryPersistenceTest {
     try {
       executeInTransaction(
           sessionFactory,
-          (sessionFactory) -> {
-            dao.update(childClientHolder.getChildClient());
-          });
+          sessionFactory ->  dao.update(childClientHolder.getChildClient())
+          );
 
-      fail("OptimisticLockException should be thrown");
-    } catch (OptimisticLockException e) {
+      fail("RollbackException should be thrown");
+    } catch (RollbackException e) {
+      assertTrue(e.getCause() instanceof OptimisticLockException);
     }
   }
 
@@ -216,8 +216,9 @@ public class OptimisticLockingTest extends BaseCwsCmsInMemoryPersistenceTest {
             dao.update(childClient);
           });
 
-      fail("OptimisticLockException should be thrown");
-    } catch (OptimisticLockException e) {
+      fail("RollbackException should be thrown");
+    } catch (RollbackException e) {
+      assertTrue(e.getCause() instanceof OptimisticLockException);
     }
   }
 
