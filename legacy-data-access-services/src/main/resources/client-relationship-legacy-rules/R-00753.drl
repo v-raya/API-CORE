@@ -22,10 +22,11 @@ rule "R-00753"
       $clientRelationship : ClientRelationship($endDate1 : endDate, $startDate1 : startDate) from $relationshipEntityAwareDto.clientRelationshipList
       $relationshipForUpdate : ClientRelationship(
          (($clientRelationship.primaryClient.identifier == primaryClient.identifier && $clientRelationship.secondaryClient.identifier == secondaryClient.identifier)
-       &&  (startDate == null || endDate == null || startDate <= $endDate1)
-       && ($startDate1 == null || endDate == null || $startDate1 <= endDate)
-       && ($startDate1 == null || endDate == null || $startDate1 <= endDate)
-       && ($startDate1 == null || $endDate1 == null || $startDate1 <= $endDate1))
+       && (startDate != null && endDate != null && $startDate1 != null && $endDate1 != null)
+       &&  startDate <= $endDate1
+       && $startDate1 <= endDate
+       && $startDate1 <= endDate
+       && $startDate1 <= $endDate1)
       ) from $relationshipEntityAwareDto.entity
       then
       IssueDetails details = new IssueDetails();
