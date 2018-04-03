@@ -14,7 +14,6 @@ public class R08840Test extends BaseDocToolRulesChildClientRelationshipTest {
 
   private static final String RULE_NAME = "R-08840";
 
-
   @Test
   public void testRelationshipTypeIsMatch() throws DroolsException {
     enrichRelationshipWithType((short) 190);
@@ -31,11 +30,6 @@ public class R08840Test extends BaseDocToolRulesChildClientRelationshipTest {
         awareDTO, principal, ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
 
     assertEquals(awareDTO.isNeedMembershipVerification(), false);
-  }
-
-  @Test
-  public void testParentHasOneTribalRowWithNullFkmbrt() {
-
   }
 
   private void enrichRelationshipWithType(short type) {

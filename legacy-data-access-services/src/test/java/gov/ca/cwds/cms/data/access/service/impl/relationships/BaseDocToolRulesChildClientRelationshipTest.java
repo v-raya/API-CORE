@@ -22,9 +22,6 @@ import org.mockito.Mock;
  */
 public abstract class BaseDocToolRulesChildClientRelationshipTest extends BaseDocToolRulesTest {
 
-  private String PRIMARY_ID = "0001112223";
-  private String SECONDARY_ID = "0001112224";
-
   protected BusinessValidationService businessValidationService;
   protected ClientCoreService clientCoreService;
   protected ClientRelationshipAwareDTO awareDTO;
@@ -67,20 +64,20 @@ public abstract class BaseDocToolRulesChildClientRelationshipTest extends BaseDo
     }
   }
 
-  protected ClientRelationship getRelationship(LocalDate startDate, LocalDate endDate) {
-    ClientRelationship clientRelationship = new ClientRelationship();
-    clientRelationship.setStartDate(startDate);
-    clientRelationship.setEndDate(endDate);
-
-    Client client = new Client();
-    client.setIdentifier(PRIMARY_ID);
-
-    Client clientSecondary = new Client();
-    clientSecondary.setIdentifier(SECONDARY_ID);
-
-    clientRelationship.setPrimaryClient(client);
-    clientRelationship.setSecondaryClient(clientSecondary);
-
-    return clientRelationship;
-  }
+//  protected ClientRelationship getRelationship(LocalDate startDate, LocalDate endDate) {
+//    ClientRelationship clientRelationship = new ClientRelationship();
+//    clientRelationship.setStartDate(startDate);
+//    clientRelationship.setEndDate(endDate);
+//
+//    Client client = new Client();
+//    client.setIdentifier(PRIMARY_ID);
+//
+//    Client clientSecondary = new Client();
+//    clientSecondary.setIdentifier(SECONDARY_ID);
+//
+//    clientRelationship.setPrimaryClient(client);
+//    clientRelationship.setSecondaryClient(clientSecondary);
+//
+//    return clientRelationship;
+//  }
 }
