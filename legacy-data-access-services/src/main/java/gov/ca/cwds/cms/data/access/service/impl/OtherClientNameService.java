@@ -74,6 +74,8 @@ public class OtherClientNameService {
     clientUc.setCommonFirstName(StringUtils.upperCase(otherClientName.getFirstName()));
     clientUc.setSourceTableId(otherClientName.getThirdId());
     clientUc.setSourceTableCode(Constants.ClientUcSourceTableCode.OTHER_CLIENT_NAME);
+    clientUc.setLastUpdateId(PrincipalUtils.getStaffPersonId());
+    clientUc.setLastUpdateTime(LocalDateTime.now());
     clientUcDao.create(clientUc);
   }
 
