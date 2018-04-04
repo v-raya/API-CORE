@@ -24,11 +24,23 @@ import gov.ca.cwds.data.legacy.cms.dao.SafetyAlertDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.SchoolOriginHistoryDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.SpecialEducationDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.TribalAncestryNotificationDaoTest;
+import gov.ca.cwds.security.utils.PrincipalUtils;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 
-@RunWith(Suite.class)
+@RunWith(PowerMockRunner.class)
+@PowerMockRunnerDelegate(Suite.class)
+@PrepareForTest({PrincipalUtils.class})
+@PowerMockIgnore({
+    "javax.xml.*",
+    "org.xml.*",
+    "org.w3c.*"
+    })
 @Suite.SuiteClasses({
     CaseDaoTest.class,
     ClientDaoTest.class,

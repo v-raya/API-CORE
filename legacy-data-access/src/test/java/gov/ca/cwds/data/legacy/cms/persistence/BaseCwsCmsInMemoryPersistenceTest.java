@@ -1,5 +1,8 @@
 package gov.ca.cwds.data.legacy.cms.persistence;
 
+import static org.powermock.api.mockito.PowerMockito.when;
+
+import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,7 +20,9 @@ import org.dbunit.util.fileloader.FlatXmlDataFileLoader;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.junit.Before;
 import org.junit.ClassRule;
+import org.powermock.api.mockito.PowerMockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +42,12 @@ public abstract class BaseCwsCmsInMemoryPersistenceTest  {
 
   @ClassRule
   public static final InMemoryTestResources inMemoryTestResources = InMemoryTestResources.getInstance();
+
+  @Before
+  public void superBefore() {
+    PowerMockito.mockStatic(PrincipalUtils.class);
+    when(PrincipalUtils.getStaffPersonId()).thenReturn("0X5");
+  }
 
   protected void executeInTransaction(SessionFactory sessionFactory,
       Consumer<SessionFactory> consumer) {
@@ -95,7 +106,7 @@ public abstract class BaseCwsCmsInMemoryPersistenceTest  {
 
   protected void assertTableEquals(ITable expectedTable, ITable actualTable, String... ignoreCols)
       throws Exception {
-    ITable filteredTable = columnFilter.includedColumnsTable(actualTable,
+    ITable filteredTable = DefaultColumnFilter.includedColumnsTable(actualTable,
         expectedTable.getTableMetaData().getColumns());
     Assertion.assertEqualsIgnoreCols(expectedTable, filteredTable, ignoreCols);
   }
