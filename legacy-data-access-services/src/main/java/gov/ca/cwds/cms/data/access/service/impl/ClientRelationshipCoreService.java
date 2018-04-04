@@ -69,11 +69,12 @@ public class ClientRelationshipCoreService
   @Override
   public ClientRelationship create(ClientRelationshipAwareDTO entityAwareDto)
       throws DataAccessServicesException {
+    String staffPerson = PrincipalUtils.getStaffPersonId();
     entityAwareDto.getEntity().setLastUpdateTime(LocalDateTime.now());
-    entityAwareDto.getEntity().setLastUpdateId(PrincipalUtils.getStaffPersonId());
+    entityAwareDto.getEntity().setLastUpdateId(staffPerson);
     entityAwareDto
         .getEntity()
-        .setIdentifier(CmsKeyIdGenerator.getNextValue(PrincipalUtils.getStaffPersonId()));
+        .setIdentifier(CmsKeyIdGenerator.getNextValue(staffPerson));
     return super.create(entityAwareDto);
   }
 
