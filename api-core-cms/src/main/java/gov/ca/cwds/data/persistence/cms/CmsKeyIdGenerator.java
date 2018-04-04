@@ -172,34 +172,21 @@ public final class CmsKeyIdGenerator {
 
   private static final float nSHIFT_YEAR = 1; // NOSONAR 0 bit shift (2 ^ 0)
 
-  private static final BigDecimal[] POWER_BASE62 = {
-      BigDecimal.valueOf(1.000000000000000e+000),
-      BigDecimal.valueOf(6.200000000000000e+001),
-      BigDecimal.valueOf(3.844000000000000e+003),
-      BigDecimal.valueOf(2.383280000000000e+005),
-      BigDecimal.valueOf(1.477633600000000e+007),
-      BigDecimal.valueOf(9.161328320000000e+008),
-      BigDecimal.valueOf(5.680023558400000e+010),
-      BigDecimal.valueOf(3.521614606208000e+012),
-      BigDecimal.valueOf(2.183401055848960e+014),
-      BigDecimal.valueOf(1.353708654626355e+016),
-      BigDecimal.valueOf(8.392993658683402e+017),
-      BigDecimal.valueOf(5.203656068383710e+019),
-      BigDecimal.valueOf(3.226266762397900e+021),
-      BigDecimal.valueOf(2.000285392686698e+023),
-      BigDecimal.valueOf(1.240176943465753e+025),
-      BigDecimal.valueOf(7.689097049487666e+026),
-      BigDecimal.valueOf(4.767240170682353e+028),
-      BigDecimal.valueOf(2.955688905823059e+030),
-      BigDecimal.valueOf(1.832527121610297e+032)
-  };
+  private static final BigDecimal[] POWER_BASE62 = {BigDecimal.valueOf(1.000000000000000e+000),
+      BigDecimal.valueOf(6.200000000000000e+001), BigDecimal.valueOf(3.844000000000000e+003),
+      BigDecimal.valueOf(2.383280000000000e+005), BigDecimal.valueOf(1.477633600000000e+007),
+      BigDecimal.valueOf(9.161328320000000e+008), BigDecimal.valueOf(5.680023558400000e+010),
+      BigDecimal.valueOf(3.521614606208000e+012), BigDecimal.valueOf(2.183401055848960e+014),
+      BigDecimal.valueOf(1.353708654626355e+016), BigDecimal.valueOf(8.392993658683402e+017),
+      BigDecimal.valueOf(5.203656068383710e+019), BigDecimal.valueOf(3.226266762397900e+021),
+      BigDecimal.valueOf(2.000285392686698e+023), BigDecimal.valueOf(1.240176943465753e+025),
+      BigDecimal.valueOf(7.689097049487666e+026), BigDecimal.valueOf(4.767240170682353e+028),
+      BigDecimal.valueOf(2.955688905823059e+030), BigDecimal.valueOf(1.832527121610297e+032)};
 
-  private static final char[] ALPHABET = {
-      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
-      'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b',
-      'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
-      'v', 'w', 'x', 'y', 'z'
-  };
+  private static final char[] ALPHABET = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
+      'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+      'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+      'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 
   private static String currentValue;
 
