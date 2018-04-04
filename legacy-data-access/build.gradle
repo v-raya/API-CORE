@@ -2,7 +2,6 @@
 dependencies {
     compile project(':api-core-common')
     compile group: "io.dropwizard", name: "dropwizard-hibernate", version: dropwizardVersion
-    compile group: 'gov.ca.cwds.api', name:'api-security', version: apiSecurityVersion
 
     testCompile group: 'gov.ca.cwds.cals', name: 'cws-cms-data-model', version: dataModelVersion, changing: true
     testCompile group: 'org.liquibase', name: 'liquibase-core', version: '3.5.3'
@@ -12,6 +11,7 @@ dependencies {
     testCompile group: 'org.mockito', name: 'mockito-core', version: mockitoVersion
     testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: powerMockVersion
     testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: powerMockVersion
+    testCompile group: 'gov.ca.cwds.api', name:'api-security', version: apiSecurityVersion
 }
 
 publishing {
