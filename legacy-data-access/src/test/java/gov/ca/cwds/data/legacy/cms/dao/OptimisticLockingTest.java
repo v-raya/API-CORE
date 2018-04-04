@@ -174,8 +174,7 @@ public class OptimisticLockingTest extends BaseCwsCmsInMemoryPersistenceTest {
           );
 
       fail("RollbackException should be thrown");
-    } catch (RollbackException e) {
-      assertTrue(e.getCause() instanceof OptimisticLockException);
+    } catch (OptimisticLockException e) {
     }
   }
 
@@ -217,8 +216,7 @@ public class OptimisticLockingTest extends BaseCwsCmsInMemoryPersistenceTest {
           });
 
       fail("RollbackException should be thrown");
-    } catch (RollbackException e) {
-      assertTrue(e.getCause() instanceof OptimisticLockException);
+    } catch (OptimisticLockException e) {
     }
   }
 

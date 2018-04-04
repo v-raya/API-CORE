@@ -15,12 +15,14 @@ import liquibase.resource.ClassLoaderResourceAccessor;
 import org.dbunit.JdbcDatabaseTester;
 import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 import org.junit.rules.ExternalResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class InMemoryTestResources extends ExternalResource {
 
+  private static final String HIBERNATE_CONFIG_PATH = "hibernate.cfg.xml";
   private static final String LIQUIBASE_SCRIPT_PATH = "liquibase/cwscms_database_base_with_lookups.xml";
   private static final String SCHEMA = "CWSCMS";
   private static final String URL =
@@ -89,16 +91,19 @@ public class InMemoryTestResources extends ExternalResource {
     }
   }
 
-  protected static void createDatabase() throws Exception {
+  private static void createDatabase() throws Exception {
     Class.forName(DRIVER_CLASS_NAME);
     runLiquibaseScript(LIQUIBASE_SCRIPT_PATH);
   }
 
-  protected static SessionFactory createHibrtnateSessionFactory() {
-    EntityManagerFactory entityManagerFactory = Persistence
-        .createEntityManagerFactory("CWSCMS-TEST");
-    SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
-    return sessionFactory;
+  private static SessionFactory createHibrtnateSessionFactory() {
+    Configuration configuration = new Configuration();
+    configuration.configure(HIBERNATE_CONFIG_PATH);
+    configuration.setProperty("hibernate.connection.url", URL);
+    configuration.setProperty("hibernate.connection.username", USER);
+    configuration.setProperty("hibernate.connection.password", PASSWORD);
+    configuration.setProperty("hibernate.default_schema", SCHEMA);
+    return configuration.buildSessionFactory();
   }
 
   private static void runLiquibaseScript(String script) throws LiquibaseException {
