@@ -173,7 +173,7 @@ public class OptimisticLockingTest extends BaseCwsCmsInMemoryPersistenceTest {
           sessionFactory ->  dao.update(childClientHolder.getChildClient())
           );
 
-      fail("RollbackException should be thrown");
+      fail("OptimisticLockException should be thrown");
     } catch (OptimisticLockException e) {
     }
   }
@@ -215,7 +215,7 @@ public class OptimisticLockingTest extends BaseCwsCmsInMemoryPersistenceTest {
             dao.update(childClient);
           });
 
-      fail("RollbackException should be thrown");
+      fail("OptimisticLockException should be thrown");
     } catch (OptimisticLockException e) {
     }
   }
