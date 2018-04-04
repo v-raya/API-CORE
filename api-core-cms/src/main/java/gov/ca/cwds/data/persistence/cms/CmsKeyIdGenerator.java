@@ -233,9 +233,8 @@ public final class CmsKeyIdGenerator {
    *
    * @param ts seed timestamp
    * @return CMS formatted timestamp
-   * @throws ParseException on parsing error
    */
-  protected static String createTimestampStr(final Date ts) throws ParseException {
+  protected static String createTimestampStr(final Date ts) {
     return ts == null
         ? createTimestampStr()
         : doubleToStrN(7, timestampToDouble(getTimestampSeed(ts)), POWER_BASE62);
