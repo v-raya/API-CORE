@@ -16,12 +16,26 @@ public class TribalMembershipVerificationDao extends BaseDaoImpl<TribalMembershi
     super(sessionFactory);
   }
 
-  public List<TribalMembershipVerification> findParensByClientId(String clientId) {
+  public List<TribalMembershipVerification> findByClientIdNoTribalEligFrom(String clientId) {
     final List<TribalMembershipVerification> membershipVerifications =
         currentSession()
             .createNamedQuery(
                 TribalMembershipVerification
                     .FIND_TRIBAL_MEMBERSHIP_VERIFICATION_BY_CLIENT_ID_NO_TRIBAL_ELIG_FROM,
+                TribalMembershipVerification.class)
+            .setParameter(TribalMembershipVerification.PARAM_CLIENT_ID, clientId)
+            .list();
+    return ImmutableList.<TribalMembershipVerification>builder()
+        .addAll(membershipVerifications)
+        .build();
+  }
+
+  public List<TribalMembershipVerification> findByClientId(String clientId) {
+    final List<TribalMembershipVerification> membershipVerifications =
+        currentSession()
+            .createNamedQuery(
+                TribalMembershipVerification
+                    .FIND_TRIBAL_MEMBERSHIP_VERIFICATION_BY_CLIENT_ID,
                 TribalMembershipVerification.class)
             .setParameter(TribalMembershipVerification.PARAM_CLIENT_ID, clientId)
             .list();

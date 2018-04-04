@@ -8,7 +8,7 @@ import org.hibernate.annotations.NamedQuery;
 /** @author CWDS TPT-3 Team */
 @Entity
 @Cacheable
-@DiscriminatorValue(value = "INDN_STC ")
+@DiscriminatorValue(value = "INDN_STC")
 @NamedQuery(
   name = IndianEnrolmentStatus.NQ_ALL,
   query = "FROM gov.ca.cwds.data.legacy.cms.entity.syscodes.IndianEnrolmentStatus"

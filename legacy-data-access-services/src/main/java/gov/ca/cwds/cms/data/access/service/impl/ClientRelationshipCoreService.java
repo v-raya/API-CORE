@@ -2,7 +2,6 @@ package gov.ca.cwds.cms.data.access.service.impl;
 
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT_ID;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -117,7 +116,6 @@ public class ClientRelationshipCoreService
     public void beforeDataProcessing(DataAccessBundle bundle) {
       super.beforeDataProcessing(bundle);
       enrichWithPrimaryAndSecondaryClients(bundle);
-      validateAndAddIfNeededTribalMembershipVerification(bundle);
     }
 
     @Override
@@ -132,6 +130,7 @@ public class ClientRelationshipCoreService
 
     @Override
     public void beforeBusinessValidation(DataAccessBundle bundle) {
+      validateAndAddIfNeededTribalMembershipVerification(bundle);
 
       ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
       Client client = awareDTO.getEntity().getPrimaryClient();
@@ -197,23 +196,27 @@ public class ClientRelationshipCoreService
       Client secondaryClient =
           clientDao.find(awareDTO.getEntity().getSecondaryClient().getIdentifier());
 
-      List<TribalMembershipVerification> parentTribals =
-          tribalMembershipVerificationDao.findParensByClientId(secondaryClient.getIdentifier());
+      List<TribalMembershipVerification> secondaryTribals = new ArrayList<>();
+      secondaryTribals.addAll(
+          tribalMembershipVerificationDao.findByClientIdNoTribalEligFrom(
+              secondaryClient.getIdentifier()));
 
-      List<TribalMembershipVerification> parentExtraTribals =
-          getExtraRowsForPrimaryClient(parentTribals);
+      List<TribalMembershipVerification> primaryTribals = new ArrayList<>();
+      primaryTribals.addAll(
+          tribalMembershipVerificationDao.findByClientIdNoTribalEligFrom(
+              primaryClient.getIdentifier()));
 
-      List<TribalMembershipVerification> childTribals =
-          tribalMembershipVerificationDao.findParensByClientId(primaryClient.getIdentifier());
+      List<TribalMembershipVerification> childExtraTribals =
+          getExtraRowsForPrimaryClient(primaryTribals);
 
-      parentExtraTribals.forEach(
+      childExtraTribals.forEach(
           e -> {
             TribalMembershipVerification newlyAdded = tribalMembershipVerificationDao.create(e);
-            changedRowsForChild(newlyAdded, childTribals);
+            changedRows(newlyAdded, secondaryTribals);
           });
     }
 
-    private void changedRowsForChild(
+    private void changedRows(
         TribalMembershipVerification newlyAdded, List<TribalMembershipVerification> childTribals) {
       if (newlyAdded == null || childTribals == null || childTribals.isEmpty()) {
         return;

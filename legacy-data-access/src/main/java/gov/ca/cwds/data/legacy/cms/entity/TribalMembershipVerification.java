@@ -1,12 +1,8 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
-import static gov.ca.cwds.data.legacy.cms.entity.TribalAncestryNotification.FIND_TRIBAL_ANCESTRY_NOTIFICATION_BY_CHILD_CLIENT_ID;
-import static gov.ca.cwds.data.legacy.cms.entity.TribalAncestryNotification.PARAM_CHILD_CLIENT_ID;
-
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.IndianEnrolmentStatus;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.IndianTribeType;
-import gov.ca.cwds.data.persistence.CompositeKey;
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -15,14 +11,15 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.NamedQuery;
 
 /**
  * @author CWDS TPT-3 Team
@@ -42,10 +39,32 @@ import org.hibernate.annotations.FetchMode;
           + TribalMembershipVerification.PARAM_CLIENT_ID
           + " and t.fkFromTribalMembershipVerification is null"
 )
+@NamedQuery(
+    name =
+        TribalMembershipVerification
+            .FIND_TRIBAL_MEMBERSHIP_VERIFICATION_BY_CLIENT_ID,
+    query =
+        "SELECT t FROM gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification t "
+            + "where t.clientId =:"
+            + TribalMembershipVerification.PARAM_CLIENT_ID
+)
+@NamedQuery(
+    name =
+        TribalMembershipVerification
+            .FIND_ALL_TRIBAL,
+    query =
+        "SELECT t FROM gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification t"
+)
 public class TribalMembershipVerification extends CmsPersistentObject {
 
   public static final String FIND_TRIBAL_MEMBERSHIP_VERIFICATION_BY_CLIENT_ID_NO_TRIBAL_ELIG_FROM =
       "gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification";
+
+  public static final String FIND_TRIBAL_MEMBERSHIP_VERIFICATION_BY_CLIENT_ID =
+      "gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerificationById";
+
+  public static final String FIND_ALL_TRIBAL =
+      "gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerificationAll";
 
   public static final String PARAM_CLIENT_ID = "clientId";
 
@@ -55,7 +74,6 @@ public class TribalMembershipVerification extends CmsPersistentObject {
   @Column(name = "THIRD_ID")
   private String thirdId;
 
-  @Id
   @NotNull
   @Size(min = CMS_ID_LEN, max = CMS_ID_LEN)
   @Column(name = "FKCLIENT_T")
@@ -90,8 +108,9 @@ public class TribalMembershipVerification extends CmsPersistentObject {
   private LocalDate statusDate;
 
   @Override
+  @Transient
   public Serializable getPrimaryKey() {
-    return new CompositeKey(clientId, thirdId);
+    return getThirdId();
   }
 
   public String getDoc318id() {

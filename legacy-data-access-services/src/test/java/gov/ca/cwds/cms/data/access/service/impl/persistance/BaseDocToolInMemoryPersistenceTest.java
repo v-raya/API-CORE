@@ -1,6 +1,4 @@
-package gov.ca.cwds.cms.data.access.service.impl;
-
-import gov.ca.cwds.data.legacy.cms.persistence.BasePersistenceTest;
+package gov.ca.cwds.cms.data.access.service.impl.persistance;
 
 public abstract class BaseDocToolInMemoryPersistenceTest extends BasePersistenceTest {
 
