@@ -1,7 +1,9 @@
 #applicationName: CWDS API FUNCTIONAL TESTING
+#If you are creating your own yaml file in your project please follow the same naming pattern. 
 
 authenticationMode: TEST
-tokenCredentials:
+testUrl:
+   baseUrl: ${BASE_URL:-https://ferbapi.preint.cwds.io}
    authenticationBaseUrl: ${BASE_URL:-https://sectest.dss.ca.gov}
    perryLoginUrl: ${PERRY_LOGIN_URL:-https://web.preint.cwds.io/perry/login}
    authLoginUrl: ${AUTH_LOGIN_URL:-https://web.preint.cwds.io/perry/authn/login}

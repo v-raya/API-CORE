@@ -9,7 +9,7 @@ package gov.ca.cwds.authenticate.config;
 public class CWDSAuthenticationClientConfig {
 
   private String authenticationMode;
-  private TokenCredentials tokenCredentials;
+  private TokenCredentials testUrl;
   private SocialWorkerOnly socialWorkerOnly;
 
   /**
@@ -29,15 +29,15 @@ public class CWDSAuthenticationClientConfig {
   /**
    * @return the tokenCredentials
    */
-  public TokenCredentials getTokenCredentials() {
-    return tokenCredentials;
+  public TokenCredentials getTestUrl() {
+    return testUrl;
   }
 
   /**
-   * @param tokenCredentials - tokenCredentials
+   * @param testUrl - testUrl
    */
-  public void setTokenCredentials(TokenCredentials tokenCredentials) {
-    this.tokenCredentials = tokenCredentials;
+  public void setTestUrl(TokenCredentials testUrl) {
+    this.testUrl = testUrl;
   }
 
   /**

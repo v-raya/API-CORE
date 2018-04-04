@@ -14,6 +14,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.ca.cwds.authenticate.config.ConfigReader;
 import gov.ca.cwds.authenticate.config.ConfigUtils;
 
 /**
@@ -38,23 +39,26 @@ public class CWDSDevAuthenticationClient extends HttpClientBuild implements CWDS
 
   private static final String ACCESS_CODE = "accessCode";
   private static final String LOCATION = "Location";
-  private ConfigUtils configUtils = new ConfigUtils();
+  private ConfigReader configReader;
 
   private HttpGet httpGet;
   private URI uri;
   private HttpResponse httpResponse;
   private String redirectUrl;
   private String token = null;
-
   private String userName;
 
   /**
-   * Constructor
-   * 
+   * @param configReader - configReader
    * @param userName - userName
    */
-  public CWDSDevAuthenticationClient(String userName) {
+  public CWDSDevAuthenticationClient(ConfigReader configReader, String userName) {
     this.userName = userName;
+    if (configReader == null) {
+      this.configReader = new ConfigUtils();
+    } else {
+      this.configReader = configReader;
+    }
   }
 
   /**
@@ -64,7 +68,7 @@ public class CWDSDevAuthenticationClient extends HttpClientBuild implements CWDS
   public String getToken() {
     try {
       LOGGER.info(NEW_REQUEST_TO_BEGIN);
-      LOGGER.info("GET: {}", configUtils.getYamlValues().getTokenCredentials().getAuthLoginUrl());
+      LOGGER.info("GET: {}", configReader.readConfig().getTestUrl().getAuthLoginUrl());
       postParams.add(new BasicNameValuePair("callback", CALL_BACK_URL));
       postParams.add(new BasicNameValuePair("sp_id", null));
       httpGet = new HttpGet(AUTH_LOGIN_URL);

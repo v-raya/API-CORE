@@ -7,6 +7,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.ca.cwds.authenticate.config.ConfigReader;
 import gov.ca.cwds.authenticate.config.ConfigUtils;
 
 /**
@@ -23,8 +24,19 @@ public class AuthenticationUtils {
   private String stateSensitiveToken;
   private String stateSealedToken;
 
-  CWDSLoginType cwdsLoginType = new CWDSLoginType();
-  private ConfigUtils configUtils = new ConfigUtils();
+  CWDSLoginType cwdsLoginType = null;
+  private ConfigReader configReader;
+
+  /**
+   * @param configReader - configReader
+   */
+  public AuthenticationUtils(ConfigReader configReader) {
+    if (configReader == null) {
+      this.configReader = new ConfigUtils();
+    } else {
+      this.configReader = configReader;
+    }
+  }
 
   /**
    * @param userType - Type user to get the token {@link UserGroup}
@@ -32,8 +44,9 @@ public class AuthenticationUtils {
    */
   public String getToken(UserGroup userType) {
 
+    cwdsLoginType = new CWDSLoginType(configReader);
     if (userType != null) {
-      String loginType = configUtils.getYamlValues().getAuthenticationMode();
+      String loginType = configReader.readConfig().getAuthenticationMode();
       switch (userType) {
         case SOCIAL_WORKER:
           return getSocialWorkerToken(loginType, userType);

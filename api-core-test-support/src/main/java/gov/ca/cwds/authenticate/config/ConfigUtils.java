@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
-import io.dropwizard.configuration.ConfigurationSourceProvider;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 
@@ -15,7 +14,7 @@ import io.dropwizard.configuration.SubstitutingSourceProvider;
  * @author CWDS TPT-4 Team
  *
  */
-public class ConfigUtils implements ConfigurationSourceProvider {
+public class ConfigUtils implements ConfigReader {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ConfigUtils.class);
 
@@ -24,7 +23,8 @@ public class ConfigUtils implements ConfigurationSourceProvider {
   /**
    * @return the yaml file values
    */
-  public CWDSAuthenticationClientConfig getYamlValues() {
+  @Override
+  public CWDSAuthenticationClientConfig readConfig() {
     Yaml yaml = new Yaml();
     try {
       InputStream ymlTestingSourceProvider =

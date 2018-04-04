@@ -8,6 +8,8 @@ package gov.ca.cwds.authenticate.config;
  */
 public class TokenCredentials {
 
+  private String baseUrl;
+
   private String authenticationBaseUrl;
 
   private String perryLoginUrl;
@@ -21,12 +23,21 @@ public class TokenCredentials {
   private String logOutUrl;
 
   /**
+   * getAuthenticationBaseUrl.
+   * 
+   * @return the authenticationBaseUrl
+   */
+  public String getAuthenticationBaseUrl() {
+    return authenticationBaseUrl;
+  }
+
+  /**
    * getBaseUrl.
    * 
    * @return the baseUrl
    */
-  public String getAuthenticationBaseUrl() {
-    return authenticationBaseUrl;
+  public String getBaseUrl() {
+    return baseUrl;
   }
 
   /**
@@ -72,6 +83,13 @@ public class TokenCredentials {
    */
   public String getLogOutUrl() {
     return logOutUrl;
+  }
+
+  /**
+   * @param baseUrl - baseUrl
+   */
+  public void setBaseUrl(String baseUrl) {
+    this.baseUrl = baseUrl;
   }
 
   /**

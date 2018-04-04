@@ -14,6 +14,8 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.ca.cwds.authenticate.config.ConfigReader;
+
 /**
  * This class is used to generate the token using username and password with Perry, and handles all
  * the redirect from clicking the login to the end to get the token.
@@ -69,12 +71,15 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
   private HttpResponse httpResponse;
   private HttpPost httpPost;
   private String location;
+  private ConfigReader configReader;
 
   /**
+   * @param configReader - configReader
    * @param userName - userName
    * @param password - password
    */
-  public CWDSAuthenticationClient(String userName, String password) {
+  public CWDSAuthenticationClient(ConfigReader configReader, String userName, String password) {
+    this.configReader = configReader;
     this.userName = userName;
     this.password = password;
   }
