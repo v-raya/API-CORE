@@ -14,16 +14,13 @@ import javax.persistence.IdClass;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-/**
- * @author CWDS TPT-3 Team
- */
+/** @author CWDS TPT-3 Team */
 @Entity
 @Table(name = "SCH_HIST")
 @IdClass(SchoolOriginHistoryPK.class)
 @NamedQuery(
-    name = SchoolOriginHistory.NQ_FIND_BY_CLIENT_ID,
-    query = "from SchoolOriginHistory where fkchldClt = :"
-        + SchoolOriginHistory.NQ_PARAM_CLIENT_ID
+  name = SchoolOriginHistory.NQ_FIND_BY_CLIENT_ID,
+  query = "from SchoolOriginHistory where fkchldClt = :" + SchoolOriginHistory.NQ_PARAM_CLIENT_ID
 )
 public class SchoolOriginHistory extends CmsPersistentObject {
 
@@ -76,8 +73,7 @@ public class SchoolOriginHistory extends CmsPersistentObject {
     return schoolDecision;
   }
 
-  public void setSchoolDecision(
-      YesNoUnknown schoolDecisionCode) {
+  public void setSchoolDecision(YesNoUnknown schoolDecisionCode) {
     this.schoolDecision = schoolDecisionCode;
   }
 
@@ -106,11 +102,15 @@ public class SchoolOriginHistory extends CmsPersistentObject {
       return false;
     }
     SchoolOriginHistory schoolOriginHistory = (SchoolOriginHistory) o;
-    return Objects.equal(fkchldClt, schoolOriginHistory.fkchldClt) &&
-        Objects.equal(thirdId, schoolOriginHistory.thirdId) &&
-        Objects.equal(schoolDecision, schoolOriginHistory.schoolDecision) &&
-        Objects.equal(schoolDecisionDate, schoolOriginHistory.schoolDecisionDate) &&
-        Objects.equal(fkedPvdrt, schoolOriginHistory.fkedPvdrt);
+    return isIdsEqual(schoolOriginHistory)
+        && Objects.equal(schoolDecision, schoolOriginHistory.schoolDecision)
+        && Objects.equal(schoolDecisionDate, schoolOriginHistory.schoolDecisionDate);
+  }
+
+  private boolean isIdsEqual(SchoolOriginHistory schoolOriginHistory) {
+    return Objects.equal(fkchldClt, schoolOriginHistory.fkchldClt)
+        && Objects.equal(thirdId, schoolOriginHistory.thirdId)
+        && Objects.equal(fkedPvdrt, schoolOriginHistory.fkedPvdrt);
   }
 
   @Override

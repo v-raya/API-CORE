@@ -17,6 +17,7 @@ import org.mapstruct.factory.Mappers;
  * @author CWDS CALS API Team
  */
 @Mapper(imports={CountyUtil.class, Constants.class})
+@FunctionalInterface
 public interface CountyOwnershipMapper {
   CountyOwnershipMapper INSTANCE = Mappers.getMapper(CountyOwnershipMapper.class);
 
