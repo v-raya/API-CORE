@@ -15,6 +15,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+@SuppressWarnings("squid:S1607")
 public class CaseDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
 
   private CaseDao caseDao = null;
