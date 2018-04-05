@@ -25,7 +25,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
 
-@SuppressWarnings({"squid:S3437", "squid:S2160"})
+@SuppressWarnings({"squid:S3437", "squid:S2160", "squid:S1135"})
 @Entity
 @NamedQuery(
     name = FIND_TERMINATION_BY_CHILD_CLIENT_ID,
