@@ -20,8 +20,7 @@ public class DroolsService {
   private static final String VAR_VALIDATION_DETAILS_LIST = "validationDetailsList";
   private static final String VAR_AUTHORIZATION_RESULT = "authorizationResult";
 
-  public Set<IssueDetails> performBusinessRules(DroolsConfiguration droolsConfiguration, Object... facts)
-      throws DroolsException {
+  public Set<IssueDetails> performBusinessRules(DroolsConfiguration droolsConfiguration, Object... facts) {
     KieSession kSession = null;
     try {
       kSession = initSession(droolsConfiguration);
@@ -33,13 +32,15 @@ public class DroolsService {
       final int rulesFired = kSession.fireAllRules();
       log(droolsConfiguration, facts, rulesFired, validationDetailsList);
       return validationDetailsList;
+    } catch (DroolsException e) {
+      throw new IllegalStateException(e);
     } finally {
       disposeSessionSafely(kSession);
     }
   }
 
   public boolean performAuthorizationRules(final DroolsConfiguration droolsConfiguration,
-      final Collection<Object> facts) throws DroolsException {
+      final Collection<Object> facts) {
     KieSession kieSession = null;
     try {
       kieSession = initSession(droolsConfiguration);
@@ -51,6 +52,8 @@ public class DroolsService {
       final Boolean authorizationResult = (Boolean) kieSession.getGlobal(VAR_AUTHORIZATION_RESULT);
       log(droolsConfiguration, facts, rulesFired, authorizationResult);
       return authorizationResult;
+    } catch (DroolsException e) {
+      throw new IllegalStateException(e);
     } finally {
       disposeSessionSafely(kieSession);
     }

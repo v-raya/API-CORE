@@ -6,15 +6,7 @@ import static gov.ca.cwds.cms.data.access.service.impl.IdGenerator.generateId;
 import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
 import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Date;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.cms.data.access.Constants.PhoneticSearchTables;
 import gov.ca.cwds.cms.data.access.dao.BackgroundCheckDao;
@@ -58,9 +50,13 @@ import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeProfile;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeUc;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
-import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Date;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Service for create/update/find PlacementHome with business validation and data processing.
@@ -150,15 +146,13 @@ public class PlacementHomeCoreService
     }
 
     @Override
-    public void dataProcessing(DataAccessBundle bundle, PerryAccount perryAccount)
-        throws DroolsException {
+    public void dataProcessing(DataAccessBundle bundle, PerryAccount perryAccount) {
       businessValidationService.runDataProcessing(bundle.getAwareDto(), perryAccount,
           PlacementHomeDroolsConfiguration.DATA_PROCESSING_INSTANCE);
     }
 
     @Override
-    public void businessValidation(DataAccessBundle bundle, PerryAccount perryAccount)
-        throws DroolsException {
+    public void businessValidation(DataAccessBundle bundle, PerryAccount perryAccount) {
       businessValidationService.runBusinessValidation(bundle.getAwareDto(), perryAccount,
           PlacementHomeDroolsConfiguration.INSTANCE);
     }

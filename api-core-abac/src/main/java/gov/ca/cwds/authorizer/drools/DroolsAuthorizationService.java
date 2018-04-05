@@ -3,7 +3,6 @@ package gov.ca.cwds.authorizer.drools;
 import com.google.inject.Inject;
 import gov.ca.cwds.authorizer.StaffPrivilegeType;
 import gov.ca.cwds.authorizer.drools.configuration.DroolsAuthorizer;
-import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.drools.DroolsService;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,7 +20,8 @@ public class DroolsAuthorizationService {
     this.droolsService = droolsService;
   }
 
-  public boolean authorizeObjectOperation(final Collection<StaffPrivilegeType> staffPrivilegeTypes, final DroolsAuthorizer droolsConfiguration, List<Object> instances) throws DroolsException {
+  public boolean authorizeObjectOperation(final Collection<StaffPrivilegeType> staffPrivilegeTypes,
+      final DroolsAuthorizer droolsConfiguration, List<Object> instances) {
     final Collection<Object> facts = toFactsCollection(staffPrivilegeTypes, instances);
     return droolsService.performAuthorizationRules(
         droolsConfiguration.getInstance(),
@@ -29,7 +29,8 @@ public class DroolsAuthorizationService {
     );
   }
 
-  private Collection<Object> toFactsCollection(final Collection<StaffPrivilegeType> staffPrivilegeTypes, final List<Object> instances) {
+  private Collection<Object> toFactsCollection(
+      final Collection<StaffPrivilegeType> staffPrivilegeTypes, final List<Object> instances) {
     final Collection<Object> facts = new ArrayList<>(staffPrivilegeTypes.size() + instances.size());
     facts.addAll(staffPrivilegeTypes);
     facts.addAll(instances);

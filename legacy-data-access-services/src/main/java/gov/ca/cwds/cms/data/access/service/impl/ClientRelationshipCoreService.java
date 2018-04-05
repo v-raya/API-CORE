@@ -2,13 +2,7 @@ package gov.ca.cwds.cms.data.access.service.impl;
 
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT_ID;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.cms.data.access.dto.ClientRelationshipAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.DataAccessServiceBase;
@@ -22,10 +16,13 @@ import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.ClientRelationshipDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
-import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Service for create/update/find ClientRelationship with business validation and data processing.
@@ -66,7 +63,7 @@ public class ClientRelationshipCoreService
 
   @Override
   public ClientRelationship update(ClientRelationshipAwareDTO entityAwareDto)
-      throws DataAccessServicesException, DroolsException {
+      throws DataAccessServicesException {
     entityAwareDto.getEntity().setLastUpdateTime(LocalDateTime.now());
     entityAwareDto.getEntity().setLastUpdateId(PrincipalUtils.getStaffPersonId());
     return super.update(entityAwareDto);
@@ -137,8 +134,7 @@ public class ClientRelationshipCoreService
     }
 
     @Override
-    public void businessValidation(DataAccessBundle bundle, PerryAccount perryAccount)
-        throws DroolsException {
+    public void businessValidation(DataAccessBundle bundle, PerryAccount perryAccount) {
       businessValidationService.runBusinessValidation(
           bundle.getAwareDto(),
           PrincipalUtils.getPrincipal(),
