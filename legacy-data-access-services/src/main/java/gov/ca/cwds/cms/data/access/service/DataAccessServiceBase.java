@@ -11,6 +11,8 @@ import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.io.Serializable;
 
 /**
+ * Abstract implementation for DataAccessServiceBase.
+ *
  * @author CWDS TPT-3 Team
  */
 public abstract class DataAccessServiceBase<

@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Drools Service.
  * @author CWDS CALS API Team
  */
 
@@ -20,13 +21,21 @@ public class DroolsService {
   private static final String VAR_VALIDATION_DETAILS_LIST = "validationDetailsList";
   private static final String VAR_AUTHORIZATION_RESULT = "authorizationResult";
 
-  public Set<IssueDetails> performBusinessRules(DroolsConfiguration droolsConfiguration, Object... facts) {
+  /**
+   *  Processing Business Rules.
+   *
+   * @param droolsConfiguration configuration.
+   * @param facts facts for rules.
+   * @return set of Issues.
+   */
+  public Set<IssueDetails> performBusinessRules(DroolsConfiguration droolsConfiguration,
+      Object... facts) {
     KieSession kSession = null;
     try {
       kSession = initSession(droolsConfiguration);
       final Set<IssueDetails> validationDetailsList = new HashSet<>();
       kSession.setGlobal(VAR_VALIDATION_DETAILS_LIST, validationDetailsList);
-      for (Object fact: facts) {
+      for (Object fact : facts) {
         kSession.insert(fact);
       }
       final int rulesFired = kSession.fireAllRules();
@@ -39,6 +48,13 @@ public class DroolsService {
     }
   }
 
+  /**
+   * Perform authorisation rules.
+   *
+   * @param droolsConfiguration configuration.
+   * @param facts facts for rules.
+   * @return boolean result.
+   */
   public boolean performAuthorizationRules(final DroolsConfiguration droolsConfiguration,
       final Collection<Object> facts) {
     KieSession kieSession = null;

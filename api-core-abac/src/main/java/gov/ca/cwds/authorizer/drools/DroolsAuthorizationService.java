@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ *  Drools authorization service.
+ *
  * @author CWDS TPT-3 Team
  */
 public class DroolsAuthorizationService {
@@ -20,6 +22,14 @@ public class DroolsAuthorizationService {
     this.droolsService = droolsService;
   }
 
+  /**
+   *  Authorization object operation.
+   *
+   * @param staffPrivilegeTypes staff privilage types.
+   * @param droolsConfiguration drools configuration.
+   * @param instances instances.
+   * @return result of authorization.
+   */
   public boolean authorizeObjectOperation(final Collection<StaffPrivilegeType> staffPrivilegeTypes,
       final DroolsAuthorizer droolsConfiguration, List<Object> instances) {
     final Collection<Object> facts = toFactsCollection(staffPrivilegeTypes, instances);

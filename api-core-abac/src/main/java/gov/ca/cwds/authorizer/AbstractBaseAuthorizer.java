@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Abstract implementation of Base Authorizer.
+ *
  * @author CWDS TPT-2 Team
  */
 public abstract class AbstractBaseAuthorizer<T, I> extends BaseAuthorizer<T, I> {
@@ -24,7 +26,12 @@ public abstract class AbstractBaseAuthorizer<T, I> extends BaseAuthorizer<T, I> 
 
   private DroolsAuthorizer droolsConfiguration;
 
-
+  /**
+   * Constructor.
+   *
+   * @param droolsAuthorizationService Authorization service
+   * @param droolsConfiguration Drools configuration
+   */
   public AbstractBaseAuthorizer(DroolsAuthorizationService droolsAuthorizationService,
       DroolsAuthorizer droolsConfiguration) {
     this.droolsAuthorizationService = droolsAuthorizationService;
