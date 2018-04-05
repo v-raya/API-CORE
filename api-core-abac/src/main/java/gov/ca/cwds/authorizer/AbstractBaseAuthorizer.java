@@ -50,19 +50,19 @@ public abstract class AbstractBaseAuthorizer<T, I> extends BaseAuthorizer<T, I> 
   protected boolean authorizeInstanceOperation(
       final T instance,
       List<Object> authorizationFacts) {
-      final PerryAccount perryAccount = PerrySubject.getPerryAccount();
-      final Set<StaffPrivilegeType> staffPrivilegeTypes = toStaffPersonPrivilegeTypes(perryAccount);
-      if (staffPrivilegeTypes.isEmpty()) {
-        return false;
-      }
-      if (authorizationFacts == null) {
-        authorizationFacts = new ArrayList<>();
-      }
-      authorizationFacts.add(instance);
-      authorizationFacts.add(perryAccount);
-      final boolean authorizationResult = droolsAuthorizationService
-          .authorizeObjectOperation(staffPrivilegeTypes, droolsConfiguration, authorizationFacts);
-      logAuthorization(perryAccount, staffPrivilegeTypes, instance, authorizationResult);
-      return authorizationResult;
+    final PerryAccount perryAccount = PerrySubject.getPerryAccount();
+    final Set<StaffPrivilegeType> staffPrivilegeTypes = toStaffPersonPrivilegeTypes(perryAccount);
+    if (staffPrivilegeTypes.isEmpty()) {
+      return false;
+    }
+    if (authorizationFacts == null) {
+      authorizationFacts = new ArrayList<>();
+    }
+    authorizationFacts.add(instance);
+    authorizationFacts.add(perryAccount);
+    final boolean authorizationResult = droolsAuthorizationService
+        .authorizeObjectOperation(staffPrivilegeTypes, droolsConfiguration, authorizationFacts);
+    logAuthorization(perryAccount, staffPrivilegeTypes, instance, authorizationResult);
+    return authorizationResult;
   }
 }
