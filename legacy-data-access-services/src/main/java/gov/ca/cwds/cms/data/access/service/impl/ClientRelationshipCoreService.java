@@ -2,13 +2,6 @@ package gov.ca.cwds.cms.data.access.service.impl;
 
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT_ID;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.dto.ClientRelationshipAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
@@ -26,11 +19,16 @@ import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
-import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -119,8 +117,7 @@ public class ClientRelationshipCoreService
     }
 
     @Override
-    public void dataProcessing(DataAccessBundle bundle, PerryAccount perryAccount)
-        throws DroolsException {
+    public void dataProcessing(DataAccessBundle bundle, PerryAccount perryAccount) {
       super.dataProcessing(bundle, perryAccount);
       businessValidationService.runBusinessValidation(
           bundle.getAwareDto(),
