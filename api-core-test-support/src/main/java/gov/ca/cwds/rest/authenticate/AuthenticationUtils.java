@@ -1,12 +1,5 @@
 package gov.ca.cwds.rest.authenticate;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import gov.ca.cwds.authenticate.config.ConfigReader;
 import gov.ca.cwds.authenticate.config.ConfigUtils;
 
@@ -15,8 +8,6 @@ import gov.ca.cwds.authenticate.config.ConfigUtils;
  *
  */
 public class AuthenticationUtils {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationUtils.class);
 
   private String token;
   private String countySensitiveToken;
@@ -39,86 +30,65 @@ public class AuthenticationUtils {
   }
 
   /**
-   * @param userType - Type user to get the token {@link UserGroup}
+   * @param userType - Type of user to get the token {@link UserGroup}
    * @return the user based token
    */
   public String getToken(UserGroup userType) {
-
     cwdsLoginType = new CWDSLoginType(configReader);
     if (userType != null) {
-      String loginType = configReader.readConfig().getAuthenticationMode();
       switch (userType) {
         case SOCIAL_WORKER:
-          return getSocialWorkerToken(loginType, userType);
+          return getSocialWorkerToken(userType);
 
         case COUNTY_SENSITIVE:
-          return getCountySensitiveToken(userType, loginType);
+          return getCountySensitiveToken(userType);
 
         case COUNTY_SEALED:
-          return getCountySealedToken(userType, loginType);
+          return getCountySealedToken(userType);
 
         case STATE_SENSITIVE:
-          return getStateSenstiveToken(userType, loginType);
+          return getStateSenstiveToken(userType);
 
         case STATE_SEALED:
-          return getStateSealedToken(userType, loginType);
+          return getStateSealedToken(userType);
       }
     }
     return null;
   }
 
-  private String getStateSealedToken(UserGroup userType, String loginType) {
+  private String getStateSealedToken(UserGroup userType) {
     if (stateSealedToken == null) {
-      stateSealedToken = getToken(loginType, userType);
+      stateSealedToken = cwdsLoginType.login(userType);
     }
     return stateSealedToken;
   }
 
-  private String getStateSenstiveToken(UserGroup userType, String loginType) {
+  private String getStateSenstiveToken(UserGroup userType) {
     if (stateSensitiveToken == null) {
-      stateSensitiveToken = getToken(loginType, userType);
+      stateSensitiveToken = cwdsLoginType.login(userType);
     }
     return stateSensitiveToken;
   }
 
-  private String getCountySealedToken(UserGroup userType, String loginType) {
+  private String getCountySealedToken(UserGroup userType) {
     if (countySealedToken == null) {
-      countySealedToken = getToken(loginType, userType);
+      countySealedToken = cwdsLoginType.login(userType);
     }
     return countySealedToken;
   }
 
-  private String getCountySensitiveToken(UserGroup userType, String loginType) {
+  private String getCountySensitiveToken(UserGroup userType) {
     if (countySensitiveToken == null) {
-      countySensitiveToken = getToken(loginType, userType);
+      countySensitiveToken = cwdsLoginType.login(userType);
     }
     return countySensitiveToken;
   }
 
-  private String getSocialWorkerToken(String loginType, UserGroup userType) {
+  private String getSocialWorkerToken(UserGroup userType) {
     if (token == null) {
-      token = getToken(loginType, userType);
+      token = cwdsLoginType.login(userType);
     }
     return token;
-  }
-
-  private String getToken(String loginType, UserGroup userType) {
-    if (!"TEST".equals(loginType)) {
-      return cwdsLoginType.login("username", "password");
-    } else {
-      String jsonFile = "";
-      String userJson = "";
-      if (userType != null) {
-        jsonFile = "/LoginUser/" + userType.getName() + ".json";
-      }
-      try {
-        userJson = new String(IOUtils.toByteArray(getClass().getResourceAsStream(jsonFile)),
-            StandardCharsets.UTF_8);
-      } catch (IOException e) {
-        LOGGER.error("Unable to parse the json into String {}", e);
-      }
-      return cwdsLoginType.login(userJson);
-    }
   }
 
 }
