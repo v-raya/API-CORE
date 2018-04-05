@@ -20,7 +20,6 @@ import static org.hamcrest.Matchers.is;
 import gov.ca.cwds.authorizer.ClientCondition;
 import gov.ca.cwds.authorizer.StaffPrivilegeType;
 import gov.ca.cwds.authorizer.drools.configuration.ClientAbstractAuthorizationDroolsConfiguration;
-import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.drools.DroolsService;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,7 +37,7 @@ public class ClientAuthorizationDrlTest {
       = new DroolsAuthorizationService(droolsService);
 
   @Test
-  public void authorizeClientRead_success_whenNoConditionsClient() throws DroolsException {
+  public void authorizeClientRead_success_whenNoConditionsClient() {
     assertClientAccessMatrixValue(NO_CONDITIONS, list(SOCIAL_WORKER_ONLY), true);
     assertClientAccessMatrixValue(NO_CONDITIONS, list(COUNTY_SENSITIVE), true);
     assertClientAccessMatrixValue(NO_CONDITIONS, list(COUNTY_SEALED), true);
@@ -47,7 +46,7 @@ public class ClientAuthorizationDrlTest {
   }
 
   @Test
-  public void authorizeClientRead_success_whenSameCountySensitiveClient() throws DroolsException {
+  public void authorizeClientRead_success_whenSameCountySensitiveClient() {
     assertClientAccessMatrixValue(SAME_COUNTY_SENSITIVE, list(SOCIAL_WORKER_ONLY), false);
     assertClientAccessMatrixValue(SAME_COUNTY_SENSITIVE, list(COUNTY_SENSITIVE), true);
     assertClientAccessMatrixValue(SAME_COUNTY_SENSITIVE, list(COUNTY_SEALED), false);
@@ -56,7 +55,7 @@ public class ClientAuthorizationDrlTest {
   }
 
   @Test
-  public void authorizeClientRead_success_whenSameCountySealedClient() throws DroolsException {
+  public void authorizeClientRead_success_whenSameCountySealedClient() {
     assertClientAccessMatrixValue(SAME_COUNTY_SEALED, list(SOCIAL_WORKER_ONLY), false);
     assertClientAccessMatrixValue(SAME_COUNTY_SEALED, list(COUNTY_SENSITIVE), false);
     assertClientAccessMatrixValue(SAME_COUNTY_SEALED, list(COUNTY_SEALED), true);
@@ -65,7 +64,7 @@ public class ClientAuthorizationDrlTest {
   }
 
   @Test
-  public void authorizeClientRead_success_whenDifferentCountySensitiveClient() throws DroolsException {
+  public void authorizeClientRead_success_whenDifferentCountySensitiveClient() {
     assertClientAccessMatrixValue(DIFFERENT_COUNTY_SENSITIVE, list(SOCIAL_WORKER_ONLY), false);
     assertClientAccessMatrixValue(DIFFERENT_COUNTY_SENSITIVE, list(COUNTY_SENSITIVE), false);
     assertClientAccessMatrixValue(DIFFERENT_COUNTY_SENSITIVE, list(COUNTY_SEALED), false);
@@ -74,7 +73,7 @@ public class ClientAuthorizationDrlTest {
   }
 
   @Test
-  public void authorizeClientRead_success_whenDifferentCountySealedClient() throws DroolsException {
+  public void authorizeClientRead_success_whenDifferentCountySealedClient() {
     assertClientAccessMatrixValue(DIFFERENT_COUNTY_SEALED, list(SOCIAL_WORKER_ONLY), false);
     assertClientAccessMatrixValue(DIFFERENT_COUNTY_SEALED, list(COUNTY_SENSITIVE), false);
     assertClientAccessMatrixValue(DIFFERENT_COUNTY_SEALED, list(COUNTY_SEALED), false);
@@ -83,7 +82,7 @@ public class ClientAuthorizationDrlTest {
   }
 
   @Test
-  public void authorizeClientRead_success_whenNoCountySensitiveClient() throws DroolsException {
+  public void authorizeClientRead_success_whenNoCountySensitiveClient() {
     assertClientAccessMatrixValue(NO_COUNTY_SENSITIVE, list(SOCIAL_WORKER_ONLY), false);
     assertClientAccessMatrixValue(NO_COUNTY_SENSITIVE, list(COUNTY_SENSITIVE), true);
     assertClientAccessMatrixValue(NO_COUNTY_SENSITIVE, list(COUNTY_SEALED), false);
@@ -92,7 +91,7 @@ public class ClientAuthorizationDrlTest {
   }
 
   @Test
-  public void authorizeClientRead_success_whenNoCountySealedClient() throws DroolsException {
+  public void authorizeClientRead_success_whenNoCountySealedClient() {
     assertClientAccessMatrixValue(NO_COUNTY_SEALED, list(SOCIAL_WORKER_ONLY), false);
     assertClientAccessMatrixValue(NO_COUNTY_SEALED, list(COUNTY_SENSITIVE), false);
     assertClientAccessMatrixValue(NO_COUNTY_SEALED, list(COUNTY_SEALED), true);
@@ -101,7 +100,7 @@ public class ClientAuthorizationDrlTest {
   }
 
   @Test
-  public void authorizeClientRead_true_whenMultiplePrivilegesWithSomePermitted() throws DroolsException {
+  public void authorizeClientRead_true_whenMultiplePrivilegesWithSomePermitted() {
     final List<StaffPrivilegeType> privileges = Arrays.asList(
         SOCIAL_WORKER_ONLY,
         COUNTY_SENSITIVE,
@@ -113,7 +112,7 @@ public class ClientAuthorizationDrlTest {
   }
 
   @Test
-  public void authorizeClientRead_false_whenMultiplePrivilegesWithNoPermitted() throws DroolsException {
+  public void authorizeClientRead_false_whenMultiplePrivilegesWithNoPermitted() {
     final List<StaffPrivilegeType> privileges = Arrays.asList(
         SOCIAL_WORKER_ONLY,
         COUNTY_SENSITIVE,
@@ -125,12 +124,12 @@ public class ClientAuthorizationDrlTest {
   }
 
   @Test
-  public void authorizeClientRead_false_whenNoPrivileges() throws DroolsException {
+  public void authorizeClientRead_false_whenNoPrivileges() {
     assertClientAccessMatrixValue(DIFFERENT_COUNTY_SEALED, emptyList(), false);
   }
 
   private void assertClientAccessMatrixValue(ClientCondition condition,
-      List<StaffPrivilegeType> privileges, boolean expectedResult) throws DroolsException {
+      List<StaffPrivilegeType> privileges, boolean expectedResult) {
     ClientAbstractAuthorizationDroolsConfiguration droolsConfiguration = new ClientAbstractAuthorizationDroolsConfiguration();
     List instances = new ArrayList<>();
     instances.add(condition);

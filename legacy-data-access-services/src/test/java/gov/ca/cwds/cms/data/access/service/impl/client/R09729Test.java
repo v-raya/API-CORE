@@ -8,7 +8,6 @@ import static gov.ca.cwds.cms.data.access.service.impl.client.ClientTestUtil.saf
 import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;
-import gov.ca.cwds.drools.DroolsException;
 import org.junit.Test;
 
 /**
@@ -21,7 +20,7 @@ public class R09729Test extends BaseDocToolRulesClientImplementationTest {
   private static final String THIRD_ID_2 = "0hmDhCP0Fm";
 
   @Test
-  public void rule09729_satisfied_whenNoAlerts() throws DroolsException {
+  public void rule09729_satisfied_whenNoAlerts() {
     // given
     final Client client = client(SOME_DATE);
     final ChildClientEntityAwareDTO input = dto(client);
@@ -31,7 +30,7 @@ public class R09729Test extends BaseDocToolRulesClientImplementationTest {
   }
 
   @Test
-  public void rule09729_satisfied_whenSingleAlertOnDOB() throws DroolsException {
+  public void rule09729_satisfied_whenSingleAlertOnDOB() {
     // given
     final Client client = client(SOME_DATE);
     final SafetyAlert safetyAlert = safetyAlert(THIRD_ID, SOME_DATE);
@@ -42,7 +41,7 @@ public class R09729Test extends BaseDocToolRulesClientImplementationTest {
   }
 
   @Test
-  public void rule09729_satisfied_whenSingleAlertAfterDOB() throws DroolsException {
+  public void rule09729_satisfied_whenSingleAlertAfterDOB() {
     // given
     final Client client = client(SOME_DATE);
     final SafetyAlert safetyAlert = safetyAlert(THIRD_ID, SOME_DATE.plusDays(100));
@@ -53,7 +52,7 @@ public class R09729Test extends BaseDocToolRulesClientImplementationTest {
   }
 
   @Test
-  public void rule09729_satisfied_whenTwoAlertsAfterDOB() throws DroolsException {
+  public void rule09729_satisfied_whenTwoAlertsAfterDOB() {
     // given
     final Client client = client(SOME_DATE);
     final SafetyAlert safetyAlert0 = safetyAlert(THIRD_ID, SOME_DATE.plusDays(1));
@@ -65,7 +64,7 @@ public class R09729Test extends BaseDocToolRulesClientImplementationTest {
   }
 
   @Test
-  public void rule09729_violated_whenSingleAlertBeforeDOB() throws DroolsException {
+  public void rule09729_violated_whenSingleAlertBeforeDOB() {
     // given
     final Client client = client(SOME_DATE);
     final SafetyAlert safetyAlert = safetyAlert(THIRD_ID, SOME_DATE.minusDays(1));
@@ -76,7 +75,7 @@ public class R09729Test extends BaseDocToolRulesClientImplementationTest {
   }
 
   @Test
-  public void rule09729_violatedTwice_whenTwoAlertsBeforeDOB() throws DroolsException {
+  public void rule09729_violatedTwice_whenTwoAlertsBeforeDOB() {
     // given
     final Client client = client(SOME_DATE);
     final SafetyAlert safetyAlert0 = safetyAlert(THIRD_ID, SOME_DATE.minusDays(1));
@@ -88,7 +87,7 @@ public class R09729Test extends BaseDocToolRulesClientImplementationTest {
   }
 
   @Test
-  public void rule09729_violated_whenOneOfTwoAlertsIsBeforeDOB() throws DroolsException {
+  public void rule09729_violated_whenOneOfTwoAlertsIsBeforeDOB() {
     // given
     final Client client = client(SOME_DATE);
     final SafetyAlert safetyAlert0 = safetyAlert(THIRD_ID, SOME_DATE.plusDays(100));
