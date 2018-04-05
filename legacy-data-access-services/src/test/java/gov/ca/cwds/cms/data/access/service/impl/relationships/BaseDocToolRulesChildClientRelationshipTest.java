@@ -20,9 +20,6 @@ import org.mockito.Mock;
  */
 public abstract class BaseDocToolRulesChildClientRelationshipTest extends BaseDocToolRulesTest {
 
-  private String PRIMARY_ID = "0001112223";
-  private String SECONDARY_ID = "0001112224";
-
   protected BusinessValidationService businessValidationService;
   protected ClientCoreService clientCoreService;
   protected ClientRelationshipAwareDTO awareDTO;
@@ -70,10 +67,10 @@ public abstract class BaseDocToolRulesChildClientRelationshipTest extends BaseDo
     clientRelationship.setEndDate(endDate);
 
     Client client = new Client();
-    client.setIdentifier(PRIMARY_ID);
+    client.setIdentifier("oooo111111");
 
     Client clientSecondary = new Client();
-    clientSecondary.setIdentifier(SECONDARY_ID);
+    clientSecondary.setIdentifier("oooo222222");
 
     clientRelationship.setPrimaryClient(client);
     clientRelationship.setSecondaryClient(clientSecondary);
