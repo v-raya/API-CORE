@@ -7,7 +7,6 @@ import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.enums.CompetencyType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ParentalRightTerminationType;
 import java.io.Serializable;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -78,7 +77,7 @@ public class ParentalRightsTermination extends CmsPersistentObject {
   private CompetencyType competencyType;
 
   @Column(name = "COMP_EX_DT")
-  private Date competencyExaminationDate;
+  private LocalDate competencyExaminationDate;
 
   @NotNull
   @Size(max = 30)
@@ -180,7 +179,6 @@ public class ParentalRightsTermination extends CmsPersistentObject {
     this.commentDescription = comntDsc;
   }
 
-
   public String getLocationDescription() {
     return locationDescription;
   }
@@ -188,7 +186,6 @@ public class ParentalRightsTermination extends CmsPersistentObject {
   public void setLocationDescription(String endlocDsc) {
     this.locationDescription = endlocDsc;
   }
-
 
   public CompetencyType getCompetencyType() {
     return competencyType;
@@ -198,15 +195,13 @@ public class ParentalRightsTermination extends CmsPersistentObject {
     this.competencyType = competencyType;
   }
 
-
-  public Date getCompetencyExaminationDate() {
+  public LocalDate getCompetencyExaminationDate() {
     return competencyExaminationDate;
   }
 
-  public void setCompetencyExaminationDate(Date compExDt) {
-    this.competencyExaminationDate = compExDt;
+  public void setCompetencyExaminationDate(LocalDate competencyExaminationDate) {
+    this.competencyExaminationDate = competencyExaminationDate;
   }
-
 
   public String getCompetencyProfessionalName() {
     return competencyProfessionalName;
@@ -215,7 +210,6 @@ public class ParentalRightsTermination extends CmsPersistentObject {
   public void setCompetencyProfessionalName(String compPronm) {
     this.competencyProfessionalName = compPronm;
   }
-
 
   public boolean getConservatorshipAllowsRelIndicator() {
     return conservatorshipAllowsRelIndicator;
