@@ -20,13 +20,13 @@ public class PlacementHomeEntityAwareDTO extends BaseEntityAwareDTO<PlacementHom
   private List<OtherAdultInHomeEntityAwareDTO> otherAdultInHomeParameterObjects = new ArrayList<>();
   private EmergencyContactDetail emergencyContactDetail;
 
-  private Set<? extends CWSIdentifier> homeLanguages = new HashSet<>();
+  private Set<CWSIdentifier> homeLanguages = new HashSet<>();
 
-  public Set<? extends CWSIdentifier> getHomeLanguages() {
+  public Set<CWSIdentifier> getHomeLanguages() {
     return homeLanguages;
   }
 
-  public void setHomeLanguages(Set<? extends CWSIdentifier> homeLanguages) {
+  public void setHomeLanguages(Set<CWSIdentifier> homeLanguages) {
     this.homeLanguages = homeLanguages;
   }
 

@@ -182,10 +182,18 @@ public class ClientRelationship extends CmsPersistentObject {
       return false;
     }
     ClientRelationship that = (ClientRelationship) o;
+    return isClientsEqual(that)
+        && isDatesEqual(that)
+        && Objects.equals(getEndDate(), that.getEndDate());
+  }
+
+  private boolean isClientsEqual(ClientRelationship that) {
     return Objects.equals(getSecondaryClient(), that.getSecondaryClient())
-        && Objects.equals(getPrimaryClient(), that.getPrimaryClient())
-        && Objects.equals(getType(), that.getType())
-        && Objects.equals(getStartDate(), that.getStartDate())
+        && Objects.equals(getPrimaryClient(), that.getPrimaryClient());
+  }
+
+  private boolean isDatesEqual(ClientRelationship that) {
+    return Objects.equals(getStartDate(), that.getStartDate())
         && Objects.equals(getEndDate(), that.getEndDate());
   }
 

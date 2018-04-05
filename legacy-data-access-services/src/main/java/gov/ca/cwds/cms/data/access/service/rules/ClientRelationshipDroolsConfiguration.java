@@ -13,6 +13,12 @@ public final class ClientRelationshipDroolsConfiguration
           "client-relationship-agenda",
           "client-relationship-legacy-rules");
 
+  public static final ClientRelationshipDroolsConfiguration DATA_PROCESSING_INSTANCE =
+      new ClientRelationshipDroolsConfiguration(
+          "client-relationship-session",
+          "client-relationship-data-processing-agenda",
+          "client-relationship-legacy-rules");
+
   private ClientRelationshipDroolsConfiguration(
       String rulesSession, String rulesAgenda, String kieContainerId) {
     super(rulesSession, rulesAgenda, kieContainerId);

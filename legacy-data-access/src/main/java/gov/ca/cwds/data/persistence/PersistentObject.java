@@ -33,6 +33,6 @@ public interface PersistentObject extends ApiMarker {
    * 
    * @return the unique primary key
    */
-  public Serializable getPrimaryKey();
+  Serializable getPrimaryKey();
 
 }

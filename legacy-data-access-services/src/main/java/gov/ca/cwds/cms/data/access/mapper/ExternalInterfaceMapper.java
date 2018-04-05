@@ -10,6 +10,7 @@ import org.mapstruct.factory.Mappers;
  * @author CWDS CALS API Team
  */
 @Mapper(imports = LocalDateTime.class)
+@FunctionalInterface
 public interface ExternalInterfaceMapper {
   ExternalInterfaceMapper INSTANCE = Mappers.getMapper(ExternalInterfaceMapper.class);
 
