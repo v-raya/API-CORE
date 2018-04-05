@@ -13,5 +13,5 @@ public interface ConfigReader extends ConfigurationSourceProvider {
   /**
    * @return the config values
    */
-  public CWDSAuthenticationClientConfig readConfig();
+  public CwdsAuthenticationClientConfig readConfig();
 }

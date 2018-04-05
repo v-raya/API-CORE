@@ -18,20 +18,20 @@ public class ConfigUtils implements ConfigReader {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ConfigUtils.class);
 
-  private CWDSAuthenticationClientConfig cwdsAuthenticationClientConfig;
+  private CwdsAuthenticationClientConfig cwdsAuthenticationClientConfig;
 
   /**
    * @return the yaml file values
    */
   @Override
-  public CWDSAuthenticationClientConfig readConfig() {
+  public CwdsAuthenticationClientConfig readConfig() {
     Yaml yaml = new Yaml();
     try {
       InputStream ymlTestingSourceProvider =
           new SubstitutingSourceProvider(this, new EnvironmentVariableSubstitutor(false))
               .open("/testConfig.yml");
       cwdsAuthenticationClientConfig =
-          yaml.loadAs(ymlTestingSourceProvider, CWDSAuthenticationClientConfig.class);
+          yaml.loadAs(ymlTestingSourceProvider, CwdsAuthenticationClientConfig.class);
     } catch (IOException e) {
       LOGGER.error("Unable to read the yml file {}", e);
     }

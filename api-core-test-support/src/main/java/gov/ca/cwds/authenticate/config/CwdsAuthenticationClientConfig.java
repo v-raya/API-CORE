@@ -6,7 +6,7 @@ package gov.ca.cwds.authenticate.config;
  * @author CWDS TPT-4 Team
  *
  */
-public class CWDSAuthenticationClientConfig {
+public class CwdsAuthenticationClientConfig {
 
   private String authenticationMode;
   private TokenCredentials testUrl;
