@@ -25,9 +25,9 @@ import gov.ca.cwds.authenticate.config.ConfigUtils;
  * @author CWDS TPT-4 Team
  *
  */
-public class CWDSDevAuthenticationClient extends HttpClientBuild implements CWDSClientCommon {
+public class CwdsDevAuthenticationClient extends HttpClientBuild implements CwdsClientCommon {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CWDSDevAuthenticationClient.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CwdsDevAuthenticationClient.class);
 
   private static final int GET_ONLY_ACCESS_CODE_VALUE = 11;
 
@@ -52,7 +52,7 @@ public class CWDSDevAuthenticationClient extends HttpClientBuild implements CWDS
    * @param configReader - configReader
    * @param userName - userName
    */
-  public CWDSDevAuthenticationClient(ConfigReader configReader, String userName) {
+  public CwdsDevAuthenticationClient(ConfigReader configReader, String userName) {
     this.userName = userName;
     if (configReader == null) {
       this.configReader = new ConfigUtils();

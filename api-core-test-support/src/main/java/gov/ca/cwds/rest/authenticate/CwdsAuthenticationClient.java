@@ -23,9 +23,9 @@ import gov.ca.cwds.authenticate.config.ConfigReader;
  * @author CWDS TPT-4 Team
  *
  */
-public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSClientCommon {
+public class CwdsAuthenticationClient extends HttpClientBuild implements CwdsClientCommon {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CWDSAuthenticationClient.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CwdsAuthenticationClient.class);
 
   private static final int GET_STATE_VALUE = 4;
   private static final int GET_RESPONE_TYPE_VALUE = 3;
@@ -78,7 +78,7 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
    * @param userName - userName
    * @param password - password
    */
-  public CWDSAuthenticationClient(ConfigReader configReader, String userName, String password) {
+  public CwdsAuthenticationClient(ConfigReader configReader, String userName, String password) {
     this.configReader = configReader;
     this.userName = userName;
     this.password = password;

@@ -13,11 +13,11 @@ import gov.ca.cwds.authenticate.config.ConfigReader;
  * @author CWDS TPT-4 Team
  *
  */
-public class CWDSLoginType {
+public class CwdsLoginType {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CWDSLoginType.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CwdsLoginType.class);
 
-  CWDSClientCommon cwdsClientCommon = null;
+  CwdsClientCommon cwdsClientCommon = null;
   ConfigReader configReader = null;
 
   /**
@@ -25,7 +25,7 @@ public class CWDSLoginType {
    * 
    * @param configReader - configReader
    */
-  public CWDSLoginType(ConfigReader configReader) {
+  public CwdsLoginType(ConfigReader configReader) {
     this.configReader = configReader;
   }
 
@@ -35,14 +35,14 @@ public class CWDSLoginType {
    */
   public String login(UserGroup userType) {
     if (!"TEST".equals(configReader.readConfig().getAuthenticationMode())) {
-      new CWDSAuthenticationClient(configReader, "", "");
+      new CwdsAuthenticationClient(configReader, "", "");
     } else {
       String jsonFile = "/LoginUser/" + userType.getName() + ".json";
       String userJson = "";
       try {
         userJson = new String(IOUtils.toByteArray(getClass().getResourceAsStream(jsonFile)),
             StandardCharsets.UTF_8);
-        cwdsClientCommon = new CWDSDevAuthenticationClient(configReader, userJson);
+        cwdsClientCommon = new CwdsDevAuthenticationClient(configReader, userJson);
 
       } catch (IOException e) {
         LOGGER.error("Unable to parse the json into String {}", e);

@@ -15,7 +15,7 @@ public class AuthenticationUtils {
   private String stateSensitiveToken;
   private String stateSealedToken;
 
-  CWDSLoginType cwdsLoginType = null;
+  CwdsLoginType cwdsLoginType = null;
   private ConfigReader configReader;
 
   /**
@@ -34,7 +34,7 @@ public class AuthenticationUtils {
    * @return the user based token
    */
   public String getToken(UserGroup userType) {
-    cwdsLoginType = new CWDSLoginType(configReader);
+    cwdsLoginType = new CwdsLoginType(configReader);
     if (userType != null) {
       switch (userType) {
         case SOCIAL_WORKER:
