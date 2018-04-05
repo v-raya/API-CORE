@@ -30,7 +30,6 @@ public class CWDSLoginType {
   }
 
   /**
-   * @param loginType - loginType
    * @param userType - userType
    * @return the valid user token
    */
