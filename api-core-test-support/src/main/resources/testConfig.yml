@@ -12,5 +12,5 @@ testUrl:
    logOutUrl: ${LOG_OUT_URL:-}
 
 socialWorkerOnly:
-   username: ${USERNAME:-TESTPA}
-   password: ${PASSWORD:-CWS1kids}
+   username: ${USERNAME:-}
+   password: ${PASSWORD:-}

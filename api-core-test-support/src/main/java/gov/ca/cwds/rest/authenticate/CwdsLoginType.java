@@ -10,6 +10,14 @@ import org.slf4j.LoggerFactory;
 import gov.ca.cwds.authenticate.config.ConfigReader;
 
 /**
+ * This class will handle the different type of login based on the authentication mode, If the
+ * Authentication mode in the Yaml file is set to TEST it uses the Json type or else username and
+ * password to get the token.
+ * 
+ * <p>
+ * authenticationMode: TEST mean perry is in dev mode
+ * </p>
+ * 
  * @author CWDS TPT-4 Team
  *
  */
