@@ -10,6 +10,7 @@ import javax.persistence.Version;
  *
  * @author CWDS API Team
  */
+@SuppressWarnings("squid:S2160")
 @MappedSuperclass
 public abstract class CmsPersistentObjectVersioned extends CmsPersistentObjectBase {
 

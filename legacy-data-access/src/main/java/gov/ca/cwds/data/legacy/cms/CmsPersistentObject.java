@@ -9,7 +9,7 @@ import javax.persistence.MappedSuperclass;
  *
  * @author CWDS API Team
  */
-@SuppressWarnings("squid:S3437")
+@SuppressWarnings({"squid:S3437", "squid:S2160"})
 @MappedSuperclass
 public abstract class CmsPersistentObject extends CmsPersistentObjectBase {
 
