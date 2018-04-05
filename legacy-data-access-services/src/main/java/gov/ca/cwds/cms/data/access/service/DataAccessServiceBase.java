@@ -56,8 +56,8 @@ public abstract class DataAccessServiceBase<
   @Override
   public T create(P entityAwareDTO) throws DataAccessServicesException {
     DataAccessBundle<P> dataAccessBundle = new DataAccessBundle<>(entityAwareDTO);
-    PerryAccount perryAccount = PrincipalUtils.getPrincipal();
     createLifecycle.beforeDataProcessing(dataAccessBundle);
+    PerryAccount perryAccount = PrincipalUtils.getPrincipal();
     createLifecycle.dataProcessing(dataAccessBundle, perryAccount);
     createLifecycle.afterDataProcessing(dataAccessBundle);
     createLifecycle.beforeBusinessValidation(dataAccessBundle);
@@ -71,8 +71,8 @@ public abstract class DataAccessServiceBase<
   @Override
   public T update(P entityAwareDTO) throws DataAccessServicesException {
     DataAccessBundle<P> dataAccessBundle = new DataAccessBundle<>(entityAwareDTO);
-    PerryAccount perryAccount = PrincipalUtils.getPrincipal();
     updateLifecycle.beforeDataProcessing(dataAccessBundle);
+    PerryAccount perryAccount = PrincipalUtils.getPrincipal();
     updateLifecycle.dataProcessing(dataAccessBundle, perryAccount);
     updateLifecycle.afterDataProcessing(dataAccessBundle);
     updateLifecycle.beforeBusinessValidation(dataAccessBundle);
