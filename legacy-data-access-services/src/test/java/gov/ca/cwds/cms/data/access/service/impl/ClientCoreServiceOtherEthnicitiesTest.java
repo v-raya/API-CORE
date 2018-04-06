@@ -31,10 +31,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(PrincipalUtils.class)
-public class ClientCoreServiceOtherEthnicitiesTest {
+public class ClientCoreServiceOtherEthnicitiesTest extends BaseTestWithAuthorizedClient{
 
-  private static final DateTimeFormatter TIMESTAMP_FORMATTER =
-      DateTimeFormatter.ofPattern("yyyy-MM-dd-HH.mm.ss.SSSSSS");
 
   private static final String CLIENT_ID = "0000000001";
 
@@ -52,7 +50,7 @@ public class ClientCoreServiceOtherEthnicitiesTest {
     PowerMockito.mockStatic(PrincipalUtils.class);
     when(PrincipalUtils.getStaffPersonId()).thenReturn(USER_ID);
 
-    when(clientDao.find(CLIENT_ID)).thenReturn(getPersistedClient());
+    when(clientDao.find(CLIENT_ID)).thenReturn(getPersistedClient(CLIENT_ID));
     clientCoreService = new ClientCoreService(clientDao);
     clientCoreService.setClientOtherEthnicityDao(clientOtherEthnicityDao);
   }
@@ -102,36 +100,10 @@ public class ClientCoreServiceOtherEthnicitiesTest {
     return client;
   }
 
-  private Client getPersistedClient() {
-    Client client = new Client();
-    client.setIdentifier(CLIENT_ID);
-    addPersistedOtherEthnicity(client, "0000000002", (short) 2, "002",
-        time("2002-11-01-12.53.07.580225"));
-    addPersistedOtherEthnicity(client, "0000000003", (short) 3, "003",
-        time("2004-02-12-14.56.37.492178"));
-    return client;
-  }
-
   private ClientOtherEthnicity addOtherEthnicity(Client client, short code) {
     ClientOtherEthnicity coe = new ClientOtherEthnicity();
     coe.setEthnicityCode(code);
     client.addOtherEthnicity(coe);
     return coe;
-  }
-
-  private ClientOtherEthnicity addPersistedOtherEthnicity(
-      Client client, String id, short code, String userId, LocalDateTime lastUpdateTime) {
-    ClientOtherEthnicity coe = new ClientOtherEthnicity();
-    coe.setId(id);
-    coe.setEthnicityCode(code);
-    coe.setLastUpdateId(userId);
-    coe.setLastUpdateTime(lastUpdateTime);
-
-    client.addOtherEthnicity(coe);
-    return coe;
-  }
-
-  private LocalDateTime time(String timestampStr) {
-    return LocalDateTime.parse(timestampStr, TIMESTAMP_FORMATTER);
   }
 }

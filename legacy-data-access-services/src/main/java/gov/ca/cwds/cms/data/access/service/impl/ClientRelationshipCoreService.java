@@ -101,14 +101,30 @@ public class ClientRelationshipCoreService
     return new DefaultDataAccessLifeCycle<>();
   }
 
-  public List<ClientRelationship> findRelationshipsByLeftSide(
+  public List<ClientRelationship> findRelationshipsBySecondaryClientId(
       @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
     return crudDao.findRelationshipsBySecondaryClientId(clientId, LocalDate.now());
   }
 
-  public List<ClientRelationship> findRelationshipsByRightSide(
+  public List<ClientRelationship> findRelationshipsByPrimaryClientId(
       @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
     return crudDao.findRelationshipsByPrimaryClientId(clientId, LocalDate.now());
+  }
+
+  protected BusinessValidationService getBusinessValidationService() {
+    return businessValidationService;
+  }
+
+  protected ClientDao getClientDao() {
+    return clientDao;
+  }
+
+  protected TribalMembershipVerificationDao getTribalMembershipVerificationDao() {
+    return tribalMembershipVerificationDao;
+  }
+
+  protected ClientRelationshipDao getClientRelationshipDao() {
+    return crudDao;
   }
 
   private class UpdateLificycle extends DefaultDataAccessLifeCycle {
@@ -138,8 +154,8 @@ public class ClientRelationshipCoreService
       String clientId = client.getIdentifier();
 
       List<ClientRelationship> otherRelationshipsForThisClient =
-          new ArrayList<>(findRelationshipsByRightSide(clientId));
-      otherRelationshipsForThisClient.addAll(findRelationshipsByRightSide(clientId));
+          new ArrayList<>(findRelationshipsByPrimaryClientId(clientId));
+      otherRelationshipsForThisClient.addAll(findRelationshipsByPrimaryClientId(clientId));
 
       otherRelationshipsForThisClient.removeIf(
           e -> e.getIdentifier().equals(awareDTO.getEntity().getIdentifier()));
