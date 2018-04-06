@@ -42,7 +42,7 @@ public class CountryDao extends BaseDaoImpl<Country> {
       country = query.getSingleResult();
     } catch (NoResultException e) {
       LOG.warn("There is no result for logicalId = {}", logicalId);
-      LOG.debug(e.getMessage(), e);
+      LOG.debug("error has occured for logicalId = {}", logicalId, e);
     }
 
     return country;
