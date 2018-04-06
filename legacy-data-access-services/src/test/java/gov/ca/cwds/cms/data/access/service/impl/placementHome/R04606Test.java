@@ -1,7 +1,6 @@
 package gov.ca.cwds.cms.data.access.service.impl.placementHome;
 
 import gov.ca.cwds.cms.data.access.service.rules.PlacementHomeDroolsConfiguration;
-import gov.ca.cwds.drools.DroolsException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -26,7 +25,7 @@ public class R04606Test extends BaseDocToolRulesPlacementHomeTest {
     Assert.assertTrue(placementHomeEntityAwareDTO.getEntity().getAgeToNo() == 18);
   }
 
-  private void checkR04606(Runnable testCase) throws DroolsException {
+  private void checkR04606(Runnable testCase) {
     testCase.run();
     businessValidationService.runDataProcessing(
         placementHomeEntityAwareDTO,

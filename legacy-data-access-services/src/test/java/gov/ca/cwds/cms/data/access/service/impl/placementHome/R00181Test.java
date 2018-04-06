@@ -5,7 +5,6 @@ import static org.junit.Assert.fail;
 import gov.ca.cwds.cms.data.access.dto.OtherChildInHomeEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.rules.PlacementHomeDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.OtherChildrenInPlacementHome;
-import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -66,7 +65,7 @@ public class R00181Test extends BaseDocToolRulesPlacementHomeTest {
   }
 
 
-  private void assertInvalid(Runnable testCase) throws DroolsException {
+  private void assertInvalid(Runnable testCase) {
     try {
       testCase.run();
       businessValidationService.runBusinessValidation(placementHomeEntityAwareDTO, principal, PlacementHomeDroolsConfiguration.INSTANCE);

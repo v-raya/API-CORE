@@ -2,7 +2,6 @@ package gov.ca.cwds.cms.data.access.service.lifecycle;
 
 import gov.ca.cwds.cms.data.access.dto.BaseEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
-import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.realm.PerryAccount;
 
 public interface DataAccessServiceLifecycle<F extends BaseEntityAwareDTO> {
@@ -14,10 +13,9 @@ public interface DataAccessServiceLifecycle<F extends BaseEntityAwareDTO> {
 
   void afterBusinessValidation(DataAccessBundle<F> bundle);
 
-  void dataProcessing(DataAccessBundle<F> bundle, PerryAccount perryAccount) throws DroolsException;
+  void dataProcessing(DataAccessBundle<F> bundle, PerryAccount perryAccount);
 
-  void businessValidation(DataAccessBundle<F> bundle, PerryAccount perryAccount)
-      throws DroolsException;
+  void businessValidation(DataAccessBundle<F> bundle, PerryAccount perryAccount);
 
   void afterStore(DataAccessBundle<F> bundle) throws DataAccessServicesException;
 }

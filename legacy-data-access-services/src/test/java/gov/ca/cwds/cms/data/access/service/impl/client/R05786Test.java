@@ -2,7 +2,6 @@ package gov.ca.cwds.cms.data.access.service.impl.client;
 
 import gov.ca.cwds.cms.data.access.service.rules.ClientDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
-import gov.ca.cwds.drools.DroolsException;
 import org.junit.Test;
 
 public class R05786Test extends BaseDocToolRulesClientImplementationTest {
@@ -21,7 +20,7 @@ public class R05786Test extends BaseDocToolRulesClientImplementationTest {
   private static final short AKA_NAMETYPE_SYSID = 1311; // AKA
 
   @Test
-  public void testLastNameChanged() throws DroolsException {
+  public void testLastNameChanged() {
     Client client = ClientTestUtil.withFirstLastMiddleNames(OLD_FIRST_NAME, NEW_LAST_NAME, OLD_MIDDLE_NAME);
     Client persistedClient = createPersistedClient();
     clientEntityAwareDTO.setEntity(client);
@@ -38,7 +37,7 @@ public class R05786Test extends BaseDocToolRulesClientImplementationTest {
   }
 
   @Test
-  public void testAllNamePartsChanged() throws DroolsException {
+  public void testAllNamePartsChanged() {
     Client client = ClientTestUtil.withFirstLastMiddleNames(NEW_FIRST_NAME, NEW_LAST_NAME, NEW_MIDDLE_NAME);
     Client persistedClient = createPersistedClient();
     clientEntityAwareDTO.setEntity(client);
@@ -55,7 +54,7 @@ public class R05786Test extends BaseDocToolRulesClientImplementationTest {
   }
 
   @Test
-  public void testLastNameNotChanged() throws DroolsException {
+  public void testLastNameNotChanged() {
     Client client = ClientTestUtil.withFirstLastMiddleNames(NEW_FIRST_NAME, OLD_LAST_NAME, NEW_MIDDLE_NAME);
     Client persistedClient = createPersistedClient();
     clientEntityAwareDTO.setEntity(client);
