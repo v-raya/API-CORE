@@ -22,7 +22,7 @@ import org.hibernate.annotations.NotFoundAction;
  * @author CWDS CALS API Team
  */
 @MappedSuperclass
-@SuppressWarnings("squid:S3437") //LocalDate is serializable
+@SuppressWarnings({"squid:S3437", "common-java:DuplicatedBlocks"}) //LocalDate is serializable
 public abstract class BaseLicensingVisit implements PersistentObject {
 
     private static final long serialVersionUID = -8288205929550791793L;
