@@ -1,7 +1,7 @@
 package gov.ca.cwds.rest.shiro;
 
-import java.util.Optional;
 import gov.ca.cwds.rest.YamlShiroConfiguration;
+import java.util.Optional;
 import org.apache.shiro.config.Ini;
 import org.apache.shiro.web.env.IniWebEnvironment;
 

@@ -1,8 +1,8 @@
 package gov.ca.cwds.rest.shiro;
 
 import java.util.Collection;
-import javax.servlet.Filter;
 import gov.ca.cwds.rest.MinimalApiConfiguration;
+import javax.servlet.Filter;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.web.env.IniWebEnvironment;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
