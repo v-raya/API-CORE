@@ -34,7 +34,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 /** @author CWDS TPT-3 Team */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(PrincipalUtils.class)
-@PowerMockIgnore({"javax.xml.*", "org.xml.*", "org.w3c.*"})
+@PowerMockIgnore({"javax.*", "org.xml.*", "org.w3c.*", "com.sun.*"})
 public class R08840DBTest extends BaseDocToolInMemoryPersistenceTest {
 
   private ClientDao clientDao;
