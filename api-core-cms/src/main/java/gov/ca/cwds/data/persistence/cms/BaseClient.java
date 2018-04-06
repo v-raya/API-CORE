@@ -157,6 +157,7 @@ public abstract class BaseClient extends CmsPersistentObject
   protected Short genderIdentityType;
 
   @Column(name = "GI_NL_DSC")
+  @ColumnTransformer(read = "trim(GI_NL_DSC)")
   protected String giNotListedDescription;
 
   @Type(type = "short")
@@ -280,6 +281,7 @@ public abstract class BaseClient extends CmsPersistentObject
   protected String soUnableToDetermineCode;
 
   @Column(name = "SO_NL_DSC")
+  @ColumnTransformer(read = "trim(SO_NL_DSC)")
   protected String soNotListedDescrption;
 
   @Column(name = "SOCPLC_CD")
@@ -831,7 +833,7 @@ public abstract class BaseClient extends CmsPersistentObject
    * @return the giNotListedDescription
    */
   public String getGiNotListedDescription() {
-    return StringUtils.trimToEmpty(giNotListedDescription);
+    return giNotListedDescription;
   }
 
   /**
@@ -859,7 +861,7 @@ public abstract class BaseClient extends CmsPersistentObject
    * @return the soNotListedDescrption
    */
   public String getSoNotListedDescrption() {
-    return StringUtils.trimToEmpty(soNotListedDescrption);
+    return soNotListedDescrption;
   }
 
   /**
