@@ -251,6 +251,7 @@ public class HealthReferral extends CmsPersistentObject {
         getReferralOutcomeDate());
   }
 
+  @SuppressWarnings("common-java:DuplicatedBlocks")
   @Embeddable
   public static class Id implements Serializable {
 
