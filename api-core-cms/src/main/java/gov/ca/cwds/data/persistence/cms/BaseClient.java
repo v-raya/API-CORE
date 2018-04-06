@@ -152,6 +152,17 @@ public abstract class BaseClient extends CmsPersistentObject
   @Column(name = "GENDER_CD")
   protected String genderCode;
 
+  @Type(type = "short")
+  @Column(name = "CLNT_GIC")
+  protected Short genderIdentityType;
+
+  @Column(name = "GI_NL_DSC")
+  protected String giNotListedDescription;
+
+  @Type(type = "short")
+  @Column(name = "CLNT_GEC")
+  protected Short genderExpressionType;
+
   @Column(name = "HEALTH_TXT")
   protected String healthSummaryText;
 
@@ -260,6 +271,16 @@ public abstract class BaseClient extends CmsPersistentObject
    */
   @Column(name = "SENSTV_IND")
   protected String sensitivityIndicator;
+
+  @Type(type = "short")
+  @Column(name = "CLNT_SOC")
+  protected Short sexualOrientationType;
+
+  @Column(name = "SO_UD_CD")
+  protected String soUnableToDetermineCode;
+
+  @Column(name = "SO_NL_DSC")
+  protected String soNotListedDescrption;
 
   @Column(name = "SOCPLC_CD")
   protected String soc158PlacementCode;
@@ -797,6 +818,48 @@ public abstract class BaseClient extends CmsPersistentObject
    */
   public String getUnemployedParentCode() {
     return StringUtils.trimToEmpty(unemployedParentCode);
+  }
+
+  /**
+   * @return the genderIdentityType
+   */
+  public Short getGenderIdentityType() {
+    return genderIdentityType;
+  }
+
+  /**
+   * @return the giNotListedDescription
+   */
+  public String getGiNotListedDescription() {
+    return StringUtils.trimToEmpty(giNotListedDescription);
+  }
+
+  /**
+   * @return the genderExpressionType
+   */
+  public Short getGenderExpressionType() {
+    return genderExpressionType;
+  }
+
+  /**
+   * @return the sexualOrientationType
+   */
+  public Short getSexualOrientationType() {
+    return sexualOrientationType;
+  }
+
+  /**
+   * @return the soUnableToDetermineCode
+   */
+  public String getSoUnableToDetermineCode() {
+    return StringUtils.trimToEmpty(soUnableToDetermineCode);
+  }
+
+  /**
+   * @return the soNotListedDescrption
+   */
+  public String getSoNotListedDescrption() {
+    return StringUtils.trimToEmpty(soNotListedDescrption);
   }
 
   /**
