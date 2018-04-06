@@ -16,7 +16,7 @@ public class SCPEntityAwareDTO extends BaseEntityAwareDTO<SubstituteCareProvider
   private String placementHomeId;
   private boolean primaryApplicant;
   private List<CWSIdentifier> ethnicityList = new ArrayList<>();
-  private List<CWSIdentifier> otherStatesOfLiving = new ArrayList<>();
+  private List<? extends CWSIdentifier> otherStatesOfLiving = new ArrayList<>();
   private List<PhoneContactDetail> phoneNumbers = new ArrayList<>();
 
   public String getPlacementHomeId() {
@@ -53,12 +53,12 @@ public class SCPEntityAwareDTO extends BaseEntityAwareDTO<SubstituteCareProvider
     this.ethnicityList = ethnicityList;
   }
 
-  public List<CWSIdentifier> getOtherStatesOfLiving() {
+  public List<? extends CWSIdentifier> getOtherStatesOfLiving() {
     return otherStatesOfLiving;
   }
 
   public void setOtherStatesOfLiving(
-      List<CWSIdentifier> otherStatesOfLiving) {
+      List<? extends CWSIdentifier> otherStatesOfLiving) {
     this.otherStatesOfLiving = otherStatesOfLiving;
   }
 

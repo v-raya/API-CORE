@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest;
 
 import gov.ca.cwds.inject.InjectorHolder;
+import gov.ca.cwds.rest.shiro.YamlShiroBundle;
 import io.dropwizard.jersey.setup.JerseyEnvironment;
 import java.util.EnumSet;
 
@@ -56,12 +57,7 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
 
   private static Injector injector;
 
-  private final ShiroBundle<T> shiroBundle = new ShiroBundle<T>() {
-    @Override
-    protected ShiroConfiguration narrow(T configuration) {
-      return configuration.getShiroConfiguration();
-    }
-  };
+  private final ShiroBundle<T> shiroBundle = new YamlShiroBundle<>();
 
   /**
    * Extending classes must provide the Guice module for their application.
