@@ -15,7 +15,8 @@ public class NullableBooleanConverter implements AttributeConverter<Boolean, Str
   }
 
   @Override
-  @SuppressWarnings("squid:S2447")
+  @SuppressWarnings({"squid:S2447", "fb-contrib:TBP_TRISTATE_BOOLEAN_PATTERN",
+      "findbugs:NP_BOOLEAN_RETURN_NULL"})
   public Boolean convertToEntityAttribute(String dbData) {
     if (StringUtils.isBlank(dbData)) {
       return null;
