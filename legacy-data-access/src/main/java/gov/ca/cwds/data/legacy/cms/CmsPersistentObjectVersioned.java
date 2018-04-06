@@ -14,6 +14,7 @@ import javax.persistence.Version;
 @MappedSuperclass
 public abstract class CmsPersistentObjectVersioned extends CmsPersistentObjectBase {
 
+  private static final long serialVersionUID = -8659901907696848214L;
   /**
    * LAST_UPDATE_TIMESTAMP - The date and time of the most recent update of an occurrence of this
    * entity type.
