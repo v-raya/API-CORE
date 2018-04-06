@@ -59,6 +59,7 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.PlacementFacilityTypeHistory"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.ClientServiceProvider"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.OtherClientName" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification" />
 
 
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.ActiveServiceComponentType"/>
@@ -95,5 +96,7 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.HealthReferralType" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.HealthScreeningType" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.HealthScreenedByType" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.IndianEnrolmentStatus" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.IndianTribeType" />
   </session-factory>
 </hibernate-configuration>

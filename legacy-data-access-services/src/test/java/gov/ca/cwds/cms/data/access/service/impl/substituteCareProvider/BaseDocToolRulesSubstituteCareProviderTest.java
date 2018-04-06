@@ -7,12 +7,11 @@ import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderDao;
 import gov.ca.cwds.cms.data.access.dto.ExtendedSCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
-import gov.ca.cwds.cms.data.access.service.impl.SubstituteCareProviderCoreService;
 import gov.ca.cwds.cms.data.access.service.impl.BaseDocToolRulesTest;
+import gov.ca.cwds.cms.data.access.service.impl.SubstituteCareProviderCoreService;
 import gov.ca.cwds.cms.data.access.service.rules.SubstituteCareProviderDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeInformation;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
-import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import org.junit.Before;
 
@@ -48,7 +47,7 @@ public abstract class BaseDocToolRulesSubstituteCareProviderTest extends BaseDoc
           entityAwareDTO, principal, SubstituteCareProviderDroolsConfiguration.INSTANCE);
     } catch (BusinessValidationException e) {
       fail();
-    } catch (DroolsException e) {
+    } catch (Exception e) {
       fail(e.getMessage());
     }
   }
@@ -65,7 +64,7 @@ public abstract class BaseDocToolRulesSubstituteCareProviderTest extends BaseDoc
       assert e.getValidationDetailsList()
           .stream()
           .noneMatch(issueDetails -> issueDetails.getCode().equals(ruleCode));
-    } catch (DroolsException e) {
+    } catch (Exception e) {
       fail(e.getMessage());
     }
   }
@@ -85,7 +84,7 @@ public abstract class BaseDocToolRulesSubstituteCareProviderTest extends BaseDoc
               .filter(issueDetails -> issueDetails.getCode().equals(ruleCode))
               .count()
           == 1;
-    } catch (DroolsException e) {
+    } catch (Exception e) {
       fail(e.getMessage());
     }
   }

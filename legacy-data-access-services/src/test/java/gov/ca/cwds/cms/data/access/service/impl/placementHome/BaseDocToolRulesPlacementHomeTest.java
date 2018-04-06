@@ -6,12 +6,11 @@ import gov.ca.cwds.cms.data.access.Constants.StaffPersonPrivileges;
 import gov.ca.cwds.cms.data.access.dao.PlacementHomeDao;
 import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
-import gov.ca.cwds.cms.data.access.service.impl.PlacementHomeCoreService;
 import gov.ca.cwds.cms.data.access.service.impl.BaseDocToolRulesTest;
+import gov.ca.cwds.cms.data.access.service.impl.PlacementHomeCoreService;
 import gov.ca.cwds.cms.data.access.service.rules.PlacementHomeDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
-import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import org.junit.Before;
 import org.mockito.Mock;
@@ -33,8 +32,7 @@ public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRules
   }
 
   protected void checkRuleViolatedOnce(
-      PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, String ruleName)
-      throws DroolsException {
+      PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, String ruleName) {
     try {
       runBusinessValidation(placementHomeEntityAwareDTO);
       fail();
@@ -44,8 +42,7 @@ public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRules
   }
 
   void checkRuleViolated(
-      PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, String ruleName, int count)
-      throws DroolsException {
+      PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, String ruleName, int count) {
     try {
       runBusinessValidation(placementHomeEntityAwareDTO);
       fail();
@@ -54,8 +51,7 @@ public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRules
     }
   }
 
-  void checkRuleValid(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, String ruleName)
-      throws DroolsException {
+  void checkRuleValid(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO, String ruleName) {
     try {
       runBusinessValidation(placementHomeEntityAwareDTO);
     } catch (BusinessValidationException e) {
@@ -63,8 +59,7 @@ public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRules
     }
   }
 
-  private void runBusinessValidation(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO)
-      throws DroolsException {
+  private void runBusinessValidation(PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO) {
     businessValidationService.runBusinessValidation(
         placementHomeEntityAwareDTO, principal, PlacementHomeDroolsConfiguration.INSTANCE);
   }
@@ -89,7 +84,7 @@ public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRules
               .filter(issueDetails -> issueDetails.getCode().equals(ruleCode))
               .count()
           == 1;
-    } catch (DroolsException e) {
+    } catch (Exception e) {
       fail(e.getMessage());
     }
   }

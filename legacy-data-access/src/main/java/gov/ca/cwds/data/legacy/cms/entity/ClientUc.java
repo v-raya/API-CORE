@@ -97,15 +97,28 @@ public class ClientUc extends CmsPersistentObject {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    if (!super.equals(o)) return false;
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    if (!super.equals(o)) {
+      return false;
+    }
+
     ClientUc clientUc = (ClientUc) o;
-    return Objects.equals(commonFirstName, clientUc.commonFirstName)
-        && Objects.equals(commonLastName, clientUc.commonLastName)
-        && Objects.equals(commonMiddleName, clientUc.commonMiddleName)
+    return isNamesEqual(clientUc)
         && Objects.equals(sourceTableCode, clientUc.sourceTableCode)
         && Objects.equals(sourceTableId, clientUc.sourceTableId);
+  }
+
+  private boolean isNamesEqual(ClientUc clientUc) {
+    return Objects.equals(commonFirstName, clientUc.commonFirstName)
+        && Objects.equals(commonLastName, clientUc.commonLastName)
+        && Objects.equals(commonMiddleName, clientUc.commonMiddleName);
   }
 
   @Override

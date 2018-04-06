@@ -1,0 +1,39 @@
+import gov.ca.cwds.data.legacy.cms.entity.Client
+import gov.ca.cwds.data.legacy.cms.entity.OtherClientName
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType
+import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
+import java.util.Objects
+
+global java.util.Set<IssueDetails> validationDetailsList
+
+rule "R-10841"
+  dialect "mvel"
+  agenda-group "client-agenda"
+     /*
+        Code: R - 10841
+
+        Rule text:
+          When a Client first, middle or last name field or Other Names first, middle or last name field is added,
+          modified, or deleted, make the appropriate update to the corresponding Client Phonetic rows.
+
+        Logic:
+          If adding, modifying, or deleting CLIENT.Common_First_Name, .Common_Middle_Name or .Common_Last_Name or
+          OTHER_CLIENT_NAME.First_Name, .Middle_Name or .Last_Name, then add, modify, or delete corresponding
+          CLIENT_PHONETIC_NAME and CLIENT_PHONETIC_NAME2 rows.
+
+
+      */
+  when
+        $clientAwareDTO: ClientEntityAwareDTO()
+        $persistentClient: Client() from $clientAwareDTO.persistentClientState
+        $client: Client(
+            $persistentClient != null,
+            !Objects.equals(commonLastName, $persistentClient.commonLastName) ||
+            !Objects.equals(commonFirstName, $persistentClient.commonFirstName) ||
+            !Objects.equals(commonMiddleName, $persistentClient.commonMiddleName)
+        )
+        from $clientAwareDTO.entity
+
+ then
+        $clientAwareDTO.setUpdateClientPhoneticName(true);
+end

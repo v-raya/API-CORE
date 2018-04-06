@@ -150,4 +150,12 @@ public class ClientTestUtil {
     return dto;
   }
 
+  public static Client withFirstLastMiddleNames(String firstName, String lastName, String middleName) {
+    Client client = ClientTestUtil.client();
+    client.setCommonLastName(lastName);
+    client.setCommonFirstName(firstName);
+    client.setCommonMiddleName(middleName);
+    return client;
+  }
+
 }

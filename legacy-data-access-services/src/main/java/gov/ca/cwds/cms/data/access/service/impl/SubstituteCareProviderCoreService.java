@@ -1,5 +1,6 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
+import static gov.ca.cwds.cms.data.access.Constants.SsaName3StoredProcedureCrudOperationCode.INSERT_OPERATION_CODE;
 import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
 import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
 import static org.apache.commons.lang3.StringUtils.upperCase;
@@ -35,7 +36,6 @@ import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeInformation;
 import gov.ca.cwds.data.legacy.cms.entity.ScpOtherEthnicity;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProviderUc;
-import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
 import java.time.LocalDate;
@@ -218,7 +218,7 @@ public class SubstituteCareProviderCoreService
       SubstituteCareProvider substituteCareProvider) {
     SsaName3ParameterObject parameterObject = new SsaName3ParameterObject();
     parameterObject.setTableName(PhoneticSearchTables.SCP_PHTT);
-    parameterObject.setCrudOper("I");
+    parameterObject.setCrudOper(INSERT_OPERATION_CODE);
     parameterObject.setIdentifier(substituteCareProvider.getIdentifier());
     parameterObject.setFirstName(substituteCareProvider.getFirstNm());
     parameterObject.setMiddleName(substituteCareProvider.getMidIniNm());
@@ -290,8 +290,7 @@ public class SubstituteCareProviderCoreService
     }
 
     @Override
-    public void dataProcessing(DataAccessBundle bundle, PerryAccount perryAccount)
-        throws DroolsException {
+    public void dataProcessing(DataAccessBundle bundle, PerryAccount perryAccount) {
       businessValidationService.runDataProcessing(
           bundle.getAwareDto(),
           perryAccount,
@@ -299,8 +298,7 @@ public class SubstituteCareProviderCoreService
     }
 
     @Override
-    public void businessValidation(DataAccessBundle bundle, PerryAccount perryAccount)
-        throws DroolsException {
+    public void businessValidation(DataAccessBundle bundle, PerryAccount perryAccount) {
       businessValidationService.runBusinessValidation(
           bundle.getAwareDto(), perryAccount, SubstituteCareProviderDroolsConfiguration.INSTANCE);
     }
