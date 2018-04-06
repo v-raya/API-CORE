@@ -10,7 +10,7 @@ public abstract class BaseEntityEnumConverter<E extends EntityEnum<K>, K>
     implements AttributeConverter<E, K> {
 
   static <K, E> Map<K, E> initializeMapping(EntityEnum<K>[] values) {
-    Map result = new HashMap<K, EntityEnum<K>>();
+    Map result = new HashMap<K, EntityEnum<K>>(values.length);
     for (EntityEnum<K> item : values) {
       result.put(item.getCode(), item);
     }
