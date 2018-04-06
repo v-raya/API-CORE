@@ -8,7 +8,6 @@ import static gov.ca.cwds.cms.data.access.service.impl.client.ClientTestUtil.sch
 import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.SchoolOriginHistory;
-import gov.ca.cwds.drools.DroolsException;
 import org.junit.Test;
 
 /**
@@ -19,7 +18,7 @@ public class R10293Test extends BaseDocToolRulesClientImplementationTest {
   private static final String RULE_NAME = "R-10293";
 
   @Test
-  public void rule10293_satisfied_whenNoDasHistories() throws DroolsException {
+  public void rule10293_satisfied_whenNoDasHistories() {
     // given
     final Client client = client(SOME_DATE);
     final ChildClientEntityAwareDTO input = dto(client);
@@ -29,7 +28,7 @@ public class R10293Test extends BaseDocToolRulesClientImplementationTest {
   }
 
   @Test
-  public void rule10293_satisfied_whenSingleDasHistoryOnDOB() throws DroolsException {
+  public void rule10293_satisfied_whenSingleDasHistoryOnDOB() {
     // given
     final Client client = client(SOME_DATE);
     final SchoolOriginHistory history = schoolOriginHistory(SOME_DATE);
@@ -40,7 +39,7 @@ public class R10293Test extends BaseDocToolRulesClientImplementationTest {
   }
 
   @Test
-  public void rule10293_satisfied_whenSingleDasHistoryAfterDOB() throws DroolsException {
+  public void rule10293_satisfied_whenSingleDasHistoryAfterDOB() {
     // given
     final Client client = client(SOME_DATE);
     final SchoolOriginHistory history = schoolOriginHistory(SOME_DATE.plusDays(100));
@@ -51,7 +50,7 @@ public class R10293Test extends BaseDocToolRulesClientImplementationTest {
   }
 
   @Test
-  public void rule10293_satisfied_whenTwoDasHistoriesAfterDOB() throws DroolsException {
+  public void rule10293_satisfied_whenTwoDasHistoriesAfterDOB() {
     // given
     final Client client = client(SOME_DATE);
     final SchoolOriginHistory history0 = schoolOriginHistory(SOME_DATE.plusDays(1));
@@ -63,7 +62,7 @@ public class R10293Test extends BaseDocToolRulesClientImplementationTest {
   }
 
   @Test
-  public void rule10293_violated_whenSingleDasHistoryBeforeDOB() throws DroolsException {
+  public void rule10293_violated_whenSingleDasHistoryBeforeDOB() {
     // given
     final Client client = client(SOME_DATE);
     final SchoolOriginHistory history = schoolOriginHistory(SOME_DATE.minusDays(1));
@@ -74,7 +73,7 @@ public class R10293Test extends BaseDocToolRulesClientImplementationTest {
   }
 
   @Test
-  public void rule10293_violatedTwice_whenTwoDasHistoriesBeforeDOB() throws DroolsException {
+  public void rule10293_violatedTwice_whenTwoDasHistoriesBeforeDOB() {
     // given
     final Client client = client(SOME_DATE);
     final SchoolOriginHistory history0 = schoolOriginHistory(SOME_DATE.minusDays(1));
@@ -86,7 +85,7 @@ public class R10293Test extends BaseDocToolRulesClientImplementationTest {
   }
 
   @Test
-  public void rule10293_violated_whenOneOfTwoDasHistoriesIsBeforeDOB() throws DroolsException {
+  public void rule10293_violated_whenOneOfTwoDasHistoriesIsBeforeDOB() {
     // given
     final Client client = client(SOME_DATE);
     final SchoolOriginHistory history0 = schoolOriginHistory(SOME_DATE.plusDays(100));

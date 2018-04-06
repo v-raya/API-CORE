@@ -17,7 +17,6 @@ import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification;
 import gov.ca.cwds.data.legacy.cms.entity.enums.YesNoUnknown;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ClientRelationshipType;
-import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
@@ -153,8 +152,6 @@ public class R08840DBTest extends BaseDocToolInMemoryPersistenceTest {
             secondaryTribalsAfterRule.addAll(
                 tribalMembershipVerificationDao.findByClientId(secondaryClientId));
           } catch (DataAccessServicesException e) {
-            e.printStackTrace();
-          } catch (DroolsException e) {
             e.printStackTrace();
           }
         });
