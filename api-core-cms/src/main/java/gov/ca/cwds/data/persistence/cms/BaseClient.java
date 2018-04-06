@@ -34,7 +34,6 @@ import gov.ca.cwds.data.std.ApiPersonAware;
 @MappedSuperclass
 public abstract class BaseClient extends CmsPersistentObject
     implements ApiPersonAware, ApiMultipleLanguagesAware, AccessLimitationAware {
-
   private static final long serialVersionUID = 1L;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BaseClient.class);
@@ -583,6 +582,27 @@ public abstract class BaseClient extends CmsPersistentObject
   }
 
   /**
+   * @return the genderIdentityType
+   */
+  public Short getGenderIdentityType() {
+    return genderIdentityType;
+  }
+
+  /**
+   * @return the giNotListedDescription
+   */
+  public String getGiNotListedDescription() {
+    return giNotListedDescription;
+  }
+
+  /**
+   * @return the genderExpressionType
+   */
+  public Short getGenderExpressionType() {
+    return genderExpressionType;
+  }
+
+  /**
    * @return the healthSummaryText
    */
   public String getHealthSummaryText() {
@@ -766,6 +786,28 @@ public abstract class BaseClient extends CmsPersistentObject
   }
 
   /**
+   * @return the sexualOrientationType
+   */
+  public Short getSexualOrientationType() {
+    return sexualOrientationType;
+  }
+
+  /**
+   * @return the soUnableToDetermineCode
+   */
+  public String getSoUnableToDetermineCode() {
+    return StringUtils.trimToEmpty(soUnableToDetermineCode);
+  }
+
+  /**
+   * @return the soNotListedDescrption
+   */
+  public String getSoNotListedDescrption() {
+    return soNotListedDescrption;
+  }
+
+
+  /**
    * @return the soc158PlacementCode
    */
   public String getSoc158PlacementCode() {
@@ -820,48 +862,6 @@ public abstract class BaseClient extends CmsPersistentObject
    */
   public String getUnemployedParentCode() {
     return StringUtils.trimToEmpty(unemployedParentCode);
-  }
-
-  /**
-   * @return the genderIdentityType
-   */
-  public Short getGenderIdentityType() {
-    return genderIdentityType;
-  }
-
-  /**
-   * @return the giNotListedDescription
-   */
-  public String getGiNotListedDescription() {
-    return giNotListedDescription;
-  }
-
-  /**
-   * @return the genderExpressionType
-   */
-  public Short getGenderExpressionType() {
-    return genderExpressionType;
-  }
-
-  /**
-   * @return the sexualOrientationType
-   */
-  public Short getSexualOrientationType() {
-    return sexualOrientationType;
-  }
-
-  /**
-   * @return the soUnableToDetermineCode
-   */
-  public String getSoUnableToDetermineCode() {
-    return StringUtils.trimToEmpty(soUnableToDetermineCode);
-  }
-
-  /**
-   * @return the soNotListedDescrption
-   */
-  public String getSoNotListedDescrption() {
-    return soNotListedDescrption;
   }
 
   /**
