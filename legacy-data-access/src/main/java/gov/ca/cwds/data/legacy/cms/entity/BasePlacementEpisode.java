@@ -23,7 +23,7 @@ import org.hibernate.annotations.NotFoundAction;
  * @author CWDS CALS API Team
  */
 @MappedSuperclass
-@SuppressWarnings("squid:S3437") //LocalDate is serializable
+@SuppressWarnings({"squid:S3437", "common-java:DuplicatedBlocks"}) //LocalDate is serializable
 public abstract class BasePlacementEpisode implements IBasePlacementEpisode, PersistentObject {
 
     private static final long serialVersionUID = -3903845942588945919L;
