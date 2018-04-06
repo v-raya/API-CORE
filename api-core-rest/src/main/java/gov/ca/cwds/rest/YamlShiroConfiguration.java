@@ -1,9 +1,8 @@
 package gov.ca.cwds.rest;
 
+import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.secnod.dropwizard.shiro.ShiroConfiguration;
-
-import java.util.Map;
 
 public class YamlShiroConfiguration extends ShiroConfiguration {
   @JsonProperty("ini")

@@ -1,10 +1,9 @@
 package gov.ca.cwds.rest.shiro;
 
+import java.util.Optional;
 import gov.ca.cwds.rest.YamlShiroConfiguration;
 import org.apache.shiro.config.Ini;
 import org.apache.shiro.web.env.IniWebEnvironment;
-
-import java.util.Optional;
 
 class YamlIniWebEnvironment extends IniWebEnvironment {
   private YamlShiroConfiguration yamlShiroConfiguration;
