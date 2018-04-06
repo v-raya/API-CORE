@@ -21,15 +21,16 @@ public abstract class CmsPersistentObjectVersioned extends CmsPersistentObjectBa
   @Version
   @Column(name = "LST_UPD_TS", nullable = false)
   private Timestamp lastUpdatedTime;
+
   /**
    * @return the time and date of the most recent update to an occurrence of this entity type.
    */
   public Timestamp getLastUpdateTime() {
-    return lastUpdatedTime;
+    return lastUpdatedTime == null ? null : (Timestamp) lastUpdatedTime.clone();
   }
 
   @SuppressWarnings("javadoc")
   public void setLastUpdateTime(Timestamp lastUpdatedTime) {
-    this.lastUpdatedTime = lastUpdatedTime;
+    this.lastUpdatedTime = (lastUpdatedTime == null ? null : (Timestamp) lastUpdatedTime.clone());
   }
 }
