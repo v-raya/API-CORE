@@ -11,6 +11,7 @@ import javax.persistence.Table;
  * 
  * @author CASE API Team
  */
+@SuppressWarnings("squid:S2160")
 @Entity
 @Table(name = "LONG_TXT")
 public class LongText extends CmsPersistentObject {

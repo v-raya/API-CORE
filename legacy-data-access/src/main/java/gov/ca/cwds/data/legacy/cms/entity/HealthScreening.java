@@ -176,6 +176,7 @@ public class HealthScreening extends CmsPersistentObject {
             getScreeningDate());
   }
 
+  @SuppressWarnings("common-java:DuplicatedBlocks")
   @Embeddable
   public static class Id implements Serializable {
 

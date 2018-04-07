@@ -11,6 +11,7 @@ import javax.persistence.MappedSuperclass;
  *
  * @author CWDS API Team
  */
+@SuppressWarnings("squid:S2160")
 @MappedSuperclass
 public abstract class CmsPersistentObjectBase extends ApiObjectIdentity implements PersistentObject {
 
