@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
-import gov.ca.cwds.data.stream.ScalarResultsStreamer;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.util.Arrays;
 import java.util.List;
