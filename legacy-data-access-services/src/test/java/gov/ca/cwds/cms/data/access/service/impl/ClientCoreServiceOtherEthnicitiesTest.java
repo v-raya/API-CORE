@@ -31,17 +31,14 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(PrincipalUtils.class)
-public class ClientCoreServiceOtherEthnicitiesTest extends BaseTestWithAuthorizedClient{
-
+public class ClientCoreServiceOtherEthnicitiesTest extends BaseUnitTest {
 
   private static final String CLIENT_ID = "0000000001";
 
   private static final String USER_ID = "0X5";
 
-  @Mock
-  private ClientDao clientDao;
-  @Mock
-  private ClientOtherEthnicityDao clientOtherEthnicityDao;
+  @Mock private ClientDao clientDao;
+  @Mock private ClientOtherEthnicityDao clientOtherEthnicityDao;
 
   private ClientCoreService clientCoreService;
 
@@ -65,27 +62,28 @@ public class ClientCoreServiceOtherEthnicitiesTest extends BaseTestWithAuthorize
 
     clientCoreService.getUpdateLifeCycle().afterBusinessValidation(bundle);
 
-    //assert that ClientOtherEthnicity with code 3 will be removed
+    // assert that ClientOtherEthnicity with code 3 will be removed
     verify(clientOtherEthnicityDao).delete(eq("0000000003"));
 
     Set<ClientOtherEthnicity> otherEtnicities = client.getOtherEthnicities();
     assertEquals(2, otherEtnicities.size());
 
     Map<Short, ClientOtherEthnicity> etnicitiesmap =
-        otherEtnicities.stream()
+        otherEtnicities
+            .stream()
             .collect(Collectors.toMap(ClientOtherEthnicity::getEthnicityCode, Function.identity()));
 
     Set<Short> ethnicityCodes = etnicitiesmap.keySet();
     assertTrue(ethnicityCodes.contains((short) 1));
     assertTrue(ethnicityCodes.contains((short) 2));
 
-    //ClientOtherEthnicity for insert
+    // ClientOtherEthnicity for insert
     ClientOtherEthnicity coe1 = etnicitiesmap.get((short) 1);
     assertNotNull(coe1.getId());
     assertNotNull(coe1.getLastUpdateTime());
     assertEquals(USER_ID, coe1.getLastUpdateId());
 
-    //ClientOtherEthnicity for update, the same state as in DB
+    // ClientOtherEthnicity for update, the same state as in DB
     ClientOtherEthnicity coe2 = etnicitiesmap.get((short) 2);
     assertEquals("0000000002", coe2.getId());
     assertEquals(time("2002-11-01-12.53.07.580225"), coe2.getLastUpdateTime());
