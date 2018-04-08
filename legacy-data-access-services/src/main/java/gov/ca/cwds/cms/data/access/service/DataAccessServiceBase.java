@@ -24,25 +24,6 @@ public abstract class DataAccessServiceBase<
 
   protected DataAccessServiceBase(E crudDao) {
     this.crudDao = crudDao;
-    init();
-  }
-
-  private final void init() {
-    updateLifecycle = getUpdateLifeCycle();
-    createLifecycle = getCreateLifeCycle();
-    deleteLifecycle = getDeleteLifeCycle();
-
-    if (updateLifecycle == null) {
-      updateLifecycle = new DefaultDataAccessLifeCycle<>();
-    }
-
-    if (createLifecycle == null) {
-      createLifecycle = new DefaultDataAccessLifeCycle<>();
-    }
-
-    if (deleteLifecycle == null) {
-      deleteLifecycle = new DefaultDataAccessLifeCycle<>();
-    }
   }
 
   @Override
@@ -53,6 +34,13 @@ public abstract class DataAccessServiceBase<
   @Override
   public T create(P entityAwareDTO) throws DataAccessServicesException {
     try {
+
+      if (getCreateLifeCycle() == null) {
+        createLifecycle = new DefaultDataAccessLifeCycle<>();
+      } else {
+        createLifecycle = getCreateLifeCycle();
+      }
+
       DataAccessBundle<P> dataAccessBundle = new DataAccessBundle<>(entityAwareDTO);
       createLifecycle.beforeDataProcessing(dataAccessBundle);
 
@@ -74,6 +62,13 @@ public abstract class DataAccessServiceBase<
   @Override
   public T update(P entityAwareDTO) throws DataAccessServicesException, DroolsException {
     try {
+
+      if (getUpdateLifeCycle() == null) {
+        updateLifecycle = new DefaultDataAccessLifeCycle<>();
+      } else {
+        updateLifecycle = getUpdateLifeCycle();
+      }
+
       DataAccessBundle<P> dataAccessBundle = new DataAccessBundle<>(entityAwareDTO);
       updateLifecycle.beforeDataProcessing(dataAccessBundle);
 
@@ -94,11 +89,16 @@ public abstract class DataAccessServiceBase<
 
   @Override
   public final T delete(Serializable primaryKey) {
+    if (getDeleteLifeCycle() == null) {
+      deleteLifecycle = new DefaultDataAccessLifeCycle<>();
+    } else {
+      deleteLifecycle = getDeleteLifeCycle();
+    }
+
     return crudDao.delete(primaryKey);
   }
 
   protected abstract DataAccessServiceLifecycle<P> getUpdateLifeCycle();
   protected abstract DataAccessServiceLifecycle<P> getCreateLifeCycle();
   protected abstract DataAccessServiceLifecycle<P> getDeleteLifeCycle();
-
 }
