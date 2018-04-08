@@ -11,6 +11,7 @@ public class IdGenerator {
   private IdGenerator() {
   }
 
+  // TODO: WORKS INCORRECT
   public static String generateId() {
       return CmsKeyIdGenerator.getNextValue(PrincipalUtils.getStaffPersonId());
   }
