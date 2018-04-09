@@ -2,14 +2,10 @@ package gov.ca.cwds.cms.data.access.service.impl;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import gov.ca.cwds.cms.data.access.dao.PlacementHomeDao;
-import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
-import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessBundle;
-import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.utils.PrincipalUtils;
