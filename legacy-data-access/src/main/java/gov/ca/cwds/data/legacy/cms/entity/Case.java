@@ -72,7 +72,7 @@ import org.hibernate.annotations.Type;
             + " and c.endDate is not null "
   ),
 })
-@SuppressWarnings("squid:S3437")
+@SuppressWarnings({"squid:S3437", "squid:S2160"})
 public class Case extends CmsPersistentObject {
 
   public static final String NQ_FIND_ACTIVE_BY_STAFF_ID =
