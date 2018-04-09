@@ -19,14 +19,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.core.classloader.annotations.PrepareOnlyThisForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 /** @author CWDS TPT-3 Team */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({PrincipalUtils.class, PlacementHomeCoreService.class})
+@PrepareOnlyThisForTest({PrincipalUtils.class, PlacementHomeCoreService.class})
 public class PlacementHomeCoreServiceTest extends BaseUnitTest {
 
   public static final String USER_ID = "aaa";
