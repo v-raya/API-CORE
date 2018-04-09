@@ -20,7 +20,6 @@ public abstract class DataAccessServiceBase<
 
   private DataAccessServiceLifecycle<P> updateLifecycle;
   private DataAccessServiceLifecycle<P> createLifecycle;
-  private DataAccessServiceLifecycle<P> deleteLifecycle;
 
   protected DataAccessServiceBase(E crudDao) {
     this.crudDao = crudDao;
