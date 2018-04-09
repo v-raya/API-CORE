@@ -89,12 +89,6 @@ public abstract class DataAccessServiceBase<
 
   @Override
   public final T delete(Serializable primaryKey) {
-    if (getDeleteLifeCycle() == null) {
-      deleteLifecycle = new DefaultDataAccessLifeCycle<>();
-    } else {
-      deleteLifecycle = getDeleteLifeCycle();
-    }
-
     return crudDao.delete(primaryKey);
   }
 
