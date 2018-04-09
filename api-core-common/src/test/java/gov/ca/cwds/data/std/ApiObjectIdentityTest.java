@@ -16,12 +16,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareOnlyThisForTest;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 /** @author CWDS TPT-3 Team */
 @RunWith(PowerMockRunner.class)
-@PrepareOnlyThisForTest({
+@PrepareForTest({
   ToStringBuilder.class,
   HashCodeBuilder.class,
   JsonUtils.class,
