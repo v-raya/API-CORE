@@ -31,7 +31,7 @@ public class MinimalApiConfiguration extends Configuration {
   private WebSecurityConfiguration webSecurityConfiguration;
 
   @Nullable
-  private ShiroConfiguration shiroConfiguration;
+  private YamlShiroConfiguration shiroConfiguration;
 
   @Nullable
   private SecurityConfiguration securityConfiguration;
@@ -83,12 +83,12 @@ public class MinimalApiConfiguration extends Configuration {
   }
 
   @JsonProperty(value = "shiro")
-  public ShiroConfiguration getShiroConfiguration() {
+  public YamlShiroConfiguration getShiroConfiguration() {
     return shiroConfiguration;
   }
 
   @JsonProperty
-  public void setShiroConfiguration(ShiroConfiguration shiroConfiguration) {
+  public void setShiroConfiguration(YamlShiroConfiguration shiroConfiguration) {
     this.shiroConfiguration = shiroConfiguration;
   }
 

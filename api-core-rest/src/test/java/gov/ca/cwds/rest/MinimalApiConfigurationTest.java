@@ -93,7 +93,7 @@ public class MinimalApiConfigurationTest {
   @Test
   public void setShiroConfiguration_Args__ShiroConfiguration() throws Exception {
     MinimalApiConfiguration target = new MinimalApiConfiguration();
-    ShiroConfiguration shiroConfiguration = mock(ShiroConfiguration.class);
+    YamlShiroConfiguration shiroConfiguration = mock(YamlShiroConfiguration.class);
     target.setShiroConfiguration(shiroConfiguration);
   }
 

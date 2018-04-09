@@ -9,10 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 public abstract class BaseEntityEnumConverter<E extends EntityEnum<K>, K>
     implements AttributeConverter<E, K> {
 
-  private static final int INITIAL_CAPACITY = 12;
-
   static <K, E> Map<K, E> initializeMapping(EntityEnum<K>[] values) {
-    Map result = new HashMap<K, EntityEnum<K>>(INITIAL_CAPACITY);
+    Map result = new HashMap<K, EntityEnum<K>>(values.length);
     for (EntityEnum<K> item : values) {
       result.put(item.getCode(), item);
     }
