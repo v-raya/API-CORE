@@ -18,9 +18,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-/**
- * Created by leonid.marushevskiy on 6/30/2017.
- */
+/** Created by leonid.marushevskiy on 6/30/2017. */
 public class LoggingFilter implements ClientRequestFilter, ClientResponseFilter {
 
   private static final String LINE_SEPARATOR = "line.separator";
@@ -32,22 +30,27 @@ public class LoggingFilter implements ClientRequestFilter, ClientResponseFilter 
     mapper.registerModule(new JavaTimeModule());
 
     LOG.info(
-        System.getProperty(LINE_SEPARATOR) + "!!! Test Request"
-            + System.getProperty(LINE_SEPARATOR) + "!!! URL: {}"
-            + System.getProperty(LINE_SEPARATOR) + "!!! Method: {}"
-            + System.getProperty(LINE_SEPARATOR) + "!!! Body: {}",
-        requestContext.getUri(), requestContext.getMethod(),
+        "{}!!! Test Request{}!!! URL: {}{}!!! Method: {}{}!!! Body: {}",
+        System.getProperty(LINE_SEPARATOR),
+        System.getProperty(LINE_SEPARATOR),
+        System.getProperty(LINE_SEPARATOR),
+        System.getProperty(LINE_SEPARATOR),
+        requestContext.getUri(),
+        requestContext.getMethod(),
         mapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestContext.getEntity()));
   }
 
   @Override
-  public void filter(ClientRequestContext clientRequestContext,
-      ClientResponseContext clientResponseContext) throws IOException {
+  public void filter(
+      ClientRequestContext clientRequestContext, ClientResponseContext clientResponseContext)
+      throws IOException {
     LOG.info(
-        System.getProperty(LINE_SEPARATOR) + "!!! Test Response "
-            + System.getProperty(LINE_SEPARATOR) + "!!! Body: {} "
-            + System.getProperty(LINE_SEPARATOR) + "!!! Status: {}",
-        responseToString(clientResponseContext), clientResponseContext.getStatus());
+        "{}!!! Test Response {}!!! Body: {} {}!!! Status: {}",
+        System.getProperty(LINE_SEPARATOR),
+        System.getProperty(LINE_SEPARATOR),
+        System.getProperty(LINE_SEPARATOR),
+        responseToString(clientResponseContext),
+        clientResponseContext.getStatus());
   }
 
   private String responseToString(ClientResponseContext clientResponseContext) {
