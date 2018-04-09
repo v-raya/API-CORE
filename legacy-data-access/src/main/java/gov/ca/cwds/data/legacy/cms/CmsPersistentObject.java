@@ -9,9 +9,11 @@ import javax.persistence.MappedSuperclass;
  *
  * @author CWDS API Team
  */
+@SuppressWarnings({"squid:S3437", "squid:S2160"})
 @MappedSuperclass
 public abstract class CmsPersistentObject extends CmsPersistentObjectBase {
 
+  private static final long serialVersionUID = -9154954939023360996L;
   /**
    * LAST_UPDATE_TIMESTAMP - The date and time of the most recent update of an occurrence of this
    * entity type.

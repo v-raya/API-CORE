@@ -59,7 +59,7 @@ import org.hibernate.annotations.Type;
   name = "Client.findByFacilityIdAndChildId",
   query = Client.CHILDREN_BY_FACILITY_ID_BASE_QUERY + " AND c.identifier = :childId"
 )
-@SuppressWarnings({"squid:S3437", "squid:S2160"})
+@SuppressWarnings({"squid:S3437", "squid:S2160", "common-java:DuplicatedBlocks"})
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "CLIENT_T")

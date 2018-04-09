@@ -34,7 +34,6 @@ import gov.ca.cwds.data.std.ApiPersonAware;
 @MappedSuperclass
 public abstract class BaseClient extends CmsPersistentObject
     implements ApiPersonAware, ApiMultipleLanguagesAware, AccessLimitationAware {
-
   private static final long serialVersionUID = 1L;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BaseClient.class);
@@ -152,6 +151,18 @@ public abstract class BaseClient extends CmsPersistentObject
   @Column(name = "GENDER_CD")
   protected String genderCode;
 
+  @Type(type = "short")
+  @Column(name = "CLNT_GIC")
+  protected Short genderIdentityType;
+
+  @Column(name = "GI_NL_DSC")
+  @ColumnTransformer(read = "trim(GI_NL_DSC)")
+  protected String giNotListedDescription;
+
+  @Type(type = "short")
+  @Column(name = "CLNT_GEC")
+  protected Short genderExpressionType;
+
   @Column(name = "HEALTH_TXT")
   protected String healthSummaryText;
 
@@ -260,6 +271,17 @@ public abstract class BaseClient extends CmsPersistentObject
    */
   @Column(name = "SENSTV_IND")
   protected String sensitivityIndicator;
+
+  @Type(type = "short")
+  @Column(name = "CLNT_SOC")
+  protected Short sexualOrientationType;
+
+  @Column(name = "SO_UD_CD")
+  protected String soUnableToDetermineCode;
+
+  @Column(name = "SO_NL_DSC")
+  @ColumnTransformer(read = "trim(SO_NL_DSC)")
+  protected String soNotListedDescrption;
 
   @Column(name = "SOCPLC_CD")
   protected String soc158PlacementCode;
@@ -560,6 +582,27 @@ public abstract class BaseClient extends CmsPersistentObject
   }
 
   /**
+   * @return the genderIdentityType
+   */
+  public Short getGenderIdentityType() {
+    return genderIdentityType;
+  }
+
+  /**
+   * @return the giNotListedDescription
+   */
+  public String getGiNotListedDescription() {
+    return giNotListedDescription;
+  }
+
+  /**
+   * @return the genderExpressionType
+   */
+  public Short getGenderExpressionType() {
+    return genderExpressionType;
+  }
+
+  /**
    * @return the healthSummaryText
    */
   public String getHealthSummaryText() {
@@ -741,6 +784,28 @@ public abstract class BaseClient extends CmsPersistentObject
   public String getSensitivityIndicator() {
     return StringUtils.trimToEmpty(sensitivityIndicator);
   }
+
+  /**
+   * @return the sexualOrientationType
+   */
+  public Short getSexualOrientationType() {
+    return sexualOrientationType;
+  }
+
+  /**
+   * @return the soUnableToDetermineCode
+   */
+  public String getSoUnableToDetermineCode() {
+    return StringUtils.trimToEmpty(soUnableToDetermineCode);
+  }
+
+  /**
+   * @return the soNotListedDescrption
+   */
+  public String getSoNotListedDescrption() {
+    return soNotListedDescrption;
+  }
+
 
   /**
    * @return the soc158PlacementCode
