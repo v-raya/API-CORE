@@ -109,7 +109,7 @@ public class RestClientTestRule<T extends Configuration> implements TestRule {
         .setKeyPassword(properties.getProperty("perryRealm.keyStoreKeyPassword"));
     // Enc Key
     jwtConfiguration
-        .setEncryptionEnabled(Boolean.valueOf(properties.getProperty("perryRealm.useEncryption")));
+        .setEncryptionEnabled(Boolean.parseBoolean(properties.getProperty("perryRealm.useEncryption")));
     jwtConfiguration.getKeyStore()
         .setEncKeyPassword(properties.getProperty("perryRealm.encKeyPassword"));
     jwtConfiguration.getKeyStore().setEncAlias(properties.getProperty("perryRealm.encKeyAlias"));

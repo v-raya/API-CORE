@@ -23,29 +23,9 @@ public abstract class DataAccessServiceBase<
 
   private DataAccessServiceLifecycle<P> updateLifecycle;
   private DataAccessServiceLifecycle<P> createLifecycle;
-  private DataAccessServiceLifecycle<P> deleteLifecycle;
 
   protected DataAccessServiceBase(E crudDao) {
     this.crudDao = crudDao;
-    init();
-  }
-
-  private final void init() {
-    updateLifecycle = getUpdateLifeCycle();
-    createLifecycle = getCreateLifeCycle();
-    deleteLifecycle = getDeleteLifeCycle();
-
-    if (updateLifecycle == null) {
-      updateLifecycle = new DefaultDataAccessLifeCycle<>();
-    }
-
-    if (createLifecycle == null) {
-      createLifecycle = new DefaultDataAccessLifeCycle<>();
-    }
-
-    if (deleteLifecycle == null) {
-      deleteLifecycle = new DefaultDataAccessLifeCycle<>();
-    }
   }
 
   @Override
@@ -55,32 +35,49 @@ public abstract class DataAccessServiceBase<
 
   @Override
   public T create(P entityAwareDTO) throws DataAccessServicesException {
-    DataAccessBundle<P> dataAccessBundle = new DataAccessBundle<>(entityAwareDTO);
-    createLifecycle.beforeDataProcessing(dataAccessBundle);
-    PerryAccount perryAccount = PrincipalUtils.getPrincipal();
-    createLifecycle.dataProcessing(dataAccessBundle, perryAccount);
-    createLifecycle.afterDataProcessing(dataAccessBundle);
-    createLifecycle.beforeBusinessValidation(dataAccessBundle);
-    createLifecycle.businessValidation(dataAccessBundle, perryAccount);
-    createLifecycle.afterBusinessValidation(dataAccessBundle);
-    T t = crudDao.create(entityAwareDTO.getEntity());
-    createLifecycle.afterStore(dataAccessBundle);
-    return t;
+
+      if (getCreateLifeCycle() == null) {
+        createLifecycle = new DefaultDataAccessLifeCycle<>();
+      } else {
+        createLifecycle = getCreateLifeCycle();
+      }
+
+      DataAccessBundle<P> dataAccessBundle = new DataAccessBundle<>(entityAwareDTO);
+      createLifecycle.beforeDataProcessing(dataAccessBundle);
+
+      PerryAccount perryAccount = PrincipalUtils.getPrincipal();
+
+      createLifecycle.dataProcessing(dataAccessBundle, perryAccount);
+      createLifecycle.afterDataProcessing(dataAccessBundle);
+      createLifecycle.beforeBusinessValidation(dataAccessBundle);
+      createLifecycle.businessValidation(dataAccessBundle, perryAccount);
+      createLifecycle.afterBusinessValidation(dataAccessBundle);
+      T t = crudDao.create(entityAwareDTO.getEntity());
+      createLifecycle.afterStore(dataAccessBundle);
+      return t;
+
   }
 
   @Override
   public T update(P entityAwareDTO) throws DataAccessServicesException {
-    DataAccessBundle<P> dataAccessBundle = new DataAccessBundle<>(entityAwareDTO);
-    updateLifecycle.beforeDataProcessing(dataAccessBundle);
-    PerryAccount perryAccount = PrincipalUtils.getPrincipal();
-    updateLifecycle.dataProcessing(dataAccessBundle, perryAccount);
-    updateLifecycle.afterDataProcessing(dataAccessBundle);
-    updateLifecycle.beforeBusinessValidation(dataAccessBundle);
-    updateLifecycle.businessValidation(dataAccessBundle, perryAccount);
-    updateLifecycle.afterBusinessValidation(dataAccessBundle);
-    T t = crudDao.update(entityAwareDTO.getEntity());
-    updateLifecycle.afterStore(dataAccessBundle);
-    return t;
+  if (getUpdateLifeCycle() == null) {
+        updateLifecycle = new DefaultDataAccessLifeCycle<>();
+      } else {
+        updateLifecycle = getUpdateLifeCycle();
+      }    DataAccessBundle<P> dataAccessBundle = new DataAccessBundle<>(entityAwareDTO);
+      updateLifecycle.beforeDataProcessing(dataAccessBundle);
+
+      PerryAccount perryAccount = PrincipalUtils.getPrincipal();
+
+      updateLifecycle.dataProcessing(dataAccessBundle, perryAccount);
+      updateLifecycle.afterDataProcessing(dataAccessBundle);
+      updateLifecycle.beforeBusinessValidation(dataAccessBundle);
+      updateLifecycle.businessValidation(dataAccessBundle, perryAccount);
+      updateLifecycle.afterBusinessValidation(dataAccessBundle);
+      T t = crudDao.update(entityAwareDTO.getEntity());
+      updateLifecycle.afterStore(dataAccessBundle);
+      return t;
+
   }
 
   @Override
@@ -93,5 +90,4 @@ public abstract class DataAccessServiceBase<
   protected abstract DataAccessServiceLifecycle<P> getCreateLifeCycle();
 
   protected abstract DataAccessServiceLifecycle<P> getDeleteLifeCycle();
-
 }
