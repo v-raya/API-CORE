@@ -2,10 +2,8 @@ package gov.ca.cwds.cms.data.access.service.impl.placementHome;
 
 import static org.junit.Assert.fail;
 
-import gov.ca.cwds.cms.data.access.service.impl.placementHome.BaseDocToolRulesPlacementHomeTest;
 import gov.ca.cwds.cms.data.access.service.rules.PlacementHomeDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.EmergencyContactDetail;
-import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import org.junit.Assert;
 import org.junit.Before;
@@ -61,7 +59,7 @@ public class R09753Test extends BaseDocToolRulesPlacementHomeTest {
         });
   }
 
-  private void assertInvalid(Runnable testCase) throws DroolsException {
+  private void assertInvalid(Runnable testCase) {
     try {
       testCase.run();
       businessValidationService.runBusinessValidation(

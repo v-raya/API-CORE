@@ -3,9 +3,7 @@ package gov.ca.cwds.cms.data.access.service.impl.placementHome;
 import static gov.ca.cwds.cms.data.access.Constants.StaffPersonPrivileges.USR_PRV_SOC158_APPLICATION;
 import static org.junit.Assert.fail;
 
-import gov.ca.cwds.cms.data.access.service.impl.placementHome.BaseDocToolRulesPlacementHomeTest;
 import gov.ca.cwds.cms.data.access.service.rules.PlacementHomeDroolsConfiguration;
-import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -45,7 +43,7 @@ public class R05761Test extends BaseDocToolRulesPlacementHomeTest {
         });
   }
 
-  private void checkR05761(Runnable testCase) throws DroolsException {
+  private void checkR05761(Runnable testCase) {
     try {
       principal.getPrivileges().add(USR_PRV_SOC158_APPLICATION);
       testCase.run();

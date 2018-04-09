@@ -2,7 +2,6 @@ package gov.ca.cwds.cms.data.access.service.lifecycle;
 
 import gov.ca.cwds.cms.data.access.dto.BaseEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
-import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.realm.PerryAccount;
 
 /** @author CWDS TPT-3 Team */
@@ -30,14 +29,12 @@ public class DefaultDataAccessLifeCycle<T extends BaseEntityAwareDTO>
   }
 
   @Override
-  public void dataProcessing(DataAccessBundle bundle, PerryAccount perryAccount)
-      throws DroolsException {
+  public void dataProcessing(DataAccessBundle bundle, PerryAccount perryAccount) {
     // Do nothing just a stub
   }
 
   @Override
-  public void businessValidation(DataAccessBundle bundle, PerryAccount perryAccount)
-      throws DroolsException {
+  public void businessValidation(DataAccessBundle bundle, PerryAccount perryAccount) {
     // Do nothing
   }
 

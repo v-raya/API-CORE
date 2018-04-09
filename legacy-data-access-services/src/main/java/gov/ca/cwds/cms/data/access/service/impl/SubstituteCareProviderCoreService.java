@@ -36,7 +36,6 @@ import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeInformation;
 import gov.ca.cwds.data.legacy.cms.entity.ScpOtherEthnicity;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProviderUc;
-import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
 import java.time.LocalDate;
@@ -291,8 +290,7 @@ public class SubstituteCareProviderCoreService
     }
 
     @Override
-    public void dataProcessing(DataAccessBundle bundle, PerryAccount perryAccount)
-        throws DroolsException {
+    public void dataProcessing(DataAccessBundle bundle, PerryAccount perryAccount) {
       businessValidationService.runDataProcessing(
           bundle.getAwareDto(),
           perryAccount,
@@ -300,8 +298,7 @@ public class SubstituteCareProviderCoreService
     }
 
     @Override
-    public void businessValidation(DataAccessBundle bundle, PerryAccount perryAccount)
-        throws DroolsException {
+    public void businessValidation(DataAccessBundle bundle, PerryAccount perryAccount) {
       businessValidationService.runBusinessValidation(
           bundle.getAwareDto(), perryAccount, SubstituteCareProviderDroolsConfiguration.INSTANCE);
     }
