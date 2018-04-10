@@ -25,7 +25,7 @@ public class ConfigUtils implements ConfigReader {
    */
   @Override
   public CwdsAuthenticationClientConfig readConfig() {
-    Yaml yaml = new Yaml();
+    Yaml yaml = getYaml();
     try {
       InputStream ymlTestingSourceProvider =
           new SubstitutingSourceProvider(this, new EnvironmentVariableSubstitutor(false))

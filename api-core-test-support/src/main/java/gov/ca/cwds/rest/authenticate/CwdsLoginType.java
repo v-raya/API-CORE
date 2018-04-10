@@ -2,12 +2,15 @@ package gov.ca.cwds.rest.authenticate;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.authenticate.config.ConfigReader;
+import gov.ca.cwds.authenticate.config.User;
 
 /**
  * This class will handle the different type of login based on the authentication mode, If the
@@ -42,8 +45,17 @@ public class CwdsLoginType {
    * @return the valid user token
    */
   public String login(UserGroup userType) {
-    if (!"TEST".equals(configReader.readConfig().getAuthenticationMode())) {
-      new CwdsAuthenticationClient(configReader, "", "");
+    if ("TEST".equals(configReader.readConfig().getAuthenticationMode())) {
+      List<User> users = configReader.readConfig().getDefaultUsers();
+      Optional<User> user = users.stream()
+          .filter(value -> userType.getName().equals(value.getUserType())).findFirst();
+      String userName = null;
+      String password = null;
+      if (user.isPresent()) {
+        userName = user.get().getUsername();
+        password = user.get().getPassword();
+      }
+      cwdsClientCommon = new CwdsAuthenticationClient(configReader, userName, password);
     } else {
       String jsonFile = "/LoginUser/" + userType.getName() + ".json";
       String userJson = "";

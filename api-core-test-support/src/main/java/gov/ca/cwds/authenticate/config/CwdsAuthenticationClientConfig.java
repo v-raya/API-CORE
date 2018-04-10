@@ -1,5 +1,7 @@
 package gov.ca.cwds.authenticate.config;
 
+import java.util.List;
+
 /**
  * Get the values of the token credentials.
  * 
@@ -11,6 +13,7 @@ public class CwdsAuthenticationClientConfig {
   private String authenticationMode;
   private TokenCredentials testUrl;
   private SocialWorkerOnly socialWorkerOnly;
+  private List<User> defaultUsers;
 
   /**
    * @return the authenticationMode
@@ -53,4 +56,13 @@ public class CwdsAuthenticationClientConfig {
   public void setSocialWorkerOnly(SocialWorkerOnly socialWorkerOnly) {
     this.socialWorkerOnly = socialWorkerOnly;
   }
+
+  public List<User> getDefaultUsers() {
+    return defaultUsers;
+  }
+
+  public void setDefaultUsers(List<User> defaultUsers) {
+    this.defaultUsers = defaultUsers;
+  }
+
 }

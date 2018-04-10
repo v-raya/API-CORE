@@ -1,5 +1,9 @@
 package gov.ca.cwds.authenticate.config;
 
+import org.yaml.snakeyaml.TypeDescription;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
+
 import io.dropwizard.configuration.ConfigurationSourceProvider;
 
 /**
@@ -14,4 +18,12 @@ public interface ConfigReader extends ConfigurationSourceProvider {
    * @return the config values
    */
   public CwdsAuthenticationClientConfig readConfig();
+
+  default Yaml getYaml() {
+    Constructor constructor = new Constructor(CwdsAuthenticationClientConfig.class);
+    TypeDescription configDesc = new TypeDescription(CwdsAuthenticationClientConfig.class);
+    configDesc.putListPropertyType("defaultUsers", User.class);
+    constructor.addTypeDescription(configDesc);
+    return new Yaml(constructor);
+  }
 }

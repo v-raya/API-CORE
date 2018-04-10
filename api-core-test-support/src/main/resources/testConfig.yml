@@ -4,13 +4,19 @@
 authenticationMode: TEST
 testUrl:
    baseUrl: ${BASE_URL:-https://ferbapi.preint.cwds.io}
-   authenticationBaseUrl: ${BASE_URL:-https://sectest.dss.ca.gov}
-   perryLoginUrl: ${PERRY_LOGIN_URL:-https://web.preint.cwds.io/perry/login}
-   authLoginUrl: ${AUTH_LOGIN_URL:-https://web.preint.cwds.io/perry/authn/login}
-   tokenUrl: ${TOKEN_URL:-https://web.preint.cwds.io/perry/authn/token}
+   authenticationBaseUrl: ${BASE_URL:-https://localhost:8070}
+   perryLoginUrl: ${PERRY_LOGIN_URL:-https://localhost:8090/perry/login}
+   authLoginUrl: ${AUTH_LOGIN_URL:-https://localhost:8090/perry/authn/login}
+   tokenUrl: ${TOKEN_URL:-https://localhost:8090/perry/authn/token}
    callBackUrl: ${CALL_BACK_URL:-https://ferbapi.preint.cwds.io/swagger}
    logOutUrl: ${LOG_OUT_URL:-}
-
-socialWorkerOnly:
-   username: ${USERNAME:-}
-   password: ${PASSWORD:-}
+   
+defaultUsers:
+    -  userType: socialWorkerOnly
+       username: ${USERNAME:-}
+       password: ${PASSWORD:-}
+       
+    -  userType: countySensitivePrivilegeUser
+       username: ${USERNAME:-}
+       password: ${PASSWORD:-}  
+        
