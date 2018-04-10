@@ -1,5 +1,6 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
+import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT_ID;
 
 import com.google.inject.Inject;
@@ -29,6 +30,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -69,9 +71,7 @@ public class ClientRelationshipCoreService
     String staffPerson = PrincipalUtils.getStaffPersonId();
     entityAwareDto.getEntity().setLastUpdateTime(LocalDateTime.now());
     entityAwareDto.getEntity().setLastUpdateId(staffPerson);
-    entityAwareDto
-        .getEntity()
-        .setIdentifier(CmsKeyIdGenerator.getNextValue(staffPerson));
+    entityAwareDto.getEntity().setIdentifier(CmsKeyIdGenerator.getNextValue(staffPerson));
     return super.create(entityAwareDto);
   }
 
@@ -100,12 +100,40 @@ public class ClientRelationshipCoreService
 
   public List<ClientRelationship> findRelationshipsBySecondaryClientId(
       @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
-    return crudDao.findRelationshipsBySecondaryClientId(clientId, LocalDate.now());
+    return deleteNotPermittedRelationships(
+        crudDao.findRelationshipsBySecondaryClientId(clientId, LocalDate.now()));
   }
 
   public List<ClientRelationship> findRelationshipsByPrimaryClientId(
       @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
-    return crudDao.findRelationshipsByPrimaryClientId(clientId, LocalDate.now());
+    return deleteNotPermittedRelationships(
+        crudDao.findRelationshipsByPrimaryClientId(clientId, LocalDate.now()));
+  }
+
+  private List<ClientRelationship> deleteNotPermittedRelationships(
+      List<ClientRelationship> relationships) {
+    if (CollectionUtils.isEmpty(relationships)) {
+      return relationships;
+    }
+
+    List<Client> permittedClients = checkPermissionForRelatedClient(relationships);
+    List<ClientRelationship> filteredRelationships = new ArrayList<>(relationships);
+    filteredRelationships.removeIf(
+        clientRelationship -> !permittedClients.contains(clientRelationship.getSecondaryClient()));
+    return filteredRelationships;
+  }
+
+  @Authorize(CLIENT_READ_CLIENT)
+  private List<Client> checkPermissionForRelatedClient(List<ClientRelationship> relationships) {
+    if (CollectionUtils.isEmpty(relationships)) {
+      return new ArrayList<>();
+    }
+
+    final List<Client> clients = new ArrayList<>();
+    relationships
+        .stream()
+        .forEach(clientRelationship -> clients.add(clientRelationship.getSecondaryClient()));
+    return clients;
   }
 
   protected BusinessValidationService getBusinessValidationService() {
