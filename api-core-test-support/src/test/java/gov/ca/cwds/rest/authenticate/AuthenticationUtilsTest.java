@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.authenticate;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -15,7 +15,7 @@ public class AuthenticationUtilsTest {
 
   @Before
   public void init() {
-    authenticationUtils = new AuthenticationUtils();
+    authenticationUtils = new AuthenticationUtils(null);
   }
 
   @Test
