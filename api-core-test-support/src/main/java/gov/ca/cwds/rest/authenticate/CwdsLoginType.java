@@ -41,6 +41,8 @@ public class CwdsLoginType {
   }
 
   /**
+   * This method differentiate with the login type between json and user/pwd and get a valid token.
+   * 
    * @param userType - userType
    * @return the valid user token
    */

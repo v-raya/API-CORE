@@ -12,10 +12,11 @@ public class CwdsAuthenticationClientConfig {
 
   private String authenticationMode;
   private TokenCredentials testUrl;
-  private SocialWorkerOnly socialWorkerOnly;
   private List<User> defaultUsers;
 
   /**
+   * authenticationMode.
+   * 
    * @return the authenticationMode
    */
   public String getAuthenticationMode() {
@@ -23,6 +24,8 @@ public class CwdsAuthenticationClientConfig {
   }
 
   /**
+   * authenticationMode.
+   * 
    * @param authenticationMode - authenticationMode
    */
   public void setAuthenticationMode(String authenticationMode) {
@@ -30,6 +33,8 @@ public class CwdsAuthenticationClientConfig {
   }
 
   /**
+   * tokenCredentials.
+   * 
    * @return the tokenCredentials
    */
   public TokenCredentials getTestUrl() {
@@ -37,6 +42,8 @@ public class CwdsAuthenticationClientConfig {
   }
 
   /**
+   * tokenCredentials.
+   * 
    * @param testUrl - testUrl
    */
   public void setTestUrl(TokenCredentials testUrl) {
@@ -44,23 +51,19 @@ public class CwdsAuthenticationClientConfig {
   }
 
   /**
-   * @return the socialWorkerOnly
+   * defaultUsers.
+   * 
+   * @return the defaultUsers
    */
-  public SocialWorkerOnly getSocialWorkerOnly() {
-    return socialWorkerOnly;
-  }
-
-  /**
-   * @param socialWorkerOnly - socialWorkerOnly
-   */
-  public void setSocialWorkerOnly(SocialWorkerOnly socialWorkerOnly) {
-    this.socialWorkerOnly = socialWorkerOnly;
-  }
-
   public List<User> getDefaultUsers() {
     return defaultUsers;
   }
 
+  /**
+   * defaultUsers.
+   * 
+   * @param defaultUsers - defaultUsers
+   */
   public void setDefaultUsers(List<User> defaultUsers) {
     this.defaultUsers = defaultUsers;
   }

@@ -20,3 +20,14 @@ defaultUsers:
        username: ${USERNAME:-}
        password: ${PASSWORD:-}  
         
+    -  userType: countySealedPrivilegeUser
+       username: ${USERNAME:-}
+       password: ${PASSWORD:-} 
+       
+    -  userType: stateSensitivePrivilegeUser
+       username: ${USERNAME:-}
+       password: ${PASSWORD:-}
+       
+    -  userType: stateSealedPrivilegeUser
+       username: ${USERNAME:-}
+       password: ${PASSWORD:-}

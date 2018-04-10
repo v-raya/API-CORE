@@ -18,7 +18,6 @@ import gov.ca.cwds.authenticate.config.ConfigReader;
 import gov.ca.cwds.authenticate.config.ConfigUtils;
 
 /**
- * 
  * This class is used to generate the token using json for Perry dev mode, and handles all the
  * redirect from clicking the login to the end to get the token.
  * 
@@ -49,6 +48,8 @@ public class CwdsDevAuthenticationClient extends HttpClientBuild implements Cwds
   private String userName;
 
   /**
+   * This constructor is to used to initialize the yaml and used over the class.
+   * 
    * @param configReader - configReader
    * @param userName - userName
    */
@@ -62,6 +63,8 @@ public class CwdsDevAuthenticationClient extends HttpClientBuild implements Cwds
   }
 
   /**
+   * Default method to get the token.
+   * 
    * @return the valid token
    */
   @Override

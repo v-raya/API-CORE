@@ -7,7 +7,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import io.dropwizard.configuration.ConfigurationSourceProvider;
 
 /**
- * This interface is used the implement the {@link ConfigUtils}.
+ * This interface is used to implement the {@link ConfigUtils}.
  * 
  * @author CWDS TPT-4 Team
  *
@@ -15,10 +15,17 @@ import io.dropwizard.configuration.ConfigurationSourceProvider;
 public interface ConfigReader extends ConfigurationSourceProvider {
 
   /**
+   * readConfig.
+   * 
    * @return the config values
    */
   public CwdsAuthenticationClientConfig readConfig();
 
+  /**
+   * read the yaml values in the List.
+   * 
+   * @return the yaml list vales
+   */
   default Yaml getYaml() {
     Constructor constructor = new Constructor(CwdsAuthenticationClientConfig.class);
     TypeDescription configDesc = new TypeDescription(CwdsAuthenticationClientConfig.class);

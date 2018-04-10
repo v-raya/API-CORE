@@ -86,6 +86,8 @@ public class TokenCredentials {
   }
 
   /**
+   * baseUrl.
+   * 
    * @param baseUrl - baseUrl
    */
   public void setBaseUrl(String baseUrl) {
@@ -93,6 +95,8 @@ public class TokenCredentials {
   }
 
   /**
+   * authenticationBaseUrl.
+   * 
    * @param authenticationBaseUrl - authenticationBaseUrl
    */
   public void setAuthenticationBaseUrl(String authenticationBaseUrl) {
@@ -100,6 +104,8 @@ public class TokenCredentials {
   }
 
   /**
+   * perryLoginUrl.
+   * 
    * @param perryLoginUrl - perryLoginUrl
    */
   public void setPerryLoginUrl(String perryLoginUrl) {
@@ -107,6 +113,8 @@ public class TokenCredentials {
   }
 
   /**
+   * authLoginUrl.
+   * 
    * @param authLoginUrl - authLoginUrl
    */
   public void setAuthLoginUrl(String authLoginUrl) {
@@ -114,6 +122,8 @@ public class TokenCredentials {
   }
 
   /**
+   * tokenUrl.
+   * 
    * @param tokenUrl - tokenUrl
    */
   public void setTokenUrl(String tokenUrl) {
@@ -121,6 +131,8 @@ public class TokenCredentials {
   }
 
   /**
+   * callBackUrl.
+   * 
    * @param callBackUrl - callBackUrl
    */
   public void setCallBackUrl(String callBackUrl) {
@@ -128,6 +140,8 @@ public class TokenCredentials {
   }
 
   /**
+   * logOutUrl.
+   * 
    * @param logOutUrl - logOutUrl
    */
   public void setLogOutUrl(String logOutUrl) {

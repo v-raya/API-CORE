@@ -11,6 +11,8 @@ import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 
 /**
+ * This class is used to read the yaml files values using {@link Yaml}.
+ * 
  * @author CWDS TPT-4 Team
  *
  */
@@ -21,6 +23,8 @@ public class ConfigUtils implements ConfigReader {
   private CwdsAuthenticationClientConfig cwdsAuthenticationClientConfig;
 
   /**
+   * Default method to read the config values.
+   * 
    * @return the yaml file values
    */
   @Override

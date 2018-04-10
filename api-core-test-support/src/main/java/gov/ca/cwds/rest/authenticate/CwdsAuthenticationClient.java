@@ -74,6 +74,8 @@ public class CwdsAuthenticationClient extends HttpClientBuild implements CwdsCli
   private ConfigReader configReader;
 
   /**
+   * This constructor is to used to initialize the yaml and used over the class.
+   * 
    * @param configReader - configReader
    * @param userName - userName
    * @param password - password
@@ -85,6 +87,8 @@ public class CwdsAuthenticationClient extends HttpClientBuild implements CwdsCli
   }
 
   /**
+   * Default method to get the token.
+   * 
    * @return the valid token
    */
   @Override
