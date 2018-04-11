@@ -100,27 +100,33 @@ public class ClientRelationshipCoreService
 
   public List<ClientRelationship> findRelationshipsBySecondaryClientId(
       @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
-    return deleteNotPermittedRelationships(
+    return deleteNotPermittedClientData(
         crudDao.findRelationshipsBySecondaryClientId(clientId, LocalDate.now()));
   }
 
   public List<ClientRelationship> findRelationshipsByPrimaryClientId(
       @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
-    return deleteNotPermittedRelationships(
+    return deleteNotPermittedClientData(
         crudDao.findRelationshipsByPrimaryClientId(clientId, LocalDate.now()));
   }
 
-  private List<ClientRelationship> deleteNotPermittedRelationships(
+  private List<ClientRelationship> deleteNotPermittedClientData(
       List<ClientRelationship> relationships) {
     if (CollectionUtils.isEmpty(relationships)) {
       return relationships;
     }
 
     List<Client> permittedClients = checkPermissionForRelatedClient(relationships);
-    List<ClientRelationship> filteredRelationships = new ArrayList<>(relationships);
-    filteredRelationships.removeIf(
-        clientRelationship -> !permittedClients.contains(clientRelationship.getSecondaryClient()));
-    return filteredRelationships;
+    for  (ClientRelationship relationship : relationships) {
+      String secondaryClientId = relationship.getSecondaryClient().getIdentifier();
+      relationship.setSecondaryClient(new Client());
+      for (Client client : permittedClients) {
+        if (client.getIdentifier() == secondaryClientId) {
+          relationship.setSecondaryClient(client);
+        }
+      }
+    }
+    return relationships;
   }
 
   @Authorize(CLIENT_READ_CLIENT)
