@@ -151,17 +151,17 @@ public abstract class BaseClient extends CmsPersistentObject
   @Column(name = "GENDER_CD")
   protected String genderCode;
 
-  @Type(type = "short")
-  @Column(name = "CLNT_GIC")
-  protected Short genderIdentityType;
+  // @Type(type = "short")
+  // @Column(name = "CLNT_GIC")
+  // protected Short genderIdentityType;
 
-  @Column(name = "GI_NL_DSC")
-  @ColumnTransformer(read = "trim(GI_NL_DSC)")
-  protected String giNotListedDescription;
+  // @Column(name = "GI_NL_DSC")
+  // @ColumnTransformer(read = "trim(GI_NL_DSC)")
+  // protected String giNotListedDescription;
 
-  @Type(type = "short")
-  @Column(name = "CLNT_GEC")
-  protected Short genderExpressionType;
+  // @Type(type = "short")
+  // @Column(name = "CLNT_GEC")
+  // protected Short genderExpressionType;
 
   @Column(name = "HEALTH_TXT")
   protected String healthSummaryText;
@@ -272,16 +272,16 @@ public abstract class BaseClient extends CmsPersistentObject
   @Column(name = "SENSTV_IND")
   protected String sensitivityIndicator;
 
-  @Type(type = "short")
-  @Column(name = "CLNT_SOC")
-  protected Short sexualOrientationType;
+  // @Type(type = "short")
+  // @Column(name = "CLNT_SOC")
+  // protected Short sexualOrientationType;
 
-  @Column(name = "SO_UD_CD")
-  protected String soUnableToDetermineCode;
+  // @Column(name = "SO_UD_CD")
+  // protected String soUnableToDetermineCode;
 
-  @Column(name = "SO_NL_DSC")
-  @ColumnTransformer(read = "trim(SO_NL_DSC)")
-  protected String soNotListedDescrption;
+  // @Column(name = "SO_NL_DSC")
+  // @ColumnTransformer(read = "trim(SO_NL_DSC)")
+  // protected String soNotListedDescrption;
 
   @Column(name = "SOCPLC_CD")
   protected String soc158PlacementCode;
@@ -585,21 +585,24 @@ public abstract class BaseClient extends CmsPersistentObject
    * @return the genderIdentityType
    */
   public Short getGenderIdentityType() {
-    return genderIdentityType;
+    // return genderIdentityType;
+    return (short) 0;
   }
 
   /**
    * @return the giNotListedDescription
    */
   public String getGiNotListedDescription() {
-    return giNotListedDescription;
+    // return giNotListedDescription;
+    return null;
   }
 
   /**
    * @return the genderExpressionType
    */
   public Short getGenderExpressionType() {
-    return genderExpressionType;
+    // return genderExpressionType;
+    return (short) 0;
   }
 
   /**
@@ -789,21 +792,24 @@ public abstract class BaseClient extends CmsPersistentObject
    * @return the sexualOrientationType
    */
   public Short getSexualOrientationType() {
-    return sexualOrientationType;
+    // return sexualOrientationType;
+    return (short) 0;
   }
 
   /**
    * @return the soUnableToDetermineCode
    */
   public String getSoUnableToDetermineCode() {
-    return StringUtils.trimToEmpty(soUnableToDetermineCode);
+    // return StringUtils.trimToEmpty(soUnableToDetermineCode);
+    return null;
   }
 
   /**
    * @return the soNotListedDescrption
    */
   public String getSoNotListedDescrption() {
-    return soNotListedDescrption;
+    // return soNotListedDescrption;
+    return null;
   }
 
 
