@@ -126,13 +126,12 @@ public class ClientRelationshipCoreService
   private final BiConsumer<ClientRelationship, List<Client>> filterSecondaryClients =
       (relationship, permittedClients) -> {
         String secondaryClientId = relationship.getSecondaryClient().getIdentifier();
-        relationship.setSecondaryClient(new Client());
-        permittedClients.forEach(
-            client -> {
-              if (isClientId.test(client, secondaryClientId)) {
-                relationship.setSecondaryClient(client);
-              }
-            });
+        relationship.setSecondaryClient(
+            permittedClients
+                .stream()
+                .filter(e -> isClientId.test(e, secondaryClientId))
+                .findFirst()
+                .get());
       };
 
   private static final BiPredicate<Client, String> isClientId =
