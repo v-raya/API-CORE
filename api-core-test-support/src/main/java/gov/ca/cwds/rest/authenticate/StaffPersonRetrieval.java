@@ -27,6 +27,8 @@ public class StaffPersonRetrieval extends HttpClientBuild {
   private String validateUrl;
 
   /**
+   * Constructor.
+   * 
    * @param validateUrl - validateUrl
    */
   public StaffPersonRetrieval(String validateUrl) {
@@ -34,6 +36,8 @@ public class StaffPersonRetrieval extends HttpClientBuild {
   }
 
   /**
+   * getStaffPersonInfo is a user extraction using the validate url.
+   * 
    * @param token - token
    * @return the staff Person info of the related token
    */

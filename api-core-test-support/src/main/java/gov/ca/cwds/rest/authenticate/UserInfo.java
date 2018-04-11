@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.authenticate;
 
 /**
+ * To get and set the staffId and incidentCounty.
  * 
  * @author CWDS TPT-4 Team
  *
