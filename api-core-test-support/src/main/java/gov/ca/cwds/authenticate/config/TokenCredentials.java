@@ -22,6 +22,8 @@ public class TokenCredentials {
 
   private String logOutUrl;
 
+  private String validateUrl;
+
   /**
    * getAuthenticationBaseUrl.
    * 
@@ -146,6 +148,24 @@ public class TokenCredentials {
    */
   public void setLogOutUrl(String logOutUrl) {
     this.logOutUrl = logOutUrl;
+  }
+
+  /**
+   * getValidateUrl.
+   * 
+   * @return the validateUrl
+   */
+  public String getValidateUrl() {
+    return validateUrl;
+  }
+
+  /**
+   * validateUrl.
+   * 
+   * @param validateUrl - validateUrl
+   */
+  public void setValidateUrl(String validateUrl) {
+    this.validateUrl = validateUrl;
   }
 
 }

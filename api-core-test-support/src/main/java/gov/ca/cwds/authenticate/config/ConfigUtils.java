@@ -16,7 +16,7 @@ import io.dropwizard.configuration.SubstitutingSourceProvider;
  * @author CWDS TPT-4 Team
  *
  */
-public class ConfigUtils implements ConfigReader {
+public class ConfigUtils implements YmlLoader {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ConfigUtils.class);
 

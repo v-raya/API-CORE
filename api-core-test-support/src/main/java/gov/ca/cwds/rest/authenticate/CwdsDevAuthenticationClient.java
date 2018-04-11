@@ -14,8 +14,8 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gov.ca.cwds.authenticate.config.ConfigReader;
 import gov.ca.cwds.authenticate.config.ConfigUtils;
+import gov.ca.cwds.authenticate.config.YmlLoader;
 
 /**
  * This class is used to generate the token using json for Perry dev mode, and handles all the
@@ -36,9 +36,11 @@ public class CwdsDevAuthenticationClient extends HttpClientBuild implements Cwds
   private static final String AUTH_LOGIN_URL = "https://web.preint.cwds.io/perry/authn/login";
   private static final String CALL_BACK_URL = "https://ferbapi.preint.cwds.io/swagger";
 
+  private String authLoginUrl;
+
   private static final String ACCESS_CODE = "accessCode";
   private static final String LOCATION = "Location";
-  private ConfigReader configReader;
+  private YmlLoader ymlLoader;
 
   private HttpGet httpGet;
   private URI uri;
@@ -50,16 +52,21 @@ public class CwdsDevAuthenticationClient extends HttpClientBuild implements Cwds
   /**
    * This constructor is to used to initialize the yaml and used over the class.
    * 
-   * @param configReader - configReader
+   * @param ymlLoader - ymlLoader
    * @param userName - userName
    */
-  public CwdsDevAuthenticationClient(ConfigReader configReader, String userName) {
+  public CwdsDevAuthenticationClient(YmlLoader ymlLoader, String userName) {
     this.userName = userName;
-    if (configReader == null) {
-      this.configReader = new ConfigUtils();
+    if (ymlLoader == null) {
+      this.ymlLoader = new ConfigUtils();
     } else {
-      this.configReader = configReader;
+      this.ymlLoader = ymlLoader;
     }
+    init();
+  }
+
+  private void init() {
+    this.authLoginUrl = ymlLoader.readConfig().getTestUrl().getAuthLoginUrl();
   }
 
   /**
@@ -71,7 +78,7 @@ public class CwdsDevAuthenticationClient extends HttpClientBuild implements Cwds
   public String getToken() {
     try {
       LOGGER.info(NEW_REQUEST_TO_BEGIN);
-      LOGGER.info("GET: {}", configReader.readConfig().getTestUrl().getAuthLoginUrl());
+      LOGGER.info("GET: {}", authLoginUrl);
       postParams.add(new BasicNameValuePair("callback", CALL_BACK_URL));
       postParams.add(new BasicNameValuePair("sp_id", null));
       httpGet = new HttpGet(AUTH_LOGIN_URL);

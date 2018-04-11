@@ -10,6 +10,7 @@ testUrl:
    tokenUrl: ${TOKEN_URL:-https://localhost:8090/perry/authn/token}
    callBackUrl: ${CALL_BACK_URL:-https://ferbapi.preint.cwds.io/swagger}
    logOutUrl: ${LOG_OUT_URL:-}
+   validateUrl: ${VALIDATE_URL:-https://localhost:8090/perry/authn/validate}
    
 defaultUsers:
     -  userType: socialWorkerOnly

@@ -14,7 +14,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gov.ca.cwds.authenticate.config.ConfigReader;
+import gov.ca.cwds.authenticate.config.YmlLoader;
 
 /**
  * This class is used to generate the token using username and password with Perry, and handles all
@@ -71,17 +71,17 @@ public class CwdsAuthenticationClient extends HttpClientBuild implements CwdsCli
   private HttpResponse httpResponse;
   private HttpPost httpPost;
   private String location;
-  private ConfigReader configReader;
+  private YmlLoader ymlLoader;
 
   /**
    * This constructor is to used to initialize the yaml and used over the class.
    * 
-   * @param configReader - configReader
+   * @param ymlLoader - ymlLoader
    * @param userName - userName
    * @param password - password
    */
-  public CwdsAuthenticationClient(ConfigReader configReader, String userName, String password) {
-    this.configReader = configReader;
+  public CwdsAuthenticationClient(YmlLoader ymlLoader, String userName, String password) {
+    this.ymlLoader = ymlLoader;
     this.userName = userName;
     this.password = password;
   }

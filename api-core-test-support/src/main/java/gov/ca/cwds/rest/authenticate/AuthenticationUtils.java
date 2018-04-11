@@ -1,7 +1,7 @@
 package gov.ca.cwds.rest.authenticate;
 
-import gov.ca.cwds.authenticate.config.ConfigReader;
 import gov.ca.cwds.authenticate.config.ConfigUtils;
+import gov.ca.cwds.authenticate.config.YmlLoader;
 
 /**
  * @author CWDS TPT-4 Team
@@ -10,16 +10,16 @@ import gov.ca.cwds.authenticate.config.ConfigUtils;
 public class AuthenticationUtils {
 
   CwdsLoginType cwdsLoginType = null;
-  private ConfigReader configReader;
+  private YmlLoader ymlLoader;
 
   /**
-   * @param configReader - configReader
+   * @param ymlLoader - ymlLoader
    */
-  public AuthenticationUtils(ConfigReader configReader) {
-    if (configReader == null) {
-      this.configReader = new ConfigUtils();
+  public AuthenticationUtils(YmlLoader ymlLoader) {
+    if (ymlLoader == null) {
+      this.ymlLoader = new ConfigUtils();
     } else {
-      this.configReader = configReader;
+      this.ymlLoader = ymlLoader;
     }
   }
 
@@ -28,8 +28,17 @@ public class AuthenticationUtils {
    * @return the user based token
    */
   public String getToken(UserGroup userType) {
-    cwdsLoginType = new CwdsLoginType(configReader);
+    cwdsLoginType = new CwdsLoginType(ymlLoader);
     return cwdsLoginType.login(userType);
   }
 
+  /**
+   * @param token - token
+   * @return the staff Person details
+   */
+  public UserInfo getStaffPersonDetails(String token) {
+    StaffPersonRetrieval staffPersonRetreival =
+        new StaffPersonRetrieval(ymlLoader.readConfig().getTestUrl().getValidateUrl());
+    return staffPersonRetreival.getStaffPersonInfo(token);
+  }
 }

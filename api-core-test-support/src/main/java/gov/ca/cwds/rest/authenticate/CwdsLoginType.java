@@ -9,8 +9,8 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gov.ca.cwds.authenticate.config.ConfigReader;
 import gov.ca.cwds.authenticate.config.User;
+import gov.ca.cwds.authenticate.config.YmlLoader;
 
 /**
  * This class will handle the different type of login based on the authentication mode, If the
@@ -29,15 +29,15 @@ public class CwdsLoginType {
   private static final Logger LOGGER = LoggerFactory.getLogger(CwdsLoginType.class);
 
   CwdsClientCommon cwdsClientCommon = null;
-  ConfigReader configReader = null;
+  YmlLoader ymlLoader = null;
 
   /**
    * Constructor.
    * 
-   * @param configReader - configReader
+   * @param ymlLoader - ymlLoader
    */
-  public CwdsLoginType(ConfigReader configReader) {
-    this.configReader = configReader;
+  public CwdsLoginType(YmlLoader ymlLoader) {
+    this.ymlLoader = ymlLoader;
   }
 
   /**
@@ -47,8 +47,8 @@ public class CwdsLoginType {
    * @return the valid user token
    */
   public String login(UserGroup userType) {
-    if ("TEST".equals(configReader.readConfig().getAuthenticationMode())) {
-      List<User> users = configReader.readConfig().getDefaultUsers();
+    if (!"TEST".equals(ymlLoader.readConfig().getAuthenticationMode())) {
+      List<User> users = ymlLoader.readConfig().getDefaultUsers();
       Optional<User> user = users.stream()
           .filter(value -> userType.getName().equals(value.getUserType())).findFirst();
       String userName = null;
@@ -57,14 +57,14 @@ public class CwdsLoginType {
         userName = user.get().getUsername();
         password = user.get().getPassword();
       }
-      cwdsClientCommon = new CwdsAuthenticationClient(configReader, userName, password);
+      cwdsClientCommon = new CwdsAuthenticationClient(ymlLoader, userName, password);
     } else {
       String jsonFile = "/LoginUser/" + userType.getName() + ".json";
       String userJson = "";
       try {
         userJson = new String(IOUtils.toByteArray(getClass().getResourceAsStream(jsonFile)),
             StandardCharsets.UTF_8);
-        cwdsClientCommon = new CwdsDevAuthenticationClient(configReader, userJson);
+        cwdsClientCommon = new CwdsDevAuthenticationClient(ymlLoader, userJson);
 
       } catch (IOException e) {
         LOGGER.error("Unable to parse the json into String {}", e);

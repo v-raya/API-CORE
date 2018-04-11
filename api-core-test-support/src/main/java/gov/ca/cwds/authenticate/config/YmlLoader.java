@@ -12,7 +12,7 @@ import io.dropwizard.configuration.ConfigurationSourceProvider;
  * @author CWDS TPT-4 Team
  *
  */
-public interface ConfigReader extends ConfigurationSourceProvider {
+public interface YmlLoader extends ConfigurationSourceProvider {
 
   /**
    * readConfig.
@@ -27,10 +27,10 @@ public interface ConfigReader extends ConfigurationSourceProvider {
    * @return the yaml list vales
    */
   default Yaml getYaml() {
-    Constructor constructor = new Constructor(CwdsAuthenticationClientConfig.class);
+    Constructor clientConfig = new Constructor(CwdsAuthenticationClientConfig.class);
     TypeDescription configDesc = new TypeDescription(CwdsAuthenticationClientConfig.class);
     configDesc.putListPropertyType("defaultUsers", User.class);
-    constructor.addTypeDescription(configDesc);
-    return new Yaml(constructor);
+    clientConfig.addTypeDescription(configDesc);
+    return new Yaml(clientConfig);
   }
 }
