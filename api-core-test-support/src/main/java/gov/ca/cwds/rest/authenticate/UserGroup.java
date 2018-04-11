@@ -25,6 +25,9 @@ public enum UserGroup {
     this.name = name;
   }
 
+  /**
+   * @return the name
+   */
   public final String getName() {
     return name;
   }

@@ -68,21 +68,6 @@ public class MinimalApiConfigurationTest {
   }
 
   @Test
-  public void getSmartyStreetsConfiguration_Args__() throws Exception {
-    MinimalApiConfiguration target = new MinimalApiConfiguration();
-    SmartyStreetsConfiguration actual = target.getSmartyStreetsConfiguration();
-    SmartyStreetsConfiguration expected = null;
-    assertThat(actual, is(equalTo(expected)));
-  }
-
-  @Test
-  public void setSmartystreetsConfiguration_Args__SmartyStreetsConfiguration() throws Exception {
-    MinimalApiConfiguration target = new MinimalApiConfiguration();
-    SmartyStreetsConfiguration smartyStreetsConfiguration = mock(SmartyStreetsConfiguration.class);
-    target.setSmartystreetsConfiguration(smartyStreetsConfiguration);
-  }
-
-  @Test
   public void getShiroConfiguration_Args__() throws Exception {
     MinimalApiConfiguration target = new MinimalApiConfiguration();
     ShiroConfiguration actual = target.getShiroConfiguration();
