@@ -130,7 +130,7 @@ public class ClientRelationshipCoreService
             permittedClients
                 .stream()
                 .filter(e -> isClientId.test(e, secondaryClientId))
-                .findFirst().orElse(null));
+                .findFirst().orElse(new Client()));
       };
 
   private static final BiPredicate<Client, String> isClientId =
