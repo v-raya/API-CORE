@@ -30,6 +30,8 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -117,17 +119,24 @@ public class ClientRelationshipCoreService
     }
 
     List<Client> permittedClients = checkPermissionForRelatedClient(relationships);
-    for  (ClientRelationship relationship : relationships) {
-      String secondaryClientId = relationship.getSecondaryClient().getIdentifier();
-      relationship.setSecondaryClient(new Client());
-      for (Client client : permittedClients) {
-        if (client.getIdentifier() == secondaryClientId) {
-          relationship.setSecondaryClient(client);
-        }
-      }
-    }
+    relationships.forEach(r -> filterSecondaryClients.accept(r, permittedClients));
     return relationships;
   }
+
+  private final BiConsumer<ClientRelationship, List<Client>> filterSecondaryClients =
+      (relationship, permittedClients) -> {
+        String secondaryClientId = relationship.getSecondaryClient().getIdentifier();
+        relationship.setSecondaryClient(new Client());
+        permittedClients.forEach(
+            client -> {
+              if (isClientId.test(client, secondaryClientId)) {
+                relationship.setSecondaryClient(client);
+              }
+            });
+      };
+
+  private static final BiPredicate<Client, String> isClientId =
+      (client, identifier) -> client.getIdentifier().equals(identifier);
 
   @Authorize(CLIENT_READ_CLIENT)
   private List<Client> checkPermissionForRelatedClient(List<ClientRelationship> relationships) {
