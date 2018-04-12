@@ -44,14 +44,11 @@ import org.hibernate.annotations.Type;
         "select distinct theCase from gov.ca.cwds.data.legacy.cms.entity.CaseLoad cl"
             + " left join cl.caseAssignments assignment"
             + " left join assignment.theCase theCase "
-            + " where cl.caseLoadWeighting.fkstfperst = :"
-            + Case.NQ_PARAM_STAFF_ID
+            + " where cl.caseLoadWeighting.fkstfperst = :" + Case.NQ_PARAM_STAFF_ID
             + " and theCase.endDate is null "
-            + " and assignment.startDate < :"
-            + Case.NQ_PARAM_ACTIVE_DATE
-            + " and (assignment.endDate is null or assignment.endDate > :"
-            + Case.NQ_PARAM_ACTIVE_DATE
-            + ")"
+            + " and assignment.startDate <= :" + Case.NQ_PARAM_ACTIVE_DATE
+            + " and (assignment.endDate is null "
+            + "or assignment.endDate > :" + Case.NQ_PARAM_ACTIVE_DATE + ")"
   ),
   @NamedQuery(
     name = Case.NQ_FIND_ACTIVE_BY_CLIENT_ID,
