@@ -40,7 +40,7 @@ import org.hibernate.annotations.Type;
                 + " left join cl.referralAssignments assignment"
                 + " where cl.caseLoadWeighting.fkstfperst = :"
                 + Referral.PARAM_STAFF_ID
-                + " and assignment.startDate < :"
+                + " and assignment.startDate <= :"
                 + Referral.PARAM_ACTIVE_DATE
                 + " and (assignment.endDate is null or assignment.endDate > :"
                 + Referral.PARAM_ACTIVE_DATE
