@@ -202,7 +202,8 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     return super.instantiate(entityName, entityMode, id);
   }
 
-  private synchronized List<?> iterToList(@SuppressWarnings("rawtypes") Iterator iter) {
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  private synchronized List<?> iterToList(Iterator iter) {
     return IteratorUtils.toList(iter);
   }
 
