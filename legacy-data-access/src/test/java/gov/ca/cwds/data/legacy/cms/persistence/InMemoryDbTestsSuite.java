@@ -24,6 +24,7 @@ import gov.ca.cwds.data.legacy.cms.dao.SafetyAlertDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.SchoolOriginHistoryDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.SpecialEducationDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.TribalAncestryNotificationDaoTest;
+import gov.ca.cwds.data.legacy.cms.dao.TribalMembershipVerificationDaoTest;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
@@ -42,30 +43,31 @@ import org.powermock.modules.junit4.PowerMockRunnerDelegate;
     "org.w3c.*"
     })
 @Suite.SuiteClasses({
-    CaseDaoTest.class,
-    ClientDaoTest.class,
-    ClientOtherEthnicitiesTest.class,
-    ClientRelationshipDaoTest.class,
-    ClientServiceProviderDaoTest.class,
-    CreditReportHistoryDaoTest.class,
-    CsecHistoryDaoTest.class,
-    DasHistoryDaoTest.class,
-    DeliveredServiceDaoTest.class,
-    FCEligibilityDaoTest.class,
-    HealthInterventionPlanDaoTest.class,
-    HealthReferralDaoTest.class,
-    HealthScreeningDaoTest.class,
-    MedicalEligibilityApplicationDaoTest.class,
-    NearFatalityDaoTest.class,
-    OptimisticLockingTest.class,
-    ParentalRightsTerminationDaoTest.class,
-    PaternityDetailDaoTest.class,
-    PlacementEpisodeDaoTest.class,
-    ReferralDaoTest.class,
-    SafetyAlertDaoTest.class,
-    SchoolOriginHistoryDaoTest.class,
-    SpecialEducationDaoTest.class,
-    TribalAncestryNotificationDaoTest.class
+//    CaseDaoTest.class,
+//    ClientDaoTest.class,
+//    ClientOtherEthnicitiesTest.class,
+//    ClientRelationshipDaoTest.class,
+//    ClientServiceProviderDaoTest.class,
+//    CreditReportHistoryDaoTest.class,
+//    CsecHistoryDaoTest.class,
+//    DasHistoryDaoTest.class,
+//    DeliveredServiceDaoTest.class,
+//    FCEligibilityDaoTest.class,
+//    HealthInterventionPlanDaoTest.class,
+//    HealthReferralDaoTest.class,
+//    HealthScreeningDaoTest.class,
+//    MedicalEligibilityApplicationDaoTest.class,
+//    NearFatalityDaoTest.class,
+//    OptimisticLockingTest.class,
+//    ParentalRightsTerminationDaoTest.class,
+//    PaternityDetailDaoTest.class,
+//    PlacementEpisodeDaoTest.class,
+//    ReferralDaoTest.class,
+//    SafetyAlertDaoTest.class,
+//    SchoolOriginHistoryDaoTest.class,
+//    SpecialEducationDaoTest.class,
+//    TribalAncestryNotificationDaoTest.class,
+    TribalMembershipVerificationDaoTest.class
 })
 public class InMemoryDbTestsSuite {
   @ClassRule

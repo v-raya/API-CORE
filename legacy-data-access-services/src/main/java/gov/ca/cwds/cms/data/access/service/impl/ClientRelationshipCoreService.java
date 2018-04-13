@@ -42,7 +42,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class ClientRelationshipCoreService
     extends DataAccessServiceBase<
-        ClientRelationshipDao, ClientRelationship, ClientRelationshipAwareDTO> {
+    ClientRelationshipDao, ClientRelationship, ClientRelationshipAwareDTO> {
 
   private final BusinessValidationService businessValidationService;
   private final ClientDao clientDao;
@@ -260,7 +260,7 @@ public class ClientRelationshipCoreService
               primaryClient.getIdentifier()));
 
       List<TribalMembershipVerification> childExtraTribals =
-          getExtraRowsForPrimaryClient(primaryTribals);
+          getExtraRowsForPrimaryClient(secondaryTribals, primaryClient.getIdentifier());
 
       childExtraTribals.forEach(
           e -> {
@@ -296,20 +296,20 @@ public class ClientRelationshipCoreService
       if (date.isBefore(LocalDate.of(2005, Month.NOVEMBER, 19))) {
         if (tribalForUpdate.getIndianTribeType() == newlyAddedTribal.getIndianTribeType()
             && tribalForUpdate.getFkFromTribalMembershipVerification()
-                == newlyAddedTribal.getFkFromTribalMembershipVerification()) return true;
+            == newlyAddedTribal.getFkFromTribalMembershipVerification()) return true;
       }
 
       return false;
     }
 
     private List<TribalMembershipVerification> getExtraRowsForPrimaryClient(
-        List<TribalMembershipVerification> primaryTribals) {
-      if (primaryTribals == null || primaryTribals.isEmpty()) {
+        List<TribalMembershipVerification> secondaryTribals, String primaryClientId) {
+      if (secondaryTribals == null || secondaryTribals.isEmpty()) {
         return new ArrayList<>();
       }
 
       final List<TribalMembershipVerification> extraRows = new ArrayList<>();
-      primaryTribals.forEach(
+      secondaryTribals.forEach(
           a -> {
             if (StringUtils.isEmpty(a.getFkFromTribalMembershipVerification())) {
               TribalMembershipVerification extra = new TribalMembershipVerification();
@@ -318,7 +318,7 @@ public class ClientRelationshipCoreService
               extra.setIndianEnrollmentStatus(a.getIndianEnrollmentStatus());
               extra.setIndianTribeType(a.getIndianTribeType());
               extra.setThirdId(IdGenerator.generateId());
-              extra.setClientId(a.getClientId());
+              extra.setClientId(primaryClientId);
               extra.setLastUpdateId(PrincipalUtils.getStaffPersonId());
               extra.setLastUpdateTime(LocalDateTime.now());
               extraRows.add(extra);

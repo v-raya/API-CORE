@@ -40,20 +40,24 @@ import org.hibernate.annotations.NamedQuery;
           + " and t.fkFromTribalMembershipVerification is null"
 )
 @NamedQuery(
-    name =
-        TribalMembershipVerification
-            .FIND_TRIBAL_MEMBERSHIP_VERIFICATION_BY_CLIENT_ID,
-    query =
-        "SELECT t FROM gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification t "
-            + "where t.clientId =:"
-            + TribalMembershipVerification.PARAM_CLIENT_ID
+  name = TribalMembershipVerification.FIND_TRIBAL_MEMBERSHIP_VERIFICATION_BY_CLIENT_ID,
+  query =
+      "SELECT t FROM gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification t "
+          + "where t.clientId =:"
+          + TribalMembershipVerification.PARAM_CLIENT_ID
 )
 @NamedQuery(
-    name =
-        TribalMembershipVerification
-            .FIND_ALL_TRIBAL,
-    query =
-        "SELECT t FROM gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification t"
+  name = TribalMembershipVerification.FIND_ALL_TRIBAL,
+  query = "SELECT t FROM gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification t"
+)
+@NamedQuery(
+  name = TribalMembershipVerification.FIND_SUB_TRIBAL_BY_CLIENT,
+  query =
+      "SELECT subt FROM gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification subt "
+          + "left join gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification t "
+          + "with t.clientId = :"
+          + TribalMembershipVerification.PARAM_CLIENT_ID
+          + " where subt.thirdId = t.fkFromTribalMembershipVerification"
 )
 public class TribalMembershipVerification extends CmsPersistentObject {
 
@@ -65,6 +69,9 @@ public class TribalMembershipVerification extends CmsPersistentObject {
 
   public static final String FIND_ALL_TRIBAL =
       "gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerificationAll";
+
+  public static final String FIND_SUB_TRIBAL_BY_CLIENT =
+      "gov.ca.cwds.data.legacy.cms.entity.SubTribalMembershipVerificationByClientId";
 
   public static final String PARAM_CLIENT_ID = "clientId";
 

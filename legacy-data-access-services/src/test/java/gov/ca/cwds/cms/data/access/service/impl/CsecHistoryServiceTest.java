@@ -49,7 +49,7 @@ public class CsecHistoryServiceTest extends BaseUnitTest {
 
   @Test
   public void findByClientId() throws Exception {
-    List<CsecHistory> csecHistories = csecHistoryDao.findByClientId(CLIENT_ID);
+    List<CsecHistory> csecHistories = csecHistoryService.findByClientId(CLIENT_ID);
     assertNotNull(csecHistories);
     assertEquals(1, csecHistories.size());
     assertEquals(CLIENT_ID, csecHistories.get(0).getChildClient());
