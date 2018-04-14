@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -21,6 +22,7 @@ import org.hibernate.annotations.NotFoundAction;
 /** @author CWDS TPT-3 Team */
 @Entity
 @Table(name = "CSECHIST")
+@IdClass(CsecHistoryPK.class)
 @NamedQuery(
     name = CsecHistory.FIND_BY_CLIENT_ID,
     query = "FROM gov.ca.cwds.data.legacy.cms.entity.CsecHistory where childClient =:" + CsecHistory.PARAM_CLIENT_ID
@@ -32,10 +34,10 @@ public class CsecHistory extends CmsPersistentObject {
   public static final String PARAM_CLIENT_ID = "clientId";
   public static final String FIND_BY_CLIENT_ID = "CsecHistory.findByClient";
 
-  @Column(name = "CREATN_TS")
+  @Column(name = "CREATN_TS", nullable = false)
   private LocalDate creationDate;
 
-  @Column(name = "START_DT")
+  @Column(name = "START_DT", nullable = false)
   private LocalDate startDate;
 
   @Column(name = "END_DT")
@@ -57,7 +59,7 @@ public class CsecHistory extends CmsPersistentObject {
 
   @Override
   public Serializable getPrimaryKey() {
-    return new CompositeKey(getThirdId(), getChildClient());
+    return new CsecHistoryPK(childClient, thirdId);
   }
 
   public LocalDate getCreationDate() {

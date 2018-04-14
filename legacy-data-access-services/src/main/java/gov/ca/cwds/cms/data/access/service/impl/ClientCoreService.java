@@ -23,7 +23,6 @@ import gov.ca.cwds.data.legacy.cms.dao.DeliveredServiceDao;
 import gov.ca.cwds.data.legacy.cms.dao.NameTypeDao;
 import gov.ca.cwds.data.legacy.cms.dao.NearFatalityDao;
 import gov.ca.cwds.data.legacy.cms.dao.PlacementEpisodeDao;
-import gov.ca.cwds.data.legacy.cms.dao.SafetyAlertDao;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3Dao;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
@@ -59,7 +58,7 @@ public class ClientCoreService
   @Inject
   private NameTypeDao nameTypeDao;
   @Inject
-  private SafetyAlertDao safetyAlertDao;
+  private SafetyAlertService safetyAlertService;
   @Inject
   private DasHistoryDao dasHistoryDao;
   @Inject
@@ -148,7 +147,7 @@ public class ClientCoreService
       String clientId = client.getIdentifier();
 
       List<DeliveredService> deliveredServices = deliveredServiceDao.findByClientId(clientId);
-      clientEntityAwareDTO.setDeliveredService(deliveredServices);
+      clientEntityAwareDTO.getDeliveredService().addAll(deliveredServices);
 
       List<NearFatality> nearFatalities = nearFatalityDao.findNearFatalitiesByClientId(clientId);
       clientEntityAwareDTO.getNearFatalities().addAll(nearFatalities);
@@ -158,9 +157,6 @@ public class ClientCoreService
 
       Short nameTypeId = clientEntityAwareDTO.getEntity().getNameType().getSystemId();
       clientEntityAwareDTO.getEntity().setNameType(nameTypeDao.find(nameTypeId));
-
-      final Collection<SafetyAlert> safetyAlerts = safetyAlertDao.findByClientId(clientId);
-      clientEntityAwareDTO.getSafetyAlerts().addAll(safetyAlerts);
 
       final Collection<DasHistory> dasHistories = dasHistoryDao.findByClientId(clientId);
       clientEntityAwareDTO.getDasHistories().addAll(dasHistories);
@@ -180,6 +176,11 @@ public class ClientCoreService
           clientRelationshipDao.findRelationshipsBySecondaryClientId(clientId, now);
       clientEntityAwareDTO.getClientRelationships().addAll(relationshipsByPrimaryClientId);
       clientEntityAwareDTO.getClientRelationships().addAll(relationshipsBySecondaryClientId);
+
+      if (!clientEntityAwareDTO.isEnriched()) {
+        Collection<SafetyAlert> safetyAlerts = safetyAlertService.findSafetyAlertsByClientId(clientId);
+        clientEntityAwareDTO.getSafetyAlerts().addAll(safetyAlerts);
+      }
     }
 
     @Override
@@ -194,6 +195,17 @@ public class ClientCoreService
       Client client = clientEntityAwareDTO.getEntity();
       enrichOtherEthnicities(client);
     }
+
+    @Override
+    public void afterStore(DataAccessBundle bundle) {
+      ClientEntityAwareDTO clientEntityAwareDTO = (ClientEntityAwareDTO) bundle.getAwareDto();
+      createOtherNameIfNeeded(clientEntityAwareDTO);
+      updatePhoneticNameIfNeeded(clientEntityAwareDTO);
+      if (clientEntityAwareDTO.isEnriched()) {
+        safetyAlertService.updateSafetyAlertsByClientId(clientEntityAwareDTO.getEntity().getIdentifier(), clientEntityAwareDTO.getSafetyAlerts());
+      }
+    }
+
 
     private void enrichOtherEthnicities(Client client) {
       enrichExistingOtherEthnicities(client);
@@ -243,12 +255,6 @@ public class ClientCoreService
           Collectors.toMap(ClientOtherEthnicity::getEthnicityCode, Function.identity()));
     }
 
-    @Override
-    public void afterStore(DataAccessBundle bundle) {
-      ClientEntityAwareDTO clientEntityAwareDTO = (ClientEntityAwareDTO) bundle.getAwareDto();
-      createOtherNameIfNeeded(clientEntityAwareDTO);
-      updatePhoneticNameIfNeeded(clientEntityAwareDTO);
-    }
 
     private void createOtherNameIfNeeded(ClientEntityAwareDTO clientEntityAwareDTO) {
       OtherClientNameDTO otherClientName = clientEntityAwareDTO.getOtherClientName();
