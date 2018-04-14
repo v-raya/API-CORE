@@ -1,8 +1,5 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
-import static gov.ca.cwds.authorizer.ClientResultReadAuthorizer.CLIENT_RESULT_READ_OBJECT;
-import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
-
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.Constants;
 import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
@@ -37,6 +34,7 @@ import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -49,34 +47,25 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static gov.ca.cwds.authorizer.ClientResultReadAuthorizer.CLIENT_RESULT_READ_OBJECT;
+import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
+
 /** @author CWDS TPT-3 Team */
 public class ClientCoreService
     extends DataAccessServiceBase<ClientDao, Client, ClientEntityAwareDTO> {
 
-  @Inject
-  private DeliveredServiceDao deliveredServiceDao;
-  @Inject
-  private NameTypeDao nameTypeDao;
-  @Inject
-  private SafetyAlertService safetyAlertService;
-  @Inject
-  private DasHistoryDao dasHistoryDao;
-  @Inject
-  private NearFatalityDao nearFatalityDao;
-  @Inject
-  private PlacementEpisodeDao placementEpisodeDao;
-  @Inject
-  private OtherClientNameService otherClientNameService;
-  @Inject
-  private ClientServiceProviderDao clientServiceProviderDao;
-  @Inject
-  private ClientRelationshipDao clientRelationshipDao;
-  @Inject
-  private BusinessValidationService businessValidationService;
-  @Inject
-  private ClientOtherEthnicityDao clientOtherEthnicityDao;
-  @Inject
-  private SsaName3Dao ssaName3Dao;
+  @Inject private DeliveredServiceDao deliveredServiceDao;
+  @Inject private NameTypeDao nameTypeDao;
+  @Inject private SafetyAlertService safetyAlertService;
+  @Inject private DasHistoryDao dasHistoryDao;
+  @Inject private NearFatalityDao nearFatalityDao;
+  @Inject private PlacementEpisodeDao placementEpisodeDao;
+  @Inject private OtherClientNameService otherClientNameService;
+  @Inject private ClientServiceProviderDao clientServiceProviderDao;
+  @Inject private ClientRelationshipDao clientRelationshipDao;
+  @Inject private BusinessValidationService businessValidationService;
+  @Inject private ClientOtherEthnicityDao clientOtherEthnicityDao;
+  @Inject private SsaName3Dao ssaName3Dao;
 
   @Override
   public Client create(ClientEntityAwareDTO entityAwareDTO) throws DataAccessServicesException {
@@ -178,7 +167,8 @@ public class ClientCoreService
       clientEntityAwareDTO.getClientRelationships().addAll(relationshipsBySecondaryClientId);
 
       if (!clientEntityAwareDTO.isEnriched()) {
-        Collection<SafetyAlert> safetyAlerts = safetyAlertService.findSafetyAlertsByClientId(clientId);
+        Collection<SafetyAlert> safetyAlerts =
+            safetyAlertService.findSafetyAlertsByClientId(clientId);
         clientEntityAwareDTO.getSafetyAlerts().addAll(safetyAlerts);
       }
     }
@@ -202,10 +192,11 @@ public class ClientCoreService
       createOtherNameIfNeeded(clientEntityAwareDTO);
       updatePhoneticNameIfNeeded(clientEntityAwareDTO);
       if (clientEntityAwareDTO.isEnriched()) {
-        safetyAlertService.updateSafetyAlertsByClientId(clientEntityAwareDTO.getEntity().getIdentifier(), clientEntityAwareDTO.getSafetyAlerts());
+        safetyAlertService.updateSafetyAlertsByClientId(
+            clientEntityAwareDTO.getEntity().getIdentifier(),
+            clientEntityAwareDTO.getSafetyAlerts());
       }
     }
-
 
     private void enrichOtherEthnicities(Client client) {
       enrichExistingOtherEthnicities(client);
@@ -225,11 +216,11 @@ public class ClientCoreService
         Short code = persistedEthnicity.getEthnicityCode();
         ClientOtherEthnicity ethnicity = ethnicitiesMap.get(code);
 
-        if (ethnicity != null) { //update
+        if (ethnicity != null) { // update
           ethnicity.setId(persistedEthnicity.getId());
           ethnicity.setLastUpdateId(persistedEthnicity.getLastUpdateId());
           ethnicity.setLastUpdateTime(persistedEthnicity.getLastUpdateTime());
-        } else { //delete
+        } else { // delete
           persistedClient.removeOtherEthnicity(persistedEthnicity);
           clientOtherEthnicityDao.delete(persistedEthnicity.getId());
         }
@@ -241,7 +232,7 @@ public class ClientCoreService
       LocalDateTime now = LocalDateTime.now();
 
       for (ClientOtherEthnicity ethnicity : client.getOtherEthnicities()) {
-        if (ethnicity.getId() == null) { //insert
+        if (ethnicity.getId() == null) { // insert
           ethnicity.setId(IdGenerator.generateId());
           ethnicity.setLastUpdateId(userId);
           ethnicity.setLastUpdateTime(now);
@@ -251,10 +242,10 @@ public class ClientCoreService
 
     private Map<Short, ClientOtherEthnicity> getOtherEthnicityMap(
         Set<ClientOtherEthnicity> otherEthnicities) {
-      return otherEthnicities.stream().collect(
-          Collectors.toMap(ClientOtherEthnicity::getEthnicityCode, Function.identity()));
+      return otherEthnicities
+          .stream()
+          .collect(Collectors.toMap(ClientOtherEthnicity::getEthnicityCode, Function.identity()));
     }
-
 
     private void createOtherNameIfNeeded(ClientEntityAwareDTO clientEntityAwareDTO) {
       OtherClientNameDTO otherClientName = clientEntityAwareDTO.getOtherClientName();
@@ -282,8 +273,7 @@ public class ClientCoreService
     }
   }
 
-  public void setClientOtherEthnicityDao(
-      ClientOtherEthnicityDao clientOtherEthnicityDao) {
+  public void setClientOtherEthnicityDao(ClientOtherEthnicityDao clientOtherEthnicityDao) {
     this.clientOtherEthnicityDao = clientOtherEthnicityDao;
   }
 }

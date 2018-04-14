@@ -30,8 +30,7 @@ public class SafetyAlertService {
     return safetyAlertDao.findByClientId(clientId);
   }
 
-  public void updateSafetyAlertsByClientId(
-      String clientId, List<SafetyAlert> updatedSafetyAlerts) {
+  public void updateSafetyAlertsByClientId(String clientId, List<SafetyAlert> updatedSafetyAlerts) {
     Collection<SafetyAlert> persistedSafetyAlerts = safetyAlertDao.findByClientId(clientId);
     Map<Serializable, SafetyAlert> persistedMap =
         persistedSafetyAlerts
