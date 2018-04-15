@@ -9,9 +9,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NamedQuery;
@@ -21,10 +25,12 @@ import org.hibernate.annotations.NotFoundAction;
 /** @author CWDS TPT-3 Team */
 @Entity
 @Table(name = "CSECHIST")
+@IdClass(CsecHistoryPK.class)
 @NamedQuery(
     name = CsecHistory.FIND_BY_CLIENT_ID,
     query = "FROM gov.ca.cwds.data.legacy.cms.entity.CsecHistory where childClient =:" + CsecHistory.PARAM_CLIENT_ID
 )
+@SuppressWarnings({"squid:S3437"}) // LocalDate is serializable
 public class CsecHistory extends CmsPersistentObject {
 
   private static final long serialVersionUID = -1114099625983617913L;
@@ -32,10 +38,10 @@ public class CsecHistory extends CmsPersistentObject {
   public static final String PARAM_CLIENT_ID = "clientId";
   public static final String FIND_BY_CLIENT_ID = "CsecHistory.findByClient";
 
-  @Column(name = "CREATN_TS")
+  @Column(name = "CREATN_TS", nullable = false)
   private LocalDate creationDate;
 
-  @Column(name = "START_DT")
+  @Column(name = "START_DT", nullable = false)
   private LocalDate startDate;
 
   @Column(name = "END_DT")
@@ -57,7 +63,7 @@ public class CsecHistory extends CmsPersistentObject {
 
   @Override
   public Serializable getPrimaryKey() {
-    return new CompositeKey(getThirdId(), getChildClient());
+    return new CsecHistoryPK(childClient, thirdId);
   }
 
   public LocalDate getCreationDate() {
@@ -106,5 +112,37 @@ public class CsecHistory extends CmsPersistentObject {
 
   public void setThirdId(String thirdId) {
     this.thirdId = thirdId;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+
+    if (o == null || getClass() != o.getClass()) return false;
+
+    CsecHistory that = (CsecHistory) o;
+
+    return new EqualsBuilder()
+            .appendSuper(super.equals(o))
+            .append(creationDate, that.creationDate)
+            .append(startDate, that.startDate)
+            .append(endDate, that.endDate)
+            .append(childClient, that.childClient)
+            .append(sexualExploitationType, that.sexualExploitationType)
+            .append(thirdId, that.thirdId)
+            .isEquals();
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(17, 37)
+            .appendSuper(super.hashCode())
+            .append(creationDate)
+            .append(startDate)
+            .append(endDate)
+            .append(childClient)
+            .append(sexualExploitationType)
+            .append(thirdId)
+            .toHashCode();
   }
 }
