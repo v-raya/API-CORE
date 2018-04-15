@@ -15,6 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NotFound;
@@ -32,6 +35,7 @@ import org.hibernate.annotations.NotFoundAction;
         query = "from gov.ca.cwds.data.legacy.cms.entity.SafetyAlert a where a.fkClientId = :" + SafetyAlert.NQ_PARAM_CLIENT_ID
     )
 )
+@SuppressWarnings({"squid:S3437"}) // LocalDate is serializable
 public class SafetyAlert extends CmsPersistentObject {
 
   private static final long serialVersionUID = 4957223131673425323L;
@@ -164,5 +168,43 @@ public class SafetyAlert extends CmsPersistentObject {
   public void setDeactivationExplanationText(
       LongText deactivationExplanationText) {
     this.deactivationExplanationText = deactivationExplanationText;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+
+    if (o == null || getClass() != o.getClass()) return false;
+
+    SafetyAlert that = (SafetyAlert) o;
+
+    return new EqualsBuilder()
+            .appendSuper(super.equals(o))
+            .append(fkClientId, that.fkClientId)
+            .append(thirdId, that.thirdId)
+            .append(activationGovernmentEntityType, that.activationGovernmentEntityType)
+            .append(activationDate, that.activationDate)
+            .append(activationExplanationText, that.activationExplanationText)
+            .append(activationReasonType, that.activationReasonType)
+            .append(deactivationGovernmentEntityType, that.deactivationGovernmentEntityType)
+            .append(deactivationDate, that.deactivationDate)
+            .append(deactivationExplanationText, that.deactivationExplanationText)
+            .isEquals();
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(17, 37)
+            .appendSuper(super.hashCode())
+            .append(fkClientId)
+            .append(thirdId)
+            .append(activationGovernmentEntityType)
+            .append(activationDate)
+            .append(activationExplanationText)
+            .append(activationReasonType)
+            .append(deactivationGovernmentEntityType)
+            .append(deactivationDate)
+            .append(deactivationExplanationText)
+            .toHashCode();
   }
 }

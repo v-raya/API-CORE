@@ -1,4 +1,4 @@
-package gov.ca.cwds.data.legacy.cms.persistence;
+package gov.ca.cwds.cms.data.access.service.impl.dbDependentSuite;
 
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import org.dbunit.Assertion;
@@ -39,8 +39,7 @@ public abstract class BaseCwsCmsInMemoryPersistenceTest {
   protected static DefaultColumnFilter columnFilter;
 
   private static final Logger LOGGER =
-      LoggerFactory.getLogger(
-          gov.ca.cwds.data.legacy.cms.persistence.BaseCwsCmsInMemoryPersistenceTest.class);
+      LoggerFactory.getLogger(BaseCwsCmsInMemoryPersistenceTest.class);
 
   @ClassRule
   public static final InMemoryTestResources inMemoryTestResources =
