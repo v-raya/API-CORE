@@ -13,6 +13,9 @@ import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NamedQuery;
@@ -27,6 +30,7 @@ import org.hibernate.annotations.NotFoundAction;
     name = CsecHistory.FIND_BY_CLIENT_ID,
     query = "FROM gov.ca.cwds.data.legacy.cms.entity.CsecHistory where childClient =:" + CsecHistory.PARAM_CLIENT_ID
 )
+@SuppressWarnings({"squid:S3437"}) // LocalDate is serializable
 public class CsecHistory extends CmsPersistentObject {
 
   private static final long serialVersionUID = -1114099625983617913L;
@@ -108,5 +112,37 @@ public class CsecHistory extends CmsPersistentObject {
 
   public void setThirdId(String thirdId) {
     this.thirdId = thirdId;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+
+    if (o == null || getClass() != o.getClass()) return false;
+
+    CsecHistory that = (CsecHistory) o;
+
+    return new EqualsBuilder()
+            .appendSuper(super.equals(o))
+            .append(creationDate, that.creationDate)
+            .append(startDate, that.startDate)
+            .append(endDate, that.endDate)
+            .append(childClient, that.childClient)
+            .append(sexualExploitationType, that.sexualExploitationType)
+            .append(thirdId, that.thirdId)
+            .isEquals();
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(17, 37)
+            .appendSuper(super.hashCode())
+            .append(creationDate)
+            .append(startDate)
+            .append(endDate)
+            .append(childClient)
+            .append(sexualExploitationType)
+            .append(thirdId)
+            .toHashCode();
   }
 }

@@ -54,8 +54,9 @@ public class CsecHistoryService {
             .stream()
             .collect(Collectors.toMap(CsecHistory::getPrimaryKey, Function.identity()));
     for (CsecHistory csecHistory : persistedCsecHistories) {
-      if (updatedMap.get(csecHistory.getPrimaryKey()) == null) {
-        csecHistoryDao.delete(csecHistory.getPrimaryKey());
+      Serializable primaryKey = csecHistory.getPrimaryKey();
+      if (updatedMap.get(primaryKey) == null) {
+        csecHistoryDao.delete(primaryKey);
       }
     }
   }

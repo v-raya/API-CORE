@@ -51,8 +51,9 @@ public class SafetyAlertService {
             .stream()
             .collect(Collectors.toMap(SafetyAlert::getPrimaryKey, Function.identity()));
     for (SafetyAlert safetyAlert : persistedSafetyAlerts) {
-      if (updatedMap.get(safetyAlert.getPrimaryKey()) == null) {
-        safetyAlertDao.delete(safetyAlert.getPrimaryKey());
+      Serializable primaryKey = safetyAlert.getPrimaryKey();
+      if (updatedMap.get(primaryKey) == null) {
+        safetyAlertDao.delete(primaryKey);
       }
     }
   }
