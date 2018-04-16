@@ -11,7 +11,8 @@ import java.util.List;
  *
  * @author CWDS TPT-2 Team
  */
-public class PlacementHomeResultReadAuthorizer extends AbstractBaseAuthorizer<PlacementHome, String> {
+public class PlacementHomeResultReadAuthorizer extends
+    AbstractBaseAuthorizer<PlacementHome, String> {
 
   public static final String FACILITY_RESULT_READ = "placementHome:readResult";
 

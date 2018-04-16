@@ -25,7 +25,8 @@ public final class StaffPrivilegeUtil {
   }
 
   // TODO(dd): Consider to move this logic to drools
-  public static Set<StaffPrivilegeType> toStaffPersonPrivilegeTypes(final PerryAccount perryAccount) {
+  public static Set<StaffPrivilegeType> toStaffPersonPrivilegeTypes(
+      final PerryAccount perryAccount) {
     final Set<String> privileges = perryAccount.getPrivileges();
     if (privileges == null || privileges.isEmpty()) {
       return Collections.emptySet();
@@ -35,8 +36,8 @@ public final class StaffPrivilegeUtil {
     final Set<StaffPrivilegeType> results = new HashSet<>();
     for (final String privilege : privileges) {
       if (RESOURCE_MANAGEMENT.equalsIgnoreCase(privilege)) {
-         results.add(StaffPrivilegeType.RESOURCE_MANAGEMENT);
-         continue;
+        results.add(StaffPrivilegeType.RESOURCE_MANAGEMENT);
+        continue;
       }
 
       if (ADOPTIONS.equalsIgnoreCase(privilege)) {
