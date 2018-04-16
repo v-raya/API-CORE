@@ -41,11 +41,11 @@ public class XADataSourceFactory extends DataSourceFactory {
 
   @Override
   public ManagedDataSource build(MetricRegistry metricRegistry, String name) {
-    AtomikosPooledManagedDataSource ds = new AtomikosPooledManagedDataSource();
+    final AtomikosPooledManagedDataSource ds = new AtomikosPooledManagedDataSource();
     ds.setUniqueResourceName(name);
     ds.setXaDataSourceClassName(xaDataSourceClassName);
 
-    Properties props = new Properties();
+    final Properties props = new Properties();
     Optional.ofNullable(getUser()).ifPresent(user -> props.put("user", user));
     Optional.ofNullable(getPassword()).ifPresent(password -> props.put("password", password));
     Optional.ofNullable(getXaProperties()).ifPresent(props::putAll);
