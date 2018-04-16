@@ -11,24 +11,25 @@ import gov.ca.cwds.data.legacy.cms.entity.ParentalRightsTermination;
 import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
 import gov.ca.cwds.data.legacy.cms.entity.SchoolOriginHistory;
 import gov.ca.cwds.data.legacy.cms.entity.SpecialEducation;
+import gov.ca.cwds.data.legacy.cms.entity.TribalAncestryNotification;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /** @author CWDS TPT-3 Team */
 public class ChildClientEntityAwareDTO extends ClientEntityAwareDTO {
 
-  private final List<FCEligibility> fcEligibilities = new ArrayList<>();
-  private final List<HealthInterventionPlan> activeHealthInterventionPlans = new ArrayList<>();
-  private final List<ParentalRightsTermination> parentalRightsTerminations = new ArrayList<>();
-  private final List<MedicalEligibilityApplication> medicalEligibilityApplications =
-      new ArrayList<>();
-  private final List<CsecHistory> csecHistories = new ArrayList<>();
-  private final List<SchoolOriginHistory> schoolOriginHistories = new ArrayList<>();
+  private List<FCEligibility> fcEligibilities = new ArrayList<>();
+  private List<HealthInterventionPlan> activeHealthInterventionPlans = new ArrayList<>();
+  private List<ParentalRightsTermination> parentalRightsTerminations = new ArrayList<>();
+  private List<MedicalEligibilityApplication> medicalEligibilityApplications = new ArrayList<>();
+  private List<CsecHistory> csecHistories = new ArrayList<>();
+  private List<SchoolOriginHistory> schoolOriginHistories = new ArrayList<>();
   private List<PaternityDetail> paternityDetails = new ArrayList<>();
-  private final List<CreditReportHistory> creditReportHistories = new ArrayList<>();
-  private final List<SpecialEducation> specialEducations = new ArrayList<>();
+  private List<CreditReportHistory> creditReportHistories = new ArrayList<>();
+  private List<SpecialEducation> specialEducations = new ArrayList<>();
   private List<HealthReferral> healthReferrals = new ArrayList<>();
-
+  private List<TribalAncestryNotification> tribalAncestryNotifications = new ArrayList<>();
   private List<HealthScreening> healthScreenings = new ArrayList<>();
 
   public List<MedicalEligibilityApplication> getMedicalEligibilityApplications() {
@@ -77,5 +78,9 @@ public class ChildClientEntityAwareDTO extends ClientEntityAwareDTO {
 
   public List<HealthScreening> getHealthScreenings() {
     return healthScreenings;
+  }
+
+  public List<TribalAncestryNotification> getTribalAncestryNotifications() {
+    return tribalAncestryNotifications;
   }
 }

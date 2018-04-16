@@ -34,9 +34,11 @@ import org.hibernate.annotations.Type;
 @Entity
 @Table(name = "HLTH_RFT")
 @NamedQuery(
-    name = FIND_HEALTH_REFERRAL_BY_CHILD_CLIENT_ID,
-    query = "SELECT hr FROM gov.ca.cwds.data.legacy.cms.entity.HealthReferral hr "
-        + "where hr.childClient.identifier = :" + PARAM_CHILD_CLIENT_ID
+  name = FIND_HEALTH_REFERRAL_BY_CHILD_CLIENT_ID,
+  query =
+      "SELECT hr FROM gov.ca.cwds.data.legacy.cms.entity.HealthReferral hr "
+          + "where hr.childClient.identifier = :"
+          + PARAM_CHILD_CLIENT_ID
 )
 public class HealthReferral extends CmsPersistentObject {
 
@@ -47,27 +49,27 @@ public class HealthReferral extends CmsPersistentObject {
 
   private static final long serialVersionUID = 3694382844372673874L;
 
-  @EmbeddedId
-  private HealthReferral.Id id = new HealthReferral.Id();
+  @EmbeddedId private HealthReferral.Id id = new HealthReferral.Id();
 
   @NotNull
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
   @JoinColumn(
-      name = "FKCHLD_CLT",
-      referencedColumnName = "FKCLIENT_T",
-      insertable = false,
-      updatable = false
+    name = "FKCHLD_CLT",
+    referencedColumnName = "FKCLIENT_T",
+    insertable = false,
+    updatable = false
   )
   private ChildClient childClient;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
   @JoinColumn(
-      name = "HL_REFC",
-      referencedColumnName = "SYS_ID",
-      insertable = false,
-      updatable = false)
+    name = "HL_REFC",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private HealthReferralType healthReferralType;
 
   @NotNull
@@ -78,10 +80,11 @@ public class HealthReferral extends CmsPersistentObject {
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
   @JoinColumn(
-      name = "HL_CNSTC",
-      referencedColumnName = "SYS_ID",
-      insertable = false,
-      updatable = false)
+    name = "HL_CNSTC",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private HealthConsentType healthConsentType;
 
   @Column(name = "HL_CNST_DT")
@@ -90,10 +93,11 @@ public class HealthReferral extends CmsPersistentObject {
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
   @JoinColumn(
-      name = "HL_REF2C",
-      referencedColumnName = "SYS_ID",
-      insertable = false,
-      updatable = false)
+    name = "HL_REF2C",
+    referencedColumnName = "SYS_ID",
+    insertable = false,
+    updatable = false
+  )
   private HealthReferredToType healthReferredToType;
 
   @Column(name = "COMNT_DSC")
@@ -213,25 +217,41 @@ public class HealthReferral extends CmsPersistentObject {
       return false;
     }
     HealthReferral that = (HealthReferral) o;
-    return Objects.equals(getChildClient(), that.getChildClient()) &&
-        Objects.equals(getHealthReferralType(), that.getHealthReferralType()) &&
-        Objects.equals(getReferralDate(), that.getReferralDate()) &&
-        Objects.equals(getHealthConsentType(), that.getHealthConsentType()) &&
-        Objects.equals(getConsentOnFileDate(), that.getConsentOnFileDate()) &&
-        Objects.equals(getHealthReferredToType(), that.getHealthReferredToType()) &&
-        referralOutcome == that.referralOutcome &&
-        Objects.equals(getReferralOutcomeDate(), that.getReferralOutcomeDate());
+    return equalCondition1(that) && equalCondition2(that) && equalCondition3(that);
+  }
+
+  private boolean equalCondition1(HealthReferral that) {
+    return Objects.equals(getChildClient(), that.getChildClient())
+        && Objects.equals(getHealthReferralType(), that.getHealthReferralType())
+        && Objects.equals(getReferralDate(), that.getReferralDate());
+  }
+
+  private boolean equalCondition2(HealthReferral that) {
+    return Objects.equals(getHealthConsentType(), that.getHealthConsentType())
+        && Objects.equals(getConsentOnFileDate(), that.getConsentOnFileDate())
+        && Objects.equals(getHealthReferredToType(), that.getHealthReferredToType());
+  }
+
+  private boolean equalCondition3(HealthReferral that) {
+    return referralOutcome == that.referralOutcome
+        && Objects.equals(getReferralOutcomeDate(), that.getReferralOutcomeDate());
   }
 
   @Override
   public int hashCode() {
 
-    return Objects
-        .hash(getChildClient(), getHealthReferralType(), getReferralDate(),
-            getHealthConsentType(), getConsentOnFileDate(), getHealthReferredToType(),
-            referralOutcome, getReferralOutcomeDate());
+    return Objects.hash(
+        getChildClient(),
+        getHealthReferralType(),
+        getReferralDate(),
+        getHealthConsentType(),
+        getConsentOnFileDate(),
+        getHealthReferredToType(),
+        referralOutcome,
+        getReferralOutcomeDate());
   }
 
+  @SuppressWarnings("common-java:DuplicatedBlocks")
   @Embeddable
   public static class Id implements Serializable {
 
@@ -247,8 +267,7 @@ public class HealthReferral extends CmsPersistentObject {
     @Column(name = "THIRD_ID")
     private String thirdId;
 
-    public Id() {
-    }
+    public Id() {}
 
     public Id(String childClientId, String thirdId) {
       this.childClientId = childClientId;

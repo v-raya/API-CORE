@@ -17,19 +17,15 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import org.hibernate.annotations.ColumnTransformer;
 
-/**
- * @author CWDS TPT-3 Team
- */
+/** @author CWDS TPT-3 Team */
 @Entity
 @Table(name = "DAS_HIST")
 @IdClass(DasHistoryPK.class)
 @NamedQueries(
     @NamedQuery(
-        name = DasHistory.NQ_FIND_BY_CLIENT_ID,
-        query = "from DasHistory where fkclientT = :"
-            + DasHistory.NQ_PARAM_CLIENT_ID
-    )
-)
+      name = DasHistory.NQ_FIND_BY_CLIENT_ID,
+      query = "from DasHistory where fkclientT = :" + DasHistory.NQ_PARAM_CLIENT_ID
+    ))
 public class DasHistory implements PersistentObject {
 
   private static final long serialVersionUID = 6572734754959171762L;
@@ -78,7 +74,6 @@ public class DasHistory implements PersistentObject {
   public void setFkclientT(String fkclientT) {
     this.fkclientT = fkclientT;
   }
-
 
   public String getThirdId() {
     return thirdId;
@@ -145,17 +140,24 @@ public class DasHistory implements PersistentObject {
       return false;
     }
     DasHistory that = (DasHistory) o;
-    return Objects.equal(fkclientT, that.fkclientT) &&
-        Objects.equal(thirdId, that.thirdId) &&
-        Objects.equal(startDate, that.startDate) &&
-        Objects.equal(endDate, that.endDate) &&
-        Objects.equal(providedByCode, that.providedByCode) &&
-        Objects.equal(otherDescription, that.otherDescription);
+    return isDatesAndProvidedCodesEqual(that)
+        && isIdsEqual(that)
+        && Objects.equal(otherDescription, that.otherDescription);
+  }
+
+  private boolean isDatesAndProvidedCodesEqual(DasHistory that) {
+    return Objects.equal(startDate, that.startDate)
+        && Objects.equal(endDate, that.endDate)
+        && Objects.equal(providedByCode, that.providedByCode);
+  }
+
+  private boolean isIdsEqual(DasHistory that) {
+    return Objects.equal(fkclientT, that.fkclientT) && Objects.equal(thirdId, that.thirdId);
   }
 
   @Override
   public final int hashCode() {
-    return Objects
-        .hashCode(fkclientT, thirdId, startDate, endDate, providedByCode, otherDescription);
+    return Objects.hashCode(
+        fkclientT, thirdId, startDate, endDate, providedByCode, otherDescription);
   }
 }

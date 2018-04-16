@@ -2,7 +2,6 @@ package gov.ca.cwds.cms.data.access.service.impl.client;
 
 import gov.ca.cwds.data.legacy.cms.entity.ChildClient;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
-import gov.ca.cwds.drools.DroolsException;
 import org.junit.Test;
 
 /** @author CWDS TPT-3 Team */
@@ -11,7 +10,7 @@ public class R00743Test extends BaseDocToolRulesClientImplementationTest {
   private static final String RULE_NAME = "R-00743";
 
   @Test
-  public void testPrimaryAnsSecondaryLanguagesNull() throws DroolsException {
+  public void testPrimaryAnsSecondaryLanguagesNull() {
     Client client = new Client();
     client.setPrimaryLanguageCode((short) 1);
     client.setSecondaryLanguageCode((short) 12);
@@ -22,7 +21,7 @@ public class R00743Test extends BaseDocToolRulesClientImplementationTest {
   }
 
   @Test
-  public void testPrimaryLanguageEmpty() throws DroolsException {
+  public void testPrimaryLanguageEmpty() {
     Client client = new Client();
     client.setPrimaryLanguageCode((short) 0);
     client.setSecondaryLanguageCode((short) 12);
@@ -33,7 +32,7 @@ public class R00743Test extends BaseDocToolRulesClientImplementationTest {
   }
 
   @Test
-  public void testPrimarySecondaryLanguagesEmpty() throws DroolsException {
+  public void testPrimarySecondaryLanguagesEmpty() {
     Client client = new Client();
     client.setPrimaryLanguageCode((short) 0);
     client.setSecondaryLanguageCode((short) 0);
@@ -44,7 +43,7 @@ public class R00743Test extends BaseDocToolRulesClientImplementationTest {
   }
 
   @Test
-  public void testSecondaryLanguagesEmpty() throws DroolsException {
+  public void testSecondaryLanguagesEmpty() {
     ChildClient client = new ChildClient();
     client.setPrimaryLanguageCode((short) 12);
     client.setSecondaryLanguageCode((short) 0);

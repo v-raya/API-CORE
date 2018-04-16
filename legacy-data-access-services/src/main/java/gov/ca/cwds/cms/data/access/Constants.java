@@ -15,7 +15,7 @@ public final class Constants {
 
     public static final String ADR_PHTT = "ADR_PHTT";
 
-    public static final String CLT_PHNT = "CLT_PHNT";
+    public static final String CLT_PHNT = "CLT_PHTT";
 
     private PhoneticSearchTables() {}
   }

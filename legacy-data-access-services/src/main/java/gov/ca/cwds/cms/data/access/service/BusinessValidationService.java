@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.dto.BaseEntityAwareDTO;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.drools.DroolsConfiguration;
-import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.rest.exception.IssueDetails;
@@ -23,8 +22,7 @@ public class BusinessValidationService<
   }
 
   public void runBusinessValidation(
-      P entityAwareDTO, PerryAccount principal, DroolsConfiguration configuration)
-      throws DroolsException {
+      P entityAwareDTO, PerryAccount principal, DroolsConfiguration configuration) {
     // Perform validation rules
     Set<IssueDetails> detailsList =
         droolsService.performBusinessRules(configuration, entityAwareDTO, principal);
@@ -36,8 +34,7 @@ public class BusinessValidationService<
   }
 
   public void runDataProcessing(
-      P entityAwareDTO, PerryAccount principal, DroolsConfiguration configuration)
-      throws DroolsException {
+      P entityAwareDTO, PerryAccount principal, DroolsConfiguration configuration) {
     droolsService.performBusinessRules(configuration, entityAwareDTO, principal);
   }
 }

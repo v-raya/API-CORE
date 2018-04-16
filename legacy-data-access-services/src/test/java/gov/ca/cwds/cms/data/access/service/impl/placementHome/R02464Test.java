@@ -1,8 +1,6 @@
 package gov.ca.cwds.cms.data.access.service.impl.placementHome;
 
-import gov.ca.cwds.cms.data.access.service.impl.placementHome.BaseDocToolRulesPlacementHomeTest;
 import gov.ca.cwds.cms.data.access.service.rules.PlacementHomeDroolsConfiguration;
-import gov.ca.cwds.drools.DroolsException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -53,7 +51,7 @@ public class R02464Test extends BaseDocToolRulesPlacementHomeTest {
     Assert.assertTrue(placementHomeEntityAwareDTO.getEntity().getGvrEntc() == (short) 1085);
   }
 
-  private void checkR02464(Runnable testCase) throws DroolsException {
+  private void checkR02464(Runnable testCase) {
     testCase.run();
     businessValidationService.runDataProcessing(
         placementHomeEntityAwareDTO,

@@ -176,4 +176,19 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
 
     assertTableEquals(expectedTable, actualTable);
   }
+
+  @Test
+  public void findByFacilityIdAndChildId() throws Exception {}
+
+  @Test
+  public void findByLicNumAndChildId() throws Exception {}
+
+  @Test
+  public void streamByLicenseNumber() throws Exception {}
+
+  @Test
+  public void streamByLicenseNumber1() throws Exception {}
+
+  @Test
+  public void streamByFacilityId() throws Exception {}
 }

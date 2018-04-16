@@ -23,7 +23,7 @@ public class R00612Test extends BaseDocToolRulesClientImplementationTest {
     List<DeliveredService> deliveredServices = new ArrayList<>();
     deliveredServices.add(getDeliveredService());
 
-    clientEntityAwareDTO.setDeliveredService(deliveredServices);
+    clientEntityAwareDTO.getDeliveredService().addAll(deliveredServices);
     checkRuleSatisfied(RULE_NAME);
   }
 
@@ -40,7 +40,7 @@ public class R00612Test extends BaseDocToolRulesClientImplementationTest {
         getDeliveredService(
             CLIENT_BIRTH_DAY.plusMonths(10), WRONG_CLIENT_ID, IndividualType.CLIENTS));
 
-    clientEntityAwareDTO.setDeliveredService(deliveredServices);
+    clientEntityAwareDTO.getDeliveredService().addAll(deliveredServices);
     checkRuleSatisfied(RULE_NAME);
   }
 
@@ -51,7 +51,7 @@ public class R00612Test extends BaseDocToolRulesClientImplementationTest {
     List<DeliveredService> deliveredServices = new ArrayList<>();
     deliveredServices.add(getDeliveredService(CLIENT_BIRTH_DAY, CLIENT_ID, IndividualType.CLIENTS));
 
-    clientEntityAwareDTO.setDeliveredService(deliveredServices);
+    clientEntityAwareDTO.getDeliveredService().addAll(deliveredServices);
     checkRuleSatisfied(RULE_NAME);
   }
 
@@ -63,7 +63,7 @@ public class R00612Test extends BaseDocToolRulesClientImplementationTest {
     deliveredServices.add(
         getDeliveredService(CLIENT_BIRTH_DAY.minusYears(1), CLIENT_ID, IndividualType.CLIENTS));
 
-    clientEntityAwareDTO.setDeliveredService(deliveredServices);
+    clientEntityAwareDTO.getDeliveredService().addAll(deliveredServices);
     checkRuleViolatedOnce(RULE_NAME);
   }
 
@@ -75,7 +75,7 @@ public class R00612Test extends BaseDocToolRulesClientImplementationTest {
     deliveredServices.add(
         getDeliveredService(CLIENT_BIRTH_DAY.plusMonths(10), CLIENT_ID, IndividualType.ATTORNEYS));
 
-    clientEntityAwareDTO.setDeliveredService(deliveredServices);
+    clientEntityAwareDTO.getDeliveredService().addAll(deliveredServices);
     checkRuleSatisfied(RULE_NAME);
   }
 
@@ -88,7 +88,7 @@ public class R00612Test extends BaseDocToolRulesClientImplementationTest {
         getDeliveredService(
             CLIENT_BIRTH_DAY.minusYears(1), CLIENT_ID, IndividualType.SERVICE_PROVIDERS));
 
-    clientEntityAwareDTO.setDeliveredService(deliveredServices);
+    clientEntityAwareDTO.getDeliveredService().addAll(deliveredServices);
     checkRuleSatisfied(RULE_NAME);
   }
 
@@ -103,7 +103,7 @@ public class R00612Test extends BaseDocToolRulesClientImplementationTest {
     deliveredServices.add(
         getDeliveredService(CLIENT_BIRTH_DAY.plusMonths(10), CLIENT_ID, IndividualType.ATTORNEYS));
 
-    clientEntityAwareDTO.setDeliveredService(deliveredServices);
+    clientEntityAwareDTO.getDeliveredService().addAll(deliveredServices);
     checkRuleSatisfied(RULE_NAME);
   }
 
@@ -116,7 +116,7 @@ public class R00612Test extends BaseDocToolRulesClientImplementationTest {
     deliveredServices.add(
         getDeliveredService(CLIENT_BIRTH_DAY.minusYears(2), CLIENT_ID, IndividualType.CLIENTS));
 
-    clientEntityAwareDTO.setDeliveredService(deliveredServices);
+    clientEntityAwareDTO.getDeliveredService().addAll(deliveredServices);
     checkRuleViolatedOnce(RULE_NAME);
   }
 

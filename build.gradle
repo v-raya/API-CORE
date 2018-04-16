@@ -33,7 +33,7 @@ allprojects {
         glassfishJerseyExtVersion = "2.23.2"
         jacksonVersion = "2.8.2"
         postgresqlVersion = "9.4.1208.jre7"
-        dataModelVersion = '0.5.8_485-RC'
+        dataModelVersion = '0.6.2_498-RC'
         droolsVersion = "7.1.0.Final"
         mapstructVersion = '1.1.0.Final'
         junitVersion = '4.12'
@@ -43,7 +43,7 @@ allprojects {
         h2Version = "1.4.194"
         liquibaseVersion = "3.5.3"
 
-        projectMajorVersion = "1.6.2"
+        projectMajorVersion = "1.6.3"
 
         isRelease = System.getProperty("Release") == "true"
         buildNumber = System.getProperty('BuildNumber')
@@ -98,6 +98,8 @@ allprojects {
 
     test {
         exclude '**/*IT*'
+        exclude 'gov/ca/cwds/data/legacy/cms/dao/**'
+        exclude '**/dbDependent/**'
         jacoco {
             excludes = ["**org/drools/**/*"]
         }

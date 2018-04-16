@@ -14,17 +14,19 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.ca.cwds.authenticate.config.ConfigReader;
+import gov.ca.cwds.authenticate.config.ConfigUtils;
+
 /**
- * 
  * This class is used to generate the token using json for Perry dev mode, and handles all the
  * redirect from clicking the login to the end to get the token.
  * 
  * @author CWDS TPT-4 Team
  *
  */
-public class CWDSDevAuthenticationClient extends HttpClientBuild implements CWDSClientCommon {
+public class CwdsDevAuthenticationClient extends HttpClientBuild implements CwdsClientCommon {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CWDSDevAuthenticationClient.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CwdsDevAuthenticationClient.class);
 
   private static final int GET_ONLY_ACCESS_CODE_VALUE = 11;
 
@@ -36,33 +38,40 @@ public class CWDSDevAuthenticationClient extends HttpClientBuild implements CWDS
 
   private static final String ACCESS_CODE = "accessCode";
   private static final String LOCATION = "Location";
-  private ConfigUtils configUtils = new ConfigUtils();
+  private ConfigReader configReader;
 
   private HttpGet httpGet;
   private URI uri;
   private HttpResponse httpResponse;
   private String redirectUrl;
   private String token = null;
-
   private String userName;
 
   /**
-   * Constructor
+   * This constructor is to used to initialize the yaml and used over the class.
    * 
+   * @param configReader - configReader
    * @param userName - userName
    */
-  public CWDSDevAuthenticationClient(String userName) {
+  public CwdsDevAuthenticationClient(ConfigReader configReader, String userName) {
     this.userName = userName;
+    if (configReader == null) {
+      this.configReader = new ConfigUtils();
+    } else {
+      this.configReader = configReader;
+    }
   }
 
   /**
+   * Default method to get the token.
+   * 
    * @return the valid token
    */
   @Override
   public String getToken() {
     try {
       LOGGER.info(NEW_REQUEST_TO_BEGIN);
-      LOGGER.info("GET: {}", configUtils.getYamlValues().getTokenCredentials().getAuthLoginUrl());
+      LOGGER.info("GET: {}", configReader.readConfig().getTestUrl().getAuthLoginUrl());
       postParams.add(new BasicNameValuePair("callback", CALL_BACK_URL));
       postParams.add(new BasicNameValuePair("sp_id", null));
       httpGet = new HttpGet(AUTH_LOGIN_URL);

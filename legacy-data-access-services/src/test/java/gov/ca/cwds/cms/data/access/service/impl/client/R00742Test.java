@@ -21,8 +21,9 @@ public class R00742Test extends BaseDocToolRulesClientImplementationTest {
         clientEntityAwareDTO.setEntity(client);
 
         List<ClientOtherEthnicity> clientScpEthnicityList = createListOfDifferentClientOtherEthnicities(client);
-        clientEntityAwareDTO.getOtherEthnicities().addAll(clientScpEthnicityList);
-
+        for(ClientOtherEthnicity clientOtherEthnicity : clientScpEthnicityList) {
+            client.addOtherEthnicity(clientOtherEthnicity);
+        }
         checkRuleSatisfied(RULE_NAME);
     }
 
@@ -35,7 +36,9 @@ public class R00742Test extends BaseDocToolRulesClientImplementationTest {
         clientEntityAwareDTO.setEntity(client);
 
         List<ClientOtherEthnicity> clientScpEthnicityList = createListOfDifferentClientOtherEthnicities(client);
-        clientEntityAwareDTO.getOtherEthnicities().addAll(clientScpEthnicityList);
+        for(ClientOtherEthnicity clientOtherEthnicity : clientScpEthnicityList) {
+            client.addOtherEthnicity(clientOtherEthnicity);
+        };
 
         checkRuleViolatedOnce(RULE_NAME);
     }
@@ -70,8 +73,8 @@ public class R00742Test extends BaseDocToolRulesClientImplementationTest {
 
         clientEntityAwareDTO.setEntity(client);
 
-        clientEntityAwareDTO.getOtherEthnicities().add(createClientOtherEthnicity(client, (short) 0));
-        clientEntityAwareDTO.getOtherEthnicities().add(createClientOtherEthnicity(client, (short) 0));
+        createClientOtherEthnicity(client, (short) 0);
+        createClientOtherEthnicity(client, (short) 0);
 
         checkRuleSatisfied(RULE_NAME);
     }
@@ -88,10 +91,10 @@ public class R00742Test extends BaseDocToolRulesClientImplementationTest {
 
 
     private static ClientOtherEthnicity createClientOtherEthnicity(Client client, Short ethnicityCode) {
-        ClientOtherEthnicity clientScpEthnicity = new ClientOtherEthnicity();
-        clientScpEthnicity.setClient(client);
-        clientScpEthnicity.setEthnicityCode(ethnicityCode);
-        return clientScpEthnicity;
+        ClientOtherEthnicity clientOtherEthnicity = new ClientOtherEthnicity();
+        clientOtherEthnicity.setEthnicityCode(ethnicityCode);
+        client.addOtherEthnicity(clientOtherEthnicity);
+        return clientOtherEthnicity;
     }
 
 }

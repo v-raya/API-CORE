@@ -1,8 +1,6 @@
 package gov.ca.cwds.cms.data.access.service.impl.relationships;
 
-import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
-import gov.ca.cwds.drools.DroolsException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +12,12 @@ public class R00753Test extends BaseDocToolRulesChildClientRelationshipTest {
   private static final String RULE_NAME = "R-00753";
 
   /**
-   * @throws DroolsException
    *
    *      x-------------x
    *        x-------------x
    */
   @Test
-  public void overlap1() throws DroolsException {
+  public void overlap1() {
 
     LocalDate localDateStartA = LocalDate.of(2001, 11, 11);
     LocalDate localDateEndA = LocalDate.of(2020, 11, 11);
@@ -44,13 +41,12 @@ public class R00753Test extends BaseDocToolRulesChildClientRelationshipTest {
   }
 
   /**
-   * @throws DroolsException
    *
    *      x-------------x
    *    x------------x
    */
   @Test
-  public void overlap2() throws DroolsException {
+  public void overlap2() {
     LocalDate localDateStartA = LocalDate.of(2001, 11, 11);
     LocalDate localDateEndA = LocalDate.of(2020, 11, 11);
 
@@ -74,13 +70,12 @@ public class R00753Test extends BaseDocToolRulesChildClientRelationshipTest {
   }
 
   /**
-   * @throws DroolsException
    *
    *      x-------------x
    *      x-------------x
    */
   @Test
-  public void overlap3() throws DroolsException {
+  public void overlap3() {
     LocalDate localDateStartA = LocalDate.of(2001, 11, 11);
     LocalDate localDateEndA = LocalDate.of(2020, 11, 11);
 
@@ -102,12 +97,11 @@ public class R00753Test extends BaseDocToolRulesChildClientRelationshipTest {
   }
 
   /**
-   * @throws DroolsException
    *     <p>x-------------x
    *          x--------x
    */
   @Test
-  public void overlap4() throws DroolsException {
+  public void overlap4() {
     LocalDate localDateStartA = LocalDate.of(2001, 11, 11);
     LocalDate localDateEndA = LocalDate.of(2020, 11, 11);
 
@@ -130,13 +124,12 @@ public class R00753Test extends BaseDocToolRulesChildClientRelationshipTest {
   }
 
   /**
-   * @throws DroolsException
    *
    *         x-------------x
    *   x-----x
    */
   @Test
-  public void overlap5() throws DroolsException {
+  public void overlap5() {
     LocalDate localDateStartA = LocalDate.of(2001, 11, 11);
     LocalDate localDateEndA = LocalDate.of(2020, 11, 11);
 
@@ -159,12 +152,11 @@ public class R00753Test extends BaseDocToolRulesChildClientRelationshipTest {
   }
 
   /**
-   * @throws DroolsException
    *     x-------------x
    *                      x-------x
    */
   @Test
-  public void overlap6() throws DroolsException {
+  public void overlap6() {
     LocalDate localDateStartA = LocalDate.of(2001, 11, 11);
     LocalDate localDateEndA = LocalDate.of(2020, 11, 11);
 
@@ -187,12 +179,11 @@ public class R00753Test extends BaseDocToolRulesChildClientRelationshipTest {
   }
 
   /**
-   * @throws DroolsException
    *     <p>x-------------x
    *                        x-------------x
    */
   @Test
-  public void noOverlap1() throws DroolsException {
+  public void noOverlap1() {
     LocalDate localDateStartA = LocalDate.of(2001, 11, 11);
     LocalDate localDateEndA = LocalDate.of(2020, 11, 11);
 
@@ -215,12 +206,11 @@ public class R00753Test extends BaseDocToolRulesChildClientRelationshipTest {
   }
 
   /**
-   * @throws DroolsException
    *          x-------------x
    *  x-----x
    */
   @Test
-  public void noOverlap2() throws DroolsException {
+  public void noOverlap2() {
     LocalDate localDateStartA = LocalDate.of(2001, 11, 11);
     LocalDate localDateEndA = LocalDate.of(2020, 11, 11);
 

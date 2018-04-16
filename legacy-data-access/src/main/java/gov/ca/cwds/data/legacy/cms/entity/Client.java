@@ -42,33 +42,24 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
-/**
- * @author CWDS CALS API Team
- */
+/** @author CWDS CALS API Team */
 @NamedQuery(
-    name = "Client.find",
-    query = Client.CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY +
-        " AND c.identifier = :childId"
-)
-
-@NamedQuery(
-    name = "Client.findAll",
-    query = Client.CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY
-        + " ORDER BY c.identifier "
-)
-
-@NamedQuery(
-    name = "Client.findByFacilityId",
-    query = Client.CHILDREN_BY_FACILITY_ID_BASE_QUERY
-        + " ORDER BY c.identifier "
+  name = "Client.find",
+  query = Client.CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY + " AND c.identifier = :childId"
 )
 @NamedQuery(
-    name = "Client.findByFacilityIdAndChildId",
-    query = Client.CHILDREN_BY_FACILITY_ID_BASE_QUERY +
-        " AND c.identifier = :childId"
+  name = "Client.findAll",
+  query = Client.CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY + " ORDER BY c.identifier "
 )
-
-@SuppressWarnings({"squid:S3437", "squid:S2160"})
+@NamedQuery(
+  name = "Client.findByFacilityId",
+  query = Client.CHILDREN_BY_FACILITY_ID_BASE_QUERY + " ORDER BY c.identifier "
+)
+@NamedQuery(
+  name = "Client.findByFacilityIdAndChildId",
+  query = Client.CHILDREN_BY_FACILITY_ID_BASE_QUERY + " AND c.identifier = :childId"
+)
+@SuppressWarnings({"squid:S3437", "squid:S2160", "common-java:DuplicatedBlocks"})
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "CLIENT_T")
@@ -94,26 +85,26 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
           + " AND ohp.endDt is null"
           + " AND pe.plepsEndt is null";
 
-
   @Id
   @Column(name = "IDENTIFIER", nullable = false, length = 10)
-  @Access(AccessType.PROPERTY)//to get id without fetching entire client
+  @Access(AccessType.PROPERTY) // to get id without fetching entire client
   private String identifier;
 
   @OneToMany(fetch = FetchType.LAZY)
   @JoinColumn(
-      name = "FKCLIENT_T",
-      referencedColumnName = "IDENTIFIER",
-      insertable = false,
-      updatable = false
+    name = "FKCLIENT_T",
+    referencedColumnName = "IDENTIFIER",
+    insertable = false,
+    updatable = false
   )
   private Set<PlacementEpisode> placementEpisodes = new HashSet<>();
 
   @OneToMany(
-      mappedBy = "client",
-      fetch = FetchType.LAZY,
-      cascade = CascadeType.ALL,
-      orphanRemoval = true)
+    mappedBy = "client",
+    fetch = FetchType.LAZY,
+    cascade = CascadeType.ALL,
+    orphanRemoval = true
+  )
   private Set<ClientOtherEthnicity> otherEthnicities = new HashSet<>();
 
   @Column(name = "ADJDEL_IND", length = 1)
@@ -390,16 +381,32 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
       return false;
     }
     Client client = (Client) o;
-    return (getBirthCountryCode() == client.getBirthCountryCode())
-        && (getBirthStateCode() == client.getBirthStateCode())
-        && Objects.equals(getBirthCity(), client.getBirthCity())
-        && Objects.equals(getBirthDate(), client.getBirthDate())
-        && Objects.equals(getBirthFacilityName(), client.getBirthFacilityName())
-        && Objects.equals(getCommonFirstName(), client.getCommonFirstName())
-        && Objects.equals(getCommonLastName(), client.getCommonLastName())
-        && Objects.equals(getCommonMiddleName(), client.getCommonMiddleName())
-        && Objects.equals(getEmailAddress(), client.getEmailAddress())
+    return isCodesEqual(client)
+        && isNamesAndAddressesEqual(client)
         && (getChildClientIndicator() == client.getChildClientIndicator());
+  }
+
+  private boolean isCodesEqual(Client client) {
+    return (getBirthCountryCode() == client.getBirthCountryCode())
+        && (getBirthStateCode() == client.getBirthStateCode());
+  }
+
+  private boolean isNamesEqual(Client client) {
+    return Objects.equals(getCommonFirstName(), client.getCommonFirstName())
+        && Objects.equals(getCommonLastName(), client.getCommonLastName())
+        && Objects.equals(getCommonMiddleName(), client.getCommonMiddleName());
+  }
+
+  private boolean isBirthaAndAddressesEqual(Client client) {
+    return Objects.equals(getBirthCity(), client.getBirthCity())
+        && Objects.equals(getBirthDate(), client.getBirthDate())
+        && Objects.equals(getEmailAddress(), client.getEmailAddress());
+  }
+
+  private boolean isNamesAndAddressesEqual(Client client) {
+    return Objects.equals(getBirthFacilityName(), client.getBirthFacilityName())
+        && isBirthaAndAddressesEqual(client)
+        && isNamesEqual(client);
   }
 
   @Override
@@ -914,17 +921,13 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
     this.emailAddress = emailAddress;
   }
 
-  /**
-   * @return adjudicatedDelinquentIndicator (Boolean value or null)
-   */
+  /** @return adjudicatedDelinquentIndicator (Boolean value or null) */
   @SuppressWarnings("squid:S2447")
   public Boolean getAdjudicatedDelinquentIndicator() {
     return adjudicatedDelinquentIndicator;
   }
 
-  /**
-   * @param adjudicatedDelinquentIndicator (may be null)
-   */
+  /** @param adjudicatedDelinquentIndicator (may be null) */
   public void setAdjudicatedDelinquentIndicator(Boolean adjudicatedDelinquentIndicator) {
     this.adjudicatedDelinquentIndicator = adjudicatedDelinquentIndicator;
   }

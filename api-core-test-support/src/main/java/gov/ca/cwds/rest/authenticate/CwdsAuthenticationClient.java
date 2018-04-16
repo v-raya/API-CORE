@@ -14,6 +14,8 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.ca.cwds.authenticate.config.ConfigReader;
+
 /**
  * This class is used to generate the token using username and password with Perry, and handles all
  * the redirect from clicking the login to the end to get the token.
@@ -21,9 +23,9 @@ import org.slf4j.LoggerFactory;
  * @author CWDS TPT-4 Team
  *
  */
-public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSClientCommon {
+public class CwdsAuthenticationClient extends HttpClientBuild implements CwdsClientCommon {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CWDSAuthenticationClient.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CwdsAuthenticationClient.class);
 
   private static final int GET_STATE_VALUE = 4;
   private static final int GET_RESPONE_TYPE_VALUE = 3;
@@ -69,17 +71,24 @@ public class CWDSAuthenticationClient extends HttpClientBuild implements CWDSCli
   private HttpResponse httpResponse;
   private HttpPost httpPost;
   private String location;
+  private ConfigReader configReader;
 
   /**
+   * This constructor is to used to initialize the yaml and used over the class.
+   * 
+   * @param configReader - configReader
    * @param userName - userName
    * @param password - password
    */
-  public CWDSAuthenticationClient(String userName, String password) {
+  public CwdsAuthenticationClient(ConfigReader configReader, String userName, String password) {
+    this.configReader = configReader;
     this.userName = userName;
     this.password = password;
   }
 
   /**
+   * Default method to get the token.
+   * 
    * @return the valid token
    */
   @Override

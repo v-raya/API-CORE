@@ -16,7 +16,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @author CWDS CALS API Team
  */
 @MappedSuperclass
-@SuppressWarnings("squid:S3437") //LocalDate is serializable
+@SuppressWarnings({"squid:S3437", "common-java:DuplicatedBlocks"}) //LocalDate is serializable
 public abstract class BaseStaffPerson implements PersistentObject {
 
     private static final long serialVersionUID = 5518501308828983601L;

@@ -1,0 +1,46 @@
+<dataset>
+    <CSECHIST
+            FKCHLD_CLT="00xVOYD11c"
+            THIRD_ID="0vEL8AG000"
+            CREATN_TS="2004-08-04 13:07:52"
+            CSEC_TPC="6870"
+            START_DT="2017-08-04 13:07:52"
+            END_DT="2018-01-01 13:07:52"
+            LST_UPD_ID="06s"
+            LST_UPD_TS="2014-09-04 12:07:52"
+    />
+
+    <CSECHIST
+            FKCHLD_CLT="R06FKZ20X5"
+            THIRD_ID="7MPwBxx00E"
+            CREATN_TS="2010-05-04 13:07:52"
+            CSEC_TPC="6868"
+            START_DT="2017-08-04 13:07:52"
+            END_DT="[NULL]"
+            LST_UPD_ID="06s"
+            LST_UPD_TS="2015-08-04 13:07:52"
+    />
+
+    <CSECHIST
+            FKCHLD_CLT="R06FKZ20X5"
+            THIRD_ID="7MPwBxx99E"
+            CREATN_TS="2012-08-04 13:07:52"
+            CSEC_TPC="6869"
+            START_DT="2015-08-04 13:07:52"
+            END_DT="[NULL]"
+            LST_UPD_ID="05T"
+            LST_UPD_TS="1998-08-04 13:07:52"
+    />
+
+    <CSECHIST
+            FKCHLD_CLT="00xVOYD12c"
+            THIRD_ID="8MPwBxx00E"
+            CREATN_TS="2004-08-04 13:07:52"
+            CSEC_TPC="6871"
+            START_DT="2016-08-04 13:07:52"
+            END_DT="[NULL]"
+            LST_UPD_ID="06s"
+            LST_UPD_TS="1998-08-04 13:07:52"
+    />
+
+</dataset>

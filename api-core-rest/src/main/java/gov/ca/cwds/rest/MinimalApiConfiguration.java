@@ -5,7 +5,6 @@ import gov.ca.cwds.security.configuration.SecurityConfiguration;
 import io.dropwizard.Configuration;
 import javax.annotation.Nullable;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.secnod.dropwizard.shiro.ShiroConfiguration;
 
 public class MinimalApiConfiguration extends Configuration {
 
@@ -25,13 +24,10 @@ public class MinimalApiConfiguration extends Configuration {
   private SwaggerConfiguration swaggerConfiguration;
 
   @Nullable
-  private SmartyStreetsConfiguration smartyStreetsConfiguration;
-
-  @Nullable
   private WebSecurityConfiguration webSecurityConfiguration;
 
   @Nullable
-  private ShiroConfiguration shiroConfiguration;
+  private YamlShiroConfiguration shiroConfiguration;
 
   @Nullable
   private SecurityConfiguration securityConfiguration;
@@ -72,23 +68,13 @@ public class MinimalApiConfiguration extends Configuration {
     this.swaggerConfiguration = swaggerConfiguration;
   }
 
-  @JsonProperty(value = "smartystreets")
-  public SmartyStreetsConfiguration getSmartyStreetsConfiguration() {
-    return smartyStreetsConfiguration;
-  }
-
-  @JsonProperty
-  public void setSmartystreetsConfiguration(SmartyStreetsConfiguration smartyStreetsConfiguration) {
-    this.smartyStreetsConfiguration = smartyStreetsConfiguration;
-  }
-
   @JsonProperty(value = "shiro")
-  public ShiroConfiguration getShiroConfiguration() {
+  public YamlShiroConfiguration getShiroConfiguration() {
     return shiroConfiguration;
   }
 
   @JsonProperty
-  public void setShiroConfiguration(ShiroConfiguration shiroConfiguration) {
+  public void setShiroConfiguration(YamlShiroConfiguration shiroConfiguration) {
     this.shiroConfiguration = shiroConfiguration;
   }
 

@@ -2,10 +2,8 @@ package gov.ca.cwds.cms.data.access.service.impl.placementHome;
 
 import static org.junit.Assert.fail;
 
-import gov.ca.cwds.cms.data.access.service.impl.placementHome.BaseDocToolRulesPlacementHomeTest;
 import gov.ca.cwds.cms.data.access.service.rules.PlacementHomeDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
-import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import org.junit.Test;
 
@@ -26,7 +24,7 @@ public class R03855Test extends BaseDocToolRulesPlacementHomeTest {
     }
   }
 
-  private void runBusinessValidation(PlacementHome placementHome) throws DroolsException {
+  private void runBusinessValidation(PlacementHome placementHome) {
     placementHomeEntityAwareDTO.setEntity(placementHome);
     businessValidationService.runDataProcessing(
         placementHomeEntityAwareDTO,
