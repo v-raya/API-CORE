@@ -37,6 +37,18 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
     super(sessionFactory);
   }
 
+  protected Session grabSession() {
+    final SessionFactory sessionFactory = getSessionFactory();
+    Session session;
+    try {
+      session = sessionFactory.getCurrentSession();
+    } catch (Exception e) {
+      session = sessionFactory.openSession();
+    }
+
+    return session;
+  }
+
   /**
    * {@inheritDoc}
    *
@@ -46,7 +58,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
   @Override
   public List<T> findAll() {
     final String namedQueryName = constructNamedQueryName("findAll");
-    final Session session = getSessionFactory().getCurrentSession();
+    final Session session = grabSession();
 
     Transaction txn = session.getTransaction();
     txn = txn != null ? txn : session.beginTransaction();
@@ -90,14 +102,9 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
     final Transaction txn = session.beginTransaction();
     try {
       // Compatible with both DB2 z/OS and Linux.
-      final Query query =
-          session
-              .getNamedQuery(namedQueryName)
-              .setCacheable(false)
-              .setFlushMode(FlushMode.MANUAL)
-              .setReadOnly(true)
-              .setCacheMode(CacheMode.IGNORE)
-              .setTimestamp("after", new java.sql.Timestamp(datetime.getTime()));
+      final Query query = session.getNamedQuery(namedQueryName).setCacheable(false)
+          .setFlushMode(FlushMode.MANUAL).setReadOnly(true).setCacheMode(CacheMode.IGNORE)
+          .setTimestamp("after", new java.sql.Timestamp(datetime.getTime()));
 
       // Iterate, process, flush.
       int fetchSize = 5000;
