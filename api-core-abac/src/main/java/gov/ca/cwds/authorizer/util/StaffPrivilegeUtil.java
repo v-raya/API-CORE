@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Utility class for StaffPrivileges.
+ *
  * @author CWDS TPT-3 Team
  */
 public final class StaffPrivilegeUtil {
