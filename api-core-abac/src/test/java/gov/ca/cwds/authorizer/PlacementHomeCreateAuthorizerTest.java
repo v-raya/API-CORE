@@ -9,7 +9,6 @@ import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
-import gov.ca.cwds.authorizer.drools.configuration.PlacementHomeAuthorizationDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.security.realm.PerryAccount;
@@ -19,12 +18,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.core.classloader.annotations.SuppressStaticInitializationFor;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author CWDS TPT-2 Team
  */
 @RunWith(PowerMockRunner.class)
+@SuppressStaticInitializationFor("org.drools.core.util.Drools")
 @PrepareForTest(PerrySubject.class)
 public class PlacementHomeCreateAuthorizerTest {
 
@@ -35,9 +36,7 @@ public class PlacementHomeCreateAuthorizerTest {
     MockitoAnnotations.initMocks(this);
     final DroolsService droolsService = new DroolsService();
     final DroolsAuthorizationService droolsAuthorizationService = new DroolsAuthorizationService(droolsService);
-    testSubject = new PlacementHomeCreateAuthorizer(
-        droolsAuthorizationService, new PlacementHomeAuthorizationDroolsConfiguration()
-    );
+    testSubject = new PlacementHomeCreateAuthorizer(droolsAuthorizationService);
   }
 
   @Test
@@ -61,7 +60,7 @@ public class PlacementHomeCreateAuthorizerTest {
     when(PerrySubject.getPerryAccount()).thenReturn(perryAccount);
 
     // when
-    final boolean actual = testSubject.checkInstance(null);
+    final boolean actual = testSubject.checkInstance(new PlacementHome());
 
     // then
     assertThat(actual, is(expectedResult));

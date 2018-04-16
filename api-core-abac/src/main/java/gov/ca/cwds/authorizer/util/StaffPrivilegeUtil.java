@@ -14,6 +14,7 @@ public final class StaffPrivilegeUtil {
 
   public static final String CWS_CASE_MANAGEMENT_SYSTEM = "CWS Case Management System";
   public static final String RESOURCE_MANAGEMENT = "Resource Management";
+  public static final String ADOPTIONS = "Adoptions";
   public static final String STATE_OF_CALIFORNIA = "State of California";
   public static final String SENSITIVE_PERSONS = "Sensitive Persons";
   public static final String SEALED = "Sealed";
@@ -33,6 +34,16 @@ public final class StaffPrivilegeUtil {
     final String countyName = perryAccount.getCountyName();
     final Set<StaffPrivilegeType> results = new HashSet<>();
     for (final String privilege : privileges) {
+      if (RESOURCE_MANAGEMENT.equalsIgnoreCase(privilege)) {
+         results.add(StaffPrivilegeType.RESOURCE_MANAGEMENT);
+         continue;
+      }
+
+      if (ADOPTIONS.equalsIgnoreCase(privilege)) {
+        results.add(StaffPrivilegeType.ADOPTIONS);
+        continue;
+      }
+
       if (CWS_CASE_MANAGEMENT_SYSTEM.equals(privilege)) {
         results.add(StaffPrivilegeType.SOCIAL_WORKER_ONLY);
         continue;

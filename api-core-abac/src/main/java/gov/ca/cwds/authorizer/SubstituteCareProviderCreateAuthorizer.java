@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
 import gov.ca.cwds.authorizer.drools.configuration.SubstituteCareProviderAuthorizationDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
+import java.util.List;
 
 /**
  * @author CWDS TPT-2 Team
@@ -19,7 +20,7 @@ public class SubstituteCareProviderCreateAuthorizer extends
   }
 
   @Override
-  protected boolean checkInstance(final SubstituteCareProvider substituteCareProvider) {
-    return authorizeInstanceOperation(substituteCareProvider, null);
+  protected List<Object> prepareFacts(SubstituteCareProvider instance) {
+    return null;
   }
 }
