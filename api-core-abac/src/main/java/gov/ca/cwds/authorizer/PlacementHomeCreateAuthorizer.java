@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
 import gov.ca.cwds.authorizer.drools.configuration.PlacementHomeAuthorizationDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
+import java.util.List;
 
 /**
  * @author CWDS TPT-2 Team
@@ -11,13 +12,12 @@ import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 public class PlacementHomeCreateAuthorizer extends AbstractBaseAuthorizer<PlacementHome, String> {
 
   @Inject
-  public PlacementHomeCreateAuthorizer(DroolsAuthorizationService droolsAuthorizationService,
-      PlacementHomeAuthorizationDroolsConfiguration droolsConfiguration) {
-    super(droolsAuthorizationService, droolsConfiguration);
+  public PlacementHomeCreateAuthorizer(DroolsAuthorizationService droolsAuthorizationService) {
+    super(droolsAuthorizationService, PlacementHomeAuthorizationDroolsConfiguration.INSTANCE);
   }
 
   @Override
-  protected boolean checkInstance(final PlacementHome placementHome) {
-    return authorizeInstanceOperation(placementHome, null);
+  protected List<Object> prepareFacts(PlacementHome instance) {
+    return null;
   }
 }
