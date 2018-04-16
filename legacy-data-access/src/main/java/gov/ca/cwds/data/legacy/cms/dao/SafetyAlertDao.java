@@ -13,7 +13,7 @@ import org.hibernate.SessionFactory;
 /**
  * @author CWDS TPT-3 Team
  */
-public class SafetyAlertDao extends BaseDaoImpl {
+public class SafetyAlertDao extends BaseDaoImpl<SafetyAlert> {
 
   @Inject
   public SafetyAlertDao(@CmsSessionFactory SessionFactory sessionFactory) {

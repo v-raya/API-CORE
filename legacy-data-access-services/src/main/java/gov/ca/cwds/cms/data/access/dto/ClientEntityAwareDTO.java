@@ -8,13 +8,14 @@ import gov.ca.cwds.data.legacy.cms.entity.DeliveredService;
 import gov.ca.cwds.data.legacy.cms.entity.NearFatality;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementEpisode;
 import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ClientEntityAwareDTO extends BaseEntityAwareDTO<Client> {
 
   private Client persistentClientState;
-  private List<DeliveredService> deliveredService;
+  private List<DeliveredService> deliveredService = new ArrayList<>();
   private final List<SafetyAlert> safetyAlerts = new ArrayList<>();
   private final List<DasHistory> dasHistories = new ArrayList<>();
   private List<NearFatality> nearFatalities = new ArrayList<>();
@@ -23,13 +24,10 @@ public class ClientEntityAwareDTO extends BaseEntityAwareDTO<Client> {
   private OtherClientNameDTO otherClientName;
   private List<ClientRelationship> clientRelationships = new ArrayList<>();
   private boolean updateClientPhoneticName;
+  private boolean isEnriched;
 
   public List<DeliveredService> getDeliveredService() {
     return deliveredService;
-  }
-
-  public void setDeliveredService(List<DeliveredService> deliveredService) {
-    this.deliveredService = deliveredService;
   }
 
   public Client getPersistentClientState() {
@@ -78,5 +76,13 @@ public class ClientEntityAwareDTO extends BaseEntityAwareDTO<Client> {
 
   public void setUpdateClientPhoneticName(boolean updateClientPhoneticName) {
     this.updateClientPhoneticName = updateClientPhoneticName;
+  }
+
+  public boolean isEnriched() {
+    return isEnriched;
+  }
+
+  public void setEnriched(boolean enriched) {
+    isEnriched = enriched;
   }
 }

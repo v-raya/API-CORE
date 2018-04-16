@@ -26,12 +26,14 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.core.classloader.annotations.SuppressStaticInitializationFor;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author CWDS TPT-2 Team
  */
 @RunWith(PowerMockRunner.class)
+@SuppressStaticInitializationFor("org.drools.core.util.Drools")
 @PrepareForTest(PerrySubject.class)
 public class ClientResultReadAuthorizerTest {
 

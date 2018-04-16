@@ -1,14 +1,10 @@
-package gov.ca.cwds.cms.data.access.service.impl.relationships;
-
-import static org.junit.Assert.assertEquals;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.when;
+package gov.ca.cwds.cms.data.access.service.impl.relationships.dbDependent;
 
 import gov.ca.cwds.cms.data.access.dto.ClientRelationshipAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.impl.ClientRelationshipCoreService;
-import gov.ca.cwds.cms.data.access.service.impl.persistance.BaseDocToolInMemoryPersistenceTest;
+import gov.ca.cwds.cms.data.access.service.impl.dbDependentSuite.BaseCwsCmsInMemoryPersistenceTest;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.ClientRelationshipDao;
 import gov.ca.cwds.data.legacy.cms.dao.TribalMembershipVerificationDao;
@@ -20,28 +16,27 @@ import gov.ca.cwds.data.legacy.cms.entity.syscodes.ClientRelationshipType;
 import gov.ca.cwds.drools.DroolsService;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
+import org.junit.Before;
+import org.junit.Test;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+
+import static org.junit.Assert.assertEquals;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 /** @author CWDS TPT-3 Team */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(PrincipalUtils.class)
-@PowerMockIgnore({"javax.*", "org.xml.*", "org.w3c.*", "com.sun.*"})
-public class R08840DBTest extends BaseDocToolInMemoryPersistenceTest {
+public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
 
   private ClientDao clientDao;
   private TribalMembershipVerificationDao tribalMembershipVerificationDao;
   private ClientRelationshipCoreService clientRelationshipCoreService;
   private ClientRelationshipDao clientRelationshipDao;
   private BusinessValidationService businessValidationService;
+  private static final String USER_ID = "0X5";
 
   @Before
   public void before() {
@@ -57,18 +52,10 @@ public class R08840DBTest extends BaseDocToolInMemoryPersistenceTest {
             tribalMembershipVerificationDao);
   }
 
-  private void initUserAccount(String countyCwsCode) {
-    PerryAccount perryAccount = new PerryAccount();
-    perryAccount.setCountyCwsCode(countyCwsCode);
-    mockStatic(PrincipalUtils.class);
-    when(PrincipalUtils.getPrincipal()).thenReturn(perryAccount);
-    when(PrincipalUtils.getStaffPersonId()).thenReturn("ox5");
-  }
-
   @Test
   public void testPrimaryTribalAdded() throws Exception {
     cleanAllAndInsert("/dbunit/R08840_1.xml");
-    initUserAccount(null);
+    initUserAccount(USER_ID);
 
     final List<TribalMembershipVerification> primaryTribals = new ArrayList<>();
     final List<TribalMembershipVerification> secondaryTribals = new ArrayList<>();
@@ -103,7 +90,7 @@ public class R08840DBTest extends BaseDocToolInMemoryPersistenceTest {
   @Test
   public void testPrimaryTribalNotAdded() throws Exception {
     cleanAllAndInsert("/dbunit/R08840_2.xml");
-    initUserAccount(null);
+    initUserAccount(USER_ID);
 
     final List<TribalMembershipVerification> primaryTribals = new ArrayList<>();
     final List<TribalMembershipVerification> secondaryTribals = new ArrayList<>();
@@ -186,5 +173,12 @@ public class R08840DBTest extends BaseDocToolInMemoryPersistenceTest {
             e.printStackTrace();
           }
         });
+  }
+
+  private void initUserAccount(String userAccount) {
+    PerryAccount perryAccount = new PerryAccount();
+    mockStatic(PrincipalUtils.class);
+    when(PrincipalUtils.getPrincipal()).thenReturn(perryAccount);
+    when(PrincipalUtils.getStaffPersonId()).thenReturn(userAccount);
   }
 }
