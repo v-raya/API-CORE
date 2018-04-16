@@ -27,6 +27,13 @@ public final class StaffPrivilegeUtil {
   }
 
   // TODO(dd): Consider to move this logic to drools
+
+  /**
+   * Convert privileges from PerryAccount to Set of StaffPrivilegeType.
+   *
+   * @param perryAccount PerryAccount
+   * @return set of StaffPrivilegeType
+   */
   public static Set<StaffPrivilegeType> toStaffPersonPrivilegeTypes(
       final PerryAccount perryAccount) {
     final Set<String> privileges = perryAccount.getPrivileges();
