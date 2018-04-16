@@ -13,6 +13,7 @@ import org.junit.Test;
 public class TribalMembershipVerificationDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
 
   public static final String CHILD_CLIENT_ID = "RM1Mq5GABD";
+  public static final String PARENT_CLIENT_ID = "RM1Mq5GABC";
 
   private TribalMembershipVerificationDao dao = null;
 
@@ -29,11 +30,11 @@ public class TribalMembershipVerificationDaoTest extends BaseCwsCmsInMemoryPersi
         sessionFactory,
         sessionFactory -> {
           List<TribalMembershipVerification> subTribals =
-              dao.findSubTribalsByClientId(CHILD_CLIENT_ID);
+              dao.findTribalsThatHaveSubTribalsByClientId(CHILD_CLIENT_ID, PARENT_CLIENT_ID);
           assertNotNull(subTribals);
           assertEquals(1,subTribals.size() );
-          assertEquals("AdrY41t0Ky", subTribals.get(0).getThirdId());
-          assertEquals("RM1Mq5GABC", subTribals.get(0).getClientId());
+          assertEquals("AdrY41t0Ku", subTribals.get(0).getThirdId());
+          assertEquals(CHILD_CLIENT_ID, subTribals.get(0).getClientId());
         });
   }
 }

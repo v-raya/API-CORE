@@ -44,7 +44,7 @@ public class ClientRelationshipCoreService
     extends DataAccessServiceBase<
     ClientRelationshipDao, ClientRelationship, ClientRelationshipAwareDTO> {
 
-  private final BusinessValidationService businessValidationService;
+  private final BusinessValidationService<ClientRelationship, ClientRelationshipAwareDTO> businessValidationService;
   private final ClientDao clientDao;
   private final TribalMembershipVerificationDao tribalMembershipVerificationDao;
 
@@ -58,7 +58,7 @@ public class ClientRelationshipCoreService
   @Inject
   public ClientRelationshipCoreService(
       final ClientRelationshipDao clientRelationshipDao,
-      BusinessValidationService businessValidationService,
+      BusinessValidationService<ClientRelationship, ClientRelationshipAwareDTO> businessValidationService,
       ClientDao clientDao,
       TribalMembershipVerificationDao tribalMembershipVerificationDao) {
     super(clientRelationshipDao);
@@ -165,7 +165,7 @@ public class ClientRelationshipCoreService
     return crudDao;
   }
 
-  private class UpdateLificycle extends DefaultDataAccessLifeCycle {
+  private class UpdateLificycle extends DefaultDataAccessLifeCycle<ClientRelationshipAwareDTO> {
 
     @Override
     public void beforeDataProcessing(DataAccessBundle bundle) {
@@ -177,9 +177,15 @@ public class ClientRelationshipCoreService
     public void dataProcessing(DataAccessBundle bundle, PerryAccount perryAccount) {
       super.dataProcessing(bundle, perryAccount);
       businessValidationService.runBusinessValidation(
-          bundle.getAwareDto(),
+          (ClientRelationshipAwareDTO) bundle.getAwareDto(),
           PrincipalUtils.getPrincipal(),
           ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
+    }
+
+    @Override
+    public void afterDataProcessing(DataAccessBundle bundle) {
+      super.afterDataProcessing(bundle);
+      deleteTribalMembershipVerifications(((ClientRelationshipAwareDTO)bundle.getAwareDto()).getTribalMembershipVerificationsForDelete());
     }
 
     @Override
@@ -203,7 +209,7 @@ public class ClientRelationshipCoreService
     @Override
     public void businessValidation(DataAccessBundle bundle, PerryAccount perryAccount) {
       businessValidationService.runBusinessValidation(
-          bundle.getAwareDto(),
+          (ClientRelationshipAwareDTO) bundle.getAwareDto(),
           PrincipalUtils.getPrincipal(),
           ClientRelationshipDroolsConfiguration.INSTANCE);
     }
@@ -326,6 +332,14 @@ public class ClientRelationshipCoreService
           });
 
       return extraRows;
+    }
+
+    private void deleteTribalMembershipVerifications(List<TribalMembershipVerification> tribalMembershipVerifications) {
+      if (CollectionUtils.isEmpty(tribalMembershipVerifications)) {
+        return;
+      }
+
+      tribalMembershipVerifications.forEach(e->tribalMembershipVerificationDao.delete(e.getPrimaryKey()));
     }
   }
 }

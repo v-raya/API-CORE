@@ -30,15 +30,25 @@ public class TribalMembershipVerificationDao extends BaseDaoImpl<TribalMembershi
   }
 
   /**
-   * This method is looking for a list of relationships where by client id where Tribal Membership
-   * Verification is equal thirdID from parent record. (Rule 08861 where in focus .Id = .FKTR_MBVRT
-   * and FK_CLIENT = (child) CLIENT.Id and .Indian_Enrollment_Status_Type = null)
+   * This method is looking for a list of TribalMembershipVerification by client id that have a sub
+   * TribalMembershipVerification where Tribal Membership Verification is equal thirdID from parent
+   * record. (Rule 08861 where in focus .Id = .FKTR_MBVRT and FK_CLIENT = (child) CLIENT.Id and
+   * .Indian_Enrollment_Status_Type = null)
    *
    * @param clientId
    * @return
    */
-  public List<TribalMembershipVerification> findSubTribalsByClientId(String clientId) {
-    return getTribals.apply(TribalMembershipVerification.FIND_SUB_TRIBAL_BY_CLIENT, clientId);
+  public List<TribalMembershipVerification> findTribalsThatHaveSubTribalsByClientId(
+      String clientId, String parentId) {
+    final List<TribalMembershipVerification> membershipVerifications =
+        currentSession()
+            .createNamedQuery(TribalMembershipVerification.FIND_TRIBAL_THAT_HAVE_SUB_TRIBALS_BY_CLIENT, TribalMembershipVerification.class)
+            .setParameter(TribalMembershipVerification.PARAM_CLIENT_ID, clientId)
+            .setParameter(TribalMembershipVerification.PARAM_PARENT_CLIENT_ID, parentId)
+            .list();
+    return ImmutableList.<TribalMembershipVerification>builder()
+        .addAll(membershipVerifications)
+        .build();
   }
 
   private BiFunction<String, String, List<TribalMembershipVerification>> getTribals =

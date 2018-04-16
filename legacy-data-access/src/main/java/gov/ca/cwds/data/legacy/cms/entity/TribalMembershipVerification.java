@@ -51,13 +51,13 @@ import org.hibernate.annotations.NamedQuery;
   query = "SELECT t FROM gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification t"
 )
 @NamedQuery(
-  name = TribalMembershipVerification.FIND_SUB_TRIBAL_BY_CLIENT,
+  name = TribalMembershipVerification.FIND_TRIBAL_THAT_HAVE_SUB_TRIBALS_BY_CLIENT,
   query =
-      "SELECT subt FROM gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification subt "
-          + "left join gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification t "
-          + "with t.clientId = :"
+      "SELECT tribals FROM gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification tribals "
+          + "  LEFT JOIN gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification parentTribals with parentTribals.clientId = :"
+          + TribalMembershipVerification.PARAM_PARENT_CLIENT_ID
+          + " WHERE parentTribals.thirdId = tribals.fkFromTribalMembershipVerification AND tribals.clientId= :"
           + TribalMembershipVerification.PARAM_CLIENT_ID
-          + " where subt.thirdId = t.fkFromTribalMembershipVerification"
 )
 public class TribalMembershipVerification extends CmsPersistentObject {
 
@@ -70,10 +70,11 @@ public class TribalMembershipVerification extends CmsPersistentObject {
   public static final String FIND_ALL_TRIBAL =
       "gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerificationAll";
 
-  public static final String FIND_SUB_TRIBAL_BY_CLIENT =
+  public static final String FIND_TRIBAL_THAT_HAVE_SUB_TRIBALS_BY_CLIENT =
       "gov.ca.cwds.data.legacy.cms.entity.SubTribalMembershipVerificationByClientId";
 
   public static final String PARAM_CLIENT_ID = "clientId";
+  public static final String PARAM_PARENT_CLIENT_ID = "parentClientId";
 
   @Id
   @NotNull
@@ -99,7 +100,6 @@ public class TribalMembershipVerification extends CmsPersistentObject {
   @Column(name = "FKTRB_ORGT")
   private String fkSentTotribalOrganization;
 
-  @NotNull
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
   @JoinColumn(name = "INDN_STC", referencedColumnName = "SYS_ID")
