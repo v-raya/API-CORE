@@ -24,6 +24,12 @@ public class PlacementHomeDao extends BaseDaoImpl<PlacementHome> {
     super(sessionFactory);
   }
 
+  /**
+   * Returns PlacementHome by id using named query.
+   *
+   * @param facilityId PlacementHome identifier
+   * @return PlacementHome
+   */
   public PlacementHome findByFacilityId(String facilityId) {
     Session session = getSessionFactory().getCurrentSession();
     Class<PlacementHome> entityClass = getEntityClass();
