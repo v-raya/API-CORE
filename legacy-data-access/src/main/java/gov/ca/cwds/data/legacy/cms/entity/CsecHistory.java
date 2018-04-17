@@ -2,9 +2,10 @@ package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.SexualExploitationType;
-import gov.ca.cwds.data.persistence.CompositeKey;
+
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -39,7 +40,7 @@ public class CsecHistory extends CmsPersistentObject {
   public static final String FIND_BY_CLIENT_ID = "CsecHistory.findByClient";
 
   @Column(name = "CREATN_TS", nullable = false)
-  private LocalDate creationDate;
+  private LocalDateTime creationTimestamp;
 
   @Column(name = "START_DT", nullable = false)
   private LocalDate startDate;
@@ -54,7 +55,7 @@ public class CsecHistory extends CmsPersistentObject {
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "CSEC_TPC", referencedColumnName = "SYS_ID")
+  @JoinColumn(name = "CSEC_TPC", referencedColumnName = "SYS_ID", nullable = false)
   private SexualExploitationType sexualExploitationType;
 
   @Id
@@ -66,12 +67,12 @@ public class CsecHistory extends CmsPersistentObject {
     return new CsecHistoryPK(childClient, thirdId);
   }
 
-  public LocalDate getCreationDate() {
-    return creationDate;
+  public LocalDateTime getCreationTimestamp() {
+    return creationTimestamp;
   }
 
-  public void setCreationDate(LocalDate creationDate) {
-    this.creationDate = creationDate;
+  public void setCreationTimestamp(LocalDateTime creationTimestamp) {
+    this.creationTimestamp = creationTimestamp;
   }
 
   public LocalDate getStartDate() {
@@ -124,7 +125,7 @@ public class CsecHistory extends CmsPersistentObject {
 
     return new EqualsBuilder()
             .appendSuper(super.equals(o))
-            .append(creationDate, that.creationDate)
+            .append(creationTimestamp, that.creationTimestamp)
             .append(startDate, that.startDate)
             .append(endDate, that.endDate)
             .append(childClient, that.childClient)
@@ -137,7 +138,7 @@ public class CsecHistory extends CmsPersistentObject {
   public int hashCode() {
     return new HashCodeBuilder(17, 37)
             .appendSuper(super.hashCode())
-            .append(creationDate)
+            .append(creationTimestamp)
             .append(startDate)
             .append(endDate)
             .append(childClient)
