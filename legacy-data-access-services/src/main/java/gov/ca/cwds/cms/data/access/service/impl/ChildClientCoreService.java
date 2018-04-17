@@ -1,13 +1,6 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
-import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
-
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessBundle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
@@ -36,6 +29,14 @@ import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
 import gov.ca.cwds.data.legacy.cms.entity.SchoolOriginHistory;
 import gov.ca.cwds.data.legacy.cms.entity.SpecialEducation;
 import gov.ca.cwds.security.annotations.Authorize;
+import gov.ca.cwds.security.utils.PrincipalUtils;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
+
+import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
 
 /** @author CWDS TPT-3 Team */
 public class ChildClientCoreService extends ClientCoreService {
@@ -132,7 +133,18 @@ public class ChildClientCoreService extends ClientCoreService {
     }
 
     @Override
+    public void afterBusinessValidation(DataAccessBundle bundle) {
+      super.afterBusinessValidation(bundle);
+      ChildClientEntityAwareDTO childClientEntityAwareDTO =
+          (ChildClientEntityAwareDTO) bundle.getAwareDto();
+      ChildClient childClient = (ChildClient) childClientEntityAwareDTO.getEntity();
+      childClient.setChildClientLastUpdateId(PrincipalUtils.getStaffPersonId());
+      childClient.setChildClientLastUpdateTime(LocalDateTime.now());
+    }
+
+    @Override
     public void afterStore(DataAccessBundle bundle) {
+      super.afterStore(bundle);
       ChildClientEntityAwareDTO childClientEntityAwareDTO =
           (ChildClientEntityAwareDTO) bundle.getAwareDto();
       if (childClientEntityAwareDTO.isEnriched()) {
