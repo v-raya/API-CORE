@@ -14,7 +14,9 @@ import java.util.List;
 public class PlacementHomeResultReadAuthorizer extends
     AbstractBaseAuthorizer<PlacementHome, String> {
 
-  public static final String FACILITY_RESULT_READ = "placementHome:readResult";
+  public static final String PLACEMENT_HOME_RESULT_READ = "placementHome:readResult";
+  public static final String PLACEMENT_HOME_RESULT_READ_OBJECT =
+      PLACEMENT_HOME_RESULT_READ + ":placementHome";
 
   @Inject
   public PlacementHomeResultReadAuthorizer(DroolsAuthorizationService droolsAuthorizationService) {

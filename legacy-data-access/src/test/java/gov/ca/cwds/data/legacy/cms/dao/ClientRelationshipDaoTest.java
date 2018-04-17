@@ -35,21 +35,21 @@ public class ClientRelationshipDaoTest extends BaseCwsCmsInMemoryPersistenceTest
           final LocalDate CURRENT_DATE = LocalDate.of(2018, 1, 18);
 
           List<ClientRelationship> rghtRels = dao
-              .findRelationshipsBySecondaryClientId("AaiU7IW0Rt", CURRENT_DATE);
+              .findRelationshipsByPrimaryClientId("AaiU7Irere", CURRENT_DATE);
           assertEquals(3, rghtRels.size());
 
           Map<String, ClientRelationship> relMap = rghtRels.stream().collect(Collectors
-              .toMap(clientRelationship -> clientRelationship.getPrimaryClient().getIdentifier(),
+              .toMap(clientRelationship -> clientRelationship.getSecondaryClient().getIdentifier(),
                   clientRelationship -> clientRelationship));
 
-          assertTrue(relMap.containsKey("AasRx3r0Ha"));
-          assertTrue(relMap.containsKey("AazXkWY06s"));
-          assertTrue(relMap.containsKey("AfGN4uS0CR"));
+          assertTrue(relMap.containsKey("AasRx3rere"));
+          assertTrue(relMap.containsKey("AazXkWrere"));
+          assertTrue(relMap.containsKey("AfGN4urtrt"));
 
           //both dates are NULL
-          ClientRelationship rel0 = relMap.get("AasRx3r0Ha");
-          assertEquals("AaiU7IW0Rt", rel0.getSecondaryClient().getIdentifier());
-          assertEquals("AasRx3r0Ha", rel0.getPrimaryClient().getIdentifier());
+          ClientRelationship rel0 = relMap.get("AasRx3rere");
+          assertEquals("AaiU7Irere", rel0.getPrimaryClient().getIdentifier());
+          assertEquals("AasRx3rere", rel0.getSecondaryClient().getIdentifier());
           assertFalse(rel0.getAbsentParentIndicator());
           assertEquals(YesNoUnknown.YES, rel0.getSameHomeStatus());
           ClientRelationshipType relType0 = rel0.getType();
@@ -57,9 +57,9 @@ public class ClientRelationshipDaoTest extends BaseCwsCmsInMemoryPersistenceTest
           assertEquals("Sister/Brother", relType0.getShortDescription());
 
           //both dates are not null
-          ClientRelationship rel1 = relMap.get("AazXkWY06s");
-          assertEquals("AaiU7IW0Rt", rel1.getSecondaryClient().getIdentifier());
-          assertEquals("AazXkWY06s", rel1.getPrimaryClient().getIdentifier());
+          ClientRelationship rel1 = relMap.get("AazXkWrere");
+          assertEquals("AaiU7Irere", rel1.getPrimaryClient().getIdentifier());
+          assertEquals("AazXkWrere", rel1.getSecondaryClient().getIdentifier());
           assertTrue(rel1.getAbsentParentIndicator());
           assertEquals(YesNoUnknown.NO, rel1.getSameHomeStatus());
           ClientRelationshipType relType1 = rel1.getType();
@@ -67,9 +67,9 @@ public class ClientRelationshipDaoTest extends BaseCwsCmsInMemoryPersistenceTest
           assertEquals("Daughter/Father (Birth)", relType1.getShortDescription());
 
           //start date is null, end date greater than current date
-          ClientRelationship rel2 = relMap.get("AfGN4uS0CR");
-          assertEquals("AaiU7IW0Rt", rel2.getSecondaryClient().getIdentifier());
-          assertEquals("AfGN4uS0CR", rel2.getPrimaryClient().getIdentifier());
+          ClientRelationship rel2 = relMap.get("AfGN4urtrt");
+          assertEquals("AaiU7Irere", rel2.getPrimaryClient().getIdentifier());
+          assertEquals("AfGN4urtrt", rel2.getSecondaryClient().getIdentifier());
           assertFalse(rel2.getAbsentParentIndicator());
           assertEquals(YesNoUnknown.NO, rel2.getSameHomeStatus());
           ClientRelationshipType relType2 = rel2.getType();
@@ -78,19 +78,19 @@ public class ClientRelationshipDaoTest extends BaseCwsCmsInMemoryPersistenceTest
 
           //the same relation is taken from the right side
           List<ClientRelationship> leftRels = dao
-              .findRelationshipsByPrimaryClientId("AasRx3r0Ha", CURRENT_DATE);
+              .findRelationshipsBySecondaryClientId("AasRx3rere", CURRENT_DATE);
           assertEquals(1, leftRels.size());
           ClientRelationship relR0 = leftRels.get(0);
           assertEquals(rel0, relR0);
 
           //no relations when take them from left side by right side id
           List<ClientRelationship> rightRels2 = dao
-              .findRelationshipsBySecondaryClientId("AasRx3r0Ha", CURRENT_DATE);
+              .findRelationshipsByPrimaryClientId("AasRx3rere", CURRENT_DATE);
           assertEquals(0, rightRels2.size());
 
           //relation is not taken into account if its type is inactive
           List<ClientRelationship> rightRels3 = dao
-              .findRelationshipsBySecondaryClientId("AapJGAU04Z", CURRENT_DATE);
+              .findRelationshipsByPrimaryClientId("AapJGArdrd", CURRENT_DATE);
           assertEquals(0, rightRels3.size());
         });
   }
