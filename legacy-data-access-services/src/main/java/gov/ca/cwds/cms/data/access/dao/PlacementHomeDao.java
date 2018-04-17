@@ -34,9 +34,8 @@ public class PlacementHomeDao extends BaseDaoImpl<PlacementHome> {
     Session session = getSessionFactory().getCurrentSession();
     Class<PlacementHome> entityClass = getEntityClass();
     Query<PlacementHome> query =
-        session.createNamedQuery(entityClass.getSimpleName() + ".find", entityClass);
-    query.setParameter("facilityId", facilityId);
-
+        session.createNamedQuery(entityClass.getSimpleName() + ".find", entityClass)
+            .setParameter("facilityId", facilityId);
     PlacementHome placementHome = null;
     try {
       placementHome = query.getSingleResult();
@@ -44,7 +43,6 @@ public class PlacementHomeDao extends BaseDaoImpl<PlacementHome> {
       LOG.warn("There is no result for facilityId = {}", facilityId);
       LOG.debug(e.getMessage(), e);
     }
-
     return placementHome;
   }
 
