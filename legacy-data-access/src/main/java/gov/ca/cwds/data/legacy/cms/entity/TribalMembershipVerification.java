@@ -54,9 +54,11 @@ import org.hibernate.annotations.NamedQuery;
   name = TribalMembershipVerification.FIND_TRIBAL_THAT_HAVE_SUB_TRIBALS_BY_CLIENT,
   query =
       "SELECT tribals FROM gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification tribals "
-          + "  LEFT JOIN gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification parentTribals with parentTribals.clientId = :"
+          + "  LEFT JOIN gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification "
+          + "parentTribals with parentTribals.clientId = :"
           + TribalMembershipVerification.PARAM_PARENT_CLIENT_ID
-          + " WHERE parentTribals.thirdId = tribals.fkFromTribalMembershipVerification AND tribals.clientId= :"
+          + " WHERE parentTribals.thirdId = tribals.fkFromTribalMembershipVerification "
+          + "AND tribals.clientId= :"
           + TribalMembershipVerification.PARAM_CLIENT_ID
 )
 public class TribalMembershipVerification extends CmsPersistentObject {
