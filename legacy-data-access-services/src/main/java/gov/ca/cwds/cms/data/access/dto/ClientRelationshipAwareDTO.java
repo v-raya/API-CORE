@@ -10,7 +10,8 @@ public class ClientRelationshipAwareDTO extends BaseEntityAwareDTO<ClientRelatio
 
   private final List<ClientRelationship> clientRelationshipList = new ArrayList<>();
   private final List<TribalMembershipVerification> tribalsThatHaveSubTribals = new ArrayList<>();
-  private List<TribalMembershipVerification> tribalMembershipVerificationsForDelete = new ArrayList<>();
+  private List<TribalMembershipVerification> tribalMembershipVerificationsForDelete =
+      new ArrayList<>();
   private boolean isNeedMembershipVerification;
 
   public List<ClientRelationship> getClientRelationshipList() {

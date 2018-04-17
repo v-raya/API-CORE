@@ -17,6 +17,12 @@ public class TribalMembershipVerificationDao extends BaseDaoImpl<TribalMembershi
     super(sessionFactory);
   }
 
+  /**
+   * find TribalMembershipVerification with fkFromTribalMembershipVerification == null.
+   *
+   * @param clientId
+   * @return
+   */
   public List<TribalMembershipVerification> findByClientIdNoTribalEligFrom(String clientId) {
     return getTribals.apply(
         TribalMembershipVerification
@@ -24,13 +30,19 @@ public class TribalMembershipVerificationDao extends BaseDaoImpl<TribalMembershi
         clientId);
   }
 
+  /**
+   * find TribalMembershipVerification by ClientID.
+   *
+   * @param clientId
+   * @return
+   */
   public List<TribalMembershipVerification> findByClientId(String clientId) {
     return getTribals.apply(
         TribalMembershipVerification.FIND_TRIBAL_MEMBERSHIP_VERIFICATION_BY_CLIENT_ID, clientId);
   }
 
   /**
-   * This method is looking for a list of TribalMembershipVerification by client id that have a sub
+   * This method is looking for a list of TribalMembershipVerification by client id.
    * TribalMembershipVerification where Tribal Membership Verification is equal thirdID from parent
    * record. (Rule 08861 where in focus .Id = .FKTR_MBVRT and FK_CLIENT = (child) CLIENT.Id and
    * .Indian_Enrollment_Status_Type = null)
@@ -42,7 +54,9 @@ public class TribalMembershipVerificationDao extends BaseDaoImpl<TribalMembershi
       String clientId, String parentId) {
     final List<TribalMembershipVerification> membershipVerifications =
         currentSession()
-            .createNamedQuery(TribalMembershipVerification.FIND_TRIBAL_THAT_HAVE_SUB_TRIBALS_BY_CLIENT, TribalMembershipVerification.class)
+            .createNamedQuery(
+                TribalMembershipVerification.FIND_TRIBAL_THAT_HAVE_SUB_TRIBALS_BY_CLIENT,
+                TribalMembershipVerification.class)
             .setParameter(TribalMembershipVerification.PARAM_CLIENT_ID, clientId)
             .setParameter(TribalMembershipVerification.PARAM_PARENT_CLIENT_ID, parentId)
             .list();
