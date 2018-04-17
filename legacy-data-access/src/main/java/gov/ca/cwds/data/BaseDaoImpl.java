@@ -12,7 +12,6 @@ import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 import com.google.common.collect.ImmutableList;
 
@@ -37,18 +36,6 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
     super(sessionFactory);
   }
 
-  protected Session grabSession() {
-    final SessionFactory sessionFactory = getSessionFactory();
-    Session session;
-    try {
-      session = sessionFactory.getCurrentSession();
-    } catch (Exception e) {
-      session = sessionFactory.openSession();
-    }
-
-    return session;
-  }
-
   /**
    * {@inheritDoc}
    *
@@ -59,13 +46,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
   public List<T> findAll() {
     final String namedQueryName = constructNamedQueryName("findAll");
     final Session session = grabSession();
-
-    Transaction txn = session.getTransaction();
-    txn = txn != null ? txn : session.beginTransaction();
-
-    if (TransactionStatus.NOT_ACTIVE == txn.getStatus() || !txn.isActive()) {
-      txn.begin();
-    }
+    final Transaction txn = joinTransaction(session);
 
     try {
       final Query<T> query = session.getNamedQuery(namedQueryName);
@@ -99,7 +80,8 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
   public List<T> findAllUpdatedAfter(Date datetime) {
     final String namedQueryName = constructNamedQueryName("findAllUpdatedAfter");
     final Session session = getSessionFactory().getCurrentSession();
-    final Transaction txn = session.beginTransaction();
+    final Transaction txn = joinTransaction(session);
+
     try {
       // Compatible with both DB2 z/OS and Linux.
       final Query query = session.getNamedQuery(namedQueryName).setCacheable(false)
@@ -141,4 +123,5 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
   protected String constructNamedQueryName(String suffix) {
     return getEntityClass().getName() + "." + suffix;
   }
+
 }

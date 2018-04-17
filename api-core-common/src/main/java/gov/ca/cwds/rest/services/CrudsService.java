@@ -1,9 +1,10 @@
 package gov.ca.cwds.rest.services;
 
+import java.io.Serializable;
+
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import java.io.Serializable;
 
 /**
  * Interface for business {@link Service} which perform CRUDS operations
@@ -48,4 +49,5 @@ public interface CrudsService extends Service {
    * @return The {@link Response}
    */
   public Response update(Serializable primaryKey, Request request);
+
 }
