@@ -183,7 +183,9 @@ public class ClientCoreService
     public void afterBusinessValidation(DataAccessBundle bundle) {
       ClientEntityAwareDTO clientEntityAwareDTO = (ClientEntityAwareDTO) bundle.getAwareDto();
       Client client = clientEntityAwareDTO.getEntity();
-      enrichOtherEthnicities(client);
+      String userId = PrincipalUtils.getStaffPersonId();
+      enrichOtherEthnicities(client, userId);
+      client.setLastUpdateId(userId);
     }
 
     @Override
@@ -198,9 +200,9 @@ public class ClientCoreService
       }
     }
 
-    private void enrichOtherEthnicities(Client client) {
+    private void enrichOtherEthnicities(Client client, String userId) {
       enrichExistingOtherEthnicities(client);
-      enrichNewOtherEthnicities(client);
+      enrichNewOtherEthnicities(client, userId);
     }
 
     private void enrichExistingOtherEthnicities(Client client) {
@@ -227,10 +229,8 @@ public class ClientCoreService
       }
     }
 
-    private void enrichNewOtherEthnicities(Client client) {
-      String userId = PrincipalUtils.getStaffPersonId();
+    private void enrichNewOtherEthnicities(Client client, String userId) {
       LocalDateTime now = LocalDateTime.now();
-
       for (ClientOtherEthnicity ethnicity : client.getOtherEthnicities()) {
         if (ethnicity.getId() == null) { // insert
           ethnicity.setId(IdGenerator.generateId());
