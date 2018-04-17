@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -99,7 +100,7 @@ public class CsecHistoryServiceTest extends BaseCwsCmsInMemoryPersistenceTest {
   private CsecHistory getCsecHistory() {
     CsecHistory csecHistory = new CsecHistory();
     csecHistory.setStartDate(LocalDate.of(2012, 12, 12));
-    csecHistory.setCreationDate(LocalDate.now());
+    csecHistory.setCreationTimestamp(LocalDateTime.now());
     csecHistory.setChildClient(CLIENT_ID);
     SexualExploitationType sexualExploitationType = new SexualExploitationType();
     sexualExploitationType.setSystemId(SET_SYS_ID);
