@@ -24,6 +24,7 @@ import gov.ca.cwds.data.legacy.cms.dao.SafetyAlertDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.SchoolOriginHistoryDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.SpecialEducationDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.TribalAncestryNotificationDaoTest;
+import gov.ca.cwds.data.legacy.cms.dao.TribalMembershipVerificationDaoTest;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
@@ -65,7 +66,8 @@ import org.powermock.modules.junit4.PowerMockRunnerDelegate;
     SafetyAlertDaoTest.class,
     SchoolOriginHistoryDaoTest.class,
     SpecialEducationDaoTest.class,
-    TribalAncestryNotificationDaoTest.class
+    TribalAncestryNotificationDaoTest.class,
+    TribalMembershipVerificationDaoTest.class
 })
 public class InMemoryDbTestsSuite {
   @ClassRule
