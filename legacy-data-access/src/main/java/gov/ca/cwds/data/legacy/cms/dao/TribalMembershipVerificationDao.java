@@ -20,8 +20,8 @@ public class TribalMembershipVerificationDao extends BaseDaoImpl<TribalMembershi
   /**
    * find TribalMembershipVerification with fkFromTribalMembershipVerification == null.
    *
-   * @param clientId
-   * @return
+   * @param clientId Client id.
+   * @return List of TribalMembershipVerification.
    */
   public List<TribalMembershipVerification> findByClientIdNoTribalEligFrom(String clientId) {
     return getTribals.apply(
@@ -33,8 +33,8 @@ public class TribalMembershipVerificationDao extends BaseDaoImpl<TribalMembershi
   /**
    * find TribalMembershipVerification by ClientID.
    *
-   * @param clientId
-   * @return
+   * @param clientId Client id.
+   * @return List of TribalMembershipVerification.
    */
   public List<TribalMembershipVerification> findByClientId(String clientId) {
     return getTribals.apply(
@@ -47,8 +47,8 @@ public class TribalMembershipVerificationDao extends BaseDaoImpl<TribalMembershi
    * record. (Rule 08861 where in focus .Id = .FKTR_MBVRT and FK_CLIENT = (child) CLIENT.Id and
    * .Indian_Enrollment_Status_Type = null)
    *
-   * @param clientId
-   * @return
+   * @param clientId Client id.
+   * @return List of TribalMembershipVerification.
    */
   public List<TribalMembershipVerification> findTribalsThatHaveSubTribalsByClientId(
       String clientId, String parentId) {
