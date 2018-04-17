@@ -13,12 +13,7 @@ public class SafetyAlertPK implements Serializable {
 
   private static final long serialVersionUID = 4118321105344595836L;
 
-  @Column(name = "FKCLIENT_T", nullable = false, length = 10)
-  @Id
   private String fkClientId;
-
-  @Column(name = "THIRD_ID", nullable = false, length = 10)
-  @Id
   private String thirdId;
 
   public SafetyAlertPK() {
@@ -33,16 +28,8 @@ public class SafetyAlertPK implements Serializable {
     return fkClientId;
   }
 
-  public void setFkClientId(String fkclientT) {
-    this.fkClientId = fkclientT;
-  }
-
   public String getThirdId() {
     return thirdId;
-  }
-
-  public void setThirdId(String thirdId) {
-    this.thirdId = thirdId;
   }
 
   @Override

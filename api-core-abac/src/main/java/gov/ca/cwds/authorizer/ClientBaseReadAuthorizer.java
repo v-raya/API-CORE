@@ -11,6 +11,7 @@ import gov.ca.cwds.service.ClientCountyDeterminationService;
 import gov.ca.cwds.service.ClientSensitivityDeterminationService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Base class for Client Result and Client Abstract Authorizer.
@@ -46,16 +47,14 @@ public class ClientBaseReadAuthorizer extends AbstractBaseAuthorizer<Client, Str
   }
 
   @Override
-  protected boolean checkInstance(final Client client) {
-    if (client == null) {
-      return true;
-    }
-
-    final ClientCondition clientCondition = getClientCondition(client.getIdentifier(),
-        client.getSensitivity());
+  protected List<Object> prepareFacts(Client client) {
     List<Object> authorizationFacts = new ArrayList<>();
-    authorizationFacts.add(clientCondition);
-    return authorizeInstanceOperation(client, authorizationFacts);
+    Optional.ofNullable(client).ifPresent(client1 -> {
+      final ClientCondition clientCondition = getClientCondition(client.getIdentifier(),
+          client.getSensitivity());
+      authorizationFacts.add(clientCondition);
+    });
+    return authorizationFacts;
   }
 
   private ClientCondition getClientCondition(final String identifier, Sensitivity sensitivity) {

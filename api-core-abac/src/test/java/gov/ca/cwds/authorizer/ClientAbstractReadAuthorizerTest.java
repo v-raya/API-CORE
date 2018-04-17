@@ -26,12 +26,14 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.core.classloader.annotations.SuppressStaticInitializationFor;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author CWDS TPT-3 Team
  */
 @RunWith(PowerMockRunner.class)
+@SuppressStaticInitializationFor("org.drools.core.util.Drools")
 @PrepareForTest(PerrySubject.class)
 public class ClientAbstractReadAuthorizerTest {
 
@@ -58,6 +60,8 @@ public class ClientAbstractReadAuthorizerTest {
 
   @Test
   public void checkNullInstance() {
+    // Social Worker Only
+    initUserAccount("1126","State of California", CWS_CASE_MANAGEMENT_SYSTEM);
     assertTrue(testSubject.checkInstance(null));
   }
 
