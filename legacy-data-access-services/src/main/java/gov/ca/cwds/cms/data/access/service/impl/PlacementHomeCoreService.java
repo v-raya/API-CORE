@@ -7,6 +7,7 @@ import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPers
 import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
 
 import com.google.inject.Inject;
+import gov.ca.cwds.authorizer.PlacementHomeResultReadAuthorizer;
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.cms.data.access.Constants.PhoneticSearchTables;
 import gov.ca.cwds.cms.data.access.dao.BackgroundCheckDao;
@@ -52,6 +53,7 @@ import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeUc;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -122,6 +124,12 @@ public class PlacementHomeCoreService
   @Override
   protected DataAccessServiceLifecycle getDeleteLifeCycle() {
     return new DefaultDataAccessLifeCycle();
+  }
+
+  @Authorize(PlacementHomeResultReadAuthorizer.PLACEMENT_HOME_RESULT_READ_OBJECT)
+  @Override
+  public PlacementHome find(Serializable primaryKey) {
+    return crudDao.findByFacilityId((String) primaryKey);
   }
 
   @Override
