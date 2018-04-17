@@ -28,7 +28,7 @@ public class R08861DBTest extends BaseCwsCmsInMemoryPersistenceTest {
 
   public static final String CLIENT_ID = "AJ4piWo0WL";
   public static final String PARENT_CLIENT_ID = "AJ4piWo0WP";
-  public static final String RELATIONSHIP_ID = "Aaqj06L00h";
+  public static final String RELATIONSHIP_ID = "Aaqj06L01h";
   public static final String PARENT_CLIENT_ID_2 = "AJ4piWo0qq";
   public static final String RELATIONSHIP_ID_2 = "Aaqj06L0ww";
 
