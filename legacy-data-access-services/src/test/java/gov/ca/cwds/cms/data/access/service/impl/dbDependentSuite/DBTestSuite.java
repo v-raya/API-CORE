@@ -3,6 +3,7 @@ package gov.ca.cwds.cms.data.access.service.impl.dbDependentSuite;
 import gov.ca.cwds.cms.data.access.service.impl.dbDependent.CsecHistoryServiceTest;
 import gov.ca.cwds.cms.data.access.service.impl.dbDependent.SafetyAlertServiceTest;
 import gov.ca.cwds.cms.data.access.service.impl.relationships.dbDependent.R08840DBTest;
+import gov.ca.cwds.cms.data.access.service.impl.relationships.dbDependent.R08861DBTest;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
@@ -19,7 +20,8 @@ import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 @Suite.SuiteClasses({
   SafetyAlertServiceTest.class,
   CsecHistoryServiceTest.class,
-  R08840DBTest.class
+  R08840DBTest.class,
+  R08861DBTest.class
 })
 public class DBTestSuite {
   @ClassRule

@@ -42,9 +42,10 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class ClientRelationshipCoreService
     extends DataAccessServiceBase<
-    ClientRelationshipDao, ClientRelationship, ClientRelationshipAwareDTO> {
+        ClientRelationshipDao, ClientRelationship, ClientRelationshipAwareDTO> {
 
-  private final BusinessValidationService<ClientRelationship, ClientRelationshipAwareDTO> businessValidationService;
+  private final BusinessValidationService<ClientRelationship, ClientRelationshipAwareDTO>
+      businessValidationService;
   private final ClientDao clientDao;
   private final TribalMembershipVerificationDao tribalMembershipVerificationDao;
 
@@ -58,7 +59,8 @@ public class ClientRelationshipCoreService
   @Inject
   public ClientRelationshipCoreService(
       final ClientRelationshipDao clientRelationshipDao,
-      BusinessValidationService<ClientRelationship, ClientRelationshipAwareDTO> businessValidationService,
+      BusinessValidationService<ClientRelationship, ClientRelationshipAwareDTO>
+          businessValidationService,
       ClientDao clientDao,
       TribalMembershipVerificationDao tribalMembershipVerificationDao) {
     super(clientRelationshipDao);
@@ -171,6 +173,19 @@ public class ClientRelationshipCoreService
     public void beforeDataProcessing(DataAccessBundle bundle) {
       super.beforeDataProcessing(bundle);
       enrichWithPrimaryAndSecondaryClients(bundle);
+      enrichWithTribalsMembershipVerifications(bundle);
+    }
+
+    private void enrichWithTribalsMembershipVerifications(DataAccessBundle bundle) {
+      ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
+      List<TribalMembershipVerification> tribalsThatHasSubTribals =
+          tribalMembershipVerificationDao.findTribalsThatHaveSubTribalsByClientId(
+              awareDTO.getEntity().getPrimaryClient().getIdentifier(),
+              awareDTO.getEntity().getSecondaryClient().getIdentifier());
+      if (CollectionUtils.isEmpty(tribalsThatHasSubTribals)) {
+        return;
+      }
+      awareDTO.getTribalsThatHaveSubTribals().addAll(tribalsThatHasSubTribals);
     }
 
     @Override
@@ -185,7 +200,9 @@ public class ClientRelationshipCoreService
     @Override
     public void afterDataProcessing(DataAccessBundle bundle) {
       super.afterDataProcessing(bundle);
-      deleteTribalMembershipVerifications(((ClientRelationshipAwareDTO)bundle.getAwareDto()).getTribalMembershipVerificationsForDelete());
+      deleteTribalMembershipVerifications(
+          ((ClientRelationshipAwareDTO) bundle.getAwareDto())
+              .getTribalMembershipVerificationsForDelete());
     }
 
     @Override
@@ -302,7 +319,7 @@ public class ClientRelationshipCoreService
       if (date.isBefore(LocalDate.of(2005, Month.NOVEMBER, 19))) {
         if (tribalForUpdate.getIndianTribeType() == newlyAddedTribal.getIndianTribeType()
             && tribalForUpdate.getFkFromTribalMembershipVerification()
-            == newlyAddedTribal.getFkFromTribalMembershipVerification()) return true;
+                == newlyAddedTribal.getFkFromTribalMembershipVerification()) return true;
       }
 
       return false;
@@ -334,12 +351,14 @@ public class ClientRelationshipCoreService
       return extraRows;
     }
 
-    private void deleteTribalMembershipVerifications(List<TribalMembershipVerification> tribalMembershipVerifications) {
+    private void deleteTribalMembershipVerifications(
+        List<TribalMembershipVerification> tribalMembershipVerifications) {
       if (CollectionUtils.isEmpty(tribalMembershipVerifications)) {
         return;
       }
 
-      tribalMembershipVerifications.forEach(e->tribalMembershipVerificationDao.delete(e.getPrimaryKey()));
+      tribalMembershipVerifications.forEach(
+          e -> tribalMembershipVerificationDao.delete(e.getPrimaryKey()));
     }
   }
 }
