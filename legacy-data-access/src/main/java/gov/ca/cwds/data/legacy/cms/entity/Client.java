@@ -358,6 +358,26 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
   @Column(name = "ZIPPY_IND", nullable = false, length = 1)
   private boolean zippyCreatedIndicator;
 
+  @Column(name = "CLNT_SOC", nullable = false)
+  private short sexualOrientationCode;
+
+  @Column(name = "SO_UD_CD", length = 1)
+  private String sexualOrientationUnableToDetermineCode;
+
+  @Column(name = "SO_NL_DSC", length = 254)
+  @ColumnTransformer(read = "trim(SO_NL_DSC)")
+  private String sexualOrientationNotListedDescription;
+
+  @Column(name = "CLNT_GIC", nullable = false)
+  private short genderIdentityCode;
+
+  @Column(name = "GI_NL_DSC", length = 254)
+  @ColumnTransformer(read = "trim(GI_NL_DSC)")
+  private String genderIdentityNotListedDescription;
+
+  @Column(name = "CLNT_GEC", nullable = false)
+  private short genderEspressionCode;
+
   public void addOtherEthnicity(ClientOtherEthnicity otherEthnicity) {
     otherEthnicities.add(otherEthnicity);
     otherEthnicity.setClient(this);
@@ -956,6 +976,54 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
 
   public void setSoc158placementsStatus(Soc158placementsStatus soc158placementsStatus) {
     this.soc158placementsStatus = soc158placementsStatus;
+  }
+
+  public short getSexualOrientationCode() {
+    return sexualOrientationCode;
+  }
+
+  public void setSexualOrientationCode(short sexualOrientationCode) {
+    this.sexualOrientationCode = sexualOrientationCode;
+  }
+
+  public String getSexualOrientationUnableToDetermineCode() {
+    return sexualOrientationUnableToDetermineCode;
+  }
+
+  public void setSexualOrientationUnableToDetermineCode(String sexualOrientationUnableToDetermineCode) {
+    this.sexualOrientationUnableToDetermineCode = sexualOrientationUnableToDetermineCode;
+  }
+
+  public String getSexualOrientationNotListedDescription() {
+    return sexualOrientationNotListedDescription;
+  }
+
+  public void setSexualOrientationNotListedDescription(String sexualOrientationNotListedDescription) {
+    this.sexualOrientationNotListedDescription = sexualOrientationNotListedDescription;
+  }
+
+  public short getGenderIdentityCode() {
+    return genderIdentityCode;
+  }
+
+  public void setGenderIdentityCode(short genderIdentityCode) {
+    this.genderIdentityCode = genderIdentityCode;
+  }
+
+  public String getGenderIdentityNotListedDescription() {
+    return genderIdentityNotListedDescription;
+  }
+
+  public void setGenderIdentityNotListedDescription(String genderIdentityNotListedDescription) {
+    this.genderIdentityNotListedDescription = genderIdentityNotListedDescription;
+  }
+
+  public short getGenderEspressionCode() {
+    return genderEspressionCode;
+  }
+
+  public void setGenderEspressionCode(short genderEspressionCode) {
+    this.genderEspressionCode = genderEspressionCode;
   }
 
   public String getClientIndexNumber() {
