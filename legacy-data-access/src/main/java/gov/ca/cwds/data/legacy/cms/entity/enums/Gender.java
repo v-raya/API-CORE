@@ -7,6 +7,7 @@ import javax.persistence.Converter;
 public enum Gender implements EntityEnum<String> {
   FEMALE("F", "Female"),
   MALE("M", "Male"),
+  INTERSEX("I", "Intersex"),
   UNKNOWN("U", "Unknown");
 
   private final String code;
