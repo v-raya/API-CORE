@@ -15,11 +15,12 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.Soc158placementsStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.UnableToDetermineReason;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType;
 import gov.ca.cwds.data.persistence.PersistentObject;
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import org.hibernate.annotations.ColumnTransformer;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.NamedQuery;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
@@ -36,11 +37,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
-import org.hibernate.annotations.ColumnTransformer;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.NamedQuery;
-import org.hibernate.annotations.Type;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 /** @author CWDS CALS API Team */
 @NamedQuery(
@@ -990,7 +991,8 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
     return sexualOrientationUnableToDetermineCode;
   }
 
-  public void setSexualOrientationUnableToDetermineCode(String sexualOrientationUnableToDetermineCode) {
+  public void setSexualOrientationUnableToDetermineCode(
+      String sexualOrientationUnableToDetermineCode) {
     this.sexualOrientationUnableToDetermineCode = sexualOrientationUnableToDetermineCode;
   }
 
@@ -998,7 +1000,8 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
     return sexualOrientationNotListedDescription;
   }
 
-  public void setSexualOrientationNotListedDescription(String sexualOrientationNotListedDescription) {
+  public void setSexualOrientationNotListedDescription(
+      String sexualOrientationNotListedDescription) {
     this.sexualOrientationNotListedDescription = sexualOrientationNotListedDescription;
   }
 
