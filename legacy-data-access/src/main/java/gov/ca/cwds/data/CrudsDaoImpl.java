@@ -32,7 +32,7 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
 
   private SessionFactory sessionFactory;
 
-  protected Session grabSession() {
+  public Session grabSession() {
     Session session;
     try {
       session = sessionFactory.getCurrentSession();
@@ -43,7 +43,7 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
     return session;
   }
 
-  protected Transaction joinTransaction(Session session) {
+  public Transaction joinTransaction(Session session) {
     Transaction txn = session.getTransaction();
     txn = txn != null ? txn : session.beginTransaction();
 
