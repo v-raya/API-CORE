@@ -244,7 +244,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
-  @SuppressWarnings("javadoc")
   public enum ElasticSearchPersonNameSuffix {
 
     ESQUIRE("esq", new String[] {"esq", "eq", "esqu"}),

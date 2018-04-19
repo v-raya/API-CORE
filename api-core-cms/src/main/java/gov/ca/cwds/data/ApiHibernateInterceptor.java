@@ -180,19 +180,25 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
 
   @Override
   public void afterTransactionBegin(Transaction tx) {
-    LOGGER.trace("afterTransactionBegin -> txt status={}", tx.getStatus());
+    if (tx != null) {
+      LOGGER.trace("afterTransactionBegin -> txt status={}", tx.getStatus());
+    }
     super.afterTransactionBegin(tx);
   }
 
   @Override
   public void beforeTransactionCompletion(Transaction tx) {
-    LOGGER.debug("beforeTransactionCompletion -> txt status={}", tx.getStatus());
+    if (tx != null) {
+      LOGGER.debug("beforeTransactionCompletion -> txt status={}", tx.getStatus());
+    }
     super.beforeTransactionCompletion(tx);
   }
 
   @Override
   public void afterTransactionCompletion(Transaction tx) {
-    LOGGER.debug("afterTransactionCompletion -> txt status={}", tx.getStatus());
+    if (tx != null) {
+      LOGGER.debug("afterTransactionCompletion -> txt status={}", tx.getStatus());
+    }
     super.afterTransactionCompletion(tx);
   }
 
@@ -202,7 +208,8 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     return super.instantiate(entityName, entityMode, id);
   }
 
-  private synchronized List<?> iterToList(@SuppressWarnings("rawtypes") Iterator iter) {
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  private synchronized List<?> iterToList(Iterator iter) {
     return IteratorUtils.toList(iter);
   }
 

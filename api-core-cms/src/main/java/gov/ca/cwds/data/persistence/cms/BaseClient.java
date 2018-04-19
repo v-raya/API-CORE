@@ -30,7 +30,6 @@ import gov.ca.cwds.data.std.ApiPersonAware;
  * 
  * @author CDWS API Team
  */
-@SuppressWarnings("javadoc")
 @MappedSuperclass
 public abstract class BaseClient extends CmsPersistentObject
     implements ApiPersonAware, ApiMultipleLanguagesAware, AccessLimitationAware {
@@ -585,21 +584,24 @@ public abstract class BaseClient extends CmsPersistentObject
    * @return the genderIdentityType
    */
   public Short getGenderIdentityType() {
-    return genderIdentityType;
+    // return genderIdentityType;
+    return (short) 0;
   }
 
   /**
    * @return the giNotListedDescription
    */
   public String getGiNotListedDescription() {
-    return giNotListedDescription;
+    // return giNotListedDescription;
+    return null;
   }
 
   /**
    * @return the genderExpressionType
    */
   public Short getGenderExpressionType() {
-    return genderExpressionType;
+    // return genderExpressionType;
+    return (short) 0;
   }
 
   /**
@@ -789,21 +791,24 @@ public abstract class BaseClient extends CmsPersistentObject
    * @return the sexualOrientationType
    */
   public Short getSexualOrientationType() {
-    return sexualOrientationType;
+    // return sexualOrientationType;
+    return (short) 0;
   }
 
   /**
    * @return the soUnableToDetermineCode
    */
   public String getSoUnableToDetermineCode() {
-    return StringUtils.trimToEmpty(soUnableToDetermineCode);
+    // return StringUtils.trimToEmpty(soUnableToDetermineCode);
+    return null;
   }
 
   /**
    * @return the soNotListedDescrption
    */
   public String getSoNotListedDescrption() {
-    return soNotListedDescrption;
+    // return soNotListedDescrption;
+    return null;
   }
 
 

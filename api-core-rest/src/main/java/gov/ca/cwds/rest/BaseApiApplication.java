@@ -1,18 +1,13 @@
 package gov.ca.cwds.rest;
 
-import gov.ca.cwds.inject.InjectorHolder;
-import gov.ca.cwds.rest.shiro.YamlShiroBundle;
-import io.dropwizard.jersey.setup.JerseyEnvironment;
 import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 
-import gov.ca.cwds.rest.resources.TokenResource;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.secnod.dropwizard.shiro.ShiroBundle;
-import org.secnod.dropwizard.shiro.ShiroConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +16,7 @@ import com.google.inject.Module;
 import com.hubspot.dropwizard.guice.GuiceBundle;
 
 import gov.ca.cwds.ObjectMapperUtils;
+import gov.ca.cwds.inject.InjectorHolder;
 import gov.ca.cwds.logging.LoggingContext;
 import gov.ca.cwds.rest.exception.CustomExceptionMapperBinder;
 import gov.ca.cwds.rest.exception.mapper.ApiSecurityExceptionMapper;
@@ -33,10 +29,13 @@ import gov.ca.cwds.rest.exception.mapper.UnexpectedExceptionMapperImpl;
 import gov.ca.cwds.rest.exception.mapper.ValidationExceptionMapperImpl;
 import gov.ca.cwds.rest.filters.WebSecurityFilter;
 import gov.ca.cwds.rest.resources.SwaggerResource;
+import gov.ca.cwds.rest.resources.TokenResource;
+import gov.ca.cwds.rest.shiro.YamlShiroBundle;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
+import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
@@ -129,7 +128,8 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
   }
 
   private void registerExceptionMappers(Environment environment) {
-    final LoggingContext loggingContext = guiceBundle.getInjector().getInstance(LoggingContext.class);
+    final LoggingContext loggingContext =
+        guiceBundle.getInjector().getInstance(LoggingContext.class);
     final JerseyEnvironment jersey = environment.jersey();
     jersey.register(new ApiSecurityExceptionMapper());
     jersey.register(new UnexpectedExceptionMapperImpl(loggingContext));
@@ -175,9 +175,8 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
     config.setResourcePackage(swaggerConfiguration.getResourcePackage());
     config.setScan(true);
 
-    new AssetsBundle(swaggerConfiguration.getAssetsPath(),
-        swaggerConfiguration.getAssetsPath(), null, "swagger")
-            .run(environment);
+    new AssetsBundle(swaggerConfiguration.getAssetsPath(), swaggerConfiguration.getAssetsPath(),
+        null, "swagger").run(environment);
 
     LOGGER.info("Registering ApiListingResource");
     environment.jersey().register(new ApiListingResource());
@@ -192,7 +191,6 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
     }
   }
 
-  @SuppressWarnings("javadoc")
   public static Injector getInjector() {
     return injector;
   }
