@@ -29,6 +29,10 @@ dependencies {
     compile group: 'org.glassfish.jersey.core', name: 'jersey-client', version: glassfishJerseyCoreVersion
     compile group: 'org.json', name: 'json', version: '20090211'
 
+    // Distributed XA transactions:
+    compile group: 'com.atomikos', name: 'transactions-hibernate4', version: '4.0.4'
+    compile group: 'org.hibernate', name: 'hibernate-ehcache', version: '5.2.8.Final'
+    
 	// TEST:
     testCompile group: "io.dropwizard", name: "dropwizard-testing", version: dropwizardVersion
     testCompile('org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:2.23.2') {

@@ -65,12 +65,12 @@ public class CsecHistoryService {
     csecHistory.setThirdId(IdGenerator.generateId());
     csecHistory.setLastUpdateId(userId);
     csecHistory.setLastUpdateTime(now);
+    csecHistory.setCreationTimestamp(now);
     csecHistoryDao.create(csecHistory);
   }
 
   private void updateCsecHistory(
       CsecHistory persistedState, CsecHistory newState, String userId, LocalDateTime now) {
-    persistedState.setCreationDate(newState.getCreationDate());
     persistedState.setEndDate(newState.getEndDate());
     persistedState.setSexualExploitationType(newState.getSexualExploitationType());
     persistedState.setStartDate(newState.getStartDate());

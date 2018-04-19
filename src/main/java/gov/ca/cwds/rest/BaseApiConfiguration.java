@@ -1,11 +1,15 @@
 package gov.ca.cwds.rest;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.dropwizard.db.DataSourceFactory;
-import io.dropwizard.flyway.FlywayFactory;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.annotation.Nullable;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import gov.ca.cwds.data.persistence.XADataSourceFactory;
+import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.flyway.FlywayFactory;
 
 public class BaseApiConfiguration extends MinimalApiConfiguration {
 
@@ -17,6 +21,12 @@ public class BaseApiConfiguration extends MinimalApiConfiguration {
 
   @Nullable
   private DataSourceFactory cmsDataSourceFactory;
+
+  @Nullable
+  private XADataSourceFactory xaNsDataSourceFactory;
+
+  @Nullable
+  private XADataSourceFactory xaCmsDataSourceFactory;
 
   @Nullable
   private Map<String, ElasticsearchConfiguration> elasticsearchConfigurations = new HashMap<>();
@@ -54,7 +64,6 @@ public class BaseApiConfiguration extends MinimalApiConfiguration {
     this.flywayFactory = flywayFactory;
   }
 
-
   @JsonProperty(value = "elasticsearch")
   public Map<String, ElasticsearchConfiguration> getElasticsearchConfigurations() {
     return elasticsearchConfigurations;
@@ -70,4 +79,25 @@ public class BaseApiConfiguration extends MinimalApiConfiguration {
   public TriggerTablesConfiguration getTriggerTablesConfiguration() {
     return triggerTablesConfiguration;
   }
+
+  @JsonProperty
+  public XADataSourceFactory getXaCmsDataSourceFactory() {
+    return xaCmsDataSourceFactory;
+  }
+
+  @JsonProperty
+  public void setXaCmsDataSourceFactory(XADataSourceFactory xaCmsDataSourceFactory) {
+    this.xaCmsDataSourceFactory = xaCmsDataSourceFactory;
+  }
+
+  @JsonProperty
+  public XADataSourceFactory getXaNsDataSourceFactory() {
+    return xaNsDataSourceFactory;
+  }
+
+  @JsonProperty
+  public void setXaNsDataSourceFactory(XADataSourceFactory xaNsDataSourceFactory) {
+    this.xaNsDataSourceFactory = xaNsDataSourceFactory;
+  }
+
 }

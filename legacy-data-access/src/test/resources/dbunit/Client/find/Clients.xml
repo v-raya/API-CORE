@@ -58,7 +58,11 @@
     SOC158_IND="N"
     DTH_DT_IND="N"
     SOCPLC_CD="N"
-    HISP_UD_CD=" "/>
+    HISP_UD_CD=" "
+    CLNT_SOC="7066"
+    SO_UD_CD="D"
+    CLNT_GIC="7075"
+    CLNT_GEC="7081"/>
 
   <CLIENT_T
     IDENTIFIER="AapJGAU04Z"
@@ -118,7 +122,11 @@
     TRBA_CLT_B="N"
     SOC158_IND="N"
     DTH_DT_IND="N"
-    SOCPLC_CD="N"/>
+    SOCPLC_CD="N"
+    CLNT_SOC="7066"
+    SO_UD_CD="D"
+    CLNT_GIC="7075"
+    CLNT_GEC="7081"/>
 
   <CHLD_CLT
     FC_ELIGT_B="N"
@@ -212,7 +220,11 @@
     TRBA_CLT_B="N"
     SOC158_IND="N"
     DTH_DT_IND="N"
-    SOCPLC_CD="N"/>
+    SOCPLC_CD="N"
+    CLNT_SOC="7066"
+    SO_UD_CD="D"
+    CLNT_GIC="7075"
+    CLNT_GEC="7081"/>
 
   <CLIENT_T
     IDENTIFIER="AazXkWY06s"
@@ -272,5 +284,9 @@
     TRBA_CLT_B="N"
     SOC158_IND="N"
     DTH_DT_IND="N"
-    SOCPLC_CD="N"/>
+    SOCPLC_CD="N"
+    CLNT_SOC="7066"
+    SO_UD_CD="D"
+    CLNT_GIC="7075"
+    CLNT_GEC="7081"/>
 </dataset>

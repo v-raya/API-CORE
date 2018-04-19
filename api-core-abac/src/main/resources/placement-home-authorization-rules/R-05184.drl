@@ -1,0 +1,48 @@
+/*
+   Code: R - 05184
+
+   Rule Txt:
+   If the logged on user does not have Adoptions Privileges and if the Adoptions only indicator
+   is set to 'Y', then the Placement Home is not visible to the logged on user else it is visible.
+
+   Logic:
+   If STAFF_PERSON(logged on user) > USER_ID > STAFF_PERSON_PRIVILEGE(
+   where LEVEL_OF_AUTH_PRIVILEGE_CODE = ''P'' and LEVEL_OF_AUTH_PRIVILEGE_TYPE <>
+   ''Adoptions'' exists and PLACEMENT_HOME.Adoption_Home_Only_Ind = 'Y' then the
+   Placement Home is not visible, else make the Placement Home visible.
+ */
+
+import gov.ca.cwds.security.realm.PerryAccount;
+import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
+import gov.ca.cwds.authorizer.util.StaffPrivilegeUtil;
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
+
+global Boolean authorizationResult;
+
+rule "R-05184_common_read_authorization"
+  dialect "java"
+  agenda-group "placement-home-read-authorization-agenda"
+when
+    $placementHome: PlacementHome();
+    PerryAccount(privileges contains StaffPrivilegeUtil.RESOURCE_MANAGEMENT
+    ||  privileges contains StaffPrivilegeUtil.CWS_CASE_MANAGEMENT_SYSTEM);
+    eval(!"Y".equalsIgnoreCase($placementHome.getAdhmonly()));
+
+then
+    kcontext.getKieRuntime().setGlobal("authorizationResult", true);
+    retract($placementHome);
+end
+
+rule "R-05184_adoptions_read_authorization"
+  dialect "java"
+  agenda-group "placement-home-read-authorization-agenda"
+when
+    $placementHome: PlacementHome();
+    eval("Y".equalsIgnoreCase($placementHome.getAdhmonly()));
+    PerryAccount((privileges contains StaffPrivilegeUtil.RESOURCE_MANAGEMENT
+    ||  privileges contains StaffPrivilegeUtil.CWS_CASE_MANAGEMENT_SYSTEM)
+    && privileges contains StaffPrivilegeUtil.ADOPTIONS);
+then
+    kcontext.getKieRuntime().setGlobal("authorizationResult", true);
+    retract($placementHome);
+end
