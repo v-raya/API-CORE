@@ -1,34 +1,32 @@
 package gov.ca.cwds.rest.validation;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 
-public class SystemCodeDescriptionValidatorTest {
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
+/**
+ * CWDS API Team
+ */
+public class SystemCodeDescriptionCollectionValidatorTest {
   private static final class AnnoTestBean implements Serializable {
 
     @ValidSystemCodeDescription(category = "ABS_BPTC", required = true)
-    private String prop1;
+    private List<String> prop1;
 
     private String prop2;
 
@@ -36,16 +34,16 @@ public class SystemCodeDescriptionValidatorTest {
 
     }
 
-    public AnnoTestBean(String prop1, String prop2) {
+    public AnnoTestBean(List<String> prop1, String prop2) {
       this.prop1 = prop1;
       this.prop2 = prop2;
     }
 
-    String getProp1() {
+    List<String> getProp1() {
       return prop1;
     }
 
-    void setProp1(String prop1) {
+    void setProp1(List<String> prop1) {
       this.prop1 = prop1;
     }
 
@@ -65,32 +63,32 @@ public class SystemCodeDescriptionValidatorTest {
   @BeforeClass
   public static void setupClass() {
     SystemCodeCache systemCodeCache = new TestSystemCodeCache();
-    // TestSystemCodeCache.init();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
   }
 
   @Test
   public void type() throws Exception {
-    assertThat(SystemCodeDescriptionValidator.class, notNullValue());
+    assertThat(SystemCodeDescriptionCollectionValidator.class, notNullValue());
   }
 
   @Test
   public void instantiation() throws Exception {
-    SystemCodeDescriptionValidator target = new SystemCodeDescriptionValidator();
+    SystemCodeDescriptionCollectionValidator target = new SystemCodeDescriptionCollectionValidator();
     assertThat(target, notNullValue());
   }
 
   @Test
   public void initialize_Args__CmsSysCodeId() throws Exception {
-    SystemCodeDescriptionValidator target = new SystemCodeDescriptionValidator();
-    ValidSystemCodeDescription anno = mock(ValidSystemCodeDescription.class);
-    target.initialize(anno);
+    SystemCodeDescriptionCollectionValidator target = new SystemCodeDescriptionCollectionValidator();
   }
 
   @Test
   public void isValid_Args__Object__ConstraintValidatorContext() throws Exception {
-    SystemCodeDescriptionValidator target = new SystemCodeDescriptionValidator();
-    String value = "";
+    SystemCodeDescriptionCollectionValidator target = new SystemCodeDescriptionCollectionValidator();
+    ValidSystemCodeDescription anno = mock(ValidSystemCodeDescription.class);
+    target.initialize(anno);
+
+    List<String> value = Arrays.asList("");
     ConstraintValidatorContext context_ = mock(ConstraintValidatorContext.class);
     boolean actual = target.isValid(value, context_);
     boolean expected = false;
@@ -99,16 +97,15 @@ public class SystemCodeDescriptionValidatorTest {
 
   @Test
   public void validateManually() throws Exception {
-    final AnnoTestBean bean = new AnnoTestBean("Breasts", "two");
+    final AnnoTestBean bean = new AnnoTestBean(Arrays.asList("Breasts"), "two");
     Set<ConstraintViolation<AnnoTestBean>> violations = validator.validate(bean);
     assertTrue(violations.isEmpty());
   }
 
   @Test
   public void validateManually2() throws Exception {
-    final AnnoTestBean bean = new AnnoTestBean("djdjskshahfdsa", "two");
+    final AnnoTestBean bean = new AnnoTestBean(Arrays.asList("djdjskshahfdsa"), "two");
     Set<ConstraintViolation<AnnoTestBean>> violations = validator.validate(bean);
     assertFalse(violations.isEmpty());
   }
 }
-
