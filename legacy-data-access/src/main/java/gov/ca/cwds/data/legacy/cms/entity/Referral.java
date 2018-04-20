@@ -2,21 +2,26 @@ package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.enums.LimitedAccess;
+import gov.ca.cwds.data.legacy.cms.entity.facade.ReferralByStaff;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.County;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Fetch;
@@ -33,20 +38,6 @@ import org.hibernate.annotations.Type;
 @Entity
 @Table(name = "REFERL_T")
 @NamedQueries({
-    @NamedQuery(
-        name = Referral.FIND_ACTIVE_BY_STAFF_ID,
-        query =
-            "select distinct assignment.referral from gov.ca.cwds.data.legacy.cms.entity.CaseLoad cl"
-                + " left join cl.referralAssignments assignment"
-                + " where cl.caseLoadWeighting.fkstfperst = :"
-                + Referral.PARAM_STAFF_ID
-                + " and assignment.startDate <= :"
-                + Referral.PARAM_ACTIVE_DATE
-                + " and (assignment.endDate is null or assignment.endDate > :"
-                + Referral.PARAM_ACTIVE_DATE
-                + ")"
-                + " and assignment.referral.originalClosureDate is null"
-    ),
     @NamedQuery(
         name = Referral.FIND_ACTIVE_BY_CLIENT,
         query =
@@ -70,16 +61,57 @@ import org.hibernate.annotations.Type;
                 + Referral.PARAM_CLIENT_ID
     )
 })
+@NamedNativeQuery(
+  name = ReferralByStaff.NATIVE_FIND_REFERRALS_BY_STAFF_ID,
+  query = "select distinct "
+      + "  referral.IDENTIFIER as identifier, "
+      + "  trim(referral.REFERRL_NM) AS referralName, "
+      + "  referral.REF_RCV_DT AS receivedDate, "
+      + "  referral.REF_RCV_TM AS receivedTime, "
+      + "  referral_response_type.SHORT_DSC AS referralResponseType, "
+      + "  assignment_.IDENTIFIER AS assignmentIdentifier, "
+      + "  assignment_.ASGNMNT_CD AS assignmentTypeCode "
+      + "from "
+      + "  {h-schema}CASE_LDT caseload "
+      + "  left outer join {h-schema}CSLDWGHT caseloadweight "
+      + "    on caseload.IDENTIFIER = caseloadweight.FKCASE_LDT "
+      + "  left outer join {h-schema}ASGNM_T assignment_ "
+      + "    on caseload.IDENTIFIER=assignment_.FKCASE_LDT and assignment_.ESTBLSH_CD='R' "
+      + "  left outer join {h-schema}REFERL_T referral "
+      + "    on assignment_.ESTBLSH_ID=referral.IDENTIFIER "
+      + "  left outer join {h-schema}SYS_CD_C referral_response_type "
+      + "    on referral.RFR_RSPC = referral_response_type.SYS_ID "
+      + "    and referral_response_type.FKS_META_T = 'RFR_RSPC' "
+      + "where "
+      + "  caseloadweight.FKSTFPERST = ?1 "
+      + "  and assignment_.START_DT <= ?2 "
+      + "  and (assignment_.END_DT is null or assignment_.END_DT > ?3) "
+      + "  and referral.ORIGCLS_DT is null "
+)
+@SqlResultSetMapping(
+    name = ReferralByStaff.MAPPING_CASE_BY_STAFF,
+    classes = @ConstructorResult(
+        targetClass = ReferralByStaff.class,
+        columns = {
+            @ColumnResult(name = "identifier"),
+            @ColumnResult(name = "referralName"),
+            @ColumnResult(name = "receivedDate", type = LocalDate.class),
+            @ColumnResult(name = "receivedTime", type = LocalTime.class),
+            @ColumnResult(name = "referralResponseType"),
+            @ColumnResult(name = "assignmentIdentifier"),
+            @ColumnResult(name = "assignmentTypeCode", type = String.class),
+        }
+    )
+)
 @SuppressWarnings("squid:S3437")
 public class Referral extends CmsPersistentObject {
 
-  public static final String FIND_ACTIVE_BY_STAFF_ID = "Referral.findActiveReferralsByStaffId";
+  private static final long serialVersionUID = -3111967263461123486L;
+
   public static final String FIND_ACTIVE_BY_CLIENT = "Referral.findActiveReferralsByClient";
   public static final String FIND_CLOSED_BY_CLIENT = "Referral.findClosedReferralsByClient";
   public static final String FIND_BY_CLIENT = "Referral.findReferralsByClient";
-  public static final String PARAM_STAFF_ID = "staffId";
   public static final String PARAM_CLIENT_ID = "clientId";
-  public static final String PARAM_ACTIVE_DATE = "activeDate";
 
   @Id
   @Column(name = "IDENTIFIER", length = CMS_ID_LEN)
