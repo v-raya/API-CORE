@@ -12,7 +12,7 @@ import java.time.LocalDate;
  *
  * <p>N.B. @NamedNativeQuery and @SqlResultSetMapping are placed in
  * {@link gov.ca.cwds.data.legacy.cms.entity.Case} @Entity class as they
- * can be found by hibernate in @Entity classes
+ * can be found by hibernate in @Entity classes.
  *
  * <p>@author CWDS TPT-3 Team
  */
