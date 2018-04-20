@@ -550,6 +550,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
         this.gender = "male";
       } else if ("f".equals(comp)) {
         this.gender = "female";
+      } else if ("i".equals(comp)) {
+        this.gender = "intersex";
       }
     }
 
