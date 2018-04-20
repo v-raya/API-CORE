@@ -1,5 +1,10 @@
 package gov.ca.cwds.data.legacy.cms.dao;
 
+import gov.ca.cwds.data.legacy.cms.entity.CaseLoad;
+import gov.ca.cwds.data.legacy.cms.entity.CaseLoadWeighting;
+import gov.ca.cwds.data.legacy.cms.entity.ReferralAssignment;
+import gov.ca.cwds.data.legacy.cms.entity.StaffPerson;
+import gov.ca.cwds.data.legacy.cms.entity.facade.ReferralByStaff;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -23,15 +28,30 @@ public class ReferralDao extends BaseDaoImpl<Referral> {
     super(sessionFactory);
   }
 
-  public List<Referral> getOpenReferralsByStaffId(String staffId, LocalDate activeDate) {
+  /**
+   * Returns referrals which have relation to {@link StaffPerson} via {@link ReferralAssignment},
+   * {@link CaseLoad} and {@link CaseLoadWeighting} entities. Also the {@link ReferralAssignment} is
+   * active, which means param activeDate is between startDate and endDate of the assignment.
+   *
+   * @param staffId - Identifier of Staff Person who can work on the returned referrals.
+   * @param activeDate - The returned referrals' assignments will be active on this date. As usual this
+   *        param is a current date.
+   * @return Referrals with active assignments that can be managed by requested staff person.
+   * N.B. The returned objects are not of @Entity type.
+   */
+  public List<ReferralByStaff> nativeFindOpenReferralsByStaffId(String staffId, LocalDate activeDate) {
     Require.requireNotNullAndNotEmpty(staffId);
 
-    final List<Referral> referrals = currentSession()
-        .createNamedQuery(Referral.FIND_ACTIVE_BY_STAFF_ID, Referral.class)
-        .setParameter(Referral.PARAM_STAFF_ID, staffId)
-        .setParameter(Referral.PARAM_ACTIVE_DATE, activeDate != null ? activeDate : LocalDate.now())
-        .list();
-    return ImmutableList.<Referral>builder().addAll(referrals).build();
+    final LocalDate date = activeDate != null ? activeDate : LocalDate.now();
+    final List<ReferralByStaff> referrals = currentSession()
+        .getNamedNativeQuery(ReferralByStaff.NATIVE_FIND_REFERRALS_BY_STAFF_ID)
+        .setResultSetMapping(ReferralByStaff.MAPPING_CASE_BY_STAFF)
+        .setParameter(1, staffId)
+        .setParameter(2, date)
+        .setParameter(3, date)
+        .getResultList();
+
+    return ImmutableList.copyOf(referrals);
   }
 
   public List<Referral> getActiveReferralsByClientId(String clientId) {

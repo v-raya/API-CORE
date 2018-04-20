@@ -1,22 +1,20 @@
 package gov.ca.cwds.data.legacy.cms.dao;
 
-import java.time.LocalDate;
-import java.util.Collection;
-import java.util.List;
-
-import org.hibernate.SessionFactory;
-
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
-
 import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.legacy.cms.entity.Case;
 import gov.ca.cwds.data.legacy.cms.entity.CaseAssignment;
 import gov.ca.cwds.data.legacy.cms.entity.CaseLoad;
 import gov.ca.cwds.data.legacy.cms.entity.CaseLoadWeighting;
 import gov.ca.cwds.data.legacy.cms.entity.StaffPerson;
+import gov.ca.cwds.data.legacy.cms.entity.facade.CaseByStaff;
 import gov.ca.cwds.inject.CmsSessionFactory;
 import gov.ca.cwds.util.Require;
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
+import org.hibernate.SessionFactory;
 
 /**
  * DAO for {@link Case}.
@@ -43,19 +41,23 @@ public class CaseDao extends CrudsDaoImpl<Case> {
    * @param staffId - Identifier of Staff Person who can work on the returned cases.
    * @param activeDate - The returned cases assignment will be active on this date. As usual this
    *        param is a current date.
-   * @return Cases with active assignments that can be managed by requested staff person
+   * @return Cases with active assignments that can be managed by requested staff person.
+   * N.B. The returned objects are not of @Entity type.
    */
-  public Collection<Case> findByStaffIdAndActiveDate(final String staffId,
+  public Collection<CaseByStaff> nativeFindByStaffIdAndActiveDate(final String staffId,
       final LocalDate activeDate) {
     Require.requireNotNullAndNotEmpty(staffId);
 
-    final List<Case> cases = currentSession()
-        .createNamedQuery(Case.NQ_FIND_ACTIVE_BY_STAFF_ID, Case.class)
-        .setParameter(Case.NQ_PARAM_STAFF_ID, staffId)
-        .setParameter(Case.NQ_PARAM_ACTIVE_DATE, activeDate != null ? activeDate : LocalDate.now())
-        .list();
+    final LocalDate date = activeDate != null ? activeDate : LocalDate.now();
+    final List<CaseByStaff> cases = currentSession()
+        .getNamedNativeQuery(CaseByStaff.NATIVE_FIND_CASES_BY_STAFF_ID)
+        .setResultSetMapping(CaseByStaff.MAPPING_CASE_BY_STAFF)
+        .setParameter(1, staffId)
+        .setParameter(2, date)
+        .setParameter(3, date)
+        .getResultList();
 
-    return ImmutableList.<Case>builder().addAll(cases).build();
+    return ImmutableList.copyOf(cases);
   }
 
   public List<Case> findActiveByClient(String clientId) {

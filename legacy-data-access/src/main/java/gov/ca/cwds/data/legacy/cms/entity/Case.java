@@ -3,6 +3,7 @@ package gov.ca.cwds.data.legacy.cms.entity;
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.enums.LimitedAccess;
 import gov.ca.cwds.data.legacy.cms.entity.enums.ResponsibleAgency;
+import gov.ca.cwds.data.legacy.cms.entity.facade.CaseByStaff;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ActiveServiceComponentType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ApprovalStatusType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
@@ -13,15 +14,19 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Fetch;
@@ -38,18 +43,6 @@ import org.hibernate.annotations.Type;
 @Entity
 @Table(name = "CASE_T")
 @NamedQueries({
-  @NamedQuery(
-    name = Case.NQ_FIND_ACTIVE_BY_STAFF_ID,
-    query =
-        "select distinct theCase from gov.ca.cwds.data.legacy.cms.entity.CaseLoad cl"
-            + " left join cl.caseAssignments assignment"
-            + " left join assignment.theCase theCase "
-            + " where cl.caseLoadWeighting.fkstfperst = :" + Case.NQ_PARAM_STAFF_ID
-            + " and theCase.endDate is null "
-            + " and assignment.startDate <= :" + Case.NQ_PARAM_ACTIVE_DATE
-            + " and (assignment.endDate is null "
-            + "or assignment.endDate > :" + Case.NQ_PARAM_ACTIVE_DATE + ")"
-  ),
   @NamedQuery(
     name = Case.NQ_FIND_ACTIVE_BY_CLIENT_ID,
     query =
@@ -69,17 +62,57 @@ import org.hibernate.annotations.Type;
             + " and c.endDate is not null "
   ),
 })
+@NamedNativeQuery(
+    name = CaseByStaff.NATIVE_FIND_CASES_BY_STAFF_ID,
+    query = "select "
+        + "  distinct "
+        + "  case_.IDENTIFIER as identifier, "
+        + "  trim(case_.CASE_NM) as caseName, "
+        + "  client.IDENTIFIER as clientIdentifier, "
+        + "  trim(client.COM_FST_NM) as clientFirstName, "
+        + "  trim(client.COM_LST_NM) as clientLastName, "
+        + "  trim(service_component_type.SHORT_DSC) as activeServiceComponent, "
+        + "  case_assignment.IDENTIFIER as assignmentIdentifier, "
+        + "  case_assignment.ASGNMNT_CD as assignmentTypeCode, "
+        + "  case_assignment.START_DT as assignmentStartDate "
+        + "from "
+        + "  {h-schema}CASE_LDT caseload "
+        + "  left outer join {h-schema}CSLDWGHT caseloadweight on caseload.IDENTIFIER = caseloadweight.FKCASE_LDT "
+        + "  left outer join {h-schema}ASGNM_T case_assignment on caseload.IDENTIFIER=case_assignment.FKCASE_LDT and case_assignment.ESTBLSH_CD='C' "
+        + "  left outer join {h-schema}CASE_T case_ on case_assignment.ESTBLSH_ID=case_.IDENTIFIER "
+        + "  left outer join {h-schema}CLIENT_T client on case_.FKCHLD_CLT = client.IDENTIFIER "
+        + "  left outer join {h-schema}SYS_CD_C service_component_type on case_.SRV_CMPC = service_component_type.SYS_ID "
+        + "    and service_component_type.FKS_META_T = 'SRV_CMPC' "
+        + "where "
+        + "  caseloadweight.FKSTFPERST = ?1"
+        + "  and case_.END_DT is null "
+        + "  and case_assignment.START_DT <= ?2"
+        + "  and (case_assignment.END_DT is null or case_assignment.END_DT > ?3)"
+)
+@SqlResultSetMapping(
+    name = CaseByStaff.MAPPING_CASE_BY_STAFF,
+    classes = @ConstructorResult(
+        targetClass = CaseByStaff.class,
+        columns = {
+            @ColumnResult(name = "identifier"),
+            @ColumnResult(name = "caseName"),
+            @ColumnResult(name = "clientIdentifier"),
+            @ColumnResult(name = "clientFirstName"),
+            @ColumnResult(name = "clientLastName"),
+            @ColumnResult(name = "activeServiceComponent"),
+            @ColumnResult(name = "assignmentIdentifier"),
+            @ColumnResult(name = "assignmentTypeCode", type = String.class),
+            @ColumnResult(name = "assignmentStartDate", type = LocalDate.class)
+        }
+    )
+)
 @SuppressWarnings({"squid:S3437", "squid:S2160"})
 public class Case extends CmsPersistentObject {
 
-  public static final String NQ_FIND_ACTIVE_BY_STAFF_ID =
-      "gov.ca.cwds.data.legacy.cms.entity.Case.findByStaffIdAndActiveDate";
   public static final String NQ_FIND_ACTIVE_BY_CLIENT_ID =
       "gov.ca.cwds.data.legacy.cms.entity.Case.findActiveByClient";
   public static final String NQ_FIND_CLOSED_BY_CLIENT_ID =
       "gov.ca.cwds.data.legacy.cms.entity.Case.findClosedByClient";
-  public static final String NQ_PARAM_STAFF_ID = "staffId";
-  public static final String NQ_PARAM_ACTIVE_DATE = "activeDate";
   public static final String NQ_PARAM_CLIENT_ID = "clientId";
 
   /** Default serialization. */
