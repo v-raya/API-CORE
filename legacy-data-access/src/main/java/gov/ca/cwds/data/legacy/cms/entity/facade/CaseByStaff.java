@@ -7,17 +7,14 @@ import java.time.LocalDate;
  * The POJO is intended to contain data from different tables and to be filled
  * by @SqlResultSetMapping after @NamedNativeQuery is invoked.
  *
- * <p>
- * The reason to use @NamedNativeQuery and to create the 'facade' class is a
+ * <p>The reason to use @NamedNativeQuery and to create the 'facade' class is a
  * performance issue with lots of joins when using @Entity classes.
  *
- * <p>
- * N.B. @NamedNativeQuery and @SqlResultSetMapping are placed in
- * {@link gov.ca.cwds.data.legacy.cms.entity.Referral} @Entity class as they
+ * <p>N.B. @NamedNativeQuery and @SqlResultSetMapping are placed in
+ * {@link gov.ca.cwds.data.legacy.cms.entity.Case} @Entity class as they
  * can be found by hibernate in @Entity classes
  *
- * <p>
- * @author CWDS TPT-3 Team
+ * <p>@author CWDS TPT-3 Team
  */
 public class CaseByStaff {
 
@@ -34,6 +31,9 @@ public class CaseByStaff {
   private AssignmentType assignmentType;
   private LocalDate assignmentStartDate;
 
+  /**
+   * The constructor is required by @SqlResultSetMapping
+   */
   public CaseByStaff(
       String identifier,
       String caseName,

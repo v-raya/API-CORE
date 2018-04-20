@@ -63,8 +63,7 @@ import org.hibernate.annotations.Type;
 })
 @NamedNativeQuery(
   name = ReferralByStaff.NATIVE_FIND_REFERRALS_BY_STAFF_ID,
-  query = "select "
-      + "  distinct "
+  query = "select distinct "
       + "  referral.IDENTIFIER as identifier, "
       + "  trim(referral.REFERRL_NM) AS referralName, "
       + "  referral.REF_RCV_DT AS receivedDate, "
@@ -74,10 +73,14 @@ import org.hibernate.annotations.Type;
       + "  assignment_.ASGNMNT_CD AS assignmentTypeCode "
       + "from "
       + "  {h-schema}CASE_LDT caseload "
-      + "  left outer join {h-schema}CSLDWGHT caseloadweight ON caseload.IDENTIFIER = caseloadweight.FKCASE_LDT "
-      + "  left outer join {h-schema}ASGNM_T assignment_ on caseload.IDENTIFIER=assignment_.FKCASE_LDT and assignment_.ESTBLSH_CD='R' "
-      + "  left outer join {h-schema}REFERL_T referral on assignment_.ESTBLSH_ID=referral.IDENTIFIER "
-      + "  left outer join {h-schema}SYS_CD_C referral_response_type on referral.RFR_RSPC = referral_response_type.SYS_ID "
+      + "  left outer join {h-schema}CSLDWGHT caseloadweight "
+      + "    on caseload.IDENTIFIER = caseloadweight.FKCASE_LDT "
+      + "  left outer join {h-schema}ASGNM_T assignment_ "
+      + "    on caseload.IDENTIFIER=assignment_.FKCASE_LDT and assignment_.ESTBLSH_CD='R' "
+      + "  left outer join {h-schema}REFERL_T referral "
+      + "    on assignment_.ESTBLSH_ID=referral.IDENTIFIER "
+      + "  left outer join {h-schema}SYS_CD_C referral_response_type "
+      + "    on referral.RFR_RSPC = referral_response_type.SYS_ID "
       + "    and referral_response_type.FKS_META_T = 'RFR_RSPC' "
       + "where "
       + "  caseloadweight.FKSTFPERST = ?1 "

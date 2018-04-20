@@ -8,21 +8,19 @@ import java.time.LocalTime;
  * The POJO is intended to contain data from different tables and to be filled
  * by @SqlResultSetMapping after @NamedNativeQuery is invoked.
  *
- * <p>
- * The reason to use @NamedNativeQuery and to create the 'facade' class is a
+ * <p>The reason to use @NamedNativeQuery and to create the 'facade' class is a
  * performance issue with lots of joins when using @Entity classes.
  *
- * <p>
- * N.B. @NamedNativeQuery and @SqlResultSetMapping are placed in
+ * <p>N.B. @NamedNativeQuery and @SqlResultSetMapping are placed in
  * {@link gov.ca.cwds.data.legacy.cms.entity.Referral} @Entity class as they
  * can be found by hibernate in @Entity classes
  *
- * <p>
- * @author CWDS TPT-3 Team
+ * <p>@author CWDS TPT-3 Team
  */
 public class ReferralByStaff {
 
-  public static final String NATIVE_FIND_REFERRALS_BY_STAFF_ID = "ReferralByStaff.nativeFindActiveByStaffId";
+  public static final String NATIVE_FIND_REFERRALS_BY_STAFF_ID =
+      "ReferralByStaff.nativeFindActiveByStaffId";
   public static final String MAPPING_CASE_BY_STAFF = "ReferralByStaff.mapping";
 
   private String identifier;
@@ -33,6 +31,9 @@ public class ReferralByStaff {
   private String assignmentIdentifier;
   private AssignmentType assignmentType;
 
+  /**
+   * The constructor is required by @SqlResultSetMapping
+   */
   public ReferralByStaff(
       String identifier,
       String referralName,
