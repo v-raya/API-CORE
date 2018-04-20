@@ -18,7 +18,11 @@ import gov.ca.cwds.data.legacy.cms.entity.Referral;
 import gov.ca.cwds.inject.CmsSessionFactory;
 import gov.ca.cwds.util.Require;
 
-/** @author CWDS TPT-3 Team */
+/**
+ * DAO for {@link Referral}.
+ *
+ * @author CWDS TPT-3 Team
+ * */
 public class ReferralDao extends BaseDaoImpl<Referral> {
 
   @Inject
