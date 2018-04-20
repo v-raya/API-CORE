@@ -68,7 +68,7 @@ import org.hibernate.annotations.Type;
         + "  trim(referral.REFERRL_NM) AS referralName, "
         + "  referral.REF_RCV_DT AS receivedDate, "
         + "  referral.REF_RCV_TM AS receivedTime, "
-        + "  referral_response_type.SHORT_DSC AS referralResponseType, "
+        + "  trim(referral_response_type.SHORT_DSC) AS referralResponseType, "
         + "  assignment_.IDENTIFIER AS assignmentIdentifier, "
         + "  assignment_.ASGNMNT_CD AS assignmentTypeCode "
         + "from "
