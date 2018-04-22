@@ -143,6 +143,10 @@ allprojects {
         properties {
             property "sonar.jacoco.reportPath", "${buildDir}/jacoco/test.exec"
             property "sonar.jacoco.itReportPath", "${buildDir}/jacoco/integrationTest.exec"
+            property "sonar.exclusions", "src/main/resources/static/*.*, " +
+                    "src/main/resources/static/css/*.*, " +
+                    "src/main/resources/static/lib/*.*, " +
+                    "src/main/java/gov/ca/cwds/data/legacy/cms/entity/*.*"
         }
     }
 
