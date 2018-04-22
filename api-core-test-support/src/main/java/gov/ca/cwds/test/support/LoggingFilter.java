@@ -22,34 +22,37 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 public class LoggingFilter implements ClientRequestFilter, ClientResponseFilter {
 
   private static final String LINE_SEPARATOR = "line.separator";
-  private final Logger LOG = LoggerFactory.getLogger(LoggingFilter.class);
+  private static final Logger LOG = LoggerFactory.getLogger(LoggingFilter.class);
 
   @Override
   public void filter(ClientRequestContext requestContext) throws IOException {
     ObjectMapper mapper = new ObjectMapper();
     mapper.registerModule(new JavaTimeModule());
-
+    String lineSeparator = System.getProperty(LINE_SEPARATOR);
+    String context =  mapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestContext.getEntity());
     LOG.info(
         "{}!!! Test Request{}!!! URL: {}{}!!! Method: {}{}!!! Body: {}",
-        System.getProperty(LINE_SEPARATOR),
-        System.getProperty(LINE_SEPARATOR),
-        System.getProperty(LINE_SEPARATOR),
-        System.getProperty(LINE_SEPARATOR),
+        lineSeparator,
+        lineSeparator,
+        lineSeparator,
+        lineSeparator,
         requestContext.getUri(),
         requestContext.getMethod(),
-        mapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestContext.getEntity()));
+        context);
   }
 
   @Override
   public void filter(
       ClientRequestContext clientRequestContext, ClientResponseContext clientResponseContext)
       throws IOException {
+    String lineSeparator = System.getProperty(LINE_SEPARATOR);
+    String response = responseToString(clientResponseContext);
     LOG.info(
         "{}!!! Test Response {}!!! Body: {} {}!!! Status: {}",
-        System.getProperty(LINE_SEPARATOR),
-        System.getProperty(LINE_SEPARATOR),
-        System.getProperty(LINE_SEPARATOR),
-        responseToString(clientResponseContext),
+        lineSeparator,
+        lineSeparator,
+        lineSeparator,
+        response,
         clientResponseContext.getStatus());
   }
 
