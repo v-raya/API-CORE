@@ -72,20 +72,6 @@ node ('tpt2-slave'){
 			buildInfo = rtGradle.run buildFile: 'build.gradle', switches: '--info', tasks: 'sonarqube'
         }
     }
-
-	stage ('Push to artifactory'){
-    rtGradle.deployer.deployArtifacts = true
-	  if (params.RELEASE_PROJECT) {
-	      echo "!!!! PUSH RELEASE VERSION"
-        rtGradle.deployer repo:'libs-release', server: serverArti
-        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publish -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
-	  } else {
-	      echo "!!!! PUSH SNAPSHOT VERSION"
-	      rtGradle.deployer repo:'libs-snapshot', server: serverArti
-        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publish'
-	  }
-	  rtGradle.deployer.deployArtifacts = false
-	}
  } catch (Exception e)    {
  	   errorcode = e
   	   currentBuild.result = "FAIL"
