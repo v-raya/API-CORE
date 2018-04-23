@@ -137,6 +137,21 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
   }
 
   @Override
+  public Short getSystemCodeId(String shortDescription, String metaId) {
+    Short sysId = null;
+    Set<SystemCode> systemCodes = getSystemCodesForMeta(metaId);
+    if (systemCodes != null) {
+      for (SystemCode systemCode : systemCodes) {
+        if (StringUtils.equalsIgnoreCase(StringUtils.trim(shortDescription),
+            StringUtils.trim(systemCode.getShortDescription()))) {
+          sysId =  systemCode.getSystemId();
+        }
+      }
+    }
+    return sysId;
+  }
+
+  @Override
   public SystemCodeDescriptor getSystemCodeDescriptor(Number systemCodeId) {
     SystemCodeDescriptor systemCodeDescriptor = null;
     SystemCode systemCode = getSystemCode(systemCodeId);
