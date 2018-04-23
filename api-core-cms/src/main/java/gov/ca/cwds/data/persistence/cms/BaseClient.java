@@ -584,24 +584,21 @@ public abstract class BaseClient extends CmsPersistentObject
    * @return the genderIdentityType
    */
   public Short getGenderIdentityType() {
-    // return genderIdentityType;
-    return (short) 0;
+    return genderIdentityType;
   }
 
   /**
    * @return the giNotListedDescription
    */
   public String getGiNotListedDescription() {
-    // return giNotListedDescription;
-    return null;
+    return giNotListedDescription;
   }
 
   /**
    * @return the genderExpressionType
    */
   public Short getGenderExpressionType() {
-    // return genderExpressionType;
-    return (short) 0;
+    return genderExpressionType;
   }
 
   /**
@@ -791,24 +788,21 @@ public abstract class BaseClient extends CmsPersistentObject
    * @return the sexualOrientationType
    */
   public Short getSexualOrientationType() {
-    // return sexualOrientationType;
-    return (short) 0;
+    return sexualOrientationType;
   }
 
   /**
    * @return the soUnableToDetermineCode
    */
   public String getSoUnableToDetermineCode() {
-    // return StringUtils.trimToEmpty(soUnableToDetermineCode);
-    return null;
+    return StringUtils.trimToEmpty(soUnableToDetermineCode);
   }
 
   /**
    * @return the soNotListedDescrption
    */
   public String getSoNotListedDescrption() {
-    // return soNotListedDescrption;
-    return null;
+    return soNotListedDescrption;
   }
 
 
