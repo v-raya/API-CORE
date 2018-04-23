@@ -22,12 +22,8 @@
 ### Configuration changes
 <!---Please list all new configuration parameters introduced by this pull request and describe meaning.-->
 <!---Describe impact on automated deployment if any. Put N/A if not applicable.-->
+N/A
 
 ### Technical debt
 <!---If this pull request introduces some technical debt, please describe details and reference JIRA issues created to address this technical debt. Put N/A if not applicable.-->
-
-### Checklist:
-<!---Go over all the following points, and put an `x` in all the boxes that apply.-->
-<!---If you're unsure about any of these, don't hesitate to ask.-->
-- [ ] My code is in a stable state ready to be deployable, but not necessarily complete.
-- [ ] I promise on my honor as a CWDS developer to ensure I don't break the build, to check Lint/Rubocop, use best practices, to leave the code in better shape than I found it, and to have a good day.
+N/A
