@@ -1,5 +1,6 @@
 package gov.ca.cwds.test.support;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import gov.ca.cwds.security.jwt.JwtConfiguration;
 import gov.ca.cwds.security.jwt.JwtService;
 import java.io.File;
@@ -26,6 +27,7 @@ public class JWTTokenProvider implements TokenProvider<JsonIdentityAuthParams> {
     return jwtService.generate("id", "subject", config.getIdentityJson());
   }
 
+  @SuppressFBWarnings("PATH_TRAVERSAL_IN") //Path cannot be controlled by the user
   private JwtConfiguration getJwtConfiguration() throws IOException {
     Properties properties = new Properties();
     properties.load(new FileInputStream("config/shiro.ini"));

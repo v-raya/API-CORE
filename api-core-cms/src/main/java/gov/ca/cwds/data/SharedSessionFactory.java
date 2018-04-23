@@ -139,7 +139,7 @@ public class SharedSessionFactory implements SessionFactory {
   /**
    * Launch the "closer thread" in test mode. Unnecessary in production mode.
    */
-  protected void runCloseThread() {
+  final protected void runCloseThread() {
     LOGGER.info("START SESSION FACTORY CLOSER THREAD");
     new Thread(this::closerThread).start();
   }
