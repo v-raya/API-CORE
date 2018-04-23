@@ -45,6 +45,11 @@ public class TestSystemCodeCache implements SystemCodeCache {
   }
 
   @Override
+  public Short getSystemCodeId(String metaId, String shortDescription) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
   public boolean verifyActiveSystemCodeIdForMeta(Number systemCodeId, String metaId,
       boolean checkCategoryIdValueIsZero) {
     if (456 == systemCodeId.intValue()) {

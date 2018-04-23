@@ -22,7 +22,10 @@ import javax.validation.Payload;
  */
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
-@Constraint(validatedBy = SystemCodeDescriptionValidator.class)
+@Constraint(validatedBy = {
+    SystemCodeDescriptionValidator.class,
+    SystemCodeDescriptionCollectionValidator.class
+})
 public @interface ValidSystemCodeDescription {
 
   String message() default "{property} must be a valid system code for category {category}";
