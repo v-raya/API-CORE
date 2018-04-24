@@ -15,68 +15,75 @@ public class R09476Test extends BaseDocToolRulesChildClientRelationshipTest {
   private static final String RULE_NAME_1 = "R-09476-1";
   private static final String RULE_NAME_2 = "R-09476-2";
 
-  public static final String PRIMARY_CLIENT_ID = "0101010101";
-  public static final String SECONDARY_CLIENT_ID = "101010101010";
+  private static final String PRIMARY_CLIENT_ID = "0101010101";
+  private static final String SECONDARY_CLIENT_ID = "101010101010";
+  private static final String CLIENT_ID = "0011223344";
+
+  private static final Short FATHER_SONT_TYPE = 205;
+  private static final Short FATHER_DAUGHTER_TYPE = 211;
+  private static final Short SON_FATHER_TYPE = 190;
+  private static final Short DAUGHTER_FATHER_TYPE = 285;
+  private static final Short OUT_OF_SCOPE_TYPE = 44;
 
   @Test
   public void testRelationShipFatherSonWithSameId() {
-    prepareParentChildSameId((short) 205);
+    prepareParentChildSameId(FATHER_SONT_TYPE);
     checkRuleSatisfied(RULE_NAME_1);
     checkRuleSatisfied(RULE_NAME_2);
   }
 
   @Test
   public void testRelationshipFatherSonWithDifferentId() {
-    prepareParentChildDifferentId((short) 205);
+    prepareParentChildDifferentId(FATHER_SONT_TYPE);
     checkRuleViolatedOnce(RULE_NAME_1);
     checkRuleSatisfied(RULE_NAME_2);
   }
 
   @Test
   public void testRelationshipFatherDaughterWithSameId() {
-    prepareParentChildSameId((short) 211);
+    prepareParentChildSameId(FATHER_DAUGHTER_TYPE);
     checkRuleSatisfied(RULE_NAME_1);
     checkRuleSatisfied(RULE_NAME_2);
   }
 
   @Test
   public void testRelationshipFatherDaughterWithDifferentId() {
-    prepareParentChildDifferentId((short) 211);
+    prepareParentChildDifferentId(FATHER_DAUGHTER_TYPE);
     checkRuleViolatedOnce(RULE_NAME_1);
     checkRuleSatisfied(RULE_NAME_2);
   }
 
   @Test
   public void testRelationShipSonFatherWithSameId() {
-    prepareChildParentSameId((short) 190);
+    prepareChildParentSameId(SON_FATHER_TYPE);
     checkRuleSatisfied(RULE_NAME_1);
     checkRuleSatisfied(RULE_NAME_2);
   }
 
   @Test
   public void testRelationshipSonFatherWithDifferentId() {
-    prepareChildParentDifferentId((short) 190);
+    prepareChildParentDifferentId(SON_FATHER_TYPE);
     checkRuleSatisfied(RULE_NAME_1);
     checkRuleViolatedOnce(RULE_NAME_2);
   }
 
   @Test
   public void testRelationshipDaughterFatherWithSameId() {
-    prepareChildParentSameId((short) 285);
+    prepareChildParentSameId(DAUGHTER_FATHER_TYPE);
     checkRuleSatisfied(RULE_NAME_1);
     checkRuleSatisfied(RULE_NAME_2);
   }
 
   @Test
   public void testRelationshipDaughterFatherWithDifferentId() {
-    prepareChildParentDifferentId((short) 285);
+    prepareChildParentDifferentId(DAUGHTER_FATHER_TYPE);
     checkRuleSatisfied(RULE_NAME_1);
     checkRuleViolatedOnce(RULE_NAME_2);
   }
 
   @Test
   public void testRelationshipOtherType() {
-    prepareChildParentDifferentId((short) 44);
+    prepareChildParentDifferentId(OUT_OF_SCOPE_TYPE);
     checkRuleSatisfied(RULE_NAME_1);
     checkRuleSatisfied(RULE_NAME_2);
   }
@@ -99,7 +106,7 @@ public class R09476Test extends BaseDocToolRulesChildClientRelationshipTest {
     ClientPaternityDetail paternityDetail = paternityDetailBuilder.apply(relationship, YesNoUnknown.YES);
 
     Client client = new Client();
-    client.setIdentifier("0011223344");
+    client.setIdentifier(CLIENT_ID);
     paternityDetail.setClient(client);
 
     awareDTO.setEntity(relationship);
@@ -124,7 +131,7 @@ public class R09476Test extends BaseDocToolRulesChildClientRelationshipTest {
     ClientPaternityDetail paternityDetail = paternityDetailBuilder.apply(relationship, YesNoUnknown.YES);
 
     Client client = new Client();
-    client.setIdentifier("0011223344");
+    client.setIdentifier(CLIENT_ID);
     paternityDetail.setClient(client);
 
     awareDTO.setEntity(relationship);
