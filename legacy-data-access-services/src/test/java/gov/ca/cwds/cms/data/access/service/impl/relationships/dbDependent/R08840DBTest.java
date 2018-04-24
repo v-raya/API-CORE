@@ -7,6 +7,7 @@ import gov.ca.cwds.cms.data.access.service.impl.ClientRelationshipCoreService;
 import gov.ca.cwds.cms.data.access.service.impl.dbDependentSuite.BaseCwsCmsInMemoryPersistenceTest;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.ClientRelationshipDao;
+import gov.ca.cwds.data.legacy.cms.dao.PaternityDetailDao;
 import gov.ca.cwds.data.legacy.cms.dao.TribalMembershipVerificationDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
@@ -36,6 +37,7 @@ public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
   private ClientRelationshipCoreService clientRelationshipCoreService;
   private ClientRelationshipDao clientRelationshipDao;
   private BusinessValidationService businessValidationService;
+  private PaternityDetailDao paternityDetailDao;
   private static final String USER_ID = "0X5";
 
   @Before
@@ -44,12 +46,13 @@ public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
     clientDao = new ClientDao(sessionFactory);
     tribalMembershipVerificationDao = new TribalMembershipVerificationDao(sessionFactory);
     clientRelationshipDao = new ClientRelationshipDao(sessionFactory);
+    paternityDetailDao = new PaternityDetailDao(sessionFactory);
     clientRelationshipCoreService =
         new ClientRelationshipCoreService(
             clientRelationshipDao,
             businessValidationService,
             clientDao,
-            tribalMembershipVerificationDao);
+            tribalMembershipVerificationDao, paternityDetailDao);
   }
 
   @Test

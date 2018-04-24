@@ -5,18 +5,15 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-import com.codahale.metrics.MetricRegistryListener.Base;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.ClientRelationshipDao;
+import gov.ca.cwds.data.legacy.cms.dao.PaternityDetailDao;
 import gov.ca.cwds.data.legacy.cms.dao.TribalMembershipVerificationDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
-import gov.ca.cwds.data.legacy.cms.entity.ClientOtherEthnicity;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
@@ -41,6 +38,7 @@ public class ClientRelationshipCoreServiceTest extends BaseUnitTest {
   @Mock private ClientDao clientDao;
   @Mock private BusinessValidationService businessValidationService;
   @Mock private TribalMembershipVerificationDao tribalMembershipVerificationDao;
+  @Mock private PaternityDetailDao paternityDetailDao;
 
   @Before
   public void before() {
@@ -53,7 +51,8 @@ public class ClientRelationshipCoreServiceTest extends BaseUnitTest {
 
     clientRelationshipCoreService =
         new ClientRelationshipCoreService(
-            relationshipDao, businessValidationService, clientDao, tribalMembershipVerificationDao);
+            relationshipDao, businessValidationService, clientDao, tribalMembershipVerificationDao,
+            paternityDetailDao);
 
     when(relationshipDao.findRelationshipsByPrimaryClientId(anyString(), any(LocalDate.class)))
         .thenReturn(relationships);

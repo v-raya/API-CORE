@@ -34,7 +34,7 @@
     BR_FAC_NM="BirthFacilityName"
     B_STATE_C="0"
     B_CNTRY_C="0"
-    CHLD_CLT_B="N"
+    CHLD_CLT_B="Y"
     COM_FST_NM="Tumbling"
     COM_LST_NM="Lazenby"
     COM_MID_NM="Midname"

@@ -14,91 +14,112 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import org.junit.Test;
 
-/**
- * @author CWDS TPT-3 Team
- */
-public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest  {
+/** @author CWDS TPT-3 Team */
+public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest {
 
   private static final String RULE_NAME = "R-08861-2";
+
+  private static final String TRIBAL_THIRD_ID_1 = "1111111111";
+  private static final String TRIBAL_THIRD_ID_2 = "2222222222";
+  private static final String TRIBAL_THIRD_ID_3 = "3333333333";
+  private static final String TRIBAL_THIRD_ID_4 = "4444444444";
+  private static final Short RELATION_SHIP_TYPE = 190;
+  private static final Short RELATION_SHIP_TYPE_2 = 300;
 
   @Test
   public void testAwareDtoHas3TribalsToDelete() {
 
     List<TribalMembershipVerification> tribalMembershipVerifications = new ArrayList<>();
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(null, "1111111111"));
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "2222222222"));
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(null, "3333333333"));
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(null, "4444444444"));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_1));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_2));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_3));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
-    awareDTO.setEntity(clientRelationshipFunction.apply((short) 190));
+    awareDTO.setEntity(clientRelationshipFunction.apply(RELATION_SHIP_TYPE));
 
     businessValidationService.runDataProcessing(
         awareDTO, principal, ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
 
     assertNotNull(awareDTO);
     assertNotNull(awareDTO.getTribalMembershipVerificationsForDelete());
-    assertEquals(3,awareDTO.getTribalMembershipVerificationsForDelete().size());
+    assertEquals(3, awareDTO.getTribalMembershipVerificationsForDelete().size());
   }
 
   @Test
   public void testAwareDtoHas1TribalsToDelete() {
 
     List<TribalMembershipVerification> tribalMembershipVerifications = new ArrayList<>();
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "1111111111"));
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "2222222222"));
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "3333333333"));
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(null, "4444444444"));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_1));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_2));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_3));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
-    awareDTO.setEntity(clientRelationshipFunction.apply((short) 190));
+    awareDTO.setEntity(clientRelationshipFunction.apply(RELATION_SHIP_TYPE));
 
     businessValidationService.runDataProcessing(
         awareDTO, principal, ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
 
     assertNotNull(awareDTO);
     assertNotNull(awareDTO.getTribalMembershipVerificationsForDelete());
-    assertEquals(1,awareDTO.getTribalMembershipVerificationsForDelete().size());
+    assertEquals(1, awareDTO.getTribalMembershipVerificationsForDelete().size());
   }
 
   @Test
   public void testAwareDtoHas4TribalsToDelete() {
 
     List<TribalMembershipVerification> tribalMembershipVerifications = new ArrayList<>();
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(null, "1111111111"));
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(null, "2222222222"));
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(null, "3333333333"));
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(null, "4444444444"));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_1));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_2));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_3));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
-    awareDTO.setEntity(clientRelationshipFunction.apply((short) 190));
+    awareDTO.setEntity(clientRelationshipFunction.apply(RELATION_SHIP_TYPE));
 
     businessValidationService.runDataProcessing(
         awareDTO, principal, ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
 
     assertNotNull(awareDTO);
     assertNotNull(awareDTO.getTribalMembershipVerificationsForDelete());
-    assertEquals(4,awareDTO.getTribalMembershipVerificationsForDelete().size());
+    assertEquals(4, awareDTO.getTribalMembershipVerificationsForDelete().size());
   }
 
   @Test
   public void testAwareDtoHasNoTribalsToDelete() {
 
     List<TribalMembershipVerification> tribalMembershipVerifications = new ArrayList<>();
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "1111111111"));
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "2222222222"));
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "3333333333"));
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "4444444444"));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_1));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_2));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_3));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
-    awareDTO.setEntity(clientRelationshipFunction.apply((short) 190));
+    awareDTO.setEntity(clientRelationshipFunction.apply(RELATION_SHIP_TYPE));
 
     businessValidationService.runDataProcessing(
         awareDTO, principal, ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
 
     assertNotNull(awareDTO);
     assertNotNull(awareDTO.getTribalMembershipVerificationsForDelete());
-    assertEquals(0,awareDTO.getTribalMembershipVerificationsForDelete().size());
+    assertEquals(0, awareDTO.getTribalMembershipVerificationsForDelete().size());
   }
 
   @Test
@@ -107,44 +128,50 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest  {
     List<TribalMembershipVerification> tribalMembershipVerifications = new ArrayList<>();
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
-    awareDTO.setEntity(clientRelationshipFunction.apply((short) 190));
+    awareDTO.setEntity(clientRelationshipFunction.apply(RELATION_SHIP_TYPE));
 
     businessValidationService.runDataProcessing(
         awareDTO, principal, ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
 
     assertNotNull(awareDTO);
     assertNotNull(awareDTO.getTribalMembershipVerificationsForDelete());
-    assertEquals(0,awareDTO.getTribalMembershipVerificationsForDelete().size());
+    assertEquals(0, awareDTO.getTribalMembershipVerificationsForDelete().size());
   }
 
   @Test
   public void testAwareDtoHasDifferentTypeTribalsToDelete() {
 
     List<TribalMembershipVerification> tribalMembershipVerifications = new ArrayList<>();
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(null, "1111111111"));
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "2222222222"));
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(null, "3333333333"));
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "4444444444"));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_1));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_2));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_3));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
-    awareDTO.setEntity(clientRelationshipFunction.apply((short) 300));
+    awareDTO.setEntity(clientRelationshipFunction.apply(RELATION_SHIP_TYPE_2));
 
     businessValidationService.runDataProcessing(
         awareDTO, principal, ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
 
     assertNotNull(awareDTO);
     assertNotNull(awareDTO.getTribalMembershipVerificationsForDelete());
-    assertEquals(0,awareDTO.getTribalMembershipVerificationsForDelete().size());
+    assertEquals(0, awareDTO.getTribalMembershipVerificationsForDelete().size());
   }
 
   @Test
   public void testEnrolmentStatusNotNullAndNoNeedVerificationIsTrue() {
     List<TribalMembershipVerification> tribalMembershipVerifications = new ArrayList<>();
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "2222222222"));
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "4444444444"));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_2));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
-    awareDTO.setEntity(clientRelationshipFunction.apply((short) 300));
+    awareDTO.setEntity(clientRelationshipFunction.apply(RELATION_SHIP_TYPE_2));
 
     businessValidationService.runDataProcessing(
         awareDTO, principal, ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
@@ -155,11 +182,13 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest  {
   @Test
   public void testEnrolmentStatusNotNullAndNeedVerificationIsTrue() {
     List<TribalMembershipVerification> tribalMembershipVerifications = new ArrayList<>();
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "2222222222"));
-    tribalMembershipVerifications.add(tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "4444444444"));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_2));
+    tribalMembershipVerifications.add(
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
-    awareDTO.setEntity(clientRelationshipFunction.apply((short) 190));
+    awareDTO.setEntity(clientRelationshipFunction.apply(RELATION_SHIP_TYPE));
 
     businessValidationService.runDataProcessing(
         awareDTO, principal, ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
@@ -167,18 +196,22 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest  {
     checkRuleSatisfied(RULE_NAME);
   }
 
-  private BiFunction<IndianEnrolmentStatus, String, TribalMembershipVerification> tribalMembershipVerificationFunction = (status, thirdId) -> {
-    TribalMembershipVerification membershipVerification = new TribalMembershipVerification();
-    membershipVerification.setIndianEnrollmentStatus(status);
-    membershipVerification.setThirdId(thirdId);
-    return membershipVerification;
-  };
+  private BiFunction<IndianEnrolmentStatus, String, TribalMembershipVerification>
+      tribalMembershipVerificationFunction =
+          (status, thirdId) -> {
+            TribalMembershipVerification membershipVerification =
+                new TribalMembershipVerification();
+            membershipVerification.setIndianEnrollmentStatus(status);
+            membershipVerification.setThirdId(thirdId);
+            return membershipVerification;
+          };
 
-  private Function<Short, ClientRelationship> clientRelationshipFunction = (relationshipType) -> {
-    ClientRelationship clientRelationship = new ClientRelationship();
-    ClientRelationshipType type = new ClientRelationshipType();
-    type.setSystemId(relationshipType);
-    clientRelationship.setType(type);
-    return clientRelationship;
-  };
+  private Function<Short, ClientRelationship> clientRelationshipFunction =
+      (relationshipType) -> {
+        ClientRelationship clientRelationship = new ClientRelationship();
+        ClientRelationshipType type = new ClientRelationshipType();
+        type.setSystemId(relationshipType);
+        clientRelationship.setType(type);
+        return clientRelationship;
+      };
 }

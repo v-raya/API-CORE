@@ -15,6 +15,7 @@ import gov.ca.cwds.cms.data.access.service.rules.ClientRelationshipDroolsConfigu
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.ClientRelationshipDao;
+import gov.ca.cwds.data.legacy.cms.dao.PaternityDetailDao;
 import gov.ca.cwds.data.legacy.cms.dao.TribalMembershipVerificationDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
@@ -48,6 +49,7 @@ public class ClientRelationshipCoreService
       businessValidationService;
   private final ClientDao clientDao;
   private final TribalMembershipVerificationDao tribalMembershipVerificationDao;
+  private final PaternityDetailDao paternityDetailDao;
 
   /**
    * Constructor with injected services.
@@ -55,6 +57,7 @@ public class ClientRelationshipCoreService
    * @param clientRelationshipDao client relationship DAO
    * @param businessValidationService business validator
    * @param clientDao client DAO
+   * @param paternityDetailDao paternity detail DAO
    */
   @Inject
   public ClientRelationshipCoreService(
@@ -62,11 +65,13 @@ public class ClientRelationshipCoreService
       BusinessValidationService<ClientRelationship, ClientRelationshipAwareDTO>
           businessValidationService,
       ClientDao clientDao,
-      TribalMembershipVerificationDao tribalMembershipVerificationDao) {
+      TribalMembershipVerificationDao tribalMembershipVerificationDao,
+      PaternityDetailDao paternityDetailDao) {
     super(clientRelationshipDao);
     this.businessValidationService = businessValidationService;
     this.clientDao = clientDao;
     this.tribalMembershipVerificationDao = tribalMembershipVerificationDao;
+    this.paternityDetailDao = paternityDetailDao;
   }
 
   @Override
@@ -210,15 +215,28 @@ public class ClientRelationshipCoreService
       validateAndAddIfNeededTribalMembershipVerification(bundle);
 
       ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
-      Client client = awareDTO.getEntity().getPrimaryClient();
-      String clientId = client.getIdentifier();
+
+      Client primaryClient = awareDTO.getEntity().getPrimaryClient();
+      String primaryClientIdentifier = primaryClient.getIdentifier();
+
+      Client secondaryClient = awareDTO.getEntity().getSecondaryClient();
+      String secondaryClientIdentifier = secondaryClient.getIdentifier();
 
       List<ClientRelationship> otherRelationshipsForThisClient =
-          new ArrayList<>(findRelationshipsByPrimaryClientId(clientId));
-      otherRelationshipsForThisClient.addAll(findRelationshipsByPrimaryClientId(clientId));
+          new ArrayList<>(findRelationshipsByPrimaryClientId(primaryClientIdentifier));
+      otherRelationshipsForThisClient.addAll(
+          findRelationshipsByPrimaryClientId(primaryClientIdentifier));
 
       otherRelationshipsForThisClient.removeIf(
           e -> e.getIdentifier().equals(awareDTO.getEntity().getIdentifier()));
+
+      awareDTO
+          .getPrimaryClientPaternityDetails()
+          .addAll(paternityDetailDao.findByChildClientId(primaryClientIdentifier));
+
+      awareDTO
+          .getSecondaryClientPaternityDetails()
+          .addAll(paternityDetailDao.findByChildClientId(secondaryClientIdentifier));
 
       awareDTO.getClientRelationshipList().addAll(otherRelationshipsForThisClient);
     }
@@ -282,13 +300,23 @@ public class ClientRelationshipCoreService
           tribalMembershipVerificationDao.findByClientIdNoTribalEligFrom(
               primaryClient.getIdentifier()));
 
+      // isPrimaryClientChild
+      if (primaryClient.getChildClientIndicator()) {
+        updateTribals(primaryClient, secondaryClient, secondaryTribals);
+      } else {
+        updateTribals(secondaryClient, primaryClient, primaryTribals);
+      }
+    }
+
+    private void updateTribals(
+        Client childClient, Client parentClient, List<TribalMembershipVerification> parentTribals) {
       List<TribalMembershipVerification> childExtraTribals =
-          getExtraRowsForPrimaryClient(secondaryTribals, primaryClient.getIdentifier());
+          getExtraRowsForChildClient(parentTribals, childClient.getIdentifier());
 
       childExtraTribals.forEach(
           e -> {
             TribalMembershipVerification newlyAdded = tribalMembershipVerificationDao.create(e);
-            changedRows(newlyAdded, secondaryTribals);
+            changedRows(newlyAdded, parentTribals);
           });
     }
 
@@ -325,7 +353,7 @@ public class ClientRelationshipCoreService
       return false;
     }
 
-    private List<TribalMembershipVerification> getExtraRowsForPrimaryClient(
+    private List<TribalMembershipVerification> getExtraRowsForChildClient(
         List<TribalMembershipVerification> secondaryTribals, String primaryClientId) {
       if (secondaryTribals == null || secondaryTribals.isEmpty()) {
         return new ArrayList<>();
