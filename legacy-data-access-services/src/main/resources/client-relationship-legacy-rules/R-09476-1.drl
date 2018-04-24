@@ -32,7 +32,7 @@ rule "R-09476-1"
       $clientRelationship: ClientRelationship($type: type.systemId, $parent: primaryClient, $child: secondaryClient) from $relationshipEntityAwareDto.entity
       $paternity: ClientPaternityDetail(($type == 205 || $type == 211) &&
                                      birthFatherStatus.code == "Y" &&
-                                     $parent.identifier != client.identifier) from $relationshipEntityAwareDto.paternityDetails
+                                     $parent.identifier != client.identifier) from $relationshipEntityAwareDto.secondaryClientPaternityDetails
       then
       IssueDetails details = new IssueDetails();
       details.setCode("R-09476-1");

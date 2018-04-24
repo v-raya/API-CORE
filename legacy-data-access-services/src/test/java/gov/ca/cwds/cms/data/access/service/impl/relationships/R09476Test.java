@@ -55,7 +55,7 @@ public class R09476Test extends BaseDocToolRulesChildClientRelationshipTest {
 
   @Test
   public void testRelationshipSonFatherWithDifferentId() {
-    prepareParentChildDifferentId((short) 190);
+    prepareChildParentDifferentId((short) 190);
     checkRuleSatisfied(RULE_NAME_1);
     checkRuleViolatedOnce(RULE_NAME_2);
   }
@@ -69,13 +69,17 @@ public class R09476Test extends BaseDocToolRulesChildClientRelationshipTest {
 
   @Test
   public void testRelationshipDaughterFatherWithDifferentId() {
-    prepareParentChildDifferentId((short) 285);
+    prepareChildParentDifferentId((short) 285);
     checkRuleSatisfied(RULE_NAME_1);
     checkRuleViolatedOnce(RULE_NAME_2);
   }
 
   @Test
-  public void testRelationshipOtherType() {}
+  public void testRelationshipOtherType() {
+    prepareChildParentDifferentId((short) 44);
+    checkRuleSatisfied(RULE_NAME_1);
+    checkRuleSatisfied(RULE_NAME_2);
+  }
 
   private void prepareParentChildSameId(Short type) {
     ClientRelationship relationship =
@@ -85,7 +89,7 @@ public class R09476Test extends BaseDocToolRulesChildClientRelationshipTest {
     paternityDetail.setClient(relationship.getPrimaryClient());
 
     awareDTO.setEntity(relationship);
-    awareDTO.getPaternityDetails().add(paternityDetail);
+    awareDTO.getSecondaryClientPaternityDetails().add(paternityDetail);
   }
 
   private void prepareParentChildDifferentId(Short type) {
@@ -99,7 +103,7 @@ public class R09476Test extends BaseDocToolRulesChildClientRelationshipTest {
     paternityDetail.setClient(client);
 
     awareDTO.setEntity(relationship);
-    awareDTO.getPaternityDetails().add(paternityDetail);
+    awareDTO.getSecondaryClientPaternityDetails().add(paternityDetail);
   }
 
   private void prepareChildParentSameId(Short type) {
@@ -110,9 +114,22 @@ public class R09476Test extends BaseDocToolRulesChildClientRelationshipTest {
     paternityDetail.setClient(relationship.getSecondaryClient());
 
     awareDTO.setEntity(relationship);
-    awareDTO.getPaternityDetails().add(paternityDetail);
+    awareDTO.getPrimaryClientPaternityDetails().add(paternityDetail);
   }
 
+  private void prepareChildParentDifferentId(Short type) {
+    ClientRelationship relationship =
+        clientRelationshipBuilder.apply(PRIMARY_CLIENT_ID, SECONDARY_CLIENT_ID);
+    setRelationshipType.accept(type, relationship);
+    ClientPaternityDetail paternityDetail = paternityDetailBuilder.apply(relationship, YesNoUnknown.YES);
+
+    Client client = new Client();
+    client.setIdentifier("0011223344");
+    paternityDetail.setClient(client);
+
+    awareDTO.setEntity(relationship);
+    awareDTO.getPrimaryClientPaternityDetails().add(paternityDetail);
+  }
 
   private BiFunction<String, String, ClientRelationship> clientRelationshipBuilder =
       (primaryId, secondaryId) -> {

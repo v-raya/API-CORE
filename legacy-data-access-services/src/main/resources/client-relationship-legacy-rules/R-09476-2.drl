@@ -34,7 +34,7 @@ rule "R-09476-2"
       $paternity: ClientPaternityDetail(($type == 190 || $type == 285)
                                      && birthFatherStatus.code == "Y"
                                      && $parent.identifier != client.identifier)
-      from $relationshipEntityAwareDto.paternityDetails
+      from $relationshipEntityAwareDto.primaryClientPaternityDetails
       then
       IssueDetails details = new IssueDetails();
       details.setCode("R-09476-2");

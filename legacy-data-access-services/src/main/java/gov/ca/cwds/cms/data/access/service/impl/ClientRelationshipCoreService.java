@@ -215,17 +215,27 @@ public class ClientRelationshipCoreService
       validateAndAddIfNeededTribalMembershipVerification(bundle);
 
       ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
-      Client client = awareDTO.getEntity().getPrimaryClient();
-      String clientId = client.getIdentifier();
+
+      Client primaryClient = awareDTO.getEntity().getPrimaryClient();
+      String primaryClientIdentifier = primaryClient.getIdentifier();
+
+      Client secondaryClient = awareDTO.getEntity().getSecondaryClient();
+      String secondaryClientIdentifier = secondaryClient.getIdentifier();
 
       List<ClientRelationship> otherRelationshipsForThisClient =
-          new ArrayList<>(findRelationshipsByPrimaryClientId(clientId));
-      otherRelationshipsForThisClient.addAll(findRelationshipsByPrimaryClientId(clientId));
+          new ArrayList<>(findRelationshipsByPrimaryClientId(primaryClientIdentifier));
+      otherRelationshipsForThisClient.addAll(findRelationshipsByPrimaryClientId(primaryClientIdentifier));
 
       otherRelationshipsForThisClient.removeIf(
           e -> e.getIdentifier().equals(awareDTO.getEntity().getIdentifier()));
 
-      List<PaternityDetail> paternityDetails = paternityDetailDao.findByChildClientId()
+      awareDTO.getPrimaryClientPaternityDetails().addAll(
+          paternityDetailDao.findByChildClientId(primaryClientIdentifier)
+      );
+
+      awareDTO.getSecondaryClientPaternityDetails().addAll(
+          paternityDetailDao.findByChildClientId(secondaryClientIdentifier)
+      );
 
       awareDTO.getClientRelationshipList().addAll(otherRelationshipsForThisClient);
     }

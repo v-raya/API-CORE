@@ -13,7 +13,8 @@ public class ClientRelationshipAwareDTO extends BaseEntityAwareDTO<ClientRelatio
   private final List<TribalMembershipVerification> tribalsThatHaveSubTribals = new ArrayList<>();
   private List<TribalMembershipVerification> tribalMembershipVerificationsForDelete =
       new ArrayList<>();
-  private final List<PaternityDetail> paternityDetails = new ArrayList<>();
+  private final List<PaternityDetail> primaryClientPaternityDetails = new ArrayList<>();
+  private final List<PaternityDetail> secondaryClientPaternityDetails = new ArrayList<>();
   private boolean isNeedMembershipVerification;
 
   public List<ClientRelationship> getClientRelationshipList() {
@@ -41,7 +42,11 @@ public class ClientRelationshipAwareDTO extends BaseEntityAwareDTO<ClientRelatio
     this.tribalMembershipVerificationsForDelete = tribalMembershipVerificationsForDelete;
   }
 
-  public List<PaternityDetail> getPaternityDetails() {
-    return paternityDetails;
+  public List<PaternityDetail> getPrimaryClientPaternityDetails() {
+    return primaryClientPaternityDetails;
+  }
+
+  public List<PaternityDetail> getSecondaryClientPaternityDetails() {
+    return secondaryClientPaternityDetails;
   }
 }
