@@ -36,7 +36,9 @@ rule "R-09476-1"
       then
       IssueDetails details = new IssueDetails();
       details.setCode("R-09476-1");
-
+      details.setUserMessage("Birth of parent is already identified on the "
+         + "Family Information notebook. relationship type: " +
+            $type + "parent identifier: " + $parent.getIdentifier());
       details.setTechnicalMessage("Birth of parent is already identified on the Family "
       + "Information notebook Paternity Finding page and the user selects 'Parent (Birth)'"
       + " as a relationship type for a different client");
