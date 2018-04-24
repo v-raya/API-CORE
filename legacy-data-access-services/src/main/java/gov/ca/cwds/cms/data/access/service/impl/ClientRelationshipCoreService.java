@@ -19,7 +19,6 @@ import gov.ca.cwds.data.legacy.cms.dao.PaternityDetailDao;
 import gov.ca.cwds.data.legacy.cms.dao.TribalMembershipVerificationDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
-import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
 import gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.security.annotations.Authorize;
@@ -299,13 +298,22 @@ public class ClientRelationshipCoreService
           tribalMembershipVerificationDao.findByClientIdNoTribalEligFrom(
               primaryClient.getIdentifier()));
 
+      // isPrimaryClientChild
+      if(primaryClient.getChildClientIndicator()) {
+        updateTribals(primaryClient, secondaryClient, secondaryTribals);
+      } else {
+        updateTribals(secondaryClient, primaryClient, primaryTribals);
+      }
+    }
+
+    private void updateTribals(Client childClient, Client parentClient, List<TribalMembershipVerification> parentTribals) {
       List<TribalMembershipVerification> childExtraTribals =
-          getExtraRowsForPrimaryClient(secondaryTribals, primaryClient.getIdentifier());
+          getExtraRowsForChildClient(parentTribals, childClient.getIdentifier());
 
       childExtraTribals.forEach(
           e -> {
             TribalMembershipVerification newlyAdded = tribalMembershipVerificationDao.create(e);
-            changedRows(newlyAdded, secondaryTribals);
+            changedRows(newlyAdded, parentTribals);
           });
     }
 
@@ -342,7 +350,7 @@ public class ClientRelationshipCoreService
       return false;
     }
 
-    private List<TribalMembershipVerification> getExtraRowsForPrimaryClient(
+    private List<TribalMembershipVerification> getExtraRowsForChildClient(
         List<TribalMembershipVerification> secondaryTribals, String primaryClientId) {
       if (secondaryTribals == null || secondaryTribals.isEmpty()) {
         return new ArrayList<>();
