@@ -53,7 +53,8 @@ public class ClientRelationshipCoreService
 
   /**
    * Constructor with injected services.
-   *  @param clientRelationshipDao client relationship DAO
+   *
+   * @param clientRelationshipDao client relationship DAO
    * @param businessValidationService business validator
    * @param clientDao client DAO
    * @param paternityDetailDao
@@ -223,18 +224,19 @@ public class ClientRelationshipCoreService
 
       List<ClientRelationship> otherRelationshipsForThisClient =
           new ArrayList<>(findRelationshipsByPrimaryClientId(primaryClientIdentifier));
-      otherRelationshipsForThisClient.addAll(findRelationshipsByPrimaryClientId(primaryClientIdentifier));
+      otherRelationshipsForThisClient.addAll(
+          findRelationshipsByPrimaryClientId(primaryClientIdentifier));
 
       otherRelationshipsForThisClient.removeIf(
           e -> e.getIdentifier().equals(awareDTO.getEntity().getIdentifier()));
 
-      awareDTO.getPrimaryClientPaternityDetails().addAll(
-          paternityDetailDao.findByChildClientId(primaryClientIdentifier)
-      );
+      awareDTO
+          .getPrimaryClientPaternityDetails()
+          .addAll(paternityDetailDao.findByChildClientId(primaryClientIdentifier));
 
-      awareDTO.getSecondaryClientPaternityDetails().addAll(
-          paternityDetailDao.findByChildClientId(secondaryClientIdentifier)
-      );
+      awareDTO
+          .getSecondaryClientPaternityDetails()
+          .addAll(paternityDetailDao.findByChildClientId(secondaryClientIdentifier));
 
       awareDTO.getClientRelationshipList().addAll(otherRelationshipsForThisClient);
     }
@@ -299,14 +301,15 @@ public class ClientRelationshipCoreService
               primaryClient.getIdentifier()));
 
       // isPrimaryClientChild
-      if(primaryClient.getChildClientIndicator()) {
+      if (primaryClient.getChildClientIndicator()) {
         updateTribals(primaryClient, secondaryClient, secondaryTribals);
       } else {
         updateTribals(secondaryClient, primaryClient, primaryTribals);
       }
     }
 
-    private void updateTribals(Client childClient, Client parentClient, List<TribalMembershipVerification> parentTribals) {
+    private void updateTribals(
+        Client childClient, Client parentClient, List<TribalMembershipVerification> parentTribals) {
       List<TribalMembershipVerification> childExtraTribals =
           getExtraRowsForChildClient(parentTribals, childClient.getIdentifier());
 
