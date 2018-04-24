@@ -15,9 +15,11 @@ import gov.ca.cwds.cms.data.access.service.rules.ClientRelationshipDroolsConfigu
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.ClientRelationshipDao;
+import gov.ca.cwds.data.legacy.cms.dao.PaternityDetailDao;
 import gov.ca.cwds.data.legacy.cms.dao.TribalMembershipVerificationDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
+import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
 import gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.security.annotations.Authorize;
@@ -48,13 +50,14 @@ public class ClientRelationshipCoreService
       businessValidationService;
   private final ClientDao clientDao;
   private final TribalMembershipVerificationDao tribalMembershipVerificationDao;
+  private final PaternityDetailDao paternityDetailDao;
 
   /**
    * Constructor with injected services.
-   *
-   * @param clientRelationshipDao client relationship DAO
+   *  @param clientRelationshipDao client relationship DAO
    * @param businessValidationService business validator
    * @param clientDao client DAO
+   * @param paternityDetailDao
    */
   @Inject
   public ClientRelationshipCoreService(
@@ -62,11 +65,13 @@ public class ClientRelationshipCoreService
       BusinessValidationService<ClientRelationship, ClientRelationshipAwareDTO>
           businessValidationService,
       ClientDao clientDao,
-      TribalMembershipVerificationDao tribalMembershipVerificationDao) {
+      TribalMembershipVerificationDao tribalMembershipVerificationDao,
+      PaternityDetailDao paternityDetailDao) {
     super(clientRelationshipDao);
     this.businessValidationService = businessValidationService;
     this.clientDao = clientDao;
     this.tribalMembershipVerificationDao = tribalMembershipVerificationDao;
+    this.paternityDetailDao = paternityDetailDao;
   }
 
   @Override
@@ -219,6 +224,8 @@ public class ClientRelationshipCoreService
 
       otherRelationshipsForThisClient.removeIf(
           e -> e.getIdentifier().equals(awareDTO.getEntity().getIdentifier()));
+
+      List<PaternityDetail> paternityDetails = paternityDetailDao.findByChildClientId()
 
       awareDTO.getClientRelationshipList().addAll(otherRelationshipsForThisClient);
     }

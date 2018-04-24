@@ -1,0 +1,44 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.Client
+import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship
+import gov.ca.cwds.data.legacy.cms.entity.ClientPaternityDetail
+import gov.ca.cwds.cms.data.access.dto.ClientRelationshipAwareDTO;
+
+global java.util.Set<IssueDetails> validationDetailsList
+
+rule "R-09476-1"
+  dialect "mvel"
+  agenda-group "client-relationship-agenda"
+  when
+      /*
+        Code: R - 09476
+
+        Rule Txt:
+        If a birth father is already identified on the Family Information notebook Paternity
+        Finding page and the user selects 'Father (Birth)' as a relationship type for a different
+        client, send error message.
+
+        Logic:
+        If CLIENT_RELATIONSHIP [where Fkclient_T = (father) CLIENT.Id and Fkclient_0 = (child)
+        CLIENT.Id and .Client_Relationship_Type = 'Father/Daughter (Birth)' or 'Father/Son (Birth)']
+
+        AND
+        (child) CLIENT > CHILD_CLIENT > PATERNITY_DETAIL (where .Birth_Father_Code = 'Y'
+        and where .Primary_Individual_Code = 'C' and .Primary_Individual_Id <> (father) CLIENT.Id
+        from (in focus) CLIENT_RELATIONSHIP) exists, then display message and reset control
+        to previous value.
+      */
+      $relationshipEntityAwareDto: ClientRelationshipAwareDTO()
+      $clientRelationship: ClientRelationship($type: type.systemId, $parent: primaryClient, $child: secondaryClient) from $relationshipEntityAwareDto.entity
+      $paternity: ClientPaternityDetail(($type == 205 || $type == 211) &&
+                                     birthFatherStatus.code == "Y" &&
+                                     $parent.identifier != client.identifier) from $relationshipEntityAwareDto.paternityDetails
+      then
+      IssueDetails details = new IssueDetails();
+      details.setCode("R-09476-1");
+
+      details.setTechnicalMessage("Birth of parent is already identified on the Family "
+      + "Information notebook Paternity Finding page and the user selects 'Parent (Birth)'"
+      + " as a relationship type for a different client");
+      validationDetailsList.add(details);
+end

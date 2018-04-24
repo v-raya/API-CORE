@@ -12,6 +12,7 @@ import gov.ca.cwds.cms.data.access.service.impl.ClientRelationshipCoreService;
 import gov.ca.cwds.cms.data.access.service.impl.dbDependentSuite.BaseCwsCmsInMemoryPersistenceTest;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.ClientRelationshipDao;
+import gov.ca.cwds.data.legacy.cms.dao.PaternityDetailDao;
 import gov.ca.cwds.data.legacy.cms.dao.TribalMembershipVerificationDao;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification;
@@ -37,19 +38,21 @@ public class R08861DBTest extends BaseCwsCmsInMemoryPersistenceTest {
   private ClientRelationshipCoreService clientRelationshipCoreService;
   private ClientRelationshipDao clientRelationshipDao;
   private BusinessValidationService businessValidationService;
+  private PaternityDetailDao paternityDetailDao;
 
   @Before
   public void before() throws Exception {
     businessValidationService = new BusinessValidationService(new DroolsService());
     tribalMembershipVerificationDao = new TribalMembershipVerificationDao(sessionFactory);
     clientRelationshipDao = new ClientRelationshipDao(sessionFactory);
+    paternityDetailDao = new PaternityDetailDao(sessionFactory);
     clientDao = new ClientDao(sessionFactory);
     clientRelationshipCoreService =
         new ClientRelationshipCoreService(
             clientRelationshipDao,
             businessValidationService,
             clientDao,
-            tribalMembershipVerificationDao);
+            tribalMembershipVerificationDao, paternityDetailDao);
 
     cleanAllAndInsert("/dbunit/R08861.xml");
   }
