@@ -57,7 +57,7 @@ public class ClientRelationshipCoreService
    * @param clientRelationshipDao client relationship DAO
    * @param businessValidationService business validator
    * @param clientDao client DAO
-   * @param paternityDetailDao
+   * @param paternityDetailDao paternity detail DAO
    */
   @Inject
   public ClientRelationshipCoreService(
