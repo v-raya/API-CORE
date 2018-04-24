@@ -19,18 +19,23 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest {
 
   private static final String RULE_NAME = "R-08861-2";
 
+  private static final String TRIBAL_THIRD_ID_1 = "1111111111";
+  private static final String TRIBAL_THIRD_ID_2 = "2222222222";
+  private static final String TRIBAL_THIRD_ID_3 = "3333333333";
+  private static final String TRIBAL_THIRD_ID_4 = "4444444444";
+
   @Test
   public void testAwareDtoHas3TribalsToDelete() {
 
     List<TribalMembershipVerification> tribalMembershipVerifications = new ArrayList<>();
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(null, "1111111111"));
+        tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_1));
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "2222222222"));
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_2));
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(null, "3333333333"));
+        tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_3));
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(null, "4444444444"));
+        tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
     awareDTO.setEntity(clientRelationshipFunction.apply((short) 190));
@@ -48,13 +53,13 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest {
 
     List<TribalMembershipVerification> tribalMembershipVerifications = new ArrayList<>();
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "1111111111"));
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_1));
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "2222222222"));
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_2));
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "3333333333"));
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_3));
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(null, "4444444444"));
+        tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
     awareDTO.setEntity(clientRelationshipFunction.apply((short) 190));
@@ -72,13 +77,13 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest {
 
     List<TribalMembershipVerification> tribalMembershipVerifications = new ArrayList<>();
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(null, "1111111111"));
+        tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_1));
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(null, "2222222222"));
+        tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_2));
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(null, "3333333333"));
+        tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_3));
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(null, "4444444444"));
+        tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
     awareDTO.setEntity(clientRelationshipFunction.apply((short) 190));
@@ -96,13 +101,13 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest {
 
     List<TribalMembershipVerification> tribalMembershipVerifications = new ArrayList<>();
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "1111111111"));
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_1));
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "2222222222"));
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_2));
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "3333333333"));
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_3));
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "4444444444"));
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
     awareDTO.setEntity(clientRelationshipFunction.apply((short) 190));
@@ -136,13 +141,13 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest {
 
     List<TribalMembershipVerification> tribalMembershipVerifications = new ArrayList<>();
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(null, "1111111111"));
+        tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_1));
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "2222222222"));
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_2));
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(null, "3333333333"));
+        tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_3));
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "4444444444"));
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
     awareDTO.setEntity(clientRelationshipFunction.apply((short) 300));
@@ -159,9 +164,9 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest {
   public void testEnrolmentStatusNotNullAndNoNeedVerificationIsTrue() {
     List<TribalMembershipVerification> tribalMembershipVerifications = new ArrayList<>();
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "2222222222"));
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_2));
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "4444444444"));
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
     awareDTO.setEntity(clientRelationshipFunction.apply((short) 300));
@@ -176,9 +181,9 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest {
   public void testEnrolmentStatusNotNullAndNeedVerificationIsTrue() {
     List<TribalMembershipVerification> tribalMembershipVerifications = new ArrayList<>();
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "2222222222"));
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_2));
     tribalMembershipVerifications.add(
-        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), "4444444444"));
+        tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
     awareDTO.setEntity(clientRelationshipFunction.apply((short) 190));
