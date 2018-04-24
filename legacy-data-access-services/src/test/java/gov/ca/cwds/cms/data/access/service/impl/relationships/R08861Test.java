@@ -23,6 +23,8 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest {
   private static final String TRIBAL_THIRD_ID_2 = "2222222222";
   private static final String TRIBAL_THIRD_ID_3 = "3333333333";
   private static final String TRIBAL_THIRD_ID_4 = "4444444444";
+  private static final Short RELATION_SHIP_TYPE = 190;
+  private static final Short RELATION_SHIP_TYPE_2 = 300;
 
   @Test
   public void testAwareDtoHas3TribalsToDelete() {
@@ -38,7 +40,7 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest {
         tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
-    awareDTO.setEntity(clientRelationshipFunction.apply((short) 190));
+    awareDTO.setEntity(clientRelationshipFunction.apply(RELATION_SHIP_TYPE));
 
     businessValidationService.runDataProcessing(
         awareDTO, principal, ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
@@ -62,7 +64,7 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest {
         tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
-    awareDTO.setEntity(clientRelationshipFunction.apply((short) 190));
+    awareDTO.setEntity(clientRelationshipFunction.apply(RELATION_SHIP_TYPE));
 
     businessValidationService.runDataProcessing(
         awareDTO, principal, ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
@@ -86,7 +88,7 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest {
         tribalMembershipVerificationFunction.apply(null, TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
-    awareDTO.setEntity(clientRelationshipFunction.apply((short) 190));
+    awareDTO.setEntity(clientRelationshipFunction.apply(RELATION_SHIP_TYPE));
 
     businessValidationService.runDataProcessing(
         awareDTO, principal, ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
@@ -110,7 +112,7 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest {
         tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
-    awareDTO.setEntity(clientRelationshipFunction.apply((short) 190));
+    awareDTO.setEntity(clientRelationshipFunction.apply(RELATION_SHIP_TYPE));
 
     businessValidationService.runDataProcessing(
         awareDTO, principal, ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
@@ -126,7 +128,7 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest {
     List<TribalMembershipVerification> tribalMembershipVerifications = new ArrayList<>();
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
-    awareDTO.setEntity(clientRelationshipFunction.apply((short) 190));
+    awareDTO.setEntity(clientRelationshipFunction.apply(RELATION_SHIP_TYPE));
 
     businessValidationService.runDataProcessing(
         awareDTO, principal, ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
@@ -150,7 +152,7 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest {
         tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
-    awareDTO.setEntity(clientRelationshipFunction.apply((short) 300));
+    awareDTO.setEntity(clientRelationshipFunction.apply(RELATION_SHIP_TYPE_2));
 
     businessValidationService.runDataProcessing(
         awareDTO, principal, ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
@@ -169,7 +171,7 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest {
         tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
-    awareDTO.setEntity(clientRelationshipFunction.apply((short) 300));
+    awareDTO.setEntity(clientRelationshipFunction.apply(RELATION_SHIP_TYPE_2));
 
     businessValidationService.runDataProcessing(
         awareDTO, principal, ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
@@ -186,7 +188,7 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest {
         tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
-    awareDTO.setEntity(clientRelationshipFunction.apply((short) 190));
+    awareDTO.setEntity(clientRelationshipFunction.apply(RELATION_SHIP_TYPE));
 
     businessValidationService.runDataProcessing(
         awareDTO, principal, ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
