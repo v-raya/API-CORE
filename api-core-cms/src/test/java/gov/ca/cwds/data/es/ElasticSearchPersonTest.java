@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Arrays;
 
 import org.apache.commons.io.IOUtils;
 import org.elasticsearch.search.SearchHit;
@@ -166,6 +167,14 @@ public class ElasticSearchPersonTest {
     String actual = target.getDateOfBirth();
     String expected = null;
     assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getSearchableDateOfBirth() throws Exception {
+    target.setDateOfBirth("1990-09-09");
+    String[] expectedDateOfBirths = {"99", "991990", "91990", "0909", "1990", "091990", "090990", "9990", "09091990"};
+    String[] actualSearchableDateOfBirth = target.getSearchableDateOfBirth();
+    assertThat(Arrays.equals(expectedDateOfBirths, actualSearchableDateOfBirth), is(true));
   }
 
   @Test
