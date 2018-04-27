@@ -94,7 +94,7 @@ public class ClientRelationshipCoreService
 
   @Override
   protected DataAccessServiceLifecycle<ClientRelationshipAwareDTO> getUpdateLifeCycle() {
-    return new UpdateLificycle();
+    return new UpdateLifecycle();
   }
 
   @Override
@@ -172,7 +172,7 @@ public class ClientRelationshipCoreService
     return crudDao;
   }
 
-  private class UpdateLificycle extends DefaultDataAccessLifeCycle<ClientRelationshipAwareDTO> {
+  private class UpdateLifecycle extends DefaultDataAccessLifeCycle<ClientRelationshipAwareDTO> {
 
     @Override
     public void beforeDataProcessing(DataAccessBundle bundle) {
