@@ -91,7 +91,7 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
   public T delete(Serializable id) {
     T object = find(id);
     if (object != null) {
-      currentSession().delete(object);
+      grabSession().delete(object);
     }
     return object;
   }
@@ -127,7 +127,7 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
           MessageFormat.format("Unable to find entity with id={0}", object.getPrimaryKey());
       throw new EntityNotFoundException(msg);
     }
-    currentSession().evict(databaseObject);
+    grabSession().evict(databaseObject);
     return persist(object);
   }
 
