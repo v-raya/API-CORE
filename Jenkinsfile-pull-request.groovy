@@ -61,7 +61,7 @@ node ('tpt2-slave'){
      }
    }
    stage('Unit Tests') {
-       buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test jacocoTestReport', switches: '--stacktrace'
+       buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test jacocoMergeTest', switches: '--stacktrace'
    }
    stage('License Report') {
       		buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'libLicenseReport -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'

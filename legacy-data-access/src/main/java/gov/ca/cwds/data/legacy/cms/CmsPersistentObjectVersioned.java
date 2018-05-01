@@ -1,6 +1,7 @@
 package gov.ca.cwds.data.legacy.cms;
 
 import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
@@ -15,6 +16,7 @@ import javax.persistence.Version;
 public abstract class CmsPersistentObjectVersioned extends CmsPersistentObjectBase {
 
   private static final long serialVersionUID = -8659901907696848214L;
+
   /**
    * LAST_UPDATE_TIMESTAMP - The date and time of the most recent update of an occurrence of this
    * entity type.
@@ -30,7 +32,6 @@ public abstract class CmsPersistentObjectVersioned extends CmsPersistentObjectBa
     return lastUpdatedTime == null ? null : (Timestamp) lastUpdatedTime.clone();
   }
 
-  @SuppressWarnings("javadoc")
   public void setLastUpdateTime(Timestamp lastUpdatedTime) {
     this.lastUpdatedTime = (lastUpdatedTime == null ? null : (Timestamp) lastUpdatedTime.clone());
   }
