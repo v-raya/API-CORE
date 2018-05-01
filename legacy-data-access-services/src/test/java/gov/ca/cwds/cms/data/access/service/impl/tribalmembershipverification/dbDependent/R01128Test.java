@@ -3,7 +3,7 @@ package gov.ca.cwds.cms.data.access.service.impl.tribalmembershipverification.db
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import gov.ca.cwds.cms.data.access.dto.TribalMembershipVerificationAwareDTO;
+import gov.ca.cwds.cms.data.access.dto.TribalMembershipVerificationAwareDto;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.impl.ClientCoreService;
@@ -70,8 +70,8 @@ public class R01128Test extends BaseCwsCmsInMemoryPersistenceTest {
           Client clientBeforeUpdate = clientDao.find(CLIENT_ID);
           assertNotNull(clientBeforeUpdate);
           assertEquals(Boolean.FALSE, clientBeforeUpdate.getTribalMembershipVerifcationIndicator());
-          TribalMembershipVerificationAwareDTO awareDTO =
-              new TribalMembershipVerificationAwareDTO();
+          TribalMembershipVerificationAwareDto awareDTO =
+              new TribalMembershipVerificationAwareDto();
           awareDTO.setEntity(tribalMembershipVerificationSupplier.get());
           try {
             tribalMembershipVerificationCoreService.create(awareDTO);

@@ -60,11 +60,13 @@ public abstract class DataAccessServiceBase<
 
   @Override
   public T update(P entityAwareDTO) throws DataAccessServicesException {
+    
     if (getUpdateLifeCycle() == null) {
       updateLifecycle = new DefaultDataAccessLifeCycle<>();
     } else {
       updateLifecycle = getUpdateLifeCycle();
     }
+
     DataAccessBundle<P> dataAccessBundle = new DataAccessBundle<>(entityAwareDTO);
     doEnrichDataAccessBundle(dataAccessBundle);
     updateLifecycle.beforeDataProcessing(dataAccessBundle);

@@ -1,7 +1,7 @@
 package gov.ca.cwds.cms.data.access.service.impl.tribalmembership;
 
 import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
-import gov.ca.cwds.cms.data.access.dto.TribalMembershipVerificationAwareDTO;
+import gov.ca.cwds.cms.data.access.dto.TribalMembershipVerificationAwareDto;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.impl.ClientCoreService;
@@ -14,20 +14,24 @@ import gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification;
 import gov.ca.cwds.security.realm.PerryAccount;
 import javax.inject.Inject;
 
-/** @author CWDS TPT-3 Team */
+/**
+ * Life Cycle for create Tribal membership verification.
+ *
+ * @author CWDS TPT-3 Team
+ * */
 public class CreateLifeCycle
-    extends DefaultDataAccessLifeCycle<TribalMembershipVerificationAwareDTO> {
+    extends DefaultDataAccessLifeCycle<TribalMembershipVerificationAwareDto> {
 
   private final ClientCoreService clientCoreService;
   private final BusinessValidationService<
-          TribalMembershipVerification, TribalMembershipVerificationAwareDTO>
+          TribalMembershipVerification, TribalMembershipVerificationAwareDto>
       businessValidationService;
 
   @Inject
   public CreateLifeCycle(
       TribalMembershipVerificationDao tribalMembershipVerificationDao,
       ClientCoreService clientCoreService,
-      BusinessValidationService<TribalMembershipVerification, TribalMembershipVerificationAwareDTO>
+      BusinessValidationService<TribalMembershipVerification, TribalMembershipVerificationAwareDto>
           businessValidationService) {
     this.clientCoreService = clientCoreService;
     this.businessValidationService = businessValidationService;
@@ -43,7 +47,7 @@ public class CreateLifeCycle
   public void businessValidation(DataAccessBundle bundle, PerryAccount perryAccount) {
     super.businessValidation(bundle, perryAccount);
     businessValidationService.runBusinessValidation(
-        (TribalMembershipVerificationAwareDTO) bundle.getAwareDto(),
+        (TribalMembershipVerificationAwareDto) bundle.getAwareDto(),
         perryAccount,
         TribalMembershipVerificationConfiguration.INSTANCE);
   }

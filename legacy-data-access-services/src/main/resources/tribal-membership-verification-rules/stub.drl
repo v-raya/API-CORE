@@ -1,7 +1,7 @@
 import gov.ca.cwds.rest.exception.IssueDetails
 import gov.ca.cwds.data.legacy.cms.entity.Client
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship
-import gov.ca.cwds.cms.data.access.dto.TribalMembershipVerificationAwareDTO;
+import gov.ca.cwds.cms.data.access.dto.TribalMembershipVerificationAwareDto;
 
 global java.util.Set<IssueDetails> validationDetailsList
 
@@ -12,7 +12,7 @@ rule "stub"
       /**
           Delete after first rule will be implemented
       */
-      $awareDto: TribalMembershipVerificationAwareDTO()
+      $awareDto: TribalMembershipVerificationAwareDto()
       then
       IssueDetails details = new IssueDetails();
 end

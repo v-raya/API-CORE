@@ -2,7 +2,7 @@ package gov.ca.cwds.cms.data.access.service.impl.tribalmembership;
 
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT_ID;
 
-import gov.ca.cwds.cms.data.access.dto.TribalMembershipVerificationAwareDTO;
+import gov.ca.cwds.cms.data.access.dto.TribalMembershipVerificationAwareDto;
 import gov.ca.cwds.cms.data.access.service.DataAccessServiceBase;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
@@ -16,11 +16,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 import javax.inject.Inject;
 
-/** @author CWDS TPT-3 Team */
+/**
+ * CRUD service for Tribal membership verification.
+ *
+ * @author CWDS TPT-3 Team
+ * */
 public class TribalMembershipVerificationCoreService
     extends DataAccessServiceBase<
         TribalMembershipVerificationDao, TribalMembershipVerification,
-        TribalMembershipVerificationAwareDTO> {
+    TribalMembershipVerificationAwareDto> {
 
   private final CreateLifeCycle createLifeCycle;
 
@@ -33,7 +37,7 @@ public class TribalMembershipVerificationCoreService
   }
 
   @Override
-  public TribalMembershipVerification create(TribalMembershipVerificationAwareDTO entityAwareDTO)
+  public TribalMembershipVerification create(TribalMembershipVerificationAwareDto entityAwareDTO)
       throws DataAccessServicesException {
     String staffPerson = PrincipalUtils.getStaffPersonId();
     entityAwareDTO.getEntity().setLastUpdateTime(LocalDateTime.now());
@@ -48,17 +52,17 @@ public class TribalMembershipVerificationCoreService
   }
 
   @Override
-  protected DataAccessServiceLifecycle<TribalMembershipVerificationAwareDTO> getUpdateLifeCycle() {
+  protected DataAccessServiceLifecycle<TribalMembershipVerificationAwareDto> getUpdateLifeCycle() {
     return new DefaultDataAccessLifeCycle<>();
   }
 
   @Override
-  protected DataAccessServiceLifecycle<TribalMembershipVerificationAwareDTO> getCreateLifeCycle() {
+  protected DataAccessServiceLifecycle<TribalMembershipVerificationAwareDto> getCreateLifeCycle() {
     return createLifeCycle;
   }
 
   @Override
-  protected DataAccessServiceLifecycle<TribalMembershipVerificationAwareDTO> getDeleteLifeCycle() {
+  protected DataAccessServiceLifecycle<TribalMembershipVerificationAwareDto> getDeleteLifeCycle() {
     return new DefaultDataAccessLifeCycle<>();
   }
 }

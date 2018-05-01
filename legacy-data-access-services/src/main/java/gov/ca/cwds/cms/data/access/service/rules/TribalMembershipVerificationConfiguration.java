@@ -3,7 +3,11 @@ package gov.ca.cwds.cms.data.access.service.rules;
 import gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification;
 import gov.ca.cwds.drools.DroolsConfiguration;
 
-/** @author CWDS TPT-3 Team */
+/**
+ * Drools configuration for Tribal membership verification.
+ *
+ * @author CWDS TPT-3 Team
+ * */
 public class TribalMembershipVerificationConfiguration
     extends DroolsConfiguration<TribalMembershipVerification> {
 
