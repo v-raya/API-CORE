@@ -94,7 +94,7 @@ public class ClientRelationshipCoreService
 
   @Override
   protected DataAccessServiceLifecycle<ClientRelationshipAwareDTO> getUpdateLifeCycle() {
-    return new UpdateLificycle();
+    return new UpdateLifecycle();
   }
 
   @Override
@@ -172,10 +172,10 @@ public class ClientRelationshipCoreService
     return crudDao;
   }
 
-  private class UpdateLificycle extends DefaultDataAccessLifeCycle<ClientRelationshipAwareDTO> {
+  private class UpdateLifecycle extends DefaultDataAccessLifeCycle<ClientRelationshipAwareDTO> {
 
     @Override
-    public void beforeDataProcessing(DataAccessBundle bundle) {
+    public void beforeDataProcessing(DataAccessBundle bundle) throws DataAccessServicesException {
       super.beforeDataProcessing(bundle);
       enrichWithPrimaryAndSecondaryClients(bundle);
       enrichWithTribalsMembershipVerifications(bundle);
@@ -302,14 +302,14 @@ public class ClientRelationshipCoreService
 
       // isPrimaryClientChild
       if (primaryClient.getChildClientIndicator()) {
-        updateTribals(primaryClient, secondaryClient, secondaryTribals);
+        updateTribals(primaryClient, secondaryTribals);
       } else {
-        updateTribals(secondaryClient, primaryClient, primaryTribals);
+        updateTribals(secondaryClient, primaryTribals);
       }
     }
 
     private void updateTribals(
-        Client childClient, Client parentClient, List<TribalMembershipVerification> parentTribals) {
+        Client childClient, List<TribalMembershipVerification> parentTribals) {
       List<TribalMembershipVerification> childExtraTribals =
           getExtraRowsForChildClient(parentTribals, childClient.getIdentifier());
 
@@ -365,7 +365,7 @@ public class ClientRelationshipCoreService
             if (StringUtils.isEmpty(a.getFkFromTribalMembershipVerification())) {
               TribalMembershipVerification extra = new TribalMembershipVerification();
               extra.setFkFromTribalMembershipVerification(a.getThirdId());
-              extra.setFkSentTotribalOrganization(a.getFkSentTotribalOrganization());
+              extra.setFkSentToTribalOrganization(a.getFkSentToTribalOrganization());
               extra.setIndianEnrollmentStatus(a.getIndianEnrollmentStatus());
               extra.setIndianTribeType(a.getIndianTribeType());
               extra.setThirdId(IdGenerator.generateId());

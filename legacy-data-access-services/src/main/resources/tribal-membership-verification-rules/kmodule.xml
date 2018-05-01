@@ -1,0 +1,5 @@
+<kmodule xmlns="http://www.drools.org/xsd/kmodule">
+    <kbase name="tribalMembershipVerification">
+        <ksession name="tribal-membership-verification-session"/>
+    </kbase>
+</kmodule>

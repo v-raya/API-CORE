@@ -112,17 +112,17 @@ public class ClientCoreService
   }
 
   @Override
-  protected DataAccessServiceLifecycle getUpdateLifeCycle() {
+  public DataAccessServiceLifecycle getUpdateLifeCycle() {
     return new UpdateLifecycle();
   }
 
   @Override
-  protected DataAccessServiceLifecycle getCreateLifeCycle() {
+  public DataAccessServiceLifecycle getCreateLifeCycle() {
     return new DefaultDataAccessLifeCycle();
   }
 
   @Override
-  protected DataAccessServiceLifecycle getDeleteLifeCycle() {
+  public DataAccessServiceLifecycle getDeleteLifeCycle() {
     return new DefaultDataAccessLifeCycle();
   }
 
