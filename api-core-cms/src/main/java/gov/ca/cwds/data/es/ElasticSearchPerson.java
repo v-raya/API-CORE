@@ -1190,6 +1190,14 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       names.add(this.lastName);
     }
 
+    if (StringUtils.isNotBlank(this.middleName)) {
+      names.add(this.middleName);
+    }
+
+    if (StringUtils.isNotBlank(this.nameSuffix)) {
+      names.add(this.nameSuffix);
+    }
+
     if (this.akas != null) {
       for (ElasticSearchPersonAka aka : this.akas) {
         if (StringUtils.isNotBlank(aka.getFirstName())) {

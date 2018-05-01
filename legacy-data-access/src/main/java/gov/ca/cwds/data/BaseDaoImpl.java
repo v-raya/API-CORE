@@ -62,7 +62,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
   }
 
   public List<T> queryImmutableList(String queryName) {
-    final Session session = this.getSessionFactory().getCurrentSession();
+    final Session session = grabSession();
     final org.hibernate.query.Query<T> query =
         session.createNamedQuery(queryName, getEntityClass());
     final ImmutableList.Builder<T> entities = new ImmutableList.Builder<>();
@@ -79,7 +79,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
   @Override
   public List<T> findAllUpdatedAfter(Date datetime) {
     final String namedQueryName = constructNamedQueryName("findAllUpdatedAfter");
-    final Session session = getSessionFactory().getCurrentSession();
+    final Session session = grabSession();
     final Transaction txn = joinTransaction(session);
 
     try {

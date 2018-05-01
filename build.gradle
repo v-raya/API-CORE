@@ -57,6 +57,7 @@ allprojects {
         snapshotMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/repo"
         releaseMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/libs-release"
         artifactoryRepo = (isRelease ? releaseMavenRepo : snapshotMavenRepo)
+        allTestCoverageFile = "$buildDir/jacoco/allTestCoverage.exec"
     }
 
     sourceSets {
@@ -141,8 +142,8 @@ allprojects {
 
     sonarqube {
         properties {
-            property "sonar.jacoco.reportPath", "${buildDir}/jacoco/test.exec"
-            property "sonar.jacoco.itReportPath", "${buildDir}/jacoco/integrationTest.exec"
+            property "sonar.jacoco.reportPaths", allTestCoverageFile
+            property "sonar.jacoco.itReportPath", allTestCoverageFile
             property "sonar.exclusions", "src/main/resources/static/*.*, " +
                     "src/main/resources/static/css/*.*, " +
                     "src/main/resources/static/lib/*.*, " +
@@ -150,6 +151,19 @@ allprojects {
         }
     }
 
+    task jacocoMergeTest(type: JacocoMerge) {
+        destinationFile = file(allTestCoverageFile)
+        executionData = project.fileTree(dir: '.', include:'**/build/jacoco/test.exec')
+    }
+
+}
+
+subprojects {
+    sonarqube {
+        properties {
+            property "sonar.jacoco.reportPaths", allTestCoverageFile
+        }
+    }
 }
 
 dependencies {
