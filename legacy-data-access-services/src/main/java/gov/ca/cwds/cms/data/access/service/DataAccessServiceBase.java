@@ -86,7 +86,9 @@ public abstract class DataAccessServiceBase<
     return crudDao.delete(primaryKey);
   }
 
-  protected void doEnrichDataAccessBundle(final DataAccessBundle<P> dataAccessBundle) {}
+  protected void doEnrichDataAccessBundle(final DataAccessBundle<P> dataAccessBundle) {
+    // Do nothing just a stub for subclasses
+  }
 
   protected abstract DataAccessServiceLifecycle<P> getUpdateLifeCycle();
 
