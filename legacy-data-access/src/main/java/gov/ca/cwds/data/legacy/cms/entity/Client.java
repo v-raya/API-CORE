@@ -418,7 +418,7 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
         && Objects.equals(getCommonMiddleName(), client.getCommonMiddleName());
   }
 
-  private boolean isBirthaAndAddressesEqual(Client client) {
+  private boolean isBirthAndAddressesEqual(Client client) {
     return Objects.equals(getBirthCity(), client.getBirthCity())
         && Objects.equals(getBirthDate(), client.getBirthDate())
         && Objects.equals(getEmailAddress(), client.getEmailAddress());
@@ -426,7 +426,7 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
 
   private boolean isNamesAndAddressesEqual(Client client) {
     return Objects.equals(getBirthFacilityName(), client.getBirthFacilityName())
-        && isBirthaAndAddressesEqual(client)
+        && isBirthAndAddressesEqual(client)
         && isNamesEqual(client);
   }
 

@@ -9,7 +9,7 @@ public class DefaultDataAccessLifeCycle<T extends BaseEntityAwareDTO>
     implements DataAccessServiceLifecycle<T> {
 
   @Override
-  public void beforeDataProcessing(DataAccessBundle bundle) {
+  public void beforeDataProcessing(DataAccessBundle bundle) throws DataAccessServicesException {
     // Do nothing just a stub
   }
 

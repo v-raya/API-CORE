@@ -1,16 +1,19 @@
 package gov.ca.cwds.cms.data.access.service.impl.tribalmembership;
 
-import static gov.ca.cwds.cms.data.access.service.impl.tribalmembership.CreateLifeCycle.CLIENT_DAO_BUNDLE_KEY;
+import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT_ID;
 
 import gov.ca.cwds.cms.data.access.dto.TribalMembershipVerificationAwareDTO;
-import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.DataAccessServiceBase;
-import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessBundle;
+import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
-import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.TribalMembershipVerificationDao;
 import gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification;
+import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
+import gov.ca.cwds.security.annotations.Authorize;
+import gov.ca.cwds.security.utils.PrincipalUtils;
+import java.time.LocalDateTime;
+import java.util.List;
 import javax.inject.Inject;
 
 /** @author CWDS TPT-3 Team */
@@ -19,27 +22,29 @@ public class TribalMembershipVerificationCoreService
         TribalMembershipVerificationDao, TribalMembershipVerification,
         TribalMembershipVerificationAwareDTO> {
 
-  private final ClientDao clientDao;
-  private final BusinessValidationService<TribalMembershipVerification, TribalMembershipVerificationAwareDTO>
-      businessValidationService;
+  private final CreateLifeCycle createLifeCycle;
 
   @Inject
   public TribalMembershipVerificationCoreService(
-      TribalMembershipVerificationDao tribalMembershipVerificationDao, ClientDao clientDao,
-      BusinessValidationService<TribalMembershipVerification, TribalMembershipVerificationAwareDTO> businessValidationService) {
+      TribalMembershipVerificationDao tribalMembershipVerificationDao,
+      CreateLifeCycle createLifeCycle) {
     super(tribalMembershipVerificationDao);
-    this.clientDao = clientDao;
-    this.businessValidationService = businessValidationService;
+    this.createLifeCycle = createLifeCycle;
   }
 
   @Override
-  protected void doEnrichDataAccessBundle(
-      DataAccessBundle<TribalMembershipVerificationAwareDTO> dataAccessBundle) {
-    super.doEnrichDataAccessBundle(dataAccessBundle);
-    dataAccessBundle
-        .getDaos()
-        .put(CLIENT_DAO_BUNDLE_KEY, clientDao);
-    dataAccessBundle.setBusinessValidationService(businessValidationService);
+  public TribalMembershipVerification create(TribalMembershipVerificationAwareDTO entityAwareDTO)
+      throws DataAccessServicesException {
+    String staffPerson = PrincipalUtils.getStaffPersonId();
+    entityAwareDTO.getEntity().setLastUpdateTime(LocalDateTime.now());
+    entityAwareDTO.getEntity().setLastUpdateId(staffPerson);
+    entityAwareDTO.getEntity().setThirdId(CmsKeyIdGenerator.getNextValue(staffPerson));
+    return super.create(entityAwareDTO);
+  }
+
+  public List<TribalMembershipVerification> getByClientId(
+      @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
+    return crudDao.findByClientId(clientId);
   }
 
   @Override
@@ -49,7 +54,7 @@ public class TribalMembershipVerificationCoreService
 
   @Override
   protected DataAccessServiceLifecycle<TribalMembershipVerificationAwareDTO> getCreateLifeCycle() {
-    return new CreateLifeCycle();
+    return createLifeCycle;
   }
 
   @Override

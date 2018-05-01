@@ -1,5 +1,6 @@
 package gov.ca.cwds.cms.data.access.inject;
 
+import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.TribalMembershipVerificationCoreService;
 import org.hibernate.SessionFactory;
 
 import com.google.inject.AbstractModule;
@@ -41,6 +42,8 @@ public abstract class AbstractDataAccessServicesModule extends AbstractModule {
     bind(ClientCoreService.class);
     bind(ChildClientCoreService.class);
     bind(BusinessValidationService.class);
+    bind(TribalMembershipVerificationCoreService.class);
+    bind(gov.ca.cwds.cms.data.access.service.impl.tribalmembership.CreateLifeCycle.class);
   }
 
   private void configureMappers() {

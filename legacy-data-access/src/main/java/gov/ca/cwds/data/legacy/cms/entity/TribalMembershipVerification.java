@@ -100,7 +100,7 @@ public class TribalMembershipVerification extends CmsPersistentObject {
 
   @NotNull
   @Column(name = "FKTRB_ORGT")
-  private String fkSentTotribalOrganization;
+  private String fkSentToTribalOrganization;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
@@ -146,12 +146,12 @@ public class TribalMembershipVerification extends CmsPersistentObject {
     this.fkFromTribalMembershipVerification = fkFromTribalMembershipVerification;
   }
 
-  public String getFkSentTotribalOrganization() {
-    return fkSentTotribalOrganization;
+  public String getFkSentToTribalOrganization() {
+    return fkSentToTribalOrganization;
   }
 
-  public void setFkSentTotribalOrganization(String fkSentTotribalOrganization) {
-    this.fkSentTotribalOrganization = fkSentTotribalOrganization;
+  public void setFkSentToTribalOrganization(String fkSentToTribalOrganization) {
+    this.fkSentToTribalOrganization = fkSentToTribalOrganization;
   }
 
   public IndianEnrolmentStatus getIndianEnrollmentStatus() {

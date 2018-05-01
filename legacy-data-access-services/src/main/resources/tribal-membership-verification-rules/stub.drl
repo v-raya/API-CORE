@@ -1,0 +1,18 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.Client
+import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship
+import gov.ca.cwds.cms.data.access.dto.TribalMembershipVerificationAwareDTO;
+
+global java.util.Set<IssueDetails> validationDetailsList
+
+rule "stub"
+  dialect "mvel"
+  agenda-group "tribal-membership-verification-agenda"
+  when
+      /**
+          Delete after first rule will be implemented
+      */
+      $awareDto: TribalMembershipVerificationAwareDTO()
+      then
+      IssueDetails details = new IssueDetails();
+end
