@@ -2,6 +2,12 @@ package gov.ca.cwds.data.es;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Strings;
+import com.google.inject.Inject;
+import gov.ca.cwds.common.ApiFileAssistant;
+import gov.ca.cwds.rest.ElasticsearchConfiguration;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -11,7 +17,6 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Optional;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.ActionRequest;
@@ -32,49 +37,38 @@ import org.elasticsearch.indices.InvalidIndexNameException;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Strings;
-import com.google.inject.Inject;
-
-import gov.ca.cwds.common.ApiFileAssistant;
-import gov.ca.cwds.rest.ElasticsearchConfiguration;
-
 /**
  * A DAO for Elasticsearch.
- * 
+ *
  * <p>
  * OPTION: In order to avoid minimize connections to Elasticsearch, this DAO class should either be
  * final, so that other classes cannot instantiate a client or else the ES client should be injected
  * by the framework.
  * </p>
- * 
+ *
  * <p>
  * OPTION: allow child DAO classes to connect to a configured index of choice and read specified
  * document type(s).
  * </p>
- * 
+ *
  * @author CWDS API Team
  */
 public class ElasticsearchDao implements Closeable {
 
   private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ElasticsearchDao.class);
 
-  private static final int DEFAULT_MAX_RESULTS = 100;
-
-  private static final String DEFAULT_PERSON_MAPPING =
-      "/elasticsearch/mapping/map_person_5x_snake.json";
-
-  /**
+   /**
    * Standard "people" index name.
    */
   protected static final String DEFAULT_PERSON_IDX_NM = "people";
-
   /**
    * Standard "person" document name.
    */
   protected static final String DEFAULT_PERSON_DOC_TYPE = "person";
-
+  private static final int DEFAULT_MAX_RESULTS = 100;
+  private static final String DEFAULT_PERSON_MAPPING =
+      "/elasticsearch/mapping/map_person_5x_snake.json";
+  private static final int TIMEOUT_MILLIS = 1500;
   /**
    * Client is thread safe.
    */
@@ -84,7 +78,7 @@ public class ElasticsearchDao implements Closeable {
 
   /**
    * Constructor.
-   * 
+   *
    * @param client The ElasticSearch client
    * @param config ES configuration, includes default index alias and document type
    */
@@ -96,7 +90,7 @@ public class ElasticsearchDao implements Closeable {
 
   /**
    * Get the default alias, either from the configuration or the default constant.
-   * 
+   *
    * @return default alias
    */
   public String getDefaultAlias() {
@@ -106,7 +100,7 @@ public class ElasticsearchDao implements Closeable {
 
   /**
    * Get the default document type, either from the configuration or the default constant.
-   * 
+   *
    * @return default document type
    */
   public String getDefaultDocType() {
@@ -116,13 +110,12 @@ public class ElasticsearchDao implements Closeable {
 
   /**
    * Check whether Elasticsearch cluster already contains the given index or alias.
-   * 
+   *
    * @param indexOrAlias index name or alias
    * @return whether the index or alias exists
    */
   public boolean doesIndexExist(final String indexOrAlias) {
-    final MetaData clusterMeta = getClient().admin().cluster().state(Requests.clusterStateRequest())
-        .actionGet().getState().getMetaData();
+    final MetaData clusterMeta = getMetaData();
     final boolean answer = clusterMeta.hasIndex(indexOrAlias) || clusterMeta.hasAlias(indexOrAlias);
 
     if (answer) {
@@ -131,14 +124,18 @@ public class ElasticsearchDao implements Closeable {
     return answer;
   }
 
+  private MetaData getMetaData() {
+    return getClient().admin().cluster().state(Requests.clusterStateRequest()).actionGet()
+        .getState().getMetaData();
+  }
+
   /**
    * Create ES index based on supplied parameters.
-   * 
+   *
    * @param index Index name
    * @param type Index document type
    * @param settingsJsonFile Setting file
    * @param mappingJsonFile Mapping file
-   * @throws IOException
    */
   private void createIndex(final String index, final String type, final String settingsJsonFile,
       final String mappingJsonFile) throws IOException {
@@ -156,12 +153,12 @@ public class ElasticsearchDao implements Closeable {
 
   /**
    * Create ES index based on supplied parameters if it does not already exists.
-   * 
+   *
    * <p>
    * This method intentionally synchronizes against race conditions by multiple, simultaneous
    * attempts to create the same index.
    * </p>
-   * 
+   *
    * @param index Index name
    * @param type Index document type
    * @param settingsJsonFile Setting file
@@ -175,7 +172,7 @@ public class ElasticsearchDao implements Closeable {
 
       // Let Elasticsearch catch its breath.
       try {
-        Thread.sleep(1500); // NOSONAR
+        Thread.sleep(TIMEOUT_MILLIS); // NOSONAR
       } catch (InterruptedException e) {
         Thread.currentThread().interrupt();
         LOGGER.warn("Interrupted!");
@@ -185,20 +182,70 @@ public class ElasticsearchDao implements Closeable {
     }
   }
 
-  public synchronized void deleteIndex(final String index) throws IOException {
+  public synchronized void deleteIndex(final String index) {
     if (doesIndexExist(index) && getClient().admin().indices().prepareDelete(index)
-        .get(TimeValue.timeValueMillis(1500)).isAcknowledged()) {
+        .get(TimeValue.timeValueMillis(TIMEOUT_MILLIS)).isAcknowledged()) {
       LOGGER.warn("\n\n\t>>>>>> DELETE INDEX {}! <<<<<<\n\n", index);
+    }
+  }
+
+
+  /**
+   * Creates or swaps index alias
+   *
+   * @param alias Alias name
+   * @param index Index name
+   * @return true if successful
+   */
+  public synchronized boolean createOrSwapAlias(final String alias, final String index) {
+    final MetaData clusterMeta = getMetaData();
+
+    String oldIndex = StringUtils.EMPTY;
+
+    if (clusterMeta.hasIndex(alias)) {
+      LOGGER.warn("CAN'T CREATE ALIAS {}! Index with the same name already exist. ", alias);
+      return false;
+    } else if (!clusterMeta.hasIndex(index)) {
+      LOGGER.warn("CAN'T CREATE ALIAS {}! Index with the name {} doesn't  exist. ",alias, index);
+      return false;
+    } else if (clusterMeta.hasAlias(alias)) {
+      //Only one index assumed to be associated with alias.
+      oldIndex = clusterMeta.getAliasAndIndexLookup().get(alias).getIndices().get(0).getIndex()
+          .getName();
+      LOGGER.info("Swapping Alias {} from Index {} to Index {}.", alias, oldIndex, index);
+    } else {
+      LOGGER.info("Creating Alias {} for Index {}.", alias, index);
+    }
+
+    return createOrSwapAlias(alias, index, oldIndex);
+
+  }
+
+  /**
+   *
+   * @param alias Alias name
+   * @param index New Index name
+   * @param oldIndex  Current Index Name
+   * @return true if successful
+   */
+  private boolean createOrSwapAlias(final String alias, final String index, final String oldIndex) {
+    if (StringUtils.isBlank(oldIndex)) {
+      return getClient().admin().indices().prepareAliases().addAlias(index, alias)
+          .get(TimeValue.timeValueMillis(TIMEOUT_MILLIS)).isAcknowledged();
+    } else {
+      return getClient().admin().indices().prepareAliases().removeAlias(oldIndex, alias)
+          .addAlias(index, alias).get(TimeValue.timeValueMillis(TIMEOUT_MILLIS))
+          .isAcknowledged();
+
     }
   }
 
   /**
    * Create an index and apply a mapping before blasting documents into it.
-   * 
+   *
    * @param index index name or alias
    * @param numShards number of shards
    * @param numReplicas number of replicas
-   * @throws IOException on disconnect, hang, etc.
    * @deprecated call {@link #createIndexIfNeeded(String)} instead
    */
   @Deprecated
@@ -229,16 +276,16 @@ public class ElasticsearchDao implements Closeable {
 
   /**
    * Create an index, if needed, before blasting documents into it.
-   * 
+   *
    * <p>
    * Defaults to 5 shards and 1 replica.
    * </p>
-   * 
+   *
    * <p>
    * This method intentionally synchronizes against race conditions by multiple, simultaneous
    * attempts to create the same index.
    * </p>
-   * 
+   *
    * @param index index name or alias
    * @param optShards optional number of shards. Defaults to 5.
    * @param optReplicas optional number of replicas. Defaults to 1.
@@ -272,7 +319,7 @@ public class ElasticsearchDao implements Closeable {
 
   /**
    * Create an index, if missing.
-   * 
+   *
    * @param index index name or alias
    * @throws IOException on disconnect, hang, etc.
    * @see #createIndexIfNeeded(String, Optional, Optional)
@@ -285,11 +332,11 @@ public class ElasticsearchDao implements Closeable {
 
   /**
    * Prepare an index request for bulk operations.
-   * 
+   *
    * <p>
    * Upsert: update or insert.
    * </p>
-   * 
+   *
    * @param mapper Jackson ObjectMapper
    * @param id ES document id
    * @param obj document object
@@ -312,7 +359,7 @@ public class ElasticsearchDao implements Closeable {
   /**
    * Prepare an index request for bulk operations, using the default index name and person document
    * type.
-   * 
+   *
    * @param mapper Jackson ObjectMapper configured for bulk operations
    * @param id ES document id
    * @param obj document object
@@ -327,56 +374,53 @@ public class ElasticsearchDao implements Closeable {
 
   /**
    * Prepare an update request for bulk operations as an "upsert".
-   * 
+   *
    * <p>
    * If the document exists, then only update it with the update JSON. Otherwise, create a new
    * document with the insert JSON.
    * </p>
-   * 
+   *
    * @param id ES document id
    * @param alias index alias
    * @param docType document type
    * @param insertJson JSON to create a new document, if document does not exist
    * @param updateJson JSON to update existing document
    * @return prepared IndexRequest
-   * @throws JsonProcessingException if unable to serialize JSON
    */
   public ActionRequest bulkUpsert(final String id, final String alias, final String docType,
-      final String insertJson, final String updateJson) throws JsonProcessingException {
+      final String insertJson, final String updateJson) {
     return new UpdateRequest(alias, docType, id).doc(updateJson, XContentType.JSON)
         .upsert(new IndexRequest(alias, docType, id).source(insertJson, XContentType.JSON));
   }
 
   /**
    * Convenience overload for {@link #bulkUpsert(String, String, String, String, String)}.
-   * 
+   *
    * @param id ES document id
    * @param insertJson JSON to create a new document, if document does not exist
    * @param updateJson JSON to update existing document
    * @return prepared IndexRequest
-   * @throws JsonProcessingException if unable to serialize JSON
    */
   public ActionRequest bulkUpsert(final String id, final String insertJson, final String updateJson)
-      throws JsonProcessingException {
+      {
     return bulkUpsert(id, getDefaultAlias(), getDefaultDocType(), insertJson, updateJson);
   }
 
   /**
    * The Intake Auto-complete for Person takes a single search term, used to query Elasticsearch
    * Person documents on specific fields.
-   * 
+   *
    * <p>
    * For example, search strings consisting of only digits could be phone numbers, social security
    * numbers, or street address numbers. Search strings consisting of only letters could be last
    * name, first name, city, state, language, and so forth.
    * </p>
-   * 
+   *
    * <p>
-   * This method calls Elasticsearch's <a href=
-   * "https://www.elastic.co/guide/en/elasticsearch/guide/current/_best_fields.html#dis-max-query" >
-   * "dis max"</a> query feature.
+   * This method calls Elasticsearch's <a href= "https://www.elastic.co/guide/en/elasticsearch/guide/current/_best_fields.html#dis-max-query"
+   * > "dis max"</a> query feature.
    * </p>
-   * 
+   *
    * @param searchTerm ES search String
    * @param alias index alias
    * @param docType document type
@@ -423,7 +467,7 @@ public class ElasticsearchDao implements Closeable {
 
   /**
    * Search given index by pass-through query.
-   * 
+   *
    * @param index index to search
    * @param query user-provided query
    * @param protocol presumably "http://" or https://"
@@ -449,11 +493,11 @@ public class ElasticsearchDao implements Closeable {
 
   /**
    * Convenience overload. Search given index by pass-through query.
-   * 
+   *
    * <p>
    * Parameter Defaults
    * </p>
-   * 
+   *
    * <table summary="Parameter Defaults">
    * <tr>
    * <th align="justify">Param</th>
@@ -472,7 +516,7 @@ public class ElasticsearchDao implements Closeable {
    * <td>{@link #getDefaultDocType()}</td>
    * </tr>
    * </table>
-   * 
+   *
    * @param index index to search
    * @param query user-provided query
    * @return JSON ES results
@@ -485,7 +529,7 @@ public class ElasticsearchDao implements Closeable {
   /**
    * Builds an Elasticsearch compound query by combining multiple <b>should</b> clauses into a
    * Boolean Query.
-   * 
+   *
    * @param searchTerm the user entered values to search for separated by space
    * @return the Elasticsearch compound query
    */
@@ -524,7 +568,7 @@ public class ElasticsearchDao implements Closeable {
 
   /**
    * Exposed for testing. Don't abuse this.
-   * 
+   *
    * @return the client
    */
   public Client getClient() {
@@ -533,7 +577,7 @@ public class ElasticsearchDao implements Closeable {
 
   /**
    * Expose underlying Elasticsearch configuration.
-   * 
+   *
    * @return ES configuration
    */
   public ElasticsearchConfiguration getConfig() {
@@ -543,7 +587,7 @@ public class ElasticsearchDao implements Closeable {
   /**
    * Set Elasticsearch configuration. Does not automatically reconnect to host and port without
    * calling {@link #stop}, but alias and document type changes take effect immediately.
-   * 
+   *
    * @param config ES configuration
    */
   public void setConfig(ElasticsearchConfiguration config) {
@@ -552,11 +596,11 @@ public class ElasticsearchDao implements Closeable {
 
   /**
    * Consume an external REST web service, specifying URL, request headers and JSON payload.
-   * 
+   *
    * <p>
    * Note that this implementation calls the Elasticsearch HTTP transport, not the Java transport.
    * </p>
-   * 
+   *
    * @param targetURL the target URL
    * @param payload the payload specified by user
    * @return the JSON payload returned by the external web service
