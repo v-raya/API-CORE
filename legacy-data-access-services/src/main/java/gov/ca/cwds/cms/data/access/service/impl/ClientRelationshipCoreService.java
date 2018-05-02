@@ -3,7 +3,21 @@ package gov.ca.cwds.cms.data.access.service.impl;
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT_ID;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
+
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.cms.data.access.dto.ClientRelationshipAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.DataAccessServiceBase;
@@ -24,29 +38,16 @@ import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.BiPredicate;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Service for create/update/find ClientRelationship with business validation and data processing.
  *
  * @author CWDS TPT-3 Team
  */
-public class ClientRelationshipCoreService
-    extends DataAccessServiceBase<
-        ClientRelationshipDao, ClientRelationship, ClientRelationshipAwareDTO> {
+public class ClientRelationshipCoreService extends
+    DataAccessServiceBase<ClientRelationshipDao, ClientRelationship, ClientRelationshipAwareDTO> {
 
-  private final BusinessValidationService<ClientRelationship, ClientRelationshipAwareDTO>
-      businessValidationService;
+  private final BusinessValidationService<ClientRelationship, ClientRelationshipAwareDTO> businessValidationService;
   private final ClientDao clientDao;
   private final TribalMembershipVerificationDao tribalMembershipVerificationDao;
   private final PaternityDetailDao paternityDetailDao;
@@ -57,15 +58,13 @@ public class ClientRelationshipCoreService
    * @param clientRelationshipDao client relationship DAO
    * @param businessValidationService business validator
    * @param clientDao client DAO
+   * @param tribalMembershipVerificationDao tribal membership verification DAO
    * @param paternityDetailDao paternity detail DAO
    */
   @Inject
-  public ClientRelationshipCoreService(
-      final ClientRelationshipDao clientRelationshipDao,
-      BusinessValidationService<ClientRelationship, ClientRelationshipAwareDTO>
-          businessValidationService,
-      ClientDao clientDao,
-      TribalMembershipVerificationDao tribalMembershipVerificationDao,
+  public ClientRelationshipCoreService(final ClientRelationshipDao clientRelationshipDao,
+      BusinessValidationService<ClientRelationship, ClientRelationshipAwareDTO> businessValidationService,
+      ClientDao clientDao, TribalMembershipVerificationDao tribalMembershipVerificationDao,
       PaternityDetailDao paternityDetailDao) {
     super(clientRelationshipDao);
     this.businessValidationService = businessValidationService;
@@ -133,12 +132,8 @@ public class ClientRelationshipCoreService
   private final BiConsumer<ClientRelationship, List<Client>> filterSecondaryClients =
       (relationship, permittedClients) -> {
         String secondaryClientId = relationship.getSecondaryClient().getIdentifier();
-        relationship.setSecondaryClient(
-            permittedClients
-                .stream()
-                .filter(e -> isClientId.test(e, secondaryClientId))
-                .findFirst()
-                .orElse(new Client()));
+        relationship.setSecondaryClient(permittedClients.stream()
+            .filter(e -> isClientId.test(e, secondaryClientId)).findFirst().orElse(new Client()));
       };
 
   private static final BiPredicate<Client, String> isClientId =
@@ -151,8 +146,8 @@ public class ClientRelationshipCoreService
     }
 
     final List<Client> clients = new ArrayList<>();
-    relationships.forEach(
-        clientRelationship -> clients.add(clientRelationship.getSecondaryClient()));
+    relationships
+        .forEach(clientRelationship -> clients.add(clientRelationship.getSecondaryClient()));
     return clients;
   }
 
@@ -197,17 +192,15 @@ public class ClientRelationshipCoreService
     public void dataProcessing(DataAccessBundle bundle, PerryAccount perryAccount) {
       super.dataProcessing(bundle, perryAccount);
       businessValidationService.runBusinessValidation(
-          (ClientRelationshipAwareDTO) bundle.getAwareDto(),
-          PrincipalUtils.getPrincipal(),
+          (ClientRelationshipAwareDTO) bundle.getAwareDto(), PrincipalUtils.getPrincipal(),
           ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
     }
 
     @Override
     public void afterDataProcessing(DataAccessBundle bundle) {
       super.afterDataProcessing(bundle);
-      deleteTribalMembershipVerifications(
-          ((ClientRelationshipAwareDTO) bundle.getAwareDto())
-              .getTribalMembershipVerificationsForDelete());
+      deleteTribalMembershipVerifications(((ClientRelationshipAwareDTO) bundle.getAwareDto())
+          .getTribalMembershipVerificationsForDelete());
     }
 
     @Override
@@ -224,18 +217,16 @@ public class ClientRelationshipCoreService
 
       List<ClientRelationship> otherRelationshipsForThisClient =
           new ArrayList<>(findRelationshipsByPrimaryClientId(primaryClientIdentifier));
-      otherRelationshipsForThisClient.addAll(
-          findRelationshipsByPrimaryClientId(primaryClientIdentifier));
+      otherRelationshipsForThisClient
+          .addAll(findRelationshipsByPrimaryClientId(primaryClientIdentifier));
 
-      otherRelationshipsForThisClient.removeIf(
-          e -> e.getIdentifier().equals(awareDTO.getEntity().getIdentifier()));
+      otherRelationshipsForThisClient
+          .removeIf(e -> e.getIdentifier().equals(awareDTO.getEntity().getIdentifier()));
 
-      awareDTO
-          .getPrimaryClientPaternityDetails()
+      awareDTO.getPrimaryClientPaternityDetails()
           .addAll(paternityDetailDao.findByChildClientId(primaryClientIdentifier));
 
-      awareDTO
-          .getSecondaryClientPaternityDetails()
+      awareDTO.getSecondaryClientPaternityDetails()
           .addAll(paternityDetailDao.findByChildClientId(secondaryClientIdentifier));
 
       awareDTO.getClientRelationshipList().addAll(otherRelationshipsForThisClient);
@@ -244,19 +235,18 @@ public class ClientRelationshipCoreService
     @Override
     public void businessValidation(DataAccessBundle bundle, PerryAccount perryAccount) {
       businessValidationService.runBusinessValidation(
-          (ClientRelationshipAwareDTO) bundle.getAwareDto(),
-          PrincipalUtils.getPrincipal(),
+          (ClientRelationshipAwareDTO) bundle.getAwareDto(), PrincipalUtils.getPrincipal(),
           ClientRelationshipDroolsConfiguration.INSTANCE);
     }
 
     private void enrichWithPrimaryAndSecondaryClients(DataAccessBundle bundle) {
       ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
-      ParametersValidator.checkEntityId(
-          awareDTO.getEntity().getPrimaryClient(), awareDTO.getEntity().getClass().getName());
+      ParametersValidator.checkEntityId(awareDTO.getEntity().getPrimaryClient(),
+          awareDTO.getEntity().getClass().getName());
       Client primaryClient =
           clientDao.find(awareDTO.getEntity().getPrimaryClient().getPrimaryKey());
-      ParametersValidator.checkEntityId(
-          awareDTO.getEntity().getSecondaryClient(), awareDTO.getEntity().getClass().getName());
+      ParametersValidator.checkEntityId(awareDTO.getEntity().getSecondaryClient(),
+          awareDTO.getEntity().getClass().getName());
       Client secondaryClient =
           clientDao.find(awareDTO.getEntity().getSecondaryClient().getPrimaryKey());
       awareDTO.getEntity().setPrimaryClient(primaryClient);
@@ -279,26 +269,22 @@ public class ClientRelationshipCoreService
         return;
       }
 
-      ParametersValidator.checkEntityId(
-          awareDTO.getEntity().getPrimaryClient(),
+      ParametersValidator.checkEntityId(awareDTO.getEntity().getPrimaryClient(),
           awareDTO.getEntity().getPrimaryClient().getClass().getName());
       Client primaryClient =
           clientDao.find(awareDTO.getEntity().getPrimaryClient().getIdentifier());
-      ParametersValidator.checkEntityId(
-          awareDTO.getEntity().getSecondaryClient(),
+      ParametersValidator.checkEntityId(awareDTO.getEntity().getSecondaryClient(),
           awareDTO.getEntity().getSecondaryClient().getClass().getName());
       Client secondaryClient =
           clientDao.find(awareDTO.getEntity().getSecondaryClient().getIdentifier());
 
       List<TribalMembershipVerification> secondaryTribals = new ArrayList<>();
-      secondaryTribals.addAll(
-          tribalMembershipVerificationDao.findByClientIdNoTribalEligFrom(
-              secondaryClient.getIdentifier()));
+      secondaryTribals.addAll(tribalMembershipVerificationDao
+          .findByClientIdNoTribalEligFrom(secondaryClient.getIdentifier()));
 
       List<TribalMembershipVerification> primaryTribals = new ArrayList<>();
-      primaryTribals.addAll(
-          tribalMembershipVerificationDao.findByClientIdNoTribalEligFrom(
-              primaryClient.getIdentifier()));
+      primaryTribals.addAll(tribalMembershipVerificationDao
+          .findByClientIdNoTribalEligFrom(primaryClient.getIdentifier()));
 
       // isPrimaryClientChild
       if (primaryClient.getChildClientIndicator()) {
@@ -308,35 +294,32 @@ public class ClientRelationshipCoreService
       }
     }
 
-    private void updateTribals(
-        Client childClient, List<TribalMembershipVerification> parentTribals) {
+    private void updateTribals(Client childClient,
+        List<TribalMembershipVerification> parentTribals) {
       List<TribalMembershipVerification> childExtraTribals =
           getExtraRowsForChildClient(parentTribals, childClient.getIdentifier());
 
-      childExtraTribals.forEach(
-          e -> {
-            TribalMembershipVerification newlyAdded = tribalMembershipVerificationDao.create(e);
-            changedRows(newlyAdded, parentTribals);
-          });
+      childExtraTribals.forEach(e -> {
+        TribalMembershipVerification newlyAdded = tribalMembershipVerificationDao.create(e);
+        changedRows(newlyAdded, parentTribals);
+      });
     }
 
-    private void changedRows(
-        TribalMembershipVerification newlyAdded, List<TribalMembershipVerification> childTribals) {
+    private void changedRows(TribalMembershipVerification newlyAdded,
+        List<TribalMembershipVerification> childTribals) {
       if (newlyAdded == null || childTribals == null || childTribals.isEmpty()) {
         return;
       }
-      childTribals.forEach(
-          e -> {
-            if (needToUpdateRow(e, newlyAdded)) {
-              e.setStatusDate(newlyAdded.getStatusDate());
-              e.setEnrollmentNumber(newlyAdded.getEnrollmentNumber());
-              tribalMembershipVerificationDao.update(e);
-            }
-          });
+      childTribals.forEach(e -> {
+        if (needToUpdateRow(e, newlyAdded)) {
+          e.setStatusDate(newlyAdded.getStatusDate());
+          e.setEnrollmentNumber(newlyAdded.getEnrollmentNumber());
+          tribalMembershipVerificationDao.update(e);
+        }
+      });
     }
 
-    private boolean needToUpdateRow(
-        TribalMembershipVerification tribalForUpdate,
+    private boolean needToUpdateRow(TribalMembershipVerification tribalForUpdate,
         TribalMembershipVerification newlyAddedTribal) {
       Date dateFromThirdId = CmsKeyIdGenerator.getDateFromKey(tribalForUpdate.getThirdId());
       if (dateFromThirdId == null) {
@@ -346,8 +329,9 @@ public class ClientRelationshipCoreService
       LocalDate date = dateFromThirdId.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
       if (date.isBefore(LocalDate.of(2005, Month.NOVEMBER, 19))) {
         if (tribalForUpdate.getIndianTribeType() == newlyAddedTribal.getIndianTribeType()
-            && tribalForUpdate.getFkFromTribalMembershipVerification()
-                == newlyAddedTribal.getFkFromTribalMembershipVerification()) return true;
+            && tribalForUpdate.getFkFromTribalMembershipVerification() == newlyAddedTribal
+                .getFkFromTribalMembershipVerification())
+          return true;
       }
 
       return false;
@@ -360,21 +344,20 @@ public class ClientRelationshipCoreService
       }
 
       final List<TribalMembershipVerification> extraRows = new ArrayList<>();
-      secondaryTribals.forEach(
-          a -> {
-            if (StringUtils.isEmpty(a.getFkFromTribalMembershipVerification())) {
-              TribalMembershipVerification extra = new TribalMembershipVerification();
-              extra.setFkFromTribalMembershipVerification(a.getThirdId());
-              extra.setFkSentToTribalOrganization(a.getFkSentToTribalOrganization());
-              extra.setIndianEnrollmentStatus(a.getIndianEnrollmentStatus());
-              extra.setIndianTribeType(a.getIndianTribeType());
-              extra.setThirdId(IdGenerator.generateId());
-              extra.setClientId(primaryClientId);
-              extra.setLastUpdateId(PrincipalUtils.getStaffPersonId());
-              extra.setLastUpdateTime(LocalDateTime.now());
-              extraRows.add(extra);
-            }
-          });
+      secondaryTribals.forEach(a -> {
+        if (StringUtils.isEmpty(a.getFkFromTribalMembershipVerification())) {
+          TribalMembershipVerification extra = new TribalMembershipVerification();
+          extra.setFkFromTribalMembershipVerification(a.getThirdId());
+          extra.setFkSentToTribalOrganization(a.getFkSentToTribalOrganization());
+          extra.setIndianEnrollmentStatus(a.getIndianEnrollmentStatus());
+          extra.setIndianTribeType(a.getIndianTribeType());
+          extra.setThirdId(IdGenerator.generateId());
+          extra.setClientId(primaryClientId);
+          extra.setLastUpdateId(PrincipalUtils.getStaffPersonId());
+          extra.setLastUpdateTime(LocalDateTime.now());
+          extraRows.add(extra);
+        }
+      });
 
       return extraRows;
     }
@@ -385,8 +368,8 @@ public class ClientRelationshipCoreService
         return;
       }
 
-      tribalMembershipVerifications.forEach(
-          e -> tribalMembershipVerificationDao.delete(e.getPrimaryKey()));
+      tribalMembershipVerifications
+          .forEach(e -> tribalMembershipVerificationDao.delete(e.getPrimaryKey()));
     }
   }
 }

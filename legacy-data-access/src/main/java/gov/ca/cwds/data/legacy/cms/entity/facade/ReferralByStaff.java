@@ -1,23 +1,33 @@
 package gov.ca.cwds.data.legacy.cms.entity.facade;
 
-import gov.ca.cwds.data.legacy.cms.entity.enums.AssignmentType;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import javax.persistence.SqlResultSetMapping;
+
+import gov.ca.cwds.data.legacy.cms.entity.enums.AssignmentType;
+import gov.ca.cwds.data.std.ApiMarker;
+
 /**
- * The POJO is intended to contain data from different tables and to be filled
- * by @SqlResultSetMapping after @NamedNativeQuery is invoked.
+ * The POJO is intended to contain data from different tables and to be filled by
+ * {@link SqlResultSetMapping} after {@link NamedNativeQuery} is invoked.
  *
- * <p>The reason to use @NamedNativeQuery and to create the 'facade' class is a
- * performance issue with lots of joins when using @Entity classes.
+ * <p>
+ * The reason to use {@link NamedNativeQuery} and to create the 'facade' class is a performance
+ * issue with lots of joins when using {@link Entity} classes.
+ * </p>
  *
- * <p>N.B. @NamedNativeQuery and @SqlResultSetMapping are placed in
- * {@link gov.ca.cwds.data.legacy.cms.entity.Referral} @Entity class as they
- * can be found by hibernate in @Entity classes.
+ * <p>
+ * N.B. {@link NamedNativeQuery} and {@link SqlResultSetMapping} are placed in
+ * {@link gov.ca.cwds.data.legacy.cms.entity.Referral} {@link Entity} class as they can be found by
+ * hibernate in {@link Entity} classes.
+ * </p>
  *
- * <p>@author CWDS TPT-3 Team
+ * @author CWDS TPT-3 Team
  */
-public class ReferralByStaff {
+public class ReferralByStaff implements ApiMarker {
+
+  private static final long serialVersionUID = 1L;
 
   public static final String NATIVE_FIND_REFERRALS_BY_STAFF_ID =
       "ReferralByStaff.nativeFindActiveByStaffId";
@@ -32,15 +42,18 @@ public class ReferralByStaff {
   private AssignmentType assignmentType;
 
   /**
-   * The constructor is required by @SqlResultSetMapping
+   * Constructor required by {@link SqlResultSetMapping}.
+   * 
+   * @param identifier primary key
+   * @param referralName referral name/title
+   * @param receivedDate date received
+   * @param receivedTime time received
+   * @param referralResponseType response type
+   * @param assignmentIdentifier assignment foreign key
+   * @param assignmentTypeCode assignment type
    */
-  public ReferralByStaff(
-      String identifier,
-      String referralName,
-      LocalDate receivedDate,
-      LocalTime receivedTime,
-      String referralResponseType,
-      String assignmentIdentifier,
+  public ReferralByStaff(String identifier, String referralName, LocalDate receivedDate,
+      LocalTime receivedTime, String referralResponseType, String assignmentIdentifier,
       String assignmentTypeCode) {
     this.identifier = identifier;
     this.referralName = referralName;
