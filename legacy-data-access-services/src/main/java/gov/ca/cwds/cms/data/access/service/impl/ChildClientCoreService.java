@@ -69,7 +69,7 @@ public class ChildClientCoreService extends ClientCoreService {
   }
 
   @Override
-  protected DataAccessServiceLifecycle getUpdateLifeCycle() {
+  public DataAccessServiceLifecycle getUpdateLifeCycle() {
     return new ChildClientUpdateLifeCycle();
   }
 
