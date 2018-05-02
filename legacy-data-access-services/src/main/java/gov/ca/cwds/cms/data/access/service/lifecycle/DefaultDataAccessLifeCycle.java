@@ -2,10 +2,13 @@ package gov.ca.cwds.cms.data.access.service.lifecycle;
 
 import gov.ca.cwds.cms.data.access.dto.BaseEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
+import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.security.realm.PerryAccount;
 
-/** @author CWDS TPT-3 Team */
-public class DefaultDataAccessLifeCycle<T extends BaseEntityAwareDTO>
+/**
+ * @author CWDS TPT-3 Team
+ */
+public class DefaultDataAccessLifeCycle<T extends BaseEntityAwareDTO<? extends PersistentObject>>
     implements DataAccessServiceLifecycle<T> {
 
   @Override
@@ -42,4 +45,5 @@ public class DefaultDataAccessLifeCycle<T extends BaseEntityAwareDTO>
   public void afterStore(DataAccessBundle bundle) throws DataAccessServicesException {
     // Do nothing just a stub
   }
+
 }

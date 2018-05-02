@@ -1,22 +1,35 @@
 package gov.ca.cwds.data.legacy.cms.entity.facade;
 
-import gov.ca.cwds.data.legacy.cms.entity.enums.AssignmentType;
 import java.time.LocalDate;
 
+import javax.persistence.Entity;
+import javax.persistence.SqlResultSetMapping;
+
+import org.hibernate.annotations.NamedNativeQuery;
+
+import gov.ca.cwds.data.legacy.cms.entity.enums.AssignmentType;
+import gov.ca.cwds.data.std.ApiMarker;
+
 /**
- * The POJO is intended to contain data from different tables and to be filled
- * by @SqlResultSetMapping after @NamedNativeQuery is invoked.
+ * The POJO is intended to contain data from different tables and to be filled by
+ * {@link SqlResultSetMapping} after {@link NamedNativeQuery} is invoked.
  *
- * <p>The reason to use @NamedNativeQuery and to create the 'facade' class is a
- * performance issue with lots of joins when using @Entity classes.
+ * <p>
+ * The reason to use {@link NamedNativeQuery} and to create the 'facade' class is a performance
+ * issue with lots of joins when using {@link Entity} classes.
+ * </p>
  *
- * <p>N.B. @NamedNativeQuery and @SqlResultSetMapping are placed in
- * {@link gov.ca.cwds.data.legacy.cms.entity.Case} @Entity class as they
- * can be found by hibernate in @Entity classes.
+ * <p>
+ * N.B. {@link NamedNativeQuery} and {@link SqlResultSetMapping} are placed in
+ * {@link gov.ca.cwds.data.legacy.cms.entity.Case} {@link Entity} class as they can be found by
+ * hibernate in {@link Entity} classes.
+ * </p>
  *
- * <p>@author CWDS TPT-3 Team
+ * @author CWDS TPT-3 Team
  */
-public class CaseByStaff {
+public class CaseByStaff implements ApiMarker {
+
+  private static final long serialVersionUID = 1L;
 
   public static final String NATIVE_FIND_CASES_BY_STAFF_ID = "CaseByStaff.nativeFindCasesByStaffId";
   public static final String MAPPING_CASE_BY_STAFF = "CaseByStaff.mapping";
@@ -33,17 +46,20 @@ public class CaseByStaff {
 
   /**
    * The constructor is required by @SqlResultSetMapping
+   * 
+   * @param identifier primary key
+   * @param caseName case name
+   * @param clientIdentifier client foreign key
+   * @param clientFirstName client first name
+   * @param clientLastName client last name
+   * @param activeServiceComponent active service component
+   * @param assignmentIdentifier assignment foreign key
+   * @param assignmentTypeCode assignment type
+   * @param assignmentStartDate assignment start date
    */
-  public CaseByStaff(
-      String identifier,
-      String caseName,
-      String clientIdentifier,
-      String clientFirstName,
-      String clientLastName,
-      String activeServiceComponent,
-      String assignmentIdentifier,
-      String assignmentTypeCode,
-      LocalDate assignmentStartDate) {
+  public CaseByStaff(String identifier, String caseName, String clientIdentifier,
+      String clientFirstName, String clientLastName, String activeServiceComponent,
+      String assignmentIdentifier, String assignmentTypeCode, LocalDate assignmentStartDate) {
     this.identifier = identifier;
     this.caseName = caseName;
     this.clientIdentifier = clientIdentifier;
