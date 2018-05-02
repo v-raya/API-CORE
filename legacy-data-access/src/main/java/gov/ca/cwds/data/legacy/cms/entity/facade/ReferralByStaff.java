@@ -3,7 +3,10 @@ package gov.ca.cwds.data.legacy.cms.entity.facade;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import javax.persistence.Entity;
 import javax.persistence.SqlResultSetMapping;
+
+import org.hibernate.annotations.NamedNativeQuery;
 
 import gov.ca.cwds.data.legacy.cms.entity.enums.AssignmentType;
 import gov.ca.cwds.data.std.ApiMarker;
