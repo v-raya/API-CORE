@@ -268,7 +268,7 @@ public class DomainChef {
    * @return Integer
    */
   public static Integer uncookZipcodeString(String zipcode) {
-    if (StringUtils.isBlank(zipcode)) {
+    if (StringUtils.isBlank(zipcode) || "0".equals(zipcode.trim())) {
       return 0;
     }
     Matcher matcher = ZIPCODE_PATTERN.matcher(zipcode);
