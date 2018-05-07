@@ -1,4 +1,4 @@
-package gov.ca.cwds.cms.data.access.service.impl.relationships.dbDependent;
+package gov.ca.cwds.cms.data.access.service.impl.clientrelationship;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -8,7 +8,6 @@ import static org.junit.Assert.assertTrue;
 import gov.ca.cwds.cms.data.access.dto.ClientRelationshipAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
-import gov.ca.cwds.cms.data.access.service.impl.ClientRelationshipCoreService;
 import gov.ca.cwds.cms.data.access.service.impl.dbDependentSuite.BaseCwsCmsInMemoryPersistenceTest;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.ClientRelationshipDao;
@@ -39,6 +38,8 @@ public class R08861DBTest extends BaseCwsCmsInMemoryPersistenceTest {
   private ClientRelationshipDao clientRelationshipDao;
   private BusinessValidationService businessValidationService;
   private PaternityDetailDao paternityDetailDao;
+  private UpdateLifecycle updateLifecycle;
+  private SearchClientRelationshipService searchClientRelationshipService;
 
   @Before
   public void before() throws Exception {
@@ -47,12 +48,18 @@ public class R08861DBTest extends BaseCwsCmsInMemoryPersistenceTest {
     clientRelationshipDao = new ClientRelationshipDao(sessionFactory);
     paternityDetailDao = new PaternityDetailDao(sessionFactory);
     clientDao = new ClientDao(sessionFactory);
-    clientRelationshipCoreService =
-        new ClientRelationshipCoreService(
+    searchClientRelationshipService = new SearchClientRelationshipService(clientRelationshipDao);
+    updateLifecycle =
+        new UpdateLifecycle(
             clientRelationshipDao,
             businessValidationService,
             clientDao,
-            tribalMembershipVerificationDao, paternityDetailDao);
+            tribalMembershipVerificationDao,
+            paternityDetailDao,
+          searchClientRelationshipService);
+    clientRelationshipCoreService =
+        new ClientRelationshipCoreService(
+            clientRelationshipDao, updateLifecycle, searchClientRelationshipService);
 
     cleanAllAndInsert("/dbunit/R08861.xml");
   }
@@ -103,7 +110,8 @@ public class R08861DBTest extends BaseCwsCmsInMemoryPersistenceTest {
     assertTrue(CollectionUtils.isEmpty(afterDelete));
   }
 
-  private List<TribalMembershipVerification> getTrbalMembershipVerificationThatHaveSubTribals(String clientId, String parentId) {
+  private List<TribalMembershipVerification> getTrbalMembershipVerificationThatHaveSubTribals(
+      String clientId, String parentId) {
     final List<TribalMembershipVerification> shouldBeDeleted = new ArrayList<>();
 
     executeInTransaction(

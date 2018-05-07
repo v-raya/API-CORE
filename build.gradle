@@ -101,6 +101,8 @@ allprojects {
         exclude '**/*IT*'
         exclude 'gov/ca/cwds/data/legacy/cms/dao/**'
         exclude '**/dbDependent/**'
+        exclude 'gov/ca/cwds/cms/data/access/service/impl/clientrelationship/R08861DBTest.class'
+        exclude 'gov/ca/cwds/cms/data/access/service/impl/clientrelationship/R08840DBTest.class'
         jacoco {
             excludes = ["**org/drools/**/*"]
         }

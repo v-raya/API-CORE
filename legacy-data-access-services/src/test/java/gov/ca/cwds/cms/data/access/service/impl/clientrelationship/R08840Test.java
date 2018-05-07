@@ -1,8 +1,7 @@
-package gov.ca.cwds.cms.data.access.service.impl.relationships;
+package gov.ca.cwds.cms.data.access.service.impl.clientrelationship;
 
 import static org.junit.Assert.assertEquals;
 
-import gov.ca.cwds.cms.data.access.dto.ClientRelationshipAwareDTO;
 import gov.ca.cwds.cms.data.access.service.rules.ClientRelationshipDroolsConfiguration;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ClientRelationshipType;
