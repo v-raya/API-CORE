@@ -6,7 +6,11 @@ import java.text.MessageFormat;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +31,28 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
   private static final Logger LOGGER = LoggerFactory.getLogger(CrudsDaoImpl.class);
 
   private SessionFactory sessionFactory;
+
+  public Session grabSession() {
+    Session session;
+    try {
+      session = sessionFactory.getCurrentSession();
+    } catch (HibernateException e) {
+      session = sessionFactory.openSession();
+    }
+
+    return session;
+  }
+
+  public Transaction joinTransaction(Session session) {
+    Transaction txn = session.getTransaction();
+    txn = txn != null ? txn : session.beginTransaction();
+
+    if (TransactionStatus.NOT_ACTIVE == txn.getStatus() || !txn.isActive()) {
+      txn.begin();
+    }
+
+    return txn;
+  }
 
   /**
    * Default constructor.
@@ -53,6 +79,7 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
    */
   @Override
   public T find(Serializable primaryKey) {
+    grabSession();
     return get(primaryKey);
   }
 
@@ -63,9 +90,10 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
    */
   @Override
   public T delete(Serializable id) {
+    final Session session = grabSession();
     T object = find(id);
     if (object != null) {
-      currentSession().delete(object);
+      session.delete(object);
     }
     return object;
   }
@@ -77,6 +105,7 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
    */
   @Override
   public T create(T object) {
+    grabSession();
     if (object.getPrimaryKey() != null) {
       T databaseObject = find(object.getPrimaryKey());
       if (databaseObject != null) {
@@ -95,13 +124,14 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
    */
   @Override
   public T update(T object) {
+    final Session session = grabSession();
     T databaseObject = find(object.getPrimaryKey());
     if (databaseObject == null) {
       String msg =
           MessageFormat.format("Unable to find entity with id={0}", object.getPrimaryKey());
       throw new EntityNotFoundException(msg);
     }
-    currentSession().evict(databaseObject);
+    session.evict(databaseObject);
     return persist(object);
   }
 

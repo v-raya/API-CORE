@@ -1,19 +1,11 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
-import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
-
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessBundle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
 import gov.ca.cwds.data.legacy.cms.dao.ChildClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.CreditReportHistoryDao;
-import gov.ca.cwds.data.legacy.cms.dao.CsecHistoryDao;
 import gov.ca.cwds.data.legacy.cms.dao.FCEligibilityDao;
 import gov.ca.cwds.data.legacy.cms.dao.HealthInterventionPlanDao;
 import gov.ca.cwds.data.legacy.cms.dao.HealthReferralDao;
@@ -37,32 +29,29 @@ import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
 import gov.ca.cwds.data.legacy.cms.entity.SchoolOriginHistory;
 import gov.ca.cwds.data.legacy.cms.entity.SpecialEducation;
 import gov.ca.cwds.security.annotations.Authorize;
+import gov.ca.cwds.security.utils.PrincipalUtils;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
+
+import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
 
 /** @author CWDS TPT-3 Team */
 public class ChildClientCoreService extends ClientCoreService {
 
-  @Inject
-  private HealthInterventionPlanDao healthInterventionPlanDao;
-  @Inject
-  private ParentalRightsTerminationDao parentalRightsTerminationDao;
-  @Inject
-  private MedicalEligibilityApplicationDao medicalEligibilityApplicationDao;
-  @Inject
-  private FCEligibilityDao fcEligibilityDao;
-  @Inject
-  private CsecHistoryDao csecHistoryDao;
-  @Inject
-  private PaternityDetailDao paternityDetailDao;
-  @Inject
-  private CreditReportHistoryDao creditReportHistoryDao;
-  @Inject
-  private SpecialEducationDao specialEducationDao;
-  @Inject
-  private HealthReferralDao healthReferralDao;
-  @Inject
-  private SchoolOriginHistoryDao schoolOriginHistoryDao;
-  @Inject
-  private HealthScreeningDao healthScreeningDao;
+  @Inject private HealthInterventionPlanDao healthInterventionPlanDao;
+  @Inject private ParentalRightsTerminationDao parentalRightsTerminationDao;
+  @Inject private MedicalEligibilityApplicationDao medicalEligibilityApplicationDao;
+  @Inject private FCEligibilityDao fcEligibilityDao;
+  @Inject private CsecHistoryService csecHistoryService;
+  @Inject private PaternityDetailDao paternityDetailDao;
+  @Inject private CreditReportHistoryDao creditReportHistoryDao;
+  @Inject private SpecialEducationDao specialEducationDao;
+  @Inject private HealthReferralDao healthReferralDao;
+  @Inject private SchoolOriginHistoryDao schoolOriginHistoryDao;
+  @Inject private HealthScreeningDao healthScreeningDao;
 
   @Inject
   public ChildClientCoreService(ChildClientDao crudDao) {
@@ -80,7 +69,7 @@ public class ChildClientCoreService extends ClientCoreService {
   }
 
   @Override
-  protected DataAccessServiceLifecycle getUpdateLifeCycle() {
+  public DataAccessServiceLifecycle getUpdateLifeCycle() {
     return new ChildClientUpdateLifeCycle();
   }
 
@@ -111,11 +100,9 @@ public class ChildClientCoreService extends ClientCoreService {
 
       List<MedicalEligibilityApplication> medicalEligibilityApplications =
           medicalEligibilityApplicationDao.findByChildClientId(childClientId);
-      clientEntityAwareDTO.getMedicalEligibilityApplications()
+      clientEntityAwareDTO
+          .getMedicalEligibilityApplications()
           .addAll(medicalEligibilityApplications);
-
-      List<CsecHistory> csecHistories = csecHistoryDao.findByClientId(childClientId);
-      clientEntityAwareDTO.getCsecHistories().addAll(csecHistories);
 
       List<PaternityDetail> paternityDetails =
           paternityDetailDao.findByChildClientId(childClientId);
@@ -138,6 +125,33 @@ public class ChildClientCoreService extends ClientCoreService {
       List<HealthScreening> healthScreenings =
           healthScreeningDao.findByChildClientId(childClientId);
       clientEntityAwareDTO.getHealthScreenings().addAll(healthScreenings);
+
+      if (!clientEntityAwareDTO.isEnriched()) {
+        List<CsecHistory> csecHistories = csecHistoryService.findByClientId(childClientId);
+        clientEntityAwareDTO.getCsecHistories().addAll(csecHistories);
+      }
+    }
+
+    @Override
+    public void afterBusinessValidation(DataAccessBundle bundle) {
+      super.afterBusinessValidation(bundle);
+      ChildClientEntityAwareDTO childClientEntityAwareDTO =
+          (ChildClientEntityAwareDTO) bundle.getAwareDto();
+      ChildClient childClient = (ChildClient) childClientEntityAwareDTO.getEntity();
+      childClient.setChildClientLastUpdateId(PrincipalUtils.getStaffPersonId());
+      childClient.setChildClientLastUpdateTime(LocalDateTime.now());
+    }
+
+    @Override
+    public void afterStore(DataAccessBundle bundle) {
+      super.afterStore(bundle);
+      ChildClientEntityAwareDTO childClientEntityAwareDTO =
+          (ChildClientEntityAwareDTO) bundle.getAwareDto();
+      if (childClientEntityAwareDTO.isEnriched()) {
+        csecHistoryService.updateCsecHistoriesByClientId(
+            childClientEntityAwareDTO.getEntity().getIdentifier(),
+            childClientEntityAwareDTO.getCsecHistories());
+      }
     }
   }
 }

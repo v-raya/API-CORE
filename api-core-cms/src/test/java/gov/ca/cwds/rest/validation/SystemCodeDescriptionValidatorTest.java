@@ -9,6 +9,8 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.ConstraintValidatorContext;
@@ -99,7 +101,6 @@ public class SystemCodeDescriptionValidatorTest {
   public void validateManually() throws Exception {
     final AnnoTestBean bean = new AnnoTestBean("Breasts", "two");
     Set<ConstraintViolation<AnnoTestBean>> violations = validator.validate(bean);
-    System.out.println(violations);
     assertTrue(violations.isEmpty());
   }
 
@@ -107,7 +108,6 @@ public class SystemCodeDescriptionValidatorTest {
   public void validateManually2() throws Exception {
     final AnnoTestBean bean = new AnnoTestBean("djdjskshahfdsa", "two");
     Set<ConstraintViolation<AnnoTestBean>> violations = validator.validate(bean);
-    System.out.println(violations);
     assertFalse(violations.isEmpty());
   }
 }

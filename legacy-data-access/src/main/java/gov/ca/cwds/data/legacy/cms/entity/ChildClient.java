@@ -155,7 +155,7 @@ public class ChildClient extends Client {
 
   @Type(type = "yes_no")
   @Column(name = "SFSURB_IND")
-  private boolean safelySurrendedBabiesIndicatorVar;
+  private boolean safelySurrenderedBabiesIndicatorVar;
 
   @Type(type = "yes_no")
   @Column(name = "SAW1APLT_B")
@@ -325,8 +325,8 @@ public class ChildClient extends Client {
     this.previouslyAdopted = previouslyAdopted;
   }
 
-  public void setSafelySurrendedBabiesIndicatorVar(boolean safelySurrendedBabiesIndicatorVar) {
-    this.safelySurrendedBabiesIndicatorVar = safelySurrendedBabiesIndicatorVar;
+  public void setSafelySurrenderedBabiesIndicatorVar(boolean safelySurrenderedBabiesIndicatorVar) {
+    this.safelySurrenderedBabiesIndicatorVar = safelySurrenderedBabiesIndicatorVar;
   }
 
   public void setSaw1EligApplicationIndicatorVar(boolean saw1EligApplicationIndicatorVar) {
@@ -581,10 +581,10 @@ public class ChildClient extends Client {
   }
 
   /**
-   * @return the safelySurrendedBabiesIndicatorVar
+   * @return the safelySurrenderedBabiesIndicatorVar
    */
-  public boolean getSafelySurrendedBabiesIndicatorVar() {
-    return safelySurrendedBabiesIndicatorVar;
+  public boolean getSafelySurrenderedBabiesIndicatorVar() {
+    return safelySurrenderedBabiesIndicatorVar;
   }
 
   /**

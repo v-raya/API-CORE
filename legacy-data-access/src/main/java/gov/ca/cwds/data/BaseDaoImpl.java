@@ -12,7 +12,6 @@ import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 import com.google.common.collect.ImmutableList;
 
@@ -46,14 +45,8 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
   @Override
   public List<T> findAll() {
     final String namedQueryName = constructNamedQueryName("findAll");
-    final Session session = getSessionFactory().getCurrentSession();
-
-    Transaction txn = session.getTransaction();
-    txn = txn != null ? txn : session.beginTransaction();
-
-    if (TransactionStatus.NOT_ACTIVE == txn.getStatus() || !txn.isActive()) {
-      txn.begin();
-    }
+    final Session session = grabSession();
+    final Transaction txn = joinTransaction(session);
 
     try {
       final Query<T> query = session.getNamedQuery(namedQueryName);
@@ -69,7 +62,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
   }
 
   public List<T> queryImmutableList(String queryName) {
-    final Session session = this.getSessionFactory().getCurrentSession();
+    final Session session = grabSession();
     final org.hibernate.query.Query<T> query =
         session.createNamedQuery(queryName, getEntityClass());
     final ImmutableList.Builder<T> entities = new ImmutableList.Builder<>();
@@ -86,18 +79,14 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
   @Override
   public List<T> findAllUpdatedAfter(Date datetime) {
     final String namedQueryName = constructNamedQueryName("findAllUpdatedAfter");
-    final Session session = getSessionFactory().getCurrentSession();
-    final Transaction txn = session.beginTransaction();
+    final Session session = grabSession();
+    final Transaction txn = joinTransaction(session);
+
     try {
       // Compatible with both DB2 z/OS and Linux.
-      final Query query =
-          session
-              .getNamedQuery(namedQueryName)
-              .setCacheable(false)
-              .setFlushMode(FlushMode.MANUAL)
-              .setReadOnly(true)
-              .setCacheMode(CacheMode.IGNORE)
-              .setTimestamp("after", new java.sql.Timestamp(datetime.getTime()));
+      final Query query = session.getNamedQuery(namedQueryName).setCacheable(false)
+          .setFlushMode(FlushMode.MANUAL).setReadOnly(true).setCacheMode(CacheMode.IGNORE)
+          .setTimestamp("after", new java.sql.Timestamp(datetime.getTime()));
 
       // Iterate, process, flush.
       int fetchSize = 5000;
@@ -134,4 +123,5 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
   protected String constructNamedQueryName(String suffix) {
     return getEntityClass().getName() + "." + suffix;
   }
+
 }

@@ -2,16 +2,21 @@ package gov.ca.cwds.data.legacy.cms.entity;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.SexualExploitationType;
-import gov.ca.cwds.data.persistence.CompositeKey;
+
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NamedQuery;
@@ -21,10 +26,12 @@ import org.hibernate.annotations.NotFoundAction;
 /** @author CWDS TPT-3 Team */
 @Entity
 @Table(name = "CSECHIST")
+@IdClass(CsecHistoryPK.class)
 @NamedQuery(
     name = CsecHistory.FIND_BY_CLIENT_ID,
     query = "FROM gov.ca.cwds.data.legacy.cms.entity.CsecHistory where childClient =:" + CsecHistory.PARAM_CLIENT_ID
 )
+@SuppressWarnings({"squid:S3437"}) // LocalDate is serializable
 public class CsecHistory extends CmsPersistentObject {
 
   private static final long serialVersionUID = -1114099625983617913L;
@@ -32,10 +39,10 @@ public class CsecHistory extends CmsPersistentObject {
   public static final String PARAM_CLIENT_ID = "clientId";
   public static final String FIND_BY_CLIENT_ID = "CsecHistory.findByClient";
 
-  @Column(name = "CREATN_TS")
-  private LocalDate creationDate;
+  @Column(name = "CREATN_TS", nullable = false)
+  private LocalDateTime creationTimestamp;
 
-  @Column(name = "START_DT")
+  @Column(name = "START_DT", nullable = false)
   private LocalDate startDate;
 
   @Column(name = "END_DT")
@@ -48,7 +55,7 @@ public class CsecHistory extends CmsPersistentObject {
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "CSEC_TPC", referencedColumnName = "SYS_ID")
+  @JoinColumn(name = "CSEC_TPC", referencedColumnName = "SYS_ID", nullable = false)
   private SexualExploitationType sexualExploitationType;
 
   @Id
@@ -57,15 +64,15 @@ public class CsecHistory extends CmsPersistentObject {
 
   @Override
   public Serializable getPrimaryKey() {
-    return new CompositeKey(getThirdId(), getChildClient());
+    return new CsecHistoryPK(childClient, thirdId);
   }
 
-  public LocalDate getCreationDate() {
-    return creationDate;
+  public LocalDateTime getCreationTimestamp() {
+    return creationTimestamp;
   }
 
-  public void setCreationDate(LocalDate creationDate) {
-    this.creationDate = creationDate;
+  public void setCreationTimestamp(LocalDateTime creationTimestamp) {
+    this.creationTimestamp = creationTimestamp;
   }
 
   public LocalDate getStartDate() {
@@ -106,5 +113,37 @@ public class CsecHistory extends CmsPersistentObject {
 
   public void setThirdId(String thirdId) {
     this.thirdId = thirdId;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+
+    if (o == null || getClass() != o.getClass()) return false;
+
+    CsecHistory that = (CsecHistory) o;
+
+    return new EqualsBuilder()
+            .appendSuper(super.equals(o))
+            .append(creationTimestamp, that.creationTimestamp)
+            .append(startDate, that.startDate)
+            .append(endDate, that.endDate)
+            .append(childClient, that.childClient)
+            .append(sexualExploitationType, that.sexualExploitationType)
+            .append(thirdId, that.thirdId)
+            .isEquals();
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(17, 37)
+            .appendSuper(super.hashCode())
+            .append(creationTimestamp)
+            .append(startDate)
+            .append(endDate)
+            .append(childClient)
+            .append(sexualExploitationType)
+            .append(thirdId)
+            .toHashCode();
   }
 }

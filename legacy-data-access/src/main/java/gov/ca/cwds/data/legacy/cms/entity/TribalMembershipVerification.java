@@ -40,20 +40,26 @@ import org.hibernate.annotations.NamedQuery;
           + " and t.fkFromTribalMembershipVerification is null"
 )
 @NamedQuery(
-    name =
-        TribalMembershipVerification
-            .FIND_TRIBAL_MEMBERSHIP_VERIFICATION_BY_CLIENT_ID,
-    query =
-        "SELECT t FROM gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification t "
-            + "where t.clientId =:"
-            + TribalMembershipVerification.PARAM_CLIENT_ID
+  name = TribalMembershipVerification.FIND_TRIBAL_MEMBERSHIP_VERIFICATION_BY_CLIENT_ID,
+  query =
+      "SELECT t FROM gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification t "
+          + "where t.clientId =:"
+          + TribalMembershipVerification.PARAM_CLIENT_ID
 )
 @NamedQuery(
-    name =
-        TribalMembershipVerification
-            .FIND_ALL_TRIBAL,
-    query =
-        "SELECT t FROM gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification t"
+  name = TribalMembershipVerification.FIND_ALL_TRIBAL,
+  query = "SELECT t FROM gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification t"
+)
+@NamedQuery(
+  name = TribalMembershipVerification.FIND_TRIBAL_THAT_HAVE_SUB_TRIBALS_BY_CLIENT,
+  query =
+      "SELECT tribals FROM gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification tribals "
+          + "  LEFT JOIN gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification "
+          + "parentTribals with parentTribals.clientId = :"
+          + TribalMembershipVerification.PARAM_PARENT_CLIENT_ID
+          + " WHERE parentTribals.thirdId = tribals.fkFromTribalMembershipVerification "
+          + "AND tribals.clientId= :"
+          + TribalMembershipVerification.PARAM_CLIENT_ID
 )
 public class TribalMembershipVerification extends CmsPersistentObject {
 
@@ -66,7 +72,11 @@ public class TribalMembershipVerification extends CmsPersistentObject {
   public static final String FIND_ALL_TRIBAL =
       "gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerificationAll";
 
+  public static final String FIND_TRIBAL_THAT_HAVE_SUB_TRIBALS_BY_CLIENT =
+      "gov.ca.cwds.data.legacy.cms.entity.SubTribalMembershipVerificationByClientId";
+
   public static final String PARAM_CLIENT_ID = "clientId";
+  public static final String PARAM_PARENT_CLIENT_ID = "parentClientId";
 
   @Id
   @NotNull
@@ -90,9 +100,8 @@ public class TribalMembershipVerification extends CmsPersistentObject {
 
   @NotNull
   @Column(name = "FKTRB_ORGT")
-  private String fkSentTotribalOrganization;
+  private String fkSentToTribalOrganization;
 
-  @NotNull
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
   @JoinColumn(name = "INDN_STC", referencedColumnName = "SYS_ID")
@@ -137,12 +146,12 @@ public class TribalMembershipVerification extends CmsPersistentObject {
     this.fkFromTribalMembershipVerification = fkFromTribalMembershipVerification;
   }
 
-  public String getFkSentTotribalOrganization() {
-    return fkSentTotribalOrganization;
+  public String getFkSentToTribalOrganization() {
+    return fkSentToTribalOrganization;
   }
 
-  public void setFkSentTotribalOrganization(String fkSentTotribalOrganization) {
-    this.fkSentTotribalOrganization = fkSentTotribalOrganization;
+  public void setFkSentToTribalOrganization(String fkSentToTribalOrganization) {
+    this.fkSentToTribalOrganization = fkSentToTribalOrganization;
   }
 
   public IndianEnrolmentStatus getIndianEnrollmentStatus() {

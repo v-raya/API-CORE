@@ -244,7 +244,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * 
    * @author CWDS API Team
    */
-  @SuppressWarnings("javadoc")
   public enum ElasticSearchPersonNameSuffix {
 
     ESQUIRE("esq", new String[] {"esq", "eq", "esqu"}),
@@ -551,6 +550,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
         this.gender = "male";
       } else if ("f".equals(comp)) {
         this.gender = "female";
+      } else if ("i".equals(comp)) {
+        this.gender = "intersex";
       }
     }
 
@@ -1189,6 +1190,14 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       names.add(this.lastName);
     }
 
+    if (StringUtils.isNotBlank(this.middleName)) {
+      names.add(this.middleName);
+    }
+
+    if (StringUtils.isNotBlank(this.nameSuffix)) {
+      names.add(this.nameSuffix);
+    }
+
     if (this.akas != null) {
       for (ElasticSearchPersonAka aka : this.akas) {
         if (StringUtils.isNotBlank(aka.getFirstName())) {
@@ -1227,11 +1236,21 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     String mmddDob = df.format(date);
     dobValues.add(mmddDob);
 
+    // Month and Day and Year, e.g. 01/09/90
+    df = new SimpleDateFormat("MMddyy");
+    String mmddyyDob = df.format(date);
+    dobValues.add(mmddyyDob);
+
     // Remove leading zeros, e.g. 1/9/1995
     df = new SimpleDateFormat("Mdyyyy");
     String mdyyyyDob = df.format(date);
     if (!mmddyyyyDob.equals(mdyyyyDob)) {
       dobValues.add(mdyyyyDob);
+
+      //Month and Day and Year without zeros, e.g. 9/3/90
+      df = new SimpleDateFormat("Mdyy");
+      String mdyyDob = df.format(date);
+      dobValues.add(mdyyDob);
 
       // Month and year only without zeros, e.g. 9/1995
       df = new SimpleDateFormat("Myyyy");

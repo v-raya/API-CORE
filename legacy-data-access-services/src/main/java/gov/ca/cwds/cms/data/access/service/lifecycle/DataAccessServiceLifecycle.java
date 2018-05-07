@@ -4,8 +4,8 @@ import gov.ca.cwds.cms.data.access.dto.BaseEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.security.realm.PerryAccount;
 
-public interface DataAccessServiceLifecycle<F extends BaseEntityAwareDTO> {
-  void beforeDataProcessing(DataAccessBundle<F> bundle);
+public interface DataAccessServiceLifecycle<F extends BaseEntityAwareDTO<?>> {
+  void beforeDataProcessing(DataAccessBundle<F> bundle) throws DataAccessServicesException;
 
   void afterDataProcessing(DataAccessBundle<F> bundle);
 

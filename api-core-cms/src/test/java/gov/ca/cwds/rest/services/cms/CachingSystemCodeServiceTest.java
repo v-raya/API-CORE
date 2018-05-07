@@ -124,6 +124,16 @@ public class CachingSystemCodeServiceTest {
 
 
   @Test
+  public void testGetSystemCodeId() throws Exception {
+    Assert.assertEquals(new Short("27"), cachingSystemCodeService.getSystemCodeId("Business", "ADDR_TPC"));
+  }
+
+  @Test
+  public void testGetSystemCodeIdIsNotExist() throws Exception {
+    Assert.assertNull(cachingSystemCodeService.getSystemCodeId("Other description", "ADDR_TPC"));
+  }
+
+  @Test
   public void testVerifySystemCodeId() throws Exception {
     boolean validCode =
         cachingSystemCodeService.verifyActiveSystemCodeIdForMeta((short) 27, "ADDR_TPC", false);

@@ -2,6 +2,7 @@ package gov.ca.cwds.test.support;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.File;
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -41,16 +42,20 @@ public class RestClientTestRule<T extends Configuration> implements TestRule {
 
   private final DropwizardAppRule<T> dropWizardApplication;
 
+
   private static final TrustManager[] TRUST_ALL_CERTS = new TrustManager[] {new X509TrustManager() {
     @Override
+    @SuppressFBWarnings("WEAK_TRUST_MANAGER") //Used only for testing purposes
     public X509Certificate[] getAcceptedIssuers() {
       return null;
     }
 
     @Override
+    @SuppressFBWarnings("WEAK_TRUST_MANAGER") //Used only for testing purposes
     public void checkClientTrusted(X509Certificate[] certs, String authType) {}
 
     @Override
+    @SuppressFBWarnings("WEAK_TRUST_MANAGER") //Used only for testing purposes
     public void checkServerTrusted(X509Certificate[] certs, String authType) {}
   }};
 
@@ -84,6 +89,7 @@ public class RestClientTestRule<T extends Configuration> implements TestRule {
     return jwtService.generate("id", "subject", identity);
   }
 
+  @SuppressFBWarnings("PATH_TRAVERSAL_IN") //Path cannot be controlled by the user
   private JwtConfiguration getJwtConfiguration() throws IOException {
     if (jwtConfiguration != null) {
       return jwtConfiguration;

@@ -19,12 +19,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.core.classloader.annotations.SuppressStaticInitializationFor;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author CWDS TPT-2 Team
  */
 @RunWith(PowerMockRunner.class)
+@SuppressStaticInitializationFor("org.drools.core.util.Drools")
 @PrepareForTest(PerrySubject.class)
 public class SubstituteCareProviderCreateAuthorizerTest {
 
@@ -61,7 +63,7 @@ public class SubstituteCareProviderCreateAuthorizerTest {
     when(PerrySubject.getPerryAccount()).thenReturn(perryAccount);
 
     // when
-    final boolean actual = testSubject.checkInstance(null);
+    final boolean actual = testSubject.checkInstance(new SubstituteCareProvider());
 
     // then
     assertThat(actual, is(expectedResult));

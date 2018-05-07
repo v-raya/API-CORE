@@ -15,11 +15,12 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.Soc158placementsStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.UnableToDetermineReason;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType;
 import gov.ca.cwds.data.persistence.PersistentObject;
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import org.hibernate.annotations.ColumnTransformer;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.NamedQuery;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
@@ -36,11 +37,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
-import org.hibernate.annotations.ColumnTransformer;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.NamedQuery;
-import org.hibernate.annotations.Type;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 /** @author CWDS CALS API Team */
 @NamedQuery(
@@ -358,6 +359,26 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
   @Column(name = "ZIPPY_IND", nullable = false, length = 1)
   private boolean zippyCreatedIndicator;
 
+  @Column(name = "CLNT_SOC", nullable = false)
+  private short sexualOrientationCode;
+
+  @Column(name = "SO_UD_CD", length = 1)
+  private String sexualOrientationUnableToDetermineCode;
+
+  @Column(name = "SO_NL_DSC", length = 254)
+  @ColumnTransformer(read = "trim(SO_NL_DSC)")
+  private String sexualOrientationNotListedDescription;
+
+  @Column(name = "CLNT_GIC", nullable = false)
+  private short genderIdentityCode;
+
+  @Column(name = "GI_NL_DSC", length = 254)
+  @ColumnTransformer(read = "trim(GI_NL_DSC)")
+  private String genderIdentityNotListedDescription;
+
+  @Column(name = "CLNT_GEC", nullable = false)
+  private short genderEspressionCode;
+
   public void addOtherEthnicity(ClientOtherEthnicity otherEthnicity) {
     otherEthnicities.add(otherEthnicity);
     otherEthnicity.setClient(this);
@@ -397,7 +418,7 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
         && Objects.equals(getCommonMiddleName(), client.getCommonMiddleName());
   }
 
-  private boolean isBirthaAndAddressesEqual(Client client) {
+  private boolean isBirthAndAddressesEqual(Client client) {
     return Objects.equals(getBirthCity(), client.getBirthCity())
         && Objects.equals(getBirthDate(), client.getBirthDate())
         && Objects.equals(getEmailAddress(), client.getEmailAddress());
@@ -405,7 +426,7 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
 
   private boolean isNamesAndAddressesEqual(Client client) {
     return Objects.equals(getBirthFacilityName(), client.getBirthFacilityName())
-        && isBirthaAndAddressesEqual(client)
+        && isBirthAndAddressesEqual(client)
         && isNamesEqual(client);
   }
 
@@ -956,6 +977,56 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
 
   public void setSoc158placementsStatus(Soc158placementsStatus soc158placementsStatus) {
     this.soc158placementsStatus = soc158placementsStatus;
+  }
+
+  public short getSexualOrientationCode() {
+    return sexualOrientationCode;
+  }
+
+  public void setSexualOrientationCode(short sexualOrientationCode) {
+    this.sexualOrientationCode = sexualOrientationCode;
+  }
+
+  public String getSexualOrientationUnableToDetermineCode() {
+    return sexualOrientationUnableToDetermineCode;
+  }
+
+  public void setSexualOrientationUnableToDetermineCode(
+      String sexualOrientationUnableToDetermineCode) {
+    this.sexualOrientationUnableToDetermineCode = sexualOrientationUnableToDetermineCode;
+  }
+
+  public String getSexualOrientationNotListedDescription() {
+    return sexualOrientationNotListedDescription;
+  }
+
+  public void setSexualOrientationNotListedDescription(
+      String sexualOrientationNotListedDescription) {
+    this.sexualOrientationNotListedDescription = sexualOrientationNotListedDescription;
+  }
+
+  public short getGenderIdentityCode() {
+    return genderIdentityCode;
+  }
+
+  public void setGenderIdentityCode(short genderIdentityCode) {
+    this.genderIdentityCode = genderIdentityCode;
+  }
+
+  public String getGenderIdentityNotListedDescription() {
+    return genderIdentityNotListedDescription;
+  }
+
+  public void setGenderIdentityNotListedDescription(String genderIdentityNotListedDescription) {
+    this.genderIdentityNotListedDescription = genderIdentityNotListedDescription;
+  }
+
+  public short getGenderEspressionCode() {
+    return genderEspressionCode;
+  }
+
+  public void setGenderEspressionCode(short genderEspressionCode) {
+    this.genderEspressionCode = genderEspressionCode;
   }
 
   public String getClientIndexNumber() {

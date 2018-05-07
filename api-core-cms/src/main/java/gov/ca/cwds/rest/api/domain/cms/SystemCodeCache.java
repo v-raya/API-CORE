@@ -69,6 +69,16 @@ public interface SystemCodeCache extends ApiMarker {
   String getSystemCodeShortDescription(final Number systemCodeId);
 
   /**
+   * Get sys id of system code identified by given meta id and short description.
+   *
+   * @param metaId System code ID
+   * @param shortDescription syscode short description
+   * @return Short description of system code identified by given system code id. Returns null if
+   *         system code not found.
+   */
+  Short getSystemCodeId(String metaId, String shortDescription);
+
+  /**
    * Get system code descriptor for given system code id.
    * 
    * @param systemCodeId System code ID

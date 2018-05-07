@@ -135,7 +135,10 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
           c.setSecondaryLanguageCode((short)0);//S_LANG_TC
           c.setPrimaryLanguageCode((short)0);//P_LANG_TPC
           c.setReligionCode((short)0);//RLGN_TPC
-
+          c.setSexualOrientationCode((short)7066); //CLNT_SOC
+          c.setSexualOrientationUnableToDetermineCode("D"); //SO_UD_CD
+          c.setGenderIdentityCode((short)7075); //CLNT_GIC
+          c.setGenderEspressionCode((short)7081);//CLNT_GEC
           dao.create(c);
         });
 

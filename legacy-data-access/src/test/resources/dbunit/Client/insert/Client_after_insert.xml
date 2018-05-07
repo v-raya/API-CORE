@@ -67,6 +67,11 @@
     ETH_UD_CD="[NULL]"
     FTERM_DT="[NULL]"
     HEALTH_TXT="[NULL]"
-    MTERM_DT="[NULL]"/>
-
+    MTERM_DT="[NULL]"
+    CLNT_SOC="7066"
+    SO_UD_CD="D"
+    CLNT_GIC="7075"
+    CLNT_GEC="7081"
+    SO_NL_DSC="[NULL]"
+    GI_NL_DSC="[NULL]"/>
 </dataset>

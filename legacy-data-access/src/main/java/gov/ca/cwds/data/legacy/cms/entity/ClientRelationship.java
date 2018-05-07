@@ -78,12 +78,12 @@ public class ClientRelationship extends CmsPersistentObject {
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
   @JoinColumn(name = "FKCLIENT_T", referencedColumnName = "IDENTIFIER")
-  private Client secondaryClient;
+  private Client primaryClient;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
   @JoinColumn(name = "FKCLIENT_0", referencedColumnName = "IDENTIFIER")
-  private Client primaryClient;
+  private Client secondaryClient;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)

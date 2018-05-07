@@ -29,15 +29,16 @@ class DroolsKieContainerInstaller {
 
   KieContainer installKieContainer() throws DroolsException {
     try {
-          KieServices kieServices = KieServices.Factory.get();
-          addKModuleXml();
-          addDrlFiles();
-          KieBuilder kieBuilder = kieServices.newKieBuilder(kfs).buildAll();
-          kieBuilder.getKieModule();
-          if (!kieBuilder.getResults().getMessages(Message.Level.ERROR).isEmpty()) {
-            throw new DroolsException(
-                String.format(DroolsErrorMessages.DROOLS_CONTAINER_INSTALLATION_ERROR, containerId));
-          }
+      addKModuleXml();
+      addDrlFiles();
+      KieServices kieServices = KieServices.Factory.get();
+      KieBuilder kieBuilder = kieServices.newKieBuilder(kfs);
+      kieBuilder.buildAll();
+      kieBuilder.getKieModule();
+      if (!kieBuilder.getResults().getMessages(Message.Level.ERROR).isEmpty()) {
+        throw new DroolsException(
+            String.format(DroolsErrorMessages.DROOLS_CONTAINER_INSTALLATION_ERROR, containerId));
+      }
       return kieServices
           .newKieContainer(containerId, kieServices.getRepository().getDefaultReleaseId());
     } catch (IOException e) {
@@ -47,7 +48,8 @@ class DroolsKieContainerInstaller {
   }
 
   private void addDrlFiles() throws IOException {
-    for (String resourceName: IOUtils.readLines(getResourceStream(AUTO_DISCOVERY_FILENAME), "UTF-8")) {
+    for (String resourceName : IOUtils
+        .readLines(getResourceStream(AUTO_DISCOVERY_FILENAME), "UTF-8")) {
       if (resourceName.endsWith(".drl")) {
         kfs.write("src/main/resources/" + resourceName,
             IOUtils.toByteArray(getResourceStream(resourceName)));
@@ -66,7 +68,7 @@ class DroolsKieContainerInstaller {
 
   private InputStream getResourceStream(String resourceName) {
     return getClassLoader()
-          .getResourceAsStream(containerId + "/" + resourceName);
+        .getResourceAsStream(containerId + "/" + resourceName);
   }
 
 }

@@ -1,0 +1,39 @@
+import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.Client
+import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship
+import gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.ClientRelationshipType
+import gov.ca.cwds.cms.data.access.dto.ClientRelationshipAwareDTO;
+
+global java.util.Set validationDetailsList
+
+rule "R-08861-2"
+  dialect "mvel"
+  agenda-group "client-relationship-agenda"
+  when
+      /*
+      Code: R - 08861-2
+
+      Rule Txt
+       If (in focus) CLIENT_RELATIONSHIP > (parent) CLIENT > TRIBAL_MEMBERSHIP_VERIFICATION >
+       TRIBAL_MEMBERSHIP_VERIFICATION (where in focus .Id = .FKTR_MBVRT and
+       FK_CLIENT = (child) CLIENT.Id and .Indian_Enrollment_Status_Type <> null),
+       and cboRelationship changed to something other than Permitted Parent Relationship,
+       then give error and reset to previous value.
+      */
+    $relationshipEntityAwareDto: ClientRelationshipAwareDTO($isNeedMembershipVerification: needMembershipVerification)
+    $tribalsThatHaveSubTribals: TribalMembershipVerification(!$isNeedMembershipVerification
+                                                          && indianEnrollmentStatus != null)
+                                                          from $relationshipEntityAwareDto.tribalsThatHaveSubTribals
+  then
+     IssueDetails details = new IssueDetails();
+     details.setCode("R-08861-2");
+     details.setUserMessage("The Relationship changed to something other than Permitted Parent Relationship");
+     details.setProperty("ClientRelationship.type");
+     details.setInvalidValue($relationshipEntityAwareDto.getEntity().getType().getShortDescription());
+     validationDetailsList.add(details);
+end
