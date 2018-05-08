@@ -1,6 +1,6 @@
 plugins {
     id "org.sonarqube" version "2.2.1"
-    id 'com.github.jk1.dependency-license-report' version '0.3.14'
+    id 'com.github.jk1.dependency-license-report' version '0.8'
 }
 
 allprojects {
@@ -66,10 +66,6 @@ allprojects {
         }
     }
 
-    licenseReport {
-      renderer = new CWDSReportRenderer()
-    }
-
     project.group = commonGroupId
     project.version = projectVersion
 
@@ -111,23 +107,6 @@ allprojects {
         exclude '**/*Test*'
     }
 
-    task libLicenceFolders(type: Copy){
-        from 'build/reports/dependency-license'
-        into 'legal/licenses'
-        exclude "licenses.html"
-        exclude "licenses.txt"
-    }
-
-    task libLicenseReportFiles(type: Copy){
-        from 'build/reports/dependency-license'
-        into 'legal'
-        include "licenses.html"
-        include "licenses.txt"
-    }
-
-    task libLicenseReport(dependsOn:[generateLicenseReport, libLicenceFolders,
-                                     libLicenseReportFiles ] ){
-    }
     javadoc {
         options.addStringOption("charset", "UTF-8")
     }
@@ -186,248 +165,89 @@ publishing {
     }
 }
 
+licenseReport {
+    renderers = [new XmlReportRenderer(), new CwdsCsvReportRenderer(), new InventoryHtmlReportRenderer()]
+    excludeGroups = ['gov.ca.cwds.api.libs']
+}
+
+def licenceFolder = 'build/reports/dependency-license'
+task libLicenceFolders(type: Copy){
+    from licenceFolder
+    into 'legal/licenses'
+    exclude "index.html"
+    exclude "index.xml"
+    exclude "licenses.csv"
+}
+
+import com.github.jk1.license.render.*
+task libLicenseReportFiles(type: Copy){
+    from licenceFolder
+    into 'legal'
+    include "index.html"
+    include "index.xml"
+    include "licenses.csv"
+}
+
+task libLicenseReport(dependsOn:[generateLicenseReport, libLicenceFolders,
+                                 libLicenseReportFiles ] ){
+    println ("\n\n License files are generated in : ${licenceFolder}")
+}
+
 //==================================================================================================
 // Custom Groovy classes for Licence Reports.
 // Move to own classes outside of build.
-import org.gradle.api.Project;
-import com.github.jk1.license.License;
-import com.github.jk1.license.LicenseReportPlugin;
-import com.github.jk1.license.ManifestData;
 import com.github.jk1.license.ModuleData;
-import com.github.jk1.license.PomData;
 import com.github.jk1.license.ProjectData;
-import com.github.jk1.license.render.ReportRenderer;
-
-public class CWDSReportRenderer implements ReportRenderer {
-
+import com.github.jk1.license.LicenseReportExtension
+public class CwdsCsvReportRenderer extends CsvReportRenderer {
     @Override
-    void render(ProjectData data) {
-        new CWDSTextReportRenderer().render(data)
-        new CWDSHtmlReportRenderer().render(data)
+    public void render(ProjectData data){
+        LicenseReportExtension config = data.project.licenseReport
+        File output = new File(config.outputDir, filename)
+        output.write('')
 
-    }
-}
-public class CWDSTextReportRenderer implements ReportRenderer {
+        if (includeHeaderLine) {
+            output << header();
+        }
 
-  private Project project
-  private LicenseReportPlugin.LicenseReportExtension config
-  private File output
-  private int counter
-  private String fileName
-
-  CWDSTextReportRenderer(String filename = 'licenses.txt'){
-      this.fileName = filename
-  }
-  public void render(ProjectData data) {
-        project = data.project
-        config = project.licenseReport
-        output = new File(config.outputDir, fileName)
-        output.text = """
-================================================================
-       Dependency License Report for $project.name ${if (!'unspecified'.equals(project.version))
-            project.version else ''}
-================================================================
-"""
-      output << "\n\n"
-        printDependencies(data)
-        output << """
-This report was generated at ${new Date()}.
-"""
-    }
-
-    private void printDependencies(ProjectData data) {
         data.allDependencies.sort().each {
-            printDependency(it)
+            renderDependency(output, it)
         }
     }
 
-    private String printDependency(ModuleData data) {
-        boolean projectUrlDone = false
-        if (data.name) output << "License Name: $data.name "
-        if (data.version) output << " Version: $data.version\n\n"
-
-        if (data.poms.isEmpty() && data.manifests.isEmpty()) {
-            output << "No license information found\n\n"
-            return
-        }
-
-        if (!data.manifests.isEmpty() && !data.poms.isEmpty()) {
-            ManifestData manifest = data.manifests.first()
-            PomData pomData = data.poms.first()
-            if (manifest.url && pomData.projectUrl && manifest.url == pomData.projectUrl) {
-                output << "Project URL: $manifest.url\n\n"
-                projectUrlDone = true
-            }
-        }
-
-        if (!data.manifests.isEmpty()) {
-            ManifestData manifest = data.manifests.first()
-            if (manifest.url && !projectUrlDone) {
-                output << "Manifest Project URL: $manifest.url\n\n"
-            }
-            if (manifest.license) {
-                if (manifest.license.startsWith("http")) {
-                    output << "Manifest license URL: $manifest.license\n\n"
-                } else if (manifest.hasPackagedLicense) {
-                    output << "Packaged License File: $manifest.license\n\n"
-                } else {
-                    output << "Manifest License: $manifest.license (Not packaged)\n\n"
-                }
-            }
-        }
-
-        if (!data.poms.isEmpty()) {
-            PomData pomData = data.poms.first()
-            if (pomData.projectUrl && !projectUrlDone) {
-                output << "POM Project URL: $pomData.projectUrl\n\n"
-            }
-            if (pomData.licenses) {
-                pomData.licenses.each { License license ->
-                    output << "POM License: $license.name"
-                    if (license.url) {
-                        if (license.url.startsWith("http")) {
-                            output << " - $license.url\n\n"
-                        } else {
-                            output << "License: $license.url\n\n"
-                        }
-                    }
-                }
-            }
-        }
-        if (!data.licenseFiles.isEmpty() && !data.licenseFiles.first().files.isEmpty()) {
-            output << 'Embedded license: '
-            output << "\n\n"
-            output << data.licenseFiles.first().files.collect({ "                    " +
-                    "****************************************\n\n \t\t\t$it\n\n" + new
-                    File("$config.outputDir/$it").text + "\n"}).join('')
-        }
-        output <<
-                "\n\n================================================================================\n\n"
-    }
-}
-
-import com.github.jk1.license.LicenseReportPlugin.LicenseReportExtension
-class CWDSHtmlReportRenderer implements ReportRenderer {
-
-    private Project project
-    private LicenseReportExtension config
-    private File output
-    private int counter
-    private String fileName
-    private String libLicenseUrl
-
-    CWDSHtmlReportRenderer(String libLicenseUrl = "licenses",String fileName = 'licenses.html') {
-        this.fileName = fileName
-        this.libLicenseUrl = libLicenseUrl
+    CwdsCsvReportRenderer(String filename = 'licenses.csv') {
+        this.filename = filename
     }
 
-    public void render(ProjectData data) {
-        project = data.project
-        config = project.licenseReport
-        output = new File(config.outputDir, fileName)
-        output.text = """
-<html>
-<head>
-<title>Dependency License Report for $project.name</title>
-<style>
-    table, th, td { border: 1px solid black; }
-</style>
-<head>
-<body>
-<h1>Dependency License Report for $project.name ${if (!'unspecified'.equals(project.version)) project.version else ''}</h1>
-"""
-        printDependencies(data)
-        output << """
-<hr />
-<p id="timestamp">This report was generated at <em>${new Date()}</em>.</p>
-</body>
-</html>
-"""
+    void renderDependency(File output, ModuleData data) {
+        output << line(data)
     }
 
-    private void printDependencies(ProjectData data) {
-        output << "<table >"
-        output << "<hr><th>name</th><th>project url</th><th>license</th>" +
-                       "<th>Embeded License</th></hr>"
-        data.allDependencies.sort().each {
-            output << "<tr>"
-            printDependency(it)
-            output << "</tr>"
-        }
-        output << "</table>"
+    private String header(){
+        return "${quote('artifact')}$separator${quote('name')}$separator${quote('version')}$separator${quote('moduleUrl')}$separator${quote('moduleLicense')}$separator${quote('moduleLicenseUrl')}$separator${quote('projectUrl')}$separator$nl"
     }
 
-    private String printDependency(ModuleData data) {
-        boolean projectUrlDone = false
-        String name = ""
-        String urls = ""
-        String licenses = ""
-        name += "<p><strong> ${++counter}.</strong> "
-        if (data.name) name += "$data.name "
-        name += "</p>"
+    private String line(ModuleData data){
+        def (String moduleUrl, String moduleLicense, String moduleLicenseUrl) = LicenseDataCollector.singleModuleLicenseInfo(data)
+        String artifact = "${data.group}:${data.name}:${data.version}"
+        return "${quote(artifact)}$separator${quote(data.name)}$separator${quote(data.version)}$separator${quote(moduleUrl)}$separator${quote(moduleLicense)}$separator${quote(moduleLicenseUrl)}$separator${quote(projectUrl(data))}$separator$nl"
+    }
 
-        if (data.poms.isEmpty() && data.manifests.isEmpty()) {
-            name += "<p><strong>No license information found</strong></p>"
+    private String projectUrl(ModuleData data){
+        Set urls = new HashSet();
+        data.poms.each {
+            urls << it.projectUrl
         }
+        urls.join(" ")
+    }
 
-        if (!data.manifests.isEmpty() && !data.poms.isEmpty()) {
-            ManifestData manifest = data.manifests.first()
-            PomData pomData = data.poms.first()
-            if (manifest.url && pomData.projectUrl && manifest.url == pomData.projectUrl) {
-                urls += "<p> <code><a href=\"$manifest.url\">$manifest.url</a></code></p>"
-                projectUrlDone = true
-            }
+    private String quote(String content) {
+        if (content == null || content.isEmpty()) {
+            return ''
         }
-
-        if (!data.manifests.isEmpty()) {
-            ManifestData manifest = data.manifests.first()
-            if (manifest.url && !projectUrlDone) {
-                urls += "<p> <code><a href=\"$manifest.url\">$manifest.url</a></code></p>"
-            }
-            if (manifest.license) {
-                if (manifest.license.startsWith("http")) {
-                    licenses += "<p><strong>Manifest license URL:</strong> <a href=\"$manifest.license\">$manifest.license</a></p>"
-                } else if (manifest.hasPackagedLicense) {
-                    licenses += "<p><strong>Manifest license URL:</strong> <a href=\"$manifest.url\">$manifest.license</a></p>"
-                } else {
-                    licenses += "<p><strong>Manifest license URL:</strong>$manifest.license (Not packaged)</p>"
-                }
-            }
-        }
-
-        if (!data.poms.isEmpty()) {
-            PomData pomData = data.poms.first()
-            if (pomData.projectUrl && !projectUrlDone) {
-                urls += "<p> <code><a href=\"$pomData.projectUrl\">$pomData.projectUrl</a></code></p>"
-            }
-            if (pomData.licenses) {
-                pomData.licenses.each { License license ->
-                    licenses += "<p><strong>POM License: $license.name</strong>"
-                    if (license.url) {
-                        if (license.url.startsWith("http")) {
-                            licenses += " - <a href=\"$license.url\">$license.url</a>"
-                        } else {
-                            licenses += "<p> $license.url</p>"
-                        }
-                    }
-                }
-            }
-        }
-
-        output << "<td>$name</td>"
-        output << "<td>$urls</td>"
-        output << "<td>$licenses</td>"
-
-        output << "<td>"
-        if (!data.licenseFiles.isEmpty() && !data.licenseFiles.first().files.isEmpty()) {
-            output << '<p>'
-            output << data.licenseFiles.first().files.collect({ "<a " +
-                    "href=\"$libLicenseUrl/$it\">$it</a>" +
-                    " " +
-                    "" }).join('')
-            output << '</p>'
-        }
-        output << "</td>"
+        content = content.trim()
+        content = content.replaceAll(quote, "\\\\$quote")
+        "${quote}${content}${quote}"
     }
 }
 
