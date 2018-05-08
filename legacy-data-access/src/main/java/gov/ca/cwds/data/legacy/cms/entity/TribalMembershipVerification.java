@@ -40,11 +40,12 @@ import org.hibernate.annotations.NamedQuery;
           + " and t.fkFromTribalMembershipVerification is null"
 )
 @NamedQuery(
-  name = TribalMembershipVerification.FIND_TRIBAL_MEMBERSHIP_VERIFICATION_BY_CLIENT_ID,
+  name = TribalMembershipVerification.FIND_TRIBAL_MEMBERSHIP_VERIFICATION_BY_CLIENT_IDS,
   query =
       "SELECT t FROM gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification t "
-          + "where t.clientId =:"
+          + "where t.clientId IN(:"
           + TribalMembershipVerification.PARAM_CLIENT_ID
+          + ")"
 )
 @NamedQuery(
   name = TribalMembershipVerification.FIND_ALL_TRIBAL,
@@ -66,7 +67,7 @@ public class TribalMembershipVerification extends CmsPersistentObject {
   public static final String FIND_TRIBAL_MEMBERSHIP_VERIFICATION_BY_CLIENT_ID_NO_TRIBAL_ELIG_FROM =
       "gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification";
 
-  public static final String FIND_TRIBAL_MEMBERSHIP_VERIFICATION_BY_CLIENT_ID =
+  public static final String FIND_TRIBAL_MEMBERSHIP_VERIFICATION_BY_CLIENT_IDS =
       "gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerificationById";
 
   public static final String FIND_ALL_TRIBAL =
@@ -74,6 +75,9 @@ public class TribalMembershipVerification extends CmsPersistentObject {
 
   public static final String FIND_TRIBAL_THAT_HAVE_SUB_TRIBALS_BY_CLIENT =
       "gov.ca.cwds.data.legacy.cms.entity.SubTribalMembershipVerificationByClientId";
+
+  public static final String FIND_TRIBAL_BY_CLIENT_ORGANIZATION_AND_TYPE =
+      "gov.ca.cwds.data.legacy.cms.entity.ZTribalMembershipVerificationByClientId";
 
   public static final String PARAM_CLIENT_ID = "clientId";
   public static final String PARAM_PARENT_CLIENT_ID = "parentClientId";

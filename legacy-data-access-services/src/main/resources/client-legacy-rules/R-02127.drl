@@ -1,6 +1,7 @@
 import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.data.legacy.cms.entity.ChildClient
 import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO
+import gov.ca.cwds.cms.data.access.dto.ChildClientEntityAwareDTO
 import gov.ca.cwds.data.legacy.cms.entity.MedicalEligibilityApplication
 
 global java.util.Set<IssueDetails> validationDetailsList
