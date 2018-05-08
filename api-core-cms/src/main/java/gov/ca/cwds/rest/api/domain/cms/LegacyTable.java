@@ -19,9 +19,9 @@ public enum LegacyTable {
 
   ADDRESS_PHONETIC("ADR_PHTT", "Address Phonetic"),
 
-  ALLEGATION("ALLGTN_T", "Allegation"),
-
   ALIAS_OR_OTHER_CLIENT_NAME("OCL_NM_T", "Alias or other client name"),
+
+  ALLEGATION("ALLGTN_T", "Allegation"),
 
   ASSIGNMENT("ASGNM_T", "Assignment"),
 
@@ -29,25 +29,29 @@ public enum LegacyTable {
 
   CASE("CASE_T", "Case"),
 
+  CHILD_IN_PLACEMENT_HOME("OTH_KIDT", "Child in placement home"),
+
   CLIENT("CLIENT_T", "Client"),
 
   CLIENT_ADDRESS("CL_ADDRT", "Client Address"),
 
   CLIENT_PHONETIC("CLT_PHTT", "Client Phonetic"),
 
-  CROSS_REPORT("CRSS_RPT", "Cross Report"),
+  CLIENT_RELATIONSHIP("CLN_RELT", "Client Relationship"),
 
   COLLATERAL_INDIVIDUAL("COLTRL_T", "Collateral individual"),
 
-  CLIENT_RELATIONSHIP("CLN_RELT", "Client Relationship"),
-
-  CHILD_IN_PLACEMENT_HOME("OTH_KIDT", "Child in placement home"),
+  CROSS_REPORT("CRSS_RPT", "Cross Report"),
 
   DELIVERED_SERVICE("DL_SVC_T", "Delivered Service"),
 
   EDUCATION_PROVIDER("EDPRVCNT", "Education provider"),
 
   GOVERNMENT_ORGANIZATION_ENTITY("GVR_ENTC", "Government Organization Entity"),
+
+  LONG_TEXT("LONG_TXT", "Long Text (notes)"),
+
+  OTHER_CLIENT_NAME("OCL_NM_T", "Other Client Name"),
 
   OUT_OF_HOME_PLACEMENT("O_HM_PLT", "Out of Home Placement"),
 
@@ -57,19 +61,21 @@ public enum LegacyTable {
 
   REFERRAL("REFERL_T", "Referral"),
 
-  REPORTER("REPTR_T", "Reporter"),
-
   REFERRAL_CLIENT("REFR_CLT", "Referral Client"),
 
+  REPORTER("REPTR_T", "Reporter"),
+
+  SAFETY_ALERT("SAF_ALRT", "Safety Alert"),
+
   SERVICE_PROVIDER("SVC_PVRT", "Service provider"),
+
+  STAFF_PERSON("STFPERST", "Staff"),
 
   SUBSTITUTE_CARE_PROVIDER("SB_PVDRT", "Substitute care provider"),
 
   SUBSTITUTE_CARE_PROVIDER_PHONETIC("SCP_PHTT", "Substitute care provider phonetic"),
 
-  STAFF_PERSON("STFPERST", "Staff"),
-
-  SAFETY_ALERT("SAF_ALRT", "Safety Alert");
+  ;
 
   //
   // CHECKSTYLE:ON
