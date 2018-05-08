@@ -19,9 +19,9 @@ public enum LegacyTable {
 
   ADDRESS_PHONETIC("ADR_PHTT", "Address Phonetic"),
 
-  ALLEGATION("ALLGTN_T", "Allegation"),
-
   ALIAS_OR_OTHER_CLIENT_NAME("OCL_NM_T", "Alias or other client name"),
+
+  ALLEGATION("ALLGTN_T", "Allegation"),
 
   ASSIGNMENT("ASGNM_T", "Assignment"),
 
@@ -29,19 +29,19 @@ public enum LegacyTable {
 
   CASE("CASE_T", "Case"),
 
+  CHILD_IN_PLACEMENT_HOME("OTH_KIDT", "Child in placement home"),
+
   CLIENT("CLIENT_T", "Client"),
 
   CLIENT_ADDRESS("CL_ADDRT", "Client Address"),
 
-  CLINET_PHONETIC("CLT_PHTT", "Client Phonetic"),
-
-  CROSS_REPORT("CRSS_RPT", "Cross Report"),
-
-  COLLATERAL_INDIVIDUAL("COLTRL_T", "Collateral individual"),
+  CLIENT_PHONETIC("CLT_PHTT", "Client Phonetic"),
 
   CLIENT_RELATIONSHIP("CLN_RELT", "Client Relationship"),
 
-  CHILD_IN_PLACEMENT_HOME("OTH_KIDT", "Child in placement home"),
+  COLLATERAL_INDIVIDUAL("COLTRL_T", "Collateral individual"),
+
+  CROSS_REPORT("CRSS_RPT", "Cross Report"),
 
   DELIVERED_SERVICE("DL_SVC_T", "Delivered Service"),
 
@@ -49,21 +49,33 @@ public enum LegacyTable {
 
   GOVERNMENT_ORGANIZATION_ENTITY("GVR_ENTC", "Government Organization Entity"),
 
-  REFERRAL("REFERL_T", "Referral"),
+  LONG_TEXT("LONG_TXT", "Long Text (notes)"),
 
-  REPORTER("REPTR_T", "Reporter"),
+  OTHER_CLIENT_NAME("OCL_NM_T", "Other Client Name"),
+
+  OUT_OF_HOME_PLACEMENT("O_HM_PLT", "Out of Home Placement"),
+
+  PLACEMENT_EPISODE("PLC_EPST", "Placement Episode"),
+
+  PLACEMENT_HOME("PLC_HM_T", "Placement Home"),
+
+  REFERRAL("REFERL_T", "Referral"),
 
   REFERRAL_CLIENT("REFR_CLT", "Referral Client"),
 
+  REPORTER("REPTR_T", "Reporter"),
+
+  SAFETY_ALERT("SAF_ALRT", "Safety Alert"),
+
   SERVICE_PROVIDER("SVC_PVRT", "Service provider"),
+
+  STAFF_PERSON("STFPERST", "Staff"),
 
   SUBSTITUTE_CARE_PROVIDER("SB_PVDRT", "Substitute care provider"),
 
   SUBSTITUTE_CARE_PROVIDER_PHONETIC("SCP_PHTT", "Substitute care provider phonetic"),
 
-  STAFF_PERSON("STFPERST", "Staff"),
-
-  SAFETY_ALERT("SAF_ALRT", "Safety Alert");
+  ;
 
   //
   // CHECKSTYLE:ON
@@ -73,7 +85,7 @@ public enum LegacyTable {
   private String description;
 
   /**
-   * Construct with args.
+   * Construct with table name and description.
    * 
    * @param name Legacy table name
    * @param description Legacy table human readable description.
