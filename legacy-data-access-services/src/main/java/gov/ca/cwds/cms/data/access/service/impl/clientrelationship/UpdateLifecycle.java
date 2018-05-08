@@ -81,6 +81,7 @@ class UpdateLifecycle extends DefaultDataAccessLifeCycle<ClientRelationshipAware
     deleteTribalMembershipVerifications(
         ((ClientRelationshipAwareDTO) bundle.getAwareDto())
             .getTribalMembershipVerificationsForDelete());
+    validateAndAddIfNeededDuplicatedTribalMembershipVerifications(bundle);
     createTribalMembershipVerifications(
         ((ClientRelationshipAwareDTO) bundle.getAwareDto())
             .getTribalMembershipVerificationsForCreate());
@@ -138,7 +139,6 @@ class UpdateLifecycle extends DefaultDataAccessLifeCycle<ClientRelationshipAware
     if (CollectionUtils.isNotEmpty(tribalsThatHasSubTribals)) {
       awareDTO.getTribalsThatHaveSubTribals().addAll(tribalsThatHasSubTribals);
     }
-    validateAndAddIfNeededDuplicatedTribalMembershipVerifications(bundle);
   }
 
   private void enrichWithPrimaryAndSecondaryClients(DataAccessBundle bundle) {

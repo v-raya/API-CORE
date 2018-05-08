@@ -152,7 +152,7 @@ public class R10030DBTest extends BaseCwsCmsInMemoryPersistenceTest {
           Client secondary = clientDao.find(secondaryClient);
 
           ClientRelationship relationship = new ClientRelationship();
-          relationship.setIdentifier("0011001100");
+          relationship.setIdentifier("1011001101");
           relationship.setPrimaryClient(child);
           relationship.setSecondaryClient(secondary);
           relationship.setStartDate(LocalDate.of(2000, 1, 1));
@@ -165,7 +165,6 @@ public class R10030DBTest extends BaseCwsCmsInMemoryPersistenceTest {
           relationship.setLastUpdateTime(LocalDateTime.now());
           relationship.setSameHomeStatus(YesNoUnknown.YES);
 
-          awareDTO.setNeedMembershipVerification(true);
           awareDTO.setEntity(relationship);
         });
   }

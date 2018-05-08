@@ -93,8 +93,8 @@ public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
     persistRelationship(
         awareDTO, primaryTribalsAfterRUle, secondaryTribalsAfterRUle, "RM1Mq5GABC", "HkKiO2wABC");
 
-    assertEquals(primaryTribalsAfterRUle.size(), 3);
-    assertEquals(secondaryTribals.size(), 2);
+    assertEquals( 3, primaryTribalsAfterRUle.size());
+    assertEquals(2, secondaryTribals.size());
   }
 
   @Test
