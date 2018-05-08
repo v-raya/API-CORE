@@ -33,7 +33,7 @@ public enum LegacyTable {
 
   CLIENT_ADDRESS("CL_ADDRT", "Client Address"),
 
-  CLINET_PHONETIC("CLT_PHTT", "Client Phonetic"),
+  CLIENT_PHONETIC("CLT_PHTT", "Client Phonetic"),
 
   CROSS_REPORT("CRSS_RPT", "Cross Report"),
 
@@ -48,6 +48,12 @@ public enum LegacyTable {
   EDUCATION_PROVIDER("EDPRVCNT", "Education provider"),
 
   GOVERNMENT_ORGANIZATION_ENTITY("GVR_ENTC", "Government Organization Entity"),
+
+  OUT_OF_HOME_PLACEMENT("O_HM_PLT", "Out of Home Placement"),
+
+  PLACEMENT_EPISODE("PLC_EPST", "Placement Episode"),
+
+  PLACEMENT_HOME("PLC_HM_T", "Placement Home"),
 
   REFERRAL("REFERL_T", "Referral"),
 
@@ -73,7 +79,7 @@ public enum LegacyTable {
   private String description;
 
   /**
-   * Construct with args.
+   * Construct with table name and description.
    * 
    * @param name Legacy table name
    * @param description Legacy table human readable description.
