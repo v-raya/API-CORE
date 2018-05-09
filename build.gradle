@@ -58,6 +58,7 @@ allprojects {
         snapshotMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/repo"
         releaseMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/libs-release"
         artifactoryRepo = (isRelease ? releaseMavenRepo : snapshotMavenRepo)
+        allTestCoverageFile = "$buildDir/jacoco/allTestCoverage.exec"
     }
 
     sourceSets {
@@ -96,6 +97,7 @@ allprojects {
     test {
         exclude '**/*IT*'
         exclude 'gov/ca/cwds/data/legacy/cms/dao/**'
+        exclude '**/dbDependent/**'
         jacoco {
             excludes = ["**org/drools/**/*"]
         }
@@ -122,7 +124,16 @@ allprojects {
         properties {
             property "sonar.jacoco.reportPath", "${buildDir}/jacoco/test.exec"
             property "sonar.jacoco.itReportPath", "${buildDir}/jacoco/integrationTest.exec"
+            property "sonar.exclusions", "src/main/resources/static/*.*, " +
+                    "src/main/resources/static/css/*.*, " +
+                    "src/main/resources/static/lib/*.*, " +
+                    "src/main/java/gov/ca/cwds/data/legacy/cms/entity/*.*"
         }
+    }
+
+    task jacocoMergeTest(type: JacocoMerge) {
+        destinationFile = file(allTestCoverageFile)
+        executionData = project.fileTree(dir: '.', include:'**/build/jacoco/test.exec')
     }
 
     licenseReport {
@@ -138,7 +149,6 @@ allprojects {
         exclude "index.xml" exclude "licenses.csv"
     }
 
-
     task libLicenseReportFiles(type: Copy){
         from licenceFolder
         into 'legal'
@@ -153,10 +163,18 @@ allprojects {
         rename  { filename -> "${project.name}-${filename}"}
     }
 
-    task generateAllLicenseFiles(dependsOn:[generateLicenseReport, libLicenceFolders, libLicenseReportFiles ] ){
+    task generateAllLicenseFiles(dependsOn:[generateLicenseReport, libLicenseReportFiles ] ){
         println ("\n\n License files are generated in : ${licenceFolder}")
         doLast {
             tasks.subProjectLicenseFiles.execute()
+        }
+    }
+}
+
+subprojects {
+    sonarqube {
+        properties {
+            property "sonar.jacoco.reportPaths", allTestCoverageFile
         }
     }
 }
@@ -165,7 +183,9 @@ allprojects {
 // example ./gradlew  generateAllLicenseFiles libLicenseReport
 task libLicenseReport(){
     def licenseFiles = []
-    new File("${project.projectDir}/legal/subProjects").eachFileRecurse { licenseFiles << it }
+    def subProjectsDir = "${project.projectDir}/legal/subProjects"
+    mkdir subProjectsDir
+    new File(subProjectsDir).eachFileRecurse { licenseFiles << it }
     (new File('legal/licenses.csv')).text = files(licenseFiles).collect{it.getText()}.join("\n")
 }
 
