@@ -1,9 +1,10 @@
 plugins {
     id "org.sonarqube" version "2.2.1"
-    id 'com.github.jk1.dependency-license-report' version '0.8'
 }
 
+import com.github.jk1.license.render.*
 allprojects {
+    apply plugin: 'com.github.jk1.dependency-license-report'
     apply plugin: 'java'
     apply plugin: 'maven-publish'
     apply plugin: 'jacoco'
@@ -124,6 +125,48 @@ allprojects {
         }
     }
 
+    licenseReport {
+        renderers = [new XmlReportRenderer(), new CwdsCsvReportRenderer(), new InventoryHtmlReportRenderer()]
+        excludeGroups = ['gov.ca.cwds.api.libs']
+    }
+
+    def licenceFolder = 'build/reports/dependency-license'
+    task libLicenceFolders(type: Copy){
+        from licenceFolder
+        into 'legal/licenses'
+        exclude "index.html"
+        exclude "index.xml" exclude "licenses.csv"
+    }
+
+
+    task libLicenseReportFiles(type: Copy){
+        from licenceFolder
+        into 'legal'
+        include "index.html"
+        include "index.xml"
+    }
+
+    task subProjectLicenseFiles(type: Copy){
+        from "${project.projectDir.path}/${licenceFolder}"
+        into "${project.rootDir}/legal/subProjects"
+        include "licenses.csv"
+        rename  { filename -> "${project.name}-${filename}"}
+    }
+
+    task generateAllLicenseFiles(dependsOn:[generateLicenseReport, libLicenceFolders, libLicenseReportFiles ] ){
+        println ("\n\n License files are generated in : ${licenceFolder}")
+        doLast {
+            tasks.subProjectLicenseFiles.execute()
+        }
+    }
+}
+
+// run generateAllLicenseFiles first to generate all report files
+// example ./gradlew  generateAllLicenseFiles libLicenseReport
+task libLicenseReport(){
+    def licenseFiles = []
+    new File("${project.projectDir}/legal/subProjects").eachFileRecurse { licenseFiles << it }
+    (new File('legal/licenses.csv')).text = files(licenseFiles).collect{it.getText()}.join("\n")
 }
 
 dependencies {
@@ -143,92 +186,6 @@ publishing {
         maven {
             url artifactoryRepo
         }
-    }
-}
-
-licenseReport {
-    renderers = [new XmlReportRenderer(), new CwdsCsvReportRenderer(), new InventoryHtmlReportRenderer()]
-    excludeGroups = ['gov.ca.cwds.api.libs']
-}
-
-def licenceFolder = 'build/reports/dependency-license'
-task libLicenceFolders(type: Copy){
-    from licenceFolder
-    into 'legal/licenses'
-    exclude "index.html"
-    exclude "index.xml"
-    exclude "licenses.csv"
-}
-
-import com.github.jk1.license.render.*
-task libLicenseReportFiles(type: Copy){
-    from licenceFolder
-    into 'legal'
-    include "index.html"
-    include "index.xml"
-    include "licenses.csv"
-}
-
-task libLicenseReport(dependsOn:[generateLicenseReport, libLicenceFolders,
-                                 libLicenseReportFiles ] ){
-    println ("\n\n License files are generated in : ${licenceFolder}")
-}
-
-//==================================================================================================
-// Custom Groovy classes for Licence Reports.
-// Move to own classes outside of build.
-import com.github.jk1.license.ModuleData;
-import com.github.jk1.license.ProjectData;
-import com.github.jk1.license.LicenseReportExtension
-public class CwdsCsvReportRenderer extends CsvReportRenderer {
-    @Override
-    public void render(ProjectData data){
-        LicenseReportExtension config = data.project.licenseReport
-        File output = new File(config.outputDir, filename)
-        output.write('')
-
-        if (includeHeaderLine) {
-            output << header();
-        }
-
-        data.allDependencies.sort().each {
-            renderDependency(output, it)
-        }
-    }
-
-    CwdsCsvReportRenderer(String filename = 'licenses.csv') {
-        this.filename = filename
-    }
-
-    void renderDependency(File output, ModuleData data) {
-        output << line(data)
-    }
-
-    private String header(){
-        return "${quote('artifact')}$separator${quote('name')}$separator${quote('version')}$separator${quote('moduleUrl')}$separator${quote('moduleLicense')}$separator${quote('moduleLicenseUrl')}$separator${quote('projectUrl')}$separator$nl"
-    }
-
-    private String line(ModuleData data){
-        def (String moduleUrl, String moduleLicense, String moduleLicenseUrl) = LicenseDataCollector.singleModuleLicenseInfo(data)
-        String artifact = "${data.group}:${data.name}:${data.version}"
-        return "${quote(artifact)}$separator${quote(data.name)}$separator${quote(data.version)}$separator${quote(moduleUrl)}$separator${quote(moduleLicense)}$separator${quote(moduleLicenseUrl)}$separator${quote(projectUrl(data))}$separator$nl"
-    }
-
-    private String projectUrl(ModuleData data){
-        Set urls = new HashSet();
-        data.poms.each {
-            urls << it.projectUrl
-        }
-        urls.join(" ")
-    }
-
-    private String quote(String content) {
-        if (content == null || content.isEmpty()) {
-            return ''
-        }
-        content = content.trim()
-        content = content.replaceAll(quote, "\\\\$quote")
-        "${quote}${content}${quote}"
     }
 }
 
