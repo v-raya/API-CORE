@@ -4,20 +4,24 @@ import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-/** @author CWDS TPT-3 Team */
+/**
+ * Util class for relationships only between parents an children.
+ *
+ * @author CWDS TPT-3 Team
+ * */
 public class RelationshipUtil {
 
-  private static final Set<Short> typesChildParent = new HashSet<>();
-  private static final Set<Short> typesParentChild = new HashSet<>();
+  private static final Set<Integer> typesChildParent = new HashSet<>();
+  private static final Set<Integer> typesParentChild = new HashSet<>();
 
   static {
     typesChildParent.addAll(
-        Arrays.asList(new Short[] {189, 190, 192, 195, 196, 198, 284, 285, 287, 290, 291, 6360}));
-
+        createArrayOfTypes(189, 190, 192, 195, 196, 198, 284, 285, 287, 290, 291, 6360));
     typesParentChild.addAll(
-        Arrays.asList(new Short[] {204, 205, 207, 201, 211, 213, 246, 247, 251, 252, 5620, 6361}));
+        createArrayOfTypes(204, 205, 207, 201, 211, 213, 246, 247, 251, 252, 5620, 6361));
   }
 
   private RelationshipUtil() {}
@@ -38,10 +42,13 @@ public class RelationshipUtil {
   }
 
   public static Client getParent(ClientRelationship relationship) {
-    if(isChildParent(relationship)) {
+    if (isChildParent(relationship)) {
       return relationship.getSecondaryClient();
     }
     return relationship.getPrimaryClient();
+  }
 
+  private static List<Integer> createArrayOfTypes(Integer... params) {
+    return Arrays.asList(params);
   }
 }
