@@ -1,4 +1,4 @@
-package gov.ca.cwds.cms.data.access.service.impl.relationships;
+package gov.ca.cwds.cms.data.access.service.impl.clientrelationship;
 
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import java.time.LocalDate;

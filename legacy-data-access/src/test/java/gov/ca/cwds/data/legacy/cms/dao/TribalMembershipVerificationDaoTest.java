@@ -37,4 +37,31 @@ public class TribalMembershipVerificationDaoTest extends BaseCwsCmsInMemoryPersi
           assertEquals(CHILD_CLIENT_ID, subTribals.get(0).getClientId());
         });
   }
+
+  @Test
+  public void findByClientIdNoTribalEligFrom() throws Exception {
+
+  }
+
+  @Test
+  public void findByClientId() throws Exception {
+    cleanAllAndInsert("/dbunit/TribalMembershipVerification.xml");
+
+    executeInTransaction(
+      sessionFactory,
+      sessionFactory -> {
+        List<TribalMembershipVerification> tribals =
+          dao.findByClientId(CHILD_CLIENT_ID);
+        assertNotNull(tribals);
+        assertEquals(1,tribals.size() );
+        assertEquals("AdrY41t0Ku", tribals.get(0).getThirdId());
+        assertEquals(CHILD_CLIENT_ID, tribals.get(0).getClientId());
+      });
+  }
+
+  @Test
+  public void findByClientIds() throws Exception {}
+
+  @Test
+  public void findTribalsThatHaveSubTribalsByClientId() throws Exception {}
 }

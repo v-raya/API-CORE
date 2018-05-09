@@ -1,9 +1,8 @@
-package gov.ca.cwds.cms.data.access.service.impl.relationships.dbDependent;
+package gov.ca.cwds.cms.data.access.service.impl.clientrelationship;
 
 import gov.ca.cwds.cms.data.access.dto.ClientRelationshipAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
-import gov.ca.cwds.cms.data.access.service.impl.ClientRelationshipCoreService;
 import gov.ca.cwds.cms.data.access.service.impl.dbDependentSuite.BaseCwsCmsInMemoryPersistenceTest;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.ClientRelationshipDao;
@@ -38,6 +37,9 @@ public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
   private ClientRelationshipDao clientRelationshipDao;
   private BusinessValidationService businessValidationService;
   private PaternityDetailDao paternityDetailDao;
+  private UpdateLifecycle updateLifecycle;
+  private SearchClientRelationshipService searchClientRelationshipService;
+
   private static final String USER_ID = "0X5";
 
   @Before
@@ -47,18 +49,23 @@ public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
     tribalMembershipVerificationDao = new TribalMembershipVerificationDao(sessionFactory);
     clientRelationshipDao = new ClientRelationshipDao(sessionFactory);
     paternityDetailDao = new PaternityDetailDao(sessionFactory);
-    clientRelationshipCoreService =
-        new ClientRelationshipCoreService(
+    searchClientRelationshipService = new SearchClientRelationshipService(clientRelationshipDao);
+    updateLifecycle =
+        new UpdateLifecycle(
             clientRelationshipDao,
             businessValidationService,
             clientDao,
-            tribalMembershipVerificationDao, paternityDetailDao);
+            tribalMembershipVerificationDao,
+            paternityDetailDao,
+          searchClientRelationshipService);
+    clientRelationshipCoreService =
+        new ClientRelationshipCoreService(clientRelationshipDao, updateLifecycle,
+          searchClientRelationshipService);
   }
 
   @Test
   public void testPrimaryTribalAdded() throws Exception {
     cleanAllAndInsert("/dbunit/R08840_1.xml");
-    initUserAccount(USER_ID);
 
     final List<TribalMembershipVerification> primaryTribals = new ArrayList<>();
     final List<TribalMembershipVerification> secondaryTribals = new ArrayList<>();
@@ -86,8 +93,8 @@ public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
     persistRelationship(
         awareDTO, primaryTribalsAfterRUle, secondaryTribalsAfterRUle, "RM1Mq5GABC", "HkKiO2wABC");
 
-    assertEquals(primaryTribalsAfterRUle.size(), 3);
-    assertEquals(secondaryTribals.size(), 2);
+    assertEquals( 3, primaryTribalsAfterRUle.size());
+    assertEquals(2, secondaryTribals.size());
   }
 
   @Test

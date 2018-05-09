@@ -1,4 +1,4 @@
-package gov.ca.cwds.cms.data.access.service.impl.relationships;
+package gov.ca.cwds.cms.data.access.service.impl.clientrelationship;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

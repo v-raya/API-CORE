@@ -1,4 +1,4 @@
-package gov.ca.cwds.cms.data.access.service.impl;
+package gov.ca.cwds.cms.data.access.service.impl.clientrelationship;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
+import gov.ca.cwds.cms.data.access.service.impl.BaseUnitTest;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.ClientRelationshipDao;
 import gov.ca.cwds.data.legacy.cms.dao.PaternityDetailDao;
@@ -34,6 +35,8 @@ public class ClientRelationshipCoreServiceTest extends BaseUnitTest {
   private static final String SECONDARY_CLIENT = "bbddssrrtt";
 
   private ClientRelationshipCoreService clientRelationshipCoreService;
+  private UpdateLifecycle updateLifecycle;
+  private SearchClientRelationshipService searchClientRelationshipService;
   @Mock private ClientRelationshipDao relationshipDao;
   @Mock private ClientDao clientDao;
   @Mock private BusinessValidationService businessValidationService;
@@ -49,10 +52,18 @@ public class ClientRelationshipCoreServiceTest extends BaseUnitTest {
 
     List<ClientRelationship> relationships = getListOfRelationships();
 
+    searchClientRelationshipService = new SearchClientRelationshipService(relationshipDao);
+    updateLifecycle =
+        new UpdateLifecycle(
+            relationshipDao,
+            businessValidationService,
+            clientDao,
+            tribalMembershipVerificationDao,
+            paternityDetailDao,
+          searchClientRelationshipService);
     clientRelationshipCoreService =
         new ClientRelationshipCoreService(
-            relationshipDao, businessValidationService, clientDao, tribalMembershipVerificationDao,
-            paternityDetailDao);
+            relationshipDao, updateLifecycle, searchClientRelationshipService);
 
     when(relationshipDao.findRelationshipsByPrimaryClientId(anyString(), any(LocalDate.class)))
         .thenReturn(relationships);
