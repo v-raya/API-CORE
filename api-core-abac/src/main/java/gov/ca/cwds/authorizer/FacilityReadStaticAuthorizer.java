@@ -22,8 +22,8 @@ public class FacilityReadStaticAuthorizer implements StaticAuthorizer {
   @Override
   public void authorize(PerryAccount perryAccount, SimpleAuthorizationInfo simpleAuthInfo) {
     if (perryAccount.getPrivileges().stream()
-        .anyMatch(priv -> priv.equals(StaffPrivilegeUtil.RESOURCE_MANAGEMENT)
-            || priv.equals(StaffPrivilegeUtil.CWS_CASE_MANAGEMENT_SYSTEM))) {
+        .anyMatch(priv -> StaffPrivilegeUtil.RESOURCE_MANAGEMENT.equals(priv)
+            || StaffPrivilegeUtil.CWS_CASE_MANAGEMENT_SYSTEM.equals(priv))) {
       simpleAuthInfo.addObjectPermission(new WildcardPermission(FACILITY_READ_PERMISSION));
     }
   }
