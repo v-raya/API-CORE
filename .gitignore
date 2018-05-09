@@ -10,3 +10,4 @@ bin/
 *.sw*
 /gradle/
 /gradlew
+.editorconfig
