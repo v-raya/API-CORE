@@ -2,11 +2,7 @@ package gov.ca.cwds.cms.data.access.service.impl.clientrelationship;
 
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT_ID;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.cms.data.access.dto.ClientRelationshipAwareDTO;
 import gov.ca.cwds.cms.data.access.service.DataAccessServiceBase;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
@@ -17,6 +13,8 @@ import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.utils.PrincipalUtils;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Service for create/update/find ClientRelationship with business validation and data processing.
@@ -25,7 +23,7 @@ import gov.ca.cwds.security.utils.PrincipalUtils;
  */
 public class ClientRelationshipCoreService
     extends DataAccessServiceBase<
-        ClientRelationshipDao, ClientRelationship, ClientRelationshipAwareDTO> {
+      ClientRelationshipDao, ClientRelationship, ClientRelationshipAwareDTO> {
 
   private final UpdateLifecycle updateLifecycle;
   private final SearchClientRelationshipService searchClientRelationshipService;
@@ -33,11 +31,9 @@ public class ClientRelationshipCoreService
   /**
    * Constructor with injected services.
    *
-   * @param clientRelationshipDao client relationship DAO
-   * @param businessValidationService business validator
-   * @param clientDao client DAO
-   * @param tribalMembershipVerificationDao tribal membership verification DAO
-   * @param paternityDetailDao paternity detail DAO
+   * @param clientRelationshipDao client relationship dao
+   * @param updateLifecycle lifecycle for update
+   * @param searchClientRelationshipService service for search relationships
    */
   @Inject
   public ClientRelationshipCoreService(

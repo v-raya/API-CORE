@@ -18,23 +18,23 @@ import org.apache.commons.collections4.CollectionUtils;
 /**
  * @author CWDS TPT-3 Team
  */
-public class SearchClientRelationshipService {
+class SearchClientRelationshipService {
 
   private final ClientRelationshipDao clientRelationshipDao;
 
   @Inject
-  public SearchClientRelationshipService(
+  SearchClientRelationshipService(
     ClientRelationshipDao clientRelationshipDao) {
     this.clientRelationshipDao = clientRelationshipDao;
   }
 
-  public List<ClientRelationship> findRelationshipsBySecondaryClientId(
+  List<ClientRelationship> findRelationshipsBySecondaryClientId(
     @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
     return deleteNotPermittedClientData(
       clientRelationshipDao.findRelationshipsBySecondaryClientId(clientId, LocalDate.now()));
   }
 
-  public List<ClientRelationship> findRelationshipsByPrimaryClientId(
+  List<ClientRelationship> findRelationshipsByPrimaryClientId(
     @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
     return deleteNotPermittedClientData(
       clientRelationshipDao.findRelationshipsByPrimaryClientId(clientId, LocalDate.now()));
