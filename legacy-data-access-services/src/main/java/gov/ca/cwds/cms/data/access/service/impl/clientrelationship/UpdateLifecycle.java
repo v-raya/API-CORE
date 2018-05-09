@@ -82,9 +82,7 @@ class UpdateLifecycle extends DefaultDataAccessLifeCycle<ClientRelationshipAware
         ((ClientRelationshipAwareDTO) bundle.getAwareDto())
             .getTribalMembershipVerificationsForDelete());
     validateAndAddIfNeededDuplicatedTribalMembershipVerifications(bundle);
-    createTribalMembershipVerifications(
-        ((ClientRelationshipAwareDTO) bundle.getAwareDto())
-            .getTribalMembershipVerificationsForCreate());
+    createTribalMembershipVerifications(bundle);
   }
 
   @Override
@@ -132,9 +130,9 @@ class UpdateLifecycle extends DefaultDataAccessLifeCycle<ClientRelationshipAware
   private void enrichWithTribalsMembershipVerifications(DataAccessBundle bundle) {
     ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
     List<TribalMembershipVerification> tribalsThatHasSubTribals =
-      tribalMembershipVerificationDao.findTribalsThatHaveSubTribalsByClientId(
-        awareDTO.getEntity().getPrimaryClient().getIdentifier(),
-        awareDTO.getEntity().getSecondaryClient().getIdentifier());
+        tribalMembershipVerificationDao.findTribalsThatHaveSubTribalsByClientId(
+            awareDTO.getEntity().getPrimaryClient().getIdentifier(),
+            awareDTO.getEntity().getSecondaryClient().getIdentifier());
 
     if (CollectionUtils.isNotEmpty(tribalsThatHasSubTribals)) {
       awareDTO.getTribalsThatHaveSubTribals().addAll(tribalsThatHasSubTribals);
@@ -337,13 +335,15 @@ class UpdateLifecycle extends DefaultDataAccessLifeCycle<ClientRelationshipAware
         e -> tribalMembershipVerificationDao.delete(e.getPrimaryKey()));
   }
 
-  private void createTribalMembershipVerifications(
-      List<TribalMembershipVerification> tribalMembershipVerifications) {
-    if (CollectionUtils.isEmpty(tribalMembershipVerifications)) {
+  private void createTribalMembershipVerifications(DataAccessBundle bundle) {
+    ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
+    if (CollectionUtils.isEmpty(awareDTO.getTribalMembershipVerificationsForCreate())) {
       return;
     }
 
-    tribalMembershipVerifications.forEach(tribalMembershipVerificationDao::create);
+    awareDTO
+        .getTribalMembershipVerificationsForCreate()
+        .forEach(tribalMembershipVerificationDao::create);
   }
 
   private Function<TribalMembershipVerification, TribalMembershipVerification>
