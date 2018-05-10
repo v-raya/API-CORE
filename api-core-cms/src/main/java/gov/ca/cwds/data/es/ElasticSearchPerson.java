@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -32,7 +31,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -237,98 +235,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   // =========================
   // PRIVATE STATIC:
   // =========================
-
-  /**
-   * Name suffix contract for Intake API and Elasticsearch person documents. Translates related
-   * legacy values to appropriate Intake values.
-   * 
-   * @author CWDS API Team
-   */
-  public enum ElasticSearchPersonNameSuffix {
-
-    ESQUIRE("esq", new String[] {"esq", "eq", "esqu"}),
-
-    SECOND("ii", new String[] {"ii", "2", "2nd", "second", "02"}),
-
-    THIRD("iii", new String[] {"iii", "3", "3rd", "third", "03"}),
-
-    FOURTH("iv", new String[] {"iv", "iiii", "4", "4th", "fourth", "04"}),
-
-    JR("jr", new String[] {"jr", "junior", "jnr"}),
-
-    SR("sr", new String[] {"sr", "senior", "snr"}),
-
-    MD("md", new String[] {"md", "dr", "doc", "doctor"}),
-
-    PHD("phd", new String[] {"phd", "professor", "prof"}),
-
-    JD("jd", new String[] {"jd"});
-
-    /**
-     * Acceptable/contacted value for Intake.
-     */
-    public final String intake;
-
-    /**
-     * Potential matching source values from legacy.
-     */
-    @JsonIgnore
-    private final String[] legacy;
-
-    // Key = legacy free-form value.
-    @JsonIgnore
-    private static final Map<String, ElasticSearchPersonNameSuffix> mapLegacy = new HashMap<>();
-
-    // Key = Intake value.
-    @JsonIgnore
-    private static final Map<String, ElasticSearchPersonNameSuffix> mapIntake = new HashMap<>();
-
-    private ElasticSearchPersonNameSuffix(String intake, String[] legacy) {
-      this.intake = intake;
-      this.legacy = legacy;
-    }
-
-    @JsonValue
-    public String getIntake() {
-      return intake;
-    }
-
-    @JsonIgnore
-    public String[] getLegacy() {
-      return legacy != null ? Arrays.copyOf(legacy, legacy.length) : new String[0];
-    }
-
-    public ElasticSearchPersonNameSuffix lookupLegacy(String val) {
-      return ElasticSearchPersonNameSuffix.findByLegacy(val);
-    }
-
-    public static ElasticSearchPersonNameSuffix findByLegacy(String legacy) {
-      return mapLegacy.get(legacy);
-    }
-
-    public ElasticSearchPersonNameSuffix lookupIntake(String val) {
-      return ElasticSearchPersonNameSuffix.findByIntake(val);
-    }
-
-    public static ElasticSearchPersonNameSuffix findByIntake(String legacy) {
-      return mapIntake.get(legacy);
-    }
-
-    public static ElasticSearchPersonNameSuffix translateNameSuffix(String nameSuffix) {
-      return ElasticSearchPerson.ElasticSearchPersonNameSuffix
-          .findByLegacy(nameSuffix.trim().toLowerCase().replaceAll("[^a-zA-Z0-9]", ""));
-    }
-
-    static {
-      for (ElasticSearchPersonNameSuffix e : ElasticSearchPersonNameSuffix.values()) {
-        mapIntake.put(e.intake, e);
-        for (String leg : e.getLegacy()) {
-          mapLegacy.put(leg, e);
-        }
-      }
-    }
-
-  }
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchPerson.class);
 
@@ -539,9 +445,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     this.middleName = trim(middleName);
 
     if (StringUtils.isNotBlank(nameSuffix)) {
-      final ElasticSearchPersonNameSuffix maybe =
-          ElasticSearchPersonNameSuffix.translateNameSuffix(nameSuffix);
-      this.nameSuffix = maybe != null ? maybe.intake : null;
+      this.nameSuffix = trim(nameSuffix);
     }
 
     if (StringUtils.isNotBlank(gender)) {
@@ -1247,7 +1151,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     if (!mmddyyyyDob.equals(mdyyyyDob)) {
       dobValues.add(mdyyyyDob);
 
-      //Month and Day and Year without zeros, e.g. 9/3/90
+      // Month and Day and Year without zeros, e.g. 9/3/90
       df = new SimpleDateFormat("Mdyy");
       String mdyyDob = df.format(date);
       dobValues.add(mdyyDob);
