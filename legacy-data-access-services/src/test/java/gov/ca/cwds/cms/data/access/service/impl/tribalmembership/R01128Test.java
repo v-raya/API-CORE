@@ -1,4 +1,4 @@
-package gov.ca.cwds.cms.data.access.service.impl.tribalmembershipverification.dbDependent;
+package gov.ca.cwds.cms.data.access.service.impl.tribalmembership;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -71,7 +71,7 @@ public class R01128Test extends BaseCwsCmsInMemoryPersistenceTest {
           assertNotNull(clientBeforeUpdate);
           assertEquals(Boolean.FALSE, clientBeforeUpdate.getTribalMembershipVerifcationIndicator());
           TribalMembershipVerificationAwareDto awareDTO =
-              new TribalMembershipVerificationAwareDto();
+              new TribalMembershipVerificationAwareDto("00TMBVR000", "00TMBVR000");
           awareDTO.setEntity(tribalMembershipVerificationSupplier.get());
           try {
             tribalMembershipVerificationCoreService.create(awareDTO);
