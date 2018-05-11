@@ -203,5 +203,4 @@ public class NameSuffixTranslatorTest {
     String actual = NameSuffixTranslator.translate(source);
     Assert.assertEquals(expected, actual);
   }
-
 }
