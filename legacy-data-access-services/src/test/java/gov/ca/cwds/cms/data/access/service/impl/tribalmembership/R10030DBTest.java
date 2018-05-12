@@ -20,6 +20,7 @@ import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,10 +29,15 @@ import org.junit.Test;
 public class R10030DBTest extends BaseCwsCmsInMemoryPersistenceTest {
 
   private static final String USER_ID = "0X5";
-  private static final String PARENT_CLIENT_ID = "K2DISKkabf";
-  private static final String ORGANIZATION = "VyTDQ2lg25";
-  private static final String PARENT_CLIENT_ID_2 = "3Lb0X5Cabf";
-  private static final String CHILD_CLIENT_ID = "7u1zM98abf";
+  private static final String CHILD_CLIENT_ID = "1111111111";
+  private static final String PARENT_CLIENT_ID = "1222222222";
+  private static final String ORGANIZATION = "1111111111";
+  private static final Short TYPE = 2100;
+
+  private static final String CHILD_CLIENT_ID_2 = "2222222222";
+  private static final String ORGANIZATION_2 = "2222222222";
+  private static final String PARENT_CLIENT_ID_2 = "2333333333";
+  private static final Short INDIAN_STATUS_TYPE_2 = 1211;
 
   private ClientDao clientDao;
   private TribalMembershipVerificationDao tribalMembershipVerificationDao;
@@ -53,59 +59,82 @@ public class R10030DBTest extends BaseCwsCmsInMemoryPersistenceTest {
     tribalMembershipVerificationCoreService =
         new TribalMembershipVerificationCoreService(
             tribalMembershipVerificationDao, createLifeCycle);
-
-    cleanAllAndInsert("/dbunit/R10030.xml");
   }
 
   @Test
   public void testNoChildTribalExist() throws Exception {
-    createTribal(CHILD_CLIENT_ID, PARENT_CLIENT_ID, ORGANIZATION, (short) 2100);
-    testTribals(1, 1, CHILD_CLIENT_ID, PARENT_CLIENT_ID, ORGANIZATION);
+    cleanAllAndInsert("/dbunit/R10030.xml");
+    createTribal(CHILD_CLIENT_ID, PARENT_CLIENT_ID, ORGANIZATION, TYPE);
+    List<TribalMembershipVerification> childTribals;
+    List<TribalMembershipVerification> parentTribals;
+    childTribals = getTribals(CHILD_CLIENT_ID);
+    parentTribals = getTribals(PARENT_CLIENT_ID);
+
+    assertNotNull(childTribals);
+    assertNotNull(parentTribals);
+    assertEquals(1, childTribals.size());
+    assertEquals(1, parentTribals.size());
+    assertNotNull(childTribals.get(0).getFkFromTribalMembershipVerification());
+    assertEquals(null, parentTribals.get(0).getFkFromTribalMembershipVerification());
+    assertEquals(
+        parentTribals.get(0).getThirdId(),
+        childTribals.get(0).getFkFromTribalMembershipVerification());
+    assertEquals(CHILD_CLIENT_ID, childTribals.get(0).getClientId());
+    assertEquals(PARENT_CLIENT_ID, parentTribals.get(0).getClientId());
+    assertEquals(ORGANIZATION, parentTribals.get(0).getFkSentToTribalOrganization());
+    assertEquals(ORGANIZATION, childTribals.get(0).getFkSentToTribalOrganization());
+    assertEquals(TYPE, childTribals.get(0).getIndianTribeType().getSystemId());
+    assertEquals(TYPE, parentTribals.get(0).getIndianTribeType().getSystemId());
   }
 
   @Test
   public void testOneChildTribalExist() throws Exception {
-    createTribal(CHILD_CLIENT_ID, PARENT_CLIENT_ID_2, ORGANIZATION, (short) 2100);
-    testTribals(2, 1, CHILD_CLIENT_ID, PARENT_CLIENT_ID, ORGANIZATION);
+    cleanAllAndInsert("/dbunit/R10030.xml");
+
+    createTribal(CHILD_CLIENT_ID_2, PARENT_CLIENT_ID_2, ORGANIZATION_2, TYPE);
+    List<TribalMembershipVerification> childTribals;
+    List<TribalMembershipVerification> parentTribals;
+    childTribals = getTribals(CHILD_CLIENT_ID_2);
+    parentTribals = getTribals(PARENT_CLIENT_ID_2);
+    LocalDate localDate = LocalDate.of(2001, 7, 30);
+
+    assertNotNull(childTribals);
+    assertNotNull(parentTribals);
+    assertEquals(2, childTribals.size());
+    assertEquals(1, parentTribals.size());
+    assertEquals(PARENT_CLIENT_ID_2, parentTribals.get(0).getClientId());
+    assertEquals(TYPE, parentTribals.get(0).getIndianTribeType().getSystemId());
+    assertEquals(ORGANIZATION_2, parentTribals.get(0).getFkSentToTribalOrganization());
+
+    TribalMembershipVerification newChildRow =
+        childTribals
+            .stream()
+            .filter(
+                e ->
+                    e.getFkFromTribalMembershipVerification()
+                        .equals(parentTribals.get(0).getThirdId()))
+            .findFirst()
+            .orElse(null);
+
+    assertNotNull(newChildRow);
+    assertEquals(
+        parentTribals.get(0).getThirdId(), newChildRow.getFkFromTribalMembershipVerification());
+    assertEquals(CHILD_CLIENT_ID_2, newChildRow.getClientId());
+    assertEquals(ORGANIZATION_2, newChildRow.getFkSentToTribalOrganization());
+    assertEquals(TYPE, newChildRow.getIndianTribeType().getSystemId());
+    assertEquals(localDate, newChildRow.getStatusDate());
+    assertNotNull(newChildRow.getIndianEnrollmentStatus());
+    assertEquals(INDIAN_STATUS_TYPE_2, newChildRow.getIndianEnrollmentStatus().getSystemId());
   }
 
-  private void testTribals(
-      int childTribalsCount,
-      int parentTribalsCount,
-      String primaryClientId,
-      String secondaryClientId,
-      String organization) {
+  private List<TribalMembershipVerification> getTribals(String clientId) {
+    List<TribalMembershipVerification> allTribalsBeforeUpdate = new ArrayList<>();
     executeInTransaction(
         sessionFactory,
         (sessionFactory) -> {
-          List<TribalMembershipVerification> allTribalsBeforeUpdate =
-              tribalMembershipVerificationDao.findByClientIds(primaryClientId, secondaryClientId);
-          assertNotNull(allTribalsBeforeUpdate);
-          assertEquals(childTribalsCount + parentTribalsCount, allTribalsBeforeUpdate.size());
-
-          List<TribalMembershipVerification> childTribalsBeforeUpdate =
-              tribalMembershipVerificationDao.findByClientIds(primaryClientId);
-
-          assertNotNull(childTribalsBeforeUpdate);
-          assertEquals(childTribalsCount, childTribalsBeforeUpdate.size());
-          childTribalsBeforeUpdate.forEach(
-              e -> {
-                assertEquals(primaryClientId, e.getClientId());
-                assertEquals(organization, e.getFkSentToTribalOrganization());
-                assertNotNull(e.getFkFromTribalMembershipVerification());
-              });
-
-          List<TribalMembershipVerification> parentTribalsBeforeUpdate =
-              tribalMembershipVerificationDao.findByClientIds(secondaryClientId);
-          assertNotNull(parentTribalsBeforeUpdate);
-          assertEquals(parentTribalsCount, parentTribalsBeforeUpdate.size());
-          parentTribalsBeforeUpdate.forEach(
-              e -> {
-                assertEquals(secondaryClientId, e.getClientId());
-                assertEquals(organization, e.getFkSentToTribalOrganization());
-                assertEquals(null, e.getFkFromTribalMembershipVerification());
-              });
+          allTribalsBeforeUpdate.addAll(tribalMembershipVerificationDao.findByClientId(clientId));
         });
+    return allTribalsBeforeUpdate;
   }
 
   private void createTribal(String child, String parent, String organization, Short indianType) {

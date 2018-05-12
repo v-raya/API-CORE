@@ -21,7 +21,7 @@ rule "R-10030"
       $entityDuplicate: TribalMembershipVerification(
              clientId == $tribalMembershipVerification.clientId
              && fkSentToTribalOrganization == $tribalMembershipVerification.fkSentToTribalOrganization
-             && indianTribeType == $tribalMembershipVerification.indianTribeType) from $tribalMembershipVerificationAwareDto.childTribalForDuplicate
+             && indianTribeType.systemId == $tribalMembershipVerification.indianTribeType.systemId) from $tribalMembershipVerificationAwareDto.childTribalForDuplicate
 
       then
       $entityDuplicate.setStatusDate($tribalMembershipVerification.getStatusDate());
