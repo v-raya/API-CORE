@@ -1,5 +1,10 @@
 package gov.ca.cwds.cms.data.access.service.impl.dbDependentSuite;
 
+import gov.ca.cwds.cms.data.access.service.impl.clientrelationship.R08840DBTest;
+import gov.ca.cwds.cms.data.access.service.impl.clientrelationship.R08861DBTest;
+import gov.ca.cwds.cms.data.access.service.impl.dbDependent.CsecHistoryServiceTest;
+import gov.ca.cwds.cms.data.access.service.impl.dbDependent.SafetyAlertServiceTest;
+import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.R01128DBTest;
 import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.R10030DBTest;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import org.junit.ClassRule;
@@ -15,11 +20,11 @@ import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 @PrepareForTest({PrincipalUtils.class})
 @PowerMockIgnore({"javax.xml.*", "org.xml.*", "org.w3c.*"})
 @Suite.SuiteClasses({
-//  SafetyAlertServiceTest.class,
-//  CsecHistoryServiceTest.class,
-//  R08840DBTest.class,
-//  R08861DBTest.class,
-//  R01128Test.class,
+  SafetyAlertServiceTest.class,
+  CsecHistoryServiceTest.class,
+  R08840DBTest.class,
+  R08861DBTest.class,
+  R01128DBTest.class,
   R10030DBTest.class
 })
 public class DBTestSuite {

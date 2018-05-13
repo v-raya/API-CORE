@@ -47,19 +47,28 @@ public class CreateLifeCycle
   @Override
   public void beforeDataProcessing(DataAccessBundle bundle) throws DataAccessServicesException {
     super.beforeDataProcessing(bundle);
-    setTribalMembershipVerificationIndicatorForClient(bundle);
     enrichWithClients(bundle);
+    prepareParenTribalForCreate(bundle);
+    setTribalMembershipVerificationIndicatorForClient(bundle);
     enrichWithParentAndChildTribals(bundle);
     createChildTribalForDuplicate(bundle);
+  }
+
+  private void prepareParenTribalForCreate(DataAccessBundle bundle) {
+    TribalMembershipVerificationAwareDto awareDto =
+      (TribalMembershipVerificationAwareDto) bundle.getAwareDto();
+
+    // rule 10030 (for 1 tribal we are creating two rows - for child and for parent)
+    awareDto.getEntity().setClientId(awareDto.getParentId());
   }
 
   @Override
   public void dataProcessing(DataAccessBundle bundle, PerryAccount perryAccount) {
     super.dataProcessing(bundle, perryAccount);
     businessValidationService.runBusinessValidation(
-      (TribalMembershipVerificationAwareDto) bundle.getAwareDto(),
-      PrincipalUtils.getPrincipal(),
-      TribalMembershipVerificationConfiguration.DATA_PROCESSING_INSTANCE);
+        (TribalMembershipVerificationAwareDto) bundle.getAwareDto(),
+        PrincipalUtils.getPrincipal(),
+        TribalMembershipVerificationConfiguration.DATA_PROCESSING_INSTANCE);
   }
 
   @Override
@@ -79,7 +88,7 @@ public class CreateLifeCycle
 
   private void createChildTribalForDuplicate(DataAccessBundle bundle) {
     TribalMembershipVerificationAwareDto awareDto =
-      (TribalMembershipVerificationAwareDto) bundle.getAwareDto();
+        (TribalMembershipVerificationAwareDto) bundle.getAwareDto();
 
     awareDto.getEntity().setThirdId(IdGenerator.generateId());
 
@@ -99,33 +108,42 @@ public class CreateLifeCycle
 
   private void enrichWithParentAndChildTribals(DataAccessBundle bundle) {
     TribalMembershipVerificationAwareDto awareDto =
-      (TribalMembershipVerificationAwareDto) bundle.getAwareDto();
+        (TribalMembershipVerificationAwareDto) bundle.getAwareDto();
 
-    List<TribalMembershipVerification> allTribals = tribalMembershipVerificationDao.findByClientIds(awareDto.getChildId(), awareDto.getParentId());
+    List<TribalMembershipVerification> allTribals =
+        tribalMembershipVerificationDao.findByClientIds(
+            awareDto.getChildId(), awareDto.getParentId());
     if (CollectionUtils.isEmpty(allTribals)) {
       return;
     }
 
-    allTribals.forEach(e->{
-      if(awareDto.getChildId().equals(e.getClientId())) {
-        awareDto.getChildTribals().add(e);
-      } else {
-        awareDto.getParentTribals().add(e);
-      }
-    });
+    allTribals.forEach(
+        e -> {
+          if (awareDto.getChildId().equals(e.getClientId())) {
+            awareDto.getChildTribals().add(e);
+          } else {
+            awareDto.getParentTribals().add(e);
+          }
+        });
   }
 
-  private void enrichWithClients(DataAccessBundle bundle) {
+  private void enrichWithClients(DataAccessBundle bundle) throws DataAccessServicesException {
     TribalMembershipVerificationAwareDto awareDto =
-      (TribalMembershipVerificationAwareDto) bundle.getAwareDto();
+        (TribalMembershipVerificationAwareDto) bundle.getAwareDto();
 
-    awareDto.setParentClient(clientCoreService.find(awareDto.getParentId()));
-    awareDto.setChildClient(clientCoreService.find(awareDto.getChildId()));
+    Client child = clientCoreService.find(awareDto.getChildId());
+    Client parent = clientCoreService.find(awareDto.getParentId());
+    if (child == null || parent == null) {
+      throw new DataAccessServicesException(new Exception("Client doesn not exist"));
+    }
+
+    awareDto.setChildClient(child);
+    awareDto.setParentClient(parent);
   }
 
   private void storeChildDuplicatedTribal(DataAccessBundle bundle) {
     TribalMembershipVerificationAwareDto awareDto =
-      (TribalMembershipVerificationAwareDto) bundle.getAwareDto();
+        (TribalMembershipVerificationAwareDto) bundle.getAwareDto();
     tribalMembershipVerificationDao.create(awareDto.getChildTribalForDuplicate());
   }
 
@@ -137,19 +155,17 @@ public class CreateLifeCycle
    */
   private void setTribalMembershipVerificationIndicatorForClient(DataAccessBundle bundle)
       throws DataAccessServicesException {
-    TribalMembershipVerification tribalMembershipVerification =
-        (TribalMembershipVerification) bundle.getAwareDto().getEntity();
+    TribalMembershipVerificationAwareDto awareDto =
+      (TribalMembershipVerificationAwareDto) bundle.getAwareDto();
 
-    Client client = clientCoreService.find(tribalMembershipVerification.getClientId());
+    Client client = awareDto.getParentClient();
     if (client == null || client.getTribalMembershipVerifcationIndicator()) {
       return;
     }
 
     client.setTribalMembershipVerifcationIndicator(true);
-
     ClientEntityAwareDTO clientEntityAwareDTO = new ClientEntityAwareDTO();
     clientEntityAwareDTO.setEntity(client);
     clientCoreService.update(clientEntityAwareDTO);
   }
-
 }

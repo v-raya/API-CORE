@@ -34,7 +34,7 @@ allprojects {
         glassfishJerseyExtVersion = "2.23.2"
         jacksonVersion = "2.8.2"
         postgresqlVersion = "9.4.1208.jre7"
-        dataModelVersion = '0.6.2_509-RC'
+        dataModelVersion = '0.7.1'//'0.6.2_509-RC'
         droolsVersion = "7.1.0.Final"
         mapstructVersion = '1.1.0.Final'
         junitVersion = '4.12'
@@ -50,7 +50,7 @@ allprojects {
         buildNumber = System.getProperty('BuildNumber')
         customVersion = System.getProperty('CustomVersion')
 
-        projectSnapshotVersion = projectMajorVersion + "-SNAPSHOT"
+        projectSnapshotVersion = projectMajorVersion //+ "-SNAPSHOT"
         projectReleaseVersion = (customVersion == null || customVersion == "" || customVersion.startsWith('$') ? projectMajorVersion + '_' + buildNumber + '-RC' : customVersion )
         projectVersion = (isRelease ? projectReleaseVersion : projectSnapshotVersion )
 
@@ -100,7 +100,8 @@ allprojects {
         exclude '**/dbDependent/**'
         exclude 'gov/ca/cwds/cms/data/access/service/impl/clientrelationship/R08861DBTest.class'
         exclude 'gov/ca/cwds/cms/data/access/service/impl/clientrelationship/R08840DBTest.class'
-        exclude 'gov/ca/cwds/cms/data/access/service/impl/clientrelationship/R10030DBTest.class'
+        exclude 'gov/ca/cwds/cms/data/access/service/impl/tribalmembership/R10030DBTest.class'
+        exclude 'gov/ca/cwds/cms/data/access/service/impl/tribalmembership/R01128DBTest.class'
         jacoco {
             excludes = ["**org/drools/**/*"]
         }

@@ -28,7 +28,7 @@ import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 
 /** @author CWDS TPT-3 Team */
-public class R01128Test extends BaseCwsCmsInMemoryPersistenceTest {
+public class R01128DBTest extends BaseCwsCmsInMemoryPersistenceTest {
 
   private static final String CLIENT_ID = "00TMBVR000";
   private static final Short TRYBE_TYPE_ID = 2106;
