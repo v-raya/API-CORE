@@ -1,0 +1,29 @@
+import gov.ca.cwds.rest.exception.IssueDetails
+import gov.ca.cwds.data.legacy.cms.entity.Client
+import gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification
+import gov.ca.cwds.data.legacy.cms.entity.ClientPaternityDetail
+import gov.ca.cwds.cms.data.access.dto.TribalMembershipVerificationAwareDto;
+
+global java.util.Set<IssueDetails> validationDetailsList
+
+rule "R-10030"
+  dialect "mvel"
+  agenda-group "tribal-membership-verification-data-processing-agenda"
+  when
+      /*
+        Code: R - 10030
+        Rule Txt:
+        Logic:
+
+      */
+      $tribalMembershipVerificationAwareDto: TribalMembershipVerificationAwareDto()
+      $tribalMembershipVerification:TribalMembershipVerification() from $tribalMembershipVerificationAwareDto.childTribals
+      $entityDuplicate: TribalMembershipVerification(
+             clientId == $tribalMembershipVerification.clientId
+             && fkSentToTribalOrganization == $tribalMembershipVerification.fkSentToTribalOrganization
+             && indianTribeType.systemId == $tribalMembershipVerification.indianTribeType.systemId) from $tribalMembershipVerificationAwareDto.childTribalForDuplicate
+
+      then
+      $entityDuplicate.setStatusDate($tribalMembershipVerification.getStatusDate());
+      $entityDuplicate.setIndianEnrollmentStatus($tribalMembershipVerification.getIndianEnrollmentStatus());
+end

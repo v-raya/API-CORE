@@ -1,4 +1,4 @@
-package gov.ca.cwds.cms.data.access.service.impl.tribalmembershipverification.dbDependent;
+package gov.ca.cwds.cms.data.access.service.impl.tribalmembership;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -28,7 +28,7 @@ import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 
 /** @author CWDS TPT-3 Team */
-public class R01128Test extends BaseCwsCmsInMemoryPersistenceTest {
+public class R01128DBTest extends BaseCwsCmsInMemoryPersistenceTest {
 
   private static final String CLIENT_ID = "00TMBVR000";
   private static final Short TRYBE_TYPE_ID = 2106;
@@ -71,7 +71,7 @@ public class R01128Test extends BaseCwsCmsInMemoryPersistenceTest {
           assertNotNull(clientBeforeUpdate);
           assertEquals(Boolean.FALSE, clientBeforeUpdate.getTribalMembershipVerifcationIndicator());
           TribalMembershipVerificationAwareDto awareDTO =
-              new TribalMembershipVerificationAwareDto();
+              new TribalMembershipVerificationAwareDto("00TMBVR000", "00TMBVR000");
           awareDTO.setEntity(tribalMembershipVerificationSupplier.get());
           try {
             tribalMembershipVerificationCoreService.create(awareDTO);
