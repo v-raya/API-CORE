@@ -30,7 +30,9 @@ import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-/** @author CWDS TPT-3 Team */
+/**
+ * @author CWDS TPT-3 Team
+ * */
 class UpdateLifecycle extends DefaultDataAccessLifeCycle<ClientRelationshipAwareDTO> {
 
   private final BusinessValidationService<ClientRelationship, ClientRelationshipAwareDTO>
