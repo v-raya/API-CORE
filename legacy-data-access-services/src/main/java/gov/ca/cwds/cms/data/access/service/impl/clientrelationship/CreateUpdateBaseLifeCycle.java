@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
 /** @author CWDS TPT-3 Team */
 public abstract class CreateUpdateBaseLifeCycle
@@ -71,14 +70,6 @@ public abstract class CreateUpdateBaseLifeCycle
         (ClientRelationshipAwareDTO) bundle.getAwareDto(),
         PrincipalUtils.getPrincipal(),
         ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);
-  }
-
-  @Override
-  public void afterDataProcessing(DataAccessBundle bundle) {
-    super.afterDataProcessing(bundle);
-    deleteTribalMembershipVerifications(
-        ((ClientRelationshipAwareDTO) bundle.getAwareDto())
-            .getTribalMembershipVerificationsForDelete());
   }
 
   @Override
@@ -164,111 +155,66 @@ public abstract class CreateUpdateBaseLifeCycle
       return;
     }
 
-    ParametersValidator.checkEntityId(
-        awareDTO.getEntity().getPrimaryClient(),
-        awareDTO.getEntity().getPrimaryClient().getClass().getName());
-    Client primaryClient = clientDao.find(awareDTO.getEntity().getPrimaryClient().getIdentifier());
-    ParametersValidator.checkEntityId(
-        awareDTO.getEntity().getSecondaryClient(),
-        awareDTO.getEntity().getSecondaryClient().getClass().getName());
-    Client secondaryClient =
-        clientDao.find(awareDTO.getEntity().getSecondaryClient().getIdentifier());
+    Client parent = RelationshipUtil.getParent(awareDTO.getEntity());
+    Client child = RelationshipUtil.getChild(awareDTO.getEntity());
 
-    List<TribalMembershipVerification> secondaryTribals = new ArrayList<>();
-    secondaryTribals.addAll(
-        tribalMembershipVerificationDao.findByClientIdNoTribalEligFrom(
-            secondaryClient.getIdentifier()));
+    List<TribalMembershipVerification> parentTribals =
+        tribalMembershipVerificationDao.findByClientId(parent.getIdentifier());
 
-    List<TribalMembershipVerification> primaryTribals = new ArrayList<>();
-    primaryTribals.addAll(
-        tribalMembershipVerificationDao.findByClientIdNoTribalEligFrom(
-            primaryClient.getIdentifier()));
+    List<TribalMembershipVerification> childTribals =
+        tribalMembershipVerificationDao.findByClientId(parent.getIdentifier());
 
-    // isPrimaryClientChild
-    if (RelationshipUtil.isChildParent(
-        ((ClientRelationshipAwareDTO) bundle.getAwareDto()).getEntity())) {
-      updateTribals(primaryClient, secondaryTribals);
-    } else {
-      updateTribals(secondaryClient, primaryTribals);
+    parentTribals.forEach(
+        parentTribal -> createExtraTribalIfNeeded(parent, child, parentTribal, childTribals));
+  }
+
+  private void createExtraTribalIfNeeded(
+      Client parent,
+      Client child,
+      TribalMembershipVerification parentTribal,
+      List<TribalMembershipVerification> childTribals) {
+
+    TribalMembershipVerification newlyAdded = createExtraTribal(parentTribal, parent, child);
+
+    if (CollectionUtils.isNotEmpty(childTribals)) {
+      childTribals.forEach(
+          childTribal -> changeChildTribalIfNeeded(parent, child, childTribal, newlyAdded));
     }
+
+    tribalMembershipVerificationDao.create(newlyAdded);
   }
 
-  private void updateTribals(Client childClient, List<TribalMembershipVerification> parentTribals) {
-    List<TribalMembershipVerification> childExtraTribals =
-        getExtraRowsForChildClient(parentTribals, childClient.getIdentifier());
-
-    childExtraTribals.forEach(
-        e -> {
-          TribalMembershipVerification newlyAdded = tribalMembershipVerificationDao.create(e);
-          changedRows(newlyAdded, parentTribals);
-        });
-  }
-
-  private void changedRows(
-      TribalMembershipVerification newlyAdded, List<TribalMembershipVerification> childTribals) {
-    if (newlyAdded == null || childTribals == null || childTribals.isEmpty()) {
-      return;
-    }
-    childTribals.forEach(
-        e -> {
-          if (needToUpdateRow(e, newlyAdded)) {
-            e.setStatusDate(newlyAdded.getStatusDate());
-            e.setEnrollmentNumber(newlyAdded.getEnrollmentNumber());
-            tribalMembershipVerificationDao.update(e);
-          }
-        });
-  }
-
-  private boolean needToUpdateRow(
-      TribalMembershipVerification tribalForUpdate, TribalMembershipVerification newlyAddedTribal) {
-    Date dateFromThirdId = CmsKeyIdGenerator.getDateFromKey(tribalForUpdate.getThirdId());
+  private void changeChildTribalIfNeeded(
+      Client parent,
+      Client child,
+      TribalMembershipVerification childTribal,
+      TribalMembershipVerification newlyAdded) {
+    Date dateFromThirdId = CmsKeyIdGenerator.getDateFromKey(childTribal.getThirdId());
     if (dateFromThirdId == null) {
-      return false;
+      return;
     }
 
     LocalDate date = dateFromThirdId.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    if (date.isBefore(LocalDate.of(2005, Month.NOVEMBER, 19))) {
-      if (tribalForUpdate.getIndianTribeType() == newlyAddedTribal.getIndianTribeType()
-          && tribalForUpdate.getFkFromTribalMembershipVerification()
-              == newlyAddedTribal.getFkFromTribalMembershipVerification()) return true;
-    }
+    if (childTribal.getFkFromTribalMembershipVerification() != null
+        && date.isBefore(LocalDate.of(2005, Month.NOVEMBER, 19))) {
+      newlyAdded.setStatusDate(childTribal.getStatusDate());
+      newlyAdded.setEnrollmentNumber(childTribal.getEnrollmentNumber());
+      newlyAdded.setIndianEnrollmentStatus(childTribal.getIndianEnrollmentStatus());
 
-    return false;
+      tribalMembershipVerificationDao.delete(childTribal.getThirdId());
+    }
   }
 
-  private List<TribalMembershipVerification> getExtraRowsForChildClient(
-      List<TribalMembershipVerification> secondaryTribals, String primaryClientId) {
-    if (secondaryTribals == null || secondaryTribals.isEmpty()) {
-      return new ArrayList<>();
-    }
-
-    final List<TribalMembershipVerification> extraRows = new ArrayList<>();
-    secondaryTribals.forEach(
-        a -> {
-          if (StringUtils.isEmpty(a.getFkFromTribalMembershipVerification())) {
-            TribalMembershipVerification extra = new TribalMembershipVerification();
-            extra.setFkFromTribalMembershipVerification(a.getThirdId());
-            extra.setFkSentToTribalOrganization(a.getFkSentToTribalOrganization());
-            extra.setIndianEnrollmentStatus(a.getIndianEnrollmentStatus());
-            extra.setIndianTribeType(a.getIndianTribeType());
-            extra.setThirdId(IdGenerator.generateId());
-            extra.setClientId(primaryClientId);
-            extra.setLastUpdateId(PrincipalUtils.getStaffPersonId());
-            extra.setLastUpdateTime(LocalDateTime.now());
-            extraRows.add(extra);
-          }
-        });
-
-    return extraRows;
-  }
-
-  private void deleteTribalMembershipVerifications(
-      List<TribalMembershipVerification> tribalMembershipVerifications) {
-    if (CollectionUtils.isEmpty(tribalMembershipVerifications)) {
-      return;
-    }
-
-    tribalMembershipVerifications.forEach(
-        e -> tribalMembershipVerificationDao.delete(e.getPrimaryKey()));
+  private TribalMembershipVerification createExtraTribal(
+      TribalMembershipVerification parentTribal, Client parent, Client child) {
+    TribalMembershipVerification extra = new TribalMembershipVerification();
+    extra.setFkFromTribalMembershipVerification(parentTribal.getThirdId());
+    extra.setFkSentToTribalOrganization(parentTribal.getFkSentToTribalOrganization());
+    extra.setIndianTribeType(parentTribal.getIndianTribeType());
+    extra.setThirdId(IdGenerator.generateId());
+    extra.setClientId(child.getIdentifier());
+    extra.setLastUpdateId(PrincipalUtils.getStaffPersonId());
+    extra.setLastUpdateTime(LocalDateTime.now());
+    return extra;
   }
 }
