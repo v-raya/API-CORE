@@ -38,7 +38,8 @@ public class R08861DBTest extends BaseCwsCmsInMemoryPersistenceTest {
   private ClientRelationshipDao clientRelationshipDao;
   private BusinessValidationService businessValidationService;
   private PaternityDetailDao paternityDetailDao;
-  private UpdateLifecycle updateLifecycle;
+  private UpdateLifeCycle updateLifeCycle;
+  private CreateLifeCycle createLifeCycle;
   private SearchClientRelationshipService searchClientRelationshipService;
 
   @Before
@@ -49,17 +50,28 @@ public class R08861DBTest extends BaseCwsCmsInMemoryPersistenceTest {
     paternityDetailDao = new PaternityDetailDao(sessionFactory);
     clientDao = new ClientDao(sessionFactory);
     searchClientRelationshipService = new SearchClientRelationshipService(clientRelationshipDao);
-    updateLifecycle =
-        new UpdateLifecycle(
+    updateLifeCycle =
+        new UpdateLifeCycle(
             clientRelationshipDao,
             businessValidationService,
             clientDao,
             tribalMembershipVerificationDao,
             paternityDetailDao,
-          searchClientRelationshipService);
+            searchClientRelationshipService);
+    createLifeCycle =
+        new CreateLifeCycle(
+            clientRelationshipDao,
+            businessValidationService,
+            clientDao,
+            tribalMembershipVerificationDao,
+            paternityDetailDao,
+            searchClientRelationshipService);
     clientRelationshipCoreService =
         new ClientRelationshipCoreService(
-            clientRelationshipDao, updateLifecycle, searchClientRelationshipService);
+            clientRelationshipDao,
+            updateLifeCycle,
+            searchClientRelationshipService,
+            createLifeCycle);
 
     cleanAllAndInsert("/dbunit/R08861.xml");
   }

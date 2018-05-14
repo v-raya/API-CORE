@@ -10,11 +10,11 @@ import gov.ca.cwds.data.legacy.cms.dao.TribalMembershipVerificationDao;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 
 /** @author CWDS TPT-3 Team */
-class UpdateLifeCycle extends CreateUpdateBaseLifeCycle {
+public class CreateLifeCycle extends CreateUpdateBaseLifeCycle {
 
   @Inject
-  UpdateLifeCycle(
-      final ClientRelationshipDao clientRelationshipDao,
+  CreateLifeCycle(
+      ClientRelationshipDao clientRelationshipDao,
       BusinessValidationService<ClientRelationship, ClientRelationshipAwareDTO>
           businessValidationService,
       ClientDao clientDao,

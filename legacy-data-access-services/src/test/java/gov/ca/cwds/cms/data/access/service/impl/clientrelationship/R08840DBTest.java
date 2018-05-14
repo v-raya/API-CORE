@@ -37,7 +37,8 @@ public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
   private ClientRelationshipDao clientRelationshipDao;
   private BusinessValidationService businessValidationService;
   private PaternityDetailDao paternityDetailDao;
-  private UpdateLifecycle updateLifecycle;
+  private UpdateLifeCycle updateLifeCycle;
+  private CreateLifeCycle createLifeCycle;
   private SearchClientRelationshipService searchClientRelationshipService;
 
   private static final String USER_ID = "0X5";
@@ -50,17 +51,28 @@ public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
     clientRelationshipDao = new ClientRelationshipDao(sessionFactory);
     paternityDetailDao = new PaternityDetailDao(sessionFactory);
     searchClientRelationshipService = new SearchClientRelationshipService(clientRelationshipDao);
-    updateLifecycle =
-        new UpdateLifecycle(
+    updateLifeCycle =
+        new UpdateLifeCycle(
             clientRelationshipDao,
             businessValidationService,
             clientDao,
             tribalMembershipVerificationDao,
             paternityDetailDao,
-          searchClientRelationshipService);
+            searchClientRelationshipService);
+    createLifeCycle =
+        new CreateLifeCycle(
+            clientRelationshipDao,
+            businessValidationService,
+            clientDao,
+            tribalMembershipVerificationDao,
+            paternityDetailDao,
+            searchClientRelationshipService);
     clientRelationshipCoreService =
-        new ClientRelationshipCoreService(clientRelationshipDao, updateLifecycle,
-          searchClientRelationshipService);
+        new ClientRelationshipCoreService(
+            clientRelationshipDao,
+            updateLifeCycle,
+            searchClientRelationshipService,
+            createLifeCycle);
   }
 
   @Test
@@ -82,8 +94,8 @@ public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
           secondaryTribals.addAll(tribalMembershipVerificationDao.findByClientId("HkKiO2wABC"));
         });
 
-    assertEquals(primaryTribals.size(), 2);
-    assertEquals(secondaryTribals.size(), 2);
+    assertEquals(2, primaryTribals.size());
+    assertEquals(2, secondaryTribals.size());
 
     createRelationship(awareDTO, "RM1Mq5GABC", "HkKiO2wABC");
 
@@ -93,7 +105,7 @@ public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
     persistRelationship(
         awareDTO, primaryTribalsAfterRUle, secondaryTribalsAfterRUle, "RM1Mq5GABC", "HkKiO2wABC");
 
-    assertEquals( 3, primaryTribalsAfterRUle.size());
+    assertEquals(4, primaryTribalsAfterRUle.size());
     assertEquals(2, secondaryTribals.size());
   }
 
@@ -117,8 +129,8 @@ public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
           secondaryTribals.addAll(tribalMembershipVerificationDao.findByClientId("HkKiO2wAB1"));
         });
 
-    assertEquals(primaryTribals.size(), 2);
-    assertEquals(secondaryTribals.size(), 2);
+    assertEquals(2, primaryTribals.size());
+    assertEquals(2, secondaryTribals.size());
 
     createRelationship(awareDTO, "RM1Mq5GAB1", "HkKiO2wAB1");
 
@@ -128,8 +140,8 @@ public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
     persistRelationship(
         awareDTO, primaryTribalsAfterRule, secondaryTribalsAfterRule, "RM1Mq5GAB1", "HkKiO2wAB1");
 
-    assertEquals(primaryTribalsAfterRule.size(), 2);
-    assertEquals(secondaryTribals.size(), 2);
+    assertEquals(2, primaryTribalsAfterRule.size());
+    assertEquals(2, secondaryTribals.size());
   }
 
   private void persistRelationship(
