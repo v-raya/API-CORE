@@ -103,7 +103,8 @@ public class NameSuffixTranslator {
   }
 
   /**
-   * Translate given name suffix to standard value
+   * Translate given name suffix to standard value if given nameSuffix can be translated, otherwise
+   * return the given value.
    * 
    * @param nameSuffix The name suffix to translate
    * @return The standard translated value if it can be translated, otherwise returns the provided
@@ -127,7 +128,7 @@ public class NameSuffixTranslator {
     int nameSuffixInt = Integer.parseInt(nameSuffixNumerberStr);
 
     if (nameSuffixInt < MIN_ROMAN_NUMBER || nameSuffixInt > MAX_ROMAN_NUMBER) {
-      return nameSuffixNumerberStr;
+      return nameSuffix;
     }
 
     return RomanNumerals.toRoman(nameSuffixInt);
