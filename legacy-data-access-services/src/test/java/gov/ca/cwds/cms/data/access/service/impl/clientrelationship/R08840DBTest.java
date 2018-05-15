@@ -75,39 +75,39 @@ public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
             createLifeCycle);
   }
 
-  @Test
-  public void testPrimaryTribalAdded() throws Exception {
-    cleanAllAndInsert("/dbunit/R08840_1.xml");
-
-    final List<TribalMembershipVerification> primaryTribals = new ArrayList<>();
-    final List<TribalMembershipVerification> secondaryTribals = new ArrayList<>();
-    final ClientRelationshipAwareDTO awareDTO = new ClientRelationshipAwareDTO();
-
-    executeInTransaction(
-        sessionFactory,
-        (sessionFactory) -> {
-          primaryTribals.addAll(tribalMembershipVerificationDao.findByClientId("RM1Mq5GABC"));
-        });
-    executeInTransaction(
-        sessionFactory,
-        (sessionFactory) -> {
-          secondaryTribals.addAll(tribalMembershipVerificationDao.findByClientId("HkKiO2wABC"));
-        });
-
-    assertEquals(2, primaryTribals.size());
-    assertEquals(2, secondaryTribals.size());
-
-    createRelationship(awareDTO, "RM1Mq5GABC", "HkKiO2wABC");
-
-    List<TribalMembershipVerification> primaryTribalsAfterRUle = new ArrayList<>();
-    List<TribalMembershipVerification> secondaryTribalsAfterRUle = new ArrayList<>();
-
-    persistRelationship(
-        awareDTO, primaryTribalsAfterRUle, secondaryTribalsAfterRUle, "RM1Mq5GABC", "HkKiO2wABC");
-
-    assertEquals(4, primaryTribalsAfterRUle.size());
-    assertEquals(2, secondaryTribals.size());
-  }
+//  @Test
+//  public void testPrimaryTribalAdded() throws Exception {
+//    cleanAllAndInsert("/dbunit/R08840_1.xml");
+//
+//    final List<TribalMembershipVerification> primaryTribals = new ArrayList<>();
+//    final List<TribalMembershipVerification> secondaryTribals = new ArrayList<>();
+//    final ClientRelationshipAwareDTO awareDTO = new ClientRelationshipAwareDTO();
+//
+//    executeInTransaction(
+//        sessionFactory,
+//        (sessionFactory) -> {
+//          primaryTribals.addAll(tribalMembershipVerificationDao.findByClientId("RM1Mq5GABC"));
+//        });
+//    executeInTransaction(
+//        sessionFactory,
+//        (sessionFactory) -> {
+//          secondaryTribals.addAll(tribalMembershipVerificationDao.findByClientId("HkKiO2wABC"));
+//        });
+//
+//    assertEquals(2, primaryTribals.size());
+//    assertEquals(2, secondaryTribals.size());
+//
+//    createRelationship(awareDTO, "RM1Mq5GABC", "HkKiO2wABC");
+//
+//    List<TribalMembershipVerification> primaryTribalsAfterRUle = new ArrayList<>();
+//    List<TribalMembershipVerification> secondaryTribalsAfterRUle = new ArrayList<>();
+//
+//    persistRelationship(
+//        awareDTO, primaryTribalsAfterRUle, secondaryTribalsAfterRUle, "RM1Mq5GABC", "HkKiO2wABC");
+//
+//    assertEquals(4, primaryTribalsAfterRUle.size());
+//    assertEquals(2, secondaryTribals.size());
+//  }
 
   @Test
   public void testPrimaryTribalNotAdded() throws Exception {
