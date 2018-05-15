@@ -15,7 +15,14 @@ public class TribalMembershipVerificationConfiguration
       new TribalMembershipVerificationConfiguration(
           "tribal-membership-verification-session",
           "tribal-membership-verification-agenda",
-          "tribal-membership-verification-rules");
+        "tribal-membership-verification-legacy-rules");
+
+  public static final TribalMembershipVerificationConfiguration DATA_PROCESSING_INSTANCE =
+    new TribalMembershipVerificationConfiguration(
+      "tribal-membership-verification-session",
+      "tribal-membership-verification-data-processing-agenda",
+      "tribal-membership-verification-legacy-rules");
+
 
   private TribalMembershipVerificationConfiguration(
       String rulesSession, String rulesAgenda, String kieContainerId) {

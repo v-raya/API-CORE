@@ -1,11 +1,11 @@
 package gov.ca.cwds.cms.data.access.service.impl.dbDependentSuite;
 
-import gov.ca.cwds.cms.data.access.service.impl.clientrelationship.R10030DBTest;
-import gov.ca.cwds.cms.data.access.service.impl.dbDependent.CsecHistoryServiceTest;
-import gov.ca.cwds.cms.data.access.service.impl.dbDependent.SafetyAlertServiceTest;
 import gov.ca.cwds.cms.data.access.service.impl.clientrelationship.R08840DBTest;
 import gov.ca.cwds.cms.data.access.service.impl.clientrelationship.R08861DBTest;
-import gov.ca.cwds.cms.data.access.service.impl.tribalmembershipverification.dbDependent.R01128Test;
+import gov.ca.cwds.cms.data.access.service.impl.dbDependent.CsecHistoryServiceTest;
+import gov.ca.cwds.cms.data.access.service.impl.dbDependent.SafetyAlertServiceTest;
+import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.R01128DBTest;
+import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.R10030DBTest;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
@@ -24,7 +24,7 @@ import org.powermock.modules.junit4.PowerMockRunnerDelegate;
   CsecHistoryServiceTest.class,
   R08840DBTest.class,
   R08861DBTest.class,
-  R01128Test.class,
+  R01128DBTest.class,
   R10030DBTest.class
 })
 public class DBTestSuite {
