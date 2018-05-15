@@ -25,7 +25,7 @@ public class NameSuffixTranslator {
    */
   public enum AlphaNameSuffix {
 
-    ESQ("Esq", new String[] {"esq", "eq", "esqu"}),
+    ESQ("Esq", new String[] {"esq", "esq,", "eq", "esqu"}),
 
     JR("Jr", new String[] {"jr", "junior", "jnr"}),
 
@@ -93,7 +93,11 @@ public class NameSuffixTranslator {
       }
 
       String retval = null;
-      AlphaNameSuffix suffix = sourceMap.get(sourceValue.trim().toLowerCase());
+
+      String manipulatedSourceValue = sourceValue.trim().toLowerCase();
+      manipulatedSourceValue = manipulatedSourceValue.replaceAll("[^A-Za-z0-9]", "");
+
+      AlphaNameSuffix suffix = sourceMap.get(manipulatedSourceValue);
 
       if (suffix != null) {
         retval = suffix.getTranslatedValue();

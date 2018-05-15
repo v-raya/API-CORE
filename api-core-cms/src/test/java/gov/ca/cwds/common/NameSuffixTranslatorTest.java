@@ -29,6 +29,14 @@ public class NameSuffixTranslatorTest {
   }
 
   @Test
+  public void testTranslation_02() {
+    String source = "02";
+    String expected = "II";
+    String actual = NameSuffixTranslator.translate(source);
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
   public void testTranslation_5() {
     String source = "5";
     String expected = "V";
@@ -224,6 +232,30 @@ public class NameSuffixTranslatorTest {
   public void testTranslation_jd() {
     String source = "jd";
     String expected = AlphaNameSuffix.JD.getTranslatedValue();
+    String actual = NameSuffixTranslator.translate(source);
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testTranslation_jd_dot() {
+    String source = "jd.";
+    String expected = AlphaNameSuffix.JD.getTranslatedValue();
+    String actual = NameSuffixTranslator.translate(source);
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testTranslation_md_dots() {
+    String source = "m.d.";
+    String expected = AlphaNameSuffix.MD.getTranslatedValue();
+    String actual = NameSuffixTranslator.translate(source);
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testTranslation_md_numbers() {
+    String source = "m.d.87788";
+    String expected = "m.d.87788";
     String actual = NameSuffixTranslator.translate(source);
     Assert.assertEquals(expected, actual);
   }
