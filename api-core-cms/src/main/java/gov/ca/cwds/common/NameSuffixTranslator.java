@@ -25,7 +25,7 @@ public class NameSuffixTranslator {
    */
   public enum AlphaNameSuffix {
 
-    ESQ("Esq", new String[] {"esq", "esq,", "eq", "esqu"}),
+    ESQ("Esq", new String[] {"esq", "eq", "esqu"}),
 
     JR("Jr", new String[] {"jr", "junior", "jnr"}),
 
