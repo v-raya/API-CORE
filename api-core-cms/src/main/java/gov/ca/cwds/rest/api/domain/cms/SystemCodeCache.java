@@ -30,7 +30,7 @@ public interface SystemCodeCache extends ApiMarker {
   }
 
   /**
-   * Get all system meta definitions.
+   * Get all system meta (system code category) definitions.
    * 
    * @return All system meta definitions.
    */
@@ -69,9 +69,9 @@ public interface SystemCodeCache extends ApiMarker {
   String getSystemCodeShortDescription(final Number systemCodeId);
 
   /**
-   * Get sys id of system code identified by given meta id and short description.
+   * Get system code id of system code identified by given meta id and short description.
    *
-   * @param metaId System code ID
+   * @param metaId meta (category) ID
    * @param shortDescription syscode short description
    * @return Short description of system code identified by given system code id. Returns null if
    *         system code not found.
@@ -91,7 +91,7 @@ public interface SystemCodeCache extends ApiMarker {
    * corresponding category id must be zero for it to be a valid system code for the field
    * 
    * @param systemCodeId System code ID
-   * @param metaId Meta ID
+   * @param metaId Meta (category) ID
    * @param checkCategoryIdValueIsZero check that category id is 0
    * @return True if active system code ID exists under given meta.
    */
@@ -102,7 +102,7 @@ public interface SystemCodeCache extends ApiMarker {
    * Verify that given active system code ID exists for given meta ID.
    *
    * @param logicalId Logical ID
-   * @param metaId Meta ID
+   * @param metaId Meta (category) ID
    * @return True if active Logical ID exists under given meta.
    */
   boolean verifyActiveLogicalIdForMeta(String logicalId, String metaId);
@@ -111,7 +111,7 @@ public interface SystemCodeCache extends ApiMarker {
    * Verify that given active system code short description exists for given meta. ID.
    * 
    * @param shortDesc System code short description
-   * @param metaId Meta ID
+   * @param metaId Meta (category) ID
    * @return True if active system code with given description exists under given meta.
    */
   boolean verifyActiveSystemCodeDescriptionForMeta(String shortDesc, String metaId);

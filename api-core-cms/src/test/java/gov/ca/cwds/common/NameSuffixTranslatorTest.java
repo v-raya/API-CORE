@@ -29,6 +29,22 @@ public class NameSuffixTranslatorTest {
   }
 
   @Test
+  public void testTranslation_02() {
+    String source = "02";
+    String expected = "II";
+    String actual = NameSuffixTranslator.translate(source);
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testTranslation_5() {
+    String source = "5";
+    String expected = "V";
+    String actual = NameSuffixTranslator.translate(source);
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
   public void testTranslation_49th() {
     String source = "49th";
     String expected = "XLIX";
@@ -72,6 +88,22 @@ public class NameSuffixTranslatorTest {
   public void testTranslation_51() {
     String source = "51";
     String expected = "51";
+    String actual = NameSuffixTranslator.translate(source);
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testTranslation_53rd() {
+    String source = "53rd";
+    String expected = "53rd";
+    String actual = NameSuffixTranslator.translate(source);
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testTranslation_3b() {
+    String source = "3b";
+    String expected = "III";
     String actual = NameSuffixTranslator.translate(source);
     Assert.assertEquals(expected, actual);
   }
@@ -200,6 +232,30 @@ public class NameSuffixTranslatorTest {
   public void testTranslation_jd() {
     String source = "jd";
     String expected = AlphaNameSuffix.JD.getTranslatedValue();
+    String actual = NameSuffixTranslator.translate(source);
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testTranslation_jd_dot() {
+    String source = "jd.";
+    String expected = AlphaNameSuffix.JD.getTranslatedValue();
+    String actual = NameSuffixTranslator.translate(source);
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testTranslation_md_dots() {
+    String source = "m.d.";
+    String expected = AlphaNameSuffix.MD.getTranslatedValue();
+    String actual = NameSuffixTranslator.translate(source);
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testTranslation_md_numbers() {
+    String source = "m.d.87788";
+    String expected = "m.d.87788";
     String actual = NameSuffixTranslator.translate(source);
     Assert.assertEquals(expected, actual);
   }

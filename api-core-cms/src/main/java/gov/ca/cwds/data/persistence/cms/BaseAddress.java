@@ -28,7 +28,6 @@ import gov.ca.cwds.data.std.ApiPhoneAware;
 /**
  * @author CWDS API Team
  */
-@SuppressWarnings("javadoc")
 @MappedSuperclass
 public abstract class BaseAddress extends CmsPersistentObject
     implements ApiAddressAware, ApiMultiplePhonesAware {

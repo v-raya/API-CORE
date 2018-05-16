@@ -1,6 +1,7 @@
 package gov.ca.cwds.authorizer;
 
 import com.google.inject.Inject;
+
 import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
 import gov.ca.cwds.authorizer.drools.configuration.ClientResultAuthorizationDroolsConfiguration;
 
@@ -13,9 +14,9 @@ public class ClientResultReadAuthorizer extends ClientBaseReadAuthorizer {
   public static final String CLIENT_RESULT_READ_OBJECT = CLIENT_RESULT_READ + ":client";
 
   @Inject
-  public ClientResultReadAuthorizer(
-      DroolsAuthorizationService droolsAuthorizationService,
+  public ClientResultReadAuthorizer(DroolsAuthorizationService droolsAuthorizationService,
       ClientResultAuthorizationDroolsConfiguration droolsConfiguration) {
     super(droolsAuthorizationService, droolsConfiguration);
   }
+
 }
