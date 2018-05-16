@@ -1,5 +1,6 @@
 package gov.ca.cwds.cms.data.access.dto;
 
+import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import gov.ca.cwds.data.legacy.cms.entity.PaternityDetail;
 import gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification;
@@ -17,6 +18,8 @@ public class ClientRelationshipAwareDTO extends BaseEntityAwareDTO<ClientRelatio
       new ArrayList<>();
   private boolean isNeedMembershipVerification;
   private ClientRelationship relationshipThatHasToBeChanged;
+  private Client parent;
+  private Client child;
 
   public List<ClientRelationship> getClientRelationshipList() {
     return clientRelationshipList;
@@ -61,5 +64,21 @@ public class ClientRelationshipAwareDTO extends BaseEntityAwareDTO<ClientRelatio
   public void setRelationshipThatHasToBeChanged(
     ClientRelationship relationshipThatHasToBeChanged) {
     this.relationshipThatHasToBeChanged = relationshipThatHasToBeChanged;
+  }
+
+  public Client getParent() {
+    return parent;
+  }
+
+  public void setParent(Client parent) {
+    this.parent = parent;
+  }
+
+  public Client getChild() {
+    return child;
+  }
+
+  public void setChild(Client child) {
+    this.child = child;
   }
 }

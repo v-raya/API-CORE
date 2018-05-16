@@ -30,17 +30,18 @@ rule "R-09476-2"
         to previous value.
       */
       $relationshipEntityAwareDto: ClientRelationshipAwareDTO()
-      $clientRelationship: ClientRelationship($type: type.systemId, $parent: secondaryClient, $child: primaryClient) from $relationshipEntityAwareDto.entity
-      $paternity: ClientPaternityDetail(($type == 190 || $type == 285)
+      $clientRelationship: ClientRelationship($type: type.systemId) from $relationshipEntityAwareDto.entity
+      $paternity: ClientPaternityDetail($relationshipEntityAwareDto.parent != null &&
+                                     ($type == 190 || $type == 285)
                                      && birthFatherStatus.code == "Y"
-                                     && $parent.identifier != client.identifier)
+                                     && $relationshipEntityAwareDto.parent.getIdentifier() != client.identifier)
       from $relationshipEntityAwareDto.primaryClientPaternityDetails
       then
       IssueDetails details = new IssueDetails();
       details.setCode("R-09476-2");
       details.setUserMessage("Birth of parent is already identified on the "
                + "Family Information notebook. relationship type: " +
-                  $type + "parent identifier: " + $parent.getIdentifier());
+                  $type + "parent identifier: " + $relationshipEntityAwareDto.getParent().getIdentifier());
       details.setTechnicalMessage("Birth of parent is already identified on the Family "
       + "Information notebook Paternity Finding page and the user selects 'Parent (Birth)'"
       + " as a relationship type for a different client");
