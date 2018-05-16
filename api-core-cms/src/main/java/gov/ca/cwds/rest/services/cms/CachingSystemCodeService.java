@@ -30,6 +30,11 @@ import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.validation.LogicalIdLovValidation;
 import gov.ca.cwds.rest.validation.SystemCodeIdLovLValidation;
 
+/**
+ * System code caching implementation.
+ * 
+ * @author CWDS API Team
+ */
 public class CachingSystemCodeService extends SystemCodeService implements SystemCodeCache {
 
   private static final long serialVersionUID = 1468150983558929580L;
@@ -64,7 +69,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
       long secondsToRefreshCache, boolean preloadCache) {
     super(systemCodeDao, systemMetaDao);
 
-    SystemCodeCacheLoader cacheLoader = new SystemCodeCacheLoader(this);
+    final SystemCodeCacheLoader cacheLoader = new SystemCodeCacheLoader(this);
     systemCodeCache = CacheBuilder.newBuilder()
         .refreshAfterWrite(secondsToRefreshCache, TimeUnit.SECONDS).build(cacheLoader);
 
@@ -95,11 +100,12 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
   @Override
   public Set<SystemMeta> getAllSystemMetas() {
     Set<SystemMeta> systemMetas = new HashSet<>();
-    CacheKey cacheKey = CacheKey.createForAllMetas();
-    SystemMetaListResponse systemMetaListResponse = (SystemMetaListResponse) getFromCache(cacheKey);
+    SystemMetaListResponse systemMetaListResponse =
+        (SystemMetaListResponse) getFromCache(CacheKey.createForAllMetas());
     if (systemMetaListResponse != null) {
       systemMetas = systemMetaListResponse.getSystemMetas();
     }
+
     return systemMetas;
   }
 
@@ -107,13 +113,13 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
   public Set<SystemCode> getAllSystemCodes() {
     Set<SystemCode> systemCodes = new HashSet<>();
     Set<SystemMeta> systemMetas = getAllSystemMetas();
+
     if (systemMetas != null) {
       for (SystemMeta systemMeta : systemMetas) {
-        Set<SystemCode> systemCodesForMeta =
-            getSystemCodesForMeta(systemMeta.getLogicalTableDsdName());
-        systemCodes.addAll(systemCodesForMeta);
+        systemCodes.addAll(getSystemCodesForMeta(systemMeta.getLogicalTableDsdName()));
       }
     }
+
     return systemCodes;
   }
 
@@ -129,10 +135,11 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
   @Override
   public String getSystemCodeShortDescription(final Number systemCodeId) {
     String shortDescription = null;
-    SystemCode systemCode = getSystemCode(systemCodeId);
+    final SystemCode systemCode = getSystemCode(systemCodeId);
     if (systemCode != null) {
       shortDescription = systemCode.getShortDescription();
     }
+
     return shortDescription;
   }
 
@@ -144,7 +151,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
       for (SystemCode systemCode : systemCodes) {
         if (StringUtils.equalsIgnoreCase(StringUtils.trim(shortDescription),
             StringUtils.trim(systemCode.getShortDescription()))) {
-          sysId =  systemCode.getSystemId();
+          sysId = systemCode.getSystemId();
         }
       }
     }
@@ -180,16 +187,13 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
   @Override
   public boolean verifyActiveSystemCodeIdForMeta(Number systemCodeId, String metaId,
       boolean checkCategoryIdValueIsZero) {
-    Set<SystemCode> systemCodes = getSystemCodesForMeta(metaId);
-    SystemCodeIdLovLValidation validation = new SystemCodeIdLovLValidation(systemCodes);
-    return validation.isValid(systemCodeId, checkCategoryIdValueIsZero);
+    return new SystemCodeIdLovLValidation(getSystemCodesForMeta(metaId)).isValid(systemCodeId,
+        checkCategoryIdValueIsZero);
   }
 
   @Override
   public boolean verifyActiveLogicalIdForMeta(String logicalId, String metaId) {
-    Set<SystemCode> systemCodes = getSystemCodesForMeta(metaId);
-    LogicalIdLovValidation validation = new LogicalIdLovValidation(systemCodes);
-    return validation.isValid(logicalId);
+    return new LogicalIdLovValidation(getSystemCodesForMeta(metaId)).isValid(logicalId);
   }
 
   @Override
@@ -312,7 +316,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
         }
       }
 
-      LOGGER.info("Loaded all system code cache. Size: {}", systemCodeMap.size());
+      LOGGER.info("Loaded ALL system code cache. Size: {}", systemCodeMap.size());
       return systemCodeMap;
     }
   }
@@ -324,9 +328,6 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
    */
   private static class CacheKey extends ApiObjectIdentity {
 
-    /**
-     * Default.
-     */
     private static final long serialVersionUID = 1L;
 
     private static final String ALL_METAS_TYPE = "ALL_METAS";
