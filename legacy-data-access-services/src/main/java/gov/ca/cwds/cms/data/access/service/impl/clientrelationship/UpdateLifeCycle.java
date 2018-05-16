@@ -9,7 +9,11 @@ import gov.ca.cwds.data.legacy.cms.dao.PaternityDetailDao;
 import gov.ca.cwds.data.legacy.cms.dao.TribalMembershipVerificationDao;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 
-/** @author CWDS TPT-3 Team */
+/**
+ * Life Cycle for update relationships.
+ *
+ * @author CWDS TPT-3 Team
+ * */
 class UpdateLifeCycle extends CreateUpdateBaseLifeCycle {
 
   @Inject

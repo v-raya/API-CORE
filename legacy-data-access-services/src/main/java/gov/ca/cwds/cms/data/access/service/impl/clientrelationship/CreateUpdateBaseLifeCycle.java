@@ -30,7 +30,11 @@ import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-/** @author CWDS TPT-3 Team */
+/**
+ * Life Cycle for create update relationships.
+ *
+ * @author CWDS TPT-3 Team
+ */
 public abstract class CreateUpdateBaseLifeCycle
     extends DefaultDataAccessLifeCycle<ClientRelationshipAwareDTO> {
 
@@ -85,7 +89,8 @@ public abstract class CreateUpdateBaseLifeCycle
 
     Client secondaryClient = awareDTO.getEntity().getSecondaryClient();
     String secondaryClientIdentifier = secondaryClient.getIdentifier();
-    if(RelationshipUtil.isChildParent(awareDTO.getEntity()) || RelationshipUtil.isParentChild(awareDTO.getEntity())) {
+    if (RelationshipUtil.isChildParent(awareDTO.getEntity())
+        || RelationshipUtil.isParentChild(awareDTO.getEntity())) {
       awareDTO.setParent(RelationshipUtil.getParent(awareDTO.getEntity()));
       awareDTO.setChild(RelationshipUtil.getChild(awareDTO.getEntity()));
     }
