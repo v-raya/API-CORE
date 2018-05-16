@@ -16,6 +16,7 @@ public class ClientRelationshipAwareDTO extends BaseEntityAwareDTO<ClientRelatio
   private List<TribalMembershipVerification> tribalMembershipVerificationsForDelete =
       new ArrayList<>();
   private boolean isNeedMembershipVerification;
+  private ClientRelationship relationshipThatHasToBeChanged;
 
   public List<ClientRelationship> getClientRelationshipList() {
     return clientRelationshipList;
@@ -51,5 +52,14 @@ public class ClientRelationshipAwareDTO extends BaseEntityAwareDTO<ClientRelatio
 
   public List<PaternityDetail> getSecondaryClientPaternityDetails() {
     return secondaryClientPaternityDetails;
+  }
+
+  public ClientRelationship getRelationshipThatHasToBeChanged() {
+    return relationshipThatHasToBeChanged;
+  }
+
+  public void setRelationshipThatHasToBeChanged(
+    ClientRelationship relationshipThatHasToBeChanged) {
+    this.relationshipThatHasToBeChanged = relationshipThatHasToBeChanged;
   }
 }

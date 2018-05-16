@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /** @author CWDS TPT-3 Team */
 public abstract class CreateUpdateBaseLifeCycle
@@ -59,6 +60,7 @@ public abstract class CreateUpdateBaseLifeCycle
   @Override
   public void beforeDataProcessing(DataAccessBundle bundle) throws DataAccessServicesException {
     super.beforeDataProcessing(bundle);
+    enrichWithCurrentRelationship(bundle);
     enrichWithPrimaryAndSecondaryClients(bundle);
     enrichWithTribalsMembershipVerifications(bundle);
   }
@@ -90,7 +92,7 @@ public abstract class CreateUpdateBaseLifeCycle
             primaryClientIdentifier));
     otherRelationshipsForThisClient.addAll(
         searchClientRelationshipService.findRelationshipsBySecondaryClientId(
-            primaryClientIdentifier));
+            secondaryClientIdentifier));
 
     otherRelationshipsForThisClient.removeIf(
         e -> e.getIdentifier().equals(awareDTO.getEntity().getIdentifier()));
@@ -114,16 +116,62 @@ public abstract class CreateUpdateBaseLifeCycle
         ClientRelationshipDroolsConfiguration.INSTANCE);
   }
 
+  @Override
+  public void afterBusinessValidation(DataAccessBundle bundle) {
+    super.afterBusinessValidation(bundle);
+    deleteTribals(bundle);
+  }
+
+  private void deleteTribals(DataAccessBundle bundle) {
+    ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
+    awareDTO
+        .getTribalMembershipVerificationsForDelete()
+        .forEach(e -> tribalMembershipVerificationDao.delete(e.getPrimaryKey()));
+  }
+
+  /**
+   * Rule - 08861 "1) If a parent has one of the following relationships: Birth Mother, Alleged
+   * Mother, Presumed Mother, Birth Father, Alleged Father or Presumed Father and the child in the
+   * relationship has a membership status entered on their associated Tribal Membership Verification
+   * row and if user tries to change relationship to something other than relationships listed
+   * above, display error and reset to previous value. 2) If a parent has one of the following
+   * relationships: Birth Mother, Alleged Mother, Presumed Mother, Birth Father, Alleged Father or
+   * Presumed Father and the child in the relationship does not have a membership status entered on
+   * their associated Tribal Membership Verification row, and if user tries to change relationship
+   * to something other than relationships listed above, allow change in client relationship and
+   * delete the associated child's Tribal Membership Verification rows created from this parent. 3)
+   * If the relationship changes to one of the relationships listed above, then no action needs to
+   * be taken."
+   */
   private void enrichWithTribalsMembershipVerifications(DataAccessBundle bundle) {
     ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
+
+    ClientRelationship relationshipThatHasToBeChanged =
+        awareDTO.getRelationshipThatHasToBeChanged();
+    if (relationshipThatHasToBeChanged == null) {
+      return;
+    }
+
+    Client parent = RelationshipUtil.getParent(relationshipThatHasToBeChanged);
+    Client child = RelationshipUtil.getChild(relationshipThatHasToBeChanged);
+
     List<TribalMembershipVerification> tribalsThatHasSubTribals =
         tribalMembershipVerificationDao.findTribalsThatHaveSubTribalsByClientId(
-            awareDTO.getEntity().getPrimaryClient().getIdentifier(),
-            awareDTO.getEntity().getSecondaryClient().getIdentifier());
+            child.getIdentifier(), parent.getIdentifier());
 
     if (CollectionUtils.isNotEmpty(tribalsThatHasSubTribals)) {
       awareDTO.getTribalsThatHaveSubTribals().addAll(tribalsThatHasSubTribals);
     }
+  }
+
+  private void enrichWithCurrentRelationship(DataAccessBundle bundle) {
+    ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
+    if (StringUtils.isEmpty(awareDTO.getEntity().getIdentifier())) {
+      return;
+    }
+
+    awareDTO.setRelationshipThatHasToBeChanged(
+        searchClientRelationshipService.getRelationshipById(awareDTO.getEntity().getIdentifier()));
   }
 
   private void enrichWithPrimaryAndSecondaryClients(DataAccessBundle bundle) {
@@ -162,7 +210,7 @@ public abstract class CreateUpdateBaseLifeCycle
         tribalMembershipVerificationDao.findByClientId(parent.getIdentifier());
 
     List<TribalMembershipVerification> childTribals =
-        tribalMembershipVerificationDao.findByClientId(parent.getIdentifier());
+        tribalMembershipVerificationDao.findByClientId(child.getIdentifier());
 
     parentTribals.forEach(
         parentTribal -> createExtraTribalIfNeeded(parent, child, parentTribal, childTribals));

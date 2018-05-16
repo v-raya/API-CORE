@@ -20,12 +20,12 @@ import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 @PrepareForTest({PrincipalUtils.class})
 @PowerMockIgnore({"javax.xml.*", "org.xml.*", "org.w3c.*"})
 @Suite.SuiteClasses({
-//  SafetyAlertServiceTest.class,
-//  CsecHistoryServiceTest.class,
+  SafetyAlertServiceTest.class,
+  CsecHistoryServiceTest.class,
   R08840DBTest.class,
-//  R08861DBTest.class,
-//  R01128DBTest.class,
-//  R10030DBTest.class
+  R08861DBTest.class,
+  R01128DBTest.class,
+  R10030DBTest.class
 })
 public class DBTestSuite {
   @ClassRule
