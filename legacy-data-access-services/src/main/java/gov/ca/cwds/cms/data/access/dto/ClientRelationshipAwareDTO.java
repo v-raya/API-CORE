@@ -61,8 +61,7 @@ public class ClientRelationshipAwareDTO extends BaseEntityAwareDTO<ClientRelatio
     return relationshipThatHasToBeChanged;
   }
 
-  public void setRelationshipThatHasToBeChanged(
-    ClientRelationship relationshipThatHasToBeChanged) {
+  public void setRelationshipThatHasToBeChanged(ClientRelationship relationshipThatHasToBeChanged) {
     this.relationshipThatHasToBeChanged = relationshipThatHasToBeChanged;
   }
 
