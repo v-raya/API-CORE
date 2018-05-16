@@ -40,6 +40,10 @@ class SearchClientRelationshipService {
       clientRelationshipDao.findRelationshipsByPrimaryClientId(clientId, LocalDate.now()));
   }
 
+  ClientRelationship getRelationshipById(String relationshipId) {
+    return clientRelationshipDao.find(relationshipId);
+  }
+
   private List<ClientRelationship> deleteNotPermittedClientData(
     List<ClientRelationship> relationships) {
     if (CollectionUtils.isEmpty(relationships)) {

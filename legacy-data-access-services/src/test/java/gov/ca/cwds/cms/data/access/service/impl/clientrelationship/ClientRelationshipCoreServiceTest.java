@@ -35,7 +35,8 @@ public class ClientRelationshipCoreServiceTest extends BaseUnitTest {
   private static final String SECONDARY_CLIENT = "bbddssrrtt";
 
   private ClientRelationshipCoreService clientRelationshipCoreService;
-  private UpdateLifecycle updateLifecycle;
+  private UpdateLifeCycle updateLifeCycle;
+  private CreateLifeCycle createLifeCycle;
   private SearchClientRelationshipService searchClientRelationshipService;
   @Mock private ClientRelationshipDao relationshipDao;
   @Mock private ClientDao clientDao;
@@ -53,17 +54,25 @@ public class ClientRelationshipCoreServiceTest extends BaseUnitTest {
     List<ClientRelationship> relationships = getListOfRelationships();
 
     searchClientRelationshipService = new SearchClientRelationshipService(relationshipDao);
-    updateLifecycle =
-        new UpdateLifecycle(
+    updateLifeCycle =
+        new UpdateLifeCycle(
             relationshipDao,
             businessValidationService,
             clientDao,
             tribalMembershipVerificationDao,
             paternityDetailDao,
-          searchClientRelationshipService);
+            searchClientRelationshipService);
+    createLifeCycle =
+        new CreateLifeCycle(
+            relationshipDao,
+            businessValidationService,
+            clientDao,
+            tribalMembershipVerificationDao,
+            paternityDetailDao,
+            searchClientRelationshipService);
     clientRelationshipCoreService =
         new ClientRelationshipCoreService(
-            relationshipDao, updateLifecycle, searchClientRelationshipService);
+            relationshipDao, updateLifeCycle, searchClientRelationshipService, createLifeCycle);
 
     when(relationshipDao.findRelationshipsByPrimaryClientId(anyString(), any(LocalDate.class)))
         .thenReturn(relationships);

@@ -23,26 +23,29 @@ import java.util.List;
  */
 public class ClientRelationshipCoreService
     extends DataAccessServiceBase<
-      ClientRelationshipDao, ClientRelationship, ClientRelationshipAwareDTO> {
+        ClientRelationshipDao, ClientRelationship, ClientRelationshipAwareDTO> {
 
-  private final UpdateLifecycle updateLifecycle;
+  private final UpdateLifeCycle updateLifeCycle;
+  private final CreateLifeCycle createLifeCycle;
   private final SearchClientRelationshipService searchClientRelationshipService;
 
   /**
    * Constructor with injected services.
    *
    * @param clientRelationshipDao client relationship dao
-   * @param updateLifecycle lifecycle for update
+   * @param updateLifeCycle lifecycle for update
    * @param searchClientRelationshipService service for search relationships
    */
   @Inject
   public ClientRelationshipCoreService(
       final ClientRelationshipDao clientRelationshipDao,
-      final UpdateLifecycle updateLifecycle,
-      final SearchClientRelationshipService searchClientRelationshipService) {
+      final UpdateLifeCycle updateLifeCycle,
+      final SearchClientRelationshipService searchClientRelationshipService,
+      final CreateLifeCycle createLifeCycle) {
     super(clientRelationshipDao);
-    this.updateLifecycle = updateLifecycle;
+    this.updateLifeCycle = updateLifeCycle;
     this.searchClientRelationshipService = searchClientRelationshipService;
+    this.createLifeCycle = createLifeCycle;
   }
 
   @Override
@@ -65,12 +68,12 @@ public class ClientRelationshipCoreService
 
   @Override
   protected DataAccessServiceLifecycle<ClientRelationshipAwareDTO> getUpdateLifeCycle() {
-    return updateLifecycle;
+    return updateLifeCycle;
   }
 
   @Override
   protected DataAccessServiceLifecycle<ClientRelationshipAwareDTO> getCreateLifeCycle() {
-    return new DefaultDataAccessLifeCycle<>();
+    return createLifeCycle;
   }
 
   @Override

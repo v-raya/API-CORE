@@ -38,7 +38,8 @@ public class R08861DBTest extends BaseCwsCmsInMemoryPersistenceTest {
   private ClientRelationshipDao clientRelationshipDao;
   private BusinessValidationService businessValidationService;
   private PaternityDetailDao paternityDetailDao;
-  private UpdateLifecycle updateLifecycle;
+  private UpdateLifeCycle updateLifeCycle;
+  private CreateLifeCycle createLifeCycle;
   private SearchClientRelationshipService searchClientRelationshipService;
 
   @Before
@@ -49,17 +50,28 @@ public class R08861DBTest extends BaseCwsCmsInMemoryPersistenceTest {
     paternityDetailDao = new PaternityDetailDao(sessionFactory);
     clientDao = new ClientDao(sessionFactory);
     searchClientRelationshipService = new SearchClientRelationshipService(clientRelationshipDao);
-    updateLifecycle =
-        new UpdateLifecycle(
+    updateLifeCycle =
+        new UpdateLifeCycle(
             clientRelationshipDao,
             businessValidationService,
             clientDao,
             tribalMembershipVerificationDao,
             paternityDetailDao,
-          searchClientRelationshipService);
+            searchClientRelationshipService);
+    createLifeCycle =
+        new CreateLifeCycle(
+            clientRelationshipDao,
+            businessValidationService,
+            clientDao,
+            tribalMembershipVerificationDao,
+            paternityDetailDao,
+            searchClientRelationshipService);
     clientRelationshipCoreService =
         new ClientRelationshipCoreService(
-            clientRelationshipDao, updateLifecycle, searchClientRelationshipService);
+            clientRelationshipDao,
+            updateLifeCycle,
+            searchClientRelationshipService,
+            createLifeCycle);
 
     cleanAllAndInsert("/dbunit/R08861.xml");
   }
@@ -68,46 +80,15 @@ public class R08861DBTest extends BaseCwsCmsInMemoryPersistenceTest {
   public void testNeedDeleteSubTribals() throws Exception {
 
     final List<TribalMembershipVerification> shouldBeDeleted =
-        getTrbalMembershipVerificationThatHaveSubTribals(CLIENT_ID, PARENT_CLIENT_ID);
+        getTrbalMembershipVerificationThatHaveSubTribals("8888888888", "9999999999");
 
-    updateClientRelationship(RELATIONSHIP_ID);
-
-    final List<TribalMembershipVerification> afterDelete =
-        getTrbalMembershipVerificationThatHaveSubTribals(CLIENT_ID, PARENT_CLIENT_ID);
-
-    assertNotEquals(shouldBeDeleted, afterDelete);
-    assertNotNull(afterDelete);
-    assertEquals(1, afterDelete.size());
-  }
-
-  @Test
-  public void testDoNotNeedDeleteSubTribals() throws Exception {
-
-    final List<TribalMembershipVerification> shouldBeDeleted =
-        getTrbalMembershipVerificationThatHaveSubTribals(CLIENT_ID, PARENT_CLIENT_ID_2);
-
-    updateClientRelationship(RELATIONSHIP_ID_2);
+    updateClientRelationship("8888888888");
 
     final List<TribalMembershipVerification> afterDelete =
-        getTrbalMembershipVerificationThatHaveSubTribals(CLIENT_ID, PARENT_CLIENT_ID_2);
+        getTrbalMembershipVerificationThatHaveSubTribals("8888888888", "9999999999");
 
     assertNotNull(afterDelete);
-    assertNotNull(shouldBeDeleted);
-    assertTrue(CollectionUtils.isEmpty(shouldBeDeleted));
-    assertTrue(CollectionUtils.isEmpty(afterDelete));
-
-    final List<TribalMembershipVerification> shouldBeDeleted2 =
-        getTrbalMembershipVerificationThatHaveSubTribals(CLIENT_ID, PARENT_CLIENT_ID_2);
-
-    updateClientRelationship(RELATIONSHIP_ID_2);
-
-    final List<TribalMembershipVerification> afterDelete2 =
-        getTrbalMembershipVerificationThatHaveSubTribals(CLIENT_ID, PARENT_CLIENT_ID_2);
-
-    assertNotNull(afterDelete);
-    assertNotNull(shouldBeDeleted);
-    assertTrue(CollectionUtils.isEmpty(shouldBeDeleted));
-    assertTrue(CollectionUtils.isEmpty(afterDelete));
+    assertEquals(0, afterDelete.size());
   }
 
   private List<TribalMembershipVerification> getTrbalMembershipVerificationThatHaveSubTribals(
@@ -130,8 +111,9 @@ public class R08861DBTest extends BaseCwsCmsInMemoryPersistenceTest {
         (sessionFactory) -> {
           try {
             ClientRelationship relationship = clientRelationshipCoreService.find(relationshipId);
+            sessionFactory.getCurrentSession().detach(relationship);
             ClientRelationshipType type = new ClientRelationshipType();
-            type.setSystemId((short) 291);
+            type.setSystemId((short) 248);
             relationship.setType(type);
 
             ClientRelationshipAwareDTO awareDTO = new ClientRelationshipAwareDTO();

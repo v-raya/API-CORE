@@ -23,8 +23,9 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest {
   private static final String TRIBAL_THIRD_ID_2 = "2222222222";
   private static final String TRIBAL_THIRD_ID_3 = "3333333333";
   private static final String TRIBAL_THIRD_ID_4 = "4444444444";
-  private static final Short RELATION_SHIP_TYPE = 190;
-  private static final Short RELATION_SHIP_TYPE_2 = 300;
+  private static final Short RELATION_SHIP_TYPE = 444;
+  private static final Short RELATION_SHIP_TYPE_2 = 555;
+  private static final Short RELATION_SHIP_TYPE_3 = 190;
 
   @Test
   public void testAwareDtoHas3TribalsToDelete() {
@@ -159,11 +160,11 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest {
 
     assertNotNull(awareDTO);
     assertNotNull(awareDTO.getTribalMembershipVerificationsForDelete());
-    assertEquals(0, awareDTO.getTribalMembershipVerificationsForDelete().size());
+    assertEquals(2, awareDTO.getTribalMembershipVerificationsForDelete().size());
   }
 
   @Test
-  public void testEnrolmentStatusNotNullAndNoNeedVerificationIsTrue() {
+  public void testEnrolmentStatusNotNullAndNoNeedVerificationIsFalse() {
     List<TribalMembershipVerification> tribalMembershipVerifications = new ArrayList<>();
     tribalMembershipVerifications.add(
         tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_2));
@@ -188,7 +189,7 @@ public class R08861Test extends BaseDocToolRulesChildClientRelationshipTest {
         tribalMembershipVerificationFunction.apply(new IndianEnrolmentStatus(), TRIBAL_THIRD_ID_4));
 
     awareDTO.getTribalsThatHaveSubTribals().addAll(tribalMembershipVerifications);
-    awareDTO.setEntity(clientRelationshipFunction.apply(RELATION_SHIP_TYPE));
+    awareDTO.setEntity(clientRelationshipFunction.apply(RELATION_SHIP_TYPE_3));
 
     businessValidationService.runDataProcessing(
         awareDTO, principal, ClientRelationshipDroolsConfiguration.DATA_PROCESSING_INSTANCE);

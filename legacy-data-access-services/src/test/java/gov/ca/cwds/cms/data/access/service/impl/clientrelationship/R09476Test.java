@@ -107,7 +107,13 @@ public class R09476Test extends BaseDocToolRulesChildClientRelationshipTest {
 
     Client client = new Client();
     client.setIdentifier(CLIENT_ID);
+
+    Client parent = new Client();
+    client.setIdentifier(SECONDARY_CLIENT_ID);
+
     paternityDetail.setClient(client);
+    awareDTO.setParent(parent);
+    awareDTO.setChild(client);
 
     awareDTO.setEntity(relationship);
     awareDTO.getSecondaryClientPaternityDetails().add(paternityDetail);
@@ -132,7 +138,14 @@ public class R09476Test extends BaseDocToolRulesChildClientRelationshipTest {
 
     Client client = new Client();
     client.setIdentifier(CLIENT_ID);
+
+    Client parent = new Client();
+    client.setIdentifier(SECONDARY_CLIENT_ID);
+
     paternityDetail.setClient(client);
+
+    awareDTO.setParent(parent);
+    awareDTO.setChild(client);
 
     awareDTO.setEntity(relationship);
     awareDTO.getPrimaryClientPaternityDetails().add(paternityDetail);
