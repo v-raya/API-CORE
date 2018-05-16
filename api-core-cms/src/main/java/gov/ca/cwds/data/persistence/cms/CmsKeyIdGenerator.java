@@ -207,7 +207,7 @@ public final class CmsKeyIdGenerator {
    * Generate next identifier with the given staff id.
    *
    * <p>
-   * TODO: <strong>This approach does NOT scale<strong>. Implement the Iterator interface instead.
+   * TODO: <strong>This approach does NOT scale!</strong> Implement the Iterator interface instead.
    * Block other threads only on a unique staff id instead of blocking all staff id's. Construct an
    * object for a given staff id and generate keys.
    *
@@ -243,6 +243,7 @@ public final class CmsKeyIdGenerator {
    * Basic application. In that world of dial-up modems, the inefficiency of waiting on hundredths
    * of a second for a single user was acceptable. Obviously, this approach makes little sense today
    * in the age of web servers and pervasive, wireless internet connections.
+   * </p>
    *
    * @return CMS formatted timestamp
    */
@@ -292,8 +293,7 @@ public final class CmsKeyIdGenerator {
    * @return date
    */
   public static long doubleToTimestamp(double doubleTimestamp) {
-
-    Calendar cal = Calendar.getInstance();
+    final Calendar cal = Calendar.getInstance();
 
     long mseconds = (long) (doubleTimestamp / nSHIFT_HSECOND);
     cal.set(Calendar.MILLISECOND, (int) (mseconds * 10));

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import gov.ca.cwds.rest.serializer.ErrorMessageSerializer;
 
 /**
- * Immutable, JSON-aware error message, used to transmit errors from services back to the domain
+ * Immutable, JSON-aware error message, used to transmit errors from services to the domain
  * response.
  * 
  * @author CWDS API Team
