@@ -1,5 +1,8 @@
 package gov.ca.cwds.data.es;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +17,7 @@ import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.rest.api.domain.cms.SystemCode;
 
 /**
- * Simplistic, all String representation of ES person.address.
+ * Simplistic, all String representation of an Elasticsearch person.address.
  * 
  * @author CWDS API Team
  */
@@ -89,6 +92,9 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
 
   @JsonProperty("active")
   private String active;
+
+  @JsonProperty("phone_numbers")
+  private List<ElasticSearchPersonPhone> phones = new ArrayList<>();
 
   @JsonProperty("legacy_descriptor")
   @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -402,5 +408,18 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
 
   public void setCountySystemCode(ElasticSearchSystemCode countySystemCode) {
     this.county = countySystemCode;
+  }
+
+  @JsonIgnore
+  public List<ElasticSearchPersonPhone> getPhones() {
+    return phones;
+  }
+
+  public void setPhones(List<ElasticSearchPersonPhone> phones) {
+    this.phones = phones;
+  }
+
+  public void setCounty(ElasticSearchSystemCode county) {
+    this.county = county;
   }
 }
