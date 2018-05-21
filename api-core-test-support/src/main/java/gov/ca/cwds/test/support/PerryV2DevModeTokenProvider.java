@@ -12,8 +12,8 @@ public class PerryV2DevModeTokenProvider extends BasePerryV2TokenProvider<JsonId
   private static final String FORM_PARAM_USERNAME = "username";
 
   public PerryV2DevModeTokenProvider(
-      Client client, String callbackUrl, String perryUrl, String loginFormTargetUrl) {
-    super(client, callbackUrl, perryUrl, loginFormTargetUrl);
+      Client client, String perryUrl, String loginFormTargetUrl) {
+    super(client, perryUrl, loginFormTargetUrl);
   }
 
   @Override

@@ -36,16 +36,14 @@ public abstract class BasePerryV2TokenProvider<T extends AuthParams> implements
   private static final String ACCESS_CODE = "accessCode";
 
   private String perryUrl;
-  private String callbackUrl;
   private String loginFormTargetUrl;
 
   private Client client;
 
   private static final Map<String, String> tokenCache = new HashMap<>();
 
-  BasePerryV2TokenProvider(Client client, String callbackUrl, String perryUrl, String loginFormTargetUrl) {
+  BasePerryV2TokenProvider(Client client, String perryUrl, String loginFormTargetUrl) {
     this.client = client;
-    this.callbackUrl = callbackUrl;
     this.perryUrl = perryUrl;
     this.loginFormTargetUrl = loginFormTargetUrl;
     LOG.info("BasePerryV2TokenProvider was created");
@@ -97,7 +95,7 @@ public abstract class BasePerryV2TokenProvider<T extends AuthParams> implements
   private String getAccessCodeFromPerry(Map<String, NewCookie> cookies) {
     final Builder request = client.target(perryUrl)
         .path(PATH_PERRY_AUTHN_LOGIN)
-        .queryParam(CALLBACK, callbackUrl)
+        .queryParam(CALLBACK, "http://localhost/")
         .property(ClientProperties.FOLLOW_REDIRECTS, Boolean.FALSE)
         .request();
     cookies.forEach((key, value) -> request.cookie(key, value.getValue()));
