@@ -53,5 +53,5 @@ rule "R-08861-1" salience 1
         collectList($tribalsThatHaveSubTribals)
     )
   then
-  $relationshipEntityAwareDto.setTribalMembershipVerificationsForDelete($tribalsForDelete);
+  $relationshipEntityAwareDto.getTribalMembershipVerificationsForDelete().addAll($tribalsForDelete);
 end
