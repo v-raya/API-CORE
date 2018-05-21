@@ -16,28 +16,29 @@ import java.util.function.BiPredicate;
 import org.apache.commons.collections4.CollectionUtils;
 
 /**
+ * Search relationships.
+ *
  * @author CWDS TPT-3 Team
- */
+ * */
 class SearchClientRelationshipService {
 
   private final ClientRelationshipDao clientRelationshipDao;
 
   @Inject
-  SearchClientRelationshipService(
-    ClientRelationshipDao clientRelationshipDao) {
+  SearchClientRelationshipService(ClientRelationshipDao clientRelationshipDao) {
     this.clientRelationshipDao = clientRelationshipDao;
   }
 
   List<ClientRelationship> findRelationshipsBySecondaryClientId(
-    @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
+      @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
     return deleteNotPermittedClientData(
-      clientRelationshipDao.findRelationshipsBySecondaryClientId(clientId, LocalDate.now()));
+        clientRelationshipDao.findRelationshipsBySecondaryClientId(clientId, LocalDate.now()));
   }
 
   List<ClientRelationship> findRelationshipsByPrimaryClientId(
-    @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
+      @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
     return deleteNotPermittedClientData(
-      clientRelationshipDao.findRelationshipsByPrimaryClientId(clientId, LocalDate.now()));
+        clientRelationshipDao.findRelationshipsByPrimaryClientId(clientId, LocalDate.now()));
   }
 
   ClientRelationship getRelationshipById(String relationshipId) {
@@ -45,7 +46,7 @@ class SearchClientRelationshipService {
   }
 
   private List<ClientRelationship> deleteNotPermittedClientData(
-    List<ClientRelationship> relationships) {
+      List<ClientRelationship> relationships) {
     if (CollectionUtils.isEmpty(relationships)) {
       return relationships;
     }
@@ -56,18 +57,18 @@ class SearchClientRelationshipService {
   }
 
   private final BiConsumer<ClientRelationship, List<Client>> filterSecondaryClients =
-    (relationship, permittedClients) -> {
-      String secondaryClientId = relationship.getSecondaryClient().getIdentifier();
-      relationship.setSecondaryClient(
-        permittedClients
-          .stream()
-          .filter(e -> isClientId.test(e, secondaryClientId))
-          .findFirst()
-          .orElse(new Client()));
-    };
+      (relationship, permittedClients) -> {
+        String secondaryClientId = relationship.getSecondaryClient().getIdentifier();
+        relationship.setSecondaryClient(
+            permittedClients
+                .stream()
+                .filter(e -> isClientId.test(e, secondaryClientId))
+                .findFirst()
+                .orElse(new Client()));
+      };
 
   private static final BiPredicate<Client, String> isClientId =
-    (client, identifier) -> client.getIdentifier().equals(identifier);
+      (client, identifier) -> client.getIdentifier().equals(identifier);
 
   @Authorize(CLIENT_READ_CLIENT)
   private List<Client> checkPermissionForRelatedClient(List<ClientRelationship> relationships) {
@@ -77,7 +78,7 @@ class SearchClientRelationshipService {
 
     final List<Client> clients = new ArrayList<>();
     relationships.forEach(
-      clientRelationship -> clients.add(clientRelationship.getSecondaryClient()));
+        clientRelationship -> clients.add(clientRelationship.getSecondaryClient()));
     return clients;
   }
 

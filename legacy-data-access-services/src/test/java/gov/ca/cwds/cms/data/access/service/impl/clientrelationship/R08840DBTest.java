@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
@@ -32,12 +33,25 @@ import static org.powermock.api.mockito.PowerMockito.when;
 /** @author CWDS TPT-3 Team */
 public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
 
-  public static final String PARENT_CLIENT_1 = "RM1Mq5GABC";
-  public static final String CHILD_CLIENT_1 = "HkKiO2wABC";
-  public static final String PARENT_CLIENT_2 = "RM1Mq5GAB2";
-  public static final String CHILD_CLIENT_2 = "HkKiO2wAB2";
-  public static final String PARENT_CLIENT_3 = "3333333333";
-  public static final String CHILD_CLIENT_3 = "3444444444";
+  public static final String PARENT_CLIENT_1 = "1111111111";
+  public static final String CHILD_CLIENT_1 = "2222222222";
+  public static final String TRIBAL_THIRD_ID_FOR_DELETE = "MObcDoVabf";
+  public static final String TRIBAL_THIRD_ID_PARENT_1 = "1111111111";
+
+  public static final String PARENT_CLIENT_2 = "3333333333";
+  public static final String CHILD_CLIENT_2 = "4444444444";
+  public static final String TRIBAL_THIRD_ID_PARENT_2 = "1222222222";
+  public static final String TRIBAL_THIRD_ID_CHILD_2 = "1333333333";
+
+  public static final String PARENT_CLIENT_3 = "5555555555";
+  public static final String CHILD_CLIENT_3 = "6666666666";
+  public static final String TRIBAL_THIRD_ID_PARENT_3 = "1555555555";
+
+  public static final String PARENT_CLIENT_4 = "7777777777";
+  public static final String CHILD_CLIENT_4 = "8888888888";
+  public static final String CHILD_CLIENT_4_1 = "9999999999";
+  public static final String CHILD_CLIENT_4_2 = "0000000000";
+  public static final String TRIBAL_THIRD_ID_PARENT_4 = "1999999999";
 
   private ClientDao clientDao;
   private TribalMembershipVerificationDao tribalMembershipVerificationDao;
@@ -50,7 +64,7 @@ public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
   private SearchClientRelationshipService searchClientRelationshipService;
 
   @Before
-  public void before() throws Exception {
+  public void before() {
     businessValidationService = new BusinessValidationService(new DroolsService());
     clientDao = new ClientDao(sessionFactory);
     tribalMembershipVerificationDao = new TribalMembershipVerificationDao(sessionFactory);
@@ -79,131 +93,251 @@ public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
             updateLifeCycle,
             searchClientRelationshipService,
             createLifeCycle);
-
-    cleanAllAndInsert("/dbunit/R08840.xml");
-
   }
 
   @Test
-  public void oneParentExist() throws Exception {
+  public void test_noRelations_oneTribalForChildExist_withDateBefore2005() throws Exception {
+    cleanAllAndInsert("/dbunit/R08840.xml");
+
     final ClientRelationshipAwareDTO awareDTO = new ClientRelationshipAwareDTO();
-    List<TribalMembershipVerification> tribalsBeforeCreateRelationship = new ArrayList<>();
+
     List<TribalMembershipVerification> parentTribalsBeforeUpdate = new ArrayList<>();
+    List<TribalMembershipVerification> childTribalsBeforeUpdate = new ArrayList<>();
+    List<TribalMembershipVerification> allTribalsBeforeUpdate = new ArrayList<>();
+
     executeInTransaction(
         sessionFactory,
         (sessionFactory) -> {
           parentTribalsBeforeUpdate.addAll(
               tribalMembershipVerificationDao.findByClientId(PARENT_CLIENT_1));
-          tribalsBeforeCreateRelationship.addAll(
+          childTribalsBeforeUpdate.addAll(
               tribalMembershipVerificationDao.findByClientId(CHILD_CLIENT_1));
+          allTribalsBeforeUpdate.addAll(
+              tribalMembershipVerificationDao.findByClientIds(PARENT_CLIENT_1, CHILD_CLIENT_1));
         });
 
-    assertNotNull(tribalsBeforeCreateRelationship);
-    assertEquals(0, tribalsBeforeCreateRelationship.size());
+    assertNotNull(allTribalsBeforeUpdate);
+    assertEquals(2, allTribalsBeforeUpdate.size());
     assertNotNull(parentTribalsBeforeUpdate);
     assertEquals(1, parentTribalsBeforeUpdate.size());
+    assertNotNull(childTribalsBeforeUpdate);
+    assertEquals(1, childTribalsBeforeUpdate.size());
+    assertNotNull(childTribalsBeforeUpdate.get(0));
+    assertEquals(TRIBAL_THIRD_ID_FOR_DELETE, childTribalsBeforeUpdate.get(0).getThirdId());
+    assertEquals(null, childTribalsBeforeUpdate.get(0).getFkFromTribalMembershipVerification());
+    assertEquals(CHILD_CLIENT_1, childTribalsBeforeUpdate.get(0).getClientId());
 
-    createRelationship(awareDTO, CHILD_CLIENT_1, PARENT_CLIENT_1);
+    createRelationship(awareDTO, PARENT_CLIENT_1, CHILD_CLIENT_1);
 
-    List<TribalMembershipVerification> childTribalsAfterCreate = new ArrayList<>();
     List<TribalMembershipVerification> parentTribalsAfterUpdate = new ArrayList<>();
+    List<TribalMembershipVerification> childTribalsAfterUpdate = new ArrayList<>();
+    List<TribalMembershipVerification> allTribalsAfterUpdate = new ArrayList<>();
+
     executeInTransaction(
         sessionFactory,
         (sessionFactory) -> {
-          childTribalsAfterCreate.addAll(
-              tribalMembershipVerificationDao.findByClientId(CHILD_CLIENT_1));
           parentTribalsAfterUpdate.addAll(
               tribalMembershipVerificationDao.findByClientId(PARENT_CLIENT_1));
+          childTribalsAfterUpdate.addAll(
+              tribalMembershipVerificationDao.findByClientId(CHILD_CLIENT_1));
+          allTribalsAfterUpdate.addAll(
+              tribalMembershipVerificationDao.findByClientIds(PARENT_CLIENT_1, CHILD_CLIENT_1));
         });
 
+    assertNotNull(allTribalsAfterUpdate);
+    assertEquals(2, allTribalsAfterUpdate.size());
     assertNotNull(parentTribalsAfterUpdate);
     assertEquals(1, parentTribalsAfterUpdate.size());
-    assertNotNull(childTribalsAfterCreate);
-    assertEquals(1, childTribalsAfterCreate.size());
+    assertNotNull(childTribalsAfterUpdate);
+    assertEquals(1, childTribalsAfterUpdate.size());
+    assertNotNull(childTribalsAfterUpdate.get(0));
+    assertNotEquals(TRIBAL_THIRD_ID_FOR_DELETE, childTribalsAfterUpdate.get(0).getThirdId());
     assertEquals(
-        parentTribalsAfterUpdate.get(0).getThirdId(),
-        childTribalsAfterCreate.get(0).getFkFromTribalMembershipVerification());
+        TRIBAL_THIRD_ID_PARENT_1,
+        childTribalsAfterUpdate.get(0).getFkFromTribalMembershipVerification());
+    assertEquals(CHILD_CLIENT_1, childTribalsAfterUpdate.get(0).getClientId());
   }
 
   @Test
-  public void parentDoesnotExist() throws Exception {
+  public void test_noRelations_oneTribalForChildExist_oneParentTribalExist() throws Exception {
+    cleanAllAndInsert("/dbunit/R08840.xml");
 
     final ClientRelationshipAwareDTO awareDTO = new ClientRelationshipAwareDTO();
-    List<TribalMembershipVerification> tribalsBeforeCreateRelationship = new ArrayList<>();
+
     List<TribalMembershipVerification> parentTribalsBeforeUpdate = new ArrayList<>();
+    List<TribalMembershipVerification> childTribalsBeforeUpdate = new ArrayList<>();
+    List<TribalMembershipVerification> allTribalsBeforeUpdate = new ArrayList<>();
+
     executeInTransaction(
-      sessionFactory,
-      (sessionFactory) -> {
-        parentTribalsBeforeUpdate.addAll(
-          tribalMembershipVerificationDao.findByClientId(PARENT_CLIENT_2));
-        tribalsBeforeCreateRelationship.addAll(
-          tribalMembershipVerificationDao.findByClientId(CHILD_CLIENT_2));
-      });
+        sessionFactory,
+        (sessionFactory) -> {
+          parentTribalsBeforeUpdate.addAll(
+              tribalMembershipVerificationDao.findByClientId(PARENT_CLIENT_2));
+          childTribalsBeforeUpdate.addAll(
+              tribalMembershipVerificationDao.findByClientId(CHILD_CLIENT_2));
+          allTribalsBeforeUpdate.addAll(
+              tribalMembershipVerificationDao.findByClientIds(PARENT_CLIENT_2, CHILD_CLIENT_2));
+        });
 
-    assertNotNull(tribalsBeforeCreateRelationship);
-    assertEquals(0, tribalsBeforeCreateRelationship.size());
-    assertNotNull(parentTribalsBeforeUpdate);
-    assertEquals(0, parentTribalsBeforeUpdate.size());
-
-    createRelationship(awareDTO, CHILD_CLIENT_2, PARENT_CLIENT_2);
-
-    List<TribalMembershipVerification> childTribalsAfterCreate = new ArrayList<>();
-    List<TribalMembershipVerification> parentTribalsAfterUpdate = new ArrayList<>();
-    executeInTransaction(
-      sessionFactory,
-      (sessionFactory) -> {
-        childTribalsAfterCreate.addAll(
-          tribalMembershipVerificationDao.findByClientId(CHILD_CLIENT_2));
-        parentTribalsAfterUpdate.addAll(
-          tribalMembershipVerificationDao.findByClientId(PARENT_CLIENT_2));
-      });
-
-    assertNotNull(parentTribalsAfterUpdate);
-    assertEquals(0, parentTribalsAfterUpdate.size());
-    assertNotNull(childTribalsAfterCreate);
-    assertEquals(0, childTribalsAfterCreate.size());
-  }
-
-  @Test
-  public void parentExistAndChildExist() {
-    final ClientRelationshipAwareDTO awareDTO = new ClientRelationshipAwareDTO();
-    List<TribalMembershipVerification> tribalsBeforeCreateRelationship = new ArrayList<>();
-    List<TribalMembershipVerification> parentTribalsBeforeUpdate = new ArrayList<>();
-    executeInTransaction(
-      sessionFactory,
-      (sessionFactory) -> {
-        parentTribalsBeforeUpdate.addAll(
-          tribalMembershipVerificationDao.findByClientId(PARENT_CLIENT_3));
-        tribalsBeforeCreateRelationship.addAll(
-          tribalMembershipVerificationDao.findByClientId(CHILD_CLIENT_3));
-      });
-
-    assertNotNull(tribalsBeforeCreateRelationship);
-    assertEquals(1, tribalsBeforeCreateRelationship.size());
+    assertNotNull(allTribalsBeforeUpdate);
+    assertEquals(2, allTribalsBeforeUpdate.size());
     assertNotNull(parentTribalsBeforeUpdate);
     assertEquals(1, parentTribalsBeforeUpdate.size());
-
-    createRelationship(awareDTO, CHILD_CLIENT_3, PARENT_CLIENT_3);
-
-    List<TribalMembershipVerification> childTribalsAfterCreate = new ArrayList<>();
-    List<TribalMembershipVerification> parentTribalsAfterUpdate = new ArrayList<>();
-    executeInTransaction(
-      sessionFactory,
-      (sessionFactory) -> {
-        childTribalsAfterCreate.addAll(
-          tribalMembershipVerificationDao.findByClientId(CHILD_CLIENT_3));
-        parentTribalsAfterUpdate.addAll(
-          tribalMembershipVerificationDao.findByClientId(PARENT_CLIENT_3));
-      });
-
-    assertNotNull(parentTribalsAfterUpdate);
-    assertEquals(1, parentTribalsAfterUpdate.size());
-    assertNotNull(childTribalsAfterCreate);
-    assertEquals(1, childTribalsAfterCreate.size());
-
+    assertNotNull(childTribalsBeforeUpdate);
+    assertEquals(1, childTribalsBeforeUpdate.size());
+    assertNotNull(childTribalsBeforeUpdate.get(0));
     assertEquals(
-      parentTribalsAfterUpdate.get(0).getThirdId(),
-      childTribalsAfterCreate.get(0).getFkFromTribalMembershipVerification());
+        TRIBAL_THIRD_ID_PARENT_2,
+        childTribalsBeforeUpdate.get(0).getFkFromTribalMembershipVerification());
+    assertEquals(TRIBAL_THIRD_ID_PARENT_2, parentTribalsBeforeUpdate.get(0).getThirdId());
+    assertEquals(TRIBAL_THIRD_ID_CHILD_2, childTribalsBeforeUpdate.get(0).getThirdId());
+
+    createRelationship(awareDTO, PARENT_CLIENT_2, CHILD_CLIENT_2);
+
+    List<TribalMembershipVerification> parentTribalsAfterUpdate = new ArrayList<>();
+    List<TribalMembershipVerification> childTribalsAfterUpdate = new ArrayList<>();
+    List<TribalMembershipVerification> allTribalsAfterUpdate = new ArrayList<>();
+
+    executeInTransaction(
+        sessionFactory,
+        (sessionFactory) -> {
+          parentTribalsAfterUpdate.addAll(
+              tribalMembershipVerificationDao.findByClientId(PARENT_CLIENT_2));
+          childTribalsAfterUpdate.addAll(
+              tribalMembershipVerificationDao.findByClientId(CHILD_CLIENT_2));
+          allTribalsAfterUpdate.addAll(
+              tribalMembershipVerificationDao.findByClientIds(PARENT_CLIENT_2, CHILD_CLIENT_2));
+        });
+
+    assertNotNull(allTribalsAfterUpdate);
+    assertEquals(2, allTribalsAfterUpdate.size());
+    assertNotNull(parentTribalsBeforeUpdate);
+    assertEquals(1, parentTribalsAfterUpdate.size());
+    assertNotNull(childTribalsBeforeUpdate);
+    assertEquals(1, childTribalsAfterUpdate.size());
+    assertNotNull(childTribalsBeforeUpdate.get(0));
+    assertEquals(
+        TRIBAL_THIRD_ID_PARENT_2,
+        childTribalsAfterUpdate.get(0).getFkFromTribalMembershipVerification());
+    assertEquals(TRIBAL_THIRD_ID_PARENT_2, parentTribalsAfterUpdate.get(0).getThirdId());
+    assertEquals(TRIBAL_THIRD_ID_CHILD_2, childTribalsAfterUpdate.get(0).getThirdId());
+  }
+
+  @Test
+  public void test_noRelations_oneParentTribalExist() throws Exception {
+    cleanAllAndInsert("/dbunit/R08840.xml");
+
+    final ClientRelationshipAwareDTO awareDTO = new ClientRelationshipAwareDTO();
+
+    List<TribalMembershipVerification> parentTribalsBeforeUpdate = new ArrayList<>();
+    List<TribalMembershipVerification> childTribalsBeforeUpdate = new ArrayList<>();
+    List<TribalMembershipVerification> allTribalsBeforeUpdate = new ArrayList<>();
+
+    executeInTransaction(
+        sessionFactory,
+        (sessionFactory) -> {
+          parentTribalsBeforeUpdate.addAll(
+              tribalMembershipVerificationDao.findByClientId(PARENT_CLIENT_3));
+          childTribalsBeforeUpdate.addAll(
+              tribalMembershipVerificationDao.findByClientId(CHILD_CLIENT_3));
+          allTribalsBeforeUpdate.addAll(
+              tribalMembershipVerificationDao.findByClientIds(PARENT_CLIENT_3, CHILD_CLIENT_3));
+        });
+
+    assertNotNull(allTribalsBeforeUpdate);
+    assertEquals(1, allTribalsBeforeUpdate.size());
+    assertNotNull(parentTribalsBeforeUpdate);
+    assertEquals(1, parentTribalsBeforeUpdate.size());
+    assertNotNull(childTribalsBeforeUpdate);
+    assertEquals(0, childTribalsBeforeUpdate.size());
+    assertNotNull(parentTribalsBeforeUpdate.get(0));
+    assertEquals(TRIBAL_THIRD_ID_PARENT_3, parentTribalsBeforeUpdate.get(0).getThirdId());
+
+    createRelationship(awareDTO, PARENT_CLIENT_3, CHILD_CLIENT_3);
+
+    List<TribalMembershipVerification> parentTribalsAfterUpdate = new ArrayList<>();
+    List<TribalMembershipVerification> childTribalsAfterUpdate = new ArrayList<>();
+    List<TribalMembershipVerification> allTribalsAfterUpdate = new ArrayList<>();
+
+    executeInTransaction(
+        sessionFactory,
+        (sessionFactory) -> {
+          parentTribalsAfterUpdate.addAll(
+              tribalMembershipVerificationDao.findByClientId(PARENT_CLIENT_3));
+          childTribalsAfterUpdate.addAll(
+              tribalMembershipVerificationDao.findByClientId(CHILD_CLIENT_3));
+          allTribalsAfterUpdate.addAll(
+              tribalMembershipVerificationDao.findByClientIds(PARENT_CLIENT_3, CHILD_CLIENT_3));
+        });
+
+    assertNotNull(allTribalsAfterUpdate);
+    assertEquals(2, allTribalsAfterUpdate.size());
+    assertNotNull(parentTribalsBeforeUpdate);
+    assertEquals(1, parentTribalsAfterUpdate.size());
+    assertNotNull(childTribalsBeforeUpdate);
+    assertEquals(1, childTribalsAfterUpdate.size());
+    assertNotNull(childTribalsAfterUpdate.get(0));
+    assertEquals(
+        TRIBAL_THIRD_ID_PARENT_3,
+        childTribalsAfterUpdate.get(0).getFkFromTribalMembershipVerification());
+    assertEquals(TRIBAL_THIRD_ID_PARENT_3, parentTribalsAfterUpdate.get(0).getThirdId());
+  }
+
+  @Test
+  public void test_noRelation_oneParent_2Childs() throws Exception {
+    cleanAllAndInsert("/dbunit/R08840.xml");
+
+    final ClientRelationshipAwareDTO awareDTO = new ClientRelationshipAwareDTO();
+
+    List<TribalMembershipVerification> parentTribalsBeforeUpdate = new ArrayList<>();
+    List<TribalMembershipVerification> childTribalsBeforeUpdate = new ArrayList<>();
+    List<TribalMembershipVerification> allTribalsBeforeUpdate = new ArrayList<>();
+
+    executeInTransaction(
+        sessionFactory,
+        (sessionFactory) -> {
+          parentTribalsBeforeUpdate.addAll(
+              tribalMembershipVerificationDao.findByClientId(PARENT_CLIENT_4));
+          childTribalsBeforeUpdate.addAll(
+              tribalMembershipVerificationDao.findByClientId(CHILD_CLIENT_4));
+          allTribalsBeforeUpdate.addAll(
+              tribalMembershipVerificationDao.findByClientIds(
+                  PARENT_CLIENT_4, CHILD_CLIENT_4, CHILD_CLIENT_4_1, CHILD_CLIENT_4_2));
+        });
+
+    assertNotNull(allTribalsBeforeUpdate);
+    assertEquals(1, allTribalsBeforeUpdate.size());
+    assertNotNull(parentTribalsBeforeUpdate);
+    assertEquals(1, parentTribalsBeforeUpdate.size());
+    assertEquals(PARENT_CLIENT_4, parentTribalsBeforeUpdate.get(0).getClientId());
+    assertNotNull(childTribalsBeforeUpdate);
+    assertEquals(0, childTribalsBeforeUpdate.size());
+
+    createRelationship(awareDTO, PARENT_CLIENT_4, CHILD_CLIENT_4);
+
+    List<TribalMembershipVerification> parentTribalsAfterUpdate = new ArrayList<>();
+    List<TribalMembershipVerification> childTribalsAfterUpdate = new ArrayList<>();
+    List<TribalMembershipVerification> allTribalsAfterUpdate = new ArrayList<>();
+
+    executeInTransaction(
+        sessionFactory,
+        (sessionFactory) -> {
+          parentTribalsAfterUpdate.addAll(
+              tribalMembershipVerificationDao.findByClientId(PARENT_CLIENT_4));
+          childTribalsAfterUpdate.addAll(
+              tribalMembershipVerificationDao.findByClientIds(
+                  CHILD_CLIENT_4, CHILD_CLIENT_4_1, CHILD_CLIENT_4_2));
+          allTribalsAfterUpdate.addAll(
+              tribalMembershipVerificationDao.findByClientIds(
+                  PARENT_CLIENT_4, CHILD_CLIENT_4, CHILD_CLIENT_4_1, CHILD_CLIENT_4_2));
+        });
+
+    assertNotNull(allTribalsBeforeUpdate);
+    assertEquals(4, allTribalsAfterUpdate.size());
+    assertNotNull(childTribalsAfterUpdate);
+    assertEquals(3, childTribalsAfterUpdate.size());
+    childTribalsAfterUpdate.forEach(
+        e -> assertEquals(TRIBAL_THIRD_ID_PARENT_4, e.getFkFromTribalMembershipVerification()));
   }
 
   private void createRelationship(
@@ -222,7 +356,7 @@ public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
           relationship.setEndDate(LocalDate.of(2019, 1, 1));
 
           ClientRelationshipType type = new ClientRelationshipType();
-          type.setSystemId((short) 190);
+          type.setSystemId((short) 204);
           relationship.setType(type);
           relationship.setLastUpdateId("0X5");
           relationship.setLastUpdateTime(LocalDateTime.now());
