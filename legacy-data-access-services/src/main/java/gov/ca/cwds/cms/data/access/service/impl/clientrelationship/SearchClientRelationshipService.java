@@ -15,7 +15,11 @@ import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 import org.apache.commons.collections4.CollectionUtils;
 
-/** @author CWDS TPT-3 Team */
+/**
+ * Search relationships.
+ *
+ * @author CWDS TPT-3 Team
+ * */
 class SearchClientRelationshipService {
 
   private final ClientRelationshipDao clientRelationshipDao;

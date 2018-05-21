@@ -9,7 +9,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/** @author CWDS TPT-3 Team */
+/**
+ * @author CWDS TPT-3 Team
+ * */
 public class ClientRelationshipAwareDTO extends BaseEntityAwareDTO<ClientRelationship> {
 
   private final List<ClientRelationship> clientRelationshipList = new ArrayList<>();
@@ -19,7 +21,7 @@ public class ClientRelationshipAwareDTO extends BaseEntityAwareDTO<ClientRelatio
   private final Set<TribalMembershipVerification> tribalMembershipVerificationsForDelete =
       new HashSet<>();
   private final Set<TribalMembershipVerification> tribalMembershipVerificationsForCreate =
-    new HashSet<>();
+      new HashSet<>();
   private boolean isNeedMembershipVerification;
   private ClientRelationship relationshipThatHasToBeChanged;
   private Client parent;

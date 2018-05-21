@@ -86,17 +86,17 @@ public abstract class CreateUpdateBaseLifeCycle
   public void beforeBusinessValidation(DataAccessBundle bundle) {
     validateAndAddIfNeededTribalMembershipVerification(bundle);
 
-    ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
+    ClientRelationshipAwareDTO awareDto = (ClientRelationshipAwareDTO) bundle.getAwareDto();
 
-    Client primaryClient = awareDTO.getEntity().getPrimaryClient();
+    Client primaryClient = awareDto.getEntity().getPrimaryClient();
     String primaryClientIdentifier = primaryClient.getIdentifier();
 
-    Client secondaryClient = awareDTO.getEntity().getSecondaryClient();
+    Client secondaryClient = awareDto.getEntity().getSecondaryClient();
     String secondaryClientIdentifier = secondaryClient.getIdentifier();
-    if (RelationshipUtil.isChildParent(awareDTO.getEntity())
-        || RelationshipUtil.isParentChild(awareDTO.getEntity())) {
-      awareDTO.setParent(RelationshipUtil.getParent(awareDTO.getEntity()));
-      awareDTO.setChild(RelationshipUtil.getChild(awareDTO.getEntity()));
+    if (RelationshipUtil.isChildParent(awareDto.getEntity())
+        || RelationshipUtil.isParentChild(awareDto.getEntity())) {
+      awareDto.setParent(RelationshipUtil.getParent(awareDto.getEntity()));
+      awareDto.setChild(RelationshipUtil.getChild(awareDto.getEntity()));
     }
 
     List<ClientRelationship> otherRelationshipsForThisClient = new ArrayList<>();
@@ -108,17 +108,17 @@ public abstract class CreateUpdateBaseLifeCycle
             secondaryClientIdentifier));
 
     otherRelationshipsForThisClient.removeIf(
-        e -> e.getIdentifier().equals(awareDTO.getEntity().getIdentifier()));
+        e -> e.getIdentifier().equals(awareDto.getEntity().getIdentifier()));
 
-    awareDTO
+    awareDto
         .getPrimaryClientPaternityDetails()
         .addAll(paternityDetailDao.findByChildClientId(primaryClientIdentifier));
 
-    awareDTO
+    awareDto
         .getSecondaryClientPaternityDetails()
         .addAll(paternityDetailDao.findByChildClientId(secondaryClientIdentifier));
 
-    awareDTO.getClientRelationshipList().addAll(otherRelationshipsForThisClient);
+    awareDto.getClientRelationshipList().addAll(otherRelationshipsForThisClient);
   }
 
   @Override
@@ -137,15 +137,15 @@ public abstract class CreateUpdateBaseLifeCycle
   }
 
   private void deleteTribals(DataAccessBundle bundle) {
-    ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
-    awareDTO
+    ClientRelationshipAwareDTO awareDto = (ClientRelationshipAwareDTO) bundle.getAwareDto();
+    awareDto
         .getTribalMembershipVerificationsForDelete()
         .forEach(e -> tribalMembershipVerificationDao.delete(e.getPrimaryKey()));
   }
 
   private void createTribals(DataAccessBundle bundle) {
-    ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
-    awareDTO
+    ClientRelationshipAwareDTO awareDto = (ClientRelationshipAwareDTO) bundle.getAwareDto();
+    awareDto
         .getTribalMembershipVerificationsForCreate()
         .forEach(tribalMembershipVerificationDao::create);
   }
@@ -165,10 +165,10 @@ public abstract class CreateUpdateBaseLifeCycle
    * be taken."
    */
   private void enrichWithTribalsMembershipVerifications(DataAccessBundle bundle) {
-    ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
+    ClientRelationshipAwareDTO awareDto = (ClientRelationshipAwareDTO) bundle.getAwareDto();
 
     ClientRelationship relationshipThatHasToBeChanged =
-        awareDTO.getRelationshipThatHasToBeChanged();
+      awareDto.getRelationshipThatHasToBeChanged();
     if (relationshipThatHasToBeChanged == null) {
       return;
     }
@@ -181,31 +181,31 @@ public abstract class CreateUpdateBaseLifeCycle
             child.getIdentifier(), parent.getIdentifier());
 
     if (CollectionUtils.isNotEmpty(tribalsThatHasSubTribals)) {
-      awareDTO.getTribalsThatHaveSubTribals().addAll(tribalsThatHasSubTribals);
+      awareDto.getTribalsThatHaveSubTribals().addAll(tribalsThatHasSubTribals);
     }
   }
 
   private void enrichWithCurrentRelationship(DataAccessBundle bundle) {
-    ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
-    if (StringUtils.isEmpty(awareDTO.getEntity().getIdentifier())) {
+    ClientRelationshipAwareDTO awareDto = (ClientRelationshipAwareDTO) bundle.getAwareDto();
+    if (StringUtils.isEmpty(awareDto.getEntity().getIdentifier())) {
       return;
     }
 
-    awareDTO.setRelationshipThatHasToBeChanged(
-        searchClientRelationshipService.getRelationshipById(awareDTO.getEntity().getIdentifier()));
+    awareDto.setRelationshipThatHasToBeChanged(
+        searchClientRelationshipService.getRelationshipById(awareDto.getEntity().getIdentifier()));
   }
 
   private void enrichWithPrimaryAndSecondaryClients(DataAccessBundle bundle) {
-    ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
+    ClientRelationshipAwareDTO awareDto = (ClientRelationshipAwareDTO) bundle.getAwareDto();
     ParametersValidator.checkEntityId(
-        awareDTO.getEntity().getPrimaryClient(), awareDTO.getEntity().getClass().getName());
-    Client primaryClient = clientDao.find(awareDTO.getEntity().getPrimaryClient().getPrimaryKey());
+        awareDto.getEntity().getPrimaryClient(), awareDto.getEntity().getClass().getName());
+    Client primaryClient = clientDao.find(awareDto.getEntity().getPrimaryClient().getPrimaryKey());
     ParametersValidator.checkEntityId(
-        awareDTO.getEntity().getSecondaryClient(), awareDTO.getEntity().getClass().getName());
+        awareDto.getEntity().getSecondaryClient(), awareDto.getEntity().getClass().getName());
     Client secondaryClient =
-        clientDao.find(awareDTO.getEntity().getSecondaryClient().getPrimaryKey());
-    awareDTO.getEntity().setPrimaryClient(primaryClient);
-    awareDTO.getEntity().setSecondaryClient(secondaryClient);
+        clientDao.find(awareDto.getEntity().getSecondaryClient().getPrimaryKey());
+    awareDto.getEntity().setPrimaryClient(primaryClient);
+    awareDto.getEntity().setSecondaryClient(secondaryClient);
   }
 
   /**
@@ -219,24 +219,24 @@ public abstract class CreateUpdateBaseLifeCycle
    * the child's existing row if they exist.
    */
   private void validateAndAddIfNeededTribalMembershipVerification(DataAccessBundle bundle) {
-    ClientRelationshipAwareDTO awareDTO = (ClientRelationshipAwareDTO) bundle.getAwareDto();
-    if (!awareDTO.isNeedMembershipVerification()) {
+    ClientRelationshipAwareDTO awareDto = (ClientRelationshipAwareDTO) bundle.getAwareDto();
+    if (!awareDto.isNeedMembershipVerification()) {
       return;
     }
 
-    Set<TribalMembershipVerification> extraTribals = getExtraTribalsForCreate(awareDTO);
+    Set<TribalMembershipVerification> extraTribals = getExtraTribalsForCreate(awareDto);
     List<TribalMembershipVerification> existingChildTribals = getExistingTribals(extraTribals);
 
-    extraTribals.forEach(e->filterTribal(awareDTO, existingChildTribals, e));
+    extraTribals.forEach(e -> filterTribal(awareDto, existingChildTribals, e));
   }
 
   private void filterTribal(
-      ClientRelationshipAwareDTO awareDTO,
+      ClientRelationshipAwareDTO awareDto,
       List<TribalMembershipVerification> existingChildTribals,
       TribalMembershipVerification extra) {
     final boolean[] exist = {false};
     if (CollectionUtils.isEmpty(existingChildTribals)) {
-      awareDTO.getTribalMembershipVerificationsForCreate().add(extra);
+      awareDto.getTribalMembershipVerificationsForCreate().add(extra);
       return;
     }
 
@@ -251,11 +251,11 @@ public abstract class CreateUpdateBaseLifeCycle
             LocalDate date =
                 dateFromThirdId.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             if (date.isBefore(LocalDate.of(2005, Month.NOVEMBER, 19))) {
-              awareDTO.getTribalMembershipVerificationsForDelete().add(existingChild);
+              awareDto.getTribalMembershipVerificationsForDelete().add(existingChild);
               extra.setIndianEnrollmentStatus(existingChild.getIndianEnrollmentStatus());
               extra.setStatusDate(existingChild.getStatusDate());
               extra.setEnrollmentNumber(existingChild.getEnrollmentNumber());
-              awareDTO.getTribalMembershipVerificationsForCreate().add(extra);
+              awareDto.getTribalMembershipVerificationsForCreate().add(extra);
               exist[0] = true;
             }
           } else if (existingChild.getClientId().equals(extra.getClientId())
@@ -265,15 +265,15 @@ public abstract class CreateUpdateBaseLifeCycle
         });
 
     if (!exist[0]) {
-      awareDTO.getTribalMembershipVerificationsForCreate().add(extra);
+      awareDto.getTribalMembershipVerificationsForCreate().add(extra);
     }
   }
 
   private Set<TribalMembershipVerification> getExtraTribalsForCreate(
-      ClientRelationshipAwareDTO awareDTO) {
+      ClientRelationshipAwareDTO awareDto) {
 
-    Client parent = RelationshipUtil.getParent(awareDTO.getEntity());
-    Client child = RelationshipUtil.getChild(awareDTO.getEntity());
+    Client parent = RelationshipUtil.getParent(awareDto.getEntity());
+    Client child = RelationshipUtil.getChild(awareDto.getEntity());
 
     List<TribalMembershipVerification> parentTribals =
         tribalMembershipVerificationDao.findByClientId(parent.getIdentifier());
