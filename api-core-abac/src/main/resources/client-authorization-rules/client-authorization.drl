@@ -44,6 +44,16 @@ then
 end
 
 
+rule "State of California Sensitive client"
+when
+    $clientCondition: ClientCondition(this == ClientCondition.DIFFERENT_COUNTY_SENSITIVE)
+    StaffPrivilegeType(this == StaffPrivilegeType.STATE_SENSITIVE)
+then
+    kcontext.getKieRuntime().setGlobal("authorizationResult", true);
+    retract($clientCondition);
+end
+
+
 rule "No County Sensitive client"
 when
     $clientCondition: ClientCondition(this == ClientCondition.NO_COUNTY_SENSITIVE)
