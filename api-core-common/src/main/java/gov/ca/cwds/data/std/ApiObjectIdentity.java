@@ -10,8 +10,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import gov.ca.cwds.utils.JsonUtils;
 
 /**
- * Convenient, default implementations of {@link #toString()}, {@link #hashCode()}, and {@link
- * #equals(Object)}.
+ * Convenient, default implementations of {@link #toString()}, {@link #hashCode()}, and
+ * {@link #equals(Object)}.
  *
  * @author CWDS API Team
  */
@@ -29,14 +29,14 @@ public abstract class ApiObjectIdentity implements ApiMarker {
 
   @Override
   public int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(
-        17, 37, this, false, ApiObjectIdentity.class, EXCLUDED_FIELDS);
+    return HashCodeBuilder.reflectionHashCode(17, 37, this, false, ApiObjectIdentity.class,
+        EXCLUDED_FIELDS);
   }
 
   @Override
   public boolean equals(Object obj) {
-    return EqualsBuilder.reflectionEquals(
-        this, obj, false, ApiObjectIdentity.class, EXCLUDED_FIELDS);
+    return EqualsBuilder.reflectionEquals(this, obj, false, ApiObjectIdentity.class,
+        EXCLUDED_FIELDS);
   }
 
   /**
@@ -48,4 +48,5 @@ public abstract class ApiObjectIdentity implements ApiMarker {
   public String toJson() throws JsonProcessingException {
     return JsonUtils.to(this);
   }
+
 }

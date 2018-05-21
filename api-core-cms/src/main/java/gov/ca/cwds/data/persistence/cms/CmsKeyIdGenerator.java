@@ -1,9 +1,6 @@
 package gov.ca.cwds.data.persistence.cms;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -21,7 +18,8 @@ import gov.ca.cwds.rest.services.ServiceException;
 /**
  * Java port of gov.ca.cwds.rest.util.jni.KeyJNI and underlying shared library, cws_randgen.cpp.
  *
- * <p>To generateXYZ an identifier, the current date/timestamp is rearranged as shown below, placing
+ * <p>
+ * To generateXYZ an identifier, the current date/timestamp is rearranged as shown below, placing
  * less-significant time units into more-significant fields. This convolution provides better
  * "hashing" into cache and the database.
  *
@@ -54,7 +52,8 @@ import gov.ca.cwds.rest.services.ServiceException;
  *
  * </blockquote>
  *
- * <p>Note that CWS/CMS has made use of <strong>unrealistic</strong> values on some occasions. For
+ * <p>
+ * Note that CWS/CMS has made use of <strong>unrealistic</strong> values on some occasions. For
  * example, the project may need to generateXYZ many identifiers during a minimum outage window. In
  * order to make all of those generated identifiers correspond to the date/hour range of the outage,
  * project-generated identifiers may coerce unrealistic values for minutes, seconds, and hundredths.
@@ -63,20 +62,24 @@ import gov.ca.cwds.rest.services.ServiceException;
  * means that the longest formatted date/timestamp output is 27 characters (including punctuation),
  * although it will usually fit in 26.
  *
- * <p>Once packed into the bit arrangement shown above, the number is converted to seven base-62
+ * <p>
+ * Once packed into the bit arrangement shown above, the number is converted to seven base-62
  * characters, using first the digits 0-9, then uppercase letters, then lowercase letters.
  *
- * <p>The final 3 characters of the identifier indicate the staffperson (or project process) which
+ * <p>
+ * The final 3 characters of the identifier indicate the staffperson (or project process) which
  * created the row.
  *
- * <p>For the User Interface, the identifier can also be converted into a formatted 19-digit decimal
+ * <p>
+ * For the User Interface, the identifier can also be converted into a formatted 19-digit decimal
  * number. In the 19-digit format, the first 13 decimal digits are a conversion of the first seven
  * base-62 characters, while the last 6 decimal digits are an independent conversion of the last 3
  * base-62 characters (ie, staffperson ID) from the identifier. The 19 digits are formatted into
  * three groups of four digits, followed by a final group of seven digits, so the full string length
  * is 22 characters with punctuation.
  *
- * <p>In this source file, the 3 formats are referred to as:
+ * <p>
+ * In this source file, the 3 formats are referred to as:
  *
  * <blockquote>
  *
@@ -111,7 +114,8 @@ public final class CmsKeyIdGenerator {
   /**
    * Self-validating bean class for staff id.
    *
-   * <p>javax.validation only works on real "bean" classes, not Java native classes like String or
+   * <p>
+   * javax.validation only works on real "bean" classes, not Java native classes like String or
    * Long. Therefore, wrap the incoming staff id in a small class, which follows the Java Bean
    * specification (i.e., getters and setters).
    *
@@ -133,19 +137,23 @@ public final class CmsKeyIdGenerator {
       this.value = value;
     }
 
-    @SuppressWarnings("javadoc")
     public String getValue() {
       return value;
     }
 
-    @SuppressWarnings("javadoc")
     public void setValue(String value) {
       this.value = value;
     }
   }
 
-  /** Utility struct class stores details of CWDS key decomposition. */
-  @SuppressWarnings("javadoc")
+  /**
+   * Utility struct class stores details of CWDS key decomposition.
+   * 
+   * <p>
+   * <strong>WARNING</strong>: <strong>Do NOT change this struct</strong>. It maps directly the C++
+   * library.
+   * </p>
+   */
   public static final class KeyDetail {
     public String key; // NOSONAR
     public String staffId; // NOSONAR
@@ -198,9 +206,10 @@ public final class CmsKeyIdGenerator {
   /**
    * Generate next identifier with the given staff id.
    *
-   * <p>TODO: This approach does not scale. Implement the Iterator and/or interfaces instead. Lock
-   * on a unique staff id instead of blocking all users. Construct an object for a given staff id
-   * and generate keys.
+   * <p>
+   * TODO: <strong>This approach does NOT scale!</strong> Implement the Iterator interface instead.
+   * Block other threads only on a unique staff id instead of blocking all staff id's. Construct an
+   * object for a given staff id and generate keys.
    *
    * @param staffId the staffId
    * @return the unique key from staffId
@@ -222,18 +231,19 @@ public final class CmsKeyIdGenerator {
    * @return CMS formatted timestamp
    */
   protected static String createTimestampStr(final Date ts) {
-    return ts == null
-        ? createTimestampStr()
+    return ts == null ? createTimestampStr()
         : doubleToStrN(7, timestampToDouble(getTimestampSeed(ts)), POWER_BASE62);
   }
 
   /**
    * Format the CMS timestamp String, the last 7 characters of the key.
    *
-   * <p>Code taken originally from the original C++ algorithm, designed for legacy fat client Visual
+   * <p>
+   * Code taken originally from the original C++ algorithm, designed for legacy fat client Visual
    * Basic application. In that world of dial-up modems, the inefficiency of waiting on hundredths
    * of a second for a single user was acceptable. Obviously, this approach makes little sense today
    * in the age of web servers and pervasive, wireless internet connections.
+   * </p>
    *
    * @return CMS formatted timestamp
    */
@@ -248,7 +258,7 @@ public final class CmsKeyIdGenerator {
       // If the timestamp value is the same as before, stay in the loop.
       // Otherwise, break out since it is unique.
       if (nTimestamp == nPreviousTimestamp) { // NOSONAR
-        Thread.yield(); // From original algorithm
+        Thread.yield(); // From original algorithm. Sadness.
         continue;
       } else {
         break;
@@ -265,28 +275,14 @@ public final class CmsKeyIdGenerator {
    */
   public static double timestampToDouble(final Calendar cal) {
     double ret = 0;
-    final NumberFormat fmt = new DecimalFormat("###,###.000");
 
     ret += (double) cal.get(Calendar.MILLISECOND) / 10 * nSHIFT_HSECOND;
-    LOGGER.debug("MILLISECOND: {}", fmt.format(ret));
-
     ret += (double) cal.get(Calendar.SECOND) * nSHIFT_SECOND;
-    LOGGER.debug("SECOND:      {}", fmt.format(ret));
-
     ret += (double) cal.get(Calendar.MINUTE) * nSHIFT_MINUTE;
-    LOGGER.debug("MINUTE:      {}", fmt.format(ret));
-
     ret += (double) cal.get(Calendar.HOUR_OF_DAY) * nSHIFT_HOUR;
-    LOGGER.debug("HOUR_OF_DAY: {}", fmt.format(ret));
-
     ret += (double) cal.get(Calendar.DATE) * nSHIFT_DAY;
-    LOGGER.debug("DATE:        {}", fmt.format(ret));
-
     ret += (double) (cal.get(Calendar.MONTH)) * nSHIFT_MONTH;
-    LOGGER.debug("MONTH:       {}", fmt.format(ret));
-
-    ret = ret + (double) (cal.get(Calendar.YEAR) - 1900) * nSHIFT_YEAR;
-    LOGGER.debug("YEAR:        {}", fmt.format(ret));
+    ret += (double) (cal.get(Calendar.YEAR) - 1900) * nSHIFT_YEAR;
 
     return ret;
   }
@@ -297,8 +293,7 @@ public final class CmsKeyIdGenerator {
    * @return date
    */
   public static long doubleToTimestamp(double doubleTimestamp) {
-
-    Calendar cal = Calendar.getInstance();
+    final Calendar cal = Calendar.getInstance();
 
     long mseconds = (long) (doubleTimestamp / nSHIFT_HSECOND);
     cal.set(Calendar.MILLISECOND, (int) (mseconds * 10));
@@ -346,7 +341,7 @@ public final class CmsKeyIdGenerator {
     final BigDecimal bdSrc = BigDecimal.valueOf(src);
 
     // Determine the largest power of the number.
-    for (i = 0; bdSrc.doubleValue() >= powers[i].doubleValue(); i++, p++) ; // NOSONAR
+    for (i = 0; bdSrc.doubleValue() >= powers[i].doubleValue(); i++, p++); // NOSONAR
 
     // Left-pad the string with the destination string width.
     final int pad = dstLen - p;
@@ -468,8 +463,8 @@ public final class CmsKeyIdGenerator {
    * code refers to this as a UI identifier.
    *
    * @param key 10 character, base-62 legacy key
-   * @return UI identifier in format 0000-0000-0000-0000000. If provided key is null or enpty, then
-   *     null is returned.
+   * @return UI identifier in format 0000-0000-0000-0000000. If provided key is null or empty, then
+   *         null is returned.
    */
   public static String getUIIdentifierFromKey(String key) {
     if (StringUtils.isBlank(key)) {
@@ -487,13 +482,8 @@ public final class CmsKeyIdGenerator {
     LOGGER.trace("tsB10={}, staffB10={}", tsB10, staffB10);
 
     final StringBuilder buf = new StringBuilder();
-    buf.append(tsB10.substring(0, 4))
-        .append('-')
-        .append(tsB10.substring(4, 8))
-        .append('-')
-        .append(tsB10.substring(8, 12))
-        .append('-')
-        .append(tsB10.substring(12))
+    buf.append(tsB10.substring(0, 4)).append('-').append(tsB10.substring(4, 8)).append('-')
+        .append(tsB10.substring(8, 12)).append('-').append(tsB10.substring(12))
         .append(staffB10.substring(0));
 
     return buf.toString();

@@ -120,7 +120,6 @@ public class Case extends CmsPersistentObject {
       "gov.ca.cwds.data.legacy.cms.entity.Case.findClosedByClient";
   public static final String NQ_PARAM_CLIENT_ID = "clientId";
 
-  /** Default serialization. */
   private static final long serialVersionUID = 3310114537014283818L;
 
   @Id

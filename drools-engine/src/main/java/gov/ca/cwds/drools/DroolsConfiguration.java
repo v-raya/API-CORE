@@ -6,7 +6,6 @@ import org.kie.api.runtime.KieContainer;
 /**
  * @author CWDS CALS API Team
  */
-
 public class DroolsConfiguration<T> {
 
   private String sessionName;
@@ -45,10 +44,8 @@ public class DroolsConfiguration<T> {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this)
-        .append("sessionName", sessionName)
-        .append("agendaGroup", agendaGroup)
-        .append("pathToRulesConfig", pathToRulesConfig)
+    return new ToStringBuilder(this).append("sessionName", sessionName)
+        .append("agendaGroup", agendaGroup).append("pathToRulesConfig", pathToRulesConfig)
         .toString();
   }
 }

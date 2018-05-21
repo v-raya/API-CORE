@@ -48,10 +48,10 @@ rule "R-08861-1" salience 1
     $tribalsForDelete: ArrayList() from accumulate(
         $tribalsThatHaveSubTribals: TribalMembershipVerification(
           indianEnrollmentStatus == null
-          && $relationshipEntityAwareDto.needMembershipVerification == true
+          && !$relationshipEntityAwareDto.needMembershipVerification
         ) from $relationshipEntityAwareDto.tribalsThatHaveSubTribals,
         collectList($tribalsThatHaveSubTribals)
     )
   then
-  $relationshipEntityAwareDto.setTribalMembershipVerificationsForDelete($tribalsForDelete);
+  $relationshipEntityAwareDto.getTribalMembershipVerificationsForDelete().addAll($tribalsForDelete);
 end
