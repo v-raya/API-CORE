@@ -108,7 +108,7 @@ public class ClientAbstractReadAuthorizerTest {
     when(clientCountyDeterminationService.getClientCountiesById(anyString()))
         .thenReturn(Arrays.asList(new Short[]{1034, 1012}));
     final Client client = initClient(Sensitivity.SENSITIVE);
-    checkAllCases(client, "1073", "Colusa", false, false, false, false, false);
+    checkAllCases(client, "1073", "Colusa", false, false, false, true, false);
   }
 
   @Test
