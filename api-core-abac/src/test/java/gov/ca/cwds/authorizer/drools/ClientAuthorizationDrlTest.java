@@ -68,7 +68,7 @@ public class ClientAuthorizationDrlTest {
     assertClientAccessMatrixValue(DIFFERENT_COUNTY_SENSITIVE, list(SOCIAL_WORKER_ONLY), false);
     assertClientAccessMatrixValue(DIFFERENT_COUNTY_SENSITIVE, list(COUNTY_SENSITIVE), false);
     assertClientAccessMatrixValue(DIFFERENT_COUNTY_SENSITIVE, list(COUNTY_SEALED), false);
-    assertClientAccessMatrixValue(DIFFERENT_COUNTY_SENSITIVE, list(STATE_SENSITIVE), false);
+    assertClientAccessMatrixValue(DIFFERENT_COUNTY_SENSITIVE, list(STATE_SENSITIVE), true);
     assertClientAccessMatrixValue(DIFFERENT_COUNTY_SENSITIVE, list(STATE_SEALED), false);
   }
 
