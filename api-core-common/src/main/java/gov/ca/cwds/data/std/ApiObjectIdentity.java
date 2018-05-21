@@ -48,4 +48,5 @@ public abstract class ApiObjectIdentity implements ApiMarker {
   public String toJson() throws JsonProcessingException {
     return JsonUtils.to(this);
   }
+
 }
