@@ -2,7 +2,11 @@ package gov.ca.cwds.cms.data.access.service.impl.clientrelationship;
 
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT_ID;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.cms.data.access.dto.ClientRelationshipAwareDTO;
 import gov.ca.cwds.cms.data.access.service.DataAccessServiceBase;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
@@ -13,17 +17,14 @@ import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.utils.PrincipalUtils;
-import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * Service for create/update/find ClientRelationship with business validation and data processing.
  *
  * @author CWDS TPT-3 Team
  */
-public class ClientRelationshipCoreService
-    extends DataAccessServiceBase<
-        ClientRelationshipDao, ClientRelationship, ClientRelationshipAwareDTO> {
+public class ClientRelationshipCoreService extends
+    DataAccessServiceBase<ClientRelationshipDao, ClientRelationship, ClientRelationshipAwareDTO> {
 
   private final UpdateLifeCycle updateLifeCycle;
   private final CreateLifeCycle createLifeCycle;
@@ -35,10 +36,10 @@ public class ClientRelationshipCoreService
    * @param clientRelationshipDao client relationship dao
    * @param updateLifeCycle lifecycle for update
    * @param searchClientRelationshipService service for search relationships
+   * @param createLifeCycle common create lifecycle
    */
   @Inject
-  public ClientRelationshipCoreService(
-      final ClientRelationshipDao clientRelationshipDao,
+  public ClientRelationshipCoreService(final ClientRelationshipDao clientRelationshipDao,
       final UpdateLifeCycle updateLifeCycle,
       final SearchClientRelationshipService searchClientRelationshipService,
       final CreateLifeCycle createLifeCycle) {
