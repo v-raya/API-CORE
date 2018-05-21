@@ -13,6 +13,46 @@ import gov.ca.cwds.common.NameSuffixTranslator.AlphaNameSuffix;
 public class NameSuffixTranslatorTest {
 
   @Test
+  public void testTranslation_1st() {
+    String source = "1st  ";
+    String expected = "1st  ";
+    String actual = NameSuffixTranslator.translate(source);
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testTranslation_3rd() {
+    String source = "3rd";
+    String expected = "III";
+    String actual = NameSuffixTranslator.translate(source);
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testTranslation_4th() {
+    String source = "4th";
+    String expected = "IV";
+    String actual = NameSuffixTranslator.translate(source);
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testTranslation_23rd() {
+    String source = "23rd";
+    String expected = "XXIII";
+    String actual = NameSuffixTranslator.translate(source);
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testTranslation_23() {
+    String source = "23";
+    String expected = "XXIII";
+    String actual = NameSuffixTranslator.translate(source);
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
   public void testTranslation_2nd() {
     String source = "2nd  ";
     String expected = "II";
@@ -103,7 +143,7 @@ public class NameSuffixTranslatorTest {
   @Test
   public void testTranslation_3b() {
     String source = "3b";
-    String expected = "III";
+    String expected = "3b";
     String actual = NameSuffixTranslator.translate(source);
     Assert.assertEquals(expected, actual);
   }

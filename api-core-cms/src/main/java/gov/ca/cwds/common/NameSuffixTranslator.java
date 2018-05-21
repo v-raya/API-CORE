@@ -124,12 +124,17 @@ public class NameSuffixTranslator {
       return alphaTranslation;
     }
 
-    String nameSuffixNumerberStr = nameSuffix.replaceAll("[^0-9]", "");
-    if (StringUtils.isBlank(nameSuffixNumerberStr)) {
+
+    String manipulatedNameSuffix = StringUtils.trimToEmpty(nameSuffix);
+    manipulatedNameSuffix = StringUtils.removeEndIgnoreCase(manipulatedNameSuffix, "nd");
+    manipulatedNameSuffix = StringUtils.removeEndIgnoreCase(manipulatedNameSuffix, "rd");
+    manipulatedNameSuffix = StringUtils.removeEndIgnoreCase(manipulatedNameSuffix, "th");
+
+    if (!StringUtils.isNumeric(manipulatedNameSuffix)) {
       return nameSuffix;
     }
 
-    int nameSuffixInt = Integer.parseInt(nameSuffixNumerberStr);
+    int nameSuffixInt = Integer.parseInt(manipulatedNameSuffix);
 
     if (nameSuffixInt < MIN_ROMAN_NUMBER || nameSuffixInt > MAX_ROMAN_NUMBER) {
       return nameSuffix;
