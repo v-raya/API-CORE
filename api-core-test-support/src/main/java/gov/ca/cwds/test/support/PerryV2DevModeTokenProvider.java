@@ -11,10 +11,10 @@ public class PerryV2DevModeTokenProvider extends BasePerryV2TokenProvider<JsonId
 
   private static final String FORM_PARAM_USERNAME = "username";
 
-  public PerryV2DevModeTokenProvider(Client client, String perryUrl, String loginFormTargetUrl) {
+  public PerryV2DevModeTokenProvider(
+      Client client, String perryUrl, String loginFormTargetUrl) {
     super(client, perryUrl, loginFormTargetUrl);
   }
-
 
   @Override
   protected Form prepareLoginForm(JsonIdentityAuthParams params) {
@@ -22,5 +22,4 @@ public class PerryV2DevModeTokenProvider extends BasePerryV2TokenProvider<JsonId
     form.param(FORM_PARAM_USERNAME, params.getIdentityJson().replaceAll("\n", StringUtils.EMPTY));
     return form;
   }
-
 }
