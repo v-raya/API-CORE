@@ -95,7 +95,7 @@ public abstract class BasePerryV2TokenProvider<T extends AuthParams> implements
   private String getAccessCodeFromPerry(Map<String, NewCookie> cookies) {
     final Builder request = client.target(perryUrl)
         .path(PATH_PERRY_AUTHN_LOGIN)
-        .queryParam(CALLBACK, "/")
+        .queryParam(CALLBACK, "http://localhost/")
         .property(ClientProperties.FOLLOW_REDIRECTS, Boolean.FALSE)
         .request();
     cookies.forEach((key, value) -> request.cookie(key, value.getValue()));
