@@ -16,6 +16,7 @@ import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 /** @author CWDS TPT-3 Team */
 @Mapper(
@@ -36,6 +37,8 @@ import org.mapstruct.Mapping;
   collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED
 )
 public interface ClientMapper {
+
+  ClientMapper INSTANCE = Mappers.getMapper(ClientMapper.class);
 
   @Mapping(source = "adjudicatedDelinquentIndicator", target = "adjudicatedDelinquentIndicator")
   @Mapping(source = "id", target = "identifier")
