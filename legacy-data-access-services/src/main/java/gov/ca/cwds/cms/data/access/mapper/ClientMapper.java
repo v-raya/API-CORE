@@ -36,6 +36,7 @@ import org.mapstruct.factory.Mappers;
   },
   collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED
 )
+@SuppressWarnings("Duplicates")
 public interface ClientMapper {
 
   ClientMapper INSTANCE = Mappers.getMapper(ClientMapper.class);
