@@ -1,5 +1,6 @@
 package gov.ca.cwds.cms.data.access.inject;
 
+import gov.ca.cwds.cms.data.access.mapper.ClientMapper;
 import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.TribalMembershipVerificationCoreService;
 import org.hibernate.SessionFactory;
 
@@ -16,9 +17,7 @@ import gov.ca.cwds.cms.data.access.service.impl.ClientCoreService;
 import gov.ca.cwds.cms.data.access.service.impl.PlacementHomeCoreService;
 import gov.ca.cwds.cms.data.access.service.impl.SubstituteCareProviderCoreService;
 
-/**
- * @author CWDS CALS API Team
- */
+/** @author CWDS CALS API Team */
 public abstract class AbstractDataAccessServicesModule extends AbstractModule {
 
   @Override
@@ -47,10 +46,12 @@ public abstract class AbstractDataAccessServicesModule extends AbstractModule {
   }
 
   private void configureMappers() {
-    bind(CountyOwnershipMapper.class).to(CountyOwnershipMapper.INSTANCE.getClass())
+    bind(CountyOwnershipMapper.class)
+        .to(CountyOwnershipMapper.INSTANCE.getClass())
         .asEagerSingleton();
-    bind(ExternalInterfaceMapper.class).to(ExternalInterfaceMapper.INSTANCE.getClass())
+    bind(ExternalInterfaceMapper.class)
+        .to(ExternalInterfaceMapper.INSTANCE.getClass())
         .asEagerSingleton();
+    bind(ClientMapper.class).to(ClientMapper.INSTANCE.getClass()).asEagerSingleton();
   }
-
 }
