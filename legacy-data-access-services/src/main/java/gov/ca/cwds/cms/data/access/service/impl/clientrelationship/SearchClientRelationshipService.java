@@ -29,16 +29,28 @@ class SearchClientRelationshipService {
     this.clientRelationshipDao = clientRelationshipDao;
   }
 
-  List<ClientRelationship> findRelationshipsBySecondaryClientId(
-      @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
+  List<ClientRelationship> findRelationshipsBySecondaryClient(
+      @Authorize(CLIENT_READ_CLIENT) final Client client) {
     return deleteNotPermittedClientData(
-        clientRelationshipDao.findRelationshipsBySecondaryClientId(clientId, LocalDate.now()));
+        clientRelationshipDao.findRelationshipsBySecondaryClientId(client.getIdentifier(), LocalDate.now()));
+  }
+
+  List<ClientRelationship> findRelationshipsByPrimaryClient(
+      @Authorize(CLIENT_READ_CLIENT) final Client client) {
+    return deleteNotPermittedClientData(
+        clientRelationshipDao.findRelationshipsByPrimaryClientId(client.getIdentifier(), LocalDate.now()));
+  }
+
+  List<ClientRelationship> findRelationshipsBySecondaryClientId(
+    @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
+    return deleteNotPermittedClientData(
+      clientRelationshipDao.findRelationshipsBySecondaryClientId(clientId, LocalDate.now()));
   }
 
   List<ClientRelationship> findRelationshipsByPrimaryClientId(
-      @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
+    @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
     return deleteNotPermittedClientData(
-        clientRelationshipDao.findRelationshipsByPrimaryClientId(clientId, LocalDate.now()));
+      clientRelationshipDao.findRelationshipsByPrimaryClientId(clientId, LocalDate.now()));
   }
 
   ClientRelationship getRelationshipById(String relationshipId) {

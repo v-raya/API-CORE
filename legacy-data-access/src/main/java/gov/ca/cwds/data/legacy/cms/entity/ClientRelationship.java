@@ -18,7 +18,12 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PersistenceException;
+import javax.persistence.PostPersist;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NamedQuery;
@@ -77,12 +82,22 @@ public class ClientRelationship extends CmsPersistentObject {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "FKCLIENT_T", referencedColumnName = "IDENTIFIER")
+  @JoinColumn(
+    name = "FKCLIENT_T",
+    referencedColumnName = "IDENTIFIER",
+    updatable = false,
+    insertable = false
+  )
   private Client primaryClient;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(name = "FKCLIENT_0", referencedColumnName = "IDENTIFIER")
+  @JoinColumn(
+    name = "FKCLIENT_0",
+    referencedColumnName = "IDENTIFIER",
+    updatable = false,
+    insertable = false
+  )
   private Client secondaryClient;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -103,6 +118,28 @@ public class ClientRelationship extends CmsPersistentObject {
   @Column(name = "SAME_HM_CD")
   @Convert(converter = YesNoUnknownConverter.class)
   private YesNoUnknown sameHomeStatus;
+
+  @Column(name = "FKCLIENT_T")
+  private String primaryClientId;
+
+  @Column(name = "FKCLIENT_0")
+  private String secondaryClientId;
+
+  @PrePersist
+  private void prepersist() {
+
+    if (primaryClient == null
+        || secondaryClient == null
+        || StringUtils.isEmpty(primaryClient.getIdentifier())
+        || StringUtils.isEmpty(secondaryClient.getIdentifier())) {
+      throw new PersistenceException("Client does not exist");
+    }
+
+    primaryClientId = primaryClient.getIdentifier();
+    secondaryClientId = secondaryClient.getIdentifier();
+    primaryClient = null;
+    secondaryClient = null;
+  }
 
   @Override
   public Serializable getPrimaryKey() {

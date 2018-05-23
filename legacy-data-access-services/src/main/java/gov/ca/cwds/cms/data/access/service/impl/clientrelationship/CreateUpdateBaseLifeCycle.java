@@ -89,10 +89,8 @@ public abstract class CreateUpdateBaseLifeCycle
     ClientRelationshipAwareDTO awareDto = (ClientRelationshipAwareDTO) bundle.getAwareDto();
 
     Client primaryClient = awareDto.getEntity().getPrimaryClient();
-    String primaryClientIdentifier = primaryClient.getIdentifier();
-
     Client secondaryClient = awareDto.getEntity().getSecondaryClient();
-    String secondaryClientIdentifier = secondaryClient.getIdentifier();
+
     if (RelationshipUtil.isChildParent(awareDto.getEntity())
         || RelationshipUtil.isParentChild(awareDto.getEntity())) {
       awareDto.setParent(RelationshipUtil.getParent(awareDto.getEntity()));
@@ -101,22 +99,22 @@ public abstract class CreateUpdateBaseLifeCycle
 
     List<ClientRelationship> otherRelationshipsForThisClient = new ArrayList<>();
     otherRelationshipsForThisClient.addAll(
-        searchClientRelationshipService.findRelationshipsByPrimaryClientId(
-            primaryClientIdentifier));
+        searchClientRelationshipService.findRelationshipsByPrimaryClient(
+          primaryClient));
     otherRelationshipsForThisClient.addAll(
-        searchClientRelationshipService.findRelationshipsBySecondaryClientId(
-            secondaryClientIdentifier));
+        searchClientRelationshipService.findRelationshipsBySecondaryClient(
+          secondaryClient));
 
     otherRelationshipsForThisClient.removeIf(
         e -> e.getIdentifier().equals(awareDto.getEntity().getIdentifier()));
 
     awareDto
         .getPrimaryClientPaternityDetails()
-        .addAll(paternityDetailDao.findByChildClientId(primaryClientIdentifier));
+        .addAll(paternityDetailDao.findByChildClientId(primaryClient.getIdentifier()));
 
     awareDto
         .getSecondaryClientPaternityDetails()
-        .addAll(paternityDetailDao.findByChildClientId(secondaryClientIdentifier));
+        .addAll(paternityDetailDao.findByChildClientId(secondaryClient.getIdentifier()));
 
     awareDto.getClientRelationshipList().addAll(otherRelationshipsForThisClient);
   }
@@ -197,15 +195,15 @@ public abstract class CreateUpdateBaseLifeCycle
 
   private void enrichWithPrimaryAndSecondaryClients(DataAccessBundle bundle) {
     ClientRelationshipAwareDTO awareDto = (ClientRelationshipAwareDTO) bundle.getAwareDto();
-    ParametersValidator.checkEntityId(
-        awareDto.getEntity().getPrimaryClient(), awareDto.getEntity().getClass().getName());
-    Client primaryClient = clientDao.find(awareDto.getEntity().getPrimaryClient().getPrimaryKey());
-    ParametersValidator.checkEntityId(
-        awareDto.getEntity().getSecondaryClient(), awareDto.getEntity().getClass().getName());
-    Client secondaryClient =
-        clientDao.find(awareDto.getEntity().getSecondaryClient().getPrimaryKey());
-    awareDto.getEntity().setPrimaryClient(primaryClient);
-    awareDto.getEntity().setSecondaryClient(secondaryClient);
+//    ParametersValidator.checkEntityId(
+//        awareDto.getEntity().getPrimaryClient(), awareDto.getEntity().getClass().getName());
+//    Client primaryClient = clientDao.find(awareDto.getEntity().getPrimaryClient().getPrimaryKey());
+//    ParametersValidator.checkEntityId(
+//        awareDto.getEntity().getSecondaryClient(), awareDto.getEntity().getClass().getName());
+//    Client secondaryClient =
+//        clientDao.find(awareDto.getEntity().getSecondaryClient().getPrimaryKey());
+//    awareDto.getEntity().setPrimaryClient(primaryClient);
+//    awareDto.getEntity().setSecondaryClient(secondaryClient);-
   }
 
   /**
@@ -286,10 +284,10 @@ public abstract class CreateUpdateBaseLifeCycle
     TribalMembershipVerification parentTribal = parentTribals.get(0);
 
     List<ClientRelationship> allParenPrimaryRelationships =
-        searchClientRelationshipService.findRelationshipsByPrimaryClientId(parent.getIdentifier());
+        searchClientRelationshipService.findRelationshipsByPrimaryClient(parent);
     List<ClientRelationship> allParenSecondaryRelationships =
-        searchClientRelationshipService.findRelationshipsBySecondaryClientId(
-            parent.getIdentifier());
+        searchClientRelationshipService.findRelationshipsBySecondaryClient(
+            parent);
 
     List<ClientRelationship> allParentRelationships =
         Stream.concat(

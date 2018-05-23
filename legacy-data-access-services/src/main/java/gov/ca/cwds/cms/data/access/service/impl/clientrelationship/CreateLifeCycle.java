@@ -14,7 +14,7 @@ import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
  *
  * @author CWDS TPT-3 Team
  * */
-public class CreateLifeCycle extends CreateUpdateBaseLifeCycle {
+class CreateLifeCycle extends CreateUpdateBaseLifeCycle {
 
   @Inject
   CreateLifeCycle(
