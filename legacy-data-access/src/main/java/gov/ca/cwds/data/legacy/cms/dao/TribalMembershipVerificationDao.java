@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.legacy.cms.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -94,6 +95,9 @@ public class TribalMembershipVerificationDao extends BaseDaoImpl<TribalMembershi
 
   private BiFunction<String, String[], List<TribalMembershipVerification>> getTribals =
       (queryName, clientId) -> {
+        if (clientId == null || clientId.length == 0) {
+          return new ArrayList<>();
+        }
         final List<TribalMembershipVerification> membershipVerifications =
             currentSession()
                 .createNamedQuery(queryName, TribalMembershipVerification.class)
