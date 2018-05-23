@@ -43,7 +43,7 @@ import org.hibernate.annotations.NamedQuery;
   name = TribalMembershipVerification.FIND_TRIBAL_MEMBERSHIP_VERIFICATION_BY_CLIENT_IDS,
   query =
       "SELECT t FROM gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification t "
-          + "where t.clientId IN(:"
+          + "where t.clientId in(:"
           + TribalMembershipVerification.PARAM_CLIENT_ID
           + ")"
 )
