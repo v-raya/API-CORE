@@ -125,7 +125,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
 
   @Override
   public SystemCode getSystemCode(final Number systemCodeId) {
-    if (systemCodeId == null) {
+    if (systemCodeId == null || Integer.valueOf("0").equals(systemCodeId.intValue())) {
       return null;
     }
 
