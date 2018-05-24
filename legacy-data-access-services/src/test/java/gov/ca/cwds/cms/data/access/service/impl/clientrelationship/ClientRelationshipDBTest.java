@@ -8,9 +8,7 @@ import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.util.Date;
-import gov.ca.cwds.data.legacy.cms.entity.enums.YesNoUnknown;
 import gov.ca.cwds.data.persistence.cms.BaseClient;
-import java.time.LocalDate;
 
 import gov.ca.cwds.cms.data.access.dto.ClientRelationshipDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
@@ -100,11 +98,17 @@ public class ClientRelationshipDBTest extends BaseCwsCmsInMemoryPersistenceTest 
           client1.setIdentifier(CLIENT_ID_1);
           client2.setIdentifier(CLIENT_ID_2);
 
+          sessionFactory.getCurrentSession().detach(client1);
+          sessionFactory.getCurrentSession().detach(client2);
+
+          BaseClient baseClient1 = getBaseClient(client1);
+          BaseClient baseClient2 = getBaseClient(client2);
+
           ClientRelationship clientRelationship =
               clientRelationshipDao.find(EXISTING_RELATIONSHIP_ID);
           ClientRelationshipDTO dto = new ClientRelationshipDTO();
-          dto.setPrimaryClient(getBaseClient(client1));
-          dto.setSecondaryClient(getBaseClient(client2));
+          dto.setPrimaryClient(baseClient1);
+          dto.setSecondaryClient(baseClient2);
           dto.setType(clientRelationship.getType().getSystemId());
           dto.setStartDate(clientRelationship.getStartDate());
           dto.setEndDate(clientRelationship.getEndDate());
@@ -120,7 +124,7 @@ public class ClientRelationshipDBTest extends BaseCwsCmsInMemoryPersistenceTest 
   }
 
   private BaseClient getBaseClient(Client client) {
-    BaseClient baseClient = new BaseClient() {};
+    BaseClient baseClient = new BaseClient(){};
     baseClient.setAdjudicatedDelinquentIndicator("YES");
     baseClient.setAdoptionStatusCode(client.getAdoptionStatus().getCode());
     baseClient.setAlienRegistrationNumber(client.getAlienRegistrationNumber());

@@ -125,6 +125,7 @@ public class ClientRelationshipCoreService
         clientMapper.toLegacyClient(clientRelationshipDTO.getSecondaryClient()));
     clientRelationship.setPrimaryClient(
         clientMapper.toLegacyClient(clientRelationshipDTO.getPrimaryClient()));
+
     clientRelationship.setLastUpdateTime(clientRelationship.getLastUpdateTime());
     clientRelationship.setLastUpdateId(clientRelationship.getLastUpdateId());
 

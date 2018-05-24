@@ -22,27 +22,40 @@ public class ClientRelationshipDao extends BaseDaoImpl<ClientRelationship> {
     super(sessionFactory);
   }
 
-  public List<ClientRelationship> findRelationshipsBySecondaryClientId(String leftSideClientId,
-      LocalDate localDate) {
-    return findRelationships(NQ_FIND_RELATIONSHIPS_BY_SECONDARY_CLIENT_ID, leftSideClientId, localDate);
+//  @Override
+//  public ClientRelationship create(ClientRelationship object) {
+//    getSessionFactory()
+//        .getCurrentSession()
+//        .load(object.getPrimaryClient(), object.getPrimaryClient().getIdentifier());
+//    getSessionFactory()
+//        .getCurrentSession()
+//        .load(object.getSecondaryClient(), object.getPrimaryClient().getIdentifier());
+//    return super.create(object);
+//  }
+
+  public List<ClientRelationship> findRelationshipsBySecondaryClientId(
+      String leftSideClientId, LocalDate localDate) {
+    return findRelationships(
+        NQ_FIND_RELATIONSHIPS_BY_SECONDARY_CLIENT_ID, leftSideClientId, localDate);
   }
 
-  public List<ClientRelationship> findRelationshipsByPrimaryClientId(String rightSideClientId,
-      LocalDate localDate) {
-    return findRelationships(NQ_FIND_RELATIONSHIPS_BY_PRIMARY_CLIENT_ID, rightSideClientId, localDate);
+  public List<ClientRelationship> findRelationshipsByPrimaryClientId(
+      String rightSideClientId, LocalDate localDate) {
+    return findRelationships(
+        NQ_FIND_RELATIONSHIPS_BY_PRIMARY_CLIENT_ID, rightSideClientId, localDate);
   }
 
-  private List<ClientRelationship> findRelationships(String queryName, String clientId,
-      LocalDate localDate
-  ) {
+  private List<ClientRelationship> findRelationships(
+      String queryName, String clientId, LocalDate localDate) {
     Require.requireNotNullAndNotEmpty(clientId);
     Require.requireNotNullAndNotEmpty(localDate);
 
-    final List<ClientRelationship> relationships = currentSession()
-        .createNamedQuery(queryName, ClientRelationship.class)
-        .setParameter(CLIENT_ID, clientId)
-        .setParameter(NQ_PARAM_CURRENT_DATE, localDate)
-        .list();
+    final List<ClientRelationship> relationships =
+        currentSession()
+            .createNamedQuery(queryName, ClientRelationship.class)
+            .setParameter(CLIENT_ID, clientId)
+            .setParameter(NQ_PARAM_CURRENT_DATE, localDate)
+            .list();
 
     return ImmutableList.copyOf(relationships);
   }
