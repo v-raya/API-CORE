@@ -1,30 +1,28 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.List;
-
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToMany;
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.converter.StringToRequiredIntegerConverter;
 import gov.ca.cwds.data.legacy.cms.entity.converter.StringToRequiredLongConverter;
 import gov.ca.cwds.data.legacy.cms.entity.converter.ZipCodeConverter;
 import gov.ca.cwds.data.legacy.cms.entity.converter.ZipExtConverter;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 /**
  * @author CWDS CALS API Team
@@ -110,6 +108,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * Placement Home Profiles
    */
   @OneToMany
+  @LazyCollection(LazyCollectionOption.FALSE)
   @JoinColumn(name = "FKPLC_HM_T")
   private List<PlacementHomeProfile> placementHomeProfiles;
 
@@ -117,6 +116,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * Additional notes for a Placement Home
    */
   @OneToMany
+  @LazyCollection(LazyCollectionOption.FALSE)
   @JoinColumn(name = "FKPLC_HM_T")
   private List<PlacementHomeNotes> placementHomeNotes;
 
@@ -125,6 +125,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * Placement Home Facility type was of a specific type
    */
   @OneToMany
+  @LazyCollection(LazyCollectionOption.FALSE)
   @JoinColumn(name = "FKPLC_HM_T")
   private List<PlacementFacilityTypeHistory> placementFacilityTypeHistory;
 
@@ -485,8 +486,7 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * </blockquote>
    */
   @NotFound(action = NotFoundAction.IGNORE)
-  @ManyToOne
-  @Fetch(FetchMode.SELECT)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "PRM_SUBSID", referencedColumnName = "IDENTIFIER")
   private SubstituteCareProvider primarySubstituteCareProvider;
 
@@ -912,10 +912,12 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private String endComdsc;
 
   @OneToMany
+  @LazyCollection(LazyCollectionOption.FALSE)
   @JoinColumn(name = "FKPLC_HM_T")
   private List<OtherAdultsInPlacementHome> otherAdultsInPlacementHomes;
 
   @OneToMany
+  @LazyCollection(LazyCollectionOption.FALSE)
   @JoinColumn(name = "FKPLC_HM_T")
   private List<OtherChildrenInPlacementHome> otherChildrenInPlacementHomes;
 
