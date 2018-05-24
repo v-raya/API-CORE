@@ -19,8 +19,6 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -108,7 +106,6 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * Placement Home Profiles
    */
   @OneToMany
-  @LazyCollection(LazyCollectionOption.FALSE)
   @JoinColumn(name = "FKPLC_HM_T")
   private List<PlacementHomeProfile> placementHomeProfiles;
 
