@@ -116,7 +116,6 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * Additional notes for a Placement Home
    */
   @OneToMany
-  @LazyCollection(LazyCollectionOption.FALSE)
   @JoinColumn(name = "FKPLC_HM_T")
   private List<PlacementHomeNotes> placementHomeNotes;
 
@@ -125,7 +124,6 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
    * Placement Home Facility type was of a specific type
    */
   @OneToMany
-  @LazyCollection(LazyCollectionOption.FALSE)
   @JoinColumn(name = "FKPLC_HM_T")
   private List<PlacementFacilityTypeHistory> placementFacilityTypeHistory;
 
@@ -912,12 +910,10 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
   private String endComdsc;
 
   @OneToMany
-  @LazyCollection(LazyCollectionOption.FALSE)
   @JoinColumn(name = "FKPLC_HM_T")
   private List<OtherAdultsInPlacementHome> otherAdultsInPlacementHomes;
 
   @OneToMany
-  @LazyCollection(LazyCollectionOption.FALSE)
   @JoinColumn(name = "FKPLC_HM_T")
   private List<OtherChildrenInPlacementHome> otherChildrenInPlacementHomes;
 
