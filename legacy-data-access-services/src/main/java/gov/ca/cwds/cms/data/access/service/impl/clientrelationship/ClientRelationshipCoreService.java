@@ -121,10 +121,23 @@ public class ClientRelationshipCoreService
     clientRelationship.setEndDate(clientRelationshipDTO.getEndDate());
     clientRelationship.setSameHomeStatus(clientRelationshipDTO.getSameHomeStatus());
     clientRelationship.setStartDate(clientRelationshipDTO.getStartDate());
+
+    crudDao.getSessionFactory().getCurrentSession().flush();
+    Client legacyPrimaryClient =
+        clientMapper.toLegacyClient(clientRelationshipDTO.getSecondaryClient());
+    Client legacySecondaryClient =
+        clientMapper.toLegacyClient(clientRelationshipDTO.getPrimaryClient());
+
     clientRelationship.setSecondaryClient(
-        clientMapper.toLegacyClient(clientRelationshipDTO.getSecondaryClient()));
+        crudDao
+            .getSessionFactory()
+            .getCurrentSession()
+            .load(Client.class, legacySecondaryClient.getIdentifier()));
     clientRelationship.setPrimaryClient(
-        clientMapper.toLegacyClient(clientRelationshipDTO.getPrimaryClient()));
+        crudDao
+            .getSessionFactory()
+            .getCurrentSession()
+            .load(Client.class, legacyPrimaryClient.getIdentifier()));
 
     clientRelationship.setLastUpdateTime(clientRelationship.getLastUpdateTime());
     clientRelationship.setLastUpdateId(clientRelationship.getLastUpdateId());

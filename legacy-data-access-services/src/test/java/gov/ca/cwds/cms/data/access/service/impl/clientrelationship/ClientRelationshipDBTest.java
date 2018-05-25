@@ -5,8 +5,11 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
 import gov.ca.cwds.cms.data.access.mapper.ClientMapper;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
+import gov.ca.cwds.cms.data.access.service.impl.dao.BaseClientDao;
+import gov.ca.cwds.cms.data.access.service.impl.dao.BaseClientImpl;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
+import java.util.ArrayList;
 import java.util.Date;
 import gov.ca.cwds.data.persistence.cms.BaseClient;
 
@@ -20,6 +23,7 @@ import gov.ca.cwds.data.legacy.cms.dao.TribalMembershipVerificationDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import gov.ca.cwds.drools.DroolsService;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mapstruct.factory.Mappers;
@@ -45,8 +49,8 @@ public class ClientRelationshipDBTest extends BaseCwsCmsInMemoryPersistenceTest 
   private UpdateLifeCycle updateLifeCycle;
   private CreateLifeCycle createLifeCycle;
   private SearchClientRelationshipService searchClientRelationshipService;
+  private BaseClientDao baseClientDao;
   private ClientMapper clientMapper = Mappers.getMapper(ClientMapper.class);
-
 
   @Before
   public void before() throws Exception {
@@ -79,6 +83,7 @@ public class ClientRelationshipDBTest extends BaseCwsCmsInMemoryPersistenceTest 
             searchClientRelationshipService,
             createLifeCycle);
 
+    baseClientDao = new BaseClientDao(sessionFactory);
     clientRelationshipCoreService.setClientMapper(clientMapper);
     cleanAllAndInsert("/dbunit/Relationships.xml");
     initUserAccount(USER_ID);
@@ -98,11 +103,12 @@ public class ClientRelationshipDBTest extends BaseCwsCmsInMemoryPersistenceTest 
           client1.setIdentifier(CLIENT_ID_1);
           client2.setIdentifier(CLIENT_ID_2);
 
-          sessionFactory.getCurrentSession().detach(client1);
-          sessionFactory.getCurrentSession().detach(client2);
+          BaseClientImpl baseClient1 = (BaseClientImpl) getBaseClient(client1);
+          BaseClientImpl baseClient2 = (BaseClientImpl) getBaseClient(client2);
+          baseClientDao.create(baseClient1);
+          baseClientDao.create(baseClient2);
 
-          BaseClient baseClient1 = getBaseClient(client1);
-          BaseClient baseClient2 = getBaseClient(client2);
+//          sessionFactory.getCurrentSession().flush();
 
           ClientRelationship clientRelationship =
               clientRelationshipDao.find(EXISTING_RELATIONSHIP_ID);
@@ -121,11 +127,24 @@ public class ClientRelationshipDBTest extends BaseCwsCmsInMemoryPersistenceTest 
             e.printStackTrace();
           }
         });
+
+    executeInTransaction(
+        sessionFactory,
+        (sessionFactory) -> {
+          List<ClientRelationship> clientRelationshipList = new ArrayList<>();
+          clientRelationshipList.addAll(
+              clientRelationshipCoreService.findRelationshipsByPrimaryClientId(CLIENT_ID_1));
+          clientRelationshipList.addAll(
+              clientRelationshipCoreService.findRelationshipsBySecondaryClientId(CLIENT_ID_2));
+         // List<Client> clients = clientDao.findAll();
+          System.out.println(clientRelationshipList);
+         // System.out.println(clients);
+        });
   }
 
   private BaseClient getBaseClient(Client client) {
-    BaseClient baseClient = new BaseClient(){};
-    baseClient.setAdjudicatedDelinquentIndicator("YES");
+    BaseClient baseClient = new BaseClientImpl();
+    baseClient.setAdjudicatedDelinquentIndicator("Y");
     baseClient.setAdoptionStatusCode(client.getAdoptionStatus().getCode());
     baseClient.setAlienRegistrationNumber(client.getAlienRegistrationNumber());
     baseClient.setBirthCity(client.getBirthCity());
@@ -133,21 +152,21 @@ public class ClientRelationshipDBTest extends BaseCwsCmsInMemoryPersistenceTest 
     baseClient.setBirthDate(new Date());
     baseClient.setBirthFacilityName(client.getBirthFacilityName());
     baseClient.setBirthStateCodeType(client.getBirthStateCode());
-    baseClient.setBirthplaceVerifiedIndicator("YES");
-    baseClient.setChildClientIndicatorVar("NO");
+    baseClient.setBirthplaceVerifiedIndicator("Y");
+    baseClient.setChildClientIndicatorVar("N");
     baseClient.setClientIndexNumber(client.getClientIndexNumber());
     baseClient.setCommentDescription(client.getCommentDescription());
     baseClient.setCommonFirstName(client.getCommonFirstName());
     baseClient.setCommonLastName(client.getCommonLastName());
     baseClient.setCommonMiddleName(client.getCommonMiddleName());
     baseClient.setConfidentialityActionDate(new Date());
-    baseClient.setConfidentialityInEffectIndicator("YES");
+    baseClient.setConfidentialityInEffectIndicator("Y");
     baseClient.setCreationDate(new Date());
-    baseClient.setCurrCaChildrenServIndicator("YES");
+    baseClient.setCurrCaChildrenServIndicator("Y");
     baseClient.setCurrentlyOtherDescription(client.getCurrentlyOtherDescription());
-    baseClient.setCurrentlyRegionalCenterIndicator("NO");
+    baseClient.setCurrentlyRegionalCenterIndicator("N");
     baseClient.setDeathDate(new Date());
-    baseClient.setDeathDateVerifiedIndicator("NO");
+    baseClient.setDeathDateVerifiedIndicator("N");
     baseClient.setDeathPlace(client.getDeathPlace());
     baseClient.setDeathReasonText(client.getDeathReasonText());
     baseClient.setDriverLicenseNumber(client.getDriverLicenseNumber());
@@ -163,36 +182,39 @@ public class ClientRelationshipDBTest extends BaseCwsCmsInMemoryPersistenceTest 
     baseClient.setImmigrationCountryCodeType(client.getImmigrationCountryCode());
     baseClient.setImmigrationStatusType(client.getImmigrationStatusCode());
     baseClient.setIncapacitatedParentCode(client.getIncapacitatedParentStatus().getCode());
-    baseClient.setIndividualHealthCarePlanIndicator("YES");
-    baseClient.setLimitationOnScpHealthIndicator("NO");
+    baseClient.setIndividualHealthCarePlanIndicator("Y");
+    baseClient.setLimitationOnScpHealthIndicator("N");
     baseClient.setLiterateCode(client.getLiterateStatus().getCode());
-    baseClient.setMaritalCohabitatnHstryIndicatorVar("NO");
+    baseClient.setMaritalCohabitatnHstryIndicatorVar("N");
     baseClient.setMaritalStatusType(client.getMaritalStatusCode());
-    baseClient.setMilitaryStatusCode("");
+    baseClient.setMilitaryStatusCode("D");
     baseClient.setMotherParentalRightTermDate(new Date());
     baseClient.setNamePrefixDescription("");
     baseClient.setNameType(client.getNameType().getSystemId());
-    baseClient.setOutstandingWarrantIndicator("NO");
-    baseClient.setPrevCaChildrenServIndicator("NO");
+    baseClient.setOutstandingWarrantIndicator("N");
+    baseClient.setPrevCaChildrenServIndicator("N");
     baseClient.setPrevOtherDescription("");
-    baseClient.setPrevRegionalCenterIndicator("YES");
+    baseClient.setPrevRegionalCenterIndicator("Y");
     baseClient.setPrimaryEthnicityType(client.getPrimaryEthnicityCode());
     baseClient.setPrimaryLanguageType(client.getPrimaryLanguageCode());
     baseClient.setReligionType(client.getReligionCode());
     baseClient.setSecondaryLanguageType(client.getSecondaryLanguageCode());
-    baseClient.setSensitiveHlthInfoOnFileIndicator("NO");
+    baseClient.setSensitiveHlthInfoOnFileIndicator("N");
     baseClient.setSensitivityIndicator("S");
     baseClient.setSoc158PlacementCode(client.getSoc158placementsStatus().getCode());
-    baseClient.setSoc158SealedClientIndicator("YES");
+    baseClient.setSoc158SealedClientIndicator("Y");
     baseClient.setSocialSecurityNumChangedCode(client.getSocialSecurityNumberChangedCode());
     baseClient.setSocialSecurityNumber(client.getSocialSecurityNumber());
     baseClient.setSuffixTitleDescription("");
-    baseClient.setTribalAncestryClientIndicatorVar("NO");
-    baseClient.setTribalMembrshpVerifctnIndicatorVar("NO");
+    baseClient.setTribalAncestryClientIndicatorVar("N");
+    baseClient.setTribalMembrshpVerifctnIndicatorVar("N");
     baseClient.setUnemployedParentCode("N");
-    baseClient.setZippyCreatedIndicator("NO");
+    baseClient.setZippyCreatedIndicator("N");
     baseClient.setLastUpdatedId("0X5");
     baseClient.setLastUpdatedTime(new Date());
+    baseClient.setSexualOrientationType((short) 0);
+    baseClient.setGenderIdentityType((short) 0);
+    baseClient.setGenderExpressionType((short) 0);
     return baseClient;
   }
 

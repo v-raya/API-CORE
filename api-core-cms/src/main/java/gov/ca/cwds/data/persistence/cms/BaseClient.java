@@ -1221,6 +1221,20 @@ public abstract class BaseClient extends CmsPersistentObject
     this.zippyCreatedIndicator = zippyCreatedIndicator;
   }
 
+  public void setSexualOrientationType(Short sexualOrientationType) {
+    this.sexualOrientationType = sexualOrientationType;
+  }
+
+  public void setGenderIdentityType(Short genderIdentityType) {
+    this.genderIdentityType = genderIdentityType;
+  }
+
+  public void setGenderExpressionType(Short genderExpressionType) {
+    this.genderExpressionType = genderExpressionType;
+  }
+
+
+
   @Override
   public String getLimitedAccessCode() {
     return getSensitivityIndicator();

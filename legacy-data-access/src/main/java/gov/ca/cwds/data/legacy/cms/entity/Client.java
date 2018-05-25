@@ -60,6 +60,7 @@ import java.util.Set;
   name = "Client.findByFacilityIdAndChildId",
   query = Client.CHILDREN_BY_FACILITY_ID_BASE_QUERY + " AND c.identifier = :childId"
 )
+@NamedQuery(name = Client.NQ_ALL, query = "FROM gov.ca.cwds.data.legacy.cms.entity.Client")
 @SuppressWarnings({"squid:S3437", "squid:S2160", "common-java:DuplicatedBlocks"})
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -67,6 +68,8 @@ import java.util.Set;
 public class Client extends CmsPersistentObjectVersioned implements IClient, PersistentObject {
 
   private static final long serialVersionUID = 783532074047017463L;
+
+  public static final String NQ_ALL = "Client.all";
 
   public static final String CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY =
       "SELECT c FROM gov.ca.cwds.data.legacy.cms.entity.Client c"

@@ -22,17 +22,6 @@ public class ClientRelationshipDao extends BaseDaoImpl<ClientRelationship> {
     super(sessionFactory);
   }
 
-//  @Override
-//  public ClientRelationship create(ClientRelationship object) {
-//    getSessionFactory()
-//        .getCurrentSession()
-//        .load(object.getPrimaryClient(), object.getPrimaryClient().getIdentifier());
-//    getSessionFactory()
-//        .getCurrentSession()
-//        .load(object.getSecondaryClient(), object.getPrimaryClient().getIdentifier());
-//    return super.create(object);
-//  }
-
   public List<ClientRelationship> findRelationshipsBySecondaryClientId(
       String leftSideClientId, LocalDate localDate) {
     return findRelationships(

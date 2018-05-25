@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.legacy.cms.dao;
 
+import com.google.common.collect.ImmutableList;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -29,6 +31,15 @@ public class ClientDao extends BaseDaoImpl<Client> {
   @Inject
   public ClientDao(@CmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
+  }
+
+  @Override
+  public List<Client> findAll() {
+    Session session = this.getSessionFactory().getCurrentSession();
+    Query<Client> query = session.createNamedQuery(Client.NQ_ALL, Client.class);
+    ImmutableList.Builder<Client> entities = new ImmutableList.Builder<>();
+    entities.addAll(query.list());
+    return entities.build();
   }
 
   /**

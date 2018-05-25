@@ -195,15 +195,15 @@ public abstract class CreateUpdateBaseLifeCycle
 
   private void enrichWithPrimaryAndSecondaryClients(DataAccessBundle bundle) {
     ClientRelationshipAwareDTO awareDto = (ClientRelationshipAwareDTO) bundle.getAwareDto();
-//    ParametersValidator.checkEntityId(
-//        awareDto.getEntity().getPrimaryClient(), awareDto.getEntity().getClass().getName());
-//    Client primaryClient = clientDao.find(awareDto.getEntity().getPrimaryClient().getPrimaryKey());
-//    ParametersValidator.checkEntityId(
-//        awareDto.getEntity().getSecondaryClient(), awareDto.getEntity().getClass().getName());
-//    Client secondaryClient =
-//        clientDao.find(awareDto.getEntity().getSecondaryClient().getPrimaryKey());
-//    awareDto.getEntity().setPrimaryClient(primaryClient);
-//    awareDto.getEntity().setSecondaryClient(secondaryClient);-
+    ParametersValidator.checkEntityId(
+        awareDto.getEntity().getPrimaryClient(), awareDto.getEntity().getClass().getName());
+    Client primaryClient = clientDao.find(awareDto.getEntity().getPrimaryClient().getPrimaryKey());
+    ParametersValidator.checkEntityId(
+        awareDto.getEntity().getSecondaryClient(), awareDto.getEntity().getClass().getName());
+    Client secondaryClient =
+        clientDao.find(awareDto.getEntity().getSecondaryClient().getPrimaryKey());
+    awareDto.getEntity().setPrimaryClient(primaryClient);
+    awareDto.getEntity().setSecondaryClient(secondaryClient);
   }
 
   /**
