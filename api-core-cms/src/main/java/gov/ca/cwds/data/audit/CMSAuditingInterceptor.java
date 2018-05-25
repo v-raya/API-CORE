@@ -8,7 +8,7 @@ import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.Type;
 
 //hibernate.session_factory.interceptor
-public class AuditingInterceptor extends EmptyInterceptor {
+public class CMSAuditingInterceptor extends EmptyInterceptor {
   @Override
   public boolean onSave(
     Object entity,

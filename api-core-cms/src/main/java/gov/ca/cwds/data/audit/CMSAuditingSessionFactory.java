@@ -10,8 +10,8 @@ import org.hibernate.engine.spi.SessionFactoryDelegatingImpl;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.jdbc.Work;
 
-public class AuditingSessionFactory extends SessionFactoryDelegatingImpl implements Work {
-  public AuditingSessionFactory(SessionFactoryImplementor delegate) {
+public class CMSAuditingSessionFactory extends SessionFactoryDelegatingImpl implements Work {
+  public CMSAuditingSessionFactory(SessionFactoryImplementor delegate) {
     super(delegate);
   }
 
