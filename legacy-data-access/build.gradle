@@ -2,6 +2,7 @@
 dependencies {
     compile project(':api-core-common')
     compile group: "io.dropwizard", name: "dropwizard-hibernate", version: dropwizardVersion
+    compile group: 'gov.ca.cwds.api', name:'api-security', version: apiSecurityVersion
 
     testCompile group: 'gov.ca.cwds.cals', name: 'cws-cms-data-model', version: dataModelVersion, changing: true
     testCompile group: 'org.liquibase', name: 'liquibase-core', version: '3.5.3'
