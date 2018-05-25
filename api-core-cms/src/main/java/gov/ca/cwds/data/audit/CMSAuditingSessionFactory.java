@@ -3,6 +3,7 @@ package gov.ca.cwds.data.audit;
 import java.sql.Connection;
 import java.sql.SQLException;
 import com.ibm.db2.jcc.DB2Connection;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import gov.ca.cwds.security.realm.PerrySubject;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -10,6 +11,8 @@ import org.hibernate.engine.spi.SessionFactoryDelegatingImpl;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.jdbc.Work;
 
+//This session factory is introduced exactly for CMS DB2 access monitoring
+@SuppressFBWarnings("JVR_JDBC_VENDOR_RELIANCE")
 public class CMSAuditingSessionFactory extends SessionFactoryDelegatingImpl implements Work {
   public CMSAuditingSessionFactory(SessionFactoryImplementor delegate) {
     super(delegate);
