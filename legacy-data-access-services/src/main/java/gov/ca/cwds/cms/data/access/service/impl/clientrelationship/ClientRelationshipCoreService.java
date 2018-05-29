@@ -107,10 +107,10 @@ public class ClientRelationshipCoreService
   @Override
   public void createRelationship(ClientRelationshipDTO clientRelationshipDto)
       throws DataAccessServicesException {
-    create(form(clientRelationshipDto));
+    create(buildAwareObject(clientRelationshipDto));
   }
 
-  private ClientRelationshipAwareDTO form(ClientRelationshipDTO clientRelationshipDto) {
+  private ClientRelationshipAwareDTO buildAwareObject(ClientRelationshipDTO clientRelationshipDto) {
     ClientRelationship clientRelationship = new ClientRelationship();
     clientRelationship.setIdentifier(clientRelationshipDto.getIdentifier());
     clientRelationship.setAbsentParentIndicator(clientRelationshipDto.isAbsentParentIndicator());
