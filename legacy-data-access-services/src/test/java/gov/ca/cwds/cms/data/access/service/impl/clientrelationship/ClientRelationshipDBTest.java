@@ -1,5 +1,7 @@
 package gov.ca.cwds.cms.data.access.service.impl.clientrelationship;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
@@ -9,6 +11,7 @@ import gov.ca.cwds.cms.data.access.service.impl.dao.BaseClientDao;
 import gov.ca.cwds.cms.data.access.service.impl.dao.BaseClientImpl;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import gov.ca.cwds.data.persistence.cms.BaseClient;
@@ -91,6 +94,17 @@ public class ClientRelationshipDBTest extends BaseCwsCmsInMemoryPersistenceTest 
 
   @Test
   public void createRelationshipTest() {
+
+    executeInTransaction(
+      sessionFactory,
+      (sessionFactory) -> {
+        List<ClientRelationship> relationships =
+          clientRelationshipDao.findRelationshipsByPrimaryClientId(
+            CLIENT_ID_2, LocalDate.now());
+        assertNotNull(relationships);
+        assertEquals(0, relationships.size());
+      });
+
     executeInTransaction(
         sessionFactory,
         (sessionFactory) -> {
@@ -107,8 +121,6 @@ public class ClientRelationshipDBTest extends BaseCwsCmsInMemoryPersistenceTest 
           BaseClientImpl baseClient2 = (BaseClientImpl) getBaseClient(client2);
           baseClientDao.create(baseClient1);
           baseClientDao.create(baseClient2);
-
-//          sessionFactory.getCurrentSession().flush();
 
           ClientRelationship clientRelationship =
               clientRelationshipDao.find(EXISTING_RELATIONSHIP_ID);
@@ -131,14 +143,15 @@ public class ClientRelationshipDBTest extends BaseCwsCmsInMemoryPersistenceTest 
     executeInTransaction(
         sessionFactory,
         (sessionFactory) -> {
-          List<ClientRelationship> clientRelationshipList = new ArrayList<>();
-          clientRelationshipList.addAll(
-              clientRelationshipCoreService.findRelationshipsByPrimaryClientId(CLIENT_ID_1));
-          clientRelationshipList.addAll(
-              clientRelationshipCoreService.findRelationshipsBySecondaryClientId(CLIENT_ID_2));
-         // List<Client> clients = clientDao.findAll();
-          System.out.println(clientRelationshipList);
-         // System.out.println(clients);
+          List<ClientRelationship> relationships =
+            clientRelationshipDao.findRelationshipsByPrimaryClientId(
+              CLIENT_ID_2, LocalDate.now());
+          assertNotNull(relationships);
+          assertEquals(1, relationships.size());
+          assertNotNull(relationships.get(0).getPrimaryClient());
+          assertEquals(CLIENT_ID_2, relationships.get(0).getPrimaryClient().getIdentifier());
+          assertNotNull(relationships.get(0).getSecondaryClient());
+          assertEquals(CLIENT_ID_1, relationships.get(0).getSecondaryClient().getIdentifier());
         });
   }
 

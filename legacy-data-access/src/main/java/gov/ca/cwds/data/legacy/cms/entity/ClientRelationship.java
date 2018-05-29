@@ -46,8 +46,11 @@ import org.hibernate.annotations.Type;
           + INACTIVE_IND_CONDITION
           + DATE_CONDITION
 )
+@NamedQuery(name = ClientRelationship.NQ_ALL, query = "FROM gov.ca.cwds.data.legacy.cms.entity.ClientRelationship")
 @SuppressWarnings("squid:S3437")
 public class ClientRelationship extends CmsPersistentObject {
+
+  public static final String NQ_ALL = "ClientRelationship.all";
 
   public static final String NQ_FIND_RELATIONSHIPS_BY_SECONDARY_CLIENT_ID =
       "gov.ca.cwds.data.legacy.cms.entity.ClientRelationship.findRelationshipsBySecondaryClientId";
