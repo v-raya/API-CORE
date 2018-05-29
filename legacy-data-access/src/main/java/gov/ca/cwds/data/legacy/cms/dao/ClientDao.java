@@ -33,14 +33,6 @@ public class ClientDao extends BaseDaoImpl<Client> {
     super(sessionFactory);
   }
 
-  @Override
-  public List<Client> findAll() {
-    Session session = this.getSessionFactory().getCurrentSession();
-    Query<Client> query = session.createNamedQuery(Client.NQ_ALL, Client.class);
-    ImmutableList.Builder<Client> entities = new ImmutableList.Builder<>();
-    entities.addAll(query.list());
-    return entities.build();
-  }
 
   /**
    * 
