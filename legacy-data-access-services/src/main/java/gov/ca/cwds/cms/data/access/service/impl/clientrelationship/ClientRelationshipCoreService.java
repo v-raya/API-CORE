@@ -138,9 +138,6 @@ public class ClientRelationshipCoreService
             .getCurrentSession()
             .load(Client.class, legacyPrimaryClient.getIdentifier()));
 
-    clientRelationship.setLastUpdateTime(clientRelationship.getLastUpdateTime());
-    clientRelationship.setLastUpdateId(clientRelationship.getLastUpdateId());
-
     ClientRelationshipAwareDTO awareDto = new ClientRelationshipAwareDTO();
     awareDto.setEntity(clientRelationship);
     return awareDto;
