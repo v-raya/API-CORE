@@ -48,9 +48,4 @@ public class ClientRelationshipDao extends BaseDaoImpl<ClientRelationship> {
 
     return ImmutableList.copyOf(relationships);
   }
-
-  @Override
-  public List<ClientRelationship> findAll() {
-    return queryImmutableList(ClientRelationship.NQ_ALL);
-  }
 }
