@@ -1,7 +1,10 @@
 package gov.ca.cwds.cms.data.access.service.impl.clientrelationship;
 
-import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT_ID;
-
+import gov.ca.cwds.cms.data.access.dto.ClientRelationshipDTO;
+import gov.ca.cwds.cms.data.access.mapper.ClientMapper;
+import gov.ca.cwds.cms.data.access.service.ClientRelationshipService;
+import gov.ca.cwds.data.legacy.cms.entity.Client;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.ClientRelationshipType;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,7 +18,6 @@ import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
 import gov.ca.cwds.data.legacy.cms.dao.ClientRelationshipDao;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
-import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 
 /**
@@ -23,9 +25,12 @@ import gov.ca.cwds.security.utils.PrincipalUtils;
  *
  * @author CWDS TPT-3 Team
  */
-public class ClientRelationshipCoreService extends
-    DataAccessServiceBase<ClientRelationshipDao, ClientRelationship, ClientRelationshipAwareDTO> {
+public class ClientRelationshipCoreService
+    extends DataAccessServiceBase<
+        ClientRelationshipDao, ClientRelationship, ClientRelationshipAwareDTO>
+    implements ClientRelationshipService {
 
+  @Inject private ClientMapper clientMapper;
   private final UpdateLifeCycle updateLifeCycle;
   private final CreateLifeCycle createLifeCycle;
   private final SearchClientRelationshipService searchClientRelationshipService;
@@ -39,7 +44,8 @@ public class ClientRelationshipCoreService extends
    * @param createLifeCycle common create lifecycle
    */
   @Inject
-  public ClientRelationshipCoreService(final ClientRelationshipDao clientRelationshipDao,
+  public ClientRelationshipCoreService(
+      final ClientRelationshipDao clientRelationshipDao,
       final UpdateLifeCycle updateLifeCycle,
       final SearchClientRelationshipService searchClientRelationshipService,
       final CreateLifeCycle createLifeCycle) {
@@ -82,12 +88,62 @@ public class ClientRelationshipCoreService extends
     return new DefaultDataAccessLifeCycle<>();
   }
 
+  public List<ClientRelationship> findRelationshipsBySecondaryClient(final Client client) {
+    return searchClientRelationshipService.findRelationshipsBySecondaryClient(client);
+  }
+
+  public List<ClientRelationship> findRelationshipsByPrimaryClient(final Client client) {
+    return searchClientRelationshipService.findRelationshipsByPrimaryClient(client);
+  }
+
   public List<ClientRelationship> findRelationshipsBySecondaryClientId(final String clientId) {
     return searchClientRelationshipService.findRelationshipsBySecondaryClientId(clientId);
   }
 
-  public List<ClientRelationship> findRelationshipsByPrimaryClientId(
-      @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
+  public List<ClientRelationship> findRelationshipsByPrimaryClientId(final String clientId) {
     return searchClientRelationshipService.findRelationshipsByPrimaryClientId(clientId);
+  }
+
+  @Override
+  public void createRelationship(ClientRelationshipDTO clientRelationshipDto)
+      throws DataAccessServicesException {
+    create(buildAwareObject(clientRelationshipDto));
+  }
+
+  private ClientRelationshipAwareDTO buildAwareObject(ClientRelationshipDTO clientRelationshipDto) {
+    ClientRelationship clientRelationship = new ClientRelationship();
+    clientRelationship.setIdentifier(clientRelationshipDto.getIdentifier());
+    clientRelationship.setAbsentParentIndicator(clientRelationshipDto.isAbsentParentIndicator());
+    ClientRelationshipType clientRelationshipType = new ClientRelationshipType();
+    clientRelationshipType.setSystemId(clientRelationshipDto.getType());
+    clientRelationship.setType(clientRelationshipType);
+    clientRelationship.setEndDate(clientRelationshipDto.getEndDate());
+    clientRelationship.setSameHomeStatus(clientRelationshipDto.getSameHomeStatus());
+    clientRelationship.setStartDate(clientRelationshipDto.getStartDate());
+
+    crudDao.getSessionFactory().getCurrentSession().flush();
+    Client legacyPrimaryClient =
+        clientMapper.toLegacyClient(clientRelationshipDto.getSecondaryClient());
+    Client legacySecondaryClient =
+        clientMapper.toLegacyClient(clientRelationshipDto.getPrimaryClient());
+
+    clientRelationship.setSecondaryClient(
+        crudDao
+            .getSessionFactory()
+            .getCurrentSession()
+            .load(Client.class, legacySecondaryClient.getIdentifier()));
+    clientRelationship.setPrimaryClient(
+        crudDao
+            .getSessionFactory()
+            .getCurrentSession()
+            .load(Client.class, legacyPrimaryClient.getIdentifier()));
+
+    ClientRelationshipAwareDTO awareDto = new ClientRelationshipAwareDTO();
+    awareDto.setEntity(clientRelationship);
+    return awareDto;
+  }
+
+  public void setClientMapper(ClientMapper clientMapper) {
+    this.clientMapper = clientMapper;
   }
 }

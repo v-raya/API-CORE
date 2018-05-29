@@ -19,7 +19,7 @@ import org.apache.commons.collections4.CollectionUtils;
  * Search relationships.
  *
  * @author CWDS TPT-3 Team
- * */
+ */
 class SearchClientRelationshipService {
 
   private final ClientRelationshipDao clientRelationshipDao;
@@ -27,6 +27,20 @@ class SearchClientRelationshipService {
   @Inject
   SearchClientRelationshipService(ClientRelationshipDao clientRelationshipDao) {
     this.clientRelationshipDao = clientRelationshipDao;
+  }
+
+  List<ClientRelationship> findRelationshipsBySecondaryClient(
+      @Authorize(CLIENT_READ_CLIENT) final Client client) {
+    return deleteNotPermittedClientData(
+        clientRelationshipDao.findRelationshipsBySecondaryClientId(
+            client.getIdentifier(), LocalDate.now()));
+  }
+
+  List<ClientRelationship> findRelationshipsByPrimaryClient(
+      @Authorize(CLIENT_READ_CLIENT) final Client client) {
+    return deleteNotPermittedClientData(
+        clientRelationshipDao.findRelationshipsByPrimaryClientId(
+            client.getIdentifier(), LocalDate.now()));
   }
 
   List<ClientRelationship> findRelationshipsBySecondaryClientId(
@@ -81,5 +95,4 @@ class SearchClientRelationshipService {
         clientRelationship -> clients.add(clientRelationship.getSecondaryClient()));
     return clients;
   }
-
 }

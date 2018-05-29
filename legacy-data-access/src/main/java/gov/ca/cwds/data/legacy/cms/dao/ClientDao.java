@@ -31,6 +31,7 @@ public class ClientDao extends BaseDaoImpl<Client> {
     super(sessionFactory);
   }
 
+
   /**
    * 
    * @param facilityId facility primary key
