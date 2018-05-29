@@ -5,6 +5,8 @@ import gov.ca.cwds.data.persistence.cms.BaseClient;
 import java.time.LocalDate;
 
 /**
+ * Hotline (create relationship).
+ *
  * @author CWDS TPT-3 Team
  * */
 public class ClientRelationshipDTO {
