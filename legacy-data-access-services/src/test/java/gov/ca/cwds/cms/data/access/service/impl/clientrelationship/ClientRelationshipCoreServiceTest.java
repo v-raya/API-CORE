@@ -30,9 +30,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(PrincipalUtils.class)
 public class ClientRelationshipCoreServiceTest extends BaseUnitTest {
 
-  @Test
-  public void createRelationship() throws Exception {}
-
   public static final String USER_ID = "aaa";
   private static final String PRIMARY_CLIENT = "aaddssrrtt";
   private static final String SECONDARY_CLIENT = "bbddssrrtt";
