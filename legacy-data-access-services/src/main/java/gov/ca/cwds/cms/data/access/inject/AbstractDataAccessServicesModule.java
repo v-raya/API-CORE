@@ -44,8 +44,8 @@ public abstract class AbstractDataAccessServicesModule extends AbstractModule {
     bind(BusinessValidationService.class);
     bind(TribalMembershipVerificationCoreService.class);
     bind(gov.ca.cwds.cms.data.access.service.impl.tribalmembership.CreateLifeCycle.class);
-    bind(gov.ca.cwds.cms.data.access.service.ClientRelationshipService.class).to(
-      ClientRelationshipCoreService.class);
+    bind(gov.ca.cwds.cms.data.access.service.ClientRelationshipService.class)
+        .to(ClientRelationshipCoreService.class);
   }
 
   private void configureMappers() {

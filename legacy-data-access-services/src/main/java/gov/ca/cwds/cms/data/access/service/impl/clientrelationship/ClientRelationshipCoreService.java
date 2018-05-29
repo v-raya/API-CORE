@@ -111,7 +111,6 @@ public class ClientRelationshipCoreService
   }
 
   private ClientRelationshipAwareDTO form(ClientRelationshipDTO clientRelationshipDto) {
-    ClientRelationshipAwareDTO awareDto = new ClientRelationshipAwareDTO();
     ClientRelationship clientRelationship = new ClientRelationship();
     clientRelationship.setIdentifier(clientRelationshipDto.getIdentifier());
     clientRelationship.setAbsentParentIndicator(clientRelationshipDto.isAbsentParentIndicator());
@@ -142,6 +141,7 @@ public class ClientRelationshipCoreService
     clientRelationship.setLastUpdateTime(clientRelationship.getLastUpdateTime());
     clientRelationship.setLastUpdateId(clientRelationship.getLastUpdateId());
 
+    ClientRelationshipAwareDTO awareDto = new ClientRelationshipAwareDTO();
     awareDto.setEntity(clientRelationship);
     return awareDto;
   }
