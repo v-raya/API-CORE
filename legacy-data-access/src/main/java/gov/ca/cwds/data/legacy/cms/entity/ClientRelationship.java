@@ -46,7 +46,10 @@ import org.hibernate.annotations.Type;
           + INACTIVE_IND_CONDITION
           + DATE_CONDITION
 )
-@NamedQuery(name = ClientRelationship.NQ_ALL, query = "FROM gov.ca.cwds.data.legacy.cms.entity.ClientRelationship")
+@NamedQuery(
+  name = ClientRelationship.NQ_ALL,
+  query = "FROM gov.ca.cwds.data.legacy.cms.entity.ClientRelationship"
+)
 @SuppressWarnings("squid:S3437")
 public class ClientRelationship extends CmsPersistentObject {
 
@@ -80,18 +83,12 @@ public class ClientRelationship extends CmsPersistentObject {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "FKCLIENT_T",
-    referencedColumnName = "IDENTIFIER"
-  )
+  @JoinColumn(name = "FKCLIENT_T", referencedColumnName = "IDENTIFIER")
   private Client primaryClient;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
-  @JoinColumn(
-    name = "FKCLIENT_0",
-    referencedColumnName = "IDENTIFIER"
-  )
+  @JoinColumn(name = "FKCLIENT_0", referencedColumnName = "IDENTIFIER")
   private Client secondaryClient;
 
   @ManyToOne(fetch = FetchType.LAZY)

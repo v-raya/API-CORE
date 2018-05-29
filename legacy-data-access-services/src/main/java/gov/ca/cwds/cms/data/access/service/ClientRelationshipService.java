@@ -8,6 +8,6 @@ import gov.ca.cwds.cms.data.access.dto.ClientRelationshipDTO;
  * @author CWDS TPT-3 Team
  */
 public interface ClientRelationshipService {
-  void createRelationship(ClientRelationshipDTO clientRelationshipDTO)
-    throws DataAccessServicesException;
+  void createRelationship(ClientRelationshipDTO clientRelationshipDto)
+      throws DataAccessServicesException;
 }

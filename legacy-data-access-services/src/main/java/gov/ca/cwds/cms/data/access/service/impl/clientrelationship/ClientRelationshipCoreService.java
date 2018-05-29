@@ -105,28 +105,28 @@ public class ClientRelationshipCoreService
   }
 
   @Override
-  public void createRelationship(ClientRelationshipDTO clientRelationshipDTO)
+  public void createRelationship(ClientRelationshipDTO clientRelationshipDto)
       throws DataAccessServicesException {
-    create(form(clientRelationshipDTO));
+    create(form(clientRelationshipDto));
   }
 
-  private ClientRelationshipAwareDTO form(ClientRelationshipDTO clientRelationshipDTO) {
-    ClientRelationshipAwareDTO awareDTO = new ClientRelationshipAwareDTO();
+  private ClientRelationshipAwareDTO form(ClientRelationshipDTO clientRelationshipDto) {
+    ClientRelationshipAwareDTO awareDto = new ClientRelationshipAwareDTO();
     ClientRelationship clientRelationship = new ClientRelationship();
-    clientRelationship.setIdentifier(clientRelationshipDTO.getIdentifier());
-    clientRelationship.setAbsentParentIndicator(clientRelationshipDTO.isAbsentParentIndicator());
+    clientRelationship.setIdentifier(clientRelationshipDto.getIdentifier());
+    clientRelationship.setAbsentParentIndicator(clientRelationshipDto.isAbsentParentIndicator());
     ClientRelationshipType clientRelationshipType = new ClientRelationshipType();
-    clientRelationshipType.setSystemId(clientRelationshipDTO.getType());
+    clientRelationshipType.setSystemId(clientRelationshipDto.getType());
     clientRelationship.setType(clientRelationshipType);
-    clientRelationship.setEndDate(clientRelationshipDTO.getEndDate());
-    clientRelationship.setSameHomeStatus(clientRelationshipDTO.getSameHomeStatus());
-    clientRelationship.setStartDate(clientRelationshipDTO.getStartDate());
+    clientRelationship.setEndDate(clientRelationshipDto.getEndDate());
+    clientRelationship.setSameHomeStatus(clientRelationshipDto.getSameHomeStatus());
+    clientRelationship.setStartDate(clientRelationshipDto.getStartDate());
 
     crudDao.getSessionFactory().getCurrentSession().flush();
     Client legacyPrimaryClient =
-        clientMapper.toLegacyClient(clientRelationshipDTO.getSecondaryClient());
+        clientMapper.toLegacyClient(clientRelationshipDto.getSecondaryClient());
     Client legacySecondaryClient =
-        clientMapper.toLegacyClient(clientRelationshipDTO.getPrimaryClient());
+        clientMapper.toLegacyClient(clientRelationshipDto.getPrimaryClient());
 
     clientRelationship.setSecondaryClient(
         crudDao
@@ -142,8 +142,8 @@ public class ClientRelationshipCoreService
     clientRelationship.setLastUpdateTime(clientRelationship.getLastUpdateTime());
     clientRelationship.setLastUpdateId(clientRelationship.getLastUpdateId());
 
-    awareDTO.setEntity(clientRelationship);
-    return awareDTO;
+    awareDto.setEntity(clientRelationship);
+    return awareDto;
   }
 
   public void setClientMapper(ClientMapper clientMapper) {

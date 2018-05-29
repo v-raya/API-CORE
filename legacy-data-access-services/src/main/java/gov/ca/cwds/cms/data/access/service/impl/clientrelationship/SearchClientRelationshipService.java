@@ -19,7 +19,7 @@ import org.apache.commons.collections4.CollectionUtils;
  * Search relationships.
  *
  * @author CWDS TPT-3 Team
- * */
+ */
 class SearchClientRelationshipService {
 
   private final ClientRelationshipDao clientRelationshipDao;
@@ -32,25 +32,27 @@ class SearchClientRelationshipService {
   List<ClientRelationship> findRelationshipsBySecondaryClient(
       @Authorize(CLIENT_READ_CLIENT) final Client client) {
     return deleteNotPermittedClientData(
-        clientRelationshipDao.findRelationshipsBySecondaryClientId(client.getIdentifier(), LocalDate.now()));
+        clientRelationshipDao.findRelationshipsBySecondaryClientId(
+            client.getIdentifier(), LocalDate.now()));
   }
 
   List<ClientRelationship> findRelationshipsByPrimaryClient(
       @Authorize(CLIENT_READ_CLIENT) final Client client) {
     return deleteNotPermittedClientData(
-        clientRelationshipDao.findRelationshipsByPrimaryClientId(client.getIdentifier(), LocalDate.now()));
+        clientRelationshipDao.findRelationshipsByPrimaryClientId(
+            client.getIdentifier(), LocalDate.now()));
   }
 
   List<ClientRelationship> findRelationshipsBySecondaryClientId(
-    @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
+      @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
     return deleteNotPermittedClientData(
-      clientRelationshipDao.findRelationshipsBySecondaryClientId(clientId, LocalDate.now()));
+        clientRelationshipDao.findRelationshipsBySecondaryClientId(clientId, LocalDate.now()));
   }
 
   List<ClientRelationship> findRelationshipsByPrimaryClientId(
-    @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
+      @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
     return deleteNotPermittedClientData(
-      clientRelationshipDao.findRelationshipsByPrimaryClientId(clientId, LocalDate.now()));
+        clientRelationshipDao.findRelationshipsByPrimaryClientId(clientId, LocalDate.now()));
   }
 
   ClientRelationship getRelationshipById(String relationshipId) {
@@ -93,5 +95,4 @@ class SearchClientRelationshipService {
         clientRelationship -> clients.add(clientRelationship.getSecondaryClient()));
     return clients;
   }
-
 }
