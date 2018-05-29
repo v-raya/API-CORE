@@ -1,5 +1,6 @@
 package gov.ca.cwds.cms.data.access.service.impl.dbDependentSuite;
 
+import gov.ca.cwds.cms.data.access.service.impl.clientrelationship.ClientRelationshipDBTest;
 import gov.ca.cwds.cms.data.access.service.impl.clientrelationship.R08840DBTest;
 import gov.ca.cwds.cms.data.access.service.impl.clientrelationship.R08861DBTest;
 import gov.ca.cwds.cms.data.access.service.impl.dbDependent.CsecHistoryServiceTest;
@@ -25,7 +26,8 @@ import org.powermock.modules.junit4.PowerMockRunnerDelegate;
   R08840DBTest.class,
   R08861DBTest.class,
   R01128DBTest.class,
-  R10030DBTest.class
+  R10030DBTest.class,
+  ClientRelationshipDBTest.class
 })
 public class DBTestSuite {
   @ClassRule
