@@ -1,7 +1,7 @@
 package gov.ca.cwds.cms.data.access.service.impl.dao;
 
 import gov.ca.cwds.data.BaseDaoImpl;
-import gov.ca.cwds.data.persistence.cms.BaseClient;
+import gov.ca.cwds.data.persistence.cms.BaseClientImpl;
 import org.hibernate.SessionFactory;
 
 /**

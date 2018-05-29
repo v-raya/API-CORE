@@ -1,4 +1,4 @@
-package gov.ca.cwds.cms.data.access.service.impl.dao;
+package gov.ca.cwds.data.persistence.cms;
 
 import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.persistence.cms.BaseClient;

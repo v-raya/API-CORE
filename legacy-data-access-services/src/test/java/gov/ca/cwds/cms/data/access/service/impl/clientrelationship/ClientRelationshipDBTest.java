@@ -8,11 +8,10 @@ import static org.powermock.api.mockito.PowerMockito.when;
 import gov.ca.cwds.cms.data.access.mapper.ClientMapper;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.impl.dao.BaseClientDao;
-import gov.ca.cwds.cms.data.access.service.impl.dao.BaseClientImpl;
+import gov.ca.cwds.data.persistence.cms.BaseClientImpl;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
 import gov.ca.cwds.data.persistence.cms.BaseClient;
 
