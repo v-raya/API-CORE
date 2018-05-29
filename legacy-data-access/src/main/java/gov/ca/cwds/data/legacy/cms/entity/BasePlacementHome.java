@@ -1726,7 +1726,9 @@ public abstract class BasePlacementHome extends CmsPersistentObject implements I
 
   @Override
   public int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this);
+    return HashCodeBuilder.reflectionHashCode(this,
+      "otherChildrenInPlacementHomes", "otherAdultsInPlacementHomes",
+      "placementFacilityTypeHistory", "placementHomeNotes", "placementHomeProfiles");
   }
 
   @Override
