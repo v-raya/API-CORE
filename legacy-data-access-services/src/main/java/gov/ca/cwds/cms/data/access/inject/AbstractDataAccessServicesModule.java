@@ -1,6 +1,7 @@
 package gov.ca.cwds.cms.data.access.inject;
 
 import gov.ca.cwds.cms.data.access.mapper.ClientMapper;
+import gov.ca.cwds.cms.data.access.service.impl.clientrelationship.ClientRelationshipCoreService;
 import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.TribalMembershipVerificationCoreService;
 import org.hibernate.SessionFactory;
 
@@ -43,6 +44,8 @@ public abstract class AbstractDataAccessServicesModule extends AbstractModule {
     bind(BusinessValidationService.class);
     bind(TribalMembershipVerificationCoreService.class);
     bind(gov.ca.cwds.cms.data.access.service.impl.tribalmembership.CreateLifeCycle.class);
+    bind(gov.ca.cwds.cms.data.access.service.ClientRelationshipService.class)
+        .to(ClientRelationshipCoreService.class);
   }
 
   private void configureMappers() {

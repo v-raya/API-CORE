@@ -80,7 +80,7 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
   @SuppressWarnings("unchecked")
   public SystemCode findBySystemCodeId(Number systemCodeId) {
     final String namedQueryName = SystemCode.class.getName() + ".findBySystemCodeId";
-    Session session = getSessionFactory().getCurrentSession();
+    Session session = getCurrentSession();
 
     Transaction txn = session.getTransaction();
     boolean transactionExists = txn != null && txn.isActive();

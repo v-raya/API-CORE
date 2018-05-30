@@ -44,7 +44,7 @@ allprojects {
         h2Version = "1.4.194"
         liquibaseVersion = "3.5.3"
 
-        projectMajorVersion = "1.6.4"
+        projectMajorVersion = "1.7.2"
 
         isRelease = System.getProperty("Release") == "true"
         buildNumber = System.getProperty('BuildNumber')
@@ -100,6 +100,7 @@ allprojects {
         exclude '**/dbDependent/**'
         exclude 'gov/ca/cwds/cms/data/access/service/impl/clientrelationship/R08861DBTest.class'
         exclude 'gov/ca/cwds/cms/data/access/service/impl/clientrelationship/R08840DBTest.class'
+        exclude 'gov/ca/cwds/cms/data/access/service/impl/clientrelationship/ClientRelationshipDBTest.class'
         exclude 'gov/ca/cwds/cms/data/access/service/impl/tribalmembership/R10030DBTest.class'
         exclude 'gov/ca/cwds/cms/data/access/service/impl/tribalmembership/R01128DBTest.class'
         jacoco {
