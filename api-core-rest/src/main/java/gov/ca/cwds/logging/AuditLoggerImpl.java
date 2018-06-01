@@ -11,7 +11,6 @@ public class AuditLoggerImpl implements gov.ca.cwds.logging.AuditLogger {
 
   /**
    * Constructor
-   * 
    */
   @Inject
   public AuditLoggerImpl() {
@@ -27,5 +26,5 @@ public class AuditLoggerImpl implements gov.ca.cwds.logging.AuditLogger {
   public void audit(String data) {
     LOGGER.info(data);
   }
-}
 
+}
