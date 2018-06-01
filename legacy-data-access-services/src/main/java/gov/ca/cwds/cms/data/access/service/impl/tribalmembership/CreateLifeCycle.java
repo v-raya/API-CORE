@@ -54,14 +54,6 @@ public class CreateLifeCycle
     createChildTribalForDuplicate(bundle);
   }
 
-  private void prepareParenTribalForCreate(DataAccessBundle bundle) {
-    TribalMembershipVerificationAwareDto awareDto =
-      (TribalMembershipVerificationAwareDto) bundle.getAwareDto();
-
-    // rule 10030 (for 1 tribal we are creating two rows - for child and for parent)
-    awareDto.getEntity().setClientId(awareDto.getParentId());
-  }
-
   @Override
   public void dataProcessing(DataAccessBundle bundle, PerryAccount perryAccount) {
     super.dataProcessing(bundle, perryAccount);
@@ -84,6 +76,14 @@ public class CreateLifeCycle
   public void afterStore(DataAccessBundle bundle) throws DataAccessServicesException {
     super.afterStore(bundle);
     storeChildDuplicatedTribal(bundle);
+  }
+
+  private void prepareParenTribalForCreate(DataAccessBundle bundle) {
+    TribalMembershipVerificationAwareDto awareDto =
+      (TribalMembershipVerificationAwareDto) bundle.getAwareDto();
+
+    // rule 10030 (for 1 tribal we are creating two rows - for child and for parent)
+    awareDto.getEntity().setClientId(awareDto.getParentId());
   }
 
   private void createChildTribalForDuplicate(DataAccessBundle bundle) {
@@ -134,7 +134,7 @@ public class CreateLifeCycle
     Client child = clientCoreService.find(awareDto.getChildId());
     Client parent = clientCoreService.find(awareDto.getParentId());
     if (child == null || parent == null) {
-      throw new DataAccessServicesException(new Exception("Client doesn not exist"));
+      throw new DataAccessServicesException(new Exception("Client does not exist"));
     }
 
     awareDto.setChildClient(child);

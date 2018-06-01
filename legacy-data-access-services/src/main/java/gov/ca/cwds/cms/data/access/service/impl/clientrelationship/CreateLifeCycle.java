@@ -3,6 +3,7 @@ package gov.ca.cwds.cms.data.access.service.impl.clientrelationship;
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.dto.ClientRelationshipAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
+import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessBundle;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.ClientRelationshipDao;
 import gov.ca.cwds.data.legacy.cms.dao.PaternityDetailDao;
@@ -32,5 +33,12 @@ class CreateLifeCycle extends CreateUpdateBaseLifeCycle {
         tribalMembershipVerificationDao,
         paternityDetailDao,
         searchClientRelationshipService);
+  }
+
+  @Override
+  public void afterBusinessValidation(DataAccessBundle bundle) {
+    super.afterBusinessValidation(bundle);
+    deleteTribals(bundle);
+    createTribals(bundle);
   }
 }
