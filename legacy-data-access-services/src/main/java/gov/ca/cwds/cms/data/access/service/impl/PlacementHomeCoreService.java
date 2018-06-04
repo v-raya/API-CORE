@@ -37,6 +37,7 @@ import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
 import gov.ca.cwds.cms.data.access.service.rules.PlacementHomeDroolsConfiguration;
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
+import gov.ca.cwds.data.legacy.cms.dao.CountyLicenseCaseDao;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
 import gov.ca.cwds.data.legacy.cms.entity.BackgroundCheck;
 import gov.ca.cwds.data.legacy.cms.entity.CountyOwnership;
@@ -100,6 +101,8 @@ public class PlacementHomeCoreService
   private BackgroundCheckDao backgroundCheckDao;
   @Inject
   private SsaName3Dao ssaName3Dao;
+  @Inject
+  private CountyLicenseCaseDao countyLicenseCaseDao;
 
   /**
    * Constructor with injected services.
@@ -179,6 +182,7 @@ public class PlacementHomeCoreService
       createSubstituteCareProviders(placementHomeEntityAwareDto);
       createOtherAdultsInHome(placementHomeEntityAwareDto);
       createOtherChildrenInHome(placementHomeEntityAwareDto);
+      createCountyLicenseCase(placementHomeEntityAwareDto);
       prepareAddressPhoneticSearchKeywords(placementHomeEntityAwareDto.getEntity());
     }
 
@@ -370,6 +374,11 @@ public class PlacementHomeCoreService
       placementFacilityTypeHistory.setLastUpdateTimestamp(LocalDateTime.now());
       placementFacilityTypeHistory.setLastUpdateId(getStaffPersonId());
       placementFacilityTypeHistoryDao.create(placementFacilityTypeHistory);
+    }
+
+    private void createCountyLicenseCase(PlacementHomeEntityAwareDTO parameterObject) {
+      final PlacementHome placementHome = parameterObject.getEntity();
+      countyLicenseCaseDao.create(placementHome.getCountyLicenseCase());
     }
 
     private void prepareAddressPhoneticSearchKeywords(PlacementHome placementHome) {
