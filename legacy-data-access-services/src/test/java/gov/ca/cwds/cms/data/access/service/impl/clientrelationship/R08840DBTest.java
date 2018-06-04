@@ -3,7 +3,10 @@ package gov.ca.cwds.cms.data.access.service.impl.clientrelationship;
 import gov.ca.cwds.cms.data.access.dto.ClientRelationshipAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
+import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.impl.dbDependentSuite.BaseCwsCmsInMemoryPersistenceTest;
+import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.TribalMembershipVerificationCoreService;
+import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.ClientRelationshipDao;
 import gov.ca.cwds.data.legacy.cms.dao.PaternityDetailDao;
@@ -62,6 +65,7 @@ public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
   private UpdateLifeCycle updateLifeCycle;
   private CreateLifeCycle createLifeCycle;
   private SearchClientRelationshipService searchClientRelationshipService;
+  private TribalMembershipVerificationCoreService tribalMembershipVerificationCoreService;
 
   @Before
   public void before() {
@@ -71,6 +75,8 @@ public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
     clientRelationshipDao = new ClientRelationshipDao(sessionFactory);
     paternityDetailDao = new PaternityDetailDao(sessionFactory);
     searchClientRelationshipService = new SearchClientRelationshipService(clientRelationshipDao);
+    tribalMembershipVerificationCoreService =
+        new TribalMembershipVerificationCoreService(tribalMembershipVerificationDao, null, null);
     updateLifeCycle =
         new UpdateLifeCycle(
             clientRelationshipDao,
@@ -86,7 +92,8 @@ public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
             clientDao,
             tribalMembershipVerificationDao,
             paternityDetailDao,
-            searchClientRelationshipService);
+            searchClientRelationshipService,
+            tribalMembershipVerificationCoreService);
     clientRelationshipCoreService =
         new ClientRelationshipCoreService(
             clientRelationshipDao,

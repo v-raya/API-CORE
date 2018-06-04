@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.impl.BaseUnitTest;
+import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.TribalMembershipVerificationCoreService;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.ClientRelationshipDao;
 import gov.ca.cwds.data.legacy.cms.dao.PaternityDetailDao;
@@ -43,6 +44,7 @@ public class ClientRelationshipCoreServiceTest extends BaseUnitTest {
   @Mock private BusinessValidationService businessValidationService;
   @Mock private TribalMembershipVerificationDao tribalMembershipVerificationDao;
   @Mock private PaternityDetailDao paternityDetailDao;
+  private TribalMembershipVerificationCoreService tribalMembershipVerificationCoreService;
 
   @Before
   public void before() {
@@ -54,6 +56,8 @@ public class ClientRelationshipCoreServiceTest extends BaseUnitTest {
     List<ClientRelationship> relationships = getListOfRelationships();
 
     searchClientRelationshipService = new SearchClientRelationshipService(relationshipDao);
+    tribalMembershipVerificationCoreService =
+        new TribalMembershipVerificationCoreService(tribalMembershipVerificationDao, null, null);
     updateLifeCycle =
         new UpdateLifeCycle(
             relationshipDao,
@@ -69,7 +73,8 @@ public class ClientRelationshipCoreServiceTest extends BaseUnitTest {
             clientDao,
             tribalMembershipVerificationDao,
             paternityDetailDao,
-            searchClientRelationshipService);
+            searchClientRelationshipService,
+            tribalMembershipVerificationCoreService);
     clientRelationshipCoreService =
         new ClientRelationshipCoreService(
             relationshipDao, updateLifeCycle, searchClientRelationshipService, createLifeCycle);

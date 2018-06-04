@@ -45,6 +45,7 @@ public class R10030DBTest extends BaseCwsCmsInMemoryPersistenceTest {
   private TribalMembershipVerificationCoreService tribalMembershipVerificationCoreService;
   private BusinessValidationService businessValidationService;
   private CreateLifeCycle createLifeCycle;
+  private UpdateLifeCycle updateLifeCycle;
 
   @Before
   public void before() throws Exception {
@@ -56,9 +57,12 @@ public class R10030DBTest extends BaseCwsCmsInMemoryPersistenceTest {
     createLifeCycle =
         new CreateLifeCycle(
             tribalMembershipVerificationDao, clientCoreService, businessValidationService);
+    updateLifeCycle =
+        new UpdateLifeCycle(
+            tribalMembershipVerificationDao, clientCoreService, businessValidationService);
     tribalMembershipVerificationCoreService =
         new TribalMembershipVerificationCoreService(
-            tribalMembershipVerificationDao, createLifeCycle);
+            tribalMembershipVerificationDao, createLifeCycle, updateLifeCycle);
   }
 
   @Test

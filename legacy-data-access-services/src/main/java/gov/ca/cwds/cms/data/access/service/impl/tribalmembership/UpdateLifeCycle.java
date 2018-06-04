@@ -13,14 +13,12 @@ import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.time.LocalDateTime;
 
 /**
- * Life Cycle for create Tribal membership verification.
- *
  * @author CWDS TPT-3 Team
- */
-public class CreateLifeCycle extends CreateUpdateLifeCycle {
+ * */
+public class UpdateLifeCycle extends CreateUpdateLifeCycle {
 
   @Inject
-  public CreateLifeCycle(
+  public UpdateLifeCycle(
       TribalMembershipVerificationDao tribalMembershipVerificationDao,
       ClientCoreService clientCoreService,
       BusinessValidationService<TribalMembershipVerification, TribalMembershipVerificationAwareDto>
@@ -37,8 +35,6 @@ public class CreateLifeCycle extends CreateUpdateLifeCycle {
   private void createChildTribalForDuplicate(DataAccessBundle bundle) {
     TribalMembershipVerificationAwareDto awareDto =
       (TribalMembershipVerificationAwareDto) bundle.getAwareDto();
-
-    awareDto.getEntity().setThirdId(IdGenerator.generateId());
 
     TribalMembershipVerification childTribal = new TribalMembershipVerification();
     childTribal.setFkFromTribalMembershipVerification(awareDto.getEntity().getThirdId());

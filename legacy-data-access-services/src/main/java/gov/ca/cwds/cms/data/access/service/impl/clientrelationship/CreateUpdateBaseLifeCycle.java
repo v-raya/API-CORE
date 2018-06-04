@@ -122,15 +122,15 @@ public abstract class CreateUpdateBaseLifeCycle
     Client secondaryClient = awareDto.getEntity().getSecondaryClient();
 
     awareDto
-      .getClientRelationshipList()
-      .addAll(searchClientRelationshipService.findRelationshipsByPrimaryClient(primaryClient));
+        .getClientRelationshipList()
+        .addAll(searchClientRelationshipService.findRelationshipsByPrimaryClient(primaryClient));
     awareDto
-      .getClientRelationshipList()
-      .addAll(
-        searchClientRelationshipService.findRelationshipsBySecondaryClient(secondaryClient));
+        .getClientRelationshipList()
+        .addAll(
+            searchClientRelationshipService.findRelationshipsBySecondaryClient(secondaryClient));
     awareDto
-      .getClientRelationshipList()
-      .removeIf(e -> e.getIdentifier().equals(awareDto.getEntity().getIdentifier()));
+        .getClientRelationshipList()
+        .removeIf(e -> e.getIdentifier().equals(awareDto.getEntity().getIdentifier()));
   }
 
   private void enrichWithExistingPaternityDetails(DataAccessBundle bundle) {
@@ -139,12 +139,12 @@ public abstract class CreateUpdateBaseLifeCycle
     Client secondaryClient = awareDto.getEntity().getSecondaryClient();
 
     awareDto
-      .getPrimaryClientPaternityDetails()
-      .addAll(paternityDetailDao.findByChildClientId(primaryClient.getIdentifier()));
+        .getPrimaryClientPaternityDetails()
+        .addAll(paternityDetailDao.findByChildClientId(primaryClient.getIdentifier()));
 
     awareDto
-      .getSecondaryClientPaternityDetails()
-      .addAll(paternityDetailDao.findByChildClientId(secondaryClient.getIdentifier()));
+        .getSecondaryClientPaternityDetails()
+        .addAll(paternityDetailDao.findByChildClientId(secondaryClient.getIdentifier()));
   }
 
   private void enrichWithPrimaryAndSecondaryClients(DataAccessBundle bundle) {

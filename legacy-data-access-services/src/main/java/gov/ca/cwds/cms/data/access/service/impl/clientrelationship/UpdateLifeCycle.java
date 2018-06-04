@@ -63,7 +63,7 @@ class UpdateLifeCycle extends CreateUpdateBaseLifeCycle {
     }
 
     awareDto.setRelationshipThatHasToBeChanged(
-      searchClientRelationshipService.getRelationshipById(awareDto.getEntity().getIdentifier()));
+        searchClientRelationshipService.getRelationshipById(awareDto.getEntity().getIdentifier()));
   }
 
   /**
@@ -84,7 +84,7 @@ class UpdateLifeCycle extends CreateUpdateBaseLifeCycle {
     ClientRelationshipAwareDTO awareDto = (ClientRelationshipAwareDTO) bundle.getAwareDto();
 
     ClientRelationship relationshipThatHasToBeChanged =
-      awareDto.getRelationshipThatHasToBeChanged();
+        awareDto.getRelationshipThatHasToBeChanged();
     if (relationshipThatHasToBeChanged == null) {
       return;
     }
@@ -93,8 +93,8 @@ class UpdateLifeCycle extends CreateUpdateBaseLifeCycle {
     Client child = RelationshipUtil.getChild(relationshipThatHasToBeChanged);
 
     List<TribalMembershipVerification> tribalsThatHasSubTribals =
-      tribalMembershipVerificationDao.findTribalsThatHaveSubTribalsByClientId(
-        child.getIdentifier(), parent.getIdentifier());
+        tribalMembershipVerificationDao.findTribalsThatHaveSubTribalsByClientId(
+            child.getIdentifier(), parent.getIdentifier());
 
     if (CollectionUtils.isNotEmpty(tribalsThatHasSubTribals)) {
       awareDto.getTribalsThatHaveSubTribals().addAll(tribalsThatHasSubTribals);
