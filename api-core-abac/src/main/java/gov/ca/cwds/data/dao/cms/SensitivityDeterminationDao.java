@@ -1,7 +1,6 @@
 package gov.ca.cwds.data.dao.cms;
 
 import org.apache.shiro.authz.AuthorizationException;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import com.google.inject.Inject;
@@ -40,8 +39,7 @@ public class SensitivityDeterminationDao extends BaseAuthorizationDao {
   }
 
   private Object executeNativeQuery(final String namedQuery, final String clientId) {
-    Session session = sessionFactory.getCurrentSession();
-    return session.createNativeQuery(namedQuery).setParameter(NQ_PARAM_CLIENT_ID, clientId)
+    return grabSession().createNativeQuery(namedQuery).setParameter(NQ_PARAM_CLIENT_ID, clientId)
         .getSingleResult();
   }
 

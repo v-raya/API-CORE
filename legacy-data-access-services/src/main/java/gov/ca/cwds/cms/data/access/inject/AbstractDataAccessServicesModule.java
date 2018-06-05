@@ -20,7 +20,12 @@ import gov.ca.cwds.cms.data.access.service.impl.clientrelationship.ClientRelatio
 import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.CreateLifeCycle;
 import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.TribalMembershipVerificationCoreService;
 
-/** @author CWDS CALS API Team */
+/**
+ * Common module binds services for authorization, common client services, and singleton instances.
+ * Used by CALS and Ferb.
+ * 
+ * @author CWDS CALS API Team
+ */
 public abstract class AbstractDataAccessServicesModule extends AbstractModule {
 
   @Override

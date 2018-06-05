@@ -5,7 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 /**
- * Reliable session acquisition, regardless of datasource types or transaction boundaries.
+ * Reliable session acquisition, regardless of datasource or transaction boundaries.
  * 
  * @author CWDS API Team
  */

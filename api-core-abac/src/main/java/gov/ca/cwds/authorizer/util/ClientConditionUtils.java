@@ -1,23 +1,24 @@
 package gov.ca.cwds.authorizer.util;
 
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+
 import gov.ca.cwds.authorizer.ClientCondition;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.realm.PerrySubject;
-import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 
 /**
- * Utility class
+ * Utility class for {@link ClientCondition}'s.
  *
  * @author CWDS TPT-3 Team
  */
 public final class ClientConditionUtils {
 
-  private ClientConditionUtils() {
-  }
+  private ClientConditionUtils() {}
 
-  // TODO(dd): Consider to move this to drools
+  // TODO(dd): Consider moving these methods to Drools.
   /**
    *
    * @param sensitivity sensitivity
@@ -44,8 +45,7 @@ public final class ClientConditionUtils {
       return ClientCondition.NO_COUNTY_SENSITIVE;
     }
 
-    return clientCountyCodes.contains(staffPersonCountyCode)
-        ? ClientCondition.SAME_COUNTY_SENSITIVE
+    return clientCountyCodes.contains(staffPersonCountyCode) ? ClientCondition.SAME_COUNTY_SENSITIVE
         : ClientCondition.DIFFERENT_COUNTY_SENSITIVE;
   }
 
@@ -55,8 +55,7 @@ public final class ClientConditionUtils {
       return ClientCondition.NO_COUNTY_SEALED;
     }
 
-    return clientCountyCodes.contains(staffPersonCountyCode)
-        ? ClientCondition.SAME_COUNTY_SEALED
+    return clientCountyCodes.contains(staffPersonCountyCode) ? ClientCondition.SAME_COUNTY_SEALED
         : ClientCondition.DIFFERENT_COUNTY_SEALED;
   }
 
@@ -66,8 +65,8 @@ public final class ClientConditionUtils {
   }
 
   private static Short getStaffPersonCountyCode(final String staffCountyCodeString) {
-    return StringUtils.isNotBlank(staffCountyCodeString)
-        ? Short.valueOf(staffCountyCodeString)
+    return StringUtils.isNotBlank(staffCountyCodeString) ? Short.valueOf(staffCountyCodeString)
         : null;
   }
+
 }

@@ -1,11 +1,12 @@
 package gov.ca.cwds.authorizer.util;
 
 
-import gov.ca.cwds.authorizer.StaffPrivilegeType;
-import gov.ca.cwds.security.realm.PerryAccount;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import gov.ca.cwds.authorizer.StaffPrivilegeType;
+import gov.ca.cwds.security.realm.PerryAccount;
 
 /**
  * Utility class for StaffPrivileges.
@@ -23,10 +24,9 @@ public final class StaffPrivilegeUtil {
   public static final String RESOURCE_MGMT_PLACEMENT_FACILITY_MAINT =
       "Resource Mgmt Placement Facility Maint";
 
-  private StaffPrivilegeUtil() {
-  }
+  private StaffPrivilegeUtil() {}
 
-  // TODO(dd): Consider to move this logic to drools
+  // TODO(dd): Consider moving this logic to Drools.
 
   /**
    * Convert privileges from PerryAccount to Set of StaffPrivilegeType.
