@@ -13,6 +13,8 @@ import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.time.LocalDateTime;
 
 /**
+ * Update lifecycle for Tribals.
+ *
  * @author CWDS TPT-3 Team
  * */
 public class UpdateLifeCycle extends CreateUpdateLifeCycle {

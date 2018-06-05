@@ -17,7 +17,11 @@ import java.util.List;
 import javax.inject.Inject;
 import org.apache.commons.collections4.CollectionUtils;
 
-/** @author CWDS TPT-3 Team */
+/**
+ * Base lifeCycle for Tribals.
+ *
+ * @author CWDS TPT-3 Team
+ * */
 public abstract class CreateUpdateLifeCycle
     extends DefaultDataAccessLifeCycle<TribalMembershipVerificationAwareDto> {
 
