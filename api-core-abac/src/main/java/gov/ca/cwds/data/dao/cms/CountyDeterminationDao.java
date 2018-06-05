@@ -29,7 +29,7 @@ public class CountyDeterminationDao extends BaseAuthorizationDao {
   public CountyDeterminationDao(@CwsRsSessionFactory SessionFactory sessionFactory,
       @Named("managed") String managed) {
     super(sessionFactory);
-    this.managed = StringUtils.isNotBlank(managed) && "true".equals(managed);
+    this.managed = StringUtils.isBlank(managed) || "Y".equals(managed);
   }
 
   /**
