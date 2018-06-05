@@ -36,7 +36,6 @@ public final class Constants {
   }
 
   public static class StaffPersonPrivileges {
-
     public static final String USR_PRV_RESOURCE_MGMT_PLACEMENT_FACILITY_MAINT =
         "Resource Mgmt Placement Facility Maint";
     public static final String USR_PRV_SOC158_APPLICATION = "SOC158 Application";
@@ -50,4 +49,5 @@ public final class Constants {
 
     private Authorize() {}
   }
+
 }

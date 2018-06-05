@@ -14,15 +14,13 @@ import gov.ca.cwds.inject.CmsSessionFactory;
  *
  * @author CWDS API Team
  */
-public class SensitivityDeterminationDao {
+public class SensitivityDeterminationDao extends BaseAuthorizationDao {
 
   private static final String NQ_PARAM_CLIENT_ID = "clientId";
 
-  private final SessionFactory sessionFactory;
-
   @Inject
   public SensitivityDeterminationDao(@CmsSessionFactory SessionFactory sessionFactory) {
-    this.sessionFactory = sessionFactory;
+    super(sessionFactory);
   }
 
   /**

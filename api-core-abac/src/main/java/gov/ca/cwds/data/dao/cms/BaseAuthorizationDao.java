@@ -11,18 +11,7 @@ import org.hibernate.SessionFactory;
  */
 public class BaseAuthorizationDao {
 
-  private SessionFactory sessionFactory;
-
-  protected Session grabSession() {
-    Session session;
-    try {
-      session = sessionFactory.getCurrentSession();
-    } catch (HibernateException e) {
-      session = sessionFactory.openSession();
-    }
-
-    return session;
-  }
+  protected final SessionFactory sessionFactory;
 
   /**
    * Default constructor.
@@ -33,11 +22,15 @@ public class BaseAuthorizationDao {
     this.sessionFactory = sessionFactory;
   }
 
-  /**
-   * Provided for <strong>convenience</strong>. Don't abuse this.
-   */
-  protected SessionFactory getSessionFactory() {
-    return sessionFactory;
+  protected Session grabSession() {
+    Session session;
+    try {
+      session = sessionFactory.getCurrentSession();
+    } catch (HibernateException e) {
+      session = sessionFactory.openSession();
+    }
+
+    return session;
   }
 
 }
