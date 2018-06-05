@@ -38,7 +38,6 @@ public class R10030DBTest extends BaseCwsCmsInMemoryPersistenceTest {
   private static final String ORGANIZATION = "2222222222";
   private static final String EXISTING_TRIBAL_ID = "2333333333";
   private static final Short TYPE = 2100;
-
   private static final String PARENT_CLIENT_ID_2 = "9999999921";
   private static final String CHILD_CLIENT_ID_2 = "8888888821";
   private static final String EXISTING_TRIBAL_ID_2 = "9999999921";
