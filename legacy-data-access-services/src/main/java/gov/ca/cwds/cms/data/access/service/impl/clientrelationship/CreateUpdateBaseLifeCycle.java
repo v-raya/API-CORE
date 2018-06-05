@@ -24,7 +24,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -68,9 +67,7 @@ public abstract class CreateUpdateBaseLifeCycle
   @Override
   public void beforeDataProcessing(DataAccessBundle bundle) throws DataAccessServicesException {
     super.beforeDataProcessing(bundle);
-    enrichWithCurrentRelationship(bundle);
     enrichWithPrimaryAndSecondaryClients(bundle);
-    enrichWithTribalsMembershipVerifications(bundle);
   }
 
   @Override
@@ -85,11 +82,7 @@ public abstract class CreateUpdateBaseLifeCycle
   @Override
   public void beforeBusinessValidation(DataAccessBundle bundle) {
     validateAndAddIfNeededTribalMembershipVerification(bundle);
-
     ClientRelationshipAwareDTO awareDto = (ClientRelationshipAwareDTO) bundle.getAwareDto();
-
-    Client primaryClient = awareDto.getEntity().getPrimaryClient();
-    Client secondaryClient = awareDto.getEntity().getSecondaryClient();
 
     if (RelationshipUtil.isChildParent(awareDto.getEntity())
         || RelationshipUtil.isParentChild(awareDto.getEntity())) {
@@ -97,26 +90,8 @@ public abstract class CreateUpdateBaseLifeCycle
       awareDto.setChild(RelationshipUtil.getChild(awareDto.getEntity()));
     }
 
-    List<ClientRelationship> otherRelationshipsForThisClient = new ArrayList<>();
-    otherRelationshipsForThisClient.addAll(
-        searchClientRelationshipService.findRelationshipsByPrimaryClient(
-          primaryClient));
-    otherRelationshipsForThisClient.addAll(
-        searchClientRelationshipService.findRelationshipsBySecondaryClient(
-          secondaryClient));
-
-    otherRelationshipsForThisClient.removeIf(
-        e -> e.getIdentifier().equals(awareDto.getEntity().getIdentifier()));
-
-    awareDto
-        .getPrimaryClientPaternityDetails()
-        .addAll(paternityDetailDao.findByChildClientId(primaryClient.getIdentifier()));
-
-    awareDto
-        .getSecondaryClientPaternityDetails()
-        .addAll(paternityDetailDao.findByChildClientId(secondaryClient.getIdentifier()));
-
-    awareDto.getClientRelationshipList().addAll(otherRelationshipsForThisClient);
+    enrichWithExistingRelationships(bundle);
+    enrichWithExistingPaternityDetails(bundle);
   }
 
   @Override
@@ -127,70 +102,49 @@ public abstract class CreateUpdateBaseLifeCycle
         ClientRelationshipDroolsConfiguration.INSTANCE);
   }
 
-  @Override
-  public void afterBusinessValidation(DataAccessBundle bundle) {
-    super.afterBusinessValidation(bundle);
-    deleteTribals(bundle);
-    createTribals(bundle);
-  }
-
-  private void deleteTribals(DataAccessBundle bundle) {
+  protected void deleteTribals(DataAccessBundle bundle) {
     ClientRelationshipAwareDTO awareDto = (ClientRelationshipAwareDTO) bundle.getAwareDto();
     awareDto
         .getTribalMembershipVerificationsForDelete()
         .forEach(e -> tribalMembershipVerificationDao.delete(e.getPrimaryKey()));
   }
 
-  private void createTribals(DataAccessBundle bundle) {
+  protected void createTribals(DataAccessBundle bundle) {
     ClientRelationshipAwareDTO awareDto = (ClientRelationshipAwareDTO) bundle.getAwareDto();
     awareDto
         .getTribalMembershipVerificationsForCreate()
         .forEach(tribalMembershipVerificationDao::create);
   }
 
-  /**
-   * Rule - 08861 "1) If a parent has one of the following relationships: Birth Mother, Alleged
-   * Mother, Presumed Mother, Birth Father, Alleged Father or Presumed Father and the child in the
-   * relationship has a membership status entered on their associated Tribal Membership Verification
-   * row and if user tries to change relationship to something other than relationships listed
-   * above, display error and reset to previous value. 2) If a parent has one of the following
-   * relationships: Birth Mother, Alleged Mother, Presumed Mother, Birth Father, Alleged Father or
-   * Presumed Father and the child in the relationship does not have a membership status entered on
-   * their associated Tribal Membership Verification row, and if user tries to change relationship
-   * to something other than relationships listed above, allow change in client relationship and
-   * delete the associated child's Tribal Membership Verification rows created from this parent. 3)
-   * If the relationship changes to one of the relationships listed above, then no action needs to
-   * be taken."
-   */
-  private void enrichWithTribalsMembershipVerifications(DataAccessBundle bundle) {
+  private void enrichWithExistingRelationships(DataAccessBundle bundle) {
     ClientRelationshipAwareDTO awareDto = (ClientRelationshipAwareDTO) bundle.getAwareDto();
+    Client primaryClient = awareDto.getEntity().getPrimaryClient();
+    Client secondaryClient = awareDto.getEntity().getSecondaryClient();
 
-    ClientRelationship relationshipThatHasToBeChanged =
-      awareDto.getRelationshipThatHasToBeChanged();
-    if (relationshipThatHasToBeChanged == null) {
-      return;
-    }
-
-    Client parent = RelationshipUtil.getParent(relationshipThatHasToBeChanged);
-    Client child = RelationshipUtil.getChild(relationshipThatHasToBeChanged);
-
-    List<TribalMembershipVerification> tribalsThatHasSubTribals =
-        tribalMembershipVerificationDao.findTribalsThatHaveSubTribalsByClientId(
-            child.getIdentifier(), parent.getIdentifier());
-
-    if (CollectionUtils.isNotEmpty(tribalsThatHasSubTribals)) {
-      awareDto.getTribalsThatHaveSubTribals().addAll(tribalsThatHasSubTribals);
-    }
+    awareDto
+        .getClientRelationshipList()
+        .addAll(searchClientRelationshipService.findRelationshipsByPrimaryClient(primaryClient));
+    awareDto
+        .getClientRelationshipList()
+        .addAll(
+            searchClientRelationshipService.findRelationshipsBySecondaryClient(secondaryClient));
+    awareDto
+        .getClientRelationshipList()
+        .removeIf(e -> e.getIdentifier().equals(awareDto.getEntity().getIdentifier()));
   }
 
-  private void enrichWithCurrentRelationship(DataAccessBundle bundle) {
+  private void enrichWithExistingPaternityDetails(DataAccessBundle bundle) {
     ClientRelationshipAwareDTO awareDto = (ClientRelationshipAwareDTO) bundle.getAwareDto();
-    if (StringUtils.isEmpty(awareDto.getEntity().getIdentifier())) {
-      return;
-    }
+    Client primaryClient = awareDto.getEntity().getPrimaryClient();
+    Client secondaryClient = awareDto.getEntity().getSecondaryClient();
 
-    awareDto.setRelationshipThatHasToBeChanged(
-        searchClientRelationshipService.getRelationshipById(awareDto.getEntity().getIdentifier()));
+    awareDto
+        .getPrimaryClientPaternityDetails()
+        .addAll(paternityDetailDao.findByChildClientId(primaryClient.getIdentifier()));
+
+    awareDto
+        .getSecondaryClientPaternityDetails()
+        .addAll(paternityDetailDao.findByChildClientId(secondaryClient.getIdentifier()));
   }
 
   private void enrichWithPrimaryAndSecondaryClients(DataAccessBundle bundle) {
@@ -286,8 +240,7 @@ public abstract class CreateUpdateBaseLifeCycle
     List<ClientRelationship> allParenPrimaryRelationships =
         searchClientRelationshipService.findRelationshipsByPrimaryClient(parent);
     List<ClientRelationship> allParenSecondaryRelationships =
-        searchClientRelationshipService.findRelationshipsBySecondaryClient(
-            parent);
+        searchClientRelationshipService.findRelationshipsBySecondaryClient(parent);
 
     List<ClientRelationship> allParentRelationships =
         Stream.concat(
@@ -297,9 +250,9 @@ public abstract class CreateUpdateBaseLifeCycle
     allParentRelationships.forEach(
         e -> {
           Client additionalChild = RelationshipUtil.getChild(e);
-          extraTribals.add(createExtraTribal(parentTribal, parent, additionalChild));
+          extraTribals.add(createExtraTribal(parentTribal, additionalChild));
         });
-    extraTribals.add(createExtraTribal(parentTribal, parent, child));
+    extraTribals.add(createExtraTribal(parentTribal, child));
 
     return extraTribals;
   }
@@ -314,7 +267,7 @@ public abstract class CreateUpdateBaseLifeCycle
   }
 
   private TribalMembershipVerification createExtraTribal(
-      TribalMembershipVerification parentTribal, Client parent, Client child) {
+      TribalMembershipVerification parentTribal, Client child) {
     TribalMembershipVerification extra = new TribalMembershipVerification();
     extra.setFkFromTribalMembershipVerification(parentTribal.getThirdId());
     extra.setFkSentToTribalOrganization(parentTribal.getFkSentToTribalOrganization());
