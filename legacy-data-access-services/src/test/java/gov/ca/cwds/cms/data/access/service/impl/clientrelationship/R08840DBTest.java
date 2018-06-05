@@ -2,11 +2,8 @@ package gov.ca.cwds.cms.data.access.service.impl.clientrelationship;
 
 import gov.ca.cwds.cms.data.access.dto.ClientRelationshipAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
-import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
-import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.impl.dbDependentSuite.BaseCwsCmsInMemoryPersistenceTest;
 import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.TribalMembershipVerificationCoreService;
-import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.ClientRelationshipDao;
 import gov.ca.cwds.data.legacy.cms.dao.PaternityDetailDao;
@@ -17,8 +14,6 @@ import gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification;
 import gov.ca.cwds.data.legacy.cms.entity.enums.YesNoUnknown;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ClientRelationshipType;
 import gov.ca.cwds.drools.DroolsService;
-import gov.ca.cwds.security.realm.PerryAccount;
-import gov.ca.cwds.security.utils.PrincipalUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,8 +25,6 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.when;
 
 /** @author CWDS TPT-3 Team */
 public class R08840DBTest extends BaseCwsCmsInMemoryPersistenceTest {
