@@ -27,6 +27,7 @@ import org.powermock.modules.junit4.PowerMockRunnerDelegate;
   R08861DBTest.class,
   R01128DBTest.class,
   R10030DBTest.class,
+  gov.ca.cwds.cms.data.access.service.impl.clientrelationship.R10030DBTest.class,
   ClientRelationshipDBTest.class
 })
 public class DBTestSuite {

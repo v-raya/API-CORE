@@ -1,14 +1,13 @@
 package gov.ca.cwds.cms.data.access.service.impl.clientrelationship;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import gov.ca.cwds.cms.data.access.dto.ClientRelationshipAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.impl.dbDependentSuite.BaseCwsCmsInMemoryPersistenceTest;
+import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.TribalMembershipVerificationCoreService;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.ClientRelationshipDao;
 import gov.ca.cwds.data.legacy.cms.dao.PaternityDetailDao;
@@ -19,7 +18,6 @@ import gov.ca.cwds.data.legacy.cms.entity.syscodes.ClientRelationshipType;
 import gov.ca.cwds.drools.DroolsService;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,6 +39,7 @@ public class R08861DBTest extends BaseCwsCmsInMemoryPersistenceTest {
   private UpdateLifeCycle updateLifeCycle;
   private CreateLifeCycle createLifeCycle;
   private SearchClientRelationshipService searchClientRelationshipService;
+  private TribalMembershipVerificationCoreService tribalMembershipVerificationCoreService;
 
   @Before
   public void before() throws Exception {
@@ -50,6 +49,8 @@ public class R08861DBTest extends BaseCwsCmsInMemoryPersistenceTest {
     paternityDetailDao = new PaternityDetailDao(sessionFactory);
     clientDao = new ClientDao(sessionFactory);
     searchClientRelationshipService = new SearchClientRelationshipService(clientRelationshipDao);
+    tribalMembershipVerificationCoreService =
+        new TribalMembershipVerificationCoreService(tribalMembershipVerificationDao, null, null);
     updateLifeCycle =
         new UpdateLifeCycle(
             clientRelationshipDao,
@@ -65,7 +66,8 @@ public class R08861DBTest extends BaseCwsCmsInMemoryPersistenceTest {
             clientDao,
             tribalMembershipVerificationDao,
             paternityDetailDao,
-            searchClientRelationshipService);
+            searchClientRelationshipService,
+            tribalMembershipVerificationCoreService);
     clientRelationshipCoreService =
         new ClientRelationshipCoreService(
             clientRelationshipDao,
