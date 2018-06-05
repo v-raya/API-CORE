@@ -23,6 +23,7 @@ import gov.ca.cwds.cms.data.access.dao.PlacementHomeDao;
 import gov.ca.cwds.cms.data.access.dao.PlacementHomeProfileDao;
 import gov.ca.cwds.cms.data.access.dao.PlacementHomeUcDao;
 import gov.ca.cwds.cms.data.access.dao.SsaName3Dao;
+import gov.ca.cwds.cms.data.access.dto.CLCEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.OtherAdultInHomeEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.OtherChildInHomeEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
@@ -102,7 +103,7 @@ public class PlacementHomeCoreService
   @Inject
   private SsaName3Dao ssaName3Dao;
   @Inject
-  private CountyLicenseCaseDao countyLicenseCaseDao;
+  private CountyLicenseCaseService countyLicenseCaseService;
 
   /**
    * Constructor with injected services.
@@ -376,9 +377,13 @@ public class PlacementHomeCoreService
       placementFacilityTypeHistoryDao.create(placementFacilityTypeHistory);
     }
 
-    private void createCountyLicenseCase(PlacementHomeEntityAwareDTO parameterObject) {
+    private void createCountyLicenseCase(PlacementHomeEntityAwareDTO parameterObject)
+      throws DataAccessServicesException {
       final PlacementHome placementHome = parameterObject.getEntity();
-      countyLicenseCaseDao.create(placementHome.getCountyLicenseCase());
+      CLCEntityAwareDTO clcEntityAwareDTO = new CLCEntityAwareDTO();
+      clcEntityAwareDTO.setEntity(placementHome.getCountyLicenseCase());
+      clcEntityAwareDTO.setPlacementHomeId(placementHome.getIdentifier());
+      countyLicenseCaseService.create(clcEntityAwareDTO);
     }
 
     private void prepareAddressPhoneticSearchKeywords(PlacementHome placementHome) {
