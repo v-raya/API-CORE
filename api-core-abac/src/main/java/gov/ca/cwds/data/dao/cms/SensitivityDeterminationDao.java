@@ -29,8 +29,8 @@ public class SensitivityDeterminationDao extends BaseAuthorizationDao {
    * @return sensitivity
    */
   public Sensitivity getSensitivity(final String clientId) {
-    final String nativeQuery = "SELECT SENSTV_IND " + " FROM {h-schema}CLIENT_T "
-        + " WHERE IDENTIFIER = :" + NQ_PARAM_CLIENT_ID;
+    final String nativeQuery =
+        "SELECT SENSTV_IND FROM {h-schema}CLIENT_T  WHERE IDENTIFIER = :" + NQ_PARAM_CLIENT_ID;
     Object sensitivity = executeNativeQuery(nativeQuery, clientId);
     if (sensitivity == null) {
       throw new AuthorizationException("Found Client with no sensitive indicator");
