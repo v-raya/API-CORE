@@ -1,8 +1,10 @@
 package gov.ca.cwds.service;
 
-import com.google.inject.Inject;
-import gov.ca.cwds.data.dao.cms.CountyDeterminationDao;
 import java.util.List;
+
+import com.google.inject.Inject;
+
+import gov.ca.cwds.data.dao.cms.CountyDeterminationDao;
 
 /**
  * @author CWDS TPT-2
@@ -17,7 +19,7 @@ public class ClientCountyDeterminationService {
   }
 
   /**
-   * This method determines client counties by Client ID
+   * This method determines client counties by Client ID.
    *
    * @param clientId Client ID
    * @return client counties
@@ -25,4 +27,5 @@ public class ClientCountyDeterminationService {
   public List<Short> getClientCountiesById(final String clientId) {
     return countyDeterminationDao.getClientCounties(clientId);
   }
+
 }

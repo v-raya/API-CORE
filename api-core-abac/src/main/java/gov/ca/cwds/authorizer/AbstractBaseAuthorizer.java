@@ -2,21 +2,25 @@ package gov.ca.cwds.authorizer;
 
 import static gov.ca.cwds.authorizer.util.StaffPrivilegeUtil.toStaffPersonPrivilegeTypes;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gov.ca.cwds.authorizer.drools.DroolsAuthorizationService;
 import gov.ca.cwds.authorizer.drools.configuration.DroolsAuthorizer;
 import gov.ca.cwds.security.authorizer.BaseAuthorizer;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.realm.PerrySubject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
- * Abstract implementation of Base Authorizer.
+ * Abstract, Drools-aware implementation of Base Authorizer.
  *
+ * @param <T> class type
+ * @param <I> identifier type
  * @author CWDS TPT-2 Team
  */
 public abstract class AbstractBaseAuthorizer<T, I> extends BaseAuthorizer<T, I> {
@@ -39,27 +43,19 @@ public abstract class AbstractBaseAuthorizer<T, I> extends BaseAuthorizer<T, I> 
     this.droolsConfiguration = droolsConfiguration;
   }
 
-  private void logAuthorization(
-      final PerryAccount perryAccount,
-      final Set<StaffPrivilegeType> staffPrivilegeTypes,
-      final T instance,
+  private void logAuthorization(final PerryAccount perryAccount,
+      final Set<StaffPrivilegeType> staffPrivilegeTypes, final T instance,
       final boolean authorizationResult) {
-    String instanceName = Optional.ofNullable(instance).map(t -> t.getClass().getSimpleName())
-        .orElse(null);
+    String instanceName =
+        Optional.ofNullable(instance).map(t -> t.getClass().getSimpleName()).orElse(null);
     LOGGER.info(
         "StaffPerson [{}] with staffPrivilegeTypes = {} is performing action on object [{}]. "
             + "Authorization result = [{}]. {}",
-        perryAccount.getStaffId(),
-        staffPrivilegeTypes,
-        instanceName,
-        authorizationResult,
-        perryAccount
-    );
+        perryAccount.getStaffId(), staffPrivilegeTypes, instanceName, authorizationResult,
+        perryAccount);
   }
 
-  protected boolean authorizeInstanceOperation(
-      final T instance,
-      List<Object> authorizationFacts) {
+  protected boolean authorizeInstanceOperation(final T instance, List<Object> authorizationFacts) {
     final PerryAccount perryAccount = PerrySubject.getPerryAccount();
     final Set<StaffPrivilegeType> staffPrivilegeTypes = toStaffPersonPrivilegeTypes(perryAccount);
     if (staffPrivilegeTypes.isEmpty()) {

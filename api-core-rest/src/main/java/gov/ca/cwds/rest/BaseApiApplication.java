@@ -121,7 +121,8 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
     LOGGER.info("Registering SystemCodeCache");
 
     LOGGER.info("Setting up Guice injector");
-    // Providing access to the guice injector from external classes such as custom validators
+
+    // Provides access to the guice injector from external classes, such as custom validators.
     InjectorHolder.INSTANCE.setInjector(injector);
 
     runInternal(configuration, environment);
@@ -147,7 +148,7 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
    * 
    * @param environment
    */
-  private static void registerFilters(final Environment environment, GuiceBundle guiceBundle) {
+  private static void registerFilters(final Environment environment, GuiceBundle<?> guiceBundle) {
     BaseApiApplication.injector = guiceBundle.getInjector();
 
     environment.servlets()
