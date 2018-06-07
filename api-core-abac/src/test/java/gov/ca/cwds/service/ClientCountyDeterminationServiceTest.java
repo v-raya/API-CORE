@@ -45,7 +45,7 @@ public class ClientCountyDeterminationServiceTest {
     runLiquibaseScript(LIQUIBASE_CWSRS1_PATH);
 
     final CountyDeterminationDao countyDeterminationDao =
-        new CountyDeterminationDao(daoTestRule.getSessionFactory(), "true");
+        new CountyDeterminationDao(daoTestRule.getSessionFactory());
     testSubject = new ClientCountyDeterminationService(countyDeterminationDao);
   }
 
