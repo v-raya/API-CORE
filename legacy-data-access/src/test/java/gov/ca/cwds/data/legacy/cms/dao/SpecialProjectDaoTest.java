@@ -23,7 +23,8 @@ public class SpecialProjectDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
     cleanAllAndInsert("/dbunit/SpecialProjects.xml");
 
     executeInTransaction(sessionFactory, sessionFactory -> {
-      List<SpecialProject> specialProjects = dao.findActiveSSBByGovernmentEntity((short) 1086);
+      List<SpecialProject> specialProjects =
+          dao.findActiveSafelySurrenderedBabiesSpecialProjectByGovernmentEntity((short) 1086);
       Assert.assertEquals(1, specialProjects.size());
       SpecialProject specialProject = specialProjects.get(0);
 

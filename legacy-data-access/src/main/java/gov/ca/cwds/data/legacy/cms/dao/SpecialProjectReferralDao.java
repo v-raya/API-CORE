@@ -16,7 +16,7 @@ import gov.ca.cwds.inject.CmsSessionFactory;
 public class SpecialProjectReferralDao extends BaseDaoImpl<SpecialProjectReferral> {
 
   /**
-   * Constructor
+   * Constructor.
    * 
    * @param sessionFactory the sessionFactory
    */

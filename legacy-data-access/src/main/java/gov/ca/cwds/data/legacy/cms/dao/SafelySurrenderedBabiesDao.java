@@ -16,7 +16,7 @@ import gov.ca.cwds.inject.CmsSessionFactory;
 public class SafelySurrenderedBabiesDao extends BaseDaoImpl<SafelySurrenderedBabies> {
 
   /**
-   * Constructor
+   * Constructor.
    * 
    * @param sessionFactory the sessionFactory
    */

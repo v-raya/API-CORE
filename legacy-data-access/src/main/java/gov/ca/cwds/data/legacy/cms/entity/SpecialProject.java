@@ -60,10 +60,10 @@ public class SpecialProject extends CmsPersistentObject {
   private Boolean arcassIndicator;
 
   /**
-   * No-argument constructor
+   * No-argument constructor.
    */
   public SpecialProject() {
-    // No-argument constructor
+    super();
   }
 
   @Override

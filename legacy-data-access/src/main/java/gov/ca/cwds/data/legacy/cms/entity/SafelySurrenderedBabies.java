@@ -14,7 +14,7 @@ import org.hibernate.annotations.Type;
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 
 /**
- * {@link CmsPersistentObject} representing a Safely Surrendered Babies
+ * {@link CmsPersistentObject} representing a Safely Surrendered Babies.
  * 
  * @author CWDS API Team
  */
@@ -73,9 +73,7 @@ public class SafelySurrenderedBabies extends CmsPersistentObject {
   private String specialProjectReferral;
 
   /**
-   * Default constructor
-   * 
-   * Required for Hibernate
+   * Default no-argument constructor.
    */
   public SafelySurrenderedBabies() {
     super();

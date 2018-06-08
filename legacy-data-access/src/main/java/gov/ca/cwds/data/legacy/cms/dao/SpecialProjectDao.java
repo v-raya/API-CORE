@@ -13,7 +13,7 @@ import gov.ca.cwds.inject.CmsSessionFactory;
 import gov.ca.cwds.util.Require;
 
 /**
- * DAO for special projects
+ * DAO for special projects.
  * 
  * @author CWDS API Team
  */
@@ -30,7 +30,8 @@ public class SpecialProjectDao extends BaseDaoImpl<SpecialProject> {
    * @param governmentEntity Government entity for which to find SSB special project
    * @return The active SSB special projects for given government entity, returns null if not found.
    */
-  public List<SpecialProject> findActiveSSBByGovernmentEntity(Short governmentEntity) {
+  public List<SpecialProject> findActiveSafelySurrenderedBabiesSpecialProjectByGovernmentEntity(
+      Short governmentEntity) {
     Require.requireNotNullAndNotEmpty(governmentEntity);
 
     final List<SpecialProject> specialProjects = currentSession()

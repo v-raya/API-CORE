@@ -47,10 +47,10 @@ public class SpecialProjectReferral extends CmsPersistentObject {
   private LocalDate partEndDate;
 
   /**
-   * No-argument constructor
+   * No-argument constructor.
    */
   public SpecialProjectReferral() {
-    // No-argument constructor
+    super();
   }
 
   @Override
