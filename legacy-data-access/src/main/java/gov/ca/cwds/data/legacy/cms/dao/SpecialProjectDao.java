@@ -9,7 +9,6 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.legacy.cms.entity.SpecialProject;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.Language;
 import gov.ca.cwds.inject.CmsSessionFactory;
 import gov.ca.cwds.util.Require;
 
@@ -18,7 +17,7 @@ import gov.ca.cwds.util.Require;
  * 
  * @author CWDS API Team
  */
-public class SpecialProjectDao extends BaseDaoImpl<Language> {
+public class SpecialProjectDao extends BaseDaoImpl<SpecialProject> {
 
   @Inject
   public SpecialProjectDao(@CmsSessionFactory SessionFactory sessionFactory) {
