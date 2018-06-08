@@ -191,9 +191,10 @@ subprojects {
 task libLicenseReport(){
     def licenseFiles = []
     def subProjectsDir = "${project.projectDir}/legal/subProjects"
+    def licenseCsvFile = "${project.projectDir}/legal/licenses.csv"
     mkdir subProjectsDir
     new File(subProjectsDir).eachFileRecurse { licenseFiles << it }
-    (new File('legal/licenses.csv')).text = files(licenseFiles).collect{it.getText()}.join("\n")
+    (new File(licenseCsvFile)).text = files(licenseFiles).collect{it.getText()}.join("\n")
 }
 
 dependencies {
