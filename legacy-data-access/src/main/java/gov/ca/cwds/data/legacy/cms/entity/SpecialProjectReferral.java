@@ -18,7 +18,7 @@ import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
  * @author CWDS TPT Team
  */
 @Entity
-@Table(name = "SPC_PRJT")
+@Table(name = "SPRJ_RFT")
 public class SpecialProjectReferral extends CmsPersistentObject {
 
   private static final long serialVersionUID = 241170224860954003L;

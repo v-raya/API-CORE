@@ -25,7 +25,7 @@ public class SafelySurrenderedBabies extends CmsPersistentObject {
   private static final long serialVersionUID = -7281540421859071478L;
 
   @Id
-  @Column(name = "FKCHLD_CLT")
+  @Column(name = "FKCHLD_CLT", length = CMS_ID_LEN)
   private String childClientId;
 
   @Type(type = "date")
@@ -66,10 +66,10 @@ public class SafelySurrenderedBabies extends CmsPersistentObject {
   @Column(name = "CPSNTF_TM")
   private LocalTime cpsNotofiedTime;
 
-  @Column(name = "FKSPRJ_CST")
+  @Column(name = "FKSPRJ_CST", length = CMS_ID_LEN)
   private String specialProjectCase;
 
-  @Column(name = "FKSPRJ_RFT")
+  @Column(name = "FKSPRJ_RFT", length = CMS_ID_LEN)
   private String specialProjectReferral;
 
   /**
