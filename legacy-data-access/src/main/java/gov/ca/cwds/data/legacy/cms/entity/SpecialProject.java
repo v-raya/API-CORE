@@ -22,8 +22,8 @@ import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 @Entity
 @Table(name = "SPC_PRJT")
 @NamedQuery(name = SpecialProject.FIND_ACTIVE_SSB_BY_GOVERNMENT_ENTITY,
-    query = "FROM SpecialProject WHERE PROJECT_NM = " + SpecialProject.SSB_SPECIAL_PROJECT_NAME
-        + " AND END_DT IS NULL AND GVR_ENTC = :governmentEntity")
+    query = "FROM SpecialProject WHERE PROJECT_NM = '" + SpecialProject.SSB_SPECIAL_PROJECT_NAME
+        + "' AND END_DT IS NULL AND GVR_ENTC = :governmentEntity")
 
 public class SpecialProject extends CmsPersistentObject {
 
