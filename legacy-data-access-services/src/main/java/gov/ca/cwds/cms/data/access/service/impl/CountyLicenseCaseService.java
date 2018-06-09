@@ -33,7 +33,7 @@ public class CountyLicenseCaseService
     return new DefaultDataAccessLifeCycle();
   }
 
-  protected class CreateLifecycle extends DefaultDataAccessLifeCycle<CLCEntityAwareDTO> {
+  protected static class CreateLifecycle extends DefaultDataAccessLifeCycle<CLCEntityAwareDTO> {
     @Override
     public void beforeDataProcessing(DataAccessBundle bundle) {
       CLCEntityAwareDTO awareDTO = (CLCEntityAwareDTO) bundle.getAwareDto();
