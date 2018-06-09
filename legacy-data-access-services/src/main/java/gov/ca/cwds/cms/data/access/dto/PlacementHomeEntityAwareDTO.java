@@ -1,7 +1,6 @@
 package gov.ca.cwds.cms.data.access.dto;
 
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
-import gov.ca.cwds.data.legacy.cms.entity.CountyLicenseCase;
 import gov.ca.cwds.data.legacy.cms.entity.EmergencyContactDetail;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 
@@ -20,7 +19,7 @@ public class PlacementHomeEntityAwareDTO extends BaseEntityAwareDTO<PlacementHom
   private List<OtherChildInHomeEntityAwareDTO> otherChildrenInHomeParameterObjects = new ArrayList<>();
   private List<OtherAdultInHomeEntityAwareDTO> otherAdultInHomeParameterObjects = new ArrayList<>();
   private EmergencyContactDetail emergencyContactDetail;
-  private CountyLicenseCase countyLicenseCase;
+  private CLCEntityAwareDTO countyLicenseCase;
 
   private Set<? extends CWSIdentifier> homeLanguages = new HashSet<>();
 
@@ -84,11 +83,11 @@ public class PlacementHomeEntityAwareDTO extends BaseEntityAwareDTO<PlacementHom
     this.emergencyContactDetail = emergencyContactDetail;
   }
 
-  public CountyLicenseCase getCountyLicenseCase() {
+  public CLCEntityAwareDTO getCountyLicenseCase() {
     return countyLicenseCase;
   }
 
-  public void setCountyLicenseCase(CountyLicenseCase countyLicenseCase) {
+  public void setCountyLicenseCase(CLCEntityAwareDTO countyLicenseCase) {
     this.countyLicenseCase = countyLicenseCase;
   }
 }

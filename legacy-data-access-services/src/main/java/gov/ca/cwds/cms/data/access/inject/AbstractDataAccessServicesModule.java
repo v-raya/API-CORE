@@ -1,6 +1,8 @@
 package gov.ca.cwds.cms.data.access.inject;
 
 import gov.ca.cwds.cms.data.access.mapper.ClientMapper;
+import gov.ca.cwds.cms.data.access.service.impl.CountyLicenseCaseService;
+import gov.ca.cwds.cms.data.access.service.impl.StaffPersonService;
 import gov.ca.cwds.cms.data.access.service.impl.clientrelationship.ClientRelationshipCoreService;
 import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.TribalMembershipVerificationCoreService;
 import org.hibernate.SessionFactory;
@@ -39,6 +41,8 @@ public abstract class AbstractDataAccessServicesModule extends AbstractModule {
   private void configureDataAccessServices() {
     bind(PlacementHomeCoreService.class);
     bind(SubstituteCareProviderCoreService.class);
+    bind(CountyLicenseCaseService.class);
+    bind(StaffPersonService.class);
     bind(ClientCoreService.class);
     bind(ChildClientCoreService.class);
     bind(BusinessValidationService.class);

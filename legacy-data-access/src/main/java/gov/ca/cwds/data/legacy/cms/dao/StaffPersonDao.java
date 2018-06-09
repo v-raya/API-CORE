@@ -2,7 +2,6 @@ package gov.ca.cwds.data.legacy.cms.dao;
 
 import com.google.inject.Inject;
 import gov.ca.cwds.data.BaseDaoImpl;
-import gov.ca.cwds.data.legacy.cms.entity.CountyLicenseCase;
 import gov.ca.cwds.data.legacy.cms.entity.StaffPerson;
 import gov.ca.cwds.inject.CmsSessionFactory;
 import org.hibernate.SessionFactory;
