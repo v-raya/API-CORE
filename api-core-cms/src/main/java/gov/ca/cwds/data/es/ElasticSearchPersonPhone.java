@@ -115,7 +115,6 @@ public class ElasticSearchPersonPhone
     return this.id;
   }
 
-  @SuppressWarnings("javadoc")
   public void setPhoneNumberExtension(String phoneNumberExtension) {
     this.phoneNumberExtension = phoneNumberExtension;
   }

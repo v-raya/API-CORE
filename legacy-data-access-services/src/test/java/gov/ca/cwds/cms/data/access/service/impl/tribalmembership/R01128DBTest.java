@@ -7,8 +7,6 @@ import gov.ca.cwds.cms.data.access.dto.TribalMembershipVerificationAwareDto;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.impl.ClientCoreService;
-import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.CreateLifeCycle;
-import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.TribalMembershipVerificationCoreService;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import gov.ca.cwds.data.legacy.cms.dao.TribalMembershipVerificationDao;
@@ -43,6 +41,7 @@ public class R01128DBTest extends BaseCwsCmsInMemoryPersistenceTest {
   private TribalMembershipVerificationCoreService tribalMembershipVerificationCoreService;
   private ClientCoreService clientCoreService;
   private CreateLifeCycle createLifeCycle;
+  private UpdateLifeCycle updateLifeCycle;
 
   @Before
   public void init() {
@@ -55,9 +54,12 @@ public class R01128DBTest extends BaseCwsCmsInMemoryPersistenceTest {
     createLifeCycle =
         new CreateLifeCycle(
             tribalMembershipVerificationDao, clientCoreService, businessValidationService);
+    updateLifeCycle =
+        new UpdateLifeCycle(
+            tribalMembershipVerificationDao, clientCoreService, businessValidationService);
     tribalMembershipVerificationCoreService =
         new TribalMembershipVerificationCoreService(
-            tribalMembershipVerificationDao, createLifeCycle);
+            tribalMembershipVerificationDao, createLifeCycle, updateLifeCycle);
   }
 
   @Test

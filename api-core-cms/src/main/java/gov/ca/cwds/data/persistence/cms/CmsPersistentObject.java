@@ -16,14 +16,17 @@ import gov.ca.cwds.data.std.ApiObjectIdentity;
 /**
  * Base class for objects in the legacy, DB2 persistence layer.
  * 
+ * <p>
+ * Word to the wise: <strong>most but not all CMS tables</strong> have columns "LST_UPD_ID" and
+ * "LST_UPD_TS", but there are exceptions. Prefer interface {@link PersistentObject} over this class
+ * for those cases.
+ * </p>
+ * 
  * @author CWDS API Team
  */
 @MappedSuperclass
 public abstract class CmsPersistentObject extends ApiObjectIdentity implements PersistentObject {
 
-  /**
-   * Baseline serialization version.
-   */
   private static final long serialVersionUID = 1L;
 
   /**
@@ -52,7 +55,7 @@ public abstract class CmsPersistentObject extends ApiObjectIdentity implements P
   protected CmsPersistentObject() {}
 
   /**
-   * Constructor.
+   * Preferred constructor.
    * 
    * @param lastUpdatedId the id of the last person to update this object
    */
@@ -94,12 +97,10 @@ public abstract class CmsPersistentObject extends ApiObjectIdentity implements P
   @Override
   public abstract Serializable getPrimaryKey();
 
-  @SuppressWarnings("javadoc")
   public void setLastUpdatedId(String lastUpdatedId) {
     this.lastUpdatedId = lastUpdatedId;
   }
 
-  @SuppressWarnings("javadoc")
   public void setLastUpdatedTime(Date lastUpdatedTime) {
     this.lastUpdatedTime = lastUpdatedTime;
   }

@@ -20,20 +20,23 @@ import javax.inject.Inject;
  * CRUD service for Tribal membership verification.
  *
  * @author CWDS TPT-3 Team
- * */
+ */
 public class TribalMembershipVerificationCoreService
     extends DataAccessServiceBase<
         TribalMembershipVerificationDao, TribalMembershipVerification,
-    TribalMembershipVerificationAwareDto> {
+        TribalMembershipVerificationAwareDto> {
 
   private final CreateLifeCycle createLifeCycle;
+  private final UpdateLifeCycle updateLifeCycle;
 
   @Inject
   public TribalMembershipVerificationCoreService(
       TribalMembershipVerificationDao tribalMembershipVerificationDao,
-      CreateLifeCycle createLifeCycle) {
+      CreateLifeCycle createLifeCycle,
+      UpdateLifeCycle updateLifeCycle) {
     super(tribalMembershipVerificationDao);
     this.createLifeCycle = createLifeCycle;
+    this.updateLifeCycle = updateLifeCycle;
   }
 
   @Override
@@ -46,6 +49,15 @@ public class TribalMembershipVerificationCoreService
     return super.create(entityAwareDTO);
   }
 
+  @Override
+  public TribalMembershipVerification update(TribalMembershipVerificationAwareDto entityAwareDTO)
+      throws DataAccessServicesException {
+    String staffPerson = PrincipalUtils.getStaffPersonId();
+    entityAwareDTO.getEntity().setLastUpdateTime(LocalDateTime.now());
+    entityAwareDTO.getEntity().setLastUpdateId(staffPerson);
+    return super.update(entityAwareDTO);
+  }
+
   public List<TribalMembershipVerification> getByClientId(
       @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
     return crudDao.findByClientId(clientId);
@@ -53,7 +65,7 @@ public class TribalMembershipVerificationCoreService
 
   @Override
   protected DataAccessServiceLifecycle<TribalMembershipVerificationAwareDto> getUpdateLifeCycle() {
-    return new DefaultDataAccessLifeCycle<>();
+    return updateLifeCycle;
   }
 
   @Override

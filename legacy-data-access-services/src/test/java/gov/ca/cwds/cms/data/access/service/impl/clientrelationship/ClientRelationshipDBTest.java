@@ -7,7 +7,9 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
 import gov.ca.cwds.cms.data.access.mapper.ClientMapper;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
+import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.impl.dao.BaseClientDao;
+import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.TribalMembershipVerificationCoreService;
 import gov.ca.cwds.data.persistence.cms.BaseClientImpl;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
@@ -53,6 +55,7 @@ public class ClientRelationshipDBTest extends BaseCwsCmsInMemoryPersistenceTest 
   private SearchClientRelationshipService searchClientRelationshipService;
   private BaseClientDao baseClientDao;
   private ClientMapper clientMapper = Mappers.getMapper(ClientMapper.class);
+  private TribalMembershipVerificationCoreService tribalMembershipVerificationCoreService;
 
   @Before
   public void before() throws Exception {
@@ -62,6 +65,8 @@ public class ClientRelationshipDBTest extends BaseCwsCmsInMemoryPersistenceTest 
     clientRelationshipDao = new ClientRelationshipDao(sessionFactory);
     paternityDetailDao = new PaternityDetailDao(sessionFactory);
     searchClientRelationshipService = new SearchClientRelationshipService(clientRelationshipDao);
+    tribalMembershipVerificationCoreService =
+        new TribalMembershipVerificationCoreService(tribalMembershipVerificationDao, null, null);
     updateLifeCycle =
         new UpdateLifeCycle(
             clientRelationshipDao,
@@ -77,7 +82,8 @@ public class ClientRelationshipDBTest extends BaseCwsCmsInMemoryPersistenceTest 
             clientDao,
             tribalMembershipVerificationDao,
             paternityDetailDao,
-            searchClientRelationshipService);
+            searchClientRelationshipService,
+            tribalMembershipVerificationCoreService);
     clientRelationshipCoreService =
         new ClientRelationshipCoreService(
             clientRelationshipDao,
@@ -95,14 +101,14 @@ public class ClientRelationshipDBTest extends BaseCwsCmsInMemoryPersistenceTest 
   public void createRelationshipTest() {
 
     executeInTransaction(
-      sessionFactory,
-      (sessionFactory) -> {
-        List<ClientRelationship> relationships =
-          clientRelationshipDao.findRelationshipsByPrimaryClientId(
-            CLIENT_ID_2, LocalDate.now());
-        assertNotNull(relationships);
-        assertEquals(0, relationships.size());
-      });
+        sessionFactory,
+        (sessionFactory) -> {
+          List<ClientRelationship> relationships =
+              clientRelationshipDao.findRelationshipsByPrimaryClientId(
+                  CLIENT_ID_2, LocalDate.now());
+          assertNotNull(relationships);
+          assertEquals(0, relationships.size());
+        });
 
     executeInTransaction(
         sessionFactory,
@@ -143,8 +149,8 @@ public class ClientRelationshipDBTest extends BaseCwsCmsInMemoryPersistenceTest 
         sessionFactory,
         (sessionFactory) -> {
           List<ClientRelationship> relationships =
-            clientRelationshipDao.findRelationshipsByPrimaryClientId(
-              CLIENT_ID_2, LocalDate.now());
+              clientRelationshipDao.findRelationshipsByPrimaryClientId(
+                  CLIENT_ID_2, LocalDate.now());
           assertNotNull(relationships);
           assertEquals(1, relationships.size());
           assertNotNull(relationships.get(0).getPrimaryClient());

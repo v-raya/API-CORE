@@ -54,7 +54,7 @@ allprojects {
         projectReleaseVersion = (customVersion == null || customVersion == "" || customVersion.startsWith('$') ? projectMajorVersion + '_' + buildNumber + '-RC' : customVersion )
         projectVersion = (isRelease ? projectReleaseVersion : projectSnapshotVersion )
 
-        // Publishing configuration
+        // Publishing configuration:
         snapshotMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/repo"
         releaseMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/libs-release"
         artifactoryRepo = (isRelease ? releaseMavenRepo : snapshotMavenRepo)
@@ -81,6 +81,7 @@ allprojects {
     dependencies {
         compile group: 'com.ibm', name: 'db2jcc4', version: '4.0.0'
         compile group: 'com.ibm', name: 'db2jcc_license_cisuz', version: '4.0.0'
+        
         // LOGGING:
         compile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
         compile group: 'org.slf4j', name: 'slf4j-ext', version: slf4jVersion
@@ -100,6 +101,7 @@ allprojects {
         exclude '**/dbDependent/**'
         exclude 'gov/ca/cwds/cms/data/access/service/impl/clientrelationship/R08861DBTest.class'
         exclude 'gov/ca/cwds/cms/data/access/service/impl/clientrelationship/R08840DBTest.class'
+        exclude 'gov/ca/cwds/cms/data/access/service/impl/clientrelationship/R10030DBTest.class'
         exclude 'gov/ca/cwds/cms/data/access/service/impl/clientrelationship/ClientRelationshipDBTest.class'
         exclude 'gov/ca/cwds/cms/data/access/service/impl/tribalmembership/R10030DBTest.class'
         exclude 'gov/ca/cwds/cms/data/access/service/impl/tribalmembership/R01128DBTest.class'
@@ -184,14 +186,15 @@ subprojects {
     }
 }
 
-// run generateAllLicenseFiles first to generate all report files
-// example ./gradlew  generateAllLicenseFiles libLicenseReport
+// Run generateAllLicenseFiles first to generate all report files
+// EXAMPLE: ./gradlew generateAllLicenseFiles libLicenseReport
 task libLicenseReport(){
     def licenseFiles = []
     def subProjectsDir = "${project.projectDir}/legal/subProjects"
+    def licenseCsvFile = "${project.projectDir}/legal/licenses.csv"
     mkdir subProjectsDir
     new File(subProjectsDir).eachFileRecurse { licenseFiles << it }
-    (new File('legal/licenses.csv')).text = files(licenseFiles).collect{it.getText()}.join("\n")
+    (new File(licenseCsvFile)).text = files(licenseFiles).collect{it.getText()}.join("\n")
 }
 
 dependencies {

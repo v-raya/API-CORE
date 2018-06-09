@@ -1,6 +1,22 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
+import static gov.ca.cwds.authorizer.ClientResultReadAuthorizer.CLIENT_RESULT_READ_OBJECT;
+import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
+
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.cms.data.access.Constants;
 import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.OtherClientNameDTO;
@@ -35,37 +51,45 @@ import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static gov.ca.cwds.authorizer.ClientResultReadAuthorizer.CLIENT_RESULT_READ_OBJECT;
-import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
-
 /** @author CWDS TPT-3 Team */
 public class ClientCoreService
     extends DataAccessServiceBase<ClientDao, Client, ClientEntityAwareDTO> {
 
-  @Inject private DeliveredServiceDao deliveredServiceDao;
-  @Inject private NameTypeDao nameTypeDao;
-  @Inject private SafetyAlertService safetyAlertService;
-  @Inject private DasHistoryDao dasHistoryDao;
-  @Inject private NearFatalityDao nearFatalityDao;
-  @Inject private PlacementEpisodeDao placementEpisodeDao;
-  @Inject private OtherClientNameService otherClientNameService;
-  @Inject private ClientServiceProviderDao clientServiceProviderDao;
-  @Inject private ClientRelationshipDao clientRelationshipDao;
-  @Inject private BusinessValidationService businessValidationService;
-  @Inject private ClientOtherEthnicityDao clientOtherEthnicityDao;
-  @Inject private SsaName3Dao ssaName3Dao;
+  @Inject
+  private DeliveredServiceDao deliveredServiceDao;
+
+  @Inject
+  private NameTypeDao nameTypeDao;
+
+  @Inject
+  private SafetyAlertService safetyAlertService;
+
+  @Inject
+  private DasHistoryDao dasHistoryDao;
+
+  @Inject
+  private NearFatalityDao nearFatalityDao;
+
+  @Inject
+  private PlacementEpisodeDao placementEpisodeDao;
+
+  @Inject
+  private OtherClientNameService otherClientNameService;
+
+  @Inject
+  private ClientServiceProviderDao clientServiceProviderDao;
+
+  @Inject
+  private ClientRelationshipDao clientRelationshipDao;
+
+  @Inject
+  private BusinessValidationService businessValidationService;
+
+  @Inject
+  private ClientOtherEthnicityDao clientOtherEthnicityDao;
+
+  @Inject
+  private SsaName3Dao ssaName3Dao;
 
   @Override
   public Client create(ClientEntityAwareDTO entityAwareDTO) throws DataAccessServicesException {
@@ -175,8 +199,8 @@ public class ClientCoreService
 
     @Override
     public void businessValidation(DataAccessBundle bundle, PerryAccount perryAccount) {
-      businessValidationService.runBusinessValidation(
-          bundle.getAwareDto(), PrincipalUtils.getPrincipal(), ClientDroolsConfiguration.INSTANCE);
+      businessValidationService.runBusinessValidation(bundle.getAwareDto(),
+          PrincipalUtils.getPrincipal(), ClientDroolsConfiguration.INSTANCE);
     }
 
     @Override
@@ -242,8 +266,7 @@ public class ClientCoreService
 
     private Map<Short, ClientOtherEthnicity> getOtherEthnicityMap(
         Set<ClientOtherEthnicity> otherEthnicities) {
-      return otherEthnicities
-          .stream()
+      return otherEthnicities.stream()
           .collect(Collectors.toMap(ClientOtherEthnicity::getEthnicityCode, Function.identity()));
     }
 
@@ -259,8 +282,8 @@ public class ClientCoreService
         Client client = clientEntityAwareDTO.getEntity();
         SsaName3ParameterObject parameterObject = new SsaName3ParameterObject();
         parameterObject.setTableName(Constants.PhoneticSearchTables.CLT_PHNT);
-        parameterObject.setCrudOper(
-            Constants.SsaName3StoredProcedureCrudOperationCode.UPDATE_OPERATION_CODE);
+        parameterObject
+            .setCrudOper(Constants.SsaName3StoredProcedureCrudOperationCode.UPDATE_OPERATION_CODE);
         parameterObject.setNameCd(Constants.PhoneticPrimaryNameCode.CLIENT_NAME);
         parameterObject.setIdentifier(client.getIdentifier());
         parameterObject.setFirstName(client.getCommonFirstName());

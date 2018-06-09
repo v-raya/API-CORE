@@ -54,7 +54,11 @@ public abstract class BaseOtherChildInPlacemtHome extends CmsPersistentObject
   @JsonIgnore
   @Override
   public String getFirstName() {
-    return null;
+    String fullName = getName();
+    if(!fullName.contains(" ")) {
+      return null;
+    }
+    return StringUtils.split(fullName, " ", 2)[0];
   }
 
   @JsonIgnore
@@ -66,7 +70,11 @@ public abstract class BaseOtherChildInPlacemtHome extends CmsPersistentObject
   @JsonIgnore
   @Override
   public String getLastName() {
-    return this.getName();
+    String fullName = getName();
+    if(!fullName.contains(" ")) {
+      return fullName;
+    }
+    return StringUtils.split(fullName, " ", 2)[1];
   }
 
   @JsonIgnore
