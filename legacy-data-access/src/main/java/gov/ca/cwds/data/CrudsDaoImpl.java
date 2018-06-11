@@ -10,7 +10,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +46,7 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
     Transaction txn = session.getTransaction();
     txn = txn != null ? txn : session.beginTransaction();
 
-    if (TransactionStatus.NOT_ACTIVE == txn.getStatus() || !txn.isActive()) {
+    if (!txn.isActive()) {
       txn.begin();
     }
 
