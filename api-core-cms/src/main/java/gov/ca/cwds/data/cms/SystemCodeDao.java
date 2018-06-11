@@ -4,7 +4,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,20 +58,26 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
   public SystemCode[] findByForeignKeyMetaTable(String foreignKeyMetaTable) {
     final String namedQueryName = SystemCode.class.getName() + ".findByForeignKeyMetaTable";
 
-    final Session session = getCurrentSession();
-    Transaction txn = session.getTransaction();
-    boolean transactionExists = txn != null && txn.isActive();
-    txn = transactionExists ? txn : session.beginTransaction();
+    // DRS: NO NO NO!! Interferes with transaction management, like XA.
+    final Session session = grabSession();
+    joinTransaction(session);
+
+    // Transaction txn = session.getTransaction();
+    // boolean transactionExists = txn != null && txn.isActive();
+    // txn = transactionExists ? txn : session.beginTransaction();
 
     try {
       final Query query = session.getNamedQuery(namedQueryName).setString("foreignKeyMetaTable",
           foreignKeyMetaTable);
       final SystemCode[] systemCodes = (SystemCode[]) query.list().toArray(new SystemCode[0]);
-      if (!transactionExists)
-        txn.commit();
+
+      // DRS: not in managed transactions.
+      // if (!transactionExists)
+      // txn.commit();
+
       return systemCodes;
     } catch (HibernateException h) {
-      txn.rollback();
+      // txn.rollback();
       throw new DaoException(h);
     }
   }
@@ -80,22 +85,24 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
   @SuppressWarnings("unchecked")
   public SystemCode findBySystemCodeId(Number systemCodeId) {
     final String namedQueryName = SystemCode.class.getName() + ".findBySystemCodeId";
-    Session session = getCurrentSession();
+    final Session session = grabSession();
+    joinTransaction(session);
 
-    Transaction txn = session.getTransaction();
-    boolean transactionExists = txn != null && txn.isActive();
-    txn = transactionExists ? txn : session.beginTransaction();
+    // Transaction txn = session.getTransaction();
+    // boolean transactionExists = txn != null && txn.isActive();
+    // txn = transactionExists ? txn : session.beginTransaction();
 
     try {
       final Query query =
           session.getNamedQuery(namedQueryName).setShort("systemId", systemCodeId.shortValue());
       final SystemCode systemCode = (SystemCode) query.getSingleResult();
-      if (!transactionExists)
-        txn.commit();
+      // if (!transactionExists)
+      // txn.commit();
       return systemCode;
     } catch (HibernateException h) {
-      txn.rollback();
+      // txn.rollback();
       throw new DaoException(h);
     }
   }
+
 }
