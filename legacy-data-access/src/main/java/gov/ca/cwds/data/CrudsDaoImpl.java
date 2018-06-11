@@ -31,6 +31,11 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
 
   private SessionFactory sessionFactory;
 
+  /**
+   * Get the current session or open a new one, as needed.
+   * 
+   * @return usable session
+   */
   public Session grabSession() {
     Session session;
     try {
@@ -42,6 +47,12 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
     return session;
   }
 
+  /**
+   * Join an existing transaction or create a new one, as needed.
+   * 
+   * @param session live session
+   * @return active transaction
+   */
   public Transaction joinTransaction(Session session) {
     Transaction txn = session.getTransaction();
     txn = txn != null ? txn : session.beginTransaction();
