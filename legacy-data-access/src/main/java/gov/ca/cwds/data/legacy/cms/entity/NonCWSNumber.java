@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -19,6 +20,7 @@ import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
  */
 @Entity
 @Table(name = "NCWSNO_T")
+@IdClass(NonCWSNumber.PrimaryKey.class)
 public class NonCWSNumber extends CmsPersistentObject {
 
   private static final long serialVersionUID = -7079045042245993656L;
@@ -36,7 +38,7 @@ public class NonCWSNumber extends CmsPersistentObject {
     private String thirdId;
 
     @Id
-    @Column(name = "FKCLIENT_T", nullable = false, length = 10)
+    @Column(name = "FKCLIENT_T", nullable = false, length = CMS_ID_LEN)
     private String clientId;
 
     /**
