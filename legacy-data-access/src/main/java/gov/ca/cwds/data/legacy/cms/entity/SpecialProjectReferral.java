@@ -24,26 +24,26 @@ public class SpecialProjectReferral extends CmsPersistentObject {
   private static final long serialVersionUID = 241170224860954003L;
 
   @Id
-  @Column(name = "THIRD_ID", length = CMS_ID_LEN)
+  @Column(name = "THIRD_ID", nullable = false, length = CMS_ID_LEN)
   private String id;
 
-  @Column(name = "FKREFERL_T", length = CMS_ID_LEN)
+  @Column(name = "FKREFERL_T", nullable = false, length = CMS_ID_LEN)
   private String referralId;
 
-  @Column(name = "FKSPC_PRJT", length = CMS_ID_LEN)
+  @Column(name = "FKSPC_PRJT", nullable = false, length = CMS_ID_LEN)
   private String specialProjectId;
 
-  @Column(name = "CNTY_SPFCD")
+  @Column(name = "CNTY_SPFCD", nullable = false, length = 2)
   private String countySpecificCode;
 
-  @Column(name = "SFSURB_IND")
+  @Column(name = "SFSURB_IND", nullable = false, length = 1)
   @Type(type = "yes_no")
   private Boolean ssbIndicator;
 
-  @Column(name = "PART_STRDT")
+  @Column(name = "PART_STRDT", nullable = false, length = 10)
   private LocalDate partStartDate;
 
-  @Column(name = "PART_ENDT")
+  @Column(name = "PART_ENDT", nullable = true, length = 10)
   private LocalDate partEndDate;
 
   /**

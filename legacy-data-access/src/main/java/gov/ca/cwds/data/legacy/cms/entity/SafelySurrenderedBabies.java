@@ -26,43 +26,43 @@ public class SafelySurrenderedBabies extends CmsPersistentObject {
   @Column(name = "FKCHLD_CLT", length = CMS_ID_LEN)
   private String childClientId;
 
-  @Column(name = "SURR_DT")
+  @Column(name = "SURR_DT", nullable = false, length = 10)
   private LocalDate surrenderedDate;
 
-  @Column(name = "SURR_TM")
+  @Column(name = "SURR_TM", nullable = true, length = 8)
   private LocalTime surrenderedTime;
 
-  @Column(name = "SURR_BY_NM")
+  @Column(name = "SURR_BY_NM", nullable = false, length = 40)
   private String surrenderedByName;
 
-  @Column(name = "RELTO_CLT")
+  @Column(name = "RELTO_CLT", nullable = false, length = 5)
   private Short relationToClient;
 
-  @Column(name = "COMM_DESC")
+  @Column(name = "COMM_DESC", nullable = true, length = 254)
   private String commentDescription;
 
-  @Column(name = "ID_INFO_CD", length = 1)
+  @Column(name = "ID_INFO_CD", nullable = false, length = 1)
   private String braceletIdInfoCode;
 
-  @Column(name = "MEDQUES_CD", length = 1)
+  @Column(name = "MEDQUES_CD", nullable = false, length = 1)
   private String medicalQuestionnaireCode;
 
-  @Column(name = "QUESREC_DT")
+  @Column(name = "QUESREC_DT", nullable = true, length = 10)
   private LocalDate questionnaireReceivedDate;
 
-  @Column(name = "CPSNTF_IND")
+  @Column(name = "CPSNTF_IND", nullable = false, length = 1)
   private Boolean cpsNotofiedIndicator;
 
-  @Column(name = "CPSNTF_DT")
+  @Column(name = "CPSNTF_DT", nullable = false, length = 10)
   private LocalDate cpsNotofiedDate;
 
-  @Column(name = "CPSNTF_TM")
+  @Column(name = "CPSNTF_TM", nullable = true, length = 8)
   private LocalTime cpsNotofiedTime;
 
-  @Column(name = "FKSPRJ_CST", length = CMS_ID_LEN)
+  @Column(name = "FKSPRJ_CST", nullable = true, length = CMS_ID_LEN)
   private String specialProjectCase;
 
-  @Column(name = "FKSPRJ_RFT", length = CMS_ID_LEN)
+  @Column(name = "FKSPRJ_RFT", nullable = true, length = CMS_ID_LEN)
   private String specialProjectReferral;
 
   /**
