@@ -1,12 +1,15 @@
 package gov.ca.cwds.data.dao.cms;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import gov.ca.cwds.inject.CwsRsSessionFactory;
 import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.context.internal.ManagedSessionContext;
+
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+
+import gov.ca.cwds.inject.CwsRsSessionFactory;
 
 /**
  * Hibernate DAO for getting county of client from the {@code CLIENT_CNTY} table in a DB2
@@ -46,6 +49,7 @@ public class CountyDeterminationDao extends BaseAuthorizationDao {
     Session session = null;
     try {
       session = grabSession();
+      joinTransaction(session);
       if (managed) {
         ManagedSessionContext.bind(session);
       }
