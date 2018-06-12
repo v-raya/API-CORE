@@ -23,6 +23,7 @@ import gov.ca.cwds.cms.data.access.dao.PlacementHomeDao;
 import gov.ca.cwds.cms.data.access.dao.PlacementHomeProfileDao;
 import gov.ca.cwds.cms.data.access.dao.PlacementHomeUcDao;
 import gov.ca.cwds.cms.data.access.dao.SsaName3Dao;
+import gov.ca.cwds.cms.data.access.dto.CLCEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.OtherAdultInHomeEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.OtherChildInHomeEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
@@ -39,6 +40,7 @@ import gov.ca.cwds.cms.data.access.service.rules.PlacementHomeDroolsConfiguratio
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
 import gov.ca.cwds.data.legacy.cms.entity.BackgroundCheck;
+import gov.ca.cwds.data.legacy.cms.entity.CountyLicenseCase;
 import gov.ca.cwds.data.legacy.cms.entity.CountyOwnership;
 import gov.ca.cwds.data.legacy.cms.entity.EmergencyContactDetail;
 import gov.ca.cwds.data.legacy.cms.entity.ExternalInterface;
@@ -100,6 +102,8 @@ public class PlacementHomeCoreService
   private BackgroundCheckDao backgroundCheckDao;
   @Inject
   private SsaName3Dao ssaName3Dao;
+  @Inject
+  private CountyLicenseCaseService countyLicenseCaseService;
 
   /**
    * Constructor with injected services.
@@ -179,6 +183,7 @@ public class PlacementHomeCoreService
       createSubstituteCareProviders(placementHomeEntityAwareDto);
       createOtherAdultsInHome(placementHomeEntityAwareDto);
       createOtherChildrenInHome(placementHomeEntityAwareDto);
+      createCountyLicenseCase(placementHomeEntityAwareDto);
       prepareAddressPhoneticSearchKeywords(placementHomeEntityAwareDto.getEntity());
     }
 
@@ -207,7 +212,6 @@ public class PlacementHomeCoreService
       for (OtherChildInHomeEntityAwareDTO otherChildInHomeParameterObject : parameterObject
           .getOtherChildrenInHomeParameterObjects()) {
         createOtherChildInHome(placementHome, otherChildInHomeParameterObject);
-        createChildRelationshipsToScp(otherChildInHomeParameterObject);
       }
     }
 
@@ -237,7 +241,6 @@ public class PlacementHomeCoreService
       for (OtherAdultInHomeEntityAwareDTO adultInHomeParameterObject : parameterObject
           .getOtherAdultInHomeParameterObjects()) {
         createOtherAdultInHome(placementHome, adultInHomeParameterObject);
-        createAdultRelationshipsToScp(adultInHomeParameterObject);
         createAdultOutOfStateChecks(adultInHomeParameterObject);
       }
     }
@@ -370,6 +373,15 @@ public class PlacementHomeCoreService
       placementFacilityTypeHistory.setLastUpdateTimestamp(LocalDateTime.now());
       placementFacilityTypeHistory.setLastUpdateId(getStaffPersonId());
       placementFacilityTypeHistoryDao.create(placementFacilityTypeHistory);
+    }
+
+    private void createCountyLicenseCase(PlacementHomeEntityAwareDTO parameterObject)
+      throws DataAccessServicesException {
+      final PlacementHome placementHome = parameterObject.getEntity();
+      CLCEntityAwareDTO clcEntityAwareDTO = parameterObject.getCountyLicenseCase();
+      clcEntityAwareDTO.setPlacementHomeId(placementHome.getIdentifier());
+      CountyLicenseCase countyLicenseCase = countyLicenseCaseService.create(clcEntityAwareDTO);
+      placementHome.setCountyLicenseCase(countyLicenseCase);
     }
 
     private void prepareAddressPhoneticSearchKeywords(PlacementHome placementHome) {

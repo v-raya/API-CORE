@@ -17,7 +17,7 @@ global Boolean authorizationResult;
 
 rule "R-11037"
   dialect "mvel"
-  agenda-group "substitute-care-provider-authorization-agenda"
+  agenda-group "placement-home-authorization-agenda"
 when
     $placementHome: PlacementHome()
     PerryAccount(privileges contains "Resource Mgmt Placement Facility Maint")
