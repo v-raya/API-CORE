@@ -4,6 +4,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -28,7 +29,7 @@ public abstract class BaseCountyLicenseCase implements ICountyLicenseCase, Persi
   private Short ffhType;
   private String identifier;
   private String lstUpdId;
-  private Timestamp lstUpdTs;
+  private LocalDateTime lstUpdTs;
   private Short licAgeFr;
   private Short licAgeTo;
   private String licGndr;
@@ -111,11 +112,11 @@ public abstract class BaseCountyLicenseCase implements ICountyLicenseCase, Persi
 
   @Basic
   @Column(name = "LST_UPD_TS", nullable = false)
-  public Timestamp getLstUpdTs() {
+  public LocalDateTime getLstUpdTs() {
     return lstUpdTs;
   }
 
-  public void setLstUpdTs(Timestamp lstUpdTs) {
+  public void setLstUpdTs(LocalDateTime lstUpdTs) {
     this.lstUpdTs = lstUpdTs;
   }
 

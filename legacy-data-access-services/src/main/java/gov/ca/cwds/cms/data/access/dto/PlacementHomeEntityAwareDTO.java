@@ -19,6 +19,7 @@ public class PlacementHomeEntityAwareDTO extends BaseEntityAwareDTO<PlacementHom
   private List<OtherChildInHomeEntityAwareDTO> otherChildrenInHomeParameterObjects = new ArrayList<>();
   private List<OtherAdultInHomeEntityAwareDTO> otherAdultInHomeParameterObjects = new ArrayList<>();
   private EmergencyContactDetail emergencyContactDetail;
+  private CLCEntityAwareDTO countyLicenseCase;
 
   private Set<? extends CWSIdentifier> homeLanguages = new HashSet<>();
 
@@ -82,4 +83,11 @@ public class PlacementHomeEntityAwareDTO extends BaseEntityAwareDTO<PlacementHom
     this.emergencyContactDetail = emergencyContactDetail;
   }
 
+  public CLCEntityAwareDTO getCountyLicenseCase() {
+    return countyLicenseCase;
+  }
+
+  public void setCountyLicenseCase(CLCEntityAwareDTO countyLicenseCase) {
+    this.countyLicenseCase = countyLicenseCase;
+  }
 }
