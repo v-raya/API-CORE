@@ -212,7 +212,6 @@ public class PlacementHomeCoreService
       for (OtherChildInHomeEntityAwareDTO otherChildInHomeParameterObject : parameterObject
           .getOtherChildrenInHomeParameterObjects()) {
         createOtherChildInHome(placementHome, otherChildInHomeParameterObject);
-//        createChildRelationshipsToScp(otherChildInHomeParameterObject);
       }
     }
 
@@ -242,7 +241,6 @@ public class PlacementHomeCoreService
       for (OtherAdultInHomeEntityAwareDTO adultInHomeParameterObject : parameterObject
           .getOtherAdultInHomeParameterObjects()) {
         createOtherAdultInHome(placementHome, adultInHomeParameterObject);
-//        createAdultRelationshipsToScp(adultInHomeParameterObject);
         createAdultOutOfStateChecks(adultInHomeParameterObject);
       }
     }
