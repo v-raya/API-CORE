@@ -88,4 +88,13 @@ public interface ApiPersonAware extends PersistentObject {
   default String getClientIndexNumber() {
     return null;
   }
+
+  /**
+   * Getter for death date.
+   * 
+   * @return death date
+   */
+  default Date getDeathDate() {
+    return null;
+  }
 }
