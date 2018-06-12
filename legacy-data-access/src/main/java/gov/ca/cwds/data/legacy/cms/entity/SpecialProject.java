@@ -35,27 +35,27 @@ public class SpecialProject extends CmsPersistentObject {
   public static final String PARAM_GOVERNMENT_ENTITY = "governmentEntity";
 
   @Id
-  @Column(name = "IDENTIFIER", length = CMS_ID_LEN)
+  @Column(name = "IDENTIFIER", nullable = false, length = CMS_ID_LEN)
   private String id;
 
-  @Column(name = "PROJECT_NM")
+  @Column(name = "PROJECT_NM", nullable = false, length = 30)
   @ColumnTransformer(read = "trim(PROJECT_NM)")
   private String name;
 
-  @Column(name = "PRJCT_DSC")
+  @Column(name = "PRJCT_DSC", nullable = false, length = 254)
   @ColumnTransformer(read = "trim(PRJCT_DSC)")
   private String description;
 
-  @Column(name = "GVR_ENTC")
+  @Column(name = "GVR_ENTC", nullable = false, length = 5)
   private Short governmentEntity;
 
-  @Column(name = "START_DT")
+  @Column(name = "START_DT", nullable = false, length = 10)
   private LocalDate startDate;
 
-  @Column(name = "END_DT")
+  @Column(name = "END_DT", nullable = true, length = 10)
   private LocalDate endDate;
 
-  @Column(name = "ARCASS_IND")
+  @Column(name = "ARCASS_IND", nullable = false, length = 1)
   @Type(type = "yes_no")
   private Boolean arcassIndicator;
 

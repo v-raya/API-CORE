@@ -94,10 +94,10 @@ public class NonCWSNumber extends CmsPersistentObject {
   @Column(name = "FKCLIENT_T", nullable = false, length = CMS_ID_LEN)
   private String clientId;
 
-  @Column(name = "OTH_ID_C")
+  @Column(name = "OTH_ID_C", nullable = false, length = 5)
   private Short otherIdCode;
 
-  @Column(name = "OTHER_CLID")
+  @Column(name = "OTHER_CLID", nullable = false, length = 10)
   private String otherId;
 
   /**
