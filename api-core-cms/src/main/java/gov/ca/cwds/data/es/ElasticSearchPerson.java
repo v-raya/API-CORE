@@ -281,6 +281,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonProperty("date_of_birth")
   private String dateOfBirth;
 
+  @JsonProperty("date_of_death")
+  private String dateOfDeath;
+
   @JsonProperty("gender")
   private String gender;
 
@@ -838,6 +841,25 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    */
   public void setDateOfBirth(String dateOfBirth) {
     this.dateOfBirth = trim(dateOfBirth);
+  }
+
+  /**
+   * Getter for date of death.
+   * 
+   * @return date of death
+   */
+  @JsonProperty("date_of_death")
+  public String getDateOfDeath() {
+    return dateOfDeath;
+  }
+
+  /**
+   * Setter for dateOfDeath.
+   * 
+   * @param dateOfDeath death date
+   */
+  public void setDateOfDeath(String dateOfDeath) {
+    this.dateOfDeath = trim(dateOfDeath);
   }
 
   /**

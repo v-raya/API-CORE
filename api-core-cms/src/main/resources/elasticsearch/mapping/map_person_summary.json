@@ -63,7 +63,7 @@
       "type": "date",
       "store": true
     },
-      "date_of_birth_as_text": {
+    "date_of_birth_as_text": {
       "type": "text",
       "store": true
     },
@@ -101,6 +101,11 @@
       "type": "text",
       "store": true
     },
+    "date_of_death": {
+      "format": "strict_date_optional_time||epoch_millis",
+      "type": "date",
+      "store": true
+    },    
     "open_case_id": {
       "type": "text",
       "store": true
