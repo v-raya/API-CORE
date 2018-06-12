@@ -9,8 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Type;
-
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 
 /**
@@ -28,11 +26,9 @@ public class SafelySurrenderedBabies extends CmsPersistentObject {
   @Column(name = "FKCHLD_CLT", length = CMS_ID_LEN)
   private String childClientId;
 
-  @Type(type = "date")
   @Column(name = "SURR_DT")
   private LocalDate surrenderedDate;
 
-  @Type(type = "time")
   @Column(name = "SURR_TM")
   private LocalTime surrenderedTime;
 
@@ -51,18 +47,15 @@ public class SafelySurrenderedBabies extends CmsPersistentObject {
   @Column(name = "MEDQUES_CD", length = 1)
   private String medicalQuestionnaireCode;
 
-  @Type(type = "date")
   @Column(name = "QUESREC_DT")
   private LocalDate questionnaireReceivedDate;
 
   @Column(name = "CPSNTF_IND")
   private Boolean cpsNotofiedIndicator;
 
-  @Type(type = "date")
   @Column(name = "CPSNTF_DT")
   private LocalDate cpsNotofiedDate;
 
-  @Type(type = "time")
   @Column(name = "CPSNTF_TM")
   private LocalTime cpsNotofiedTime;
 
