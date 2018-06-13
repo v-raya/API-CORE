@@ -506,6 +506,7 @@ public abstract class BaseClient extends CmsPersistentObject
   /**
    * @return the deathDate
    */
+  @Override
   public Date getDeathDate() {
     return deathDate;
   }

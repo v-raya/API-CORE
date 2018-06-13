@@ -123,6 +123,7 @@ public class SubstituteCareProviderCoreService
     List<ScpOtherEthnicity> clientScpEthnicities =
         dto.getEthnicityList()
             .stream()
+            .filter(ethnicity -> ethnicity != null)
             .map(ethnicity -> buildScpOtherEthnicity(ethnicity, dto.getEntity().getIdentifier()))
             .collect(Collectors.toList());
 

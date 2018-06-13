@@ -28,48 +28,44 @@ public class SafelySurrenderedBabies extends CmsPersistentObject {
   @Column(name = "FKCHLD_CLT", length = CMS_ID_LEN)
   private String childClientId;
 
-  @Type(type = "date")
-  @Column(name = "SURR_DT")
+  @Column(name = "SURR_DT", nullable = false, length = 10)
   private LocalDate surrenderedDate;
 
-  @Type(type = "time")
-  @Column(name = "SURR_TM")
+  @Column(name = "SURR_TM", nullable = true, length = 8)
   private LocalTime surrenderedTime;
 
-  @Column(name = "SURR_BY_NM")
+  @Column(name = "SURR_BY_NM", nullable = false, length = 40)
   private String surrenderedByName;
 
-  @Column(name = "RELTO_CLT")
+  @Column(name = "RELTO_CLT", nullable = false, length = 5)
   private Short relationToClient;
 
-  @Column(name = "COMM_DESC")
+  @Column(name = "COMM_DESC", nullable = true, length = 254)
   private String commentDescription;
 
-  @Column(name = "ID_INFO_CD", length = 1)
+  @Column(name = "ID_INFO_CD", nullable = false, length = 1)
   private String braceletIdInfoCode;
 
-  @Column(name = "MEDQUES_CD", length = 1)
+  @Column(name = "MEDQUES_CD", nullable = false, length = 1)
   private String medicalQuestionnaireCode;
 
-  @Type(type = "date")
-  @Column(name = "QUESREC_DT")
+  @Column(name = "QUESREC_DT", nullable = true, length = 10)
   private LocalDate questionnaireReceivedDate;
 
-  @Column(name = "CPSNTF_IND")
+  @Column(name = "CPSNTF_IND", nullable = false, length = 1)
+  @Type(type = "yes_no")
   private Boolean cpsNotofiedIndicator;
 
-  @Type(type = "date")
-  @Column(name = "CPSNTF_DT")
+  @Column(name = "CPSNTF_DT", nullable = false, length = 10)
   private LocalDate cpsNotofiedDate;
 
-  @Type(type = "time")
-  @Column(name = "CPSNTF_TM")
+  @Column(name = "CPSNTF_TM", nullable = true, length = 8)
   private LocalTime cpsNotofiedTime;
 
-  @Column(name = "FKSPRJ_CST", length = CMS_ID_LEN)
+  @Column(name = "FKSPRJ_CST", nullable = true, length = CMS_ID_LEN)
   private String specialProjectCase;
 
-  @Column(name = "FKSPRJ_RFT", length = CMS_ID_LEN)
+  @Column(name = "FKSPRJ_RFT", nullable = true, length = CMS_ID_LEN)
   private String specialProjectReferral;
 
   /**
