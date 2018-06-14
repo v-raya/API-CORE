@@ -54,4 +54,12 @@ public class LegacyTableTest {
     assertThat(actual, is(equalTo(expected)));
   }
 
+  @Test
+  public void lookupByName_Args__EducationProviderContactService() throws Exception {
+    String tableName = "EDPRVCNT";
+    LegacyTable actual = LegacyTable.lookupByName(tableName);
+    LegacyTable expected = LegacyTable.EDUCATION_PROVIDER_CONTACT;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
 }
