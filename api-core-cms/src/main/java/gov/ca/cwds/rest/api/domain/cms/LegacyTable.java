@@ -45,6 +45,8 @@ public enum LegacyTable {
 
   DELIVERED_SERVICE("DL_SVC_T", "Delivered Service"),
 
+  EDUCATION_PROVIDER("ED_PVDRT", "Education Provider"),
+
   EDUCATION_PROVIDER_CONTACT("EDPRVCNT", "Education Provider Contact"),
 
   GOVERNMENT_ORGANIZATION_ENTITY("GVR_ENTC", "Government Organization Entity"),

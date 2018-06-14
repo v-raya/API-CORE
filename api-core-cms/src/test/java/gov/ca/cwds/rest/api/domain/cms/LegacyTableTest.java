@@ -55,11 +55,20 @@ public class LegacyTableTest {
   }
 
   @Test
-  public void lookupByName_Args__EducationProviderContactService() throws Exception {
+  public void lookupByName_Args__EducationProvider() throws Exception {
+    String tableName = "ED_PVDRT";
+    LegacyTable actual = LegacyTable.lookupByName(tableName);
+    LegacyTable expected = LegacyTable.EDUCATION_PROVIDER;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void lookupByName_Args__EducationProviderContact() throws Exception {
     String tableName = "EDPRVCNT";
     LegacyTable actual = LegacyTable.lookupByName(tableName);
     LegacyTable expected = LegacyTable.EDUCATION_PROVIDER_CONTACT;
     assertThat(actual, is(equalTo(expected)));
   }
+
 
 }
