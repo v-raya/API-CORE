@@ -71,7 +71,7 @@ public class DomainChef {
   /**
    * Formatter for LocalDate
    */
-  protected static DateTimeFormatter localDateFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+  protected static final DateTimeFormatter localDateFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
   
   /**
    * Constructor
@@ -191,15 +191,15 @@ public class DomainChef {
   }
   
   /**
-   * @param date - String to uncook to LocalDate
+   * @param date - String to un cook to LocalDate
    * @return LocalDate 
    */
   public static LocalDate uncookLocalDateString(String date) {
     String trimDate = StringUtils.trim(date);
     if (StringUtils.isNotEmpty(trimDate)) {
       try {
-        LocalDate localDate = LocalDate.parse(trimDate, localDateFormatter);
-        return localDate;
+        LocalDate localDate = null;
+        return localDate = LocalDate.parse(trimDate, localDateFormatter);
       } catch (Exception e) {
         throw new ApiException(e);
       }
