@@ -31,7 +31,7 @@ rule "R-00311-CA"
       details.setCode("R-00311");
       details.setProperty("PlacementHome.gvrEntc");
       details.setInvalidValue($placementHome.gvrEntc);
-      details.setUserMessage("GOVERNMENT ENTITY TYPE (location county) must be specified if STATE CODE TYPE is CA and must not be specified if not CA .");
+      details.setUserMessage("Location county should be specified for Facility with residence in California.");
       details.setTechnicalMessage("If State_Code_Type = CA, Government_Entity_Type must not be null. If State_Code_Type <> CA, Government_Entity_Type must be null.");
       validationDetailsList.add(details);
 end
@@ -61,7 +61,7 @@ rule "R-00311-NON-CA"
       details.setCode("R-00311");
       details.setProperty("PlacementHome.gvrEntc");
       details.setInvalidValue($placementHome.gvrEntc);
-      details.setUserMessage("GOVERNMENT ENTITY TYPE (location county) must be specified if STATE CODE TYPE is CA and must not be specified if not CA .");
+      details.setUserMessage("Location county should not be specified for Facility with residence out of California.");
       details.setTechnicalMessage("If State_Code_Type = CA, Government_Entity_Type must not be null. If State_Code_Type <> CA, Government_Entity_Type must be null.");
       validationDetailsList.add(details);
 end
