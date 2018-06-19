@@ -1,16 +1,34 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Date;
+import static gov.ca.cwds.cms.data.access.Constants.PhoneticPrimaryNameCode.PLACEMENT_HOME_ADDRESS;
+import static gov.ca.cwds.cms.data.access.Constants.SsaName3StoredProcedureCrudOperationCode.INSERT_OPERATION_CODE;
+import static gov.ca.cwds.cms.data.access.service.impl.IdGenerator.generateId;
+import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
+import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
+
 import com.google.inject.Inject;
 import gov.ca.cwds.authorizer.PlacementHomeResultReadAuthorizer;
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.cms.data.access.Constants.PhoneticSearchTables;
-import gov.ca.cwds.cms.data.access.dao.*;
-import gov.ca.cwds.cms.data.access.dto.*;
+import gov.ca.cwds.cms.data.access.dao.BackgroundCheckDao;
+import gov.ca.cwds.cms.data.access.dao.CountyOwnershipDao;
+import gov.ca.cwds.cms.data.access.dao.EmergencyContactDetailDao;
+import gov.ca.cwds.cms.data.access.dao.ExternalInterfaceDao;
+import gov.ca.cwds.cms.data.access.dao.OtherAdultsInPlacementHomeDao;
+import gov.ca.cwds.cms.data.access.dao.OtherChildrenInPlacementHomeDao;
+import gov.ca.cwds.cms.data.access.dao.OtherPeopleScpRelationshipDao;
+import gov.ca.cwds.cms.data.access.dao.OutOfStateCheckDao;
+import gov.ca.cwds.cms.data.access.dao.PlacementFacilityTypeHistoryDao;
+import gov.ca.cwds.cms.data.access.dao.PlacementHomeDao;
+import gov.ca.cwds.cms.data.access.dao.PlacementHomeProfileDao;
+import gov.ca.cwds.cms.data.access.dao.PlacementHomeUcDao;
+import gov.ca.cwds.cms.data.access.dao.SsaName3Dao;
+import gov.ca.cwds.cms.data.access.dto.AppAndLicHistoryAwareDTO;
+import gov.ca.cwds.cms.data.access.dto.CLCEntityAwareDTO;
+import gov.ca.cwds.cms.data.access.dto.OtherAdultInHomeEntityAwareDTO;
+import gov.ca.cwds.cms.data.access.dto.OtherChildInHomeEntityAwareDTO;
+import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
+import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.mapper.ExternalInterfaceMapper;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
@@ -22,17 +40,28 @@ import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
 import gov.ca.cwds.cms.data.access.service.rules.PlacementHomeDroolsConfiguration;
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
-import gov.ca.cwds.data.legacy.cms.entity.*;
+import gov.ca.cwds.data.legacy.cms.entity.BackgroundCheck;
+import gov.ca.cwds.data.legacy.cms.entity.CountyLicenseCase;
+import gov.ca.cwds.data.legacy.cms.entity.CountyOwnership;
+import gov.ca.cwds.data.legacy.cms.entity.EmergencyContactDetail;
+import gov.ca.cwds.data.legacy.cms.entity.ExternalInterface;
+import gov.ca.cwds.data.legacy.cms.entity.OtherAdultsInPlacementHome;
+import gov.ca.cwds.data.legacy.cms.entity.OtherChildrenInPlacementHome;
+import gov.ca.cwds.data.legacy.cms.entity.OtherPeopleScpRelationship;
+import gov.ca.cwds.data.legacy.cms.entity.OutOfStateCheck;
+import gov.ca.cwds.data.legacy.cms.entity.PlacementFacilityTypeHistory;
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeProfile;
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeUc;
+import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
-
-
-import static gov.ca.cwds.cms.data.access.Constants.PhoneticPrimaryNameCode.PLACEMENT_HOME_ADDRESS;
-import static gov.ca.cwds.cms.data.access.Constants.SsaName3StoredProcedureCrudOperationCode.INSERT_OPERATION_CODE;
-import static gov.ca.cwds.cms.data.access.service.impl.IdGenerator.generateId;
-import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
-import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
 
 /**
  * Service for create/update/find PlacementHome with business validation and data processing.
@@ -118,6 +147,7 @@ public class PlacementHomeCoreService
   }
 
   protected class CreateLifecycle extends DefaultDataAccessLifeCycle<PlacementHomeEntityAwareDTO> {
+
     @Override
     public void beforeDataProcessing(DataAccessBundle bundle) {
       validateParameters((PlacementHomeEntityAwareDTO) bundle.getAwareDto());
@@ -191,7 +221,7 @@ public class PlacementHomeCoreService
     }
 
     private void createOtherChildInHome(PlacementHome placementHome,
-                                        OtherChildInHomeEntityAwareDTO parameterObject) {
+      OtherChildInHomeEntityAwareDTO parameterObject) {
       OtherChildrenInPlacementHome otherChildInPlacementHome = parameterObject.getEntity();
       otherChildInPlacementHome.setLstUpdId(getStaffPersonId());
       otherChildInPlacementHome.setLstUpdTs(LocalDateTime.now());
@@ -233,7 +263,7 @@ public class PlacementHomeCoreService
     }
 
     private void createOtherAdultInHome(PlacementHome placementHome,
-                                        OtherAdultInHomeEntityAwareDTO parameterObject) {
+      OtherAdultInHomeEntityAwareDTO parameterObject) {
       OtherAdultsInPlacementHome otherAdultInPlacementHome = parameterObject.getEntity();
       otherAdultInPlacementHome.setLstUpdId(getStaffPersonId());
       otherAdultInPlacementHome.setLstUpdTs(LocalDateTime.now());
@@ -322,17 +352,9 @@ public class PlacementHomeCoreService
     }
 
     /**
-     * Rule: R - 11179
-     * <p>
-     * <p>
-     * Rule Txt
-     * <p>
-     * <p>
-     * If the placement home is being saved to the database for the first time then create a new
-     * Placement Facility Type History row.
-     * <p>
-     * <p>
-     * Logic If (in focus) PLACEMENT_HOME is saved to the database for the first time then create
+     * Rule: R - 11179 <p> <p> Rule Txt <p> <p> If the placement home is being saved to the database
+     * for the first time then create a new Placement Facility Type History row. <p> <p> Logic If
+     * (in focus) PLACEMENT_HOME is saved to the database for the first time then create
      * PLACEMENT_HOME > PLACEMENT_FACILITY_TYPE_HISTORY set .Start_Timestamp = System Timestamp AND
      * .Placement_Facility_Type = (in focus) PLACEMENT_HOME.Placement_Facility_Type.
      */
@@ -359,9 +381,11 @@ public class PlacementHomeCoreService
       placementHome.setCountyLicenseCase(countyLicenseCase);
     }
 
-    private void createApplicationAndLicenseStatusHistory(PlacementHomeEntityAwareDTO parameterObject)
+    private void createApplicationAndLicenseStatusHistory(
+      PlacementHomeEntityAwareDTO parameterObject)
       throws DataAccessServicesException {
-      for (AppAndLicHistoryAwareDTO appAndLicHistoryAwareDTO : parameterObject.getAppAndLicHistory()) {
+      for (AppAndLicHistoryAwareDTO appAndLicHistoryAwareDTO : parameterObject
+        .getAppAndLicHistory()) {
         applicationAndLicenseStatusHistoryService.create(appAndLicHistoryAwareDTO);
       }
     }
