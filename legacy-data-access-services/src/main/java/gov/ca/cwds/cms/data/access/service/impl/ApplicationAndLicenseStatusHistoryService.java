@@ -1,5 +1,6 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
+import java.util.function.Consumer;
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.dto.AppAndLicHistoryAwareDTO;
 import gov.ca.cwds.cms.data.access.service.DefaultCmsDataAccessService;
@@ -18,7 +19,7 @@ public class ApplicationAndLicenseStatusHistoryService
   }
 
   @Override
-  protected void setId(ApplicationAndLicenseStatusHistory entity, String id) {
-    entity.setIdentifier(id);
+  protected Consumer<String> idSetter(ApplicationAndLicenseStatusHistory entity) {
+    return entity::setIdentifier;
   }
 }
