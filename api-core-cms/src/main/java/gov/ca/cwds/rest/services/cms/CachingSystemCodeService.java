@@ -80,8 +80,8 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
         throw new ServiceException(e);
       }
 
-      LOGGER.info("System code cache size: {}, refresh after (seconds): ", systemCodeCache.size(),
-          secondsToRefreshCache);
+      LOGGER.info("System code cache size: {}, pre-loaded: {}, refresh after (seconds): ",
+          systemCodeCache.size(), preloadCache, secondsToRefreshCache);
     }
   }
 
