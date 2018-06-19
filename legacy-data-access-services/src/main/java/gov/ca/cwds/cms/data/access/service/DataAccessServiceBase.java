@@ -16,8 +16,8 @@ import java.io.Serializable;
  * @author CWDS TPT-3 Team
  */
 public abstract class DataAccessServiceBase<
-        E extends CrudsDao<T>, T extends PersistentObject, P extends BaseEntityAwareDTO<T>>
-    implements DataAccessService<T, P> {
+  E extends CrudsDao<T>, T extends PersistentObject, P extends BaseEntityAwareDTO<T>>
+  implements DataAccessService<T, P> {
 
   protected final E crudDao;
 
@@ -60,7 +60,7 @@ public abstract class DataAccessServiceBase<
 
   @Override
   public T update(P entityAwareDTO) throws DataAccessServicesException {
-    
+
     if (getUpdateLifeCycle() == null) {
       updateLifecycle = new DefaultDataAccessLifeCycle<>();
     } else {

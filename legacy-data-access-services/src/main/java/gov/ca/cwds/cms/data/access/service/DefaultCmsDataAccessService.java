@@ -1,7 +1,5 @@
 package gov.ca.cwds.cms.data.access.service;
 
-import java.time.LocalDateTime;
-import java.util.function.Consumer;
 import gov.ca.cwds.cms.data.access.dto.BaseEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.impl.IdGenerator;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
@@ -9,6 +7,8 @@ import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
 import gov.ca.cwds.data.CrudsDao;
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.security.utils.PrincipalUtils;
+import java.time.LocalDateTime;
+import java.util.function.Consumer;
 
 public abstract class DefaultCmsDataAccessService
   <E extends CrudsDao<T>, T extends CmsPersistentObject, P extends BaseEntityAwareDTO<T>>
