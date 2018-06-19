@@ -12,37 +12,37 @@ public class DefaultDataAccessLifeCycle<T extends BaseEntityAwareDTO<? extends P
     implements DataAccessServiceLifecycle<T> {
 
   @Override
-  public void beforeDataProcessing(DataAccessBundle bundle) throws DataAccessServicesException {
+  public void beforeDataProcessing(DataAccessBundle<T> bundle) throws DataAccessServicesException {
     // Do nothing just a stub
   }
 
   @Override
-  public void afterDataProcessing(DataAccessBundle bundle) {
+  public void afterDataProcessing(DataAccessBundle<T> bundle) {
     // Do nothing just a stub
   }
 
   @Override
-  public void beforeBusinessValidation(DataAccessBundle bundle) {
+  public void beforeBusinessValidation(DataAccessBundle<T> bundle) {
     // Do nothing just a stub
   }
 
   @Override
-  public void afterBusinessValidation(DataAccessBundle bundle) {
+  public void afterBusinessValidation(DataAccessBundle<T> bundle) {
     // Do nothing just a stub
   }
 
   @Override
-  public void dataProcessing(DataAccessBundle bundle, PerryAccount perryAccount) {
+  public void dataProcessing(DataAccessBundle<T> bundle, PerryAccount perryAccount) {
     // Do nothing just a stub
   }
 
   @Override
-  public void businessValidation(DataAccessBundle bundle, PerryAccount perryAccount) {
+  public void businessValidation(DataAccessBundle<T> bundle, PerryAccount perryAccount) {
     // Do nothing
   }
 
   @Override
-  public void afterStore(DataAccessBundle bundle) throws DataAccessServicesException {
+  public void afterStore(DataAccessBundle<T> bundle) throws DataAccessServicesException {
     // Do nothing just a stub
   }
 
