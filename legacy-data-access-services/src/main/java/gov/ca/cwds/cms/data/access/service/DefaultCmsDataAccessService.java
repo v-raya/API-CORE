@@ -23,7 +23,7 @@ public abstract class DefaultCmsDataAccessService
    *
    * @param entityAwareDTO entity holder
    * @return newly created entity
-   * @throws DataAccessServicesException
+   * @throws DataAccessServicesException if something went wrong
    */
   public T create(P entityAwareDTO) throws DataAccessServicesException {
     idSetter(entityAwareDTO.getEntity()).accept(IdGenerator.generateId());
@@ -36,7 +36,7 @@ public abstract class DefaultCmsDataAccessService
    *
    * @param entityAwareDTO entity holder
    * @return updated entity
-   * @throws DataAccessServicesException
+   * @throws DataAccessServicesException if something went wrong
    */
   public T update(P entityAwareDTO) throws DataAccessServicesException {
     audit(entityAwareDTO.getEntity());
