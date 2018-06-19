@@ -9,9 +9,12 @@ import static org.hamcrest.Matchers.startsWith;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import org.hamcrest.core.Is;
+import org.joda.time.DateTime;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -28,6 +31,7 @@ public class DomainChefTest {
   protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd-HH.mm.ss.SSS";
   protected static final String LEGACY_TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
   protected static final String TIME_FORMAT = "HH:mm:ss";
+  protected static final String TIMESTAMP_STRICT_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZZ";
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -104,6 +108,19 @@ public class DomainChefTest {
 
     assertThat(DomainChef.cookDate(date), is(equalTo(df.format(date))));
   }
+  
+  @Test
+  public void cookLocalDateReturnsCorrectString() throws Exception {
+    DateTimeFormatter localDateFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+    LocalDate localDate = LocalDate.now();
+    assertThat(DomainChef.cookLocalDate(localDate), is(equalTo(localDate.format(localDateFormatter))));
+  }
+  
+  @Test
+  public void cookLocalDateReturnsEmptyString() throws Exception {
+    LocalDate localDate = null;
+    assertThat(DomainChef.cookLocalDate(localDate), is(equalTo(null)));
+  }
 
   // cookTimestamp tests
   @Test
@@ -145,6 +162,20 @@ public class DomainChefTest {
     assertThat(DomainChef.uncookDateString(dateString), is(equalTo(dateBasedOnFormat)));
   }
 
+  @Test
+  public void uncookLocalDateStringReturnsCorrectDate() throws Exception {
+    DateTimeFormatter localDateFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+    LocalDate localDate = LocalDate.now();
+    String localDateString = localDate.format(localDateFormatter);
+    assertThat(DomainChef.uncookLocalDateString(localDateString), is(equalTo(localDate)));
+  }
+  
+  @Test
+  public void uncookLocalDateStringReturnsNull() throws Exception {
+    String localDateString = "";
+    assertThat(DomainChef.uncookLocalDateString(localDateString), is(equalTo(null)));
+  }
+  
   @Test
   public void uncookDateStringReturnsNullOnNull() throws Exception {
     assertThat(DomainChef.uncookDateString(null), is(nullValue()));
@@ -229,6 +260,26 @@ public class DomainChefTest {
     assertThat(DomainChef.uncookTimeString(""), is(nullValue()));
   }
 
+  @Test
+  public void uncookStrictTimestampString() throws Exception {
+    String timeString = "2016-08-03T01:00:00.000-0700";
+    Date strictTime = new SimpleDateFormat(TIMESTAMP_STRICT_FORMAT).parse("2016-08-03T01:00:00.000-0700");
+    assertThat(DomainChef.uncookStrictTimestampString(timeString), is(equalTo(strictTime)));
+  }
+  
+  @Test 
+  public void uncookStrictTimestampStringWhenNull() throws Exception {
+    String timeString = "";
+    assertThat(DomainChef.uncookStrictTimestampString(timeString), is(equalTo(null)));
+  }
+  
+  @Test
+  public void uncookStrictTimestampStringThrowsExceptionOnBadInput() throws Exception {
+    thrown.expect(ApiException.class);
+    thrown.expectCause(Is.isA(ParseException.class));
+    DomainChef.uncookStrictTimestampString("dlfjkdfjdkfjkd");
+  }
+  
   // cookZipcodeNumber tests
   @Test
   public void cookZipcodeNumberReturnsEmptyStringWhenZipcodeNumberIsNull() throws Exception {
@@ -279,5 +330,33 @@ public class DomainChefTest {
     thrown.expectMessage(startsWith("Unable to uncook zipcode string"));
     DomainChef.uncookZipcodeString("dlfjkdfjdkfjkd");
   }
+  
+  @Test
+  public void testConcatenateDateAndTimeSuccess() throws Exception {
+    DateFormat tf = new SimpleDateFormat(TIME_FORMAT);
+    DateFormat df = new SimpleDateFormat(DATE_FORMAT);
+    Date receivedDate = df.parse("2018-06-15");
+    Date receivedTime = tf.parse("12:01:01");
+    DateTime srcDate = new DateTime(receivedDate);
+    DateTime srcTime = new DateTime(receivedTime);
+    
+    DateTime coDateTime = new DateTime(srcDate.getYear(), srcDate.getMonthOfYear(),
+        srcDate.getDayOfMonth(), srcTime.getHourOfDay(), srcTime.getMinuteOfHour(),
+        srcTime.getSecondOfMinute(), srcTime.getMillisOfSecond());
+    
+    Date comboDateTime = coDateTime.toDate();
+    
+    assertThat(DomainChef.concatenateDateAndTime(receivedDate, receivedTime), is(equalTo(comboDateTime)));
+  }
 
+  @Test
+  public void testConcatenteDateAndTimeWithNullTime() throws Exception {
+    DateFormat df = new SimpleDateFormat(DATE_FORMAT);
+    Date receivedDate = df.parse("2018-06-15");
+    Date receivedTime = null;
+    DateTime srcDate = new DateTime(receivedDate);
+    Date coDate = srcDate.toDate();
+    assertThat(DomainChef.concatenateDateAndTime(receivedDate, receivedTime), is(equalTo(coDate)));
+   
+  }
 }
