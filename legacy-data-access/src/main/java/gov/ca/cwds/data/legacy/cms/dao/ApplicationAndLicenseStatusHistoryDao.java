@@ -10,7 +10,7 @@ public class ApplicationAndLicenseStatusHistoryDao extends
   BaseDaoImpl<ApplicationAndLicenseStatusHistory> {
 
   /**
-   * Constructor
+   * Constructor.
    *
    * @param sessionFactory The session factory
    */
