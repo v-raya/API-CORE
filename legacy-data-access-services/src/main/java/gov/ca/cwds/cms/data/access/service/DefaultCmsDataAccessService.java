@@ -18,12 +18,26 @@ public abstract class DefaultCmsDataAccessService
     super(crudDao);
   }
 
+  /**
+   * Creates new db record, runs generic entity creation lifecycle.
+   *
+   * @param entityAwareDTO entity holder
+   * @return newly created entity
+   * @throws DataAccessServicesException
+   */
   public T create(P entityAwareDTO) throws DataAccessServicesException {
     idSetter(entityAwareDTO.getEntity()).accept(IdGenerator.generateId());
     audit(entityAwareDTO.getEntity());
     return super.create(entityAwareDTO);
   }
 
+  /**
+   * Updates entity, runs generic 'update' lifecycle.
+   *
+   * @param entityAwareDTO entity holder
+   * @return updated entity
+   * @throws DataAccessServicesException
+   */
   public T update(P entityAwareDTO) throws DataAccessServicesException {
     audit(entityAwareDTO.getEntity());
     return super.update(entityAwareDTO);
