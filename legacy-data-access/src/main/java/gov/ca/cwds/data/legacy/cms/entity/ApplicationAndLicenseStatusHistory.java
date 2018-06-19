@@ -1,13 +1,20 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
+import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import java.io.Serializable;
 import java.time.LocalDate;
-import javax.persistence.*;
-import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "AL_HSTAT")
 public class ApplicationAndLicenseStatusHistory extends CmsPersistentObject {
+
   @Id
   @Column(name = "IDENTIFIER", nullable = false, length = 10)
   private String identifier;
@@ -17,16 +24,16 @@ public class ApplicationAndLicenseStatusHistory extends CmsPersistentObject {
   private PlacementHome placementHome;
 
   /**
-   * APP_OR_LICENSE_STATUS_CODE -
-   * This code defines each type of status type for which APPL_AND_LICENSE_STAT_HISTORY is maintained.
-   * (e.g. Application Status Type = A, License Status Type = L, Certified Pending Licensure Type = C).
+   * APP_OR_LICENSE_STATUS_CODE - This code defines each type of status type for which
+   * APPL_AND_LICENSE_STAT_HISTORY is maintained. (e.g. Application Status Type = A, License Status
+   * Type = L, Certified Pending Licensure Type = C).
    */
   @Column(name = "AP_LIC_CD", nullable = false, length = 1)
   private String applicationOrLicenseStatusCode;
 
   /**
-   * APP_OR_LICENSE_STATUS_TYPE - The system generated number assigned to each
-   * APPLICATION STATUS TYPE or LICENSE STATUS TYPE for a specific PLACEMENT HOME.
+   * APP_OR_LICENSE_STATUS_TYPE - The system generated number assigned to each APPLICATION STATUS
+   * TYPE or LICENSE STATUS TYPE for a specific PLACEMENT HOME.
    */
   @Column(name = "AP_LIC_STC", nullable = false)
   private Short applicationOrLicenseStatusType; //TODO sys code????
@@ -39,16 +46,19 @@ public class ApplicationAndLicenseStatusHistory extends CmsPersistentObject {
   private String closedIndicator;
 
   /**
-   * END_DATE - The date on which this application status type or license status type becomes inactive.
+   * END_DATE - The date on which this application status type or license status type becomes
+   * inactive.
    */
   @Column(name = "END_DT")
   private LocalDate endDt;
 
   /**
-   * START_DATE - The date on which this application status type or license status type becomes active.
+   * START_DATE - The date on which this application status type or license status type becomes
+   * active.
    */
   @Column(name = "START_DT", nullable = false)
   private LocalDate startDt;
+
   public String getIdentifier() {
     return identifier;
   }
