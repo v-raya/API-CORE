@@ -2,7 +2,6 @@ package gov.ca.cwds.data.legacy.cms.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -23,6 +22,14 @@ public class SpecialProjectReferral extends CmsPersistentObject {
 
   private static final long serialVersionUID = 241170224860954003L;
 
+  public static final String FIND_BY_REFERRAL_ID_AND_SPECIAL_PROJECT_ID = 
+      "gov.ca.cwds.data.persistence.cms.SpecialProjectReferral.findByReferralIdAndSpecialProjectId";
+  static final String FIND_BY_REFERRAL_ID_AND_SPECIAL_PROJECT_ID_QUERY =
+      "FROM SpecialProjectReferral WHERE FKREFERL_T = referralId AND FKSPC_PRJT = specialProjectId";
+  
+  public static final String PARAM_REFERRAL_ID = "referralId";
+  public static final String PARAM_SPECIAL_PROJECT_ID = "specialProjectId";
+
   @Id
   @Column(name = "THIRD_ID", nullable = false, length = CMS_ID_LEN)
   private String id;
@@ -38,13 +45,13 @@ public class SpecialProjectReferral extends CmsPersistentObject {
 
   @Column(name = "SFSURB_IND", nullable = false, length = 1)
   @Type(type = "yes_no")
-  private Boolean ssbIndicator;
+  private Boolean safelySurrenderedBabiesIndicator;
 
   @Column(name = "PART_STRDT", nullable = false, length = 10)
-  private LocalDate partStartDate;
+  private LocalDate participationStartDate;
 
   @Column(name = "PART_ENDT", nullable = true, length = 10)
-  private LocalDate partEndDate;
+  private LocalDate participationEndDate;
 
   /**
    * No-argument constructor.
@@ -53,6 +60,31 @@ public class SpecialProjectReferral extends CmsPersistentObject {
     super();
   }
 
+  /**
+   * Constructor
+   * 
+   * @param countySpecificCode - county specific code
+   * @param referralId - referral ID
+   * @param specialProjectId - special project ID
+   * @param participationEndDate - participation end date
+   * @param participationStartDate - participation start date
+   * @param safelySurrenderedBabiesIndicator - safely surrendered babies indicator
+   * @param id - third ID
+   * 
+   */
+  public SpecialProjectReferral(String countySpecificCode, String referralId, String specialProjectId,
+      LocalDate participationEndDate, LocalDate participationStartDate, Boolean safelySurrenderedBabiesIndicator,
+      String id) {
+    super();
+    this.countySpecificCode = countySpecificCode;
+    this.referralId = referralId;
+    this.specialProjectId = specialProjectId;
+    this.participationEndDate = participationEndDate;
+    this.participationStartDate = participationStartDate;
+    this.safelySurrenderedBabiesIndicator = safelySurrenderedBabiesIndicator;
+    this.id = id;
+  }
+  
   @Override
   public Serializable getPrimaryKey() {
     return getId();
@@ -91,26 +123,26 @@ public class SpecialProjectReferral extends CmsPersistentObject {
   }
 
   public Boolean getSsbIndicator() {
-    return ssbIndicator;
+    return safelySurrenderedBabiesIndicator;
   }
 
-  public void setSsbIndicator(Boolean ssbIndicator) {
-    this.ssbIndicator = ssbIndicator;
+  public void setSsbIndicator(Boolean safelySurrenderedBabiesIndicator) {
+    this.safelySurrenderedBabiesIndicator = safelySurrenderedBabiesIndicator;
   }
 
   public LocalDate getPartStartDate() {
-    return partStartDate;
+    return participationStartDate;
   }
 
-  public void setPartStartDate(LocalDate partStartDate) {
-    this.partStartDate = partStartDate;
+  public void setPartStartDate(LocalDate participationStartDate) {
+    this.participationStartDate = participationStartDate;
   }
 
   public LocalDate getPartEndDate() {
-    return partEndDate;
+    return participationEndDate;
   }
 
-  public void setPartEndDate(LocalDate partEndDate) {
-    this.partEndDate = partEndDate;
+  public void setPartEndDate(LocalDate participationEndDate) {
+    this.participationEndDate = participationEndDate;
   }
 }
