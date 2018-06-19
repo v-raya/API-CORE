@@ -1,6 +1,7 @@
 package gov.ca.cwds.cms.data.access.service;
 
 import gov.ca.cwds.cms.data.access.dto.ClientRelationshipDTO;
+import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 
 /**
  * HOTLINE.
@@ -8,6 +9,6 @@ import gov.ca.cwds.cms.data.access.dto.ClientRelationshipDTO;
  * @author CWDS TPT-3 Team
  */
 public interface ClientRelationshipService {
-  void createRelationship(ClientRelationshipDTO clientRelationshipDto)
+  ClientRelationship createRelationship(ClientRelationshipDTO clientRelationshipDto)
       throws DataAccessServicesException;
 }

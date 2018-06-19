@@ -3,9 +3,13 @@ package gov.ca.cwds.cms.data.access.service.impl.clientrelationship;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import gov.ca.cwds.cms.data.access.dto.ClientRelationshipDTO;
+import gov.ca.cwds.cms.data.access.mapper.ClientMapper;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
+import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.impl.BaseUnitTest;
 import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.TribalMembershipVerificationCoreService;
 import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
@@ -14,10 +18,13 @@ import gov.ca.cwds.data.legacy.cms.dao.PaternityDetailDao;
 import gov.ca.cwds.data.legacy.cms.dao.TribalMembershipVerificationDao;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
+import gov.ca.cwds.data.persistence.cms.BaseClient;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -102,6 +109,41 @@ public class ClientRelationshipCoreServiceTest extends BaseUnitTest {
     assertEquals(2, relationships.size());
 
     relationships.forEach(e -> testRelationship(e));
+  }
+
+  @Test
+  public void createRelationship() throws DataAccessServicesException {
+    Client primaryClientEntity = new Client();
+    primaryClientEntity.setIdentifier("primaryId");
+    Client secondaryClientEntity = new Client();
+    primaryClientEntity.setIdentifier("secondaryId");
+
+    SessionFactory factory = mock(SessionFactory.class);
+    when(relationshipDao.getSessionFactory()).thenReturn(factory);
+    ClientRelationship savedRelationship = mock(ClientRelationship.class);
+    when(relationshipDao.create(any(ClientRelationship.class))).thenReturn(savedRelationship);
+    when(clientDao.getSessionFactory()).thenReturn(factory);
+    Session session = mock(Session.class);
+    when(factory.getCurrentSession()).thenReturn(session);
+    when(session.load(Client.class, primaryClientEntity.getIdentifier())).thenReturn(primaryClientEntity);
+    when(session.load(Client.class, secondaryClientEntity.getIdentifier())).thenReturn(secondaryClientEntity);
+
+    ClientRelationshipDTO relationship = new ClientRelationshipDTO();
+    BaseClient primaryClient = mock(BaseClient.class);
+    BaseClient secondaryClient = mock(BaseClient.class);
+    relationship.setPrimaryClient(primaryClient);
+    relationship.setSecondaryClient(secondaryClient);
+
+    ClientRelationshipCoreService service = new ClientRelationshipCoreService( relationshipDao,
+    mock(UpdateLifeCycle.class), searchClientRelationshipService, mock(CreateLifeCycle.class));
+    ClientMapper mapper = mock(ClientMapper.class);
+    when(mapper.toLegacyClient(primaryClient)).thenReturn(primaryClientEntity);
+    when(mapper.toLegacyClient(secondaryClient)).thenReturn( secondaryClientEntity);
+    service.setClientMapper(mapper);
+
+    ClientRelationship actualRelationship = service.createRelationship(relationship);
+
+    assertEquals(savedRelationship, actualRelationship);
   }
 
   private void testRelationship(ClientRelationship e) {

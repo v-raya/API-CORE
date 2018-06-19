@@ -40,4 +40,25 @@ public class SpecialProjectDao extends BaseDaoImpl<SpecialProject> {
 
     return ImmutableList.copyOf(specialProjects);
   }
+  
+  /**
+   * find SpecialProject by government entity and special project name
+   * 
+   * @param governmentEntityType - government entity type
+   * @param name - special project name
+   * @return - list of special projects matching parameters
+   */
+  public List<SpecialProject> findSpecialProjectByGovernmentEntityAndName(String name, 
+      Short governmentEntityType) {
+    Require.requireNotNullAndNotEmpty(governmentEntityType);
+
+    final List<SpecialProject> specialProjects = currentSession()
+      .createNamedQuery(SpecialProject.FIND_BY_PROJECT_NAME, SpecialProject.class)
+      .setParameter(SpecialProject.PARAM_GOVERNMENT_ENTITY, governmentEntityType)
+      .setParameter(SpecialProject.PARAM_NAME, name)
+      .list();
+    return ImmutableList.copyOf(specialProjects);
+    }
+
+
 }
