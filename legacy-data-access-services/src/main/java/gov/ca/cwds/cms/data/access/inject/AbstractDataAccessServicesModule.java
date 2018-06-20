@@ -1,9 +1,12 @@
 package gov.ca.cwds.cms.data.access.inject;
 
+import org.hibernate.SessionFactory;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
+
 import gov.ca.cwds.cms.data.access.mapper.ClientMapper;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.mapper.ExternalInterfaceMapper;
@@ -18,7 +21,6 @@ import gov.ca.cwds.cms.data.access.service.impl.SubstituteCareProviderCoreServic
 import gov.ca.cwds.cms.data.access.service.impl.clientrelationship.ClientRelationshipCoreService;
 import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.CreateLifeCycle;
 import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.TribalMembershipVerificationCoreService;
-import org.hibernate.SessionFactory;
 
 /**
  * Common module binds services for authorization, common client services, and singleton instances.
@@ -49,7 +51,7 @@ public abstract class AbstractDataAccessServicesModule extends AbstractModule {
    */
   protected abstract SessionFactory getDataAccessServicesSessionFactory(Injector injector);
 
-  private void configureDataAccessServices() {
+  protected void configureDataAccessServices() {
     bind(PlacementHomeCoreService.class);
     bind(SubstituteCareProviderCoreService.class);
     bind(CountyLicenseCaseService.class);
@@ -65,7 +67,7 @@ public abstract class AbstractDataAccessServicesModule extends AbstractModule {
   /**
    * Configure singleton mapper instances.
    */
-  private void configureMappers() {
+  protected void configureMappers() {
     bind(CountyOwnershipMapper.class).to(CountyOwnershipMapper.INSTANCE.getClass())
         .asEagerSingleton();
     bind(ExternalInterfaceMapper.class).to(ExternalInterfaceMapper.INSTANCE.getClass())
