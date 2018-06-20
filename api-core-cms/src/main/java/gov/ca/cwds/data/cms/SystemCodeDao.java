@@ -35,23 +35,6 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
   }
 
   /**
-   * Get the current session, if available, or open a new one.
-   * 
-   * @return Hibernate session
-   */
-  protected Session getCurrentSession() {
-    Session session;
-    try {
-      session = getSessionFactory().getCurrentSession();
-    } catch (HibernateException e) { // NOSONAR
-      LOGGER.warn("NO SESSION!");
-      session = getSessionFactory().openSession();
-    }
-
-    return session;
-  }
-
-  /**
    * @param foreignKeyMetaTable meta group
    * @return all keys by meta table
    */
@@ -59,7 +42,7 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
   public SystemCode[] findByForeignKeyMetaTable(String foreignKeyMetaTable) {
     final String namedQueryName = SystemCode.class.getName() + ".findByForeignKeyMetaTable";
 
-    final Session session = getCurrentSession();
+    final Session session = grabSession();
     Transaction txn = session.getTransaction();
     boolean transactionExists = txn != null && txn.isActive();
     txn = transactionExists ? txn : session.beginTransaction();
@@ -80,7 +63,7 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
   @SuppressWarnings("unchecked")
   public SystemCode findBySystemCodeId(Number systemCodeId) {
     final String namedQueryName = SystemCode.class.getName() + ".findBySystemCodeId";
-    Session session = getCurrentSession();
+    Session session = grabSession();
 
     Transaction txn = session.getTransaction();
     boolean transactionExists = txn != null && txn.isActive();
