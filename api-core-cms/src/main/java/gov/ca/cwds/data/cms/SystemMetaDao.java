@@ -37,7 +37,7 @@ public class SystemMetaDao extends CrudsDaoImpl<SystemMeta> {
   public SystemMeta[] findAll() {
 
     final String namedQueryName = SystemMeta.class.getName() + ".findAll";
-    Session session = getSessionFactory().getCurrentSession();
+    Session session = grabSession();
 
     Transaction txn = session.getTransaction();
     boolean transactionExists = txn != null && txn.isActive();
