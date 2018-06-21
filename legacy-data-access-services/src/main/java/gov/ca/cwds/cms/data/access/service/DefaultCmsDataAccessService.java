@@ -26,8 +26,9 @@ public abstract class DefaultCmsDataAccessService
    * @throws DataAccessServicesException if something went wrong
    */
   public T create(P entityAwareDTO) throws DataAccessServicesException {
-    idSetter(entityAwareDTO.getEntity()).accept(IdGenerator.generateId());
-    audit(entityAwareDTO.getEntity());
+    T entity = entityAwareDTO.getEntity();
+    idSetter(entity).accept(IdGenerator.generateId());
+    audit(entity);
     return super.create(entityAwareDTO);
   }
 
