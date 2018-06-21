@@ -19,4 +19,5 @@ public class AuditingModule extends AbstractModule {
     bind(AuditLogger.class).to(AuditLoggerImpl.class);
     bind(LoggingContext.class).to(MDCLoggingContext.class);
   }
+
 }
