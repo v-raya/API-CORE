@@ -83,7 +83,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     if (LOGGER.isTraceEnabled()) {
       LOGGER.trace("onDelete -> id={}, entity={}", id, entity);
     } else {
-      LOGGER.debug("onDelete -> id={}, entityClass={}", id, entity.getClass().getName());
+      LOGGER.info("onDelete -> id={}, entityClass={}", id, entity.getClass().getName());
     }
 
     logLimitedAccessRecord(entity, "onDelete");
@@ -114,7 +114,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     if (LOGGER.isTraceEnabled()) {
       LOGGER.trace("onLoad -> id={}, entity={}", id, entity);
     } else {
-      LOGGER.debug("onLoad -> id={}, entityClass={}", id, entity.getClass().getName());
+      LOGGER.info("onLoad -> id={}, entityClass={}", id, entity.getClass().getName());
     }
 
     logLimitedAccessRecord(entity, "onLoad");
@@ -125,7 +125,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
     if (LOGGER.isTraceEnabled()) {
-      LOGGER.debug("onSave -> id={}, entity={}", id, entity);
+      LOGGER.trace("onSave -> id={}, entity={}", id, entity);
     } else {
       LOGGER.info("onSave -> id={}, entityClass={}", id, entity.getClass().getName());
     }
@@ -180,14 +180,16 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
 
   @Override
   public void afterTransactionBegin(Transaction tx) {
+    LOGGER.info("afterTransactionBegin");
     if (tx != null) {
-      LOGGER.trace("afterTransactionBegin -> txt status={}", tx.getStatus());
+      LOGGER.debug("afterTransactionBegin -> txt status={}", tx.getStatus());
     }
     super.afterTransactionBegin(tx);
   }
 
   @Override
   public void beforeTransactionCompletion(Transaction tx) {
+    LOGGER.info("beforeTransactionCompletion");
     if (tx != null) {
       LOGGER.debug("beforeTransactionCompletion -> txt status={}", tx.getStatus());
     }
@@ -196,6 +198,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
 
   @Override
   public void afterTransactionCompletion(Transaction tx) {
+    LOGGER.info("afterTransactionCompletion");
     if (tx != null) {
       LOGGER.debug("afterTransactionCompletion -> txt status={}", tx.getStatus());
     }
@@ -204,7 +207,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
 
   @Override
   public Object instantiate(String entityName, EntityMode entityMode, Serializable id) {
-    LOGGER.trace("preFlush -> id={}, entityClass={}", id, entityName);
+    LOGGER.info("instantiate -> id={}, entityClass={}", id, entityName);
     return super.instantiate(entityName, entityMode, id);
   }
 
