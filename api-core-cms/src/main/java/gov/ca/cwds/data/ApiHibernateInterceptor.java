@@ -175,7 +175,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
    */
   @Override
   public void postFlush(@SuppressWarnings("rawtypes") Iterator iterator) {
-    LOGGER.debug("postFlush -> after commit");
+    LOGGER.info("postFlush -> after commit");
   }
 
   @Override

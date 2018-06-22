@@ -34,23 +34,6 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
   }
 
   /**
-   * Get the current session, if available, or open a new one.
-   * 
-   * @return Hibernate session
-   */
-  protected Session getCurrentSession() {
-    Session session;
-    try {
-      session = getSessionFactory().getCurrentSession();
-    } catch (HibernateException e) { // NOSONAR
-      LOGGER.warn("NO SESSION!");
-      session = getSessionFactory().openSession();
-    }
-
-    return session;
-  }
-
-  /**
    * @param foreignKeyMetaTable meta group
    * @return all keys by meta table
    */
@@ -67,9 +50,9 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
     // txn = transactionExists ? txn : session.beginTransaction();
 
     try {
-      final Query query = session.getNamedQuery(namedQueryName).setString("foreignKeyMetaTable",
-          foreignKeyMetaTable);
-      final SystemCode[] systemCodes = (SystemCode[]) query.list().toArray(new SystemCode[0]);
+      final Query<SystemCode> query = session.getNamedQuery(namedQueryName)
+          .setString("foreignKeyMetaTable", foreignKeyMetaTable);
+      final SystemCode[] systemCodes = query.list().toArray(new SystemCode[0]);
 
       // DRS: not in managed transactions.
       // if (!transactionExists)
@@ -93,9 +76,9 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
     // txn = transactionExists ? txn : session.beginTransaction();
 
     try {
-      final Query query =
+      final Query<SystemCode> query =
           session.getNamedQuery(namedQueryName).setShort("systemId", systemCodeId.shortValue());
-      final SystemCode systemCode = (SystemCode) query.getSingleResult();
+      final SystemCode systemCode = query.getSingleResult();
       // if (!transactionExists)
       // txn.commit();
       return systemCode;

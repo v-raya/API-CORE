@@ -56,4 +56,5 @@ public class SystemMetaDao extends CrudsDaoImpl<SystemMeta> {
       throw new DaoException(h);
     }
   }
+
 }
