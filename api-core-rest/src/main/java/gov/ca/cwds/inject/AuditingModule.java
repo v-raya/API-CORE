@@ -8,7 +8,7 @@ import gov.ca.cwds.logging.LoggingContext;
 import gov.ca.cwds.logging.MDCLoggingContext;
 
 /**
- * DI for Auditing classes
+ * DI for Auditing classes.
  * 
  * @author CWDS API Team
  */
