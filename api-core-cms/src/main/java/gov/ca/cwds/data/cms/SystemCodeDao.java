@@ -39,6 +39,8 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
    */
   @SuppressWarnings("unchecked")
   public SystemCode[] findByForeignKeyMetaTable(String foreignKeyMetaTable) {
+    LOGGER.info("SystemCodeDao.findByForeignKeyMetaTable: foreignKeyMetaTable: {}",
+        foreignKeyMetaTable);
     final String namedQueryName = SystemCode.class.getName() + ".findByForeignKeyMetaTable";
 
     // DRS: NO NO NO!! Interferes with transaction management, like XA.
@@ -56,7 +58,7 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
 
       // DRS: not in managed transactions.
       // if (!transactionExists)
-      // txn.commit();
+      // txn.commit(); // NO!!
 
       return systemCodes;
     } catch (HibernateException h) {
@@ -67,6 +69,7 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
 
   @SuppressWarnings("unchecked")
   public SystemCode findBySystemCodeId(Number systemCodeId) {
+    LOGGER.info("SystemCodeDao.findBySystemCodeId: systemCodeId: {}", systemCodeId);
     final String namedQueryName = SystemCode.class.getName() + ".findBySystemCodeId";
     final Session session = grabSession();
     joinTransaction(session);
@@ -80,7 +83,7 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
           session.getNamedQuery(namedQueryName).setShort("systemId", systemCodeId.shortValue());
       final SystemCode systemCode = query.getSingleResult();
       // if (!transactionExists)
-      // txn.commit();
+      // txn.commit(); // NO!!
       return systemCode;
     } catch (HibernateException h) {
       // txn.rollback();

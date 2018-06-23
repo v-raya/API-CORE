@@ -52,7 +52,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
       final Query<T> query = session.getNamedQuery(namedQueryName);
       final ImmutableList.Builder<T> entities = new ImmutableList.Builder<>();
       entities.addAll(query.list());
-      txn.commit();
+      // txn.commit(); // DRS: NO!! Kills XA transactions.
       return entities.build();
     } catch (HibernateException h) {
       txn.rollback();
