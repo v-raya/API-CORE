@@ -1,5 +1,9 @@
 package gov.ca.cwds.data.dao.cms;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.apache.shiro.authz.AuthorizationException;
 import org.hibernate.SessionFactory;
 
@@ -16,6 +20,7 @@ import gov.ca.cwds.inject.CmsSessionFactory;
 public class SensitivityDeterminationDao extends BaseAuthorizationDao {
 
   private static final String NQ_PARAM_CLIENT_ID = "clientId";
+  private static final String NQ_PARAM_CLIENT_IDS = "clientIds";
 
   @Inject
   public SensitivityDeterminationDao(@CmsSessionFactory SessionFactory sessionFactory) {
@@ -30,17 +35,33 @@ public class SensitivityDeterminationDao extends BaseAuthorizationDao {
    */
   public Sensitivity getSensitivity(final String clientId) {
     final String nativeQuery =
-        "SELECT SENSTV_IND FROM {h-schema}CLIENT_T  WHERE IDENTIFIER = :" + NQ_PARAM_CLIENT_ID;
-    Object sensitivity = executeNativeQuery(nativeQuery, clientId);
-    if (sensitivity == null) {
+        "SELECT SENSTV_IND FROM {h-schema}CLIENT_T WHERE IDENTIFIER = :" + NQ_PARAM_CLIENT_ID;
+    String sensitivityCode = (String) grabSession().createNativeQuery(nativeQuery)
+      .setParameter(NQ_PARAM_CLIENT_ID, clientId).getSingleResult();
+    return constructSensitivity(sensitivityCode);
+  }
+
+  public Map<String, Sensitivity> getSensitivityMap(Collection<String> clientIds) {
+    if (clientIds == null || clientIds.isEmpty()) {
+      return new HashMap<>();
+    }
+    final Map<String, Sensitivity> sensitivityMap = new HashMap<>(clientIds.size());
+    final String nativeQuery =
+      "SELECT IDENTIFIER, SENSTV_IND FROM {h-schema}CLIENT_T WHERE IDENTIFIER IN :"
+        + NQ_PARAM_CLIENT_IDS;
+    @SuppressWarnings("unchecked")
+    List<String[]> sensitivityResults = grabSession().createNativeQuery(nativeQuery)
+      .setParameter(NQ_PARAM_CLIENT_IDS, clientIds).getResultList();
+    for (String[] sensitivityResult : sensitivityResults) {
+      sensitivityMap.put(sensitivityResult[0], constructSensitivity(sensitivityResult[1]));
+    }
+    return sensitivityMap;
+  }
+
+  private Sensitivity constructSensitivity(String code) {
+    if (code == null) {
       throw new AuthorizationException("Found Client with no sensitive indicator");
     }
-    return Sensitivity.fromCode(sensitivity.toString());
+    return Sensitivity.fromCode(code);
   }
-
-  private Object executeNativeQuery(final String namedQuery, final String clientId) {
-    return grabSession().createNativeQuery(namedQuery).setParameter(NQ_PARAM_CLIENT_ID, clientId)
-        .getSingleResult();
-  }
-
 }

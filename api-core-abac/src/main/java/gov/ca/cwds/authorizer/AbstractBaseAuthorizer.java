@@ -3,10 +3,12 @@ package gov.ca.cwds.authorizer;
 import static gov.ca.cwds.authorizer.util.StaffPrivilegeUtil.toStaffPersonPrivilegeTypes;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,21 +40,21 @@ public abstract class AbstractBaseAuthorizer<T, I> extends BaseAuthorizer<T, I> 
    * @param droolsConfiguration Drools configuration
    */
   public AbstractBaseAuthorizer(DroolsAuthorizationService droolsAuthorizationService,
-      DroolsAuthorizer droolsConfiguration) {
+    DroolsAuthorizer droolsConfiguration) {
     this.droolsAuthorizationService = droolsAuthorizationService;
     this.droolsConfiguration = droolsConfiguration;
   }
 
   private void logAuthorization(final PerryAccount perryAccount,
-      final Set<StaffPrivilegeType> staffPrivilegeTypes, final T instance,
-      final boolean authorizationResult) {
+    final Set<StaffPrivilegeType> staffPrivilegeTypes, final T instance,
+    final boolean authorizationResult) {
     String instanceName =
-        Optional.ofNullable(instance).map(t -> t.getClass().getSimpleName()).orElse(null);
+      Optional.ofNullable(instance).map(t -> t.getClass().getSimpleName()).orElse(null);
     LOGGER.info(
-        "StaffPerson [{}] with staffPrivilegeTypes = {} is performing action on object [{}]. "
-            + "Authorization result = [{}]. {}",
-        perryAccount.getStaffId(), staffPrivilegeTypes, instanceName, authorizationResult,
-        perryAccount);
+      "StaffPerson [{}] with staffPrivilegeTypes = {} is performing action on object [{}]. "
+        + "Authorization result = [{}]. {}",
+      perryAccount.getStaffId(), staffPrivilegeTypes, instanceName, authorizationResult,
+      perryAccount);
   }
 
   protected boolean authorizeInstanceOperation(final T instance, List<Object> authorizationFacts) {
@@ -67,7 +69,7 @@ public abstract class AbstractBaseAuthorizer<T, I> extends BaseAuthorizer<T, I> 
     authorizationFacts.add(instance);
     authorizationFacts.add(perryAccount);
     final boolean authorizationResult = droolsAuthorizationService
-        .authorizeObjectOperation(staffPrivilegeTypes, droolsConfiguration, authorizationFacts);
+      .authorizeObjectOperation(staffPrivilegeTypes, droolsConfiguration, authorizationFacts);
     logAuthorization(perryAccount, staffPrivilegeTypes, instance, authorizationResult);
     return authorizationResult;
   }
@@ -78,6 +80,13 @@ public abstract class AbstractBaseAuthorizer<T, I> extends BaseAuthorizer<T, I> 
       return true;
     }
     return authorizeInstanceOperation(instance, prepareFacts(instance));
+  }
+
+  @Override
+  protected Collection<T> filterInstances(Collection<T> instances) {
+    // don't check if instances is null because BaseAuthorizer.filter is doing that already
+    return instances.stream().filter(i -> authorizeInstanceOperation(i, prepareFacts(i)))
+      .collect(Collectors.toSet());
   }
 
   protected abstract List<Object> prepareFacts(T instance);

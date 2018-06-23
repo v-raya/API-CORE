@@ -3,6 +3,7 @@ package gov.ca.cwds.authorizer;
 import static gov.ca.cwds.authorizer.util.ClientConditionUtils.toClientCondition;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +15,7 @@ import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
 import gov.ca.cwds.service.ClientCountyDeterminationService;
 import gov.ca.cwds.service.ClientSensitivityDeterminationService;
+import java.util.stream.Collectors;
 
 /**
  * Base class for Client Result and Client Abstract Authorizer.
@@ -50,6 +52,11 @@ public class ClientBaseReadAuthorizer extends AbstractBaseAuthorizer<Client, Str
     client.setIdentifier(clientId);
     client.setSensitivity(sensitivity);
     return authorizeInstanceOperation(client, authorizationFacts);
+  }
+
+  @Override
+  protected Collection<String> filterIds(Collection<String> ids) {
+    return ids.stream().filter(this::checkId).collect(Collectors.toSet());
   }
 
   @Override
