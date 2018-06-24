@@ -43,26 +43,17 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
         foreignKeyMetaTable);
     final String namedQueryName = SystemCode.class.getName() + ".findByForeignKeyMetaTable";
 
-    // DRS: NO NO NO!! Interferes with transaction management, like XA.
+    // DRS: Don't interfere with transaction management, like XA.
     final Session session = grabSession();
     joinTransaction(session);
-
-    // Transaction txn = session.getTransaction();
-    // boolean transactionExists = txn != null && txn.isActive();
-    // txn = transactionExists ? txn : session.beginTransaction();
 
     try {
       final Query<SystemCode> query = session.getNamedQuery(namedQueryName)
           .setString("foreignKeyMetaTable", foreignKeyMetaTable);
       final SystemCode[] systemCodes = query.list().toArray(new SystemCode[0]);
 
-      // DRS: not in managed transactions.
-      // if (!transactionExists)
-      // txn.commit(); // NO!!
-
       return systemCodes;
     } catch (HibernateException h) {
-      // txn.rollback();
       throw new DaoException(h);
     }
   }
@@ -74,19 +65,12 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
     final Session session = grabSession();
     joinTransaction(session);
 
-    // Transaction txn = session.getTransaction();
-    // boolean transactionExists = txn != null && txn.isActive();
-    // txn = transactionExists ? txn : session.beginTransaction();
-
     try {
       final Query<SystemCode> query =
           session.getNamedQuery(namedQueryName).setShort("systemId", systemCodeId.shortValue());
       final SystemCode systemCode = query.getSingleResult();
-      // if (!transactionExists)
-      // txn.commit(); // NO!!
       return systemCode;
     } catch (HibernateException h) {
-      // txn.rollback();
       throw new DaoException(h);
     }
   }
