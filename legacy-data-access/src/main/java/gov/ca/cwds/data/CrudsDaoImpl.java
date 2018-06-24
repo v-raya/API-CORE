@@ -47,7 +47,14 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
     Transaction txn = session.getTransaction();
     txn = txn != null ? txn : session.beginTransaction();
 
-    if (TransactionStatus.NOT_ACTIVE == txn.getStatus() || !txn.isActive()) {
+    if (!txn.getRollbackOnly() && !txn.isActive()
+        && txn.getStatus() != TransactionStatus.FAILED_COMMIT
+        && txn.getStatus() != TransactionStatus.COMMITTING
+        && txn.getStatus() != TransactionStatus.COMMITTED
+        && txn.getStatus() != TransactionStatus.FAILED_COMMIT
+        && txn.getStatus() != TransactionStatus.MARKED_ROLLBACK
+        && txn.getStatus() != TransactionStatus.ROLLED_BACK
+        && txn.getStatus() != TransactionStatus.ROLLING_BACK) {
       txn.begin();
     }
 

@@ -146,6 +146,8 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   @Override
   @SuppressWarnings("rawtypes")
   public void preFlush(Iterator iter) {
+    LOGGER.info("preFlush");
+    CaresStackUtils.logStack();
     final List list = iterToList(iter);
     for (Object obj : list) {
 
