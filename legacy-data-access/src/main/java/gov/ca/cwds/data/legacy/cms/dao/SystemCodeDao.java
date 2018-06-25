@@ -32,7 +32,7 @@ public class SystemCodeDao extends BaseDaoImpl<SystemCode> {
 
     final List<SystemCode> systemCodes =
         grabSession().createNamedQuery(SystemCode.NQ_FIND_BY_META, SystemCode.class)
-            .setParameter(SystemCode.NQ_PARAM_META, metaCode).setCacheable(true)
+            .setParameter(SystemCode.NQ_PARAM_META, metaCode).setCacheable(true).setReadOnly(true)
             .setCacheRegion(SYSTEM_CODE_CACHE_REGION).list();
 
     return ImmutableList.<SystemCode>builder().addAll(systemCodes).build();

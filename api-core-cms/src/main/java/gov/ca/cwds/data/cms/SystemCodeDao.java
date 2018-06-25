@@ -41,7 +41,7 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
   public SystemCode[] findByForeignKeyMetaTable(String foreignKeyMetaTable) {
     LOGGER.info("SystemCodeDao.findByForeignKeyMetaTable: foreignKeyMetaTable: {}",
         foreignKeyMetaTable);
-    final String namedQueryName = SystemCode.class.getName() + ".findByForeignKeyMetaTable";
+    final String namedQueryName = this.getClass().getName() + ".findByForeignKeyMetaTable";
 
     // DRS: Don't interfere with transaction management, like XA.
     final Session session = grabSession();
@@ -49,10 +49,9 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
 
     try {
       final Query<SystemCode> query = session.getNamedQuery(namedQueryName)
-          .setString("foreignKeyMetaTable", foreignKeyMetaTable);
-      final SystemCode[] systemCodes = query.list().toArray(new SystemCode[0]);
-
-      return systemCodes;
+          .setString("foreignKeyMetaTable", foreignKeyMetaTable).setReadOnly(true)
+          .setCacheable(true);
+      return query.list().toArray(new SystemCode[0]);
     } catch (HibernateException h) {
       throw new DaoException(h);
     }
@@ -61,13 +60,13 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
   @SuppressWarnings("unchecked")
   public SystemCode findBySystemCodeId(Number systemCodeId) {
     LOGGER.info("SystemCodeDao.findBySystemCodeId: systemCodeId: {}", systemCodeId);
-    final String namedQueryName = SystemCode.class.getName() + ".findBySystemCodeId";
+    final String namedQueryName = this.getClass() + ".findBySystemCodeId";
     final Session session = grabSession();
     joinTransaction(session);
 
     try {
-      final Query<SystemCode> query =
-          session.getNamedQuery(namedQueryName).setShort("systemId", systemCodeId.shortValue());
+      final Query<SystemCode> query = session.getNamedQuery(namedQueryName)
+          .setShort("systemId", systemCodeId.shortValue()).setReadOnly(true).setCacheable(true);
       final SystemCode systemCode = query.getSingleResult();
       return systemCode;
     } catch (HibernateException h) {

@@ -177,7 +177,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
    */
   @Override
   public void postFlush(@SuppressWarnings("rawtypes") Iterator iterator) {
-    LOGGER.info("\t ****** postFlush -> after commit ******");
+    LOGGER.info("postFlush");
     CaresStackUtils.logStack();
   }
 
@@ -186,7 +186,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     LOGGER.info("afterTransactionBegin");
     CaresStackUtils.logStack();
     if (tx != null) {
-      LOGGER.info("afterTransactionBegin -> txt status={}", tx.getStatus());
+      LOGGER.info("afterTransactionBegin -> txn status={}", tx.getStatus());
     }
     super.afterTransactionBegin(tx);
   }
@@ -196,7 +196,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     LOGGER.info("\n\t ****** beforeTransactionCompletion ****** \n");
     CaresStackUtils.logStack();
     if (tx != null) {
-      LOGGER.info("beforeTransactionCompletion -> txt status={}", tx.getStatus());
+      LOGGER.info("beforeTransactionCompletion -> txn status={}", tx.getStatus());
     }
     super.beforeTransactionCompletion(tx);
   }
@@ -206,7 +206,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     LOGGER.info("\n\t ****** afterTransactionCompletion ****** \n");
     CaresStackUtils.logStack();
     if (tx != null) {
-      LOGGER.info("afterTransactionCompletion -> txt status={}", tx.getStatus());
+      LOGGER.info("afterTransactionCompletion -> txn status={}", tx.getStatus());
     }
     super.afterTransactionCompletion(tx);
   }
