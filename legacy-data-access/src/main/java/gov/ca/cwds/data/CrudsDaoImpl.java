@@ -32,6 +32,11 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
 
   private SessionFactory sessionFactory;
 
+  /**
+   * Grab a session! If a current session is available, return it, else open a new session.
+   * 
+   * @return usable session
+   */
   public Session grabSession() {
     Session session;
     try {
@@ -53,7 +58,7 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
         && txn.getStatus() != TransactionStatus.MARKED_ROLLBACK
         && txn.getStatus() != TransactionStatus.ROLLED_BACK
         && txn.getStatus() != TransactionStatus.ROLLING_BACK) {
-      LOGGER.info("\n\n ******* Begin new transaction ******* \n");
+      LOGGER.warn("\n\t ******* Begin new transaction ******* \n");
       txn.begin();
     }
 
