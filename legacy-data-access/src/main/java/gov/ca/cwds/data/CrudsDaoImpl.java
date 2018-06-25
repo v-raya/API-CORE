@@ -53,6 +53,7 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
         && txn.getStatus() != TransactionStatus.MARKED_ROLLBACK
         && txn.getStatus() != TransactionStatus.ROLLED_BACK
         && txn.getStatus() != TransactionStatus.ROLLING_BACK) {
+      LOGGER.info("\n\n ******* Begin new transaction ******* \n");
       txn.begin();
     }
 
