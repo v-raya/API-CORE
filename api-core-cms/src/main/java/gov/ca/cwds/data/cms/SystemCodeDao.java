@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.cms;
 
+import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -37,7 +38,7 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
    * @param foreignKeyMetaTable meta group
    * @return all keys by meta table
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "deprecation"})
   public SystemCode[] findByForeignKeyMetaTable(String foreignKeyMetaTable) {
     LOGGER.info("SystemCodeDao.findByForeignKeyMetaTable: foreignKeyMetaTable: {}",
         foreignKeyMetaTable);
@@ -50,14 +51,14 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
     try {
       final Query<SystemCode> query = session.getNamedQuery(namedQueryName)
           .setString("foreignKeyMetaTable", foreignKeyMetaTable).setReadOnly(true)
-          .setCacheable(true);
+          .setCacheable(true).setHibernateFlushMode(FlushMode.MANUAL);
       return query.list().toArray(new SystemCode[0]);
     } catch (HibernateException h) {
       throw new DaoException(h);
     }
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "deprecation"})
   public SystemCode findBySystemCodeId(Number systemCodeId) {
     LOGGER.info("SystemCodeDao.findBySystemCodeId: systemCodeId: {}", systemCodeId);
     final String namedQueryName = this.getClass() + ".findBySystemCodeId";
@@ -65,8 +66,9 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
     joinTransaction(session);
 
     try {
-      final Query<SystemCode> query = session.getNamedQuery(namedQueryName)
-          .setShort("systemId", systemCodeId.shortValue()).setReadOnly(true).setCacheable(true);
+      final Query<SystemCode> query =
+          session.getNamedQuery(namedQueryName).setShort("systemId", systemCodeId.shortValue())
+              .setReadOnly(true).setCacheable(true).setHibernateFlushMode(FlushMode.MANUAL);
       final SystemCode systemCode = query.getSingleResult();
       return systemCode;
     } catch (HibernateException h) {

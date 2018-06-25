@@ -48,6 +48,12 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
     return session;
   }
 
+  /**
+   * Join the current transaction or begin a new one, as needed.
+   * 
+   * @param session active session
+   * @return active or new transaction
+   */
   public Transaction joinTransaction(Session session) {
     Transaction txn = session.getTransaction();
     txn = txn != null ? txn : session.beginTransaction();
