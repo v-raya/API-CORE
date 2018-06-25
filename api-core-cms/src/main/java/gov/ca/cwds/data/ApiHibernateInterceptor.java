@@ -193,7 +193,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
 
   @Override
   public void beforeTransactionCompletion(Transaction tx) {
-    LOGGER.info("beforeTransactionCompletion");
+    LOGGER.info("\n\n ****** beforeTransactionCompletion ****** \n");
     CaresStackUtils.logStack();
     if (tx != null) {
       LOGGER.debug("beforeTransactionCompletion -> txt status={}", tx.getStatus());
