@@ -17,6 +17,7 @@ import gov.ca.cwds.security.realm.PerrySubject;
 // This session factory is introduced exactly for CMS DB2 access monitoring.
 @SuppressFBWarnings("JVR_JDBC_VENDOR_RELIANCE")
 public class CMSAuditingSessionFactory extends SessionFactoryDelegatingImpl implements Work {
+
   public CMSAuditingSessionFactory(SessionFactoryImplementor delegate) {
     super(delegate);
   }
@@ -38,4 +39,5 @@ public class CMSAuditingSessionFactory extends SessionFactoryDelegatingImpl impl
     // https://www.ibm.com/support/knowledgecenter/en/SSEPGG_9.5.0/com.ibm.db2.luw.admin.sec.doc/doc/r0051526.html
     db2Connection.setDB2ClientUser(racfid);
   }
+
 }
