@@ -177,7 +177,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
    */
   @Override
   public void postFlush(@SuppressWarnings("rawtypes") Iterator iterator) {
-    LOGGER.info("\n\n ****** postFlush -> after commit ****** \n");
+    LOGGER.info("\n\t ****** postFlush -> after commit ****** \n");
     CaresStackUtils.logStack();
   }
 
@@ -186,39 +186,40 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     LOGGER.info("afterTransactionBegin");
     CaresStackUtils.logStack();
     if (tx != null) {
-      LOGGER.debug("afterTransactionBegin -> txt status={}", tx.getStatus());
+      LOGGER.info("afterTransactionBegin -> txt status={}", tx.getStatus());
     }
     super.afterTransactionBegin(tx);
   }
 
   @Override
   public void beforeTransactionCompletion(Transaction tx) {
-    LOGGER.info("\n\n ****** beforeTransactionCompletion ****** \n");
+    LOGGER.info("\n\t ****** beforeTransactionCompletion ****** \n");
     CaresStackUtils.logStack();
     if (tx != null) {
-      LOGGER.debug("beforeTransactionCompletion -> txt status={}", tx.getStatus());
+      LOGGER.info("beforeTransactionCompletion -> txt status={}", tx.getStatus());
     }
     super.beforeTransactionCompletion(tx);
   }
 
   @Override
   public void afterTransactionCompletion(Transaction tx) {
-    LOGGER.info("\n\n ****** afterTransactionCompletion ****** \n");
+    LOGGER.info("\n\t ****** afterTransactionCompletion ****** \n");
     CaresStackUtils.logStack();
     if (tx != null) {
-      LOGGER.debug("afterTransactionCompletion -> txt status={}", tx.getStatus());
+      LOGGER.info("afterTransactionCompletion -> txt status={}", tx.getStatus());
     }
     super.afterTransactionCompletion(tx);
   }
 
   @Override
   public Object instantiate(String entityName, EntityMode entityMode, Serializable id) {
-    LOGGER.info("instantiate -> id={}, entityClass={}", id, entityName);
+    LOGGER.debug("instantiate -> id={}, entityClass={}", id, entityName);
     return super.instantiate(entityName, entityMode, id);
   }
 
   @SuppressWarnings({"rawtypes", "unchecked"})
   private synchronized List<?> iterToList(Iterator iter) {
+    LOGGER.info("iterToList");
     return IteratorUtils.toList(iter);
   }
 

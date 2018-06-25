@@ -19,7 +19,8 @@ public class CaresStackUtils {
       final StackTraceElement[] stack = Thread.currentThread().getStackTrace();
       Arrays.stream(stack, 0, stack.length - 1)
           .filter(e -> e.getClassName().startsWith("gov.ca.cwds")
-              && !e.getClassName().startsWith("gov.ca.cwds.rest.filters"))
+              && !e.getClassName().startsWith("gov.ca.cwds.rest.filters")
+              && !e.getClassName().contains("$$"))
           .forEach(e -> LOGGER.info("\t{}", e));
     } catch (Exception e) {
       throw e;
