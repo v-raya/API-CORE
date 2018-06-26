@@ -193,7 +193,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
 
   @Override
   public void beforeTransactionCompletion(Transaction tx) {
-    LOGGER.info("\n\t ****** beforeTransactionCompletion ****** \n");
+    LOGGER.info("****** beforeTransactionCompletion ******");
     CaresStackUtils.logStack();
     if (tx != null) {
       LOGGER.info("beforeTransactionCompletion -> txn status={}", tx.getStatus());
@@ -203,7 +203,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
 
   @Override
   public void afterTransactionCompletion(Transaction tx) {
-    LOGGER.info("\n\t ****** afterTransactionCompletion ****** \n");
+    LOGGER.info("****** afterTransactionCompletion ******");
     CaresStackUtils.logStack();
     if (tx != null) {
       LOGGER.info("afterTransactionCompletion -> txn status={}", tx.getStatus());
