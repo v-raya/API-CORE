@@ -36,6 +36,7 @@ public class CMSAuditingSessionFactory extends SessionFactoryDelegatingImpl impl
 
   @Override
   public void execute(Connection connection) throws SQLException {
+    LOGGER.info("CMSAuditingSessionFactory.execute");
     final DB2Connection db2Connection = (DB2Connection) connection;
     final String racfid = PerrySubject.getPerryAccount().getUser();
     // racfid will be available as CURRENT CLIENT_USERID

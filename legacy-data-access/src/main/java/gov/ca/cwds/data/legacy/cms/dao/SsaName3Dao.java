@@ -36,15 +36,20 @@ public class SsaName3Dao {
    * @param parameterObject stored procedure parameters
    */
   public void callStoredProc(SsaName3ParameterObject parameterObject) {
-    Session session = sessionFactory.getCurrentSession();
+    if (true) {
+      LOGGER.warn("\n\t******* legacy SsaName3Dao: SKIP FOR XA! ******* \n");
+      return;
+    }
+
+    final Session session = sessionFactory.getCurrentSession();
     final String STORED_PROC_NAME = "SPSSANAME3";
     final String schema =
         (String) session.getSessionFactory().getProperties().get("hibernate.default_schema");
-    String strdtts = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS")
+    final String strdtts = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.SSS")
         .format(parameterObject.getUpdateTimeStamp());
 
     try {
-      ProcedureCall q = session.createStoredProcedureCall(schema + "." + STORED_PROC_NAME);
+      final ProcedureCall q = session.createStoredProcedureCall(schema + "." + STORED_PROC_NAME);
 
       q.registerStoredProcedureParameter("TABLENAME", String.class, ParameterMode.IN);
       q.registerStoredProcedureParameter("CRUDFUNCT", String.class, ParameterMode.IN);

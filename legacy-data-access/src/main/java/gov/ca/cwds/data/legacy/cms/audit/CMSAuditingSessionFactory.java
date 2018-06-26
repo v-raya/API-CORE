@@ -8,6 +8,8 @@ import org.hibernate.Session;
 import org.hibernate.engine.spi.SessionFactoryDelegatingImpl;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.jdbc.Work;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ibm.db2.jcc.DB2Connection;
 
@@ -18,12 +20,15 @@ import gov.ca.cwds.security.realm.PerrySubject;
 @SuppressFBWarnings("JVR_JDBC_VENDOR_RELIANCE")
 public class CMSAuditingSessionFactory extends SessionFactoryDelegatingImpl implements Work {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(CMSAuditingSessionFactory.class);
+
   public CMSAuditingSessionFactory(SessionFactoryImplementor delegate) {
     super(delegate);
   }
 
   @Override
   public Session openSession() throws HibernateException {
+    LOGGER.info("CMSAuditingSessionFactory.openSession");
     Session session = super.openSession();
     session.doWork(this);
     return session;
@@ -31,6 +36,7 @@ public class CMSAuditingSessionFactory extends SessionFactoryDelegatingImpl impl
 
   @Override
   public void execute(Connection connection) throws SQLException {
+    LOGGER.info("CMSAuditingSessionFactory.execute");
     DB2Connection db2Connection = (DB2Connection) connection;
     String racfid = PerrySubject.getPerryAccount().getUser();
     // racfid will be available as CURRENT CLIENT_USERID
