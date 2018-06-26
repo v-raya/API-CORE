@@ -4,7 +4,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 
 import com.google.inject.Inject;
 
@@ -37,23 +36,16 @@ public class SystemMetaDao extends CrudsDaoImpl<SystemMeta> {
   public SystemMeta[] findAll() {
 
     final String namedQueryName = SystemMeta.class.getName() + ".findAll";
-    Session session = grabSession();
-
-    Transaction txn = session.getTransaction();
-    boolean transactionExists = txn != null && txn.isActive();
+    final Session session = grabSession();
+    joinTransaction(session);
 
     try {
-      txn = transactionExists ? txn : session.beginTransaction();
       Query query = session.getNamedQuery(namedQueryName);
       SystemMeta[] systemMetas = (SystemMeta[]) query.list().toArray(new SystemMeta[0]);
-      if (!transactionExists)
-        txn.commit();
       return systemMetas;
     } catch (HibernateException h) {
-      if (txn != null) {
-        txn.rollback();
-      }
       throw new DaoException(h);
     }
   }
+
 }

@@ -1,10 +1,10 @@
 package gov.ca.cwds.data.cms;
 
+import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,50 +35,51 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
   }
 
   /**
+   * Find all system codes for a category.
+   * 
+   * <p>
+   * Don't interfere with transaction management, like XA, but committing or rolling back. Let the
+   * transaction manager do that for you.
+   * </p>
+   * 
    * @param foreignKeyMetaTable meta group
    * @return all keys by meta table
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "deprecation"})
   public SystemCode[] findByForeignKeyMetaTable(String foreignKeyMetaTable) {
-    final String namedQueryName = SystemCode.class.getName() + ".findByForeignKeyMetaTable";
+    LOGGER.info("SystemCodeDao.findByForeignKeyMetaTable: foreignKeyMetaTable: {}",
+        foreignKeyMetaTable);
+    final String namedQueryName = this.getClass().getName() + ".findByForeignKeyMetaTable";
 
     final Session session = grabSession();
-    Transaction txn = session.getTransaction();
-    boolean transactionExists = txn != null && txn.isActive();
-    txn = transactionExists ? txn : session.beginTransaction();
+    joinTransaction(session);
 
     try {
-      final Query query = session.getNamedQuery(namedQueryName).setString("foreignKeyMetaTable",
-          foreignKeyMetaTable);
-      final SystemCode[] systemCodes = (SystemCode[]) query.list().toArray(new SystemCode[0]);
-      if (!transactionExists)
-        txn.commit();
-      return systemCodes;
+      final Query<SystemCode> query = session.getNamedQuery(namedQueryName)
+          .setString("foreignKeyMetaTable", foreignKeyMetaTable).setReadOnly(true)
+          .setCacheable(true).setHibernateFlushMode(FlushMode.MANUAL);
+      return query.list().toArray(new SystemCode[0]);
     } catch (HibernateException h) {
-      txn.rollback();
       throw new DaoException(h);
     }
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "deprecation"})
   public SystemCode findBySystemCodeId(Number systemCodeId) {
-    final String namedQueryName = SystemCode.class.getName() + ".findBySystemCodeId";
-    Session session = grabSession();
-
-    Transaction txn = session.getTransaction();
-    boolean transactionExists = txn != null && txn.isActive();
-    txn = transactionExists ? txn : session.beginTransaction();
+    LOGGER.info("SystemCodeDao.findBySystemCodeId: systemCodeId: {}", systemCodeId);
+    final String namedQueryName = this.getClass() + ".findBySystemCodeId";
+    final Session session = grabSession();
+    joinTransaction(session);
 
     try {
-      final Query query =
-          session.getNamedQuery(namedQueryName).setShort("systemId", systemCodeId.shortValue());
-      final SystemCode systemCode = (SystemCode) query.getSingleResult();
-      if (!transactionExists)
-        txn.commit();
+      final Query<SystemCode> query =
+          session.getNamedQuery(namedQueryName).setShort("systemId", systemCodeId.shortValue())
+              .setReadOnly(true).setCacheable(true).setHibernateFlushMode(FlushMode.MANUAL);
+      final SystemCode systemCode = query.getSingleResult();
       return systemCode;
     } catch (HibernateException h) {
-      txn.rollback();
       throw new DaoException(h);
     }
   }
+
 }

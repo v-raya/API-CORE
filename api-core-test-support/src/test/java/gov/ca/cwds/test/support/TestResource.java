@@ -1,13 +1,13 @@
 package gov.ca.cwds.test.support;
 
-import gov.ca.cwds.security.utils.PrincipalUtils;
+import static org.junit.Assert.assertEquals;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import static org.junit.Assert.assertEquals;
+import gov.ca.cwds.security.utils.PrincipalUtils;
 
 /**
  * @author CWDS CALS API Team
@@ -28,6 +28,5 @@ public class TestResource {
     assertEquals("Custom", PrincipalUtils.getPrincipal().getStaffId());
     return "Ok";
   }
-
 
 }

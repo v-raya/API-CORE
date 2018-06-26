@@ -102,7 +102,6 @@ public class SystemCode extends ReportingDomain implements Response {
     this.longDescription = longDescription;
   }
 
-  @SuppressWarnings("javadoc")
   public SystemCode(gov.ca.cwds.data.persistence.cms.SystemCode persistedSystemCode) {
     this.systemId = persistedSystemCode.getSystemId();
     this.categoryId = persistedSystemCode.getCategoryId();

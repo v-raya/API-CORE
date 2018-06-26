@@ -53,6 +53,7 @@ public class MutuallyExclusiveValidator
     this.type = constraintAnnotation.type();
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   public boolean isValid(final Object bean, ConstraintValidatorContext context) {
     boolean valid;

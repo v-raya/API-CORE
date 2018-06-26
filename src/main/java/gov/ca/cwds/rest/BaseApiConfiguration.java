@@ -29,6 +29,9 @@ public class BaseApiConfiguration extends MinimalApiConfiguration {
   private XADataSourceFactory xaCmsDataSourceFactory;
 
   @Nullable
+  private XADataSourceFactory xaCmsRsDataSourceFactory;
+
+  @Nullable
   private Map<String, ElasticsearchConfiguration> elasticsearchConfigurations = new HashMap<>();
 
   @Nullable
@@ -98,6 +101,16 @@ public class BaseApiConfiguration extends MinimalApiConfiguration {
   @JsonProperty
   public void setXaNsDataSourceFactory(XADataSourceFactory xaNsDataSourceFactory) {
     this.xaNsDataSourceFactory = xaNsDataSourceFactory;
+  }
+
+  @JsonProperty
+  public XADataSourceFactory getXaCmsRsDataSourceFactory() {
+    return xaCmsRsDataSourceFactory;
+  }
+
+  @JsonProperty
+  public void setXaCmsRsDataSourceFactory(XADataSourceFactory xaCmsRsDataSourceFactory) {
+    this.xaCmsRsDataSourceFactory = xaCmsRsDataSourceFactory;
   }
 
 }
