@@ -38,7 +38,7 @@ public class SsaName3Dao {
   public void callStoredProc(SsaName3ParameterObject parameterObject) {
     // TO1DO: XA DEBUG:
     if ("Y".equalsIgnoreCase(System.getProperty("DISABLE_BUSINESS_VALIDATION"))) {
-      LOGGER.warn("\n\t ********* XA: SKIP SPSSANAME3 UNIT COMMIT IS REMOVED! ********* \n");
+      LOGGER.warn("\n\t ********* XA: SKIP SPSSANAME3 UNTIL COMMIT IS REMOVED! ********* \n");
       return;
     }
 

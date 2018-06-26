@@ -35,6 +35,13 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
   }
 
   /**
+   * Find all system codes for a category.
+   * 
+   * <p>
+   * Don't interfere with transaction management, like XA, but committing or rolling back. Let the
+   * transaction manager do that for you.
+   * </p>
+   * 
    * @param foreignKeyMetaTable meta group
    * @return all keys by meta table
    */
@@ -44,7 +51,6 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
         foreignKeyMetaTable);
     final String namedQueryName = this.getClass().getName() + ".findByForeignKeyMetaTable";
 
-    // DRS: Don't interfere with transaction management, like XA.
     final Session session = grabSession();
     joinTransaction(session);
 
