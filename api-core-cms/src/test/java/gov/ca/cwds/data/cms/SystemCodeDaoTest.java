@@ -33,7 +33,7 @@ public class SystemCodeDaoTest extends OscarTheGrouch<SystemCode> {
   }
 
   @Test
-  public void findAll_Args__() throws Exception {
+  public void findByForeignKeyMetaTable() throws Exception {
     final SystemCode[] actual = target.findByForeignKeyMetaTable("asdf");
     final SystemCode[] expected = new SystemCode[0];
     assertThat(actual, is(equalTo(expected)));
