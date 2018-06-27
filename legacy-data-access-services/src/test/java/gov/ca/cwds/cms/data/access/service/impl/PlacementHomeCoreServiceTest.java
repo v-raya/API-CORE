@@ -25,6 +25,7 @@ import gov.ca.cwds.cms.data.access.dao.PlacementHomeDao;
 import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
 import gov.ca.cwds.common.OscarTheGrouch;
+import gov.ca.cwds.data.legacy.cms.dao.LegacyBarneyTest;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 import gov.ca.cwds.drools.DroolsException;
@@ -33,7 +34,7 @@ import gov.ca.cwds.security.utils.PrincipalUtils;
 /** @author CWDS TPT-3 Team */
 @RunWith(PowerMockRunner.class)
 @PrepareOnlyThisForTest({PrincipalUtils.class, PlacementHomeCoreService.class})
-public class PlacementHomeCoreServiceTest extends OscarTheGrouch<Client> {
+public class PlacementHomeCoreServiceTest extends LegacyBarneyTest<Client> {
 
   public static final String USER_ID = "aaa";
   public static final String PLACEMENT_ID = "2212121212";
