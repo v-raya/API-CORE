@@ -21,7 +21,8 @@ import gov.ca.cwds.inject.CwsRsSessionFactory;
  * <p>
  * DRS, 06/27/2018. This DAO manages the session context and may even close the session in normal
  * mode. In XA transactions, do NOT commit or rollback the transaction or close the session! The
- * long-term solution is to move RequestExecutionContext into api-core-common.
+ * long-term solution is to move RequestExecutionContext into
+ * <a href="https://github.com/ca-cwds/api-core">api-core</a>.
  * </p>
  *
  * @author CWDS TPT-2

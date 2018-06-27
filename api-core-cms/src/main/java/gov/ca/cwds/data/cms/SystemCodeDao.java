@@ -55,9 +55,11 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
     joinTransaction(session);
 
     try {
-      final Query<SystemCode> query = session.getNamedQuery(namedQueryName)
-          .setString("foreignKeyMetaTable", foreignKeyMetaTable).setReadOnly(true)
-          .setCacheable(true).setHibernateFlushMode(FlushMode.MANUAL);
+      final Query<SystemCode> query = session.getNamedQuery(namedQueryName);
+      query.setString("foreignKeyMetaTable", foreignKeyMetaTable);
+      query.setReadOnly(true);
+      query.setCacheable(true);
+      query.setHibernateFlushMode(FlushMode.MANUAL);
       return query.list().toArray(new SystemCode[0]);
     } catch (HibernateException h) {
       throw new DaoException(h);
@@ -72,9 +74,11 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
     joinTransaction(session);
 
     try {
-      final Query<SystemCode> query =
-          session.getNamedQuery(namedQueryName).setShort("systemId", systemCodeId.shortValue())
-              .setReadOnly(true).setCacheable(true).setHibernateFlushMode(FlushMode.MANUAL);
+      final Query<SystemCode> query = session.getNamedQuery(namedQueryName);
+      query.setShort("systemId", systemCodeId.shortValue());
+      query.setReadOnly(true);
+      query.setCacheable(true);
+      query.setHibernateFlushMode(FlushMode.MANUAL);
       final SystemCode systemCode = query.getSingleResult();
       return systemCode;
     } catch (HibernateException h) {
