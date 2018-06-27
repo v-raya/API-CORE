@@ -2,6 +2,7 @@ package gov.ca.cwds.data.dao.cms;
 
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.context.internal.ManagedSessionContext;
@@ -57,9 +58,10 @@ public class CountyDeterminationDao extends BaseAuthorizationDao {
     final boolean managed = !getXaMode();
     LOGGER.info("CountyDeterminationDao.executeNativeQuery: managed: {}", managed);
 
+    Pair<Session, Boolean> openSession = grabSession();
     Session session = null;
     try {
-      session = grabSession();
+      session = openSession.getLeft();
       if (managed) {
         ManagedSessionContext.bind(session);
       }
@@ -68,7 +70,7 @@ public class CountyDeterminationDao extends BaseAuthorizationDao {
     } finally {
       if (managed) {
         ManagedSessionContext.unbind(sessionFactory);
-        if (session != null) {
+        if (session != null && openSession.getRight() != null && openSession.getRight()) {
           session.close();
         }
       }

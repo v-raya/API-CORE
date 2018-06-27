@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.dao.cms;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -27,17 +28,19 @@ public class BaseAuthorizationDao {
   /**
    * Get the current session, if any, or open a new one.
    * 
-   * @return active session
+   * @return active session, true if opened a new session
    */
-  protected Session grabSession() {
+  protected Pair<Session, Boolean> grabSession() {
+    boolean openedNew = false;
     Session session;
     try {
       session = sessionFactory.getCurrentSession();
     } catch (HibernateException e) {
       session = sessionFactory.openSession();
+      openedNew = true;
     }
 
-    return session;
+    return Pair.of(session, openedNew);
   }
 
   public static void setXaMode(boolean xaMode) {
