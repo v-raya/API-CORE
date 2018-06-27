@@ -11,6 +11,8 @@ import org.hibernate.SessionFactory;
  */
 public class BaseAuthorizationDao {
 
+  private static final ThreadLocal<Boolean> bound = new ThreadLocal<>();
+
   protected final SessionFactory sessionFactory;
 
   /**
@@ -22,6 +24,11 @@ public class BaseAuthorizationDao {
     this.sessionFactory = sessionFactory;
   }
 
+  /**
+   * Get the current session, if any, or open a new one.
+   * 
+   * @return active session
+   */
   protected Session grabSession() {
     Session session;
     try {
@@ -31,6 +38,19 @@ public class BaseAuthorizationDao {
     }
 
     return session;
+  }
+
+  public static void setXaMode(boolean xaMode) {
+    bound.set(xaMode);
+  }
+
+  public static void clearXaMode() {
+    bound.remove();
+  }
+
+  protected boolean getXaMode() {
+    final Boolean ret = bound.get();
+    return ret != null && ret;
   }
 
 }
