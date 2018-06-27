@@ -2,15 +2,17 @@ package gov.ca.cwds.data.es;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Arrays;
 
 import org.apache.commons.io.IOUtils;
 import org.elasticsearch.search.SearchHit;
@@ -18,17 +20,22 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import gov.ca.cwds.common.OscarTheGrouch;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ESColumn;
 import gov.ca.cwds.data.es.ElasticSearchPerson.ESOptionalCollection;
+import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.rest.validation.TestSystemCodeCache;
 
-public class ElasticSearchPersonTest {
+public class ElasticSearchPersonTest extends OscarTheGrouch<Client> {
 
   private static final TestSystemCodeCache systemCodeCache = new TestSystemCodeCache();
-  ElasticSearchPerson target = new ElasticSearchPerson();
 
+  ElasticSearchPerson target;
+
+  @Override
   @Before
-  public void setup() {
+  public void setup() throws Exception {
+    super.setup();
     target = new ElasticSearchPerson();
   }
 
@@ -65,15 +72,6 @@ public class ElasticSearchPersonTest {
     target.clearOptionalCollections();
   }
 
-  // @Test
-  // public void pullCol_Args__Map__Object() throws Exception {
-  // Map<String, Object> m = new HashMap<String, Object>();
-  // Object f = null;
-  // Object actual = ElasticSearchPerson.pullCol(m, f);
-  // Object expected = null;
-  // assertThat(actual, is(equalTo(expected)));
-  // }
-
   @Test
   public void trim_Args__String() throws Exception {
     String s = null;
@@ -81,12 +79,6 @@ public class ElasticSearchPersonTest {
     String expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
-
-  // @Test
-  // public void getSystemCodes_Args__() throws Exception {
-  // gov.ca.cwds.rest.api.domain.cms.SystemCodeCache actual = ElasticSearchPerson.getSystemCodes();
-  // assertThat(actual, notNullValue());
-  // }
 
   @Test
   public void makeESPerson_Args__SearchHit() throws Exception {
@@ -172,7 +164,8 @@ public class ElasticSearchPersonTest {
   @Test
   public void getSearchableDateOfBirth() throws Exception {
     target.setDateOfBirth("1990-09-09");
-    String[] expectedDateOfBirths = {"99", "991990", "91990", "0909", "1990", "091990", "090990", "9990", "09091990"};
+    String[] expectedDateOfBirths =
+        {"99", "991990", "91990", "0909", "1990", "091990", "090990", "9990", "09091990"};
     String[] actualSearchableDateOfBirth = target.getSearchableDateOfBirth();
     assertThat(Arrays.equals(expectedDateOfBirths, actualSearchableDateOfBirth), is(true));
   }
@@ -221,7 +214,6 @@ public class ElasticSearchPersonTest {
     // not sensitive:
     final String sensitivityIndicator = null;
     target.setSensitivityIndicator(sensitivityIndicator);
-
     final String actual = target.getSensitivityIndicator();
     final String expected = "N";
     assertThat(actual, is(equalTo(expected)));
@@ -232,7 +224,6 @@ public class ElasticSearchPersonTest {
     // sensitive:
     final String sensitivityIndicator = "S";
     target.setSensitivityIndicator(sensitivityIndicator);
-
     final String actual = target.getSensitivityIndicator();
     final String expected = "S";
     assertThat(actual, is(equalTo(expected)));
@@ -243,7 +234,6 @@ public class ElasticSearchPersonTest {
     // sealed:
     final String sensitivityIndicator = "R";
     target.setSensitivityIndicator(sensitivityIndicator);
-
     final String actual = target.getSensitivityIndicator();
     final String expected = "R";
     assertThat(actual, is(equalTo(expected)));
@@ -518,6 +508,574 @@ public class ElasticSearchPersonTest {
     boolean actual = target.equals(obj);
     boolean expected = false;
     assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void readPerson_A$String() throws Exception {
+    final String json =
+        IOUtils.toString(getClass().getResourceAsStream("/fixtures/data/es/es_person.json"));
+    Object actual = ElasticSearchPerson.readPerson(json);
+    assertThat(actual, is(notNullValue()));
+  }
+
+  @Test(expected = IOException.class)
+  public void readPerson_A$String_T$IOException() throws Exception {
+    String json = "\b\tskdjf*&";
+    ElasticSearchPerson.readPerson(json);
+  }
+
+  @Test
+  public void clearOptionalCollections_A$ObjectArray() throws Exception {
+    ESOptionalCollection[] keep = new ESOptionalCollection[] {};
+    target.clearOptionalCollections(keep);
+  }
+
+  @Test
+  public void clearOptionalCollections_A$() throws Exception {
+    target.clearOptionalCollections();
+  }
+
+  @Test
+  public void trim_A$String() throws Exception {
+    String s = null;
+    String actual = ElasticSearchPerson.trim(s);
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getSystemCodes_A$() throws Exception {
+    gov.ca.cwds.rest.api.domain.cms.SystemCodeCache actual = ElasticSearchPerson.getSystemCodes();
+    assertThat(actual, is(notNullValue()));
+  }
+
+  @Test
+  public void handleHighlights_A$SearchHit$Object() throws Exception {
+    SearchHit hit = mock(SearchHit.class);
+    ElasticSearchPerson ret = new ElasticSearchPerson();
+    ElasticSearchPerson.handleHighlights(hit, ret);
+  }
+
+  @Test
+  public void makeESPerson_A$SearchHit() throws Exception {
+    SearchHit hit = mock(SearchHit.class);
+    Object actual = ElasticSearchPerson.makeESPerson(hit);
+    assertThat(actual, is(notNullValue()));
+  }
+
+  @Test
+  public void getId_A$() throws Exception {
+    String actual = target.getId();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getSourceType_A$() throws Exception {
+    String actual = target.getSourceType();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getSourceJson_A$() throws Exception {
+    String actual = target.getSourceJson();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getSourceObj_A$() throws Exception {
+    Object actual = target.getSourceObj();
+    Object expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getIndexUpdateTime_A$() throws Exception {
+    String actual = target.getIndexUpdateTime();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setIndexUpdateTime_A$String() throws Exception {
+    String indexUpdateTime = null;
+    target.setIndexUpdateTime(indexUpdateTime);
+  }
+
+  @Test
+  public void getFirstName_A$() throws Exception {
+    String actual = target.getFirstName();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setFirstName_A$String() throws Exception {
+    String firstName = null;
+    target.setFirstName(firstName);
+  }
+
+  @Test
+  public void getLastName_A$() throws Exception {
+    String actual = target.getLastName();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setLastName_A$String() throws Exception {
+    String lastName = null;
+    target.setLastName(lastName);
+  }
+
+  @Test
+  public void getGender_A$() throws Exception {
+    String actual = target.getGender();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setGender_A$String() throws Exception {
+    String gender = null;
+    target.setGender(gender);
+  }
+
+  @Test
+  public void getDateOfBirth_A$() throws Exception {
+    String actual = target.getDateOfBirth();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setDateOfBirth_A$String() throws Exception {
+    String dateOfBirth = null;
+    target.setDateOfBirth(dateOfBirth);
+  }
+
+  @Test
+  public void getDateOfDeath_A$() throws Exception {
+    String actual = target.getDateOfDeath();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setDateOfDeath_A$String() throws Exception {
+    String dateOfDeath = null;
+    target.setDateOfDeath(dateOfDeath);
+  }
+
+  @Test
+  public void getAutocompleteSearchBar_A$() throws Exception {
+    String[] actual = target.getAutocompleteSearchBar();
+    String[] expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getDateOfBirthAsText_A$() throws Exception {
+    String[] actual = target.getDateOfBirthAsText();
+    String[] expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getSearchableDateOfBirth_A$() throws Exception {
+    String[] actual = target.getSearchableDateOfBirth();
+    String[] expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getSearchableName_A$() throws Exception {
+    String[] actual = target.getSearchableName();
+    String[] expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getSsn_A$() throws Exception {
+    String actual = target.getSsn();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setSsn_A$String() throws Exception {
+    String ssn = null;
+    target.setSsn(ssn);
+  }
+
+  @Test
+  public void getType_A$() throws Exception {
+    String actual = target.getType();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setType_A$String() throws Exception {
+    String type = null;
+    target.setType(type);
+  }
+
+  @Test
+  public void getSensitivityIndicator_A$() throws Exception {
+    String actual = target.getSensitivityIndicator();
+    String expected = "N";
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setSensitivityIndicator_A$String() throws Exception {
+    String sensitivityIndicator = null;
+    target.setSensitivityIndicator(sensitivityIndicator);
+  }
+
+  @Test
+  public void getIndexNumber_A$() throws Exception {
+    String actual = target.getIndexNumber();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setIndexNumber_A$String() throws Exception {
+    String indexNumber = null;
+    target.setIndexNumber(indexNumber);
+  }
+
+  @Test
+  public void getOpenCaseId_A$() throws Exception {
+    String actual = target.getOpenCaseId();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setOpenCaseId_A$String() throws Exception {
+    String openCaseId = null;
+    target.setOpenCaseId(openCaseId);
+  }
+
+  @Test
+  public void getSource_A$() throws Exception {
+    String actual = target.getSource();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setSource_A$String() throws Exception {
+    String source = null;
+    target.setSource(source);
+  }
+
+  @Test
+  public void setId_A$String() throws Exception {
+    String id = null;
+    target.setId(id);
+  }
+
+  @Test
+  public void setSourceType_A$String() throws Exception {
+    String sourceType = null;
+    target.setSourceType(sourceType);
+  }
+
+  @Test
+  public void setSourceJson_A$String() throws Exception {
+    String sourceJson = null;
+    target.setSourceJson(sourceJson);
+  }
+
+  @Test
+  public void setSourceObj_A$Object() throws Exception {
+    Object sourceObj = null;
+    target.setSourceObj(sourceObj);
+  }
+
+  @Test
+  public void getHighlightFields_A$() throws Exception {
+    String actual = target.getHighlightFields();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setHighlightFields_A$String() throws Exception {
+    String highlightFields = null;
+    target.setHighlightFields(highlightFields);
+  }
+
+  @Test
+  public void toString_A$() throws Exception {
+    String actual = target.toString();
+    assertThat(actual, is(notNullValue()));
+  }
+
+  @Test
+  public void hashCode_A$() throws Exception {
+    int actual = target.hashCode();
+    assertThat(actual, is(not(0)));
+  }
+
+  @Test
+  public void equals_A$Object() throws Exception {
+    Object obj = null;
+    boolean actual = target.equals(obj);
+    boolean expected = false;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getHighlights_A$() throws Exception {
+    Map<String, String> actual = target.getHighlights();
+    Map<String, String> expected = new HashMap<>();
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setHighlights_A$Map() throws Exception {
+    Map<String, String> highlights = new HashMap<String, String>();
+    target.setHighlights(highlights);
+  }
+
+  @Test
+  public void getAddresses_A$() throws Exception {
+    List<ElasticSearchPersonAddress> actual = target.getAddresses();
+    List<ElasticSearchPersonAddress> expected = new ArrayList<>();
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setAddresses_A$List() throws Exception {
+    List<ElasticSearchPersonAddress> addresses = new ArrayList<>();
+    target.setAddresses(addresses);
+  }
+
+  @Test
+  public void getPhones_A$() throws Exception {
+    List<ElasticSearchPersonPhone> actual = target.getPhones();
+    List<ElasticSearchPersonPhone> expected = new ArrayList<>();
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setPhones_A$List() throws Exception {
+    List<ElasticSearchPersonPhone> phones = new ArrayList<>();
+    target.setPhones(phones);
+  }
+
+  @Test
+  public void getLanguages_A$() throws Exception {
+    List<ElasticSearchPersonLanguage> actual = target.getLanguages();
+    List<ElasticSearchPersonLanguage> expected = new ArrayList<>();
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setLanguages_A$List() throws Exception {
+    List<ElasticSearchPersonLanguage> languages = new ArrayList<>();
+    target.setLanguages(languages);
+  }
+
+  @Test
+  public void getMiddleName_A$() throws Exception {
+    String actual = target.getMiddleName();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setMiddleName_A$String() throws Exception {
+    String middleName = null;
+    target.setMiddleName(middleName);
+  }
+
+  @Test
+  public void getNameSuffix_A$() throws Exception {
+    String actual = target.getNameSuffix();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setNameSuffix_A$String() throws Exception {
+    String nameSuffix = null;
+    target.setNameSuffix(nameSuffix);
+  }
+
+  @Test
+  public void getScreenings_A$() throws Exception {
+    List<ElasticSearchPersonScreening> actual = target.getScreenings();
+    List<ElasticSearchPersonScreening> expected = new ArrayList<>();
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setScreenings_A$List() throws Exception {
+    List<ElasticSearchPersonScreening> screenings = new ArrayList<>();
+    target.setScreenings(screenings);
+  }
+
+  @Test
+  public void isUpsert_A$() throws Exception {
+    boolean actual = target.isUpsert();
+    boolean expected = false;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setUpsert_A$boolean() throws Exception {
+    boolean upsert = false;
+    target.setUpsert(upsert);
+  }
+
+  @Test
+  public void getReferrals_A$() throws Exception {
+    List<ElasticSearchPersonReferral> actual = target.getReferrals();
+    List<ElasticSearchPersonReferral> expected = new ArrayList<>();
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setReferrals_A$List() throws Exception {
+    List<ElasticSearchPersonReferral> referrals = new ArrayList<>();
+    target.setReferrals(referrals);
+  }
+
+  @Test
+  public void getRelationships_A$() throws Exception {
+    List<ElasticSearchPersonRelationship> actual = target.getRelationships();
+    List<ElasticSearchPersonRelationship> expected = new ArrayList<>();
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setRelationships_A$List() throws Exception {
+    List<ElasticSearchPersonRelationship> relationships = new ArrayList<>();
+    target.setRelationships(relationships);
+  }
+
+  @Test
+  public void getCases_A$() throws Exception {
+    List<ElasticSearchPersonCase> actual = target.getCases();
+    List<ElasticSearchPersonCase> expected = new ArrayList<>();
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setCases_A$List() throws Exception {
+    List<ElasticSearchPersonCase> cases = new ArrayList<>();
+    target.setCases(cases);
+  }
+
+  @Test
+  public void getSafetyAlerts_A$() throws Exception {
+    List<ElasticSearchSafetyAlert> actual = target.getSafetyAlerts();
+    List<ElasticSearchSafetyAlert> expected = new ArrayList<>();
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setSafetyAlerts_A$List() throws Exception {
+    List<ElasticSearchSafetyAlert> safetyAlerts = new ArrayList<>();
+    target.setSafetyAlerts(safetyAlerts);
+  }
+
+  @Test
+  public void getLegacySourceTable_A$() throws Exception {
+    String actual = target.getLegacySourceTable();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setLegacySourceTable_A$String() throws Exception {
+    String legacySourceTable = null;
+    target.setLegacySourceTable(legacySourceTable);
+  }
+
+  @Test
+  public void getLegacyId_A$() throws Exception {
+    String actual = target.getLegacyId();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setLegacyId_A$String() throws Exception {
+    String legacyId = null;
+    target.setLegacyId(legacyId);
+  }
+
+  @Test
+  public void getLegacyDescriptor_A$() throws Exception {
+    Object actual = target.getLegacyDescriptor();
+    assertThat(actual, is(notNullValue()));
+  }
+
+  @Test
+  public void setLegacyDescriptor_A$Object() throws Exception {
+    ElasticSearchLegacyDescriptor legacyDescriptor = null;
+    target.setLegacyDescriptor(legacyDescriptor);
+  }
+
+  @Test
+  public void getAkas_A$() throws Exception {
+    List<ElasticSearchPersonAka> actual = target.getAkas();
+    List<ElasticSearchPersonAka> expected = new ArrayList<>();
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setAkas_A$List() throws Exception {
+    List<ElasticSearchPersonAka> akas = new ArrayList<>();
+    target.setAkas(akas);
+  }
+
+  @Test
+  public void getClientCounty_A$() throws Exception {
+    Object actual = target.getClientCounty();
+    Object expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setClientCounty_A$Object() throws Exception {
+    ElasticSearchSystemCode clientCounty = null;
+    target.setClientCounty(clientCounty);
+  }
+
+  @Test
+  public void getClientCounties_A$() throws Exception {
+    List<ElasticSearchSystemCode> actual = target.getClientCounties();
+    List<Object> expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setClientCounties_A$List() throws Exception {
+    List<ElasticSearchSystemCode> clientCounties = new ArrayList<>();
+    target.setClientCounties(clientCounties);
+  }
+
+  @Test
+  public void getClientRace_A$() throws Exception {
+    Object actual = target.getClientRace();
+    Object expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setCleintRace_A$Object() throws Exception {
+    ElasticSearchRaceAndEthnicity clientRace = null;
+    target.setCleintRace(clientRace);
   }
 
 }
