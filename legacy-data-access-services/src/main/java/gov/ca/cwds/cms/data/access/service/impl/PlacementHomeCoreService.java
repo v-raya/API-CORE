@@ -374,17 +374,17 @@ public class PlacementHomeCoreService
     /**
      * Rule: R - 11179
      * <p>
-     * <p>
      * Rule Txt
-     * <p>
+     * </p>
      * <p>
      * If the placement home is being saved to the database for the first time then create a new
      * Placement Facility Type History row.
-     * <p>
+     * </p>
      * <p>
      * Logic If (in focus) PLACEMENT_HOME is saved to the database for the first time then create
      * PLACEMENT_HOME > PLACEMENT_FACILITY_TYPE_HISTORY set .Start_Timestamp = System Timestamp AND
      * .Placement_Facility_Type = (in focus) PLACEMENT_HOME.Placement_Facility_Type.
+     * </p>
      */
     private void createPlacementFacilityTypeHistory(PlacementHomeEntityAwareDTO parameterObject) {
       final PlacementHome placementHome = parameterObject.getEntity();
@@ -431,4 +431,5 @@ public class PlacementHomeCoreService
       ssaName3Dao.callStoredProc(parameterObject);
     }
   }
+
 }
