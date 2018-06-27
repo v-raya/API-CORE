@@ -20,7 +20,8 @@ import gov.ca.cwds.inject.CwsRsSessionFactory;
  *
  * <p>
  * DRS, 06/27/2018. This DAO manages the session context and may even close the session in normal
- * mode. In XA transactions, do NOT commit or rollback the transaction or close the session!
+ * mode. In XA transactions, do NOT commit or rollback the transaction or close the session! The
+ * long-term solution is to move RequestExecutionContext into api-core.
  * </p>
  *
  * @author CWDS TPT-2
@@ -53,7 +54,6 @@ public class CountyDeterminationDao extends BaseAuthorizationDao {
     return executeNativeQuery(nativeQuery, clientId);
   }
 
-  // DRS: long-term solution is to move RequestExecutionContext into api-core.
   @SuppressWarnings("unchecked")
   private List<Short> executeNativeQuery(final String namedQuery, final String clientId) {
     final boolean managed = !getXaMode();
