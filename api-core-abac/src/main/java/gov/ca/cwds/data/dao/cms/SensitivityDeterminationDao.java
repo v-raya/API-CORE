@@ -39,8 +39,8 @@ public class SensitivityDeterminationDao extends BaseAuthorizationDao {
   }
 
   private Object executeNativeQuery(final String namedQuery, final String clientId) {
-    return grabSession().createNativeQuery(namedQuery).setParameter(NQ_PARAM_CLIENT_ID, clientId)
-        .getSingleResult();
+    return grabSession().getLeft().createNativeQuery(namedQuery)
+        .setParameter(NQ_PARAM_CLIENT_ID, clientId).getSingleResult();
   }
 
 }

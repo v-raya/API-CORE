@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.dao.cms;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,6 +11,8 @@ import org.hibernate.SessionFactory;
  * @author CWDS API Team
  */
 public class BaseAuthorizationDao {
+
+  private static final ThreadLocal<Boolean> bound = new ThreadLocal<>();
 
   protected final SessionFactory sessionFactory;
 
@@ -22,15 +25,35 @@ public class BaseAuthorizationDao {
     this.sessionFactory = sessionFactory;
   }
 
-  protected Session grabSession() {
+  /**
+   * Get the current session, if any, or open a new one.
+   * 
+   * @return active session, true if opened a new session
+   */
+  protected Pair<Session, Boolean> grabSession() {
+    boolean openedNew = false;
     Session session;
     try {
       session = sessionFactory.getCurrentSession();
     } catch (HibernateException e) {
       session = sessionFactory.openSession();
+      openedNew = true;
     }
 
-    return session;
+    return Pair.of(session, openedNew);
+  }
+
+  public static void setXaMode(boolean xaMode) {
+    bound.set(xaMode);
+  }
+
+  public static void clearXaMode() {
+    bound.remove();
+  }
+
+  protected boolean getXaMode() {
+    final Boolean ret = bound.get();
+    return ret != null && ret;
   }
 
 }
