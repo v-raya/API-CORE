@@ -12,6 +12,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +59,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ca.cwds.ObjectMapperUtils;
 import gov.ca.cwds.data.cms.SystemCodeDao;
 import gov.ca.cwds.data.cms.SystemMetaDao;
+import gov.ca.cwds.data.legacy.cms.entity.Client;
+import gov.ca.cwds.data.legacy.cms.entity.ClientOtherEthnicity;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 
@@ -79,6 +83,9 @@ public abstract class OscarTheGrouch<T extends PersistentObject> {
 
   public static final String DEFAULT_CLIENT_ID = "Jtq8ab8H3N";
   public static final String DEFAULT_PARTICIPANT_ID = "10";
+
+  private static final DateTimeFormatter TIMESTAMP_FORMATTER =
+      DateTimeFormatter.ofPattern("yyyy-MM-dd-HH.mm.ss.SSSSSS");
 
   private static Validator validator;
   private static SystemCodeCache systemCodeCache;
@@ -302,6 +309,32 @@ public abstract class OscarTheGrouch<T extends PersistentObject> {
     when(results.get()).thenReturn(new Object[0]);
 
     return q;
+  }
+
+  protected Client getPersistedClient(String clientId) {
+    Client client = new Client();
+    client.setIdentifier(clientId);
+    addPersistedOtherEthnicity(client, "0000000002", (short) 2, "002",
+        time("2002-11-01-12.53.07.580225"));
+    addPersistedOtherEthnicity(client, "0000000003", (short) 3, "003",
+        time("2004-02-12-14.56.37.492178"));
+    return client;
+  }
+
+  private ClientOtherEthnicity addPersistedOtherEthnicity(Client client, String id, short code,
+      String userId, LocalDateTime lastUpdateTime) {
+    ClientOtherEthnicity coe = new ClientOtherEthnicity();
+    coe.setId(id);
+    coe.setEthnicityCode(code);
+    coe.setLastUpdateId(userId);
+    coe.setLastUpdateTime(lastUpdateTime);
+
+    client.addOtherEthnicity(coe);
+    return coe;
+  }
+
+  protected LocalDateTime time(String timestampStr) {
+    return LocalDateTime.parse(timestampStr, TIMESTAMP_FORMATTER);
   }
 
 }
