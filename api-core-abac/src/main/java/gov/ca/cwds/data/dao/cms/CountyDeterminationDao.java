@@ -59,7 +59,9 @@ public class CountyDeterminationDao extends BaseAuthorizationDao {
     final boolean managed = !getXaMode();
     LOGGER.info("CountyDeterminationDao.executeNativeQuery: managed: {}", managed);
 
-    Pair<Session, Boolean> openSession = grabSession();
+    final Pair<Session, Boolean> openSession = grabSession();
+    final boolean didOpenNew = openSession.getRight();
+
     Session session = null;
     try {
       session = openSession.getLeft();
@@ -71,9 +73,9 @@ public class CountyDeterminationDao extends BaseAuthorizationDao {
     } finally {
       if (managed) {
         ManagedSessionContext.unbind(sessionFactory);
-        if (session != null && openSession.getRight() != null && openSession.getRight()) {
-          session.close();
-        }
+        // if (session != null && didOpenNew) {
+        // session.close();
+        // }
       }
     }
   }
