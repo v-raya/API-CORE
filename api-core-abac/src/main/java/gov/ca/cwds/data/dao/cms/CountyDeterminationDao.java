@@ -54,7 +54,7 @@ public class CountyDeterminationDao extends BaseAuthorizationDao {
 
   @SuppressWarnings("unchecked")
   private List<Short> executeNativeQuery(final String namedQuery, final String clientId) {
-    final boolean managed = getXaMode();
+    final boolean managed = !getXaMode();
     LOGGER.info("CountyDeterminationDao.executeNativeQuery: managed: {}", managed);
 
     Session session = null;
