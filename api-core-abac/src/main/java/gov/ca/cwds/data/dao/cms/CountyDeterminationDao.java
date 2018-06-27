@@ -53,6 +53,7 @@ public class CountyDeterminationDao extends BaseAuthorizationDao {
     return executeNativeQuery(nativeQuery, clientId);
   }
 
+  // DRS: long-term solution is to move RequestExecutionContext into api-core.
   @SuppressWarnings("unchecked")
   private List<Short> executeNativeQuery(final String namedQuery, final String clientId) {
     final boolean managed = !getXaMode();
