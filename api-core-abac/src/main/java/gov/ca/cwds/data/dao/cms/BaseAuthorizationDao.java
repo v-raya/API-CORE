@@ -22,7 +22,7 @@ public class BaseAuthorizationDao {
    * 
    * @param sessionFactory Hibernate session factory
    */
-  public BaseAuthorizationDao(SessionFactory sessionFactory) {
+  BaseAuthorizationDao(SessionFactory sessionFactory) {
     this.sessionFactory = sessionFactory;
   }
 
@@ -31,7 +31,7 @@ public class BaseAuthorizationDao {
    *
    * @return active session, true if opened a new session
    */
-  protected Pair<Session, Boolean> grabSession() {
+  Pair<Session, Boolean> grabSession() {
     boolean openedNew = false;
     Session session;
     try {
@@ -55,19 +55,19 @@ public class BaseAuthorizationDao {
     bound.remove();
   }
 
-  protected boolean getXaMode() {
+  private boolean getXaMode() {
     final Boolean ret = bound.get();
     return ret != null && ret;
   }
 
-  void finalizeSession(Session session) {
+  void finalizeSession() {
     if (isManaged()) {
       ManagedSessionContext.unbind(sessionFactory);
     }
   }
 
-  protected boolean isManaged() {
-    return false;
+  private boolean isManaged() {
+    return !getXaMode();
   }
 
 }
