@@ -50,8 +50,10 @@ public class ClientBaseReadAuthorizer extends AbstractBaseAuthorizer<Client, Str
 
   @Override
   protected Collection<String> filterIds(Collection<String> ids) {
-    Map<String, Sensitivity> sensitivityMap = sensitivityDeterminationService.getClientSensitivityMapByIds(ids);
-    Map<String, List<Short>> clientCountiesMap = countyDeterminationService.getClientCountiesMapByIds(ids);
+    Map<String, Sensitivity> sensitivityMap = sensitivityDeterminationService
+      .getClientSensitivityMapByIds(ids);
+    Map<String, List<Short>> clientCountiesMap = countyDeterminationService
+      .getClientCountiesMapByIds(ids);
 
     Stream<String> filteredStream = ids.stream().filter(Objects::nonNull)
       .filter(clientId -> {
@@ -66,8 +68,10 @@ public class ClientBaseReadAuthorizer extends AbstractBaseAuthorizer<Client, Str
 
   @Override
   protected Collection<Client> filterInstances(Collection<Client> instances) {
-    Collection<String> clientIds = instances.stream().map(Client::getIdentifier).collect(Collectors.toSet());
-    Map<String, List<Short>> clientCountiesMap = countyDeterminationService.getClientCountiesMapByIds(clientIds);
+    Collection<String> clientIds = instances.stream().map(Client::getIdentifier)
+      .collect(Collectors.toSet());
+    Map<String, List<Short>> clientCountiesMap = countyDeterminationService
+      .getClientCountiesMapByIds(clientIds);
     Stream<Client> filteredStream = instances.stream().filter(Objects::nonNull)
       .filter(client -> {
         ClientCondition clientCondition = toClientCondition(client.getSensitivity(),
