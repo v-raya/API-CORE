@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.CaresStackUtils;
 import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.DaoException;
 import gov.ca.cwds.data.persistence.cms.SystemCode;
@@ -49,7 +50,8 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
   public SystemCode[] findByForeignKeyMetaTable(String foreignKeyMetaTable) {
     LOGGER.info("SystemCodeDao.findByForeignKeyMetaTable: foreignKeyMetaTable: {}",
         foreignKeyMetaTable);
-    final String namedQueryName = this.getClass().getName() + ".findByForeignKeyMetaTable";
+    CaresStackUtils.logStack();
+    final String namedQueryName = SystemCode.class + ".findByForeignKeyMetaTable";
 
     final Session session = grabSession();
     joinTransaction(session);
@@ -69,7 +71,8 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
   @SuppressWarnings({"unchecked", "deprecation"})
   public SystemCode findBySystemCodeId(Number systemCodeId) {
     LOGGER.info("SystemCodeDao.findBySystemCodeId: systemCodeId: {}", systemCodeId);
-    final String namedQueryName = this.getClass() + ".findBySystemCodeId";
+
+    final String namedQueryName = SystemCode.class + ".findBySystemCodeId";
     final Session session = grabSession();
     joinTransaction(session);
 

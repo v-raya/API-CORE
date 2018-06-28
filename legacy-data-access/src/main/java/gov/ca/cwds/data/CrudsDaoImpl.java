@@ -64,8 +64,9 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
         && txn.getStatus() != TransactionStatus.MARKED_ROLLBACK
         && txn.getStatus() != TransactionStatus.ROLLED_BACK
         && txn.getStatus() != TransactionStatus.ROLLING_BACK) {
-      LOGGER.warn("\n\t ******* Begin new transaction ******* \n");
+      LOGGER.warn("\n\t ******* Begin **NEW** transaction ******* \n");
       txn.begin();
+      CaresStackUtils.logStack();
     }
 
     return txn;
@@ -77,8 +78,7 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
    * @return default schema for this datasource
    */
   public String getCurrentSchema() {
-    return (String) grabSession().getSessionFactory().getProperties()
-        .get("hibernate.default_schema");
+    return (String) getSessionFactory().getProperties().get("hibernate.default_schema");
   }
 
   /**
