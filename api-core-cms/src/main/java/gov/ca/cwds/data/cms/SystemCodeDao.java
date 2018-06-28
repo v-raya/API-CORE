@@ -51,7 +51,7 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
     LOGGER.info("SystemCodeDao.findByForeignKeyMetaTable: foreignKeyMetaTable: {}",
         foreignKeyMetaTable);
     CaresStackUtils.logStack();
-    final String namedQueryName = SystemCode.class + ".findByForeignKeyMetaTable";
+    final String namedQueryName = SystemCode.class.getName() + ".findByForeignKeyMetaTable";
 
     final Session session = grabSession();
     joinTransaction(session);
@@ -72,7 +72,7 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
   public SystemCode findBySystemCodeId(Number systemCodeId) {
     LOGGER.info("SystemCodeDao.findBySystemCodeId: systemCodeId: {}", systemCodeId);
 
-    final String namedQueryName = SystemCode.class + ".findBySystemCodeId";
+    final String namedQueryName = SystemCode.class.getName() + ".findBySystemCodeId";
     final Session session = grabSession();
     joinTransaction(session);
 
