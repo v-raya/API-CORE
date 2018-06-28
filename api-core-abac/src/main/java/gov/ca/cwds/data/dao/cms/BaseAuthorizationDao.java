@@ -31,6 +31,7 @@ public class BaseAuthorizationDao {
    *
    * @return active session, true if opened a new session
    */
+  @SuppressWarnings("squid:S2095") // the session is returned from here, so can't be closed here
   Pair<Session, Boolean> grabSession() {
     boolean openedNew = false;
     Session session;

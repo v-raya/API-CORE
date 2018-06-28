@@ -12,7 +12,7 @@ public abstract class BaseApiTest<T extends Configuration> {
 
   protected abstract BaseDropwizardApplication<T> getApplication();
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "fb-contrib:PCOA_PARTIALLY_CONSTRUCTED_OBJECT_ACCESS"})
   @Rule
   public RestClientTestRule clientTestRule = new RestClientTestRule(getApplication());
 
