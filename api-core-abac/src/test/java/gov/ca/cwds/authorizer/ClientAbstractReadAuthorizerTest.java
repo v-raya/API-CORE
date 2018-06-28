@@ -6,6 +6,7 @@ import static gov.ca.cwds.authorizer.util.StaffPrivilegeUtil.SENSITIVE_PERSONS;
 import static gov.ca.cwds.util.PerryAccountUtils.initPerryAccountWithPrivileges;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
@@ -20,6 +21,10 @@ import gov.ca.cwds.security.realm.PerrySubject;
 import gov.ca.cwds.service.ClientCountyDeterminationService;
 import gov.ca.cwds.service.ClientSensitivityDeterminationService;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,6 +61,23 @@ public class ClientAbstractReadAuthorizerTest {
     testSubject = new ClientAbstractReadAuthorizer(droolsAuthorizationService, droolsConfiguration);
     testSubject.setSensitivityDeterminationService(clientSensitivityDeterminationService);
     testSubject.setCountyDeterminationService(clientCountyDeterminationService);
+    initMocksForFiltering();
+  }
+
+  private void initMocksForFiltering() {
+    Map<String, Sensitivity> sensitivityMap = new HashMap<>();
+    sensitivityMap.put("1", Sensitivity.SEALED);
+    sensitivityMap.put("2", Sensitivity.SENSITIVE);
+    sensitivityMap.put("3", Sensitivity.NOT_APPLICABLE);
+    when(clientSensitivityDeterminationService.getClientSensitivityMapByIds(any(Collection.class)))
+      .thenReturn(sensitivityMap);
+
+    Map<String, List<Short>> clientCountiesMap = new HashMap<>();
+    clientCountiesMap.put("1", Arrays.asList(new Short[]{1023, 1034}));
+    clientCountiesMap.put("2", Arrays.asList(new Short[]{1023, 1034}));
+    clientCountiesMap.put("3", Arrays.asList(new Short[]{1023, 1034}));
+    when(clientCountyDeterminationService.getClientCountiesMapByIds(any(Collection.class)))
+      .thenReturn(clientCountiesMap);
   }
 
   @Test
@@ -67,6 +89,7 @@ public class ClientAbstractReadAuthorizerTest {
 
   @Test
   public void checkNullSensitivity() {
+    initUserAccount("1126","State of California", CWS_CASE_MANAGEMENT_SYSTEM);
     when(clientSensitivityDeterminationService.getClientSensitivityById(anyString())).thenReturn(null);
     assertTrue(testSubject.checkId("1"));
   }
@@ -141,6 +164,26 @@ public class ClientAbstractReadAuthorizerTest {
     checkAllCases(client, "1073", "Colusa", false, false, true, false, true);
   }
 
+  @Test
+  public void idsAreFiltered() {
+    initUserAccount("1073", "Colusa", CWS_CASE_MANAGEMENT_SYSTEM);
+    Collection<String> filteredIds = testSubject.filterIds(Arrays.asList("1", "2", "3"));
+    assertEquals(1, filteredIds.size());
+    assertEquals("3", filteredIds.iterator().next());
+  }
+
+  @Test
+  public void clientsAreFiltered() {
+    initUserAccount("1073", "Colusa", CWS_CASE_MANAGEMENT_SYSTEM);
+    Collection<Client> filteredClients = testSubject.filterInstances(Arrays.asList(
+      initClient("1", Sensitivity.SENSITIVE),
+      initClient("2", Sensitivity.NOT_APPLICABLE),
+      initClient("3", Sensitivity.SEALED)
+    ));
+    assertEquals(1, filteredClients.size());
+    assertEquals("2", filteredClients.iterator().next().getIdentifier());
+  }
+
   private void checkAllCases(Client client, String userCountyCwsCode, String userCountyName, boolean socialWorkerOnly, boolean countySensitive, boolean countySealed, boolean stateSensitive, boolean stateSealed) {
     // Social Worker Only
     initUserAccount(userCountyCwsCode, userCountyName, CWS_CASE_MANAGEMENT_SYSTEM);
@@ -178,8 +221,12 @@ public class ClientAbstractReadAuthorizerTest {
   }
 
   private Client initClient(Sensitivity sensitivity) {
+    return initClient(CLIENT_ID, sensitivity);
+  }
+
+  private Client initClient(String id, Sensitivity sensitivity) {
     final Client client = new Client();
-    client.setIdentifier(CLIENT_ID);
+    client.setIdentifier(id);
     client.setSensitivity(sensitivity);
     return client;
   }

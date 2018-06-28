@@ -6,7 +6,6 @@ import java.util.List;
 import org.hibernate.CacheMode;
 import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
@@ -17,6 +16,7 @@ import com.google.common.collect.ImmutableList;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.data.std.BatchBucketDao;
+import org.hibernate.query.Query;
 
 /**
  * Base class for DAO with some common methods.
@@ -75,7 +75,7 @@ public abstract class BaseDaoImpl<T extends PersistentObject> extends CrudsDaoIm
    *
    * @see gov.ca.cwds.data.BaseDao#findAllUpdatedAfter(java.util.Date)
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "fb-contrib:CLI_CONSTANT_LIST_INDEX"})
   @Override
   public List<T> findAllUpdatedAfter(Date datetime) {
     final String namedQueryName = constructNamedQueryName("findAllUpdatedAfter");

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.context.internal.ManagedSessionContext;
 
 /**
  * Reliable session acquisition, regardless of datasource or transaction boundaries.
@@ -21,16 +22,17 @@ public class BaseAuthorizationDao {
    * 
    * @param sessionFactory Hibernate session factory
    */
-  public BaseAuthorizationDao(SessionFactory sessionFactory) {
+  BaseAuthorizationDao(SessionFactory sessionFactory) {
     this.sessionFactory = sessionFactory;
   }
 
   /**
    * Get the current session, if any, or open a new one.
-   * 
+   *
    * @return active session, true if opened a new session
    */
-  protected Pair<Session, Boolean> grabSession() {
+  @SuppressWarnings("squid:S2095") // the session is returned from here, so can't be closed here
+  Pair<Session, Boolean> grabSession() {
     boolean openedNew = false;
     Session session;
     try {
@@ -38,6 +40,9 @@ public class BaseAuthorizationDao {
     } catch (HibernateException e) {
       session = sessionFactory.openSession();
       openedNew = true;
+    }
+    if (isManaged()) {
+      ManagedSessionContext.bind(session);
     }
 
     return Pair.of(session, openedNew);
@@ -51,9 +56,19 @@ public class BaseAuthorizationDao {
     bound.remove();
   }
 
-  protected boolean getXaMode() {
+  private boolean getXaMode() {
     final Boolean ret = bound.get();
     return ret != null && ret;
+  }
+
+  void finalizeSession() {
+    if (isManaged()) {
+      ManagedSessionContext.unbind(sessionFactory);
+    }
+  }
+
+  private boolean isManaged() {
+    return !getXaMode();
   }
 
 }
