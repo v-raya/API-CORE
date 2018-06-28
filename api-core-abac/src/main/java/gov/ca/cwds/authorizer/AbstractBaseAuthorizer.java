@@ -38,21 +38,21 @@ public abstract class AbstractBaseAuthorizer<T, I> extends BaseAuthorizer<T, I> 
    * @param droolsConfiguration Drools configuration
    */
   public AbstractBaseAuthorizer(DroolsAuthorizationService droolsAuthorizationService,
-      DroolsAuthorizer droolsConfiguration) {
+    DroolsAuthorizer droolsConfiguration) {
     this.droolsAuthorizationService = droolsAuthorizationService;
     this.droolsConfiguration = droolsConfiguration;
   }
 
   private void logAuthorization(final PerryAccount perryAccount,
-      final Set<StaffPrivilegeType> staffPrivilegeTypes, final T instance,
-      final boolean authorizationResult) {
+    final Set<StaffPrivilegeType> staffPrivilegeTypes, final T instance,
+    final boolean authorizationResult) {
     String instanceName =
-        Optional.ofNullable(instance).map(t -> t.getClass().getSimpleName()).orElse(null);
+      Optional.ofNullable(instance).map(t -> t.getClass().getSimpleName()).orElse(null);
     LOGGER.info(
-        "StaffPerson [{}] with staffPrivilegeTypes = {} is performing action on object [{}]. "
-            + "Authorization result = [{}]. {}",
-        perryAccount.getStaffId(), staffPrivilegeTypes, instanceName, authorizationResult,
-        perryAccount);
+      "StaffPerson [{}] with staffPrivilegeTypes = {} is performing action on object [{}]. "
+        + "Authorization result = [{}]. {}",
+      perryAccount.getStaffId(), staffPrivilegeTypes, instanceName, authorizationResult,
+      perryAccount);
   }
 
   protected boolean authorizeInstanceOperation(final T instance, List<Object> authorizationFacts) {
@@ -67,7 +67,7 @@ public abstract class AbstractBaseAuthorizer<T, I> extends BaseAuthorizer<T, I> 
     authorizationFacts.add(instance);
     authorizationFacts.add(perryAccount);
     final boolean authorizationResult = droolsAuthorizationService
-        .authorizeObjectOperation(staffPrivilegeTypes, droolsConfiguration, authorizationFacts);
+      .authorizeObjectOperation(staffPrivilegeTypes, droolsConfiguration, authorizationFacts);
     logAuthorization(perryAccount, staffPrivilegeTypes, instance, authorizationResult);
     return authorizationResult;
   }
