@@ -1014,7 +1014,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   /**
    * Get client's open case id
    * 
-   * @return Opne case id
+   * @return open case id
    */
   public String getOpenCaseId() {
     return openCaseId;

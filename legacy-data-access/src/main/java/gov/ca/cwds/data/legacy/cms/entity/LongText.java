@@ -1,13 +1,14 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
-import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+
 /**
- * {@link CmsPersistentObject} Class representing an LongText.
+ * {@link CmsPersistentObject} class representing a LongText note.
  * 
  * @author CASE API Team
  */
@@ -70,4 +71,5 @@ public class LongText extends CmsPersistentObject {
   public void setTextDescription(String textDescription) {
     this.textDescription = textDescription;
   }
+
 }

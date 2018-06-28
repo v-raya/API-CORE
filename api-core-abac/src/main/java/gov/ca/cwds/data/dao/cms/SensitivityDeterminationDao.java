@@ -40,7 +40,7 @@ public class SensitivityDeterminationDao extends BaseAuthorizationDao {
    * @return sensitivity
    */
   public Sensitivity getSensitivity(final String clientId) {
-    Object sensitivity = grabSession().createNativeQuery(SELECT_SENSITIVITY)
+    Object sensitivity = grabSession().getLeft().createNativeQuery(SELECT_SENSITIVITY)
       .setParameter(NQ_PARAM_CLIENT_ID, clientId).getSingleResult();
     return constructSensitivity(sensitivity);
   }
@@ -56,7 +56,7 @@ public class SensitivityDeterminationDao extends BaseAuthorizationDao {
     }
     final Map<String, Sensitivity> sensitivityMap = new HashMap<>(clientIds.size());
     @SuppressWarnings("unchecked")
-    List<Object[]> sensitivityResults = grabSession().createNativeQuery(SELECT_SENSITIVITY_MAP)
+    List<Object[]> sensitivityResults = grabSession().getLeft().createNativeQuery(SELECT_SENSITIVITY_MAP)
       .setParameter(NQ_PARAM_CLIENT_IDS, clientIds).getResultList();
     for (Object[] result : sensitivityResults) {
       sensitivityMap.put(result[0].toString(), constructSensitivity(result[1]));

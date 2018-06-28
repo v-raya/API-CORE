@@ -8,16 +8,35 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.context.internal.ManagedSessionContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+
+import gov.ca.cwds.inject.CwsRsSessionFactory;
 
 /**
  * Hibernate DAO for getting county of client from the {@code CLIENT_CNTY} table in a DB2
  * "replicated" schema, such as {@code CWSRS1}.
  *
+ * <p>
+ * DRS, 06/27/2018. This DAO manages the session context and may even close the session in normal
+ * mode. In XA transactions, do NOT commit or rollback the transaction or close the session! The
+ * long-term solution is to move RequestExecutionContext into
+ * <a href="https://github.com/ca-cwds/api-core">api-core</a>.
+ * </p>
+ *
  * @author CWDS TPT-2
  */
 public class CountyDeterminationDao extends BaseAuthorizationDao {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(CountyDeterminationDao.class);
 
   private static final String CLIENT_COUNTY_CACHE = "clientCountyCache";
   private static final String NQ_PARAM_CLIENT_ID = "clientId";
@@ -38,11 +57,6 @@ public class CountyDeterminationDao extends BaseAuthorizationDao {
     super(sessionFactory);
   }
 
-  @Override
-  protected boolean isManaged() {
-    return !"Y".equals(managedProp);
-  }
-
   /**
    * List county system code id's (meta category {@code GVR_ENTC}) for the given clients.
    * 
@@ -51,9 +65,14 @@ public class CountyDeterminationDao extends BaseAuthorizationDao {
    */
   @SuppressWarnings("unchecked")
   public List<Short> getClientCounties(final String clientId) {
-    Session session = null;
+    final boolean managed = !getXaMode();
+    LOGGER.info("CountyDeterminationDao.executeNativeQuery: managed: {}", managed);
+
+    final Pair<Session, Boolean> pair = grabSession();
+    final boolean didOpenNew = pair.getRight();
+
+    Session session = pair.getLeft();
     try {
-      session = grabSession();
       return session.createNativeQuery(SELECT_CLIENT_COUNTIES)
         .setParameter(NQ_PARAM_CLIENT_ID, clientId).setCacheable(true)
         .setCacheRegion(CLIENT_COUNTY_CACHE).getResultList();
@@ -73,10 +92,17 @@ public class CountyDeterminationDao extends BaseAuthorizationDao {
       return new HashMap<>();
     }
     final Map<String, List<Short>> clientCountiesMap = new HashMap<>(clientIds.size());
-    Session session = null;
+
+    final boolean managed = !getXaMode();
+    LOGGER.info("CountyDeterminationDao.executeNativeQuery: managed: {}", managed);
+
+    final Pair<Session, Boolean> pair = grabSession();
+    final boolean didOpenNew = pair.getRight();
+
+    Session session = pair.getLeft();
+
     List<Object[]> clientCountiesResults;
     try {
-      session = grabSession();
       clientCountiesResults = session.createNativeQuery(SELECT_CLIENT_COUNTIES_MAP)
         .setParameter(NQ_PARAM_CLIENT_IDS, clientIds).getResultList();
     } finally {
