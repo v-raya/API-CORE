@@ -115,8 +115,7 @@ public class ClientBaseReadAuthorizer extends AbstractBaseAuthorizer<Client, Str
     return authorizationFacts;
   }
 
-  void setSensitivityDeterminationService(
-    ClientSensitivityDeterminationService sensitivityDeterminationService) {
+  void setSensitivityDeterminationService(ClientSensitivityDeterminationService sensitivityDeterminationService) {
     this.sensitivityDeterminationService = sensitivityDeterminationService;
   }
 
