@@ -66,7 +66,7 @@ public class CountyDeterminationDao extends BaseAuthorizationDao {
    * @param clientIds - collection of client id-s
    * @return map where key is a client id and value is a list of county codes
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "fb-contrib:CLI_CONSTANT_LIST_INDEX"})
   public Map<String, List<Short>> getClientCountiesMap(final Collection<String> clientIds) {
     if (clientIds == null || clientIds.isEmpty()) {
       return new HashMap<>();

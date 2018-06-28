@@ -54,6 +54,7 @@ public class SensitivityDeterminationDao extends BaseAuthorizationDao {
    * @param clientIds - collection of client id-s
    * @return map where key is a client id and value is Sensitivity
    */
+  @SuppressWarnings("fb-contrib:CLI_CONSTANT_LIST_INDEX")
   public Map<String, Sensitivity> getSensitivityMap(Collection<String> clientIds) {
     if (clientIds == null || clientIds.isEmpty()) {
       return new HashMap<>();
