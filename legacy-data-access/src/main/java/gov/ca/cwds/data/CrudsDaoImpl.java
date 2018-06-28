@@ -77,8 +77,7 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
    * @return default schema for this datasource
    */
   public String getCurrentSchema() {
-    return (String) grabSession().getSessionFactory().getProperties()
-        .get("hibernate.default_schema");
+    return (String) getSessionFactory().getProperties().get("hibernate.default_schema");
   }
 
   /**
