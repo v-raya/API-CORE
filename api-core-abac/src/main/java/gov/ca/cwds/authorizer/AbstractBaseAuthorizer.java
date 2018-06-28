@@ -3,12 +3,10 @@ package gov.ca.cwds.authorizer;
 import static gov.ca.cwds.authorizer.util.StaffPrivilegeUtil.toStaffPersonPrivilegeTypes;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,13 +78,6 @@ public abstract class AbstractBaseAuthorizer<T, I> extends BaseAuthorizer<T, I> 
       return true;
     }
     return authorizeInstanceOperation(instance, prepareFacts(instance));
-  }
-
-  @Override
-  protected Collection<T> filterInstances(Collection<T> instances) {
-    // don't check if instances is null because BaseAuthorizer.filter is doing that already
-    return instances.stream().filter(i -> authorizeInstanceOperation(i, prepareFacts(i)))
-      .collect(Collectors.toSet());
   }
 
   protected abstract List<Object> prepareFacts(T instance);

@@ -22,6 +22,12 @@ public class SensitivityDeterminationDao extends BaseAuthorizationDao {
   private static final String NQ_PARAM_CLIENT_ID = "clientId";
   private static final String NQ_PARAM_CLIENT_IDS = "clientIds";
 
+  private static final String SELECT_SENSITIVITY =
+    "SELECT SENSTV_IND FROM {h-schema}CLIENT_T WHERE IDENTIFIER = :" + NQ_PARAM_CLIENT_ID;
+  private static final String SELECT_SENSITIVITY_MAP =
+    "SELECT IDENTIFIER, SENSTV_IND FROM {h-schema}CLIENT_T WHERE IDENTIFIER IN :"
+      + NQ_PARAM_CLIENT_IDS;
+
   @Inject
   public SensitivityDeterminationDao(@CmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
@@ -34,34 +40,34 @@ public class SensitivityDeterminationDao extends BaseAuthorizationDao {
    * @return sensitivity
    */
   public Sensitivity getSensitivity(final String clientId) {
-    final String nativeQuery =
-        "SELECT SENSTV_IND FROM {h-schema}CLIENT_T WHERE IDENTIFIER = :" + NQ_PARAM_CLIENT_ID;
-    String sensitivityCode = (String) grabSession().createNativeQuery(nativeQuery)
+    Object sensitivity = grabSession().createNativeQuery(SELECT_SENSITIVITY)
       .setParameter(NQ_PARAM_CLIENT_ID, clientId).getSingleResult();
-    return constructSensitivity(sensitivityCode);
+    return constructSensitivity(sensitivity);
   }
 
+  /**
+   *
+   * @param clientIds - collection of client id-s
+   * @return map where key is a client id and value is Sensitivity
+   */
   public Map<String, Sensitivity> getSensitivityMap(Collection<String> clientIds) {
     if (clientIds == null || clientIds.isEmpty()) {
       return new HashMap<>();
     }
     final Map<String, Sensitivity> sensitivityMap = new HashMap<>(clientIds.size());
-    final String nativeQuery =
-      "SELECT IDENTIFIER, SENSTV_IND FROM {h-schema}CLIENT_T WHERE IDENTIFIER IN :"
-        + NQ_PARAM_CLIENT_IDS;
     @SuppressWarnings("unchecked")
-    List<String[]> sensitivityResults = grabSession().createNativeQuery(nativeQuery)
+    List<Object[]> sensitivityResults = grabSession().createNativeQuery(SELECT_SENSITIVITY_MAP)
       .setParameter(NQ_PARAM_CLIENT_IDS, clientIds).getResultList();
-    for (String[] sensitivityResult : sensitivityResults) {
-      sensitivityMap.put(sensitivityResult[0], constructSensitivity(sensitivityResult[1]));
+    for (Object[] result : sensitivityResults) {
+      sensitivityMap.put(result[0].toString(), constructSensitivity(result[1]));
     }
     return sensitivityMap;
   }
 
-  private Sensitivity constructSensitivity(String code) {
-    if (code == null) {
-      throw new AuthorizationException("Found Client with no sensitive indicator");
+  private Sensitivity constructSensitivity(Object sensitivity) {
+    if (sensitivity == null) {
+      throw new AuthorizationException("Found Client with no sensitivity indicator");
     }
-    return Sensitivity.fromCode(code);
+    return Sensitivity.fromCode(sensitivity.toString());
   }
 }
