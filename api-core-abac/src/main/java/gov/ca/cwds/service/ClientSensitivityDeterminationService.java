@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.data.dao.cms.SensitivityDeterminationDao;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.NoResultException;
 
@@ -46,7 +47,7 @@ public class ClientSensitivityDeterminationService {
     try {
       return sensitivityDeterminationDao.getSensitivityMap(clientIds);
     } catch (NoResultException e) {
-      return null;
+      return new HashMap<>();
     }
   }
 }

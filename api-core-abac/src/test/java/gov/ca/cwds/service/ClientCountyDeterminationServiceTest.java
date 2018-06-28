@@ -3,8 +3,10 @@ package gov.ca.cwds.service;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
+import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -64,6 +66,12 @@ public class ClientCountyDeterminationServiceTest {
   @Test
   public void getClientCounties_success_whenNotFound() {
     Assert.assertTrue(testSubject.getClientCountiesById("unknownId").isEmpty());
+  }
+
+  @Test
+  public void getClientSensitivityMapByIds_success_whenFound() {
+    Map<String, List<Short>> clientCountiesMap = testSubject.getClientCountiesMapByIds(Arrays.asList("00jnURO00h"));
+    Assert.assertArrayEquals(new Short[] {1077}, clientCountiesMap.get("00jnURO00h").toArray());
   }
 
   private static void runLiquibaseScript(String script) throws LiquibaseException {
