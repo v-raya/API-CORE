@@ -69,7 +69,7 @@ public class ClientCountyDeterminationServiceTest {
   }
 
   @Test
-  public void getClientSensitivityMapByIds_success_whenFound() {
+  public void getClientCountiesMapByIds_success_whenFound() {
     Map<String, List<Short>> clientCountiesMap = testSubject.getClientCountiesMapByIds(Arrays.asList("00jnURO00h"));
     Assert.assertArrayEquals(new Short[] {1077}, clientCountiesMap.get("00jnURO00h").toArray());
   }
