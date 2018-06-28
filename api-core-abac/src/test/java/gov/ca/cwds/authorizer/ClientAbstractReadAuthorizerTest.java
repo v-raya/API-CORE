@@ -67,6 +67,7 @@ public class ClientAbstractReadAuthorizerTest {
 
   @Test
   public void checkNullSensitivity() {
+    initUserAccount("1126","State of California", CWS_CASE_MANAGEMENT_SYSTEM);
     when(clientSensitivityDeterminationService.getClientSensitivityById(anyString())).thenReturn(null);
     assertTrue(testSubject.checkId("1"));
   }
