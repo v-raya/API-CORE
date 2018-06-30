@@ -232,12 +232,13 @@ public class ElasticsearchDao implements Closeable {
   private boolean createOrSwapAlias(final String alias, final String index, final String oldIndex) {
     IndicesAliasesRequestBuilder preparedAliases = getClient().admin().indices()
       .prepareAliases();
+    TimeValue timeout = TimeValue.timeValueMillis(TIMEOUT_MILLIS);
     if (StringUtils.isBlank(oldIndex)) {
       return preparedAliases.addAlias(index, alias)
-          .get(TimeValue.timeValueMillis(TIMEOUT_MILLIS)).isAcknowledged();
+          .get(timeout).isAcknowledged();
     } else {
       return preparedAliases.removeAlias(oldIndex, alias)
-          .addAlias(index, alias).get(TimeValue.timeValueMillis(TIMEOUT_MILLIS))
+          .addAlias(index, alias).get(timeout)
           .isAcknowledged();
 
     }
