@@ -396,7 +396,7 @@ public final class CmsKeyIdGenerator {
       }
 
       if (power == base) {
-        LOGGER.warn("Character too big base? {}");
+        LOGGER.warn("Character too big base?");
         return -1;
       }
     }
