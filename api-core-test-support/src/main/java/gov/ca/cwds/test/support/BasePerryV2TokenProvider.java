@@ -27,7 +27,7 @@ public abstract class BasePerryV2TokenProvider<T extends AuthParams> implements
     TokenProvider<T> {
 
   public static final String TOKEN_PARAM_NAME = "token";
-  private final Logger LOG = LoggerFactory.getLogger(BasePerryV2TokenProvider.class);
+  private static final Logger LOG = LoggerFactory.getLogger(BasePerryV2TokenProvider.class);
 
   private static final String PATH_PERRY_AUTHN_LOGIN = "/perry/authn/login";
   private static final String PATH_PERRY_AUTHN_VALIDATE = "/perry/authn/validate";

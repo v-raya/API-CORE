@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.exception;
 
-import java.util.HashSet;
+import com.google.common.collect.Sets;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -19,8 +19,8 @@ public class IssueDetailsCreator {
 
   public static Set<IssueDetails> create(ConstraintViolationException exception,
       String incidentId) {
-    Set<IssueDetails> issueDetailsSet = new HashSet<>();
     Set<ConstraintViolation<?>> constraintViolations = exception.getConstraintViolations();
+    Set<IssueDetails> issueDetailsSet = Sets.newHashSetWithExpectedSize(constraintViolations.size());
 
     for (ConstraintViolation<?> violation : constraintViolations) {
       IssueDetails issueDetails = create(violation, incidentId);

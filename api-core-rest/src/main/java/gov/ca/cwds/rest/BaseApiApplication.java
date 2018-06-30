@@ -98,7 +98,7 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
   }
 
   @Override
-  public final void run(final T configuration, final Environment environment) throws Exception {
+  public final void run(final T configuration, final Environment environment) {
     environment.servlets().setSessionHandler(new SessionHandler());
 
     registerExceptionMappers(environment);
