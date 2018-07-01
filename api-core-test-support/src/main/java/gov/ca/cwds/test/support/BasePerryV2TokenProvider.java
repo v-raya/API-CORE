@@ -2,6 +2,7 @@ package gov.ca.cwds.test.support;
 
 import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -20,12 +21,9 @@ import org.glassfish.jersey.client.ClientProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author CWDS TPT-2 Team
- */
-@SuppressWarnings("fb-contrib:PMB_POSSIBLE_MEMORY_BLOAT") // Class used only in tests
-public abstract class BasePerryV2TokenProvider<T extends AuthParams> implements
-    TokenProvider<T> {
+/** @author CWDS TPT-2 Team */
+@SuppressFBWarnings(value = "PMB_POSSIBLE_MEMORY_BLOAT", justification = "Class used only in tests")
+public abstract class BasePerryV2TokenProvider<T extends AuthParams> implements TokenProvider<T> {
 
   public static final String TOKEN_PARAM_NAME = "token";
   private static final Logger LOG = LoggerFactory.getLogger(BasePerryV2TokenProvider.class);
