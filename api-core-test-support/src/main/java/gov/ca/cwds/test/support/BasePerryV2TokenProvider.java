@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author CWDS TPT-2 Team
  */
+@SuppressWarnings("fb-contrib:PMB_POSSIBLE_MEMORY_BLOAT") // Class used only in tests
 public abstract class BasePerryV2TokenProvider<T extends AuthParams> implements
     TokenProvider<T> {
 
