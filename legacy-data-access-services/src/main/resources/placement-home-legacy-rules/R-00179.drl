@@ -32,8 +32,8 @@ rule "R-00179"
       details.setCode("R-00179");
       details.setProperty("OtherAdultsInPlacementHome.birthDt");
       details.setInvalidValue($otherAdults.getBirthDt());
-      details.setUserMessage("Other adults' birth date must be more then system date - 18 years. Other adults ID: " + $otherAdults.identifier);
-      details.setTechnicalMessage("Violation of rule: OTHER_ADULTS_IN_PLACEMENT_HOME: Birth_Date must be <= (system date - 18 years)");
+      details.setUserMessage("Other adult's date of birth must be before (current date - 18 years). Other adults ID: " + $otherAdults.identifier);
+      details.setTechnicalMessage("Violation of rule: OTHER_ADULTS_IN_PLACEMENT_HOME: Birth_Date must be <= (current date - 18 years)");
       validationDetailsList.add(details);
 end
 

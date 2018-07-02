@@ -17,7 +17,7 @@ public class MDCLoggingContext implements LoggingContext {
 
   @Override
   public String initialize() {
-    String uniqueId = UUID.randomUUID().toString();
+    final String uniqueId = UUID.randomUUID().toString();
     MDC.put(LogParameter.UNIQUE_ID.name(), uniqueId);
     return uniqueId;
   }

@@ -32,6 +32,11 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
 
   private SessionFactory sessionFactory;
 
+  /**
+   * Grab a session! If a current session is available, return it, else open a new session.
+   * 
+   * @return usable session
+   */
   public Session grabSession() {
     Session session;
     try {
@@ -43,15 +48,37 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
     return session;
   }
 
+  /**
+   * Join the current transaction or begin a new one, as needed.
+   * 
+   * @param session active session
+   * @return active or new transaction
+   */
   public Transaction joinTransaction(Session session) {
     Transaction txn = session.getTransaction();
     txn = txn != null ? txn : session.beginTransaction();
 
-    if (TransactionStatus.NOT_ACTIVE == txn.getStatus() || !txn.isActive()) {
+    if (!txn.getRollbackOnly() && !txn.isActive() && txn.getStatus() != TransactionStatus.COMMITTING
+        && txn.getStatus() != TransactionStatus.COMMITTED
+        && txn.getStatus() != TransactionStatus.FAILED_COMMIT
+        && txn.getStatus() != TransactionStatus.MARKED_ROLLBACK
+        && txn.getStatus() != TransactionStatus.ROLLED_BACK
+        && txn.getStatus() != TransactionStatus.ROLLING_BACK) {
+      LOGGER.warn("\n\t ******* Begin **NEW** transaction ******* \n");
       txn.begin();
+      CaresStackUtils.logStack();
     }
 
     return txn;
+  }
+
+  /**
+   * Find the default schema for the current datasource.
+   * 
+   * @return default schema for this datasource
+   */
+  public String getCurrentSchema() {
+    return (String) getSessionFactory().getProperties().get("hibernate.default_schema");
   }
 
   /**

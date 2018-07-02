@@ -58,4 +58,5 @@ public class ExceptionMapperUtils {
 
     return Response.status(status).entity(response).type(MediaType.APPLICATION_JSON).build();
   }
+
 }

@@ -10,7 +10,6 @@ import gov.ca.cwds.rest.api.ApiException;
  */
 @Deprecated
 @SuppressWarnings("serial")
-
 public class ValidationException extends ApiException {
 
   public ValidationException() {
@@ -33,4 +32,5 @@ public class ValidationException extends ApiException {
       boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }
+
 }

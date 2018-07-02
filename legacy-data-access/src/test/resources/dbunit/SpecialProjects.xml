@@ -20,4 +20,15 @@
     LST_UPD_ID="q48"
     LST_UPD_TS="2017-11-01 12:53:07.580225"        
   />
+  <SPC_PRJT
+    IDENTIFIER="HC9AsEcaab"
+    PROJECT_NM="S-CSEC Referral"
+    PRJCT_DSC="CSEC special project referral"
+    GVR_ENTC="1086"
+    ARCASS_IND="N"
+    START_DT="2018-01-01"
+    END_DT=""
+    LST_UPD_ID="q48"
+    LST_UPD_TS="2018-06-01 12:53:07.580225"        
+  />
 </dataset>

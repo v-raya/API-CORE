@@ -6,7 +6,16 @@ import static gov.ca.cwds.cms.data.access.service.impl.IdGenerator.generateId;
 import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
 import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Date;
+
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.authorizer.PlacementHomeResultReadAuthorizer;
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.cms.data.access.Constants.PhoneticSearchTables;
@@ -23,6 +32,7 @@ import gov.ca.cwds.cms.data.access.dao.PlacementHomeDao;
 import gov.ca.cwds.cms.data.access.dao.PlacementHomeProfileDao;
 import gov.ca.cwds.cms.data.access.dao.PlacementHomeUcDao;
 import gov.ca.cwds.cms.data.access.dao.SsaName3Dao;
+import gov.ca.cwds.cms.data.access.dto.AppAndLicHistoryAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.CLCEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.OtherAdultInHomeEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.OtherChildInHomeEntityAwareDTO;
@@ -55,16 +65,10 @@ import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeUc;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Date;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Service for create/update/find PlacementHome with business validation and data processing.
- * 
+ *
  * @author CWDS TPT-3 Team
  */
 public class PlacementHomeCoreService
@@ -72,42 +76,61 @@ public class PlacementHomeCoreService
 
   @Inject
   private BusinessValidationService businessValidationService;
+
   @Inject
   private PlacementHomeUcDao placementHomeUcDao;
+
   @Inject
   private CountyOwnershipMapper countyOwnershipMapper;
+
   @Inject
   private CountyOwnershipDao countyOwnershipDao;
+
   @Inject
   private ExternalInterfaceDao externalInterfaceDao;
+
   @Inject
   private ExternalInterfaceMapper externalInterfaceMapper;
+
   @Inject
   private EmergencyContactDetailDao emergencyContactDetailDao;
+
   @Inject
   private PlacementHomeProfileDao placementHomeProfileDao;
+
   @Inject
   private PlacementFacilityTypeHistoryDao placementFacilityTypeHistoryDao;
+
   @Inject
   private SubstituteCareProviderCoreService substituteCareProviderService;
+
   @Inject
   private OtherChildrenInPlacementHomeDao otherChildrenInPlacementHomeDao;
+
   @Inject
   private OtherPeopleScpRelationshipDao otherPeopleScpRelationshipDao;
+
   @Inject
   private OtherAdultsInPlacementHomeDao otherAdultsInPlacementHomeDao;
+
   @Inject
   private OutOfStateCheckDao outOfStateCheckDao;
+
   @Inject
   private BackgroundCheckDao backgroundCheckDao;
+
   @Inject
   private SsaName3Dao ssaName3Dao;
+
   @Inject
   private CountyLicenseCaseService countyLicenseCaseService;
 
+  @Inject
+  private ApplicationAndLicenseStatusHistoryService applicationAndLicenseStatusHistoryService;
+
   /**
    * Constructor with injected services.
-   * 
+   *
    * @param crudDao Placement Home DAO
    */
   @Inject
@@ -144,6 +167,7 @@ public class PlacementHomeCoreService
   }
 
   protected class CreateLifecycle extends DefaultDataAccessLifeCycle<PlacementHomeEntityAwareDTO> {
+
     @Override
     public void beforeDataProcessing(DataAccessBundle bundle) {
       validateParameters((PlacementHomeEntityAwareDTO) bundle.getAwareDto());
@@ -184,6 +208,7 @@ public class PlacementHomeCoreService
       createOtherAdultsInHome(placementHomeEntityAwareDto);
       createOtherChildrenInHome(placementHomeEntityAwareDto);
       createCountyLicenseCase(placementHomeEntityAwareDto);
+      createApplicationAndLicenseStatusHistory(placementHomeEntityAwareDto);
       prepareAddressPhoneticSearchKeywords(placementHomeEntityAwareDto.getEntity());
     }
 
@@ -348,18 +373,18 @@ public class PlacementHomeCoreService
 
     /**
      * Rule: R - 11179
-     *
      * <p>
      * Rule Txt
-     *
+     * </p>
      * <p>
      * If the placement home is being saved to the database for the first time then create a new
      * Placement Facility Type History row.
-     *
+     * </p>
      * <p>
      * Logic If (in focus) PLACEMENT_HOME is saved to the database for the first time then create
      * PLACEMENT_HOME > PLACEMENT_FACILITY_TYPE_HISTORY set .Start_Timestamp = System Timestamp AND
      * .Placement_Facility_Type = (in focus) PLACEMENT_HOME.Placement_Facility_Type.
+     * </p>
      */
     private void createPlacementFacilityTypeHistory(PlacementHomeEntityAwareDTO parameterObject) {
       final PlacementHome placementHome = parameterObject.getEntity();
@@ -376,12 +401,20 @@ public class PlacementHomeCoreService
     }
 
     private void createCountyLicenseCase(PlacementHomeEntityAwareDTO parameterObject)
-      throws DataAccessServicesException {
+        throws DataAccessServicesException {
       final PlacementHome placementHome = parameterObject.getEntity();
       CLCEntityAwareDTO clcEntityAwareDTO = parameterObject.getCountyLicenseCase();
       clcEntityAwareDTO.setPlacementHomeId(placementHome.getIdentifier());
       CountyLicenseCase countyLicenseCase = countyLicenseCaseService.create(clcEntityAwareDTO);
       placementHome.setCountyLicenseCase(countyLicenseCase);
+    }
+
+    private void createApplicationAndLicenseStatusHistory(
+        PlacementHomeEntityAwareDTO parameterObject) throws DataAccessServicesException {
+      for (AppAndLicHistoryAwareDTO appAndLicHistoryAwareDTO : parameterObject
+          .getAppAndLicHistory()) {
+        applicationAndLicenseStatusHistoryService.create(appAndLicHistoryAwareDTO);
+      }
     }
 
     private void prepareAddressPhoneticSearchKeywords(PlacementHome placementHome) {
@@ -398,4 +431,5 @@ public class PlacementHomeCoreService
       ssaName3Dao.callStoredProc(parameterObject);
     }
   }
+
 }

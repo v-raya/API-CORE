@@ -19,6 +19,8 @@ import gov.ca.cwds.data.legacy.cms.dao.ClientRelationshipDao;
 import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.security.utils.PrincipalUtils;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 /**
  * Service for create/update/find ClientRelationship with business validation and data processing.
@@ -105,9 +107,9 @@ public class ClientRelationshipCoreService
   }
 
   @Override
-  public void createRelationship(ClientRelationshipDTO clientRelationshipDto)
+  public ClientRelationship createRelationship(ClientRelationshipDTO clientRelationshipDto)
       throws DataAccessServicesException {
-    create(buildAwareObject(clientRelationshipDto));
+    return create(buildAwareObject(clientRelationshipDto));
   }
 
   private ClientRelationshipAwareDTO buildAwareObject(ClientRelationshipDTO clientRelationshipDto) {

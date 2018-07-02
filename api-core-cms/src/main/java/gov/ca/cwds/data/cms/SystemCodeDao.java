@@ -1,15 +1,16 @@
 package gov.ca.cwds.data.cms;
 
+import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.CaresStackUtils;
 import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.DaoException;
 import gov.ca.cwds.data.persistence.cms.SystemCode;
@@ -35,67 +36,57 @@ public class SystemCodeDao extends CrudsDaoImpl<SystemCode> {
   }
 
   /**
-   * Get the current session, if available, or open a new one.
+   * Find all system codes for a category.
    * 
-   * @return Hibernate session
-   */
-  protected Session getCurrentSession() {
-    Session session;
-    try {
-      session = getSessionFactory().getCurrentSession();
-    } catch (HibernateException e) { // NOSONAR
-      LOGGER.warn("NO SESSION!");
-      session = getSessionFactory().openSession();
-    }
-
-    return session;
-  }
-
-  /**
+   * <p>
+   * Don't interfere with transaction management, like XA, but committing or rolling back. Let the
+   * transaction manager do that for you.
+   * </p>
+   * 
    * @param foreignKeyMetaTable meta group
    * @return all keys by meta table
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "deprecation"})
   public SystemCode[] findByForeignKeyMetaTable(String foreignKeyMetaTable) {
+    LOGGER.info("SystemCodeDao.findByForeignKeyMetaTable: foreignKeyMetaTable: {}",
+        foreignKeyMetaTable);
+    CaresStackUtils.logStack();
     final String namedQueryName = SystemCode.class.getName() + ".findByForeignKeyMetaTable";
 
-    final Session session = getCurrentSession();
-    Transaction txn = session.getTransaction();
-    boolean transactionExists = txn != null && txn.isActive();
-    txn = transactionExists ? txn : session.beginTransaction();
+    final Session session = grabSession();
+    joinTransaction(session);
 
     try {
-      final Query query = session.getNamedQuery(namedQueryName).setString("foreignKeyMetaTable",
-          foreignKeyMetaTable);
-      final SystemCode[] systemCodes = (SystemCode[]) query.list().toArray(new SystemCode[0]);
-      if (!transactionExists)
-        txn.commit();
-      return systemCodes;
+      final Query<SystemCode> query = session.getNamedQuery(namedQueryName);
+      query.setString("foreignKeyMetaTable", foreignKeyMetaTable);
+      query.setReadOnly(true);
+      query.setCacheable(true);
+      query.setHibernateFlushMode(FlushMode.MANUAL);
+      return query.list().toArray(new SystemCode[0]);
     } catch (HibernateException h) {
-      txn.rollback();
       throw new DaoException(h);
     }
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "deprecation"})
   public SystemCode findBySystemCodeId(Number systemCodeId) {
-    final String namedQueryName = SystemCode.class.getName() + ".findBySystemCodeId";
-    Session session = getCurrentSession();
+    LOGGER.info("SystemCodeDao.findBySystemCodeId: systemCodeId: {}", systemCodeId);
 
-    Transaction txn = session.getTransaction();
-    boolean transactionExists = txn != null && txn.isActive();
-    txn = transactionExists ? txn : session.beginTransaction();
+    final String namedQueryName = SystemCode.class.getName() + ".findBySystemCodeId";
+    final Session session = grabSession();
+    joinTransaction(session);
 
     try {
-      final Query query =
-          session.getNamedQuery(namedQueryName).setShort("systemId", systemCodeId.shortValue());
-      final SystemCode systemCode = (SystemCode) query.getSingleResult();
-      if (!transactionExists)
-        txn.commit();
+      final Query<SystemCode> query = session.getNamedQuery(namedQueryName);
+      query.setShort("systemId", systemCodeId.shortValue());
+      query.setReadOnly(true);
+      query.setCacheable(true);
+      query.setHibernateFlushMode(FlushMode.MANUAL);
+      final SystemCode systemCode = query.getSingleResult();
       return systemCode;
     } catch (HibernateException h) {
-      txn.rollback();
       throw new DaoException(h);
     }
   }
+
 }
