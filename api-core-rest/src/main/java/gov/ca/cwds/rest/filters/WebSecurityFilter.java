@@ -3,6 +3,7 @@ package gov.ca.cwds.rest.filters;
 import java.io.IOException;
 import java.util.Map;
 
+import java.util.Set;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -37,10 +38,9 @@ public class WebSecurityFilter implements Filter {
 
   protected void handleSecurityHeaders(final HttpServletResponse httpResponse,
       final Map<String, String> securityHeaders) {
-    for (String headerName : securityHeaders.keySet()) {
-      String headerValue = securityHeaders.get(headerName);
-      if (!Strings.isNullOrEmpty(headerValue)) {
-        httpResponse.setHeader(headerName, headerValue);
+    for (Map.Entry<String, String> header : securityHeaders.entrySet()) {
+      if (!Strings.isNullOrEmpty(header.getKey())) {
+        httpResponse.setHeader(header.getKey(), header.getValue());
       }
     }
   }

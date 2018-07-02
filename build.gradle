@@ -58,7 +58,7 @@ allprojects {
         snapshotMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/repo"
         releaseMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/libs-release"
         artifactoryRepo = (isRelease ? releaseMavenRepo : snapshotMavenRepo)
-        allTestCoverageFile = "$buildDir/jacoco/allTestCoverage.exec"
+        allTestCoverageFile = "${project.rootDir}/build/jacoco/test.exec"
     }
 
     sourceSets {

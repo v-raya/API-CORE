@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import com.google.common.collect.Lists;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,6 +45,7 @@ public class SystemCodeDaoFileImpl implements ApiSystemCodeDao {
    * @return initialized system cache
    * @throws IOException if unable to read
    */
+  @SuppressWarnings("fb-contrib:PSC_PRESIZE_COLLECTIONS")
   protected List<CmsSystemCode> produce(BufferedReader reader) throws IOException {
     List<CmsSystemCode> codes = new ArrayList<>();
 
