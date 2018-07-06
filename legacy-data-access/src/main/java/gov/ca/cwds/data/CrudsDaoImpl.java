@@ -160,7 +160,7 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
     }
 
     // DRS: HOT-2176: isolate "possible non-threadsafe access to session".
-    session.flush();
+    // session.flush();
     session.evict(databaseObject);
     return persist(object);
   }
