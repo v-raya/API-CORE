@@ -113,7 +113,8 @@ public class ClientRelationshipCoreService extends
     final ClientRelationship clientRelationship = new ClientRelationship();
     clientRelationship.setIdentifier(clientRelationshipDto.getIdentifier());
     clientRelationship.setAbsentParentIndicator(clientRelationshipDto.isAbsentParentIndicator());
-    ClientRelationshipType clientRelationshipType = new ClientRelationshipType();
+
+    final ClientRelationshipType clientRelationshipType = new ClientRelationshipType();
     clientRelationshipType.setSystemId(clientRelationshipDto.getType());
     clientRelationship.setType(clientRelationshipType);
     clientRelationship.setEndDate(clientRelationshipDto.getEndDate());
@@ -121,7 +122,7 @@ public class ClientRelationshipCoreService extends
     clientRelationship.setStartDate(clientRelationshipDto.getStartDate());
 
     // DRS: HOT-2176: isolate "possible non-threadsafe access to session".
-    // crudDao.getSessionFactory().getCurrentSession().flush();
+    crudDao.getSessionFactory().getCurrentSession().flush();
     final Client legacyPrimaryClient =
         clientMapper.toLegacyClient(clientRelationshipDto.getSecondaryClient());
     final Client legacySecondaryClient =

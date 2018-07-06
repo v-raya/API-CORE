@@ -11,11 +11,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -96,7 +91,7 @@ public final class CmsKeyIdGeneratorTest {
   // ===================
   @Test
   public void testNextValueIsDifferent() {
-    for(int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 1000; i++) {
       final String keyOne = CmsKeyIdGenerator.getNextValue("0yz");
       final String keySecond = CmsKeyIdGenerator.getNextValue("0yz");
       assertFalse(keyOne.equals(keySecond));
@@ -205,7 +200,7 @@ public final class CmsKeyIdGeneratorTest {
   public void testDecomposeKeyNull() {
     // Null staff id.
     KeyDetail kd = new KeyDetail();
-//    CmsKeyIdGenerator.decomposeKey(null, kd);
+    // CmsKeyIdGenerator.decomposeKey(null, kd);
     // assertTrue("Staff ID not empty", kd.staffId == null || "".equals(kd.staffId));
   }
 
@@ -271,8 +266,8 @@ public final class CmsKeyIdGeneratorTest {
 
   @Test
   public void testGetDateFromThirdId() throws Exception {
-    SimpleDateFormat sdf =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
-    Date dateFromXtools = sdf.parse("2018-03-30 10:45:40:260" );
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
+    Date dateFromXtools = sdf.parse("2018-03-30 10:45:40:260");
     String thirdIdFromXTools = "83UiZBWABC";
     String userIdFromXTools = "ABC";
 

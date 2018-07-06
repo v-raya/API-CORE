@@ -158,6 +158,8 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
           MessageFormat.format("Unable to find entity with id={0}", object.getPrimaryKey());
       throw new EntityNotFoundException(msg);
     }
+
+    // DRS: HOT-2176: isolate "possible non-threadsafe access to session".
     session.evict(databaseObject);
     return persist(object);
   }

@@ -130,14 +130,15 @@ public final class JavaKeyCmdLine {
    * @param args command line
    */
   public static void main(String[] args) {
-    JavaKeyCmdLine run = new JavaKeyCmdLine();
+    final JavaKeyCmdLine run = new JavaKeyCmdLine();
     try {
       final OptionParser parser = new OptionParser("f:s:t:T::");
       final OptionSet options = parser.parse(args);
 
       final String staffId = options.has("s") ? (String) options.valueOf("s") : "0x5";
-      final Date ts = options.has("t")
-          ? DomainChef.uncookISO8601Timestamp((String) options.valueOf("t")) : new Date();
+      final Date ts =
+          options.has("t") ? DomainChef.uncookISO8601Timestamp((String) options.valueOf("t"))
+              : new Date();
       final String fileNm = options.has("f") ? (String) options.valueOf("f") : null;
 
       if (StringUtils.isNotBlank(fileNm)) {

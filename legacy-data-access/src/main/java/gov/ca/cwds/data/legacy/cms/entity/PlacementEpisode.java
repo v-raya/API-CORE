@@ -1,29 +1,27 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.JoinColumns;
-import javax.persistence.JoinColumn;
-import javax.persistence.NamedQuery;
-
 import static gov.ca.cwds.data.legacy.cms.entity.PlacementEpisode.FIND_BY_CLIENT_ID;
 import static gov.ca.cwds.data.legacy.cms.entity.PlacementEpisode.PARAM_CLIENT_ID;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
 /**
  * @author CWDS CALS API Team
  */
 @Entity
-@NamedQuery(
-    name = FIND_BY_CLIENT_ID,
+@NamedQuery(name = FIND_BY_CLIENT_ID,
     query = "SELECT pe FROM gov.ca.cwds.data.legacy.cms.entity.PlacementEpisode pe "
-        + "where pe.fkclientT =:" + PARAM_CLIENT_ID
-)
+        + "where pe.fkclientT =:" + PARAM_CLIENT_ID)
 @Table(name = "PLC_EPST")
 public class PlacementEpisode extends BasePlacementEpisode {
 
@@ -38,10 +36,8 @@ public class PlacementEpisode extends BasePlacementEpisode {
 
   @Override
   @OneToMany
-  @JoinColumns({
-     @JoinColumn(name = "FKPLC_EPS0", referencedColumnName = "THIRD_ID"),
-     @JoinColumn(name = "FKPLC_EPST", referencedColumnName = "FKCLIENT_T")
-  })
+  @JoinColumns({@JoinColumn(name = "FKPLC_EPS0", referencedColumnName = "THIRD_ID"),
+      @JoinColumn(name = "FKPLC_EPST", referencedColumnName = "FKCLIENT_T")})
   @OrderBy("startDt DESC")
   public Set<OutOfHomePlacement> getOutOfHomePlacements() {
     return outOfHomePlacements;
@@ -54,11 +50,12 @@ public class PlacementEpisode extends BasePlacementEpisode {
   @Override
   @Transient
   // this logic needs to be reworked, StaffPerson is not the person who adds/removes child from
-//  placement home
-//  @NotFound(action = NotFoundAction.IGNORE)
-//  @OneToOne(fetch = FetchType.LAZY)
-//  @JoinColumn(name = "RMV_BY_ID", referencedColumnName = "IDENTIFIER")
+  // placement home
+  // @NotFound(action = NotFoundAction.IGNORE)
+  // @OneToOne(fetch = FetchType.LAZY)
+  // @JoinColumn(name = "RMV_BY_ID", referencedColumnName = "IDENTIFIER")
   public StaffPerson getStaffPerson() {
     return null;
   }
+
 }
