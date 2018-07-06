@@ -151,14 +151,14 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
    */
   @Override
   public T update(T object) {
-    // final Session session = grabSession();
+    final Session session = grabSession();
     final T databaseObject = find(object.getPrimaryKey());
     if (databaseObject == null) {
       String msg =
           MessageFormat.format("Unable to find entity with id={0}", object.getPrimaryKey());
       throw new EntityNotFoundException(msg);
     }
-    // session.evict(databaseObject);
+    session.evict(databaseObject);
     return persist(object);
   }
 
