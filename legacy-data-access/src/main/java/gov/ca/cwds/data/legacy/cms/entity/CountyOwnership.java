@@ -1,27 +1,30 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
-import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
 import java.time.LocalDate;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import gov.ca.cwds.data.persistence.PersistentObject;
+
 /**
- * @author CWDS CALS API Team
- *
  * This entity will contain folded key rows for each row originating from a super parent entity. It
  * will be used to track which counties should have access to a particular row of data.
+ * 
+ * @author CWDS CALS API Team
  */
 @Entity
 @Table(name = "CNTYOWNT")
 @IdClass(CountyOwnershipPK.class)
-@SuppressWarnings({"squid:S3437"}) //LocalDate is serializable
+@SuppressWarnings({"squid:S3437"}) // LocalDate is serializable
 public class CountyOwnership implements PersistentObject {
 
   private static final long serialVersionUID = 8306097504998852336L;
@@ -53,7 +56,7 @@ public class CountyOwnership implements PersistentObject {
 
   /**
    * COUNTY_00_FLAG - A flag used to determine if the county whose number matches the number, or the
-   * default 99,  of the attribute has authority to view a particular row.
+   * default 99, of the attribute has authority to view a particular row.
    */
   @Basic
   @Column(name = "CTY_00_FLG", nullable = false, length = 1)
@@ -876,4 +879,5 @@ public class CountyOwnership implements PersistentObject {
   public Serializable getPrimaryKey() {
     return new CountyOwnershipPK(entityId, entityCd);
   }
+
 }

@@ -118,7 +118,7 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
   @Override
   public T delete(Serializable id) {
     final Session session = grabSession();
-    T object = find(id);
+    final T object = find(id);
     if (object != null) {
       session.delete(object);
     }
@@ -134,7 +134,7 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
   public T create(T object) {
     grabSession();
     if (object.getPrimaryKey() != null) {
-      T databaseObject = find(object.getPrimaryKey());
+      final T databaseObject = find(object.getPrimaryKey());
       if (databaseObject != null) {
         String msg = MessageFormat.format("entity with id={0} already exists", object);
         LOGGER.error(msg);
@@ -151,14 +151,14 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
    */
   @Override
   public T update(T object) {
-    final Session session = grabSession();
-    T databaseObject = find(object.getPrimaryKey());
+    // final Session session = grabSession();
+    final T databaseObject = find(object.getPrimaryKey());
     if (databaseObject == null) {
       String msg =
           MessageFormat.format("Unable to find entity with id={0}", object.getPrimaryKey());
       throw new EntityNotFoundException(msg);
     }
-    session.evict(databaseObject);
+    // session.evict(databaseObject);
     return persist(object);
   }
 
