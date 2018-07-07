@@ -64,7 +64,7 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
         && txn.getStatus() != TransactionStatus.MARKED_ROLLBACK
         && txn.getStatus() != TransactionStatus.ROLLED_BACK
         && txn.getStatus() != TransactionStatus.ROLLING_BACK) {
-      LOGGER.warn("*** Begin **NEW** transaction ***");
+      LOGGER.debug("Begin **NEW** transaction");
       txn.begin();
       CaresStackUtils.logStack();
     }
@@ -136,7 +136,7 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
     if (object.getPrimaryKey() != null) {
       final T databaseObject = find(object.getPrimaryKey());
       if (databaseObject != null) {
-        String msg = MessageFormat.format("entity with id={0} already exists", object);
+        final String msg = MessageFormat.format("entity with id={0} already exists", object);
         LOGGER.error(msg);
         throw new EntityExistsException(msg);
       }
@@ -154,13 +154,14 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
     final Session session = grabSession();
     final T databaseObject = find(object.getPrimaryKey());
     if (databaseObject == null) {
-      String msg =
+      final String msg =
           MessageFormat.format("Unable to find entity with id={0}", object.getPrimaryKey());
+      LOGGER.error(msg);
       throw new EntityNotFoundException(msg);
     }
 
     // DRS: HOT-2176: isolate "possible non-threadsafe access to session".
-    // session.flush();
+    session.flush();
     session.evict(databaseObject);
     return persist(object);
   }
