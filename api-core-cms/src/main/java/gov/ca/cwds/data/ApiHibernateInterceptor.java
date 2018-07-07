@@ -49,6 +49,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * @author CWDS API Team
  * @see ApiReferentialCheck
  */
+@SuppressWarnings({"fb-contrib:PMB_POSSIBLE_MEMORY_BLOAT"})
 public class ApiHibernateInterceptor extends EmptyInterceptor {
 
   private static final long serialVersionUID = 1L;

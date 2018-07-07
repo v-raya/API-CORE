@@ -98,6 +98,22 @@ public final class CmsKeyIdGeneratorTest {
     }
   }
 
+  // The Java key generator is making incorrect dates!!
+  @Test
+  @Ignore
+  public void testIsGeneratedDateRealistic() {
+    final Calendar cal = Calendar.getInstance();
+    cal.add(Calendar.DAY_OF_MONTH, 1);
+    final Date future = cal.getTime();
+
+    for (int i = 0; i < 1000; i++) {
+      final String key = CmsKeyIdGenerator.getNextValue("0yz");
+      final Date generatedDate = CmsKeyIdGenerator.getDateFromKey(key);
+      System.out.println("generatedDate: " + generatedDate);
+      assertTrue("generated date in the future!", generatedDate.before(future));
+    }
+  }
+
   @Test
   public void testGenKeyGood() {
     final String key = CmsKeyIdGenerator.getNextValue("0X5");

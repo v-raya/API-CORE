@@ -210,7 +210,7 @@ public final class CmsKeyIdGenerator {
    * <p>
    * TODO: <strong>This approach does NOT scale!</strong> Implement the Iterator interface instead.
    * Block other threads only on a unique staff id instead of blocking all staff id's. Construct an
-   * object for a given staff id and generate keys.
+   * object for a given staff id and generate keys with {@code Iterator.next()}.
    *
    * @param staffId the staffId
    * @return the unique key from staffId
@@ -501,7 +501,6 @@ public final class CmsKeyIdGenerator {
     }
 
     final String tsB62 = key.substring(0, LEN_KEYTIMESTAMP);
-
     double sdouble = strToDouble(tsB62, 62, POWER_BASE62);
     Long timestamp = doubleToTimestamp(sdouble);
     return new Date(timestamp);
