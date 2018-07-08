@@ -108,7 +108,7 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
   }
 
   /**
-   * Construct from all fields.
+   * Construct from all fields. Fields {@link #stateCode} and {@link #type} not assigned here.
    * 
    * @param id pk/identifier
    * @param streetAddress concatenated street address
@@ -122,9 +122,7 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
     this.id = id;
     this.streetAddress = streetAddress;
     this.city = city;
-    // this.state = state;
     this.zip = zip;
-    // this.type = type;
   }
 
   /**
@@ -135,7 +133,6 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
   public ElasticSearchPersonAddress(ApiAddressAware address) {
     this.id = address.getAddressId();
     this.city = address.getCity();
-    // this.county = address.getCounty();
 
     this.zip = address.getZip();
     this.zip4 = address.getApiAdrZip4();
@@ -205,14 +202,13 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
   @JsonIgnore
   @Override
   public String getCounty() {
-    // return county;
     return null;
   }
 
   @Override
   @JsonIgnore
   public void setCounty(String county) {
-    // this.county = county;
+    // County not assigned
   }
 
   @JsonIgnore
@@ -282,55 +278,45 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
   }
 
   @JsonIgnore
-  @SuppressWarnings("javadoc")
   public String getStateName() {
     return stateName;
   }
 
-  @SuppressWarnings("javadoc")
   public void setStateName(String stateName) {
     this.stateName = stateName;
   }
 
   @JsonIgnore
-  @SuppressWarnings("javadoc")
   public String getZip4() {
     return zip4;
   }
 
-  @SuppressWarnings("javadoc")
   public void setZip4(String zip4) {
     this.zip4 = zip4;
   }
 
   @JsonIgnore
-  @SuppressWarnings("javadoc")
   public String getUnitType() {
     return unitType;
   }
 
-  @SuppressWarnings("javadoc")
   public void setUnitType(String unitType) {
     this.unitType = unitType;
   }
 
   @JsonIgnore
-  @SuppressWarnings("javadoc")
   public String getUnitNumber() {
     return unitNumber;
   }
 
-  @SuppressWarnings("javadoc")
   public void setUnitNumber(String unitNumber) {
     this.unitNumber = unitNumber;
   }
 
-  @SuppressWarnings("javadoc")
   public void setStreetNumber(String streetNumber) {
     this.streetNumber = streetNumber;
   }
 
-  @SuppressWarnings("javadoc")
   public void setStreetName(String streetName) {
     this.streetName = streetName;
   }
@@ -347,12 +333,10 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
     return null;
   }
 
-  @SuppressWarnings("javadoc")
   public ElasticSearchLegacyDescriptor getLegacyDescriptor() {
     return legacyDescriptor;
   }
 
-  @SuppressWarnings("javadoc")
   public void setLegacyDescriptor(ElasticSearchLegacyDescriptor legacyDescriptor) {
     this.legacyDescriptor = legacyDescriptor;
   }

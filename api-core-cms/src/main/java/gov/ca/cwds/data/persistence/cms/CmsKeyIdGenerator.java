@@ -105,7 +105,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  *
  * @author CWDS API Team
  */
-@SuppressWarnings({"fb-contrib:MDM_THREAD_YIELD"})
+@SuppressWarnings({"fb-contrib:MDM_THREAD_YIELD", "findbugs:UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD"})
 public final class CmsKeyIdGenerator {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsKeyIdGenerator.class);

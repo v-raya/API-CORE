@@ -21,6 +21,7 @@ import gov.ca.cwds.rest.api.domain.cms.SystemMeta;
 import gov.ca.cwds.rest.api.domain.cms.SystemMetaListResponse;
 import io.dropwizard.jackson.Jackson;
 
+@SuppressWarnings({"javadoc", "squid:S2925"})
 public class CachingSystemCodeServiceTest {
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
@@ -29,7 +30,6 @@ public class CachingSystemCodeServiceTest {
   private static CachingSystemCodeService cachingSystemCodeService;
   private static CachingSystemCodeService cachingSystemCodeServicePreLoaded;
 
-  @SuppressWarnings("javadoc")
   @BeforeClass
   public static void setupClass() throws Exception {
     SystemCodeDao systemCodeDao = mock(SystemCodeDao.class);

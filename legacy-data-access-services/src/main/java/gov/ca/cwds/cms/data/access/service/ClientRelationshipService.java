@@ -8,7 +8,10 @@ import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
  *
  * @author CWDS TPT-3 Team
  */
+@FunctionalInterface
 public interface ClientRelationshipService {
+
   ClientRelationship createRelationship(ClientRelationshipDTO clientRelationshipDto)
       throws DataAccessServicesException;
+
 }
