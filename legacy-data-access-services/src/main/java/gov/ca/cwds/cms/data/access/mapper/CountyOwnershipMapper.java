@@ -1,26 +1,30 @@
 package gov.ca.cwds.cms.data.access.mapper;
 
-import gov.ca.cwds.cms.data.access.CWSIdentifier;
-import gov.ca.cwds.cms.data.access.Constants;
-import gov.ca.cwds.cms.data.access.utils.CountyUtil;
-import gov.ca.cwds.data.legacy.cms.entity.CountyOwnership;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
+import gov.ca.cwds.cms.data.access.CWSIdentifier;
+import gov.ca.cwds.cms.data.access.Constants;
+import gov.ca.cwds.cms.data.access.utils.CountyUtil;
+import gov.ca.cwds.data.legacy.cms.entity.CountyOwnership;
+
 /**
  * @author CWDS CALS API Team
  */
-@Mapper(imports={CountyUtil.class, Constants.class})
+@Mapper(imports = {CountyUtil.class, Constants.class})
 @FunctionalInterface
 public interface CountyOwnershipMapper {
+
   CountyOwnershipMapper INSTANCE = Mappers.getMapper(CountyOwnershipMapper.class);
 
+  //@formatter:off
   @Mapping(target = "entityId", source = "entityId")
   @Mapping(target = "entityCd", source = "discriminator")
   @Mapping(target = "multiFlg", ignore = true)
@@ -89,15 +93,15 @@ public interface CountyOwnershipMapper {
   @Mapping(target = "cty62Flg", constant = Constants.N)
   @Mapping(target = "cty63Flg", constant = Constants.N)
   @Mapping(target = "deleteDt", ignore = true)
-  CountyOwnership toCountyOwnership(String entityId, String discriminator,
-      List<CWSIdentifier> counties);
+  CountyOwnership toCountyOwnership(String entityId, String discriminator, List<CWSIdentifier> counties);
+  //@formatter:on
 
   @AfterMapping
-  default void afterMapping(@MappingTarget CountyOwnership countyOwnership,
-      String entityId, String discriminator) {
+  default void afterMapping(@MappingTarget CountyOwnership countyOwnership, String entityId,
+      String discriminator) {
     int yFlagsCount = 0;
     for (Method method : countyOwnership.getClass().getMethods()) {
-      if(method.getName().startsWith("getCty")) {
+      if (method.getName().startsWith("getCty")) {
         String flag;
         try {
           flag = (String) method.invoke(countyOwnership);
@@ -110,7 +114,9 @@ public interface CountyOwnershipMapper {
         }
       }
     }
-    String multiFlag = yFlagsCount > 1 ? Constants.Y : Constants.N;
+
+    final String multiFlag = yFlagsCount > 1 ? Constants.Y : Constants.N;
     countyOwnership.setMultiFlg(multiFlag);
   }
+
 }

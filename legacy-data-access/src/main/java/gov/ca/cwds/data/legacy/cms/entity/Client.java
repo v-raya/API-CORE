@@ -1,25 +1,10 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
-import gov.ca.cwds.data.legacy.cms.CmsPersistentObjectVersioned;
-import gov.ca.cwds.data.legacy.cms.entity.converter.NullableBooleanConverter;
-import gov.ca.cwds.data.legacy.cms.entity.enums.AdoptionStatus;
-import gov.ca.cwds.data.legacy.cms.entity.enums.DateOfBirthStatus;
-import gov.ca.cwds.data.legacy.cms.entity.enums.Gender;
-import gov.ca.cwds.data.legacy.cms.entity.enums.HispanicOrigin;
-import gov.ca.cwds.data.legacy.cms.entity.enums.IncapacitatedParentStatus;
-import gov.ca.cwds.data.legacy.cms.entity.enums.LiterateStatus;
-import gov.ca.cwds.data.legacy.cms.entity.enums.MilitaryStatus;
-import gov.ca.cwds.data.legacy.cms.entity.enums.ParentUnemployedStatus;
-import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
-import gov.ca.cwds.data.legacy.cms.entity.enums.Soc158placementsStatus;
-import gov.ca.cwds.data.legacy.cms.entity.enums.UnableToDetermineReason;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType;
-import gov.ca.cwds.data.persistence.PersistentObject;
-import org.hibernate.annotations.ColumnTransformer;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.NamedQuery;
-import org.hibernate.annotations.Type;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -37,29 +22,38 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+
+import org.hibernate.annotations.ColumnTransformer;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.NamedQuery;
+import org.hibernate.annotations.Type;
+
+import gov.ca.cwds.data.legacy.cms.CmsPersistentObjectVersioned;
+import gov.ca.cwds.data.legacy.cms.entity.converter.NullableBooleanConverter;
+import gov.ca.cwds.data.legacy.cms.entity.enums.AdoptionStatus;
+import gov.ca.cwds.data.legacy.cms.entity.enums.DateOfBirthStatus;
+import gov.ca.cwds.data.legacy.cms.entity.enums.Gender;
+import gov.ca.cwds.data.legacy.cms.entity.enums.HispanicOrigin;
+import gov.ca.cwds.data.legacy.cms.entity.enums.IncapacitatedParentStatus;
+import gov.ca.cwds.data.legacy.cms.entity.enums.LiterateStatus;
+import gov.ca.cwds.data.legacy.cms.entity.enums.MilitaryStatus;
+import gov.ca.cwds.data.legacy.cms.entity.enums.ParentUnemployedStatus;
+import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
+import gov.ca.cwds.data.legacy.cms.entity.enums.Soc158placementsStatus;
+import gov.ca.cwds.data.legacy.cms.entity.enums.UnableToDetermineReason;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType;
+import gov.ca.cwds.data.persistence.PersistentObject;
 
 /** @author CWDS CALS API Team */
-@NamedQuery(
-  name = "Client.find",
-  query = Client.CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY + " AND c.identifier = :childId"
-)
-@NamedQuery(
-  name = "Client.findAll",
-  query = Client.CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY + " ORDER BY c.identifier "
-)
-@NamedQuery(
-  name = "Client.findByFacilityId",
-  query = Client.CHILDREN_BY_FACILITY_ID_BASE_QUERY + " ORDER BY c.identifier "
-)
-@NamedQuery(
-  name = "Client.findByFacilityIdAndChildId",
-  query = Client.CHILDREN_BY_FACILITY_ID_BASE_QUERY + " AND c.identifier = :childId"
-)
+@NamedQuery(name = "Client.find",
+    query = Client.CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY + " AND c.identifier = :childId")
+@NamedQuery(name = "Client.findAll",
+    query = Client.CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY + " ORDER BY c.identifier ")
+@NamedQuery(name = "Client.findByFacilityId",
+    query = Client.CHILDREN_BY_FACILITY_ID_BASE_QUERY + " ORDER BY c.identifier ")
+@NamedQuery(name = "Client.findByFacilityIdAndChildId",
+    query = Client.CHILDREN_BY_FACILITY_ID_BASE_QUERY + " AND c.identifier = :childId")
 @SuppressWarnings({"squid:S3437", "squid:S2160", "common-java:DuplicatedBlocks"})
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -69,22 +63,15 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
   private static final long serialVersionUID = 783532074047017463L;
 
   public static final String CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY =
-      "SELECT c FROM gov.ca.cwds.data.legacy.cms.entity.Client c"
-          + " JOIN c.placementEpisodes pe"
-          + " JOIN pe.outOfHomePlacements ohp"
-          + " JOIN ohp.placementHome ph"
-          + " WHERE ph.licenseNo = :licenseNumber"
-          + " AND ohp.endDt is null"
+      "SELECT c FROM gov.ca.cwds.data.legacy.cms.entity.Client c" + " JOIN c.placementEpisodes pe"
+          + " JOIN pe.outOfHomePlacements ohp" + " JOIN ohp.placementHome ph"
+          + " WHERE ph.licenseNo = :licenseNumber" + " AND ohp.endDt is null"
           + " AND pe.plepsEndt is null";
 
   public static final String CHILDREN_BY_FACILITY_ID_BASE_QUERY =
-      "SELECT c FROM gov.ca.cwds.data.legacy.cms.entity.Client c"
-          + " JOIN c.placementEpisodes pe"
-          + " JOIN pe.outOfHomePlacements ohp"
-          + " JOIN ohp.placementHome ph"
-          + " WHERE ph.id = :facilityId"
-          + " AND ohp.endDt is null"
-          + " AND pe.plepsEndt is null";
+      "SELECT c FROM gov.ca.cwds.data.legacy.cms.entity.Client c" + " JOIN c.placementEpisodes pe"
+          + " JOIN pe.outOfHomePlacements ohp" + " JOIN ohp.placementHome ph"
+          + " WHERE ph.id = :facilityId" + " AND ohp.endDt is null" + " AND pe.plepsEndt is null";
 
   @Id
   @Column(name = "IDENTIFIER", nullable = false, length = 10)
@@ -92,20 +79,12 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
   private String identifier;
 
   @OneToMany(fetch = FetchType.LAZY)
-  @JoinColumn(
-    name = "FKCLIENT_T",
-    referencedColumnName = "IDENTIFIER",
-    insertable = false,
-    updatable = false
-  )
+  @JoinColumn(name = "FKCLIENT_T", referencedColumnName = "IDENTIFIER", insertable = false,
+      updatable = false)
   private Set<PlacementEpisode> placementEpisodes = new HashSet<>();
 
-  @OneToMany(
-    mappedBy = "client",
-    fetch = FetchType.LAZY,
-    cascade = CascadeType.ALL,
-    orphanRemoval = true
-  )
+  @OneToMany(mappedBy = "client", fetch = FetchType.LAZY,
+      cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})
   private Set<ClientOtherEthnicity> otherEthnicities = new HashSet<>();
 
   @Column(name = "ADJDEL_IND", length = 1)
@@ -402,8 +381,7 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
       return false;
     }
     Client client = (Client) o;
-    return isCodesEqual(client)
-        && isNamesAndAddressesEqual(client)
+    return isCodesEqual(client) && isNamesAndAddressesEqual(client)
         && (getChildClientIndicator() == client.getChildClientIndicator());
   }
 
@@ -426,23 +404,14 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
 
   private boolean isNamesAndAddressesEqual(Client client) {
     return Objects.equals(getBirthFacilityName(), client.getBirthFacilityName())
-        && isBirthAndAddressesEqual(client)
-        && isNamesEqual(client);
+        && isBirthAndAddressesEqual(client) && isNamesEqual(client);
   }
 
   @Override
   public final int hashCode() {
-    return Objects.hash(
-        getBirthCountryCode(),
-        getBirthStateCode(),
-        getBirthCity(),
-        getBirthDate(),
-        getBirthFacilityName(),
-        getCommonFirstName(),
-        getCommonLastName(),
-        getCommonMiddleName(),
-        getEmailAddress(),
-        getChildClientIndicator());
+    return Objects.hash(getBirthCountryCode(), getBirthStateCode(), getBirthCity(), getBirthDate(),
+        getBirthFacilityName(), getCommonFirstName(), getCommonLastName(), getCommonMiddleName(),
+        getEmailAddress(), getChildClientIndicator());
   }
 
   public String getIdentifier() {

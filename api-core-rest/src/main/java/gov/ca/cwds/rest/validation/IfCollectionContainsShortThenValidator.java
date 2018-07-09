@@ -6,8 +6,6 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Validates that if the {@code IfThen.ifProperty} of a given bean is not empty then the
@@ -17,9 +15,6 @@ import org.slf4j.LoggerFactory;
  */
 public class IfCollectionContainsShortThenValidator
     implements AbstractBeanValidator, ConstraintValidator<IfCollectionContainsShortThen, Object> {
-
-  private static final Logger LOGGER =
-      LoggerFactory.getLogger(IfCollectionContainsShortThenValidator.class);
 
   private String ifProperty;
   private String thenProperty;

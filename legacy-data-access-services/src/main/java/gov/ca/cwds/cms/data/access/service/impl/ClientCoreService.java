@@ -91,14 +91,14 @@ public class ClientCoreService
   @Inject
   private SsaName3Dao ssaName3Dao;
 
-  @Override
-  public Client create(ClientEntityAwareDTO entityAwareDTO) throws DataAccessServicesException {
-    return super.create(entityAwareDTO);
-  }
-
   @Inject
   public ClientCoreService(ClientDao crudDao) {
     super(crudDao);
+  }
+
+  @Override
+  public Client create(ClientEntityAwareDTO entityAwareDTO) throws DataAccessServicesException {
+    return super.create(entityAwareDTO);
   }
 
   @Override

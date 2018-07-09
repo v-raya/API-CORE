@@ -30,7 +30,9 @@ public class ClientAddress extends BaseClientAddress {
       "gov.ca.cwds.data.legacy.cms.entity.ClientAddress.findByClientId";
   public static final String NQ_PARAM_CLIENT_ID = "clientId";
 
-  @ManyToOne(cascade = CascadeType.ALL, optional = false)
+  @ManyToOne(
+      cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE},
+      optional = false)
   @JoinColumn(name = "FKADDRS_T", nullable = false, insertable = false, updatable = false)
   private Address address;
 

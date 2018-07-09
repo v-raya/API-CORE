@@ -1,5 +1,8 @@
 package gov.ca.cwds.cms.data.access.service;
 
+import java.time.LocalDateTime;
+import java.util.function.Consumer;
+
 import gov.ca.cwds.cms.data.access.dto.BaseEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.impl.IdGenerator;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
@@ -7,12 +10,9 @@ import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
 import gov.ca.cwds.data.CrudsDao;
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.security.utils.PrincipalUtils;
-import java.time.LocalDateTime;
-import java.util.function.Consumer;
 
-public abstract class DefaultCmsDataAccessService
-  <E extends CrudsDao<T>, T extends CmsPersistentObject, P extends BaseEntityAwareDTO<T>>
-  extends DataAccessServiceBase<E, T, P> {
+public abstract class DefaultCmsDataAccessService<E extends CrudsDao<T>, T extends CmsPersistentObject, P extends BaseEntityAwareDTO<T>>
+    extends DataAccessServiceBase<E, T, P> {
 
   protected DefaultCmsDataAccessService(E crudDao) {
     super(crudDao);
@@ -25,6 +25,7 @@ public abstract class DefaultCmsDataAccessService
    * @return newly created entity
    * @throws DataAccessServicesException if something went wrong
    */
+  @Override
   public T create(P entityAwareDTO) throws DataAccessServicesException {
     T entity = entityAwareDTO.getEntity();
     idSetter(entity).accept(IdGenerator.generateId());
@@ -39,6 +40,7 @@ public abstract class DefaultCmsDataAccessService
    * @return updated entity
    * @throws DataAccessServicesException if something went wrong
    */
+  @Override
   public T update(P entityAwareDTO) throws DataAccessServicesException {
     audit(entityAwareDTO.getEntity());
     return super.update(entityAwareDTO);
@@ -65,4 +67,5 @@ public abstract class DefaultCmsDataAccessService
     entity.setLastUpdateTime(LocalDateTime.now());
     entity.setLastUpdateId(PrincipalUtils.getStaffPersonId());
   }
+
 }

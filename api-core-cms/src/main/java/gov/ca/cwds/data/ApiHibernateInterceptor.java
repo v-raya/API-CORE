@@ -49,6 +49,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * @author CWDS API Team
  * @see ApiReferentialCheck
  */
+@SuppressWarnings({"fb-contrib:PMB_POSSIBLE_MEMORY_BLOAT"})
 public class ApiHibernateInterceptor extends EmptyInterceptor {
 
   private static final long serialVersionUID = 1L;
@@ -193,7 +194,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
 
   @Override
   public void beforeTransactionCompletion(Transaction tx) {
-    LOGGER.debug("****** beforeTransactionCompletion ******");
+    LOGGER.debug("****** before transaction completion ******");
     CaresStackUtils.logStack();
     if (tx != null) {
       LOGGER.debug("beforeTransactionCompletion -> txn status={}", tx.getStatus());
@@ -203,7 +204,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
 
   @Override
   public void afterTransactionCompletion(Transaction tx) {
-    LOGGER.debug("****** afterTransactionCompletion ******");
+    LOGGER.debug("****** after transaction completion ******");
     CaresStackUtils.logStack();
     if (tx != null) {
       LOGGER.debug("afterTransactionCompletion -> txn status={}", tx.getStatus());

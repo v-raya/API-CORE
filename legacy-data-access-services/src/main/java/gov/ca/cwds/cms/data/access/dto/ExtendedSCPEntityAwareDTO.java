@@ -1,11 +1,12 @@
 package gov.ca.cwds.cms.data.access.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import gov.ca.cwds.data.legacy.cms.entity.OutOfStateCheck;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeInformation;
 import gov.ca.cwds.data.legacy.cms.entity.ScpOtherEthnicity;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProviderUc;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author CWDS TPT-2 Team
@@ -15,6 +16,7 @@ public class ExtendedSCPEntityAwareDTO extends SCPEntityAwareDTO {
   private PlacementHomeInformation placementHomeInformation;
   private List<ScpOtherEthnicity> clientScpEthnicities = new ArrayList<>();
   private List<OutOfStateCheck> outOfStateChecks;
+  private SubstituteCareProviderUc substituteCareProviderUc;
 
   public ExtendedSCPEntityAwareDTO(SCPEntityAwareDTO scpEntityAwareDTO) {
     this.setPhoneNumbers(scpEntityAwareDTO.getPhoneNumbers());
@@ -24,8 +26,6 @@ public class ExtendedSCPEntityAwareDTO extends SCPEntityAwareDTO {
     this.setPrimaryApplicant(scpEntityAwareDTO.isPrimaryApplicant());
     this.setEntity(scpEntityAwareDTO.getEntity());
   }
-
-  private SubstituteCareProviderUc substituteCareProviderUc;
 
   public void setSubstituteCareProviderUc(SubstituteCareProviderUc substituteCareProviderUc) {
     this.substituteCareProviderUc = substituteCareProviderUc;
@@ -47,8 +47,7 @@ public class ExtendedSCPEntityAwareDTO extends SCPEntityAwareDTO {
     return clientScpEthnicities;
   }
 
-  public void setClientScpEthnicities(
-      List<ScpOtherEthnicity> clientScpEthnicities) {
+  public void setClientScpEthnicities(List<ScpOtherEthnicity> clientScpEthnicities) {
     this.clientScpEthnicities = clientScpEthnicities;
   }
 
@@ -59,4 +58,5 @@ public class ExtendedSCPEntityAwareDTO extends SCPEntityAwareDTO {
   public List<OutOfStateCheck> getOutOfStateChecks() {
     return outOfStateChecks;
   }
+
 }

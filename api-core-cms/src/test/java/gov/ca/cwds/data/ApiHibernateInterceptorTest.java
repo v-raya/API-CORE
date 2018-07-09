@@ -175,8 +175,8 @@ public class ApiHibernateInterceptorTest {
   @SuppressWarnings("unused")
   @Test
   public void testForSynchronizedPreFlush() throws Exception {
-    ExecutorService service = Executors.newFixedThreadPool(4);
-    ApiHibernateInterceptor interceptor = new ApiHibernateInterceptor();
+    final ExecutorService service = Executors.newFixedThreadPool(4);
+    final ApiHibernateInterceptor interceptor = new ApiHibernateInterceptor();
     final HashMap<Integer, Object> map = new HashMap<>();
     SystemCode code1 = new SystemCode();
     SystemCode code2 = new SystemCode();

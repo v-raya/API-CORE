@@ -36,12 +36,6 @@ public class SsaName3Dao {
    * @param parameterObject stored procedure parameters
    */
   public void callStoredProc(SsaName3ParameterObject parameterObject) {
-    // TO1DO: XA DEBUG:
-    if ("Y".equalsIgnoreCase(System.getProperty("DISABLE_BUSINESS_VALIDATION"))) {
-      LOGGER.warn("\n\t ********* XA: SKIP SPSSANAME3 UNTIL COMMIT IS REMOVED! ********* \n");
-      return;
-    }
-
     final Session session = sessionFactory.getCurrentSession();
     final String STORED_PROC_NAME = "SPSSANAME3";
     final String schema =

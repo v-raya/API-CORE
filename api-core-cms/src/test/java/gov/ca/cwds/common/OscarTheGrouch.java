@@ -74,7 +74,6 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
  * </p>
  * 
  * @param <T> persistence class type
- * 
  * @author CWDS API Team
  */
 public abstract class OscarTheGrouch<T extends PersistentObject> {
