@@ -26,7 +26,7 @@ import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 
 @NamedQuery(name = SpecialProject.FIND_ACTIVE_SSB_BY_GOVERNMENT_ENTITY,
     query = "FROM SpecialProject WHERE PROJECT_NM = '" + SpecialProject.SSB_SPECIAL_PROJECT_NAME
-        + "' AND END_DT IS NULL AND GVR_ENTC = :governmentEntity")
+        + "' AND END_DT IS NULL AND GVR_ENTC = :governmentEntityType")
 
 @NamedQuery(name = FIND_BY_PROJECT_NAME,
   query = FIND_BY_PROJECT_NAME_QUERY)
@@ -39,13 +39,13 @@ public class SpecialProject extends CmsPersistentObject {
   public static final String FIND_ACTIVE_SSB_BY_GOVERNMENT_ENTITY =
       "SpecialProject.findActiveSSBByGovernmentEntity";
   public static final String SSB_SPECIAL_PROJECT_NAME = "S-Safely Surrendered Baby";
-  public static final String PARAM_GOVERNMENT_ENTITY = "governmentEntity";
+  public static final String PARAM_GOVERNMENT_ENTITY = "governmentEntityType";
   public static final String PARAM_NAME = "name";
 
   public static final String FIND_BY_PROJECT_NAME = 
       "gov.ca.cwds.data.persistence.cms.SpecialProject.findByProjectName";
   static final String FIND_BY_PROJECT_NAME_QUERY = 
-      "FROM SpecialProject WHERE GOV_ENTC = :governementEntityType AND END_DT IS NULL AND PROJECT_NM = :name";
+      "FROM SpecialProject WHERE GOV_ENTC = :governmentEntityType AND END_DT IS NULL AND PROJECT_NM = :name";
   
   @Id
   @Column(name = "IDENTIFIER", nullable = false, length = CMS_ID_LEN)
