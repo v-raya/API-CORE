@@ -74,8 +74,7 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
     Transaction txn = session.getTransaction();
     txn = txn != null ? txn : session.beginTransaction();
 
-    if (!txn.getRollbackOnly() && !txn.isActive()
-        && TRAN_STATUS_BEGIN.contains(txn.getStatus())) {
+    if (!txn.getRollbackOnly() && !txn.isActive() && TRAN_STATUS_BEGIN.contains(txn.getStatus())) {
       LOGGER.debug("Begin **NEW** transaction");
       txn.begin();
       CaresStackUtils.logStack();
