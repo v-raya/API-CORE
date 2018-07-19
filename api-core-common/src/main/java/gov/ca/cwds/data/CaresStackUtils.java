@@ -15,7 +15,7 @@ public class CaresStackUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(CaresStackUtils.class);
 
   public static void logStack() {
-    if (LOGGER.isDebugEnabled()) {
+    if (LOGGER.isTraceEnabled()) {
       try {
         final StackTraceElement[] stack = Thread.currentThread().getStackTrace();
         Arrays.stream(stack, 0, stack.length - 1)
