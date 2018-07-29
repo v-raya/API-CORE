@@ -213,6 +213,11 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
     return valid;
   }
 
+  @Override
+  public long getCacheSize() {
+    return systemCodeCache.size();
+  }
+
   /**
    * Get cached object identified by given cache key.
    * 
