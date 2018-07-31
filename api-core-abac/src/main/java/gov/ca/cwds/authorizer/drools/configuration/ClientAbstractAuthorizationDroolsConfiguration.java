@@ -25,4 +25,5 @@ public final class ClientAbstractAuthorizationDroolsConfiguration
   public DroolsConfiguration getInstance() {
     return INSTANCE;
   }
+
 }

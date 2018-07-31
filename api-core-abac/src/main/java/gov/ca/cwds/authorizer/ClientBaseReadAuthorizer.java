@@ -8,6 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
@@ -17,9 +23,6 @@ import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
 import gov.ca.cwds.service.ClientCountyDeterminationService;
 import gov.ca.cwds.service.ClientSensitivityDeterminationService;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Base class for Client Result and Client Abstract Authorizer.
@@ -27,6 +30,8 @@ import java.util.stream.Stream;
  * @author CWDS TPT-3 Team
  */
 public class ClientBaseReadAuthorizer extends AbstractBaseAuthorizer<Client, String> {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ClientBaseReadAuthorizer.class);
 
   @Inject
   private ClientSensitivityDeterminationService sensitivityDeterminationService;
@@ -36,54 +41,57 @@ public class ClientBaseReadAuthorizer extends AbstractBaseAuthorizer<Client, Str
 
   @Inject
   public ClientBaseReadAuthorizer(DroolsAuthorizationService droolsAuthorizationService,
-    DroolsAuthorizer droolsConfiguration) {
+      DroolsAuthorizer droolsConfiguration) {
     super(droolsAuthorizationService, droolsConfiguration);
   }
 
   @Override
   protected boolean checkId(final String clientId) {
+    LOGGER.debug("ClientBaseReadAuthorizer.checkId: clientId: {}", clientId);
     final Sensitivity sensitivity =
-      sensitivityDeterminationService.getClientSensitivityById(clientId);
+        sensitivityDeterminationService.getClientSensitivityById(clientId);
     final ClientCondition clientCondition = getClientCondition(clientId, sensitivity);
     return checkId(clientId, sensitivity, clientCondition);
   }
 
   @Override
   protected Collection<String> filterIds(Collection<String> ids) {
-    Map<String, Sensitivity> sensitivityMap = sensitivityDeterminationService
-      .getClientSensitivityMapByIds(ids);
-    Map<String, List<Short>> clientCountiesMap = countyDeterminationService
-      .getClientCountiesMapByIds(ids);
+    LOGGER.debug("ClientBaseReadAuthorizer.filterIds: ids: {}", ids);
+    final Map<String, Sensitivity> sensitivityMap =
+        sensitivityDeterminationService.getClientSensitivityMapByIds(ids);
+    final Map<String, List<Short>> clientCountiesMap =
+        countyDeterminationService.getClientCountiesMapByIds(ids);
 
-    Stream<String> filteredStream = ids.stream().filter(Objects::nonNull)
-      .filter(clientId -> {
-        Sensitivity sensitivity = sensitivityMap.get(clientId);
-        ClientCondition clientCondition = toClientCondition(sensitivity,
-          clientCountiesMap.get(clientId));
-        return checkId(clientId, sensitivity, clientCondition);
-      });
+    final Stream<String> filteredStream = ids.stream().filter(Objects::nonNull).filter(clientId -> {
+      LOGGER.debug("ClientBaseReadAuthorizer.filterIds: clientId: {}", clientId);
+      final Sensitivity sensitivity = sensitivityMap.get(clientId);
+      final ClientCondition clientCondition =
+          toClientCondition(sensitivity, clientCountiesMap.get(clientId));
+      return checkId(clientId, sensitivity, clientCondition);
+    });
     return ids instanceof Set ? filteredStream.collect(Collectors.toSet())
-      : filteredStream.collect(Collectors.toList());
+        : filteredStream.collect(Collectors.toList());
   }
 
   @Override
   protected Collection<Client> filterInstances(Collection<Client> instances) {
-    Collection<String> clientIds = instances.stream().map(Client::getIdentifier)
-      .collect(Collectors.toSet());
-    Map<String, List<Short>> clientCountiesMap = countyDeterminationService
-      .getClientCountiesMapByIds(clientIds);
-    Stream<Client> filteredStream = instances.stream().filter(Objects::nonNull)
-      .filter(client -> {
-        ClientCondition clientCondition = toClientCondition(client.getSensitivity(),
-          clientCountiesMap.get(client.getIdentifier()));
-        return authorizeInstanceOperation(client, prepareFacts(client, clientCondition));
-      });
+    final Collection<String> clientIds =
+        instances.stream().map(Client::getIdentifier).collect(Collectors.toSet());
+    final Map<String, List<Short>> clientCountiesMap =
+        countyDeterminationService.getClientCountiesMapByIds(clientIds);
+    final Stream<Client> filteredStream =
+        instances.stream().filter(Objects::nonNull).filter(client -> {
+          LOGGER.debug("ClientBaseReadAuthorizer.filterInstances: client: {}", client);
+          final ClientCondition clientCondition = toClientCondition(client.getSensitivity(),
+              clientCountiesMap.get(client.getIdentifier()));
+          return authorizeInstanceOperation(client, prepareFacts(client, clientCondition));
+        });
     return instances instanceof Set ? filteredStream.collect(Collectors.toSet())
-      : filteredStream.collect(Collectors.toList());
+        : filteredStream.collect(Collectors.toList());
   }
 
   private boolean checkId(final String clientId, final Sensitivity sensitivity,
-    final ClientCondition clientCondition) {
+      final ClientCondition clientCondition) {
     if (sensitivity == null) {
       return true;
     }
@@ -98,14 +106,15 @@ public class ClientBaseReadAuthorizer extends AbstractBaseAuthorizer<Client, Str
   }
 
   private ClientCondition getClientCondition(final String clientId, Sensitivity sensitivity) {
+    LOGGER.debug("ClientBaseReadAuthorizer.getClientCondition: clientId: {}", clientId);
     return toClientCondition(sensitivity,
-      countyDeterminationService.getClientCountiesById(clientId));
+        countyDeterminationService.getClientCountiesById(clientId));
   }
 
   @Override
   protected List<Object> prepareFacts(Client client) {
-    final ClientCondition clientCondition = getClientCondition(client.getIdentifier(),
-      client.getSensitivity());
+    final ClientCondition clientCondition =
+        getClientCondition(client.getIdentifier(), client.getSensitivity());
     return prepareFacts(client, clientCondition);
   }
 
@@ -115,7 +124,8 @@ public class ClientBaseReadAuthorizer extends AbstractBaseAuthorizer<Client, Str
     return authorizationFacts;
   }
 
-  void setSensitivityDeterminationService(ClientSensitivityDeterminationService sensitivityDeterminationService) {
+  void setSensitivityDeterminationService(
+      ClientSensitivityDeterminationService sensitivityDeterminationService) {
     this.sensitivityDeterminationService = sensitivityDeterminationService;
   }
 

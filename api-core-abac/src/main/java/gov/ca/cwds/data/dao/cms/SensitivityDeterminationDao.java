@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.shiro.authz.AuthorizationException;
 import org.hibernate.SessionFactory;
 
@@ -23,10 +24,10 @@ public class SensitivityDeterminationDao extends BaseAuthorizationDao {
   private static final String NQ_PARAM_CLIENT_IDS = "clientIds";
 
   private static final String SELECT_SENSITIVITY =
-    "SELECT SENSTV_IND FROM {h-schema}CLIENT_T WHERE IDENTIFIER = :" + NQ_PARAM_CLIENT_ID;
+      "SELECT SENSTV_IND FROM {h-schema}CLIENT_T WHERE IDENTIFIER = :" + NQ_PARAM_CLIENT_ID;
   private static final String SELECT_SENSITIVITY_MAP =
-    "SELECT IDENTIFIER, SENSTV_IND FROM {h-schema}CLIENT_T WHERE IDENTIFIER IN :"
-      + NQ_PARAM_CLIENT_IDS;
+      "SELECT IDENTIFIER, SENSTV_IND FROM {h-schema}CLIENT_T WHERE IDENTIFIER IN :"
+          + NQ_PARAM_CLIENT_IDS;
 
   @Inject
   public SensitivityDeterminationDao(@CmsSessionFactory SessionFactory sessionFactory) {
@@ -42,7 +43,7 @@ public class SensitivityDeterminationDao extends BaseAuthorizationDao {
   public Sensitivity getSensitivity(final String clientId) {
     try {
       Object sensitivity = grabSession().getLeft().createNativeQuery(SELECT_SENSITIVITY)
-        .setParameter(NQ_PARAM_CLIENT_ID, clientId).getSingleResult();
+          .setParameter(NQ_PARAM_CLIENT_ID, clientId).getSingleResult();
       return constructSensitivity(sensitivity);
     } finally {
       finalizeSession();
@@ -59,12 +60,14 @@ public class SensitivityDeterminationDao extends BaseAuthorizationDao {
     if (clientIds == null || clientIds.isEmpty()) {
       return new HashMap<>();
     }
+
     final Map<String, Sensitivity> sensitivityMap = new HashMap<>(clientIds.size());
     try {
       @SuppressWarnings("unchecked")
-      List<Object[]> sensitivityResults = grabSession().getLeft()
-        .createNativeQuery(SELECT_SENSITIVITY_MAP).setParameter(NQ_PARAM_CLIENT_IDS, clientIds)
-        .getResultList();
+      // DRS: Hibernate does not automatically cache results from native queries.
+      final List<Object[]> sensitivityResults =
+          grabSession().getLeft().createNativeQuery(SELECT_SENSITIVITY_MAP)
+              .setParameter(NQ_PARAM_CLIENT_IDS, clientIds).getResultList();
       for (Object[] result : sensitivityResults) {
         sensitivityMap.put(result[0].toString(), constructSensitivity(result[1]));
       }
@@ -80,4 +83,5 @@ public class SensitivityDeterminationDao extends BaseAuthorizationDao {
     }
     return Sensitivity.fromCode(sensitivity.toString());
   }
+
 }

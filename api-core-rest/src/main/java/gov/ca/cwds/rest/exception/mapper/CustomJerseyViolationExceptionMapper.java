@@ -1,7 +1,5 @@
 package gov.ca.cwds.rest.exception.mapper;
 
-
-import com.google.common.collect.Sets;
 import java.io.IOException;
 import java.util.Set;
 
@@ -15,6 +13,8 @@ import org.glassfish.jersey.server.model.Invocable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Sets;
+
 import gov.ca.cwds.logging.LoggingContext;
 import gov.ca.cwds.rest.exception.BaseExceptionResponse;
 import gov.ca.cwds.rest.exception.IssueDetails;
@@ -26,7 +26,6 @@ import io.dropwizard.jersey.validation.JerseyViolationException;
 /**
  * @author CWDS CALS API Team
  */
-
 public class CustomJerseyViolationExceptionMapper
     implements ExceptionMapper<JerseyViolationException> {
 
@@ -41,8 +40,9 @@ public class CustomJerseyViolationExceptionMapper
 
   @Override
   public Response toResponse(final JerseyViolationException exception) {
-   final Set<ConstraintViolation<?>> transgressions = exception.getConstraintViolations();
-    final Set<IssueDetails> validationDetailsList = Sets.newHashSetWithExpectedSize(transgressions.size());
+    final Set<ConstraintViolation<?>> transgressions = exception.getConstraintViolations();
+    final Set<IssueDetails> validationDetailsList =
+        Sets.newHashSetWithExpectedSize(transgressions.size());
 
     for (ConstraintViolation<?> v : transgressions) {
       String message = CustomConstraintMessage.getMessage(v, exception.getInvocable()).trim();
@@ -51,7 +51,6 @@ public class CustomJerseyViolationExceptionMapper
       if (details != null) {
         details.setType(IssueType.BUSINESS_VALIDATION);
       } else {
-
         details = IssueDetailsCreator.create(v, loggingContext.getUniqueId());
       }
 
@@ -88,5 +87,3 @@ public class CustomJerseyViolationExceptionMapper
   }
 
 }
-
-

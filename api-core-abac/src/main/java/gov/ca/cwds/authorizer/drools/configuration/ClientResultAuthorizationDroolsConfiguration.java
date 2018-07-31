@@ -23,4 +23,5 @@ public final class ClientResultAuthorizationDroolsConfiguration extends DroolsCo
   public DroolsConfiguration getInstance() {
     return INSTANCE;
   }
+
 }
