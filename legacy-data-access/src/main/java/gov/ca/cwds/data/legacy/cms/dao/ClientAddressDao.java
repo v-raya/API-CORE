@@ -1,14 +1,17 @@
 package gov.ca.cwds.data.legacy.cms.dao;
 
+import java.util.Collection;
+import java.util.List;
+
+import org.hibernate.SessionFactory;
+
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.legacy.cms.entity.ClientAddress;
 import gov.ca.cwds.inject.CmsSessionFactory;
 import gov.ca.cwds.util.Require;
-import java.util.Collection;
-import java.util.List;
-import org.hibernate.SessionFactory;
 
 /**
  * DAO for {@link ClientAddress}
@@ -25,14 +28,11 @@ public class ClientAddressDao extends BaseDaoImpl<ClientAddress> {
   public Collection<ClientAddress> findByClientId(final String clientId) {
     Require.requireNotNullAndNotEmpty(clientId);
 
-    final List<ClientAddress> clientAddresses = this.getSessionFactory().getCurrentSession()
-        .createNamedQuery(ClientAddress.NQ_FIND_BY_CLIENT_ID, ClientAddress.class)
-        .setParameter(ClientAddress.NQ_PARAM_CLIENT_ID, clientId)
-        .list();
+    final List<ClientAddress> clientAddresses =
+        this.grabSession().createNamedQuery(ClientAddress.NQ_FIND_BY_CLIENT_ID, ClientAddress.class)
+            .setParameter(ClientAddress.NQ_PARAM_CLIENT_ID, clientId).list();
 
-    return ImmutableList.<ClientAddress>builder()
-        .addAll(clientAddresses)
-        .build();
+    return ImmutableList.<ClientAddress>builder().addAll(clientAddresses).build();
   }
 
 }

@@ -33,9 +33,9 @@ public class PlacementHomeDao extends BaseDaoImpl<PlacementHome> {
    */
   public PlacementHome findByFacilityId(String facilityId) {
     final Class<PlacementHome> entityClass = getEntityClass();
-    final Query<PlacementHome> query = getSessionFactory().getCurrentSession()
-        .createNamedQuery(entityClass.getSimpleName() + ".find", entityClass)
-        .setParameter("facilityId", facilityId);
+    final Query<PlacementHome> query =
+        grabSession().createNamedQuery(entityClass.getSimpleName() + ".find", entityClass)
+            .setParameter("facilityId", facilityId);
     PlacementHome placementHome = null;
     try {
       placementHome = query.getSingleResult();
