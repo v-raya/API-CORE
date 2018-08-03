@@ -1,17 +1,21 @@
 package gov.ca.cwds.data.legacy.cms.dao;
 
-import com.google.common.collect.ImmutableList;
-import com.google.inject.Inject;
-import gov.ca.cwds.data.BaseDaoImpl;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
-import gov.ca.cwds.inject.CmsSessionFactory;
 import java.util.List;
+
 import javax.persistence.NoResultException;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.ImmutableList;
+import com.google.inject.Inject;
+
+import gov.ca.cwds.data.BaseDaoImpl;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
+import gov.ca.cwds.inject.CmsSessionFactory;
 
 /** @author CWDS CASE API Team */
 public class CountryDao extends BaseDaoImpl<Country> {
@@ -24,7 +28,7 @@ public class CountryDao extends BaseDaoImpl<Country> {
 
   @Override
   public List<Country> findAll() {
-    Session session = this.getSessionFactory().getCurrentSession();
+    Session session = this.grabSession();
     Query<Country> query = session.createNamedQuery(Country.NQ_ALL, Country.class);
     ImmutableList.Builder<Country> entities = new ImmutableList.Builder<>();
     entities.addAll(query.list());
@@ -32,7 +36,7 @@ public class CountryDao extends BaseDaoImpl<Country> {
   }
 
   public Country findByLogicalId(String logicalId) {
-    Session session = this.getSessionFactory().getCurrentSession();
+    Session session = this.grabSession();
     Class<Country> entityClass = getEntityClass();
     Query<Country> query =
         session.createNamedQuery(entityClass.getSimpleName() + ".findByLogicalId", Country.class);
