@@ -216,6 +216,8 @@ public final class CmsKeyIdGenerator {
    * @return the unique key from staffId
    */
   public static synchronized String getNextValue(String staffId) {
+    LOGGER.debug("getNextValue: staffId: {}", staffId);
+
     String newValue;
     do {
       newValue = generate(staffId, new Date());

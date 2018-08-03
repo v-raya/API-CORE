@@ -68,7 +68,7 @@ public class SystemCodeService implements CrudsService {
     }
 
     Response response = null;
-    gov.ca.cwds.data.persistence.cms.SystemCode systemCode =
+    final gov.ca.cwds.data.persistence.cms.SystemCode systemCode =
         systemCodeDao.findBySystemCodeId((Number) systemCodeId);
     if (systemCode != null) {
       response = new SystemCode(systemCode);
@@ -87,19 +87,19 @@ public class SystemCodeService implements CrudsService {
       return null;
     }
 
-    gov.ca.cwds.data.persistence.cms.SystemCode[] systemCodes =
+    final gov.ca.cwds.data.persistence.cms.SystemCode[] systemCodes =
         systemCodeDao.findByForeignKeyMetaTable(foreignKeyMetaTable.toString());
 
     Response response = null;
 
     if (systemCodes != null) {
-      ImmutableSet.Builder<SystemCode> builder = ImmutableSet.builder();
+      final ImmutableSet.Builder<SystemCode> builder = ImmutableSet.builder();
       for (gov.ca.cwds.data.persistence.cms.SystemCode systemCode : systemCodes) {
         if (systemCode != null) {
           builder.add(new gov.ca.cwds.rest.api.domain.cms.SystemCode(systemCode));
         }
       }
-      Set<SystemCode> sysCodes = builder.build();
+      final Set<SystemCode> sysCodes = builder.build();
       if (!sysCodes.isEmpty()) {
         response = new SystemCodeListResponse(sysCodes);
       }
@@ -113,10 +113,10 @@ public class SystemCodeService implements CrudsService {
    */
   protected Response loadSystemMetas() {
     Response response = null;
-    SystemMeta[] sysMeta = systemMetaDao.findAll();
+    final SystemMeta[] sysMeta = systemMetaDao.findAll();
 
     if (sysMeta != null) {
-      ImmutableSet.Builder<gov.ca.cwds.rest.api.domain.cms.SystemMeta> builder =
+      final ImmutableSet.Builder<gov.ca.cwds.rest.api.domain.cms.SystemMeta> builder =
           ImmutableSet.builder();
 
       for (SystemMeta s : sysMeta) {

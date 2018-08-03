@@ -219,7 +219,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   }
 
   @SuppressWarnings({"rawtypes", "unchecked"})
-  private synchronized List<?> iterToList(Iterator iter) {
+  private List<?> iterToList(Iterator iter) {
     LOGGER.debug("iterToList");
     return IteratorUtils.toList(iter);
   }
