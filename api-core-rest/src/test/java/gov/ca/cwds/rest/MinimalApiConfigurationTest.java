@@ -7,6 +7,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
+import org.knowm.dropwizard.sundial.SundialConfiguration;
 import org.secnod.dropwizard.shiro.ShiroConfiguration;
 
 public class MinimalApiConfigurationTest {
@@ -95,6 +96,23 @@ public class MinimalApiConfigurationTest {
     MinimalApiConfiguration target = new MinimalApiConfiguration();
     WebSecurityConfiguration webSecurityConfiguration = mock(WebSecurityConfiguration.class);
     target.setWebSecurityConfiguration(webSecurityConfiguration);
+  }
+
+
+
+  @Test
+  public void getSundialConfiguration_Args__() throws Exception {
+    MinimalApiConfiguration target = new MinimalApiConfiguration();
+    SundialConfiguration actual = target.getSundialConfiguration();
+    SundialConfiguration expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setSundialConfiguration_Args__SundialConfiguration() throws Exception {
+    MinimalApiConfiguration target = new MinimalApiConfiguration();
+    SundialConfiguration sundialConfiguration = mock(SundialConfiguration.class);
+    target.setSundialConfiguration(sundialConfiguration);
   }
 
 }

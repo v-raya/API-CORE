@@ -46,8 +46,10 @@ public abstract class NewRelicReportingHealthcheckJob extends Job {
     List<String> healthy = new ArrayList<>();
     List<String> unhealthy = new ArrayList<>();
 
-    for (String key : healthCheckResults.keySet()) {
-      Result result = healthCheckResults.get(key);
+    for (Map.Entry<String, Result> entry : healthCheckResults.entrySet()) {
+      String key = entry.getKey();
+      Result result = entry.getValue();
+
       if (result.isHealthy()) {
         healthy.add(key);
       } else {
