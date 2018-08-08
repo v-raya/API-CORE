@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.knowm.dropwizard.sundial.SundialConfiguration;
 import org.secnod.dropwizard.shiro.ShiroConfiguration;
@@ -104,8 +105,7 @@ public class MinimalApiConfigurationTest {
   public void getSundialConfiguration_Args__() throws Exception {
     MinimalApiConfiguration target = new MinimalApiConfiguration();
     SundialConfiguration actual = target.getSundialConfiguration();
-    SundialConfiguration expected = null;
-    assertThat(actual, is(equalTo(expected)));
+    Assert.assertNotNull(actual);
   }
 
   @Test
