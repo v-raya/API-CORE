@@ -1,10 +1,16 @@
 package gov.ca.cwds.rest;
 
+import javax.annotation.Nullable;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
+import org.knowm.dropwizard.sundial.SundialConfiguration;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import gov.ca.cwds.security.configuration.SecurityConfiguration;
 import io.dropwizard.Configuration;
-import javax.annotation.Nullable;
-import org.hibernate.validator.constraints.NotEmpty;
 
 public class MinimalApiConfiguration extends Configuration {
 
@@ -31,6 +37,10 @@ public class MinimalApiConfiguration extends Configuration {
 
   @Nullable
   private SecurityConfiguration securityConfiguration;
+
+  @Valid
+  @NotNull
+  public SundialConfiguration sundialConfiguration = new SundialConfiguration();
 
   @JsonProperty
   public String getApplicationName() {
@@ -94,8 +104,17 @@ public class MinimalApiConfiguration extends Configuration {
   }
 
   @JsonProperty
-  public void setSecurityConfiguration(
-      SecurityConfiguration securityConfiguration) {
+  public void setSecurityConfiguration(SecurityConfiguration securityConfiguration) {
     this.securityConfiguration = securityConfiguration;
+  }
+
+  @JsonProperty("sundial")
+  public SundialConfiguration getSundialConfiguration() {
+    return sundialConfiguration;
+  }
+
+  @JsonProperty
+  public void setSundialConfiguration(SundialConfiguration sundialConfiguration) {
+    this.sundialConfiguration = sundialConfiguration;
   }
 }
