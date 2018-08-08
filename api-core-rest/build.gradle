@@ -23,7 +23,7 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-text', version: '1.1'
 
     compile group: 'com.newrelic.agent.java', name: 'newrelic-api', version: newrelicVersion
-    compile group: 'org.knowm', name: 'dropwizard-sundial', version: ropwizardSundialVersion
+    compile group: 'org.knowm', name: 'dropwizard-sundial', version: dropwizardSundialVersion
     
 	// TEST:
     testCompile group: "io.dropwizard", name: "dropwizard-testing", version: dropwizardVersion
