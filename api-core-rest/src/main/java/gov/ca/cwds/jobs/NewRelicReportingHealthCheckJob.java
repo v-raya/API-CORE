@@ -19,7 +19,7 @@ import io.dropwizard.setup.Environment;
  * 
  * @author CWDS API Team
  */
-public abstract class NewRelicReportingHealthcheckJob extends Job {
+public abstract class NewRelicReportingHealthCheckJob extends Job {
 
   private static final String HEALTHY_ATTRIBUTE = "healthy";
   private static final String UNHEALTHY_ATTRIBUTE = "unhealthy";
@@ -27,7 +27,7 @@ public abstract class NewRelicReportingHealthcheckJob extends Job {
   /**
    * Default no-argument constructor.
    */
-  public NewRelicReportingHealthcheckJob() {
+  public NewRelicReportingHealthCheckJob() {
     super();
   }
 
