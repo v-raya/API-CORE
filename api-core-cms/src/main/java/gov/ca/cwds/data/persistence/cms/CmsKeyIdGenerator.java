@@ -1,6 +1,8 @@
 package gov.ca.cwds.data.persistence.cms;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -276,14 +278,28 @@ public final class CmsKeyIdGenerator {
    */
   public static double timestampToDouble(final Calendar cal) {
     double ret = 0;
+    final NumberFormat fmt = new DecimalFormat("###,###.000");
 
     ret += (double) cal.get(Calendar.MILLISECOND) / 10 * nSHIFT_HSECOND;
+    LOGGER.debug("MILLISECOND: {}", fmt.format(ret));
+
     ret += (double) cal.get(Calendar.SECOND) * nSHIFT_SECOND;
+    LOGGER.debug("SECOND:      {}", fmt.format(ret));
+
     ret += (double) cal.get(Calendar.MINUTE) * nSHIFT_MINUTE;
+    LOGGER.debug("MINUTE:      {}", fmt.format(ret));
+
     ret += (double) cal.get(Calendar.HOUR_OF_DAY) * nSHIFT_HOUR;
+    LOGGER.debug("HOUR_OF_DAY: {}", fmt.format(ret));
+
     ret += (double) cal.get(Calendar.DATE) * nSHIFT_DAY;
+    LOGGER.debug("DATE:        {}", fmt.format(ret));
+
     ret += (double) (cal.get(Calendar.MONTH)) * nSHIFT_MONTH;
+    LOGGER.debug("MONTH:       {}", fmt.format(ret));
+
     ret += (double) (cal.get(Calendar.YEAR) - 1900) * nSHIFT_YEAR;
+    LOGGER.debug("YEAR:        {}", fmt.format(ret));
 
     return ret;
   }
@@ -296,31 +312,31 @@ public final class CmsKeyIdGenerator {
   public static long doubleToTimestamp(double doubleTimestamp) {
     final Calendar cal = Calendar.getInstance();
 
-    long mseconds = (long) (doubleTimestamp / nSHIFT_HSECOND);
+    final long mseconds = (long) (doubleTimestamp / nSHIFT_HSECOND);
     cal.set(Calendar.MILLISECOND, (int) (mseconds * 10));
     doubleTimestamp -= mseconds * nSHIFT_HSECOND;
 
-    long seconds = (long) (doubleTimestamp / nSHIFT_SECOND);
+    final long seconds = (long) (doubleTimestamp / nSHIFT_SECOND);
     cal.set(Calendar.SECOND, (int) seconds);
     doubleTimestamp -= seconds * nSHIFT_SECOND;
 
-    long min = (long) (doubleTimestamp / nSHIFT_MINUTE);
+    final long min = (long) (doubleTimestamp / nSHIFT_MINUTE);
     cal.set(Calendar.MINUTE, (int) min);
     doubleTimestamp -= min * nSHIFT_MINUTE;
 
-    long hours = (long) (doubleTimestamp / nSHIFT_HOUR);
+    final long hours = (long) (doubleTimestamp / nSHIFT_HOUR);
     cal.set(Calendar.HOUR_OF_DAY, (int) hours);
     doubleTimestamp -= hours * nSHIFT_HOUR;
 
-    long day = (long) (doubleTimestamp / nSHIFT_DAY);
+    final long day = (long) (doubleTimestamp / nSHIFT_DAY);
     cal.set(Calendar.DATE, (int) day);
     doubleTimestamp -= day * nSHIFT_DAY;
 
-    long month = (long) (doubleTimestamp / nSHIFT_MONTH);
+    final long month = (long) (doubleTimestamp / nSHIFT_MONTH);
     cal.set(Calendar.MONTH, (int) month);
     doubleTimestamp -= month * nSHIFT_MONTH;
 
-    long year = (long) ((doubleTimestamp) / nSHIFT_YEAR);
+    final long year = (long) ((doubleTimestamp) / nSHIFT_YEAR);
     cal.set(Calendar.YEAR, (int) year + 1900);
 
     return cal.getTimeInMillis();
