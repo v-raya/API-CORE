@@ -8,12 +8,9 @@ import java.util.Date;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -39,72 +36,7 @@ import joptsimple.OptionSet;
  */
 public final class JavaKeyCmdLine {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(JavaKeyCmdLine.class);
-
-  private static final class RipCKey extends ApiObjectIdentity {
-
-    private static final long serialVersionUID = 1L;
-
-    private final String key;
-    private final String staffId;
-    private final Date date;
-    private final String ui19Digit;
-    private final String newKey;
-
-    // key, staff id, ISO 8601 date, Timestamp (hr.min.sec.1/100 sec), UI Timestamp, UI 19-digit
-    public RipCKey(String line) {
-      final String[] tokens = line.split("\t");
-      this.key = tokens[0];
-      this.staffId = tokens[1];
-      this.date = DomainChef.uncookISO8601Timestamp(tokens[2]);
-      this.ui19Digit = tokens[4];
-      this.newKey = tokens[5];
-    }
-
-    public String getKey() {
-      return key;
-    }
-
-    public String getStaffId() {
-      return staffId;
-    }
-
-    public Date getDate() {
-      return date;
-    }
-
-    public String getUi19Digit() {
-      return ui19Digit;
-    }
-
-    public String regenerate() {
-      return generateKey(staffId, date);
-    }
-
-    public boolean validate() {
-      final String javaKey = regenerate();
-      if (!javaKey.equals(key)) {
-        LOGGER.warn("QUESTIONABLE KEY! staff: {}, timestamp: {}, key: {}", staffId, date, key);
-      }
-
-      return javaKey.equals(newKey);
-    }
-
-    public String getNewKey() {
-      return newKey;
-    }
-
-    @Override
-    public int hashCode() {
-      return HashCodeBuilder.reflectionHashCode(this, false);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-      return EqualsBuilder.reflectionEquals(this, obj, false);
-    }
-
-  }
+  static final Logger LOGGER = LoggerFactory.getLogger(JavaKeyCmdLine.class);
 
   private void massTest(String fileNm) throws IOException {
     final Path pathIn = Paths.get(fileNm);
@@ -116,12 +48,16 @@ public final class JavaKeyCmdLine {
     }
   }
 
-  protected static String generateKey(String staffId, Date ts) {
-    return CmsKeyIdGenerator.generate(staffId, ts);
+  protected static String generateKey(String staffId) {
+    return CmsKeyIdGenerator.getNextValue(staffId);
   }
 
   protected static String generateKey(String staffId, String strTs) {
     return CmsKeyIdGenerator.generate(staffId, DomainChef.uncookISO8601Timestamp(strTs));
+  }
+
+  protected static String generateKey(String staffId, Date date) {
+    return CmsKeyIdGenerator.generate(staffId, date);
   }
 
   /**
@@ -144,11 +80,16 @@ public final class JavaKeyCmdLine {
 
       if (StringUtils.isNotBlank(fileNm)) {
         run.massTest(fileNm);
+      } else if ("1".equals(numKeysToMake)) {
+        final String key = JavaKeyCmdLine.generateKey(staffId, ts);
+        LOGGER.info("gen: staff: {}, timestamp: {}, key: {}", staffId, ts, key);
       } else {
         final int iNumKeysToMake = Integer.parseInt(numKeysToMake);
+        LOGGER.info("Generate multiple keys. Ignore timestamp param. total keys: {}",
+            iNumKeysToMake);
         for (int i = 0; i < iNumKeysToMake; i++) {
-          LOGGER.info("gen: staff: {}, timestamp: {}, key: {}", staffId, ts,
-              JavaKeyCmdLine.generateKey(staffId, ts));
+          final String key = JavaKeyCmdLine.generateKey(staffId);
+          LOGGER.info("gen: staff: {}, key: {}", staffId, key);
         }
       }
     } catch (Exception e) {

@@ -231,7 +231,7 @@ public final class CmsKeyIdGenerator {
    * @param ts seed timestamp
    * @return CMS formatted timestamp
    */
-  protected static String createTimestampStr(final Date ts) {
+  public static String createTimestampStr(final Date ts) {
     return ts == null ? createTimestampStr()
         : doubleToStrN(7, timestampToDouble(getTimestampSeed(ts)), POWER_BASE62);
   }
