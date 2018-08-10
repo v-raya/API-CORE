@@ -34,7 +34,7 @@ import joptsimple.OptionSet;
  * 
  * @author CWDS API Team
  */
-public final class JavaKeyCmdLine {
+public class JavaKeyCmdLine {
 
   static final Logger LOGGER = LoggerFactory.getLogger(JavaKeyCmdLine.class);
 
