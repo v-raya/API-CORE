@@ -249,19 +249,18 @@ public final class CmsKeyIdGeneratorTest {
     assertThat(actual, is(not(0)));
   }
 
-
   @Test(expected = ServiceException.class)
   public void makeKey_Args__String__Date__null_staff() throws Exception {
-    String staffId = null;
-    Date ts = mock(Date.class);
-    String actual = CmsKeyIdGenerator.makeKey(staffId, ts);
-    String expected = null;
+    final String staffId = null;
+    final Date ts = mock(Date.class);
+    final String actual = CmsKeyIdGenerator.makeKey(staffId, ts);
+    final String expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void generate_Args__String__null_staff() throws Exception {
-    String actual = CmsKeyIdGenerator.getNextValue(null);
+    final String actual = CmsKeyIdGenerator.getNextValue(null);
     assertTrue("bad generated key", RGX_LEGACY_KEY.matcher(actual).matches());
   }
 
@@ -282,14 +281,14 @@ public final class CmsKeyIdGeneratorTest {
 
   @Test
   public void testGetDateFromThirdId() throws Exception {
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
-    Date dateFromXtools = sdf.parse("2018-03-30 10:45:40:260");
-    String thirdIdFromXTools = "83UiZBWABC";
-    String userIdFromXTools = "ABC";
+    final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
+    final Date dateFromXtools = sdf.parse("2018-03-30 10:45:40:260");
+    final String thirdIdFromXTools = "83UiZBWABC";
+    final String userIdFromXTools = "ABC";
 
-    String thirdId = CmsKeyIdGenerator.generate(userIdFromXTools, dateFromXtools);
+    final String thirdId = CmsKeyIdGenerator.generate(userIdFromXTools, dateFromXtools);
     assertEquals(thirdId, thirdIdFromXTools);
-    Date localDate = CmsKeyIdGenerator.getDateFromKey(thirdId);
+    final Date localDate = CmsKeyIdGenerator.getDateFromKey(thirdId);
     assertEquals(dateFromXtools.getTime(), localDate.getTime());
   }
 

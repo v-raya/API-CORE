@@ -132,10 +132,11 @@ public final class JavaKeyCmdLine {
   public static void main(String[] args) {
     final JavaKeyCmdLine run = new JavaKeyCmdLine();
     try {
-      final OptionParser parser = new OptionParser("f:s:t:T::");
+      final OptionParser parser = new OptionParser("f:s:t:T::i::");
       final OptionSet options = parser.parse(args);
 
       final String staffId = options.has("s") ? (String) options.valueOf("s") : "0x5";
+      final String numKeysToMake = options.has("i") ? (String) options.valueOf("i") : "1";
       final Date ts =
           options.has("t") ? DomainChef.uncookISO8601Timestamp((String) options.valueOf("t"))
               : new Date();
@@ -144,8 +145,11 @@ public final class JavaKeyCmdLine {
       if (StringUtils.isNotBlank(fileNm)) {
         run.massTest(fileNm);
       } else {
-        LOGGER.info("gen: staff: {}, timestamp: {}, key: {}", staffId, ts,
-            run.generateKey(staffId, ts));
+        final int iNumKeysToMake = Integer.parseInt(numKeysToMake);
+        for (int i = 0; i < iNumKeysToMake; i++) {
+          LOGGER.info("gen: staff: {}, timestamp: {}, key: {}", staffId, ts,
+              JavaKeyCmdLine.generateKey(staffId, ts));
+        }
       }
     } catch (Exception e) {
       LOGGER.error("OOPS!", e);

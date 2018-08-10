@@ -67,14 +67,14 @@ import gov.ca.cwds.rest.services.ServiceException;
  * characters, using first the digits 0-9, then uppercase letters, then lowercase letters.
  *
  * <p>
- * The final 3 characters of the identifier indicate the staffperson (or project process) which
+ * The final 3 characters of the identifier indicate the staff person (or project process) which
  * created the row.
  *
  * <p>
  * For the User Interface, the identifier can also be converted into a formatted 19-digit decimal
  * number. In the 19-digit format, the first 13 decimal digits are a conversion of the first seven
  * base-62 characters, while the last 6 decimal digits are an independent conversion of the last 3
- * base-62 characters (ie, staffperson ID) from the identifier. The 19 digits are formatted into
+ * base-62 characters (ie, staff person ID) from the identifier. The 19 digits are formatted into
  * three groups of four digits, followed by a final group of seven digits, so the full string length
  * is 22 characters with punctuation.
  *
