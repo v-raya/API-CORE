@@ -108,7 +108,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * @author CWDS API Team
  */
 @SuppressWarnings({"fb-contrib:MDM_THREAD_YIELD", "findbugs:UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD"})
-public final class CmsKeyIdGenerator {
+public class CmsKeyIdGenerator {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsKeyIdGenerator.class);
 
@@ -169,19 +169,13 @@ public final class CmsKeyIdGenerator {
   private static final int LEN_UIIDSTAFFID = 6; // for converting a key to a UI identifier
   private static final int LEN_UIIDTIMESTAMP = 13;
 
-  private static final float nSHIFT_HSECOND = 1.71798692E10f; // NOSONAR 34 bit shift (2 ^ 34)
-
-  private static final float nSHIFT_SECOND = 2.68435456E8f; // NOSONAR 28 bit shift (2 ^ 28)
-
-  private static final float nSHIFT_MINUTE = 4194304; // NOSONAR 22 bit shift (2 ^ 22)
-
-  private static final float nSHIFT_HOUR = 131072; // NOSONAR 17 bit shift (2 ^ 17)
-
-  private static final float nSHIFT_DAY = 4096; // NOSONAR 12 bit shift (2 ^ 12)
-
-  private static final float nSHIFT_MONTH = 256; // NOSONAR 8 bit shift (2 ^ 8)
-
-  private static final float nSHIFT_YEAR = 1; // NOSONAR 0 bit shift (2 ^ 0)
+  private static final double nSHIFT_HSECOND = 1L << 34; // 34 bit shift (2 to the 34th power)
+  private static final double nSHIFT_SECOND = 1L << 28; // 28 bit shift (2 to the 28th power)
+  private static final double nSHIFT_MINUTE = 1L << 22; // 22 bit shift (2 to the 22nd power)
+  private static final double nSHIFT_HOUR = 1L << 17; // 17 bit shift (2 to the 17th power)
+  private static final double nSHIFT_DAY = 1L << 12; // 12 bit shift (2 to the 12th power)
+  private static final double nSHIFT_MONTH = 1L << 8; // 8 bit shift (2 to the 8th power)
+  private static final double nSHIFT_YEAR = 1L << 0; // 0 bit shift (2 to the 0th power)
 
   private static final BigDecimal[] POWER_BASE62 = {BigDecimal.valueOf(1.000000000000000e+000),
       BigDecimal.valueOf(6.200000000000000e+001), BigDecimal.valueOf(3.844000000000000e+003),
@@ -239,13 +233,13 @@ public final class CmsKeyIdGenerator {
   }
 
   /**
-   * Format the CMS timestamp String, the last 7 characters of the key.
+   * Format the CMS timestamp String, the first 7 characters of the key.
    *
    * <p>
    * Code taken originally from the original C++ algorithm, designed for legacy fat client Visual
    * Basic application. In that world of dial-up modems, the inefficiency of waiting on hundredths
    * of a second for a single user was acceptable. Obviously, this approach makes little sense today
-   * in the age of web servers and pervasive, wireless internet connections.
+   * in the age of web servers and wireless internet connections.
    * </p>
    *
    * @return CMS formatted timestamp
@@ -280,25 +274,26 @@ public final class CmsKeyIdGenerator {
     double ret = 0;
     final NumberFormat fmt = new DecimalFormat("###,###.000");
 
-    ret += (double) cal.get(Calendar.MILLISECOND) / 10 * nSHIFT_HSECOND;
+    ret += cal.get(Calendar.MILLISECOND) / 10 * nSHIFT_HSECOND;
     LOGGER.debug("MILLISECOND: {}", fmt.format(ret));
 
-    ret += (double) cal.get(Calendar.SECOND) * nSHIFT_SECOND;
+    ret += cal.get(Calendar.SECOND) * nSHIFT_SECOND;
     LOGGER.debug("SECOND:      {}", fmt.format(ret));
 
-    ret += (double) cal.get(Calendar.MINUTE) * nSHIFT_MINUTE;
+    ret += cal.get(Calendar.MINUTE) * nSHIFT_MINUTE;
     LOGGER.debug("MINUTE:      {}", fmt.format(ret));
 
-    ret += (double) cal.get(Calendar.HOUR_OF_DAY) * nSHIFT_HOUR;
+    ret += cal.get(Calendar.HOUR_OF_DAY) * nSHIFT_HOUR;
     LOGGER.debug("HOUR_OF_DAY: {}", fmt.format(ret));
 
-    ret += (double) cal.get(Calendar.DATE) * nSHIFT_DAY;
+    ret += cal.get(Calendar.DATE) * nSHIFT_DAY;
     LOGGER.debug("DATE:        {}", fmt.format(ret));
 
-    ret += (double) (cal.get(Calendar.MONTH)) * nSHIFT_MONTH;
+    ret += (cal.get(Calendar.MONTH) - 1) * nSHIFT_MONTH;
     LOGGER.debug("MONTH:       {}", fmt.format(ret));
 
-    ret += (double) (cal.get(Calendar.YEAR) - 1900) * nSHIFT_YEAR;
+    final int year = cal.get(Calendar.YEAR);
+    ret += (year - 1900) * nSHIFT_YEAR;
     LOGGER.debug("YEAR:        {}", fmt.format(ret));
 
     return ret;
@@ -333,8 +328,10 @@ public final class CmsKeyIdGenerator {
     doubleTimestamp -= day * nSHIFT_DAY;
 
     final long month = (long) (doubleTimestamp / nSHIFT_MONTH);
+
+    // Month is 1-based in C and 0-based in Java.
     cal.set(Calendar.MONTH, (int) month);
-    doubleTimestamp -= month * nSHIFT_MONTH;
+    doubleTimestamp -= (month + 1) * nSHIFT_MONTH;
 
     final long year = (long) ((doubleTimestamp) / nSHIFT_YEAR);
     cal.set(Calendar.YEAR, (int) year + 1900);
@@ -413,7 +410,7 @@ public final class CmsKeyIdGenerator {
       }
 
       if (power == base) {
-        LOGGER.warn("Character too big base?");
+        LOGGER.warn("Character too big for base?");
         return -1;
       }
     }
@@ -428,7 +425,7 @@ public final class CmsKeyIdGenerator {
    * @return Calendar set to preferred timestamp
    */
   protected static final Calendar getTimestampSeed(final Date ts) {
-    Calendar cal = Calendar.getInstance();
+    final Calendar cal = Calendar.getInstance();
 
     if (ts != null) {
       cal.setTimeInMillis(ts.getTime());
@@ -517,8 +514,9 @@ public final class CmsKeyIdGenerator {
     }
 
     final String tsB62 = key.substring(0, LEN_KEYTIMESTAMP);
-    double sdouble = strToDouble(tsB62, 62, POWER_BASE62);
-    Long timestamp = doubleToTimestamp(sdouble);
+    final double sdouble = strToDouble(tsB62, 62, POWER_BASE62);
+    final Long timestamp = doubleToTimestamp(sdouble);
     return new Date(timestamp);
   }
+
 }
