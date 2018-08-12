@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -13,6 +14,7 @@ import static org.mockito.Mockito.mock;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
@@ -332,26 +334,48 @@ public final class CmsKeyIdGeneratorTest {
     assertEquals(thirdId, thirdIdFromXTools);
   }
 
+  protected void iterateExpiringMap(Map<String, String> keepKey, Map<String, String> lastKey,
+      String[] staffIds, Date now, boolean add, boolean expired) {
+    for (String staffId : staffIds) {
+      String expected = keepKey.get(staffId);
+
+      if (add) {
+        expected = CmsKeyIdGenerator.generate(staffId, now);
+        lastKey.put(staffId, expected);
+        keepKey.put(staffId, expected);
+      }
+
+      final String actual = lastKey.get(staffId);
+      LOGGER.info("staff id: {}, lastKey: {}", staffId, expected);
+
+      if (expired) {
+        assertThat(actual, is(nullValue()));
+      } else {
+        assertThat(actual, is(equalTo(expected)));
+      }
+    }
+  }
+
   @Test
   public void testPassiveExpiringMap() throws Exception {
-    final Map<String, String> staffLastKey =
+    final Map<String, String> lastKey =
         new PassiveExpiringMap<>(1, TimeUnit.SECONDS, new ConcurrentHashMap<>());
+    final Map<String, String> keepKey = new HashMap<>();
 
+    final String[] staffIds = {"aaa", "aab", "aac", "aad", "aae", "aaf", "aag", "aah"};
     final Date now = new Date();
-    String staffId = "0X5";
-    String lastKey = "83UiZFe0X5";
+    LOGGER.info("\n\nInitialize key maps ...");
+    iterateExpiringMap(keepKey, lastKey, staffIds, now, true, false);
 
-    staffLastKey.put(staffId, CmsKeyIdGenerator.generate(staffId, now));
-    lastKey = staffLastKey.get(staffId);
-    LOGGER.info("staff id: {}, lastKey: {}", staffId, lastKey);
+    long waitMillis = 300;
+    LOGGER.info("\n\nWait {} and verify that maps still contain keys ...", waitMillis);
+    Thread.sleep(waitMillis);
+    iterateExpiringMap(keepKey, lastKey, staffIds, now, false, false);
 
-    Thread.sleep(500);
-    lastKey = staffLastKey.get(staffId);
-    LOGGER.info("staff id: {}, lastKey: {}", staffId, lastKey);
-
+    waitMillis = 1500;
+    LOGGER.info("\n\nWait {} and verify that keys have expired ...", waitMillis);
     Thread.sleep(1500);
-    lastKey = staffLastKey.get(staffId);
-    LOGGER.info("staff id: {}, lastKey: {}", staffId, lastKey);
+    iterateExpiringMap(keepKey, lastKey, staffIds, now, false, true);
   }
 
 }
