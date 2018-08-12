@@ -346,7 +346,7 @@ public final class CmsKeyIdGeneratorTest {
       }
 
       final String actual = lastKey.get(staffId);
-      LOGGER.info("staff id: {}, lastKey: {}", staffId, expected);
+      LOGGER.info("staff id: {}, actual: {}", staffId, actual);
 
       if (expired) {
         assertThat(actual, is(nullValue()));
@@ -359,22 +359,22 @@ public final class CmsKeyIdGeneratorTest {
   @Test
   public void testPassiveExpiringMap() throws Exception {
     final Map<String, String> lastKey =
-        new PassiveExpiringMap<>(1, TimeUnit.SECONDS, new ConcurrentHashMap<>());
+        new PassiveExpiringMap<>(700, TimeUnit.MILLISECONDS, new ConcurrentHashMap<>());
     final Map<String, String> keepKey = new HashMap<>();
 
     final String[] staffIds = {"aaa", "aab", "aac", "aad", "aae", "aaf", "aag", "aah"};
     final Date now = new Date();
-    LOGGER.info("\n\nInitialize key maps ...");
+    LOGGER.info("\n\n****** Initialize key maps ... ******");
     iterateExpiringMap(keepKey, lastKey, staffIds, now, true, false);
 
     long waitMillis = 300;
-    LOGGER.info("\n\nWait {} and verify that maps still contain keys ...", waitMillis);
+    LOGGER.info("\n\n****** Wait {}, verify that keys have NOT EXPIRED ... ******", waitMillis);
     Thread.sleep(waitMillis);
     iterateExpiringMap(keepKey, lastKey, staffIds, now, false, false);
 
-    waitMillis = 1500;
-    LOGGER.info("\n\nWait {} and verify that keys have expired ...", waitMillis);
-    Thread.sleep(1500);
+    waitMillis = 1800;
+    LOGGER.info("\n\n****** Wait {}, verify that keys have EXPIRED ... ******", waitMillis);
+    Thread.sleep(waitMillis);
     iterateExpiringMap(keepKey, lastKey, staffIds, now, false, true);
   }
 
