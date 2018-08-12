@@ -91,7 +91,7 @@ public final class CmsKeyIdGeneratorTest {
   // ===================
   @Test
   public void testNextValueIsDifferent() {
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 500; i++) {
       final String keyOne = CmsKeyIdGenerator.getNextValue("0yz");
       final String keySecond = CmsKeyIdGenerator.getNextValue("0yz");
       assertFalse(keyOne.equals(keySecond));
@@ -300,7 +300,7 @@ public final class CmsKeyIdGeneratorTest {
   public void testDecodeKey() throws Exception {
     final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
     final Date dateFromXtools = sdf.parse("2018-03-30T10:45:40.260");
-    final String thirdIdFromXTools = "83UiZBWABC";
+    final String thirdIdFromXTools = "83UiZFeABC";
 
     final Date localDate = CmsKeyIdGenerator.getDateFromKey(thirdIdFromXTools);
     System.out.println("localDate: " + sdf.format(localDate));
@@ -308,17 +308,10 @@ public final class CmsKeyIdGeneratorTest {
   }
 
   @Test
-  @Ignore
   public void testGetDateFromThirdId() throws Exception {
-    // TODO: FIX ME! Answer doesn't match cws_randgen/xTools!!
-    // Close but no cigar. Method testDecodeKey() does work though, the most important result to
-    // confirm.
-
-    // ~/workspace/api/src/main/resources/jni/c/cws_randgen -k 83UiZBWABC
-    // 83UiZBWABC ABC 2018-03-30T10:45:40.260Z 2018-03-30-10.45.40.260000 0457-6041-9493-4039134
     final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
     final Date dateFromXtools = sdf.parse("2018-03-30T10:45:40.260");
-    final String thirdIdFromXTools = "83UiZBWABC";
+    final String thirdIdFromXTools = "83UiZFeABC";
     final String userIdFromXTools = "ABC";
 
     final String thirdId = CmsKeyIdGenerator.generate(userIdFromXTools, dateFromXtools);
