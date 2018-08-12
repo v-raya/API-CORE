@@ -13,11 +13,17 @@ import static org.mockito.Mockito.mock;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 import java.util.TimeZone;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
+import org.apache.commons.collections4.map.PassiveExpiringMap;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator.KeyDetail;
 import gov.ca.cwds.rest.services.ServiceException;
@@ -79,6 +85,8 @@ import gov.ca.cwds.rest.services.ServiceException;
  * @author CWDS API Team
  */
 public final class CmsKeyIdGeneratorTest {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(CmsKeyIdGeneratorTest.class);
 
   private static final int GOOD_KEY_LEN = CmsPersistentObject.CMS_ID_LEN;
   private static final Pattern RGX_LEGACY_KEY =
@@ -322,6 +330,28 @@ public final class CmsKeyIdGeneratorTest {
 
     assertEquals(dateFromXtools.getTime(), localDate.getTime());
     assertEquals(thirdId, thirdIdFromXTools);
+  }
+
+  @Test
+  public void testPassiveExpiringMap() throws Exception {
+    final Map<String, String> staffLastKey =
+        new PassiveExpiringMap<>(1, TimeUnit.SECONDS, new ConcurrentHashMap<>());
+
+    final Date now = new Date();
+    String staffId = "0X5";
+    String lastKey = "83UiZFe0X5";
+
+    staffLastKey.put(staffId, CmsKeyIdGenerator.generate(staffId, now));
+    lastKey = staffLastKey.get(staffId);
+    LOGGER.info("staff id: {}, lastKey: {}", staffId, lastKey);
+
+    Thread.sleep(500);
+    lastKey = staffLastKey.get(staffId);
+    LOGGER.info("staff id: {}, lastKey: {}", staffId, lastKey);
+
+    Thread.sleep(1500);
+    lastKey = staffLastKey.get(staffId);
+    LOGGER.info("staff id: {}, lastKey: {}", staffId, lastKey);
   }
 
 }
