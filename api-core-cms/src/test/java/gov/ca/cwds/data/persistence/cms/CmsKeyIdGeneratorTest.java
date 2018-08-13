@@ -257,7 +257,7 @@ public final class CmsKeyIdGeneratorTest {
     final Calendar cal = Calendar.getInstance();
     cal.setTimeZone(TimeZone.getTimeZone("PST"));
     cal.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2017-06-09 13:04:22"));
-    final double actual = CmsKeyIdGenerator.timestampToLong(cal);
+    final long actual = CmsKeyIdGenerator.timestampToLong(cal);
     // final double expected = 5.922526581E9;
     // assertThat(actual, is(equalTo(expected)));
     assertThat(actual, is(not(0)));
