@@ -11,6 +11,10 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -253,7 +257,7 @@ public final class CmsKeyIdGeneratorTest {
     final Calendar cal = Calendar.getInstance();
     cal.setTimeZone(TimeZone.getTimeZone("PST"));
     cal.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2017-06-09 13:04:22"));
-    final double actual = CmsKeyIdGenerator.timestampToDouble(cal);
+    final double actual = CmsKeyIdGenerator.timestampToLong(cal);
     // final double expected = 5.922526581E9;
     // assertThat(actual, is(equalTo(expected)));
     assertThat(actual, is(not(0)));
@@ -377,6 +381,30 @@ public final class CmsKeyIdGeneratorTest {
     LOGGER.info("\n\n****** Wait {}, verify that keys have EXPIRED ... ******", waitMillis);
     Thread.sleep(waitMillis);
     iterateExpiringMap(keepKey, lastKey, staffIds, now, false, true);
+  }
+
+
+  @Test
+  @Ignore
+  public void generateBanchofKeysFile() {
+    String sID;
+    Date d1 = new Date();
+    try {
+      File file = File.createTempFile("cws_IDs", ".txt");
+      BufferedWriter out = new BufferedWriter(new FileWriter(file));
+      for (int i = 0; i < 1000; i++) {
+        sID = CmsKeyIdGenerator.getNextValue("");
+        out.write(sID);
+        out.newLine();
+      }
+      System.out.println("File: " + file.getAbsolutePath());
+      out.close();
+    } catch (IOException e){
+      System.out.println("Error creating temp file.");
+      return;
+    }
+    Date d2 = new Date();
+    System.out.println("Time taken (milis): " + (d2.getTime()-d1.getTime()) );
   }
 
 }

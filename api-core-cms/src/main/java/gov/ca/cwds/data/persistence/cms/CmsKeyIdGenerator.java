@@ -1,8 +1,5 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -169,24 +166,37 @@ public class CmsKeyIdGenerator {
   private static final int LEN_UIIDSTAFFID = 6; // for converting a key to a UI identifier
   private static final int LEN_UIIDTIMESTAMP = 13;
 
-  private static final double nSHIFT_HSECOND = 1L << 34; // 34 bit shift (2 to the 34th power)
-  private static final double nSHIFT_SECOND = 1L << 28; // 28 bit shift (2 to the 28th power)
-  private static final double nSHIFT_MINUTE = 1L << 22; // 22 bit shift (2 to the 22nd power)
-  private static final double nSHIFT_HOUR = 1L << 17; // 17 bit shift (2 to the 17th power)
-  private static final double nSHIFT_DAY = 1L << 12; // 12 bit shift (2 to the 12th power)
-  private static final double nSHIFT_MONTH = 1L << 8; // 8 bit shift (2 to the 8th power)
-  private static final double nSHIFT_YEAR = 1L << 0; // 0 bit shift (2 to the 0th power)
+  private static final long nSHIFT_HSECOND = 1L << 34; // NOSONAR 34 bit shift (2 ^ 34)
+  private static final long nSHIFT_SECOND = 1L << 28; // NOSONAR 28 bit shift (2 ^ 28)
+  private static final long nSHIFT_MINUTE = 1L << 22; // NOSONAR 22 bit shift (2 ^ 22)
+  private static final long nSHIFT_HOUR = 1L << 17; // NOSONAR 17 bit shift (2 ^ 17)
+  private static final long nSHIFT_DAY = 1L << 12; // NOSONAR 12 bit shift (2 ^ 12)
+  private static final long nSHIFT_MONTH = 1L << 8; // NOSONAR 8 bit shift (2 ^ 8)
+  private static final long nSHIFT_YEAR = 1L << 0; // NOSONAR 0 bit shift (2 ^ 0)
 
-  private static final BigDecimal[] POWER_BASE62 = {BigDecimal.valueOf(1.000000000000000e+000),
-      BigDecimal.valueOf(6.200000000000000e+001), BigDecimal.valueOf(3.844000000000000e+003),
-      BigDecimal.valueOf(2.383280000000000e+005), BigDecimal.valueOf(1.477633600000000e+007),
-      BigDecimal.valueOf(9.161328320000000e+008), BigDecimal.valueOf(5.680023558400000e+010),
-      BigDecimal.valueOf(3.521614606208000e+012), BigDecimal.valueOf(2.183401055848960e+014),
-      BigDecimal.valueOf(1.353708654626355e+016), BigDecimal.valueOf(8.392993658683402e+017),
-      BigDecimal.valueOf(5.203656068383710e+019), BigDecimal.valueOf(3.226266762397900e+021),
-      BigDecimal.valueOf(2.000285392686698e+023), BigDecimal.valueOf(1.240176943465753e+025),
-      BigDecimal.valueOf(7.689097049487666e+026), BigDecimal.valueOf(4.767240170682353e+028),
-      BigDecimal.valueOf(2.955688905823059e+030), BigDecimal.valueOf(1.832527121610297e+032)};
+  private static final long[] POWER_BASE62 = {
+    1L,
+    (long)Math.pow(62, 1),
+    (long)Math.pow(62, 2),
+    (long)Math.pow(62, 3),
+    (long)Math.pow(62, 4),
+    (long)Math.pow(62, 5),
+    (long)Math.pow(62, 6),
+    (long)Math.pow(62, 7),
+    (long)Math.pow(62, 8),
+    (long)Math.pow(62, 9),
+    (long)Math.pow(62, 10),
+    (long)Math.pow(62, 11),
+    (long)Math.pow(62, 12),
+    (long)Math.pow(62, 13),
+    (long)Math.pow(62, 14),
+    (long)Math.pow(62, 15),
+    (long)Math.pow(62, 16),
+    (long)Math.pow(62, 17),
+    (long)Math.pow(62, 18)};
+
+
+
 
   private static final char[] ALPHABET = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
       'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
@@ -229,7 +239,7 @@ public class CmsKeyIdGenerator {
    */
   public static String createTimestampStr(final Date ts) {
     return ts == null ? createTimestampStr()
-        : doubleToStrN(7, timestampToDouble(getTimestampSeed(ts)), POWER_BASE62);
+        : longToStrN(7, timestampToLong(getTimestampSeed(ts)), POWER_BASE62);
   }
 
   /**
@@ -245,12 +255,12 @@ public class CmsKeyIdGenerator {
    * @return CMS formatted timestamp
    */
   protected static String createTimestampStr() {
-    double nTimestamp = 0;
-    double nPreviousTimestamp = 0; // previous value - used for UNIQUENESS!
+    long nTimestamp = 0;
+    long nPreviousTimestamp = 0; // previous value - used for UNIQUENESS!
 
     // NEXT: #145948067: make previous timestamp thread-safe.
     while (true) { // NOSONAR
-      nTimestamp = timestampToDouble(getTimestampSeed(null));
+      nTimestamp = timestampToLong(getTimestampSeed(null));
 
       // If the timestamp value is the same as before, stay in the loop.
       // Otherwise, break out since it is unique.
@@ -263,77 +273,61 @@ public class CmsKeyIdGenerator {
     }
 
     // Convert the timestamp number to a base-62 string.
-    return doubleToStrN(7, nTimestamp, POWER_BASE62);
+    return longToStrN(7, nTimestamp, POWER_BASE62);
   }
 
   /**
    * @param cal preferred timestamp
    * @return the timestamp in double
    */
-  public static double timestampToDouble(final Calendar cal) {
-    double ret = 0;
-    final NumberFormat fmt = new DecimalFormat("###,###.000");
+  public static long timestampToLong(final Calendar cal) {
+    long ret = 0;
 
-    ret += cal.get(Calendar.MILLISECOND) / 10 * nSHIFT_HSECOND;
-    LOGGER.debug("MILLISECOND: {}", fmt.format(ret));
-
+    ret += cal.get(Calendar.MILLISECOND) / 10 * nSHIFT_HSECOND  ;
     ret += cal.get(Calendar.SECOND) * nSHIFT_SECOND;
-    LOGGER.debug("SECOND:      {}", fmt.format(ret));
-
     ret += cal.get(Calendar.MINUTE) * nSHIFT_MINUTE;
-    LOGGER.debug("MINUTE:      {}", fmt.format(ret));
-
     ret += cal.get(Calendar.HOUR_OF_DAY) * nSHIFT_HOUR;
-    LOGGER.debug("HOUR_OF_DAY: {}", fmt.format(ret));
-
     ret += cal.get(Calendar.DATE) * nSHIFT_DAY;
-    LOGGER.debug("DATE:        {}", fmt.format(ret));
-
-    ret += (cal.get(Calendar.MONTH)) * nSHIFT_MONTH;
-    LOGGER.debug("MONTH:       {}", fmt.format(ret));
-
-    final int year = cal.get(Calendar.YEAR);
-    ret += (year - 1900) * nSHIFT_YEAR;
-    LOGGER.debug("YEAR:        {}", fmt.format(ret));
+    ret += cal.get(Calendar.MONTH) * nSHIFT_MONTH;
+    ret += (cal.get(Calendar.YEAR) - 1900) * nSHIFT_YEAR;
 
     return ret;
   }
 
   /**
    *
-   * @param doubleTimestamp date decoded from Base62 to double
+   * @param longTimestamp date decoded from Base62 to double
    * @return date
    */
-  public static long doubleToTimestamp(double doubleTimestamp) {
+  public static long longToTimestamp(long longTimestamp) {
     final Calendar cal = Calendar.getInstance();
 
-    final long mseconds = (long) (doubleTimestamp / nSHIFT_HSECOND);
+    final long mseconds = (longTimestamp / nSHIFT_HSECOND);
     cal.set(Calendar.MILLISECOND, (int) (mseconds * 10));
-    doubleTimestamp -= mseconds * nSHIFT_HSECOND;
+    longTimestamp -= mseconds * nSHIFT_HSECOND;
 
-    final long seconds = (long) (doubleTimestamp / nSHIFT_SECOND);
+    final long seconds = (longTimestamp / nSHIFT_SECOND);
     cal.set(Calendar.SECOND, (int) seconds);
-    doubleTimestamp -= seconds * nSHIFT_SECOND;
+    longTimestamp -= seconds * nSHIFT_SECOND;
 
-    final long min = (long) (doubleTimestamp / nSHIFT_MINUTE);
+    final long min = (longTimestamp / nSHIFT_MINUTE);
     cal.set(Calendar.MINUTE, (int) min);
-    doubleTimestamp -= min * nSHIFT_MINUTE;
+    longTimestamp -= min * nSHIFT_MINUTE;
 
-    final long hours = (long) (doubleTimestamp / nSHIFT_HOUR);
+    final long hours = (longTimestamp / nSHIFT_HOUR);
     cal.set(Calendar.HOUR_OF_DAY, (int) hours);
-    doubleTimestamp -= hours * nSHIFT_HOUR;
+    longTimestamp -= hours * nSHIFT_HOUR;
 
-    final long day = (long) (doubleTimestamp / nSHIFT_DAY);
+    final long day = (longTimestamp / nSHIFT_DAY);
     cal.set(Calendar.DATE, (int) day);
-    doubleTimestamp -= day * nSHIFT_DAY;
+    longTimestamp -= day * nSHIFT_DAY;
 
-    final long month = (long) (doubleTimestamp / nSHIFT_MONTH);
+    final long month = (longTimestamp / nSHIFT_MONTH);
 
-    // Month is 1-based in C and 0-based in Java.
-    cal.set(Calendar.MONTH, ((int) month));
-    doubleTimestamp -= month * nSHIFT_MONTH;
+    cal.set(Calendar.MONTH, (int) month);
+    longTimestamp -= month * nSHIFT_MONTH;
 
-    final long year = (long) ((doubleTimestamp) / nSHIFT_YEAR);
+    final long year =  ((longTimestamp) / nSHIFT_YEAR);
     cal.set(Calendar.YEAR, (int) year + 1900);
 
     return cal.getTimeInMillis();
@@ -345,17 +339,14 @@ public class CmsKeyIdGenerator {
    * @param powers the power vector for the destination base
    * @return the double to string
    */
-  public static String doubleToStrN(int dstLen, double src, final BigDecimal[] powers) {
+  public static String longToStrN(int dstLen, long src, final long[] powers) {
     int i;
     int p = 0;
-    double integral;
-    double raw;
+    long integral;
     final char[] dest = new char[20];
 
-    final BigDecimal bdSrc = BigDecimal.valueOf(src);
-
     // Determine the largest power of the number.
-    for (i = 0; bdSrc.doubleValue() >= powers[i].doubleValue(); i++, p++); // NOSONAR
+    for (i = 0; src >= powers[i]; i++, p++); // NOSONAR
 
     // Left-pad the string with the destination string width.
     final int pad = dstLen - p;
@@ -368,12 +359,11 @@ public class CmsKeyIdGenerator {
       }
 
       for (i = 0; i < p; i++) {
-        raw = src / powers[p - i - 1].doubleValue();
+        integral = src / powers[p - i - 1];
 
         // Break down the number and convert the integer portion to a character.
-        integral = (int) raw;
-        dest[i + pad] = ALPHABET[(int) Math.abs(integral)];
-        src -= (integral * powers[p - i - 1].doubleValue()); // NOSONAR
+        dest[i + pad] = ALPHABET[(int) integral];
+        src = src % powers[p - i - 1]; // NOSONAR
       }
     }
 
@@ -391,10 +381,10 @@ public class CmsKeyIdGenerator {
    * @param src source string
    * @param base base 10 or 62
    * @param powers powers values of this base
-   * @return double representation of the string
+   * @return long representation of the string
    */
-  protected static double strToDouble(String src, int base, final BigDecimal[] powers) {
-    double ret = 0;
+  protected static long strToLong(String src, int base, final long[] powers) {
+    long ret = 0;
     final int nLen = src.length();
     int power;
 
@@ -404,7 +394,7 @@ public class CmsKeyIdGenerator {
 
         // Find the character in the conversion table and add to the value.
         if (ALPHABET[power] == c) {
-          ret += (power * powers[nLen - i - 1].doubleValue());
+          ret += (power * powers[nLen - i - 1]);
           break;
         }
       }
@@ -514,8 +504,8 @@ public class CmsKeyIdGenerator {
     }
 
     final String tsB62 = key.substring(0, LEN_KEYTIMESTAMP);
-    final double sdouble = strToDouble(tsB62, 62, POWER_BASE62);
-    final Long timestamp = doubleToTimestamp(sdouble);
+    long slong = strToLong(tsB62, 62, POWER_BASE62);
+    long timestamp = longToTimestamp(slong);
     return new Date(timestamp);
   }
 
