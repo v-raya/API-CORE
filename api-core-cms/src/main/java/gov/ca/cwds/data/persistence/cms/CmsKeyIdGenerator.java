@@ -289,7 +289,7 @@ public class CmsKeyIdGenerator {
     ret += cal.get(Calendar.DATE) * nSHIFT_DAY;
     LOGGER.debug("DATE:        {}", fmt.format(ret));
 
-    ret += (cal.get(Calendar.MONTH) + 1) * nSHIFT_MONTH;
+    ret += (cal.get(Calendar.MONTH)) * nSHIFT_MONTH;
     LOGGER.debug("MONTH:       {}", fmt.format(ret));
 
     final int year = cal.get(Calendar.YEAR);
@@ -330,7 +330,7 @@ public class CmsKeyIdGenerator {
     final long month = (long) (doubleTimestamp / nSHIFT_MONTH);
 
     // Month is 1-based in C and 0-based in Java.
-    cal.set(Calendar.MONTH, ((int) month) - 1);
+    cal.set(Calendar.MONTH, ((int) month));
     doubleTimestamp -= month * nSHIFT_MONTH;
 
     final long year = (long) ((doubleTimestamp) / nSHIFT_YEAR);

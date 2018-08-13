@@ -310,7 +310,7 @@ public final class CmsKeyIdGeneratorTest {
   public void testDecodeKey() throws Exception {
     final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
     final Date dateFromXtools = sdf.parse("2018-03-30T10:45:40.260");
-    final String thirdIdFromXTools = "83UiZFeABC";
+    final String thirdIdFromXTools = "83UiZBWABC";
 
     final Date localDate = CmsKeyIdGenerator.getDateFromKey(thirdIdFromXTools);
     System.out.println("localDate: " + sdf.format(localDate));
@@ -321,14 +321,15 @@ public final class CmsKeyIdGeneratorTest {
   public void testGetDateFromThirdId() throws Exception {
     final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
     final Date dateFromXtools = sdf.parse("2018-03-30T10:45:40.260");
-    final String thirdIdFromXTools = "83UiZFeABC";
+    final String thirdIdFromXTools = "83UiZBWABC";
     final String userIdFromXTools = "ABC";
 
     final String thirdId = CmsKeyIdGenerator.generate(userIdFromXTools, dateFromXtools);
     System.out.println("thirdId: " + thirdId);
 
     final Date localDate = CmsKeyIdGenerator.getDateFromKey(thirdId);
-    System.out.println("localDate: " + sdf.format(localDate));
+    System.out.println(
+        "localDate: " + sdf.format(localDate) + ", dateFromXtools: " + sdf.format(dateFromXtools));
 
     assertEquals(dateFromXtools.getTime(), localDate.getTime());
     assertEquals(thirdId, thirdIdFromXTools);
