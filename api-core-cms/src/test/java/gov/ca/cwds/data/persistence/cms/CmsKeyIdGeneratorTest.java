@@ -11,28 +11,32 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
+import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator.KeyDetail;
+import gov.ca.cwds.rest.services.ServiceException;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
-
 import org.apache.commons.collections4.map.PassiveExpiringMap;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator.KeyDetail;
-import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * This JNI native library runs correctly on Linux Jenkins when libLZW.so and libstdc++.so.6 are
@@ -96,9 +100,9 @@ public final class CmsKeyIdGeneratorTest {
 
   private static final int GOOD_KEY_LEN = CmsPersistentObject.CMS_ID_LEN;
   private static final Pattern RGX_LEGACY_KEY =
-      Pattern.compile("([a-z0-9]{10})", Pattern.CASE_INSENSITIVE);
+    Pattern.compile("([a-z0-9]{10})", Pattern.CASE_INSENSITIVE);
   private static final Pattern RGX_LEGACY_TIMESTAMP =
-      Pattern.compile("([a-z0-9]{7})", Pattern.CASE_INSENSITIVE);
+    Pattern.compile("([a-z0-9]{7})", Pattern.CASE_INSENSITIVE);
 
   // ===================
   // GENERATE KEY:
@@ -175,7 +179,7 @@ public final class CmsKeyIdGeneratorTest {
   public void testGenKeyBadStaffTooLong() {
     // Wrong staff id length.
     final String key = CmsKeyIdGenerator
-        .getNextValue("ab7777d7d7d7s8283jh4jskksjajfkdjbjdjjjasdfkljcxmzxcvjdhshfjjdkksahf");
+      .getNextValue("ab7777d7d7d7s8283jh4jskksjajfkdjbjdjjjasdfkljcxmzxcvjdhshfjjdkksahf");
     // assertTrue("key generated", key == null || key.length() == 0);
   }
 
@@ -297,17 +301,17 @@ public final class CmsKeyIdGeneratorTest {
 
   /**
    * <blockquote>
-   * 
+   *
    * <pre>
-      ./cws_randgen -k 83UiZBWABC
-      key:          83UiZBWABC
-      staff:        ABC
-      date:         2018-03-30T10:45:40.260Z
-      UI 19-digit:  0457-6041-9493-4039134
+   * ./cws_randgen -k 83UiZBWABC
+   * key:          83UiZBWABC
+   * staff:        ABC
+   * date:         2018-03-30T10:45:40.260Z
+   * UI 19-digit:  0457-6041-9493-4039134
    * </pre>
-   * 
+   *
    * </blockquote>
-   * 
+   *
    * @throws Exception whatever. it's a test.
    */
   @Test
@@ -333,14 +337,14 @@ public final class CmsKeyIdGeneratorTest {
 
     final Date localDate = CmsKeyIdGenerator.getDateFromKey(thirdId);
     System.out.println(
-        "localDate: " + sdf.format(localDate) + ", dateFromXtools: " + sdf.format(dateFromXtools));
+      "localDate: " + sdf.format(localDate) + ", dateFromXtools: " + sdf.format(dateFromXtools));
 
     assertEquals(dateFromXtools.getTime(), localDate.getTime());
     assertEquals(thirdId, thirdIdFromXTools);
   }
 
   protected void iterateExpiringMap(Map<String, String> keepKey, Map<String, String> lastKey,
-      String[] staffIds, Date now, boolean add, boolean expired) {
+    String[] staffIds, Date now, boolean add, boolean expired) {
     for (String staffId : staffIds) {
       String expected = keepKey.get(staffId);
 
@@ -364,7 +368,7 @@ public final class CmsKeyIdGeneratorTest {
   @Test
   public void testPassiveExpiringMap() throws Exception {
     final Map<String, String> lastKey =
-        new PassiveExpiringMap<>(700, TimeUnit.MILLISECONDS, new ConcurrentHashMap<>());
+      new PassiveExpiringMap<>(700, TimeUnit.MILLISECONDS, new ConcurrentHashMap<>());
     final Map<String, String> keepKey = new HashMap<>();
 
     final String[] staffIds = {"aaa", "aab", "aac", "aad", "aae", "aaf", "aag", "aah"};
@@ -388,7 +392,7 @@ public final class CmsKeyIdGeneratorTest {
   @Ignore
   public void generateBanchofKeysFile() {
     String sID;
-    Date d1 = new Date();
+    Date start = new Date();
     try {
       File file = File.createTempFile("cws_IDs", ".txt");
       BufferedWriter out = new BufferedWriter(new FileWriter(file));
@@ -399,12 +403,59 @@ public final class CmsKeyIdGeneratorTest {
       }
       System.out.println("File: " + file.getAbsolutePath());
       out.close();
-    } catch (IOException e){
+    } catch (IOException e) {
       System.out.println("Error creating temp file.");
       return;
     }
-    Date d2 = new Date();
-    System.out.println("Time taken (milis): " + (d2.getTime()-d1.getTime()) );
+    Date end = new Date();
+    System.out.println("Time taken (milis): " + (end.getTime() - start.getTime()));
   }
 
+
+  @Test
+  public void multiThreadTest() throws InterruptedException {
+    final int numberOfUsers = 50;
+    final int threadsPerUser = 2;
+    final int idsPerThread = 100;
+
+    final ArrayList[] ids = new ArrayList[numberOfUsers * threadsPerUser];
+
+    ExecutorService exServer = Executors.newFixedThreadPool(numberOfUsers * threadsPerUser);
+
+    Date start = new Date();
+    //Run multipe threads
+    for (int i = 0; i < numberOfUsers; i++) {
+      String staffId = StringUtils.leftPad(String.valueOf(i + 1), 3, "0");
+      for (int j = 0; j < threadsPerUser; j++) {
+        int threadNum = i * threadsPerUser + j + 1;
+        ArrayList<String> threadIds = new ArrayList<>(idsPerThread);
+        ids[threadNum - 1] = threadIds;
+
+        exServer.execute(new Runnable() {
+          @SuppressWarnings("unused")
+          @Override
+          public void run() {
+            for (int k = 0; k < idsPerThread; k++) {
+              threadIds.add(CmsKeyIdGenerator.getNextValue(staffId));
+            }
+          }
+        });
+      }
+    }
+    exServer.shutdown();
+    exServer.awaitTermination(1, TimeUnit.HOURS);
+    Date end = new Date();
+
+    Set<String> idsSet = new HashSet<>();
+    for (int i = 0; i < ids.length; i++) {
+      idsSet.addAll(ids[i]);
+    }
+
+    System.out.println("Time (milis): " + (end.getTime() - start.getTime()));
+    System.out.println(
+      "Generated Unique IDs: " + idsSet.size() + " of " + (ids.length * idsPerThread)
+        + " expected");
+
+    assertTrue(idsSet.size() == (ids.length * idsPerThread));
+  }
 }

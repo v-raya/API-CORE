@@ -203,7 +203,7 @@ public class CmsKeyIdGenerator {
       'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
       'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 
-  private static String currentValue;
+  private static String currentValue = "0000000000";
 
   /** Static class only, do not instantiate. */
   private CmsKeyIdGenerator() {
