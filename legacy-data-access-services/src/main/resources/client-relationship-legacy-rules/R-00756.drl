@@ -34,8 +34,8 @@ rule "R-00756"
             String.format(
               "The start date cannot be less than the birth date."
                   + " dateStart: '%s';"
-                  + " primary client birthDate: %tm/%<td/%<tY;"
-                  + " secondary client birthDate: %tm/%<td/%<tY;",
+                  + " primary client birthDate: '%s';"
+                  + " secondary client birthDate: '%s'",
               $clientRelationship.getStartDate(),
               $primaryBirthDate,
               $secondaryBirthDate
