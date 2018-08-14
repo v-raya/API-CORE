@@ -401,18 +401,19 @@ public final class CmsKeyIdGeneratorTest {
         out.write(sID);
         out.newLine();
       }
-      System.out.println("File: " + file.getAbsolutePath());
+      LOGGER.info("File: " + file.getAbsolutePath());
       out.close();
     } catch (IOException e) {
-      System.out.println("Error creating temp file.");
+      LOGGER.info("Error creating temp file.");
       return;
     }
     Date end = new Date();
-    System.out.println("Time taken (milis): " + (end.getTime() - start.getTime()));
+    LOGGER.info("Time taken (milis): " + (end.getTime() - start.getTime()));
   }
 
 
   @Test
+  @Ignore
   public void multiThreadTest() throws InterruptedException {
     final int numberOfUsers = 50;
     final int threadsPerUser = 2;
@@ -451,11 +452,12 @@ public final class CmsKeyIdGeneratorTest {
       idsSet.addAll(ids[i]);
     }
 
-    System.out.println("Time (milis): " + (end.getTime() - start.getTime()));
-    System.out.println(
+    LOGGER.info("Time (milis): " + (end.getTime() - start.getTime()));
+    LOGGER.info(
       "Generated Unique IDs: " + idsSet.size() + " of " + (ids.length * idsPerThread)
         + " expected");
 
-    assertTrue(idsSet.size() == (ids.length * idsPerThread));
+    assertEquals("Number of unique IDs generated NOT equals to total number of IDs generated.",
+      idsSet.size(), (ids.length * idsPerThread));
   }
 }
