@@ -27,7 +27,7 @@ rule "R-00755"
             String.format(
               "The START DATE cannot be later than END DATE."
                   + " dateStart: '%s';"
-                  + " dateEnd: %tm/%<td/%<tY;",
+                  + " dateEnd: %s'",
               $clientRelationship.getStartDate(),
               $clientRelationship.getEndDate()
             )
