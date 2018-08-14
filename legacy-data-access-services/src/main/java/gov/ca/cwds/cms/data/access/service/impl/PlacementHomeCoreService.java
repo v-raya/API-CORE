@@ -6,7 +6,16 @@ import static gov.ca.cwds.cms.data.access.service.impl.IdGenerator.generateId;
 import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
 import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Date;
+
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.authorizer.PlacementHomeResultReadAuthorizer;
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.cms.data.access.Constants.PhoneticSearchTables;
@@ -23,6 +32,7 @@ import gov.ca.cwds.cms.data.access.dao.PlacementHomeDao;
 import gov.ca.cwds.cms.data.access.dao.PlacementHomeProfileDao;
 import gov.ca.cwds.cms.data.access.dao.PlacementHomeUcDao;
 import gov.ca.cwds.cms.data.access.dao.SsaName3Dao;
+import gov.ca.cwds.cms.data.access.dto.AppAndLicHistoryAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.CLCEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.OtherAdultInHomeEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.OtherChildInHomeEntityAwareDTO;
@@ -55,16 +65,10 @@ import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeUc;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Date;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Service for create/update/find PlacementHome with business validation and data processing.
- * 
+ *
  * @author CWDS TPT-3 Team
  */
 public class PlacementHomeCoreService
@@ -72,42 +76,61 @@ public class PlacementHomeCoreService
 
   @Inject
   private BusinessValidationService businessValidationService;
+
   @Inject
   private PlacementHomeUcDao placementHomeUcDao;
+
   @Inject
   private CountyOwnershipMapper countyOwnershipMapper;
+
   @Inject
   private CountyOwnershipDao countyOwnershipDao;
+
   @Inject
   private ExternalInterfaceDao externalInterfaceDao;
+
   @Inject
   private ExternalInterfaceMapper externalInterfaceMapper;
+
   @Inject
   private EmergencyContactDetailDao emergencyContactDetailDao;
+
   @Inject
   private PlacementHomeProfileDao placementHomeProfileDao;
+
   @Inject
   private PlacementFacilityTypeHistoryDao placementFacilityTypeHistoryDao;
+
   @Inject
   private SubstituteCareProviderCoreService substituteCareProviderService;
+
   @Inject
   private OtherChildrenInPlacementHomeDao otherChildrenInPlacementHomeDao;
+
   @Inject
   private OtherPeopleScpRelationshipDao otherPeopleScpRelationshipDao;
+
   @Inject
   private OtherAdultsInPlacementHomeDao otherAdultsInPlacementHomeDao;
+
   @Inject
   private OutOfStateCheckDao outOfStateCheckDao;
+
   @Inject
   private BackgroundCheckDao backgroundCheckDao;
+
   @Inject
   private SsaName3Dao ssaName3Dao;
+
   @Inject
   private CountyLicenseCaseService countyLicenseCaseService;
 
+  @Inject
+  private ApplicationAndLicenseStatusHistoryService applicationAndLicenseStatusHistoryService;
+
   /**
    * Constructor with injected services.
-   * 
+   *
    * @param crudDao Placement Home DAO
    */
   @Inject
@@ -144,6 +167,7 @@ public class PlacementHomeCoreService
   }
 
   protected class CreateLifecycle extends DefaultDataAccessLifeCycle<PlacementHomeEntityAwareDTO> {
+
     @Override
     public void beforeDataProcessing(DataAccessBundle bundle) {
       validateParameters((PlacementHomeEntityAwareDTO) bundle.getAwareDto());
@@ -171,7 +195,7 @@ public class PlacementHomeCoreService
 
     @Override
     public void afterStore(DataAccessBundle bundle) throws DataAccessServicesException {
-      PlacementHomeEntityAwareDTO placementHomeEntityAwareDto =
+      final PlacementHomeEntityAwareDTO placementHomeEntityAwareDto =
           (PlacementHomeEntityAwareDTO) bundle.getAwareDto();
       createPlacementHomeUc(placementHomeEntityAwareDto);
       createCountyOwnership(placementHomeEntityAwareDto);
@@ -184,6 +208,7 @@ public class PlacementHomeCoreService
       createOtherAdultsInHome(placementHomeEntityAwareDto);
       createOtherChildrenInHome(placementHomeEntityAwareDto);
       createCountyLicenseCase(placementHomeEntityAwareDto);
+      createApplicationAndLicenseStatusHistory(placementHomeEntityAwareDto);
       prepareAddressPhoneticSearchKeywords(placementHomeEntityAwareDto.getEntity());
     }
 
@@ -198,7 +223,7 @@ public class PlacementHomeCoreService
     }
 
     private void createBackgroundCheck() {
-      BackgroundCheck backgroundCheck = new BackgroundCheck();
+      final BackgroundCheck backgroundCheck = new BackgroundCheck();
       backgroundCheck.setIdentifier(IdGenerator.generateId());
       backgroundCheck.setBkgrchkc((short) -1);
       backgroundCheck.setBkgrchkDt(LocalDate.now());
@@ -208,7 +233,7 @@ public class PlacementHomeCoreService
     }
 
     private void createOtherChildrenInHome(PlacementHomeEntityAwareDTO parameterObject) {
-      PlacementHome placementHome = parameterObject.getEntity();
+      final PlacementHome placementHome = parameterObject.getEntity();
       for (OtherChildInHomeEntityAwareDTO otherChildInHomeParameterObject : parameterObject
           .getOtherChildrenInHomeParameterObjects()) {
         createOtherChildInHome(placementHome, otherChildInHomeParameterObject);
@@ -246,7 +271,7 @@ public class PlacementHomeCoreService
     }
 
     private void createAdultOutOfStateChecks(OtherAdultInHomeEntityAwareDTO parameterObject) {
-      OtherAdultsInPlacementHome otherAdultInPlacementHome = parameterObject.getEntity();
+      final OtherAdultsInPlacementHome otherAdultInPlacementHome = parameterObject.getEntity();
       for (OutOfStateCheck outOfStateCheck : parameterObject.getOutOfStateChecks()) {
         outOfStateCheck.setIdentifier(generateId());
         outOfStateCheck.setRcpntCd("O");
@@ -259,7 +284,7 @@ public class PlacementHomeCoreService
 
     private void createOtherAdultInHome(PlacementHome placementHome,
         OtherAdultInHomeEntityAwareDTO parameterObject) {
-      OtherAdultsInPlacementHome otherAdultInPlacementHome = parameterObject.getEntity();
+      final OtherAdultsInPlacementHome otherAdultInPlacementHome = parameterObject.getEntity();
       otherAdultInPlacementHome.setLstUpdId(getStaffPersonId());
       otherAdultInPlacementHome.setLstUpdTs(LocalDateTime.now());
       otherAdultInPlacementHome.setFkplcHmT(placementHome.getIdentifier());
@@ -268,7 +293,7 @@ public class PlacementHomeCoreService
     }
 
     private void createAdultRelationshipsToScp(OtherAdultInHomeEntityAwareDTO parameterObject) {
-      OtherAdultsInPlacementHome otherAdultInPlacementHome = parameterObject.getEntity();
+      final OtherAdultsInPlacementHome otherAdultInPlacementHome = parameterObject.getEntity();
       for (OtherPeopleScpRelationship relationship : parameterObject.getRelationships()) {
         relationship.setIdentifier(generateId());
         relationship.setFkothAdlt(otherAdultInPlacementHome.getIdentifier());
@@ -293,13 +318,13 @@ public class PlacementHomeCoreService
 
     private void createCountyOwnership(PlacementHomeEntityAwareDTO parameterObject) {
       final PlacementHome placementHome = parameterObject.getEntity();
-      CountyOwnership countyOwnership = countyOwnershipMapper
+      final CountyOwnership countyOwnership = countyOwnershipMapper
           .toCountyOwnership(placementHome.getIdentifier(), "P", Collections.emptyList());
       countyOwnershipDao.create(countyOwnership);
     }
 
     private void createPlacementHomeUc(PlacementHomeEntityAwareDTO parameterObject) {
-      PlacementHomeUc placementHomeUc = new PlacementHomeUc();
+      final PlacementHomeUc placementHomeUc = new PlacementHomeUc();
       final PlacementHome placementHome = parameterObject.getEntity();
       placementHomeUc.setCityNm(StringUtils.upperCase(placementHome.getCityNm()));
       placementHomeUc.setGeoRgntcd(StringUtils.upperCase(placementHome.getGeoRgntcd()));
@@ -315,13 +340,14 @@ public class PlacementHomeCoreService
     }
 
     private void createExternalInterface() {
-      ExternalInterface externalInterface = externalInterfaceMapper.toExternalInterface("");
+      final ExternalInterface externalInterface = externalInterfaceMapper.toExternalInterface("");
       externalInterfaceDao.create(externalInterface);
     }
 
     private void createEmergencyContactDetail(PlacementHomeEntityAwareDTO parameterObject) {
       final PlacementHome placementHome = parameterObject.getEntity();
-      EmergencyContactDetail emergencyContactDetail = parameterObject.getEmergencyContactDetail();
+      final EmergencyContactDetail emergencyContactDetail =
+          parameterObject.getEmergencyContactDetail();
       if (emergencyContactDetail != null) {
         emergencyContactDetail.setEstblshCd("P"); // P = PLACEMENT HOME
         emergencyContactDetail.setEstblshId(placementHome.getIdentifier());
@@ -335,7 +361,7 @@ public class PlacementHomeCoreService
     private void createPlacementHomeProfile(PlacementHomeEntityAwareDTO parameterObject) {
       final PlacementHome placementHome = parameterObject.getEntity();
       for (CWSIdentifier homeLanguage : parameterObject.getHomeLanguages()) {
-        PlacementHomeProfile placementHomeProfile = new PlacementHomeProfile();
+        final PlacementHomeProfile placementHomeProfile = new PlacementHomeProfile();
         placementHomeProfile.setThirdId(generateId());
         placementHomeProfile.setChrctrC((short) homeLanguage.getCwsId());
         placementHomeProfile.setChrctrCd("L");
@@ -348,18 +374,15 @@ public class PlacementHomeCoreService
 
     /**
      * Rule: R - 11179
-     *
-     * <p>
-     * Rule Txt
-     *
      * <p>
      * If the placement home is being saved to the database for the first time then create a new
      * Placement Facility Type History row.
-     *
+     * </p>
      * <p>
      * Logic If (in focus) PLACEMENT_HOME is saved to the database for the first time then create
      * PLACEMENT_HOME > PLACEMENT_FACILITY_TYPE_HISTORY set .Start_Timestamp = System Timestamp AND
      * .Placement_Facility_Type = (in focus) PLACEMENT_HOME.Placement_Facility_Type.
+     * </p>
      */
     private void createPlacementFacilityTypeHistory(PlacementHomeEntityAwareDTO parameterObject) {
       final PlacementHome placementHome = parameterObject.getEntity();
@@ -376,16 +399,24 @@ public class PlacementHomeCoreService
     }
 
     private void createCountyLicenseCase(PlacementHomeEntityAwareDTO parameterObject)
-      throws DataAccessServicesException {
+        throws DataAccessServicesException {
       final PlacementHome placementHome = parameterObject.getEntity();
-      CLCEntityAwareDTO clcEntityAwareDTO = parameterObject.getCountyLicenseCase();
+      final CLCEntityAwareDTO clcEntityAwareDTO = parameterObject.getCountyLicenseCase();
       clcEntityAwareDTO.setPlacementHomeId(placementHome.getIdentifier());
       CountyLicenseCase countyLicenseCase = countyLicenseCaseService.create(clcEntityAwareDTO);
       placementHome.setCountyLicenseCase(countyLicenseCase);
     }
 
+    private void createApplicationAndLicenseStatusHistory(
+        PlacementHomeEntityAwareDTO parameterObject) throws DataAccessServicesException {
+      for (AppAndLicHistoryAwareDTO appAndLicHistoryAwareDTO : parameterObject
+          .getAppAndLicHistory()) {
+        applicationAndLicenseStatusHistoryService.create(appAndLicHistoryAwareDTO);
+      }
+    }
+
     private void prepareAddressPhoneticSearchKeywords(PlacementHome placementHome) {
-      SsaName3ParameterObject parameterObject = new SsaName3ParameterObject();
+      final SsaName3ParameterObject parameterObject = new SsaName3ParameterObject();
       parameterObject.setTableName(PhoneticSearchTables.ADR_PHTT);
       parameterObject.setCrudOper(INSERT_OPERATION_CODE);
       parameterObject.setIdentifier(placementHome.getIdentifier());
@@ -398,4 +429,5 @@ public class PlacementHomeCoreService
       ssaName3Dao.callStoredProc(parameterObject);
     }
   }
+
 }

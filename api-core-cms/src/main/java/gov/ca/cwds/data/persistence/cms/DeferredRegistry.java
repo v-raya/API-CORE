@@ -44,6 +44,7 @@ import gov.ca.cwds.inject.SystemCodeCache;
  * @author CWDS API Team
  * @see SystemCodeCache
  */
+@SuppressWarnings({"fb-contrib:PMB_POSSIBLE_MEMORY_BLOAT"})
 public class DeferredRegistry<T extends ApiMarker> implements ApiMarker {
 
   private static final long serialVersionUID = 1L;

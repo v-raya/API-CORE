@@ -7,6 +7,8 @@ import javax.servlet.FilterRegistration;
 
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.knowm.dropwizard.sundial.SundialBundle;
+import org.knowm.dropwizard.sundial.SundialConfiguration;
 import org.secnod.dropwizard.shiro.ShiroBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,11 +96,19 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
 
     bootstrap.addBundle(guiceBundle);
     bootstrap.addBundle(shiroBundle);
+
+    bootstrap.addBundle(new SundialBundle<MinimalApiConfiguration>() {
+      @Override
+      public SundialConfiguration getSundialConfiguration(MinimalApiConfiguration configuration) {
+        return configuration.getSundialConfiguration();
+      }
+    });
+
     initializeInternal(bootstrap);
   }
 
   @Override
-  public final void run(final T configuration, final Environment environment) throws Exception {
+  public final void run(final T configuration, final Environment environment) {
     environment.servlets().setSessionHandler(new SessionHandler());
 
     registerExceptionMappers(environment);
@@ -124,6 +134,9 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
 
     // Provides access to the guice injector from external classes, such as custom validators.
     InjectorHolder.INSTANCE.setInjector(injector);
+
+    // used by sundial jobs
+    environment.getApplicationContext().setAttribute("environment", environment);
 
     runInternal(configuration, environment);
   }

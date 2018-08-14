@@ -29,9 +29,25 @@ public class SpecialProjectDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
       SpecialProject specialProject = specialProjects.get(0);
 
       Assert.assertEquals("S-Safely Surrendered Baby", specialProject.getName());
-      Assert.assertEquals("Safely Surrendered Baby", specialProject.getDescription());
-      Assert.assertEquals((short) 1086, specialProject.getGovernmentEntity().shortValue());
-      Assert.assertEquals(Boolean.FALSE, specialProject.getArcassIndicator());
+      Assert.assertEquals("Safely Surrendered Baby", specialProject.getProjectDescription());
+      Assert.assertEquals((short) 1086, specialProject.getGovernmentEntityType().shortValue());
+      Assert.assertEquals(Boolean.FALSE, specialProject.getArrchiveAssociationIndicator());
+    });
+  }
+  
+  @Test
+  public void testFindByReferralIdAndSpecialProjectId() throws Exception {
+    cleanAllAndInsert("/dbunit/SpecialProjects.xml");
+
+    executeInTransaction(sessionFactory, sessionFactor -> {
+      List<SpecialProject> specialProjects = dao.findSpecialProjectByGovernmentEntityAndName("S-CSEC Referral", (short) 1086);
+      Assert.assertEquals(1,  specialProjects.size());
+      SpecialProject specialProject = specialProjects.get(0);
+      
+      Assert.assertEquals("S-CSEC Referral", specialProject.getName());
+      Assert.assertEquals("CSEC special project referral", specialProject.getProjectDescription());
+      Assert.assertEquals((short) 1086, specialProject.getGovernmentEntityType().shortValue());
+      Assert.assertEquals(Boolean.FALSE, specialProject.getArrchiveAssociationIndicator());
     });
   }
 }

@@ -49,6 +49,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  * @author CWDS API Team
  * @see ApiReferentialCheck
  */
+@SuppressWarnings({"fb-contrib:PMB_POSSIBLE_MEMORY_BLOAT"})
 public class ApiHibernateInterceptor extends EmptyInterceptor {
 
   private static final long serialVersionUID = 1L;
@@ -73,7 +74,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
    */
   public static void addHandler(Class<? extends PersistentObject> klass,
       Consumer<PersistentObject> consumer) {
-    LOGGER.info("addHandler -> class={}", klass.getName());
+    LOGGER.debug("addHandler -> class={}", klass.getName());
     handlers.put(klass, consumer);
   }
 
@@ -98,7 +99,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
     if (LOGGER.isTraceEnabled()) {
       LOGGER.trace("onFlushDirty -> id={}, entity={}", id, entity);
     } else {
-      LOGGER.info("onFlushDirty -> id={}, entityClass={}", id, entity.getClass().getName());
+      LOGGER.debug("onFlushDirty -> id={}, entityClass={}", id, entity.getClass().getName());
     }
 
     logLimitedAccessRecord(entity, "onFlushDirty");
@@ -125,9 +126,9 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
     if (LOGGER.isTraceEnabled()) {
-      LOGGER.debug("onSave -> id={}, entity={}", id, entity);
+      LOGGER.trace("onSave -> id={}, entity={}", id, entity);
     } else {
-      LOGGER.info("onSave -> id={}, entityClass={}", id, entity.getClass().getName());
+      LOGGER.debug("onSave -> id={}, entityClass={}", id, entity.getClass().getName());
     }
 
     logLimitedAccessRecord(entity, "onSave");
@@ -146,6 +147,8 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
   @Override
   @SuppressWarnings("rawtypes")
   public void preFlush(Iterator iter) {
+    LOGGER.debug("preFlush");
+    CaresStackUtils.logStack();
     final List list = iterToList(iter);
     for (Object obj : list) {
 
@@ -154,7 +157,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
         if (LOGGER.isTraceEnabled()) {
           LOGGER.trace("preFlush -> id={}, entity={}", entity.getPrimaryKey(), entity);
         } else {
-          LOGGER.info("preFlush -> id={}, entityClass={}", entity.getPrimaryKey(),
+          LOGGER.debug("preFlush -> id={}, entityClass={}", entity.getPrimaryKey(),
               entity.getClass().getName());
         }
 
@@ -162,7 +165,7 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
         final Class<?> klazz = entity.getClass();
 
         if (handlers.containsKey(klazz)) {
-          LOGGER.info("handler for class {}", klazz);
+          LOGGER.debug("handler for class {}", klazz);
           handlers.get(klazz).accept(entity);
         }
 
@@ -175,41 +178,49 @@ public class ApiHibernateInterceptor extends EmptyInterceptor {
    */
   @Override
   public void postFlush(@SuppressWarnings("rawtypes") Iterator iterator) {
-    LOGGER.debug("postFlush -> after commit");
+    LOGGER.debug("postFlush");
+    CaresStackUtils.logStack();
   }
 
   @Override
   public void afterTransactionBegin(Transaction tx) {
+    LOGGER.debug("afterTransactionBegin");
+    CaresStackUtils.logStack();
     if (tx != null) {
-      LOGGER.trace("afterTransactionBegin -> txt status={}", tx.getStatus());
+      LOGGER.debug("afterTransactionBegin -> txn status={}", tx.getStatus());
     }
     super.afterTransactionBegin(tx);
   }
 
   @Override
   public void beforeTransactionCompletion(Transaction tx) {
+    LOGGER.debug("****** before transaction completion ******");
+    CaresStackUtils.logStack();
     if (tx != null) {
-      LOGGER.debug("beforeTransactionCompletion -> txt status={}", tx.getStatus());
+      LOGGER.debug("beforeTransactionCompletion -> txn status={}", tx.getStatus());
     }
     super.beforeTransactionCompletion(tx);
   }
 
   @Override
   public void afterTransactionCompletion(Transaction tx) {
+    LOGGER.debug("****** after transaction completion ******");
+    CaresStackUtils.logStack();
     if (tx != null) {
-      LOGGER.debug("afterTransactionCompletion -> txt status={}", tx.getStatus());
+      LOGGER.debug("afterTransactionCompletion -> txn status={}", tx.getStatus());
     }
     super.afterTransactionCompletion(tx);
   }
 
   @Override
   public Object instantiate(String entityName, EntityMode entityMode, Serializable id) {
-    LOGGER.trace("preFlush -> id={}, entityClass={}", id, entityName);
+    LOGGER.debug("instantiate -> id={}, entityClass={}", id, entityName);
     return super.instantiate(entityName, entityMode, id);
   }
 
   @SuppressWarnings({"rawtypes", "unchecked"})
   private synchronized List<?> iterToList(Iterator iter) {
+    LOGGER.debug("iterToList");
     return IteratorUtils.toList(iter);
   }
 

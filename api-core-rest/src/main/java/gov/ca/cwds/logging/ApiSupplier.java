@@ -17,7 +17,7 @@ public class ApiSupplier<T> {
     this.supplier = supplier;
   }
 
-  T createContents() {
+  public T createContents() {
     return supplier.get();
   }
 

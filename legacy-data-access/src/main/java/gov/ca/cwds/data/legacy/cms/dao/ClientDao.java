@@ -31,7 +31,6 @@ public class ClientDao extends BaseDaoImpl<Client> {
     super(sessionFactory);
   }
 
-
   /**
    * 
    * @param facilityId facility primary key
@@ -97,7 +96,7 @@ public class ClientDao extends BaseDaoImpl<Client> {
   }
 
   private Client findSingleFacility(String queryName, Consumer<Query<Client>> setParameters) {
-    Session session = getSessionFactory().getCurrentSession();
+    Session session = grabSession();
     Class<Client> entityClass = getEntityClass();
     Query<Client> query =
         session.createNamedQuery(entityClass.getSimpleName() + "." + queryName, entityClass);

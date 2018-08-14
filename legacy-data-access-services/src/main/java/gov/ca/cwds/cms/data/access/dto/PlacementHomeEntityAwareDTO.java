@@ -1,23 +1,24 @@
 package gov.ca.cwds.cms.data.access.dto;
 
-import gov.ca.cwds.cms.data.access.CWSIdentifier;
-import gov.ca.cwds.data.legacy.cms.entity.EmergencyContactDetail;
-import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import gov.ca.cwds.cms.data.access.CWSIdentifier;
+import gov.ca.cwds.data.legacy.cms.entity.EmergencyContactDetail;
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
+
 /**
  * @author CWDS CALS API Team
  */
-
 public class PlacementHomeEntityAwareDTO extends BaseEntityAwareDTO<PlacementHome> {
 
   private List<SCPEntityAwareDTO> scpParameterObjects = new ArrayList<>();
-  private List<OtherChildInHomeEntityAwareDTO> otherChildrenInHomeParameterObjects = new ArrayList<>();
+  private List<OtherChildInHomeEntityAwareDTO> otherChildrenInHomeParameterObjects =
+      new ArrayList<>();
   private List<OtherAdultInHomeEntityAwareDTO> otherAdultInHomeParameterObjects = new ArrayList<>();
+  private List<AppAndLicHistoryAwareDTO> appAndLicHistory = new ArrayList<>();
   private EmergencyContactDetail emergencyContactDetail;
   private CLCEntityAwareDTO countyLicenseCase;
 
@@ -35,8 +36,7 @@ public class PlacementHomeEntityAwareDTO extends BaseEntityAwareDTO<PlacementHom
     return scpParameterObjects;
   }
 
-  public void setScpParameterObjects(
-      List<SCPEntityAwareDTO> parameterObjects) {
+  public void setScpParameterObjects(List<SCPEntityAwareDTO> parameterObjects) {
     this.scpParameterObjects = parameterObjects;
   }
 
@@ -53,7 +53,8 @@ public class PlacementHomeEntityAwareDTO extends BaseEntityAwareDTO<PlacementHom
     this.otherChildrenInHomeParameterObjects = parameterObjects;
   }
 
-  public void addOtherChildrenInHomeParameterObject(OtherChildInHomeEntityAwareDTO parameterObject) {
+  public void addOtherChildrenInHomeParameterObject(
+      OtherChildInHomeEntityAwareDTO parameterObject) {
     otherChildrenInHomeParameterObjects.add(parameterObject);
   }
 
@@ -78,9 +79,12 @@ public class PlacementHomeEntityAwareDTO extends BaseEntityAwareDTO<PlacementHom
     return emergencyContactDetail;
   }
 
-  public void setEmergencyContactDetail(
-      EmergencyContactDetail emergencyContactDetail) {
+  public void setEmergencyContactDetail(EmergencyContactDetail emergencyContactDetail) {
     this.emergencyContactDetail = emergencyContactDetail;
+  }
+
+  public List<AppAndLicHistoryAwareDTO> getAppAndLicHistory() {
+    return appAndLicHistory;
   }
 
   public CLCEntityAwareDTO getCountyLicenseCase() {
@@ -90,4 +94,5 @@ public class PlacementHomeEntityAwareDTO extends BaseEntityAwareDTO<PlacementHom
   public void setCountyLicenseCase(CLCEntityAwareDTO countyLicenseCase) {
     this.countyLicenseCase = countyLicenseCase;
   }
+
 }

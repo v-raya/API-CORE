@@ -8,7 +8,7 @@ import gov.ca.cwds.logging.LoggingContext;
 import gov.ca.cwds.logging.MDCLoggingContext;
 
 /**
- * DI for Auditing classes
+ * DI for Auditing classes.
  * 
  * @author CWDS API Team
  */
@@ -19,4 +19,5 @@ public class AuditingModule extends AbstractModule {
     bind(AuditLogger.class).to(AuditLoggerImpl.class);
     bind(LoggingContext.class).to(MDCLoggingContext.class);
   }
+
 }

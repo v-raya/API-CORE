@@ -3,13 +3,6 @@ package gov.ca.cwds.rest.services.cms;
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import gov.ca.cwds.data.cms.SystemCodeDao;
-import gov.ca.cwds.data.cms.SystemMetaDao;
-import gov.ca.cwds.rest.api.domain.cms.SystemCode;
-import gov.ca.cwds.rest.api.domain.cms.SystemCodeListResponse;
-import gov.ca.cwds.rest.api.domain.cms.SystemMeta;
-import gov.ca.cwds.rest.api.domain.cms.SystemMetaListResponse;
-import io.dropwizard.jackson.Jackson;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,41 +13,49 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import gov.ca.cwds.data.cms.SystemCodeDao;
+import gov.ca.cwds.data.cms.SystemMetaDao;
+import gov.ca.cwds.rest.api.domain.cms.SystemCode;
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeListResponse;
+import gov.ca.cwds.rest.api.domain.cms.SystemMeta;
+import gov.ca.cwds.rest.api.domain.cms.SystemMetaListResponse;
+import io.dropwizard.jackson.Jackson;
+
+@SuppressWarnings({"javadoc", "squid:S2925"})
 public class CachingSystemCodeServiceTest {
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private static SystemMetaListResponse systemMetaListResponse;
   private static SystemCodeListResponse systemCodeListResponse;
   private static CachingSystemCodeService cachingSystemCodeService;
+  private static CachingSystemCodeService cachingSystemCodeServicePreLoaded;
 
-  @SuppressWarnings("javadoc")
   @BeforeClass
   public static void setupClass() throws Exception {
     SystemCodeDao systemCodeDao = mock(SystemCodeDao.class);
     SystemMetaDao systemMetaDao = mock(SystemMetaDao.class);
 
-    systemMetaListResponse =
-        MAPPER
-            .readValue(
-                fixture("fixtures/rest/services/cms/CachingSystemCodeService/test-syetm-codes-meta.json"),
-                SystemMetaListResponse.class);
+    systemMetaListResponse = MAPPER.readValue(
+        fixture("fixtures/rest/services/cms/CachingSystemCodeService/test-syetm-codes-meta.json"),
+        SystemMetaListResponse.class);
     gov.ca.cwds.data.persistence.cms.SystemMeta[] persistenceSystemMetas =
         createPersistenceSystemMetas(systemMetaListResponse);
 
-    systemCodeListResponse =
-        MAPPER.readValue(
-            fixture("fixtures/rest/services/cms/CachingSystemCodeService/test-system-codes.json"),
-            SystemCodeListResponse.class);
+    systemCodeListResponse = MAPPER.readValue(
+        fixture("fixtures/rest/services/cms/CachingSystemCodeService/test-system-codes.json"),
+        SystemCodeListResponse.class);
     gov.ca.cwds.data.persistence.cms.SystemCode[] persistenceSystemCodes =
         createPersistenceSystemCodes(systemCodeListResponse);
 
     when(systemMetaDao.findAll()).thenReturn(persistenceSystemMetas);
     when(systemCodeDao.findByForeignKeyMetaTable("ADDR_TPC")).thenReturn(persistenceSystemCodes);
-    when(systemCodeDao.findBySystemCodeId((short) 27)).thenReturn(
-        getPersistenceSystemCode(systemCodeListResponse, (short) 27));
+    when(systemCodeDao.findBySystemCodeId((short) 27))
+        .thenReturn(getPersistenceSystemCode(systemCodeListResponse, (short) 27));
     when(systemCodeDao.findByForeignKeyMetaTable("GVR_ENTC")).thenReturn(persistenceSystemCodes);
 
     cachingSystemCodeService = new CachingSystemCodeService(systemCodeDao, systemMetaDao, 1, false);
+    cachingSystemCodeServicePreLoaded =
+        new CachingSystemCodeService(systemCodeDao, systemMetaDao, 1, true);
   }
 
   @Test
@@ -107,9 +108,8 @@ public class CachingSystemCodeServiceTest {
         cachingSystemCodeService.verifyActiveSystemCodeDescriptionForMeta("Business", "ADDR_TPC");
     Assert.assertTrue(validCode);
 
-    validCode =
-        cachingSystemCodeService.verifyActiveSystemCodeDescriptionForMeta("Business-kjhkh",
-            "ADDR_TPC");
+    validCode = cachingSystemCodeService.verifyActiveSystemCodeDescriptionForMeta("Business-kjhkh",
+        "ADDR_TPC");
     Assert.assertFalse(validCode);
 
     validCode = cachingSystemCodeService.verifyActiveSystemCodeDescriptionForMeta("Business", " ");
@@ -125,7 +125,8 @@ public class CachingSystemCodeServiceTest {
 
   @Test
   public void testGetSystemCodeId() throws Exception {
-    Assert.assertEquals(new Short("27"), cachingSystemCodeService.getSystemCodeId("Business", "ADDR_TPC"));
+    Assert.assertEquals(new Short("27"),
+        cachingSystemCodeService.getSystemCodeId("Business", "ADDR_TPC"));
   }
 
   @Test
@@ -187,9 +188,8 @@ public class CachingSystemCodeServiceTest {
 
   @Test
   public void testSystemCode() throws Exception {
-    SystemCode expectedSystemCode =
-        new SystemCode((short) 27, (short) 0, "N", "", "Business", "0001", "0000000000",
-            "ADDR_TPC", "");
+    SystemCode expectedSystemCode = new SystemCode((short) 27, (short) 0, "N", "", "Business",
+        "0001", "0000000000", "ADDR_TPC", "");
     SystemCode actualSystemCode = cachingSystemCodeService.getSystemCode((short) 27);
     Assert.assertNotNull(actualSystemCode);
     Assert.assertEquals(expectedSystemCode, actualSystemCode);
@@ -207,9 +207,8 @@ public class CachingSystemCodeServiceTest {
      */
     Thread.currentThread().sleep(2000);
 
-    SystemCode expectedSystemCode =
-        new SystemCode((short) 27, (short) 0, "N", "", "Business", "0001", "0000000000",
-            "ADDR_TPC", "");
+    SystemCode expectedSystemCode = new SystemCode((short) 27, (short) 0, "N", "", "Business",
+        "0001", "0000000000", "ADDR_TPC", "");
     SystemCode actualSystemCode = cachingSystemCodeService.getSystemCode((short) 27);
     Assert.assertNotNull(actualSystemCode);
     Assert.assertEquals(expectedSystemCode, actualSystemCode);

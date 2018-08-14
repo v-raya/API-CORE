@@ -51,9 +51,6 @@ import org.slf4j.LoggerFactory;
  */
 public class SharedSessionFactory implements SessionFactory {
 
-  /**
-   * Default serialization.
-   */
   private static final long serialVersionUID = 1L;
 
   private static final int DEFAULT_DELAY = 3500;

@@ -296,6 +296,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonProperty("open_case_id")
   private String openCaseId;
 
+  @JsonProperty("open_case_responsible_agency_code")
+  private String openCaseResponsibleAgencyCode;
+
   @JsonProperty("type")
   private transient String type;
 
@@ -1014,7 +1017,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   /**
    * Get client's open case id
    * 
-   * @return Opne case id
+   * @return open case id
    */
   public String getOpenCaseId() {
     return openCaseId;
@@ -1027,6 +1030,24 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    */
   public void setOpenCaseId(String openCaseId) {
     this.openCaseId = openCaseId;
+  }
+
+  /**
+   * Get responsible agency code for open case.
+   * 
+   * @return Responsible agency code for open case.
+   */
+  public String getOpenCaseResponsibleAgencyCode() {
+    return openCaseResponsibleAgencyCode;
+  }
+
+  /**
+   * Set responsible agency code for open case.
+   * 
+   * @param openCaseResponsibleAgencyCode Responsible agency code for open case.
+   */
+  public void setOpenCaseResponsibleAgencyCode(String openCaseResponsibleAgencyCode) {
+    this.openCaseResponsibleAgencyCode = openCaseResponsibleAgencyCode;
   }
 
   /**

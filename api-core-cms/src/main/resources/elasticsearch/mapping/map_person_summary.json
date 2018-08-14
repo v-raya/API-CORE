@@ -110,6 +110,10 @@
       "type": "text",
       "store": true
     },
+    "open_case_responsible_agency_code": {
+      "type": "text",
+      "store": true
+    },
     "client_county": {
       "properties": {
         "id": {

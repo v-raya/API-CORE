@@ -3,6 +3,8 @@ package gov.ca.cwds.rest.api.domain;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -67,6 +69,12 @@ public class DomainChef {
   protected static final Pattern ZIPCODE_PATTERN = Pattern.compile("0*([0-9]*)");
 
   /**
+   * Formatter for LocalDate. "This class is immutable and thread-safe."
+   */
+  protected static final DateTimeFormatter localDateFormatter =
+      DateTimeFormatter.ofPattern(DATE_FORMAT);
+
+  /**
    * Constructor
    * 
    * Private to prevent construction
@@ -123,6 +131,17 @@ public class DomainChef {
   }
 
   /**
+   * @param date - LocalDate to format
+   * @return String in DATE_FORMAT
+   */
+  public static String cookLocalDate(LocalDate date) {
+    if (date != null) {
+      return date.format(localDateFormatter);
+    }
+    return null;
+  }
+
+  /**
    * @param date date to cook
    * @return String in TIMESTAMP_FORMAT
    */
@@ -165,6 +184,23 @@ public class DomainChef {
     if (StringUtils.isNotEmpty(trimDate)) {
       try {
         return new SimpleDateFormat(DATE_FORMAT).parse(trimDate);
+      } catch (Exception e) {
+        throw new ApiException(e);
+      }
+    }
+    return null;
+  }
+
+  /**
+   * @param date - String to un cook to LocalDate
+   * @return LocalDate
+   */
+  public static LocalDate uncookLocalDateString(String date) {
+    String trimDate = StringUtils.trim(date);
+    if (StringUtils.isNotEmpty(trimDate)) {
+      try {
+        LocalDate localDate = null;
+        return localDate = LocalDate.parse(trimDate, localDateFormatter);
       } catch (Exception e) {
         throw new ApiException(e);
       }

@@ -41,8 +41,6 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CachingSystemCodeService.class);
 
-  public static final String LOGICAL_ID = "logical_id";
-
   /**
    * System codes cache.
    */
@@ -81,6 +79,9 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
         LOGGER.error("Error loading system codes", e);
         throw new ServiceException(e);
       }
+
+      LOGGER.info("System code cache size: {}, pre-loaded: {}, refresh after (seconds): {}",
+          systemCodeCache.size(), preloadCache, secondsToRefreshCache);
     }
   }
 
@@ -210,6 +211,11 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
     }
 
     return valid;
+  }
+
+  @Override
+  public long getCacheSize() {
+    return systemCodeCache.size();
   }
 
   /**
@@ -363,5 +369,4 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
     }
 
   }
-
 }

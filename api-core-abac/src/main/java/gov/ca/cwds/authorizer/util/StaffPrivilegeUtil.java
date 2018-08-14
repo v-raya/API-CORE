@@ -2,7 +2,7 @@ package gov.ca.cwds.authorizer.util;
 
 
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.Set;
 
 import gov.ca.cwds.authorizer.StaffPrivilegeType;
@@ -42,7 +42,7 @@ public final class StaffPrivilegeUtil {
     }
 
     final String countyName = perryAccount.getCountyName();
-    final Set<StaffPrivilegeType> results = new HashSet<>();
+    final EnumSet<StaffPrivilegeType> results = EnumSet.noneOf(StaffPrivilegeType.class);
     for (final String privilege : privileges) {
       if (RESOURCE_MANAGEMENT.equalsIgnoreCase(privilege)) {
         results.add(StaffPrivilegeType.RESOURCE_MANAGEMENT);

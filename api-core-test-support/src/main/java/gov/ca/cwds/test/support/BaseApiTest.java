@@ -1,8 +1,9 @@
 package gov.ca.cwds.test.support;
 
-import io.dropwizard.Configuration;
 import org.junit.After;
 import org.junit.Rule;
+
+import io.dropwizard.Configuration;
 
 /**
  * @author CWDS CALS API Team
@@ -11,7 +12,8 @@ public abstract class BaseApiTest<T extends Configuration> {
 
   protected abstract BaseDropwizardApplication<T> getApplication();
 
-    @Rule
+  @SuppressWarnings({"unchecked", "fb-contrib:PCOA_PARTIALLY_CONSTRUCTED_OBJECT_ACCESS"})
+  @Rule
   public RestClientTestRule clientTestRule = new RestClientTestRule(getApplication());
 
   public String transformDTOtoJSON(Object o) throws Exception {
@@ -19,7 +21,6 @@ public abstract class BaseApiTest<T extends Configuration> {
   }
 
   @After
-  public void tearDown() throws Exception {
-  }
+  public void tearDown() throws Exception {}
 
 }

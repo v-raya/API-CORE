@@ -47,7 +47,7 @@ public class JWTTokenProvider implements TokenProvider<JsonIdentityAuthParams> {
         .setKeyPassword(properties.getProperty("perryRealm.keyStoreKeyPassword"));
     //Enc Key
     configuration
-        .setEncryptionEnabled(Boolean.valueOf(properties.getProperty("perryRealm.useEncryption")));
+        .setEncryptionEnabled(Boolean.parseBoolean(properties.getProperty("perryRealm.useEncryption")));
     configuration.getKeyStore()
         .setEncKeyPassword(properties.getProperty("perryRealm.encKeyPassword"));
     configuration.getKeyStore().setEncAlias(properties.getProperty("perryRealm.encKeyAlias"));

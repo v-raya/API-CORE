@@ -32,6 +32,11 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
 
   private SessionFactory sessionFactory;
 
+  /**
+   * Grab a session! If a current session is available, return it, else open a new session.
+   * 
+   * @return usable session
+   */
   public Session grabSession() {
     Session session;
     try {
@@ -43,15 +48,37 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
     return session;
   }
 
+  /**
+   * Join the current transaction or begin a new one, as needed.
+   * 
+   * @param session active session
+   * @return active or new transaction
+   */
   public Transaction joinTransaction(Session session) {
     Transaction txn = session.getTransaction();
     txn = txn != null ? txn : session.beginTransaction();
 
-    if (TransactionStatus.NOT_ACTIVE == txn.getStatus() || !txn.isActive()) {
+    if (!txn.getRollbackOnly() && !txn.isActive() && txn.getStatus() != TransactionStatus.COMMITTING
+        && txn.getStatus() != TransactionStatus.COMMITTED
+        && txn.getStatus() != TransactionStatus.FAILED_COMMIT
+        && txn.getStatus() != TransactionStatus.MARKED_ROLLBACK
+        && txn.getStatus() != TransactionStatus.ROLLED_BACK
+        && txn.getStatus() != TransactionStatus.ROLLING_BACK) {
+      LOGGER.debug("Begin **NEW** transaction");
       txn.begin();
+      CaresStackUtils.logStack();
     }
 
     return txn;
+  }
+
+  /**
+   * Find the default schema for the current datasource.
+   * 
+   * @return default schema for this datasource
+   */
+  public String getCurrentSchema() {
+    return (String) getSessionFactory().getProperties().get("hibernate.default_schema");
   }
 
   /**
@@ -91,7 +118,7 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
   @Override
   public T delete(Serializable id) {
     final Session session = grabSession();
-    T object = find(id);
+    final T object = find(id);
     if (object != null) {
       session.delete(object);
     }
@@ -107,9 +134,9 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
   public T create(T object) {
     grabSession();
     if (object.getPrimaryKey() != null) {
-      T databaseObject = find(object.getPrimaryKey());
+      final T databaseObject = find(object.getPrimaryKey());
       if (databaseObject != null) {
-        String msg = MessageFormat.format("entity with id={0} already exists", object);
+        final String msg = MessageFormat.format("entity with id={0} already exists", object);
         LOGGER.error(msg);
         throw new EntityExistsException(msg);
       }
@@ -125,12 +152,16 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
   @Override
   public T update(T object) {
     final Session session = grabSession();
-    T databaseObject = find(object.getPrimaryKey());
+    final T databaseObject = find(object.getPrimaryKey());
     if (databaseObject == null) {
-      String msg =
+      final String msg =
           MessageFormat.format("Unable to find entity with id={0}", object.getPrimaryKey());
+      LOGGER.error(msg);
       throw new EntityNotFoundException(msg);
     }
+
+    // DRS: HOT-2176: isolate "possible non-threadsafe access to session".
+    session.flush();
     session.evict(databaseObject);
     return persist(object);
   }

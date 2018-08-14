@@ -20,6 +20,7 @@ import java.util.Optional;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.ActionRequest;
+import org.elasticsearch.action.admin.indices.alias.IndicesAliasesRequestBuilder;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequestBuilder;
 import org.elasticsearch.action.index.IndexRequest;
@@ -229,12 +230,15 @@ public class ElasticsearchDao implements Closeable {
    * @return true if successful
    */
   private boolean createOrSwapAlias(final String alias, final String index, final String oldIndex) {
+    IndicesAliasesRequestBuilder preparedAliases = getClient().admin().indices()
+      .prepareAliases();
+    TimeValue timeout = TimeValue.timeValueMillis(TIMEOUT_MILLIS);
     if (StringUtils.isBlank(oldIndex)) {
-      return getClient().admin().indices().prepareAliases().addAlias(index, alias)
-          .get(TimeValue.timeValueMillis(TIMEOUT_MILLIS)).isAcknowledged();
+      return preparedAliases.addAlias(index, alias)
+          .get(timeout).isAcknowledged();
     } else {
-      return getClient().admin().indices().prepareAliases().removeAlias(oldIndex, alias)
-          .addAlias(index, alias).get(TimeValue.timeValueMillis(TIMEOUT_MILLIS))
+      return preparedAliases.removeAlias(oldIndex, alias)
+          .addAlias(index, alias).get(timeout)
           .isAcknowledged();
 
     }

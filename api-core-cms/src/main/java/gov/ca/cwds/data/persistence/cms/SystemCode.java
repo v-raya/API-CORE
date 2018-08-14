@@ -6,23 +6,20 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnTransformer;
-import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
-
 
 /**
  * {@link PersistentObject} representing a CMS System Code record.
  * 
  * @author CWDS API Team
  */
-@NamedQueries({
-    @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.SystemCode.findByForeignKeyMetaTable",
-        query = "FROM SystemCode WHERE foreignKeyMetaTable = :foreignKeyMetaTable"),
-    @NamedQuery(name = "gov.ca.cwds.data.persistence.cms.SystemCode.findBySystemCodeId",
-        query = "FROM SystemCode WHERE systemId = :systemId")})
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.SystemCode.findByForeignKeyMetaTable",
+    query = "FROM SystemCode WHERE foreignKeyMetaTable = :foreignKeyMetaTable")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.SystemCode.findBySystemCodeId",
+    query = "FROM SystemCode WHERE systemId = :systemId")
 @Entity
 @Table(name = "SYS_CD_C")
 public class SystemCode extends CmsPersistentObject {

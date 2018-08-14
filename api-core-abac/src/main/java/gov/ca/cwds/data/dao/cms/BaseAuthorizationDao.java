@@ -1,8 +1,10 @@
 package gov.ca.cwds.data.dao.cms;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.context.internal.ManagedSessionContext;
 
 /**
  * Reliable session acquisition, regardless of datasource or transaction boundaries.
@@ -11,6 +13,8 @@ import org.hibernate.SessionFactory;
  */
 public class BaseAuthorizationDao {
 
+  private static final ThreadLocal<Boolean> bound = new ThreadLocal<>();
+
   protected final SessionFactory sessionFactory;
 
   /**
@@ -18,19 +22,53 @@ public class BaseAuthorizationDao {
    * 
    * @param sessionFactory Hibernate session factory
    */
-  public BaseAuthorizationDao(SessionFactory sessionFactory) {
+  BaseAuthorizationDao(SessionFactory sessionFactory) {
     this.sessionFactory = sessionFactory;
   }
 
-  protected Session grabSession() {
+  /**
+   * Get the current session, if any, or open a new one.
+   *
+   * @return active session, true if opened a new session
+   */
+  @SuppressWarnings("squid:S2095") // the session is returned from here, so can't be closed here
+  Pair<Session, Boolean> grabSession() {
+    boolean openedNew = false;
     Session session;
     try {
       session = sessionFactory.getCurrentSession();
     } catch (HibernateException e) {
       session = sessionFactory.openSession();
+      openedNew = true;
+    }
+    if (isManaged()) {
+      ManagedSessionContext.bind(session);
     }
 
-    return session;
+    return Pair.of(session, openedNew);
+  }
+
+  public static void setXaMode(boolean xaMode) {
+    bound.set(xaMode);
+  }
+
+  public static void clearXaMode() {
+    bound.remove();
+  }
+
+  private boolean getXaMode() {
+    final Boolean ret = bound.get();
+    return ret != null && ret;
+  }
+
+  void finalizeSession() {
+    if (isManaged()) {
+      ManagedSessionContext.unbind(sessionFactory);
+    }
+  }
+
+  private boolean isManaged() {
+    return !getXaMode();
   }
 
 }

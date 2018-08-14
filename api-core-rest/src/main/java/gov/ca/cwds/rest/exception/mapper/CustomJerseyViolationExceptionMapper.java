@@ -1,8 +1,8 @@
 package gov.ca.cwds.rest.exception.mapper;
 
 
+import com.google.common.collect.Sets;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -41,8 +41,8 @@ public class CustomJerseyViolationExceptionMapper
 
   @Override
   public Response toResponse(final JerseyViolationException exception) {
-    final Set<IssueDetails> validationDetailsList = new HashSet<>();
-    final Set<ConstraintViolation<?>> transgressions = exception.getConstraintViolations();
+   final Set<ConstraintViolation<?>> transgressions = exception.getConstraintViolations();
+    final Set<IssueDetails> validationDetailsList = Sets.newHashSetWithExpectedSize(transgressions.size());
 
     for (ConstraintViolation<?> v : transgressions) {
       String message = CustomConstraintMessage.getMessage(v, exception.getInvocable()).trim();
@@ -80,7 +80,7 @@ public class CustomJerseyViolationExceptionMapper
     String marshalledDetails = StringUtils.removeStart(data, "The request body");
     IssueDetails details = null;
     try {
-      details = (IssueDetails) JsonUtils.from(marshalledDetails, IssueDetails.class);
+      details = JsonUtils.from(marshalledDetails, IssueDetails.class);
     } catch (IOException e) {
       LOG.debug("Cannot unmarshall validation details", e);
     }

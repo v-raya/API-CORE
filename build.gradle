@@ -14,7 +14,7 @@ allprojects {
 
     project.ext {
         commonGroupId = "gov.ca.cwds.api"
-        apiSecurityVersion = "1.6.2_418-RC"
+        apiSecurityVersion = "3.0.4_825-RC"
         configPath = "$rootProject.projectDir/config/"
         dropwizardVersion = "1.1.0"
         dropwizardFlywayVersion = "1.0.0-1"
@@ -43,8 +43,10 @@ allprojects {
         powerMockVersion = "1.7.3"
         h2Version = "1.4.194"
         liquibaseVersion = "3.5.3"
+        newrelicVersion = "3.41.0"
+        dropwizardSundialVersion = "1.3.1"
 
-        projectMajorVersion = "1.7.3"
+        projectMajorVersion = "1.7.4"
 
         isRelease = System.getProperty("Release") == "true"
         buildNumber = System.getProperty('BuildNumber')
@@ -58,7 +60,7 @@ allprojects {
         snapshotMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/repo"
         releaseMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/libs-release"
         artifactoryRepo = (isRelease ? releaseMavenRepo : snapshotMavenRepo)
-        allTestCoverageFile = "$buildDir/jacoco/allTestCoverage.exec"
+        allTestCoverageFile = "${project.rootDir}/build/jacoco/test.exec"
     }
 
     sourceSets {
@@ -89,6 +91,10 @@ allprojects {
         
         //Authenticate:
         compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.5' 
+        
+        compile group: 'org.apache.poi', name: 'poi', version: '3.17'
+        compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
+        compile group: 'org.apache.poi', name: 'poi-scratchpad', version: '3.17'
     }
 
     tasks.withType(Test) {
@@ -191,10 +197,9 @@ subprojects {
 task libLicenseReport(){
     def licenseFiles = []
     def subProjectsDir = "${project.projectDir}/legal/subProjects"
-    def licenseCsvFile = "${project.projectDir}/legal/licenses.csv"
     mkdir subProjectsDir
     new File(subProjectsDir).eachFileRecurse { licenseFiles << it }
-    (new File(licenseCsvFile)).text = files(licenseFiles).collect{it.getText()}.join("\n")
+    (new File("${project.projectDir}/legal/licenses.csv")).text = files(licenseFiles).collect{it.getText()}.join("\n")
 }
 
 dependencies {
