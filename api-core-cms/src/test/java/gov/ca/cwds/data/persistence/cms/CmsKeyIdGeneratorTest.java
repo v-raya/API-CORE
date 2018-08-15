@@ -11,8 +11,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
-import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator.KeyDetail;
-import gov.ca.cwds.rest.services.ServiceException;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -22,21 +20,28 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import org.apache.commons.collections4.map.PassiveExpiringMap;
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jetty.util.ConcurrentHashSet;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator.KeyDetail;
+import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * This JNI native library runs correctly on Linux Jenkins when libLZW.so and libstdc++.so.6 are
@@ -100,9 +105,9 @@ public final class CmsKeyIdGeneratorTest {
 
   private static final int GOOD_KEY_LEN = CmsPersistentObject.CMS_ID_LEN;
   private static final Pattern RGX_LEGACY_KEY =
-    Pattern.compile("([a-z0-9]{10})", Pattern.CASE_INSENSITIVE);
+      Pattern.compile("([a-z0-9]{10})", Pattern.CASE_INSENSITIVE);
   private static final Pattern RGX_LEGACY_TIMESTAMP =
-    Pattern.compile("([a-z0-9]{7})", Pattern.CASE_INSENSITIVE);
+      Pattern.compile("([a-z0-9]{7})", Pattern.CASE_INSENSITIVE);
 
   // ===================
   // GENERATE KEY:
@@ -179,7 +184,7 @@ public final class CmsKeyIdGeneratorTest {
   public void testGenKeyBadStaffTooLong() {
     // Wrong staff id length.
     final String key = CmsKeyIdGenerator
-      .getNextValue("ab7777d7d7d7s8283jh4jskksjajfkdjbjdjjjasdfkljcxmzxcvjdhshfjjdkksahf");
+        .getNextValue("ab7777d7d7d7s8283jh4jskksjajfkdjbjdjjjasdfkljcxmzxcvjdhshfjjdkksahf");
     // assertTrue("key generated", key == null || key.length() == 0);
   }
 
@@ -337,14 +342,14 @@ public final class CmsKeyIdGeneratorTest {
 
     final Date localDate = CmsKeyIdGenerator.getDateFromKey(thirdId);
     System.out.println(
-      "localDate: " + sdf.format(localDate) + ", dateFromXtools: " + sdf.format(dateFromXtools));
+        "localDate: " + sdf.format(localDate) + ", dateFromXtools: " + sdf.format(dateFromXtools));
 
     assertEquals(dateFromXtools.getTime(), localDate.getTime());
     assertEquals(thirdId, thirdIdFromXTools);
   }
 
   protected void iterateExpiringMap(Map<String, String> keepKey, Map<String, String> lastKey,
-    String[] staffIds, Date now, boolean add, boolean expired) {
+      String[] staffIds, Date now, boolean add, boolean expired) {
     for (String staffId : staffIds) {
       String expected = keepKey.get(staffId);
 
@@ -368,7 +373,7 @@ public final class CmsKeyIdGeneratorTest {
   @Test
   public void testPassiveExpiringMap() throws Exception {
     final Map<String, String> lastKey =
-      new PassiveExpiringMap<>(700, TimeUnit.MILLISECONDS, new ConcurrentHashMap<>());
+        new PassiveExpiringMap<>(700, TimeUnit.MILLISECONDS, new ConcurrentHashMap<>());
     final Map<String, String> keepKey = new HashMap<>();
 
     final String[] staffIds = {"aaa", "aab", "aac", "aad", "aae", "aaf", "aag", "aah"};
@@ -390,12 +395,13 @@ public final class CmsKeyIdGeneratorTest {
 
   @Test
   @Ignore
-  public void generateBanchofKeysFile() {
+  public void generateBunchOfKeysFile() {
     String sID;
-    Date start = new Date();
+    final Date start = new Date();
+
     try {
-      File file = File.createTempFile("cws_IDs", ".txt");
-      BufferedWriter out = new BufferedWriter(new FileWriter(file));
+      final File file = File.createTempFile("cws_IDs", ".txt");
+      final BufferedWriter out = new BufferedWriter(new FileWriter(file));
       for (int i = 0; i < 1000; i++) {
         sID = CmsKeyIdGenerator.getNextValue("");
         out.write(sID);
@@ -407,57 +413,62 @@ public final class CmsKeyIdGeneratorTest {
       LOGGER.info("Error creating temp file.");
       return;
     }
-    Date end = new Date();
-    LOGGER.info("Time taken (milis): " + (end.getTime() - start.getTime()));
+
+    LOGGER.info("Time taken (milis): " + (System.currentTimeMillis() - start.getTime()));
   }
 
+  private void genKeys(String staffId, int staffThreadNum, int idsPerThread, Set<String> results) {
+    Thread.currentThread().setName(staffId + '_' + staffThreadNum);
+    LOGGER.info("start: staffId: {}, staff thread #: {}", staffId, staffThreadNum);
+    for (int i = 0; i < idsPerThread; i++) {
+      results.add(CmsKeyIdGenerator.getNextValue(staffId));
+    }
+    LOGGER.info("stop:  staffId: {}", staffId);
+  }
 
   @Test
-  @Ignore
-  public void multiThreadTest() throws InterruptedException {
-    final int numberOfUsers = 50;
+  // @Ignore
+  public void multiThreadTest() throws Exception {
+    LOGGER.info("multiThreadTest");
+    final int numberOfUsers = 25;
     final int threadsPerUser = 2;
     final int idsPerThread = 100;
+    final int expected = numberOfUsers * threadsPerUser * idsPerThread;
 
-    final ArrayList[] ids = new ArrayList[numberOfUsers * threadsPerUser];
+    final int maxRunningThreads = Math.max(Runtime.getRuntime().availableProcessors(), 4);
 
-    ExecutorService exServer = Executors.newFixedThreadPool(numberOfUsers * threadsPerUser);
+    // final ExecutorService exServer = Executors.newFixedThreadPool(maxRunningThreads);
+    final Date start = new Date();
 
-    Date start = new Date();
-    //Run multipe threads
-    for (int i = 0; i < numberOfUsers; i++) {
-      String staffId = StringUtils.leftPad(String.valueOf(i + 1), 3, "0");
+    final List<String> staffIds = IntStream.rangeClosed(1, numberOfUsers - 1).boxed()
+        .map(i -> StringUtils.leftPad(String.valueOf(i + 1), 3, "0")).collect(Collectors.toList());
+    final Set<String> results = new ConcurrentHashSet<>();
+    LOGGER.info("staffIds.size(): {}", staffIds.size());
+
+    // It's a unit test, not a stress test. Jenkins doesn't have CPU to spare.
+    final List<ForkJoinTask<?>> tasks =
+        new ArrayList<>(numberOfUsers * threadsPerUser * idsPerThread);
+    final ForkJoinPool threadPool = new ForkJoinPool(maxRunningThreads);
+
+    // Queue worker threads.
+    for (String staffId : staffIds) {
       for (int j = 0; j < threadsPerUser; j++) {
-        int threadNum = i * threadsPerUser + j + 1;
-        ArrayList<String> threadIds = new ArrayList<>(idsPerThread);
-        ids[threadNum - 1] = threadIds;
-
-        exServer.execute(new Runnable() {
-          @SuppressWarnings("unused")
-          @Override
-          public void run() {
-            for (int k = 0; k < idsPerThread; k++) {
-              threadIds.add(CmsKeyIdGenerator.getNextValue(staffId));
-            }
-          }
-        });
+        final int staffThreadNum = j + 1;
+        tasks.add(threadPool.submit(() -> genKeys(staffId, staffThreadNum, idsPerThread, results)));
       }
     }
-    exServer.shutdown();
-    exServer.awaitTermination(1, TimeUnit.HOURS);
-    Date end = new Date();
 
-    Set<String> idsSet = new HashSet<>();
-    for (int i = 0; i < ids.length; i++) {
-      idsSet.addAll(ids[i]);
+    // Join threads, wait for tasks to finish.
+    for (ForkJoinTask<?> task : tasks) {
+      task.get(); // join thread
     }
 
-    LOGGER.info("Time (milis): " + (end.getTime() - start.getTime()));
-    LOGGER.info(
-      "Generated Unique IDs: " + idsSet.size() + " of " + (ids.length * idsPerThread)
-        + " expected");
+    LOGGER.info("Time (milis): " + (System.currentTimeMillis() - start.getTime()));
+    final int actual = results.size();
+    LOGGER.info("expected keys: {}, actual keys: {}", expected, actual);
 
     assertEquals("Number of unique IDs generated NOT equals to total number of IDs generated.",
-      idsSet.size(), (ids.length * idsPerThread));
+        expected, actual);
   }
+
 }
