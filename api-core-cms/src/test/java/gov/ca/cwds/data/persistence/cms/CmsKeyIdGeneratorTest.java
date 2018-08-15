@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,6 +33,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.apache.commons.collections4.SortedBag;
+import org.apache.commons.collections4.bag.TreeBag;
 import org.apache.commons.collections4.map.PassiveExpiringMap;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.util.ConcurrentHashSet;
@@ -415,13 +418,24 @@ public final class CmsKeyIdGeneratorTest {
     LOGGER.info("Time taken (milis): " + (System.currentTimeMillis() - start.getTime()));
   }
 
-  private void genKeys(String staffId, int staffThreadNum, int idsPerThread, Set<String> results) {
-    Thread.currentThread().setName(staffId + '_' + staffThreadNum);
-    LOGGER.info("start: staff id: {}, thread #: {}", staffId, staffThreadNum);
+  private SortedBag<String> genKeys(String staffId, int threadNum, int idsPerThread,
+      Set<String> results) {
+    Thread.currentThread().setName(staffId + '_' + threadNum);
+    LOGGER.info("start: staff id: {}, thread #: {}", staffId, threadNum);
+
+    final SortedBag<String> bag = new TreeBag<>(String::compareTo);
+    final Set<String> staffResults = new HashSet<>(threadNum * idsPerThread);
+
     for (int i = 0; i < idsPerThread; i++) {
-      results.add(CmsKeyIdGenerator.getNextValue(staffId));
+      final String key = CmsKeyIdGenerator.getNextValue(staffId);
+      staffResults.add(key);
+      bag.add(key);
     }
-    LOGGER.info("stop:  staff id: {}", staffId);
+
+    results.addAll(staffResults);
+    LOGGER.info("stop:  staff id: {}, bag: {}, staffResults: {}", staffId, bag.size(),
+        staffResults.size());
+    return bag;
   }
 
   @Test
@@ -446,8 +460,8 @@ public final class CmsKeyIdGeneratorTest {
     // Queue worker threads.
     for (String staffId : staffIds) {
       for (int j = 0; j < threadsPerUser; j++) {
-        final int staffThreadNum = j + 1;
-        tasks.add(threadPool.submit(() -> genKeys(staffId, staffThreadNum, idsPerThread, results)));
+        final int threadNum = j + 1;
+        tasks.add(threadPool.submit(() -> genKeys(staffId, threadNum, idsPerThread, results)));
       }
     }
 

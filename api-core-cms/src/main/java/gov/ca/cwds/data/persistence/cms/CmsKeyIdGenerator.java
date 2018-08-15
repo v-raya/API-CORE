@@ -207,7 +207,7 @@ public class CmsKeyIdGenerator {
       'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 
   private static final Map<String, String> lastKeys =
-      new PassiveExpiringMap<>(1, TimeUnit.MINUTES, new ConcurrentHashMap<>(1013));
+      new PassiveExpiringMap<>(1, TimeUnit.MINUTES, new ConcurrentHashMap<>(10103));
 
   /** Static class only, do not instantiate. */
   private CmsKeyIdGenerator() {
