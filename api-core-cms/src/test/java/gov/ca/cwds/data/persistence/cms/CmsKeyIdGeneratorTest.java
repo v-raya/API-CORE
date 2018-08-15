@@ -417,24 +417,24 @@ public final class CmsKeyIdGeneratorTest {
 
   private void genKeys(String staffId, int staffThreadNum, int idsPerThread, Set<String> results) {
     Thread.currentThread().setName(staffId + '_' + staffThreadNum);
-    LOGGER.info("start: staffId: {}, staff thread #: {}", staffId, staffThreadNum);
+    LOGGER.info("start: staff id: {}, thread #: {}", staffId, staffThreadNum);
     for (int i = 0; i < idsPerThread; i++) {
       results.add(CmsKeyIdGenerator.getNextValue(staffId));
     }
-    LOGGER.info("stop:  staffId: {}", staffId);
+    LOGGER.info("stop:  staff id: {}", staffId);
   }
 
   @Test
   public void multiThreadTest() throws Exception {
     LOGGER.info("multiThreadTest");
-    final int numberOfUsers = 25;
+    final int numberOfUsers = 50;
     final int threadsPerUser = 2;
     final int idsPerThread = 100;
     final int expectedCount = numberOfUsers * threadsPerUser * idsPerThread;
     final int maxRunningThreads = Math.max(Runtime.getRuntime().availableProcessors(), 4);
     final Date start = new Date();
 
-    final List<String> staffIds = IntStream.rangeClosed(1, numberOfUsers - 1).boxed()
+    final List<String> staffIds = IntStream.rangeClosed(1, numberOfUsers).boxed()
         .map(i -> StringUtils.leftPad(String.valueOf(i + 1), 3, "0")).collect(Collectors.toList());
     final Set<String> results = new ConcurrentHashSet<>();
     LOGGER.info("staffIds.size(): {}", staffIds.size());
