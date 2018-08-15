@@ -299,7 +299,8 @@ public class CmsKeyIdGenerator {
    * @return the unique key from staffId
    */
   public static String getNextValue(String staffId) {
-    final StaffGate gate = StaffGate.getStaffGate(staffId);
+    final StaffGate gate =
+        StaffGate.getStaffGate(StringUtils.isNotBlank(staffId) ? staffId : DEFAULT_USER_ID);
 
     String newValue;
     do {
