@@ -116,6 +116,8 @@ public class CmsKeyIdGenerator {
 
     private static final long serialVersionUID = 1L;
 
+    // Two options for gate storage:
+    //
     // private static final Map<String, WeakReference<StaffGate>> gates =
     // Collections.synchronizedMap(new WeakHashMap<>(10103));
 
