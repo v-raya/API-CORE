@@ -2,11 +2,15 @@ package gov.ca.cwds.data.persistence.cms;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.collections4.map.PassiveExpiringMap;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -174,7 +178,8 @@ public class CmsKeyIdGenerator {
   private static final long nSHIFT_MONTH = 1L << 8; // NOSONAR 8 bit shift (2 ^ 8)
   private static final long nSHIFT_YEAR = 1L << 0; // NOSONAR 0 bit shift (2 ^ 0)
 
-  private static final long[] POWER_BASE62 = {
+ //@formatter:off
+ private static final long[] POWER_BASE62 = {
     1L,
     (long)Math.pow(62, 1),
     (long)Math.pow(62, 2),
@@ -194,16 +199,15 @@ public class CmsKeyIdGenerator {
     (long)Math.pow(62, 16),
     (long)Math.pow(62, 17),
     (long)Math.pow(62, 18)};
-
-
-
+ //@formatter:on
 
   private static final char[] ALPHABET = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
       'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
       'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
       'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 
-  private static String currentValue = "0000000000";
+  private static final Map<String, String> lastKeys =
+      new PassiveExpiringMap<>(1, TimeUnit.MINUTES, new ConcurrentHashMap<>(1013));
 
   /** Static class only, do not instantiate. */
   private CmsKeyIdGenerator() {
@@ -221,14 +225,14 @@ public class CmsKeyIdGenerator {
    * @param staffId the staffId
    * @return the unique key from staffId
    */
-  public static synchronized String getNextValue(String staffId) {
+  public static String getNextValue(String staffId) {
     String newValue;
     do {
       newValue = generate(staffId, new Date());
-    } while (newValue.equals(currentValue));
+    } while (lastKeys.containsKey(newValue));
 
-    currentValue = newValue;
-    return currentValue;
+    lastKeys.put(newValue, newValue);
+    return newValue;
   }
 
   /**
@@ -283,7 +287,7 @@ public class CmsKeyIdGenerator {
   public static long timestampToLong(final Calendar cal) {
     long ret = 0;
 
-    ret += cal.get(Calendar.MILLISECOND) / 10 * nSHIFT_HSECOND  ;
+    ret += cal.get(Calendar.MILLISECOND) / 10 * nSHIFT_HSECOND;
     ret += cal.get(Calendar.SECOND) * nSHIFT_SECOND;
     ret += cal.get(Calendar.MINUTE) * nSHIFT_MINUTE;
     ret += cal.get(Calendar.HOUR_OF_DAY) * nSHIFT_HOUR;
@@ -327,7 +331,7 @@ public class CmsKeyIdGenerator {
     cal.set(Calendar.MONTH, (int) month);
     longTimestamp -= month * nSHIFT_MONTH;
 
-    final long year =  ((longTimestamp) / nSHIFT_YEAR);
+    final long year = ((longTimestamp) / nSHIFT_YEAR);
     cal.set(Calendar.YEAR, (int) year + 1900);
 
     return cal.getTimeInMillis();

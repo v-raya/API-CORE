@@ -395,22 +395,20 @@ public final class CmsKeyIdGeneratorTest {
 
   @Test
   @Ignore
-  public void generateBunchOfKeysFile() {
+  public void generateBunchOfKeysFile() throws Exception {
     String sID;
     final Date start = new Date();
+    final File file = File.createTempFile("cws_IDs", ".txt");
 
-    try {
-      final File file = File.createTempFile("cws_IDs", ".txt");
-      final BufferedWriter out = new BufferedWriter(new FileWriter(file));
+    try (final BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
       for (int i = 0; i < 1000; i++) {
         sID = CmsKeyIdGenerator.getNextValue("");
         out.write(sID);
         out.newLine();
       }
       LOGGER.info("File: " + file.getAbsolutePath());
-      out.close();
     } catch (IOException e) {
-      LOGGER.info("Error creating temp file.");
+      LOGGER.warn("Error creating temp file.", e);
       return;
     }
 
@@ -427,17 +425,13 @@ public final class CmsKeyIdGeneratorTest {
   }
 
   @Test
-  // @Ignore
   public void multiThreadTest() throws Exception {
     LOGGER.info("multiThreadTest");
     final int numberOfUsers = 25;
     final int threadsPerUser = 2;
     final int idsPerThread = 100;
-    final int expected = numberOfUsers * threadsPerUser * idsPerThread;
-
+    final int expectedCount = numberOfUsers * threadsPerUser * idsPerThread;
     final int maxRunningThreads = Math.max(Runtime.getRuntime().availableProcessors(), 4);
-
-    // final ExecutorService exServer = Executors.newFixedThreadPool(maxRunningThreads);
     final Date start = new Date();
 
     final List<String> staffIds = IntStream.rangeClosed(1, numberOfUsers - 1).boxed()
@@ -446,8 +440,7 @@ public final class CmsKeyIdGeneratorTest {
     LOGGER.info("staffIds.size(): {}", staffIds.size());
 
     // It's a unit test, not a stress test. Jenkins doesn't have CPU to spare.
-    final List<ForkJoinTask<?>> tasks =
-        new ArrayList<>(numberOfUsers * threadsPerUser * idsPerThread);
+    final List<ForkJoinTask<?>> tasks = new ArrayList<>(expectedCount);
     final ForkJoinPool threadPool = new ForkJoinPool(maxRunningThreads);
 
     // Queue worker threads.
@@ -465,10 +458,10 @@ public final class CmsKeyIdGeneratorTest {
 
     LOGGER.info("Time (milis): " + (System.currentTimeMillis() - start.getTime()));
     final int actual = results.size();
-    LOGGER.info("expected keys: {}, actual keys: {}", expected, actual);
+    LOGGER.info("expected keys: {}, actual keys: {}", expectedCount, actual);
 
     assertEquals("Number of unique IDs generated NOT equals to total number of IDs generated.",
-        expected, actual);
+        expectedCount, actual);
   }
 
 }
