@@ -391,6 +391,7 @@ public final class CmsKeyIdGeneratorTest {
 
     waitMillis = 1800;
     LOGGER.info("\n\n****** Wait {}, verify that keys have EXPIRED ... ******", waitMillis);
+    LOGGER.info("\n\n****** BEFORE iterating: lastKey.size(): {} ******", lastKey.size());
     Thread.sleep(waitMillis);
     iterateExpiringMap(keepKey, lastKey, staffIds, now, false, true);
   }

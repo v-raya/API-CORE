@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -111,9 +112,77 @@ import gov.ca.cwds.rest.services.ServiceException;
 @SuppressWarnings({"fb-contrib:MDM_THREAD_YIELD", "findbugs:UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD"})
 public class CmsKeyIdGenerator {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CmsKeyIdGenerator.class);
+  static class StaffGate implements Serializable {
 
-  private static final String DEFAULT_USER_ID = "0X5";
+    private static final long serialVersionUID = 1L;
+
+    // private static final Map<String, WeakReference<StaffGate>> gates =
+    // Collections.synchronizedMap(new WeakHashMap<>(10103));
+
+    private static final Map<String, StaffGate> gates = new ConcurrentHashMap<>();
+
+    private final String staffId;
+
+    private StaffGate(String staffId) {
+      this.staffId = staffId;
+    }
+
+    /**
+     * Synchronize briefly to acquire the user's key gate.
+     * 
+     * @param staffId user's staff id
+     * @return user's gate
+     */
+    public static synchronized StaffGate getStaffGate(String staffId) {
+      StaffGate ret;
+      if (gates.containsKey(staffId)) {
+        ret = gates.get(staffId);
+        // ret = gates.get(staffId).get();
+      } else {
+        ret = new StaffGate(staffId);
+        gates.put(staffId, new StaffGate(staffId));
+        // gates.put(staffId, new WeakReference<StaffGate>(new StaffGate(staffId)));
+      }
+
+      return ret;
+    }
+
+    /**
+     * Each unique user gets an instance of this class. Since this method is synchronized, each user
+     * can only call generate on one thread at a time, even for multiple simultaneous requests.
+     * 
+     * @return generated CWS/CMS key
+     */
+    public synchronized String generate() {
+      return CmsKeyIdGenerator.generate(staffId, new Date());
+    }
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((staffId == null) ? 0 : staffId.hashCode());
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      StaffGate other = (StaffGate) obj;
+      if (staffId == null) {
+        if (other.staffId != null)
+          return false;
+      } else if (!staffId.equals(other.staffId))
+        return false;
+      return true;
+    }
+
+  }
 
   /**
    * Self-validating bean class for staff id.
@@ -206,6 +275,10 @@ public class CmsKeyIdGenerator {
       'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
       'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(CmsKeyIdGenerator.class);
+
+  private static final String DEFAULT_USER_ID = "0X5";
+
   private static final Map<String, String> lastKeys =
       new PassiveExpiringMap<>(1, TimeUnit.MINUTES, new ConcurrentHashMap<>(10103));
 
@@ -215,21 +288,24 @@ public class CmsKeyIdGenerator {
   }
 
   /**
-   * Generate next identifier with the given staff id.
+   * Generate next CWS/CMS identifier with the given staff id and current datetime.
    *
    * <p>
-   * TODO: <strong>This approach does NOT scale!</strong> Implement the Iterator interface instead.
-   * Block other threads only on a unique staff id instead of blocking all staff id's. Construct an
-   * object for a given staff id and generate keys with {@code Iterator.next()}.
+   * <strong>Synchronizing on the class monitor does NOT scale</strong> Instead, implement the
+   * Iterator interface. Block only on unique staff id; don't block other staff.Construct an object
+   * for a given staff id and generate keys with {@code Iterator.next()}.
    *
    * @param staffId the staffId
    * @return the unique key from staffId
    */
   public static String getNextValue(String staffId) {
+    final StaffGate gate = StaffGate.getStaffGate(staffId);
+
     String newValue;
     do {
-      newValue = generate(staffId, new Date());
-    } while (lastKeys.containsKey(newValue));
+      newValue = gate.generate();
+      // newValue = generate(staffId, new Date());
+    } while (lastKeys.containsKey(newValue)); // safety
 
     lastKeys.put(newValue, newValue);
     return newValue;
@@ -498,9 +574,10 @@ public class CmsKeyIdGenerator {
   }
 
   /**
-   *
-   * @param key - Third Id
-   * @return date extracted from third id
+   * Extract the date portion from a CWS/CMS identifier.
+   * 
+   * @param key - CWS/CMS identifier
+   * @return date extracted from unique key
    */
   public static Date getDateFromKey(String key) {
     if (StringUtils.isBlank(key) || key.length() < LEN_KEYTIMESTAMP) {
