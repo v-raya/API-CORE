@@ -1,23 +1,20 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import gov.ca.cwds.rest.resources.ResourceParamValidator;
+import gov.ca.cwds.rest.services.ServiceException;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
 import org.apache.commons.collections4.map.PassiveExpiringMap;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import gov.ca.cwds.rest.resources.ResourceParamValidator;
-import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * Java port of gov.ca.cwds.rest.util.jni.KeyJNI and underlying shared library, cws_randgen.cpp.
@@ -112,135 +109,9 @@ import gov.ca.cwds.rest.services.ServiceException;
 @SuppressWarnings({"fb-contrib:MDM_THREAD_YIELD", "findbugs:UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD"})
 public class CmsKeyIdGenerator {
 
-  static class StaffGate implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    // Two options for gate storage:
-    //
-    // private static final Map<String, WeakReference<StaffGate>> gates =
-    // Collections.synchronizedMap(new WeakHashMap<>(10103));
-
-    private static final Map<String, StaffGate> gates = new ConcurrentHashMap<>();
-
-    private final String staffId;
-
-    private StaffGate(String staffId) {
-      this.staffId = staffId;
-    }
-
-    /**
-     * Synchronize briefly to acquire the user's key gate.
-     * 
-     * @param staffId user's staff id
-     * @return user's gate
-     */
-    public static synchronized StaffGate getStaffGate(String staffId) {
-      StaffGate ret;
-      if (gates.containsKey(staffId)) {
-        ret = gates.get(staffId);
-        // ret = gates.get(staffId).get();
-      } else {
-        ret = new StaffGate(staffId);
-        gates.put(staffId, new StaffGate(staffId));
-        // gates.put(staffId, new WeakReference<StaffGate>(new StaffGate(staffId)));
-      }
-
-      return ret;
-    }
-
-    /**
-     * Each unique user gets an instance of this class. Since this method is synchronized, each user
-     * can only call generate on one thread at a time, even for multiple simultaneous requests.
-     * 
-     * @return generated CWS/CMS key
-     */
-    public synchronized String generate() {
-      return CmsKeyIdGenerator.generate(staffId, new Date());
-    }
-
-    @Override
-    public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + ((staffId == null) ? 0 : staffId.hashCode());
-      return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj)
-        return true;
-      if (obj == null)
-        return false;
-      if (getClass() != obj.getClass())
-        return false;
-      StaffGate other = (StaffGate) obj;
-      if (staffId == null) {
-        if (other.staffId != null)
-          return false;
-      } else if (!staffId.equals(other.staffId))
-        return false;
-      return true;
-    }
-
-  }
-
-  /**
-   * Self-validating bean class for staff id.
-   *
-   * <p>
-   * javax.validation only works on real "bean" classes, not Java native classes like String or
-   * Long. Therefore, wrap the incoming staff id in a small class, which follows the Java Bean
-   * specification (i.e., getters and setters).
-   *
-   * @author CWDS API Team
-   */
-  public static final class StringKey {
-
-    @NotNull
-    @Size(min = 3, max = 3)
-    @Pattern(regexp = "[a-zA-Z0-9]+")
-    private String value;
-
-    /**
-     * Constructor.
-     *
-     * @param value String to evaluate
-     */
-    public StringKey(String value) {
-      this.value = value;
-    }
-
-    public String getValue() {
-      return value;
-    }
-
-    public void setValue(String value) {
-      this.value = value;
-    }
-  }
-
-  /**
-   * Utility struct class stores details of CWDS key decomposition.
-   * 
-   * <p>
-   * <strong>WARNING</strong>: <strong>Do NOT change this struct</strong>. It maps directly the C++
-   * library.
-   * </p>
-   */
-  public static final class KeyDetail {
-    public String key; // NOSONAR
-    public String staffId; // NOSONAR
-    public String UITimestamp; // NOSONAR
-    public String PTimestamp; // NOSONAR
-  }
-
   private static final int LEN_KEYTIMESTAMP = 7;
-
   private static final int LEN_UIIDSTAFFID = 6; // for converting a key to a UI identifier
   private static final int LEN_UIIDTIMESTAMP = 13;
-
   private static final long nSHIFT_HSECOND = 1L << 34; // NOSONAR 34 bit shift (2 ^ 34)
   private static final long nSHIFT_SECOND = 1L << 28; // NOSONAR 28 bit shift (2 ^ 28)
   private static final long nSHIFT_MINUTE = 1L << 22; // NOSONAR 22 bit shift (2 ^ 22)
@@ -248,43 +119,40 @@ public class CmsKeyIdGenerator {
   private static final long nSHIFT_DAY = 1L << 12; // NOSONAR 12 bit shift (2 ^ 12)
   private static final long nSHIFT_MONTH = 1L << 8; // NOSONAR 8 bit shift (2 ^ 8)
   private static final long nSHIFT_YEAR = 1L << 0; // NOSONAR 0 bit shift (2 ^ 0)
-
- //@formatter:off
- private static final long[] POWER_BASE62 = {
+  //@formatter:off
+  private static final long[] POWER_BASE62 = {
     1L,
-    (long)Math.pow(62, 1),
-    (long)Math.pow(62, 2),
-    (long)Math.pow(62, 3),
-    (long)Math.pow(62, 4),
-    (long)Math.pow(62, 5),
-    (long)Math.pow(62, 6),
-    (long)Math.pow(62, 7),
-    (long)Math.pow(62, 8),
-    (long)Math.pow(62, 9),
-    (long)Math.pow(62, 10),
-    (long)Math.pow(62, 11),
-    (long)Math.pow(62, 12),
-    (long)Math.pow(62, 13),
-    (long)Math.pow(62, 14),
-    (long)Math.pow(62, 15),
-    (long)Math.pow(62, 16),
-    (long)Math.pow(62, 17),
-    (long)Math.pow(62, 18)};
- //@formatter:on
-
+    (long) Math.pow(62, 1),
+    (long) Math.pow(62, 2),
+    (long) Math.pow(62, 3),
+    (long) Math.pow(62, 4),
+    (long) Math.pow(62, 5),
+    (long) Math.pow(62, 6),
+    (long) Math.pow(62, 7),
+    (long) Math.pow(62, 8),
+    (long) Math.pow(62, 9),
+    (long) Math.pow(62, 10),
+    (long) Math.pow(62, 11),
+    (long) Math.pow(62, 12),
+    (long) Math.pow(62, 13),
+    (long) Math.pow(62, 14),
+    (long) Math.pow(62, 15),
+    (long) Math.pow(62, 16),
+    (long) Math.pow(62, 17),
+    (long) Math.pow(62, 18)};
   private static final char[] ALPHABET = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
-      'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-      'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-      'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-
+    'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+    'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+    'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsKeyIdGenerator.class);
-
   private static final String DEFAULT_USER_ID = "0X5";
-
+  //@formatter:on
   private static final Map<String, String> lastKeys =
-      new PassiveExpiringMap<>(1, TimeUnit.MINUTES, new ConcurrentHashMap<>(10103));
+    new PassiveExpiringMap<>(1, TimeUnit.SECONDS, new ConcurrentHashMap<>(10103));
 
-  /** Static class only, do not instantiate. */
+  /**
+   * Static class only, do not instantiate.
+   */
   private CmsKeyIdGenerator() {
     // Static class only, do not instantiate.
   }
@@ -301,17 +169,8 @@ public class CmsKeyIdGenerator {
    * @return the unique key from staffId
    */
   public static String getNextValue(String staffId) {
-    final StaffGate gate =
-        StaffGate.getStaffGate(StringUtils.isNotBlank(staffId) ? staffId : DEFAULT_USER_ID);
-
-    String newValue;
-    do {
-      newValue = gate.generate();
-      // newValue = generate(staffId, new Date());
-    } while (lastKeys.containsKey(newValue)); // safety
-
-    lastKeys.put(newValue, newValue);
-    return newValue;
+    return StaffGate.getStaffGate(StringUtils.isNotBlank(staffId) ? staffId : DEFAULT_USER_ID)
+      .getNextValue();
   }
 
   /**
@@ -322,7 +181,7 @@ public class CmsKeyIdGenerator {
    */
   public static String createTimestampStr(final Date ts) {
     return ts == null ? createTimestampStr()
-        : longToStrN(7, timestampToLong(getTimestampSeed(ts)), POWER_BASE62);
+      : longToStrN(7, timestampToLong(getTimestampSeed(ts)), POWER_BASE62);
   }
 
   /**
@@ -378,7 +237,6 @@ public class CmsKeyIdGenerator {
   }
 
   /**
-   *
    * @param longTimestamp date decoded from Base62 to double
    * @return date
    */
@@ -424,12 +282,14 @@ public class CmsKeyIdGenerator {
    */
   public static String longToStrN(int dstLen, long src, final long[] powers) {
     int i;
-    int p = 0;
+    int p;
     long integral;
     final char[] dest = new char[20];
 
     // Determine the largest power of the number.
-    for (i = 0; src >= powers[i]; i++, p++); // NOSONAR
+    for (p = 0; src >= powers[p]; p++) {
+      ; // NOSONAR
+    }
 
     // Left-pad the string with the destination string width.
     final int pad = dstLen - p;
@@ -551,7 +411,7 @@ public class CmsKeyIdGenerator {
    *
    * @param key 10 character, base-62 legacy key
    * @return UI identifier in format 0000-0000-0000-0000000. If provided key is null or empty, then
-   *         null is returned.
+   * null is returned.
    */
   public static String getUIIdentifierFromKey(String key) {
     if (StringUtils.isBlank(key)) {
@@ -563,22 +423,22 @@ public class CmsKeyIdGenerator {
     LOGGER.trace("strTimestamp={}, strStaffId={}", tsB62, staffB62);
 
     final String tsB10 =
-        StringUtils.leftPad(String.valueOf(Base62.toBase10(tsB62)), LEN_UIIDTIMESTAMP, '0');
+      StringUtils.leftPad(String.valueOf(Base62.toBase10(tsB62)), LEN_UIIDTIMESTAMP, '0');
     final String staffB10 =
-        StringUtils.leftPad(String.valueOf(Base62.toBase10(staffB62)), LEN_UIIDSTAFFID, '0');
+      StringUtils.leftPad(String.valueOf(Base62.toBase10(staffB62)), LEN_UIIDSTAFFID, '0');
     LOGGER.trace("tsB10={}, staffB10={}", tsB10, staffB10);
 
     final StringBuilder buf = new StringBuilder();
     buf.append(tsB10.substring(0, 4)).append('-').append(tsB10.substring(4, 8)).append('-')
-        .append(tsB10.substring(8, 12)).append('-').append(tsB10.substring(12))
-        .append(staffB10.substring(0));
+      .append(tsB10.substring(8, 12)).append('-').append(tsB10.substring(12))
+      .append(staffB10.substring(0));
 
     return buf.toString();
   }
 
   /**
    * Extract the date portion from a CWS/CMS identifier.
-   * 
+   *
    * @param key - CWS/CMS identifier
    * @return date extracted from unique key
    */
@@ -591,6 +451,143 @@ public class CmsKeyIdGenerator {
     long slong = strToLong(tsB62, 62, POWER_BASE62);
     long timestamp = longToTimestamp(slong);
     return new Date(timestamp);
+  }
+
+  static class StaffGate implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    // Two options for gate storage:
+    //
+    // private static final Map<String, WeakReference<StaffGate>> gates =
+    // Collections.synchronizedMap(new WeakHashMap<>(10103));
+
+    private static final Map<String, StaffGate> gates = new PassiveExpiringMap<>(1,
+      TimeUnit.MINUTES, new ConcurrentHashMap<>());
+
+    private final String staffId;
+
+    private StaffGate(String staffId) {
+      this.staffId = staffId;
+    }
+
+    /**
+     * Synchronize briefly to acquire the user's key gate.
+     *
+     * @param staffId user's staff id
+     * @return user's gate
+     */
+    public static synchronized StaffGate getStaffGate(String staffId) {
+      StaffGate ret;
+      if (gates.containsKey(staffId)) {
+        ret = gates.get(staffId);
+        // ret = gates.get(staffId).get();
+      } else {
+        ret = new StaffGate(staffId);
+        gates.put(staffId, new StaffGate(staffId));
+        // gates.put(staffId, new WeakReference<StaffGate>(new StaffGate(staffId)));
+      }
+
+      return ret;
+    }
+
+    /**
+     * Each unique user gets an instance of this class. Since this method is synchronized, each user
+     * can only call getNextValue on one thread at a time, even for multiple simultaneous requests.
+     *
+     * @return generated CWS/CMS key
+     */
+    private synchronized String getNextValue() {
+      String newValue;
+      do {
+        newValue = CmsKeyIdGenerator.generate(staffId, new Date());
+      } while (lastKeys.containsKey(newValue)); // safety
+
+      lastKeys.put(newValue, newValue);
+      return newValue;
+    }
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((staffId == null) ? 0 : staffId.hashCode());
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj) {
+        return true;
+      }
+      if (obj == null) {
+        return false;
+      }
+      if (getClass() != obj.getClass()) {
+        return false;
+      }
+      StaffGate other = (StaffGate) obj;
+      if (staffId == null) {
+        if (other.staffId != null) {
+          return false;
+        }
+      } else if (!staffId.equals(other.staffId)) {
+        return false;
+      }
+      return true;
+    }
+
+  }
+
+  /**
+   * Self-validating bean class for staff id.
+   *
+   * <p>
+   * javax.validation only works on real "bean" classes, not Java native classes like String or
+   * Long. Therefore, wrap the incoming staff id in a small class, which follows the Java Bean
+   * specification (i.e., getters and setters).
+   *
+   * @author CWDS API Team
+   */
+  public static final class StringKey {
+
+    @NotNull
+    @Size(min = 3, max = 3)
+    @Pattern(regexp = "[a-zA-Z0-9]+")
+    private String value;
+
+    /**
+     * Constructor.
+     *
+     * @param value String to evaluate
+     */
+    public StringKey(String value) {
+      this.value = value;
+    }
+
+    public String getValue() {
+      return value;
+    }
+
+    public void setValue(String value) {
+      this.value = value;
+    }
+  }
+
+  /**
+   * Utility struct class stores details of CWDS key decomposition.
+   *
+   * <p>
+   * <strong>WARNING</strong>: <strong>Do NOT change this struct</strong>. It maps directly the C++
+   * library.
+   * </p>
+   */
+  public static final class KeyDetail {
+
+    public String key; // NOSONAR
+    public String staffId; // NOSONAR
+    public String UITimestamp; // NOSONAR
+    public String PTimestamp; // NOSONAR
   }
 
 }
