@@ -1,13 +1,17 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import java.math.BigDecimal;
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.collections4.map.PassiveExpiringMap;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,14 +71,14 @@ import gov.ca.cwds.rest.services.ServiceException;
  * characters, using first the digits 0-9, then uppercase letters, then lowercase letters.
  *
  * <p>
- * The final 3 characters of the identifier indicate the staffperson (or project process) which
+ * The final 3 characters of the identifier indicate the staff person (or project process) which
  * created the row.
  *
  * <p>
  * For the User Interface, the identifier can also be converted into a formatted 19-digit decimal
  * number. In the 19-digit format, the first 13 decimal digits are a conversion of the first seven
  * base-62 characters, while the last 6 decimal digits are an independent conversion of the last 3
- * base-62 characters (ie, staffperson ID) from the identifier. The 19 digits are formatted into
+ * base-62 characters (ie, staff person ID) from the identifier. The 19 digits are formatted into
  * three groups of four digits, followed by a final group of seven digits, so the full string length
  * is 22 characters with punctuation.
  *
@@ -106,123 +110,73 @@ import gov.ca.cwds.rest.services.ServiceException;
  * @author CWDS API Team
  */
 @SuppressWarnings({"fb-contrib:MDM_THREAD_YIELD", "findbugs:UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD"})
-public final class CmsKeyIdGenerator {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(CmsKeyIdGenerator.class);
-
-  private static final String DEFAULT_USER_ID = "0X5";
-
-  /**
-   * Self-validating bean class for staff id.
-   *
-   * <p>
-   * javax.validation only works on real "bean" classes, not Java native classes like String or
-   * Long. Therefore, wrap the incoming staff id in a small class, which follows the Java Bean
-   * specification (i.e., getters and setters).
-   *
-   * @author CWDS API Team
-   */
-  public static final class StringKey {
-
-    @NotNull
-    @Size(min = 3, max = 3)
-    @Pattern(regexp = "[a-zA-Z0-9]+")
-    private String value;
-
-    /**
-     * Constructor.
-     *
-     * @param value String to evaluate
-     */
-    public StringKey(String value) {
-      this.value = value;
-    }
-
-    public String getValue() {
-      return value;
-    }
-
-    public void setValue(String value) {
-      this.value = value;
-    }
-  }
-
-  /**
-   * Utility struct class stores details of CWDS key decomposition.
-   * 
-   * <p>
-   * <strong>WARNING</strong>: <strong>Do NOT change this struct</strong>. It maps directly the C++
-   * library.
-   * </p>
-   */
-  public static final class KeyDetail {
-    public String key; // NOSONAR
-    public String staffId; // NOSONAR
-    public String UITimestamp; // NOSONAR
-    public String PTimestamp; // NOSONAR
-  }
+public class CmsKeyIdGenerator {
 
   private static final int LEN_KEYTIMESTAMP = 7;
-
   private static final int LEN_UIIDSTAFFID = 6; // for converting a key to a UI identifier
   private static final int LEN_UIIDTIMESTAMP = 13;
+  private static final long nSHIFT_HSECOND = 1L << 34; // NOSONAR 34 bit shift (2 ^ 34)
+  private static final long nSHIFT_SECOND = 1L << 28; // NOSONAR 28 bit shift (2 ^ 28)
+  private static final long nSHIFT_MINUTE = 1L << 22; // NOSONAR 22 bit shift (2 ^ 22)
+  private static final long nSHIFT_HOUR = 1L << 17; // NOSONAR 17 bit shift (2 ^ 17)
+  private static final long nSHIFT_DAY = 1L << 12; // NOSONAR 12 bit shift (2 ^ 12)
+  private static final long nSHIFT_MONTH = 1L << 8; // NOSONAR 8 bit shift (2 ^ 8)
+  private static final long nSHIFT_YEAR = 1L << 0; // NOSONAR 0 bit shift (2 ^ 0)
 
-  private static final float nSHIFT_HSECOND = 1.71798692E10f; // NOSONAR 34 bit shift (2 ^ 34)
-
-  private static final float nSHIFT_SECOND = 2.68435456E8f; // NOSONAR 28 bit shift (2 ^ 28)
-
-  private static final float nSHIFT_MINUTE = 4194304; // NOSONAR 22 bit shift (2 ^ 22)
-
-  private static final float nSHIFT_HOUR = 131072; // NOSONAR 17 bit shift (2 ^ 17)
-
-  private static final float nSHIFT_DAY = 4096; // NOSONAR 12 bit shift (2 ^ 12)
-
-  private static final float nSHIFT_MONTH = 256; // NOSONAR 8 bit shift (2 ^ 8)
-
-  private static final float nSHIFT_YEAR = 1; // NOSONAR 0 bit shift (2 ^ 0)
-
-  private static final BigDecimal[] POWER_BASE62 = {BigDecimal.valueOf(1.000000000000000e+000),
-      BigDecimal.valueOf(6.200000000000000e+001), BigDecimal.valueOf(3.844000000000000e+003),
-      BigDecimal.valueOf(2.383280000000000e+005), BigDecimal.valueOf(1.477633600000000e+007),
-      BigDecimal.valueOf(9.161328320000000e+008), BigDecimal.valueOf(5.680023558400000e+010),
-      BigDecimal.valueOf(3.521614606208000e+012), BigDecimal.valueOf(2.183401055848960e+014),
-      BigDecimal.valueOf(1.353708654626355e+016), BigDecimal.valueOf(8.392993658683402e+017),
-      BigDecimal.valueOf(5.203656068383710e+019), BigDecimal.valueOf(3.226266762397900e+021),
-      BigDecimal.valueOf(2.000285392686698e+023), BigDecimal.valueOf(1.240176943465753e+025),
-      BigDecimal.valueOf(7.689097049487666e+026), BigDecimal.valueOf(4.767240170682353e+028),
-      BigDecimal.valueOf(2.955688905823059e+030), BigDecimal.valueOf(1.832527121610297e+032)};
+  //@formatter:off
+  private static final long[] POWER_BASE62 = {
+    1L,
+    (long) Math.pow(62, 1),
+    (long) Math.pow(62, 2),
+    (long) Math.pow(62, 3),
+    (long) Math.pow(62, 4),
+    (long) Math.pow(62, 5),
+    (long) Math.pow(62, 6),
+    (long) Math.pow(62, 7),
+    (long) Math.pow(62, 8),
+    (long) Math.pow(62, 9),
+    (long) Math.pow(62, 10),
+    (long) Math.pow(62, 11),
+    (long) Math.pow(62, 12),
+    (long) Math.pow(62, 13),
+    (long) Math.pow(62, 14),
+    (long) Math.pow(62, 15),
+    (long) Math.pow(62, 16),
+    (long) Math.pow(62, 17),
+    (long) Math.pow(62, 18)};
 
   private static final char[] ALPHABET = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
-      'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-      'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-      'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+    'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+    'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+    'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+  //@formatter:on
 
-  private static String currentValue;
+  private static final Logger LOGGER = LoggerFactory.getLogger(CmsKeyIdGenerator.class);
+  private static final String DEFAULT_USER_ID = "0X5";
+  private static final Map<String, String> lastKeys =
+      new PassiveExpiringMap<>(1, TimeUnit.SECONDS, new ConcurrentHashMap<>(10103));
 
-  /** Static class only, do not instantiate. */
+  /**
+   * Static class only, do not instantiate.
+   */
   private CmsKeyIdGenerator() {
     // Static class only, do not instantiate.
   }
 
   /**
-   * Generate next identifier with the given staff id.
+   * Generate next CWS/CMS identifier with the given staff id and current datetime.
    *
    * <p>
-   * TODO: <strong>This approach does NOT scale!</strong> Implement the Iterator interface instead.
-   * Block other threads only on a unique staff id instead of blocking all staff id's. Construct an
-   * object for a given staff id and generate keys with {@code Iterator.next()}.
+   * <strong>Synchronizing on the class monitor does NOT scale</strong> Instead, implement the
+   * Iterator interface. Block only on unique staff id; don't block other staff.Construct an object
+   * for a given staff id and generate keys with {@code Iterator.next()}.
    *
    * @param staffId the staffId
    * @return the unique key from staffId
    */
-  public static synchronized String getNextValue(String staffId) {
-    String newValue;
-    do {
-      newValue = generate(staffId, new Date());
-    } while (newValue.equals(currentValue));
-
-    currentValue = newValue;
-    return currentValue;
+  public static String getNextValue(String staffId) {
+    return StaffGate.getStaffGate(StringUtils.isNotBlank(staffId) ? staffId : DEFAULT_USER_ID)
+        .getNextValue();
   }
 
   /**
@@ -231,30 +185,30 @@ public final class CmsKeyIdGenerator {
    * @param ts seed timestamp
    * @return CMS formatted timestamp
    */
-  protected static String createTimestampStr(final Date ts) {
+  public static String createTimestampStr(final Date ts) {
     return ts == null ? createTimestampStr()
-        : doubleToStrN(7, timestampToDouble(getTimestampSeed(ts)), POWER_BASE62);
+        : longToStrN(7, timestampToLong(getTimestampSeed(ts)), POWER_BASE62);
   }
 
   /**
-   * Format the CMS timestamp String, the last 7 characters of the key.
+   * Format the CMS timestamp String, the first 7 characters of the key.
    *
    * <p>
    * Code taken originally from the original C++ algorithm, designed for legacy fat client Visual
    * Basic application. In that world of dial-up modems, the inefficiency of waiting on hundredths
    * of a second for a single user was acceptable. Obviously, this approach makes little sense today
-   * in the age of web servers and pervasive, wireless internet connections.
+   * in the age of web servers and wireless internet connections.
    * </p>
    *
    * @return CMS formatted timestamp
    */
   protected static String createTimestampStr() {
-    double nTimestamp = 0;
-    double nPreviousTimestamp = 0; // previous value - used for UNIQUENESS!
+    long nTimestamp = 0;
+    long nPreviousTimestamp = 0; // previous value - used for UNIQUENESS!
 
     // NEXT: #145948067: make previous timestamp thread-safe.
     while (true) { // NOSONAR
-      nTimestamp = timestampToDouble(getTimestampSeed(null));
+      nTimestamp = timestampToLong(getTimestampSeed(null));
 
       // If the timestamp value is the same as before, stay in the loop.
       // Otherwise, break out since it is unique.
@@ -267,60 +221,60 @@ public final class CmsKeyIdGenerator {
     }
 
     // Convert the timestamp number to a base-62 string.
-    return doubleToStrN(7, nTimestamp, POWER_BASE62);
+    return longToStrN(7, nTimestamp, POWER_BASE62);
   }
 
   /**
    * @param cal preferred timestamp
    * @return the timestamp in double
    */
-  public static double timestampToDouble(final Calendar cal) {
-    double ret = 0;
+  public static long timestampToLong(final Calendar cal) {
+    long ret = 0;
 
-    ret += (double) cal.get(Calendar.MILLISECOND) / 10 * nSHIFT_HSECOND;
-    ret += (double) cal.get(Calendar.SECOND) * nSHIFT_SECOND;
-    ret += (double) cal.get(Calendar.MINUTE) * nSHIFT_MINUTE;
-    ret += (double) cal.get(Calendar.HOUR_OF_DAY) * nSHIFT_HOUR;
-    ret += (double) cal.get(Calendar.DATE) * nSHIFT_DAY;
-    ret += (double) (cal.get(Calendar.MONTH)) * nSHIFT_MONTH;
-    ret += (double) (cal.get(Calendar.YEAR) - 1900) * nSHIFT_YEAR;
+    ret += cal.get(Calendar.MILLISECOND) / 10 * nSHIFT_HSECOND;
+    ret += cal.get(Calendar.SECOND) * nSHIFT_SECOND;
+    ret += cal.get(Calendar.MINUTE) * nSHIFT_MINUTE;
+    ret += cal.get(Calendar.HOUR_OF_DAY) * nSHIFT_HOUR;
+    ret += cal.get(Calendar.DATE) * nSHIFT_DAY;
+    ret += cal.get(Calendar.MONTH) * nSHIFT_MONTH;
+    ret += (cal.get(Calendar.YEAR) - 1900) * nSHIFT_YEAR;
 
     return ret;
   }
 
   /**
-   *
-   * @param doubleTimestamp date decoded from Base62 to double
+   * @param longTimestamp date decoded from Base62 to double
    * @return date
    */
-  public static long doubleToTimestamp(double doubleTimestamp) {
+  public static long longToTimestamp(long longTimestamp) {
     final Calendar cal = Calendar.getInstance();
 
-    long mseconds = (long) (doubleTimestamp / nSHIFT_HSECOND);
+    final long mseconds = (longTimestamp / nSHIFT_HSECOND);
     cal.set(Calendar.MILLISECOND, (int) (mseconds * 10));
-    doubleTimestamp -= mseconds * nSHIFT_HSECOND;
+    longTimestamp -= mseconds * nSHIFT_HSECOND;
 
-    long seconds = (long) (doubleTimestamp / nSHIFT_SECOND);
+    final long seconds = (longTimestamp / nSHIFT_SECOND);
     cal.set(Calendar.SECOND, (int) seconds);
-    doubleTimestamp -= seconds * nSHIFT_SECOND;
+    longTimestamp -= seconds * nSHIFT_SECOND;
 
-    long min = (long) (doubleTimestamp / nSHIFT_MINUTE);
+    final long min = (longTimestamp / nSHIFT_MINUTE);
     cal.set(Calendar.MINUTE, (int) min);
-    doubleTimestamp -= min * nSHIFT_MINUTE;
+    longTimestamp -= min * nSHIFT_MINUTE;
 
-    long hours = (long) (doubleTimestamp / nSHIFT_HOUR);
+    final long hours = (longTimestamp / nSHIFT_HOUR);
     cal.set(Calendar.HOUR_OF_DAY, (int) hours);
-    doubleTimestamp -= hours * nSHIFT_HOUR;
+    longTimestamp -= hours * nSHIFT_HOUR;
 
-    long day = (long) (doubleTimestamp / nSHIFT_DAY);
+    final long day = (longTimestamp / nSHIFT_DAY);
     cal.set(Calendar.DATE, (int) day);
-    doubleTimestamp -= day * nSHIFT_DAY;
+    longTimestamp -= day * nSHIFT_DAY;
 
-    long month = (long) (doubleTimestamp / nSHIFT_MONTH);
+    final long month = (longTimestamp / nSHIFT_MONTH);
+
     cal.set(Calendar.MONTH, (int) month);
-    doubleTimestamp -= month * nSHIFT_MONTH;
+    longTimestamp -= month * nSHIFT_MONTH;
 
-    long year = (long) ((doubleTimestamp) / nSHIFT_YEAR);
+    final long year = ((longTimestamp) / nSHIFT_YEAR);
     cal.set(Calendar.YEAR, (int) year + 1900);
 
     return cal.getTimeInMillis();
@@ -332,17 +286,16 @@ public final class CmsKeyIdGenerator {
    * @param powers the power vector for the destination base
    * @return the double to string
    */
-  public static String doubleToStrN(int dstLen, double src, final BigDecimal[] powers) {
+  public static String longToStrN(int dstLen, long src, final long[] powers) {
     int i;
-    int p = 0;
-    double integral;
-    double raw;
+    int p;
+    long integral;
     final char[] dest = new char[20];
 
-    final BigDecimal bdSrc = BigDecimal.valueOf(src);
-
     // Determine the largest power of the number.
-    for (i = 0; bdSrc.doubleValue() >= powers[i].doubleValue(); i++, p++); // NOSONAR
+    for (p = 0; src >= powers[p]; p++) {
+      // NOSONAR
+    }
 
     // Left-pad the string with the destination string width.
     final int pad = dstLen - p;
@@ -355,12 +308,11 @@ public final class CmsKeyIdGenerator {
       }
 
       for (i = 0; i < p; i++) {
-        raw = src / powers[p - i - 1].doubleValue();
+        integral = src / powers[p - i - 1];
 
         // Break down the number and convert the integer portion to a character.
-        integral = (int) raw;
-        dest[i + pad] = ALPHABET[(int) Math.abs(integral)];
-        src -= (integral * powers[p - i - 1].doubleValue()); // NOSONAR
+        dest[i + pad] = ALPHABET[(int) integral];
+        src = src % powers[p - i - 1]; // NOSONAR
       }
     }
 
@@ -378,10 +330,10 @@ public final class CmsKeyIdGenerator {
    * @param src source string
    * @param base base 10 or 62
    * @param powers powers values of this base
-   * @return double representation of the string
+   * @return long representation of the string
    */
-  protected static double strToDouble(String src, int base, final BigDecimal[] powers) {
-    double ret = 0;
+  protected static long strToLong(String src, int base, final long[] powers) {
+    long ret = 0;
     final int nLen = src.length();
     int power;
 
@@ -391,13 +343,13 @@ public final class CmsKeyIdGenerator {
 
         // Find the character in the conversion table and add to the value.
         if (ALPHABET[power] == c) {
-          ret += (power * powers[nLen - i - 1].doubleValue());
+          ret += (power * powers[nLen - i - 1]);
           break;
         }
       }
 
       if (power == base) {
-        LOGGER.warn("Character too big base?");
+        LOGGER.warn("Character too big for base?");
         return -1;
       }
     }
@@ -412,7 +364,7 @@ public final class CmsKeyIdGenerator {
    * @return Calendar set to preferred timestamp
    */
   protected static final Calendar getTimestampSeed(final Date ts) {
-    Calendar cal = Calendar.getInstance();
+    final Calendar cal = Calendar.getInstance();
 
     if (ts != null) {
       cal.setTimeInMillis(ts.getTime());
@@ -483,17 +435,17 @@ public final class CmsKeyIdGenerator {
     LOGGER.trace("tsB10={}, staffB10={}", tsB10, staffB10);
 
     final StringBuilder buf = new StringBuilder();
-    buf.append(tsB10.substring(0, 4)).append('-').append(tsB10.substring(4, 8)).append('-')
-        .append(tsB10.substring(8, 12)).append('-').append(tsB10.substring(12))
-        .append(staffB10.substring(0));
+    buf.append(tsB10, 0, 4).append('-').append(tsB10, 4, 8).append('-').append(tsB10, 8, 12)
+        .append('-').append(tsB10.substring(12)).append(staffB10);
 
     return buf.toString();
   }
 
   /**
+   * Extract the date portion from a CWS/CMS identifier.
    *
-   * @param key - Third Id
-   * @return date extracted from third id
+   * @param key - CWS/CMS identifier
+   * @return date extracted from unique key
    */
   public static Date getDateFromKey(String key) {
     if (StringUtils.isBlank(key) || key.length() < LEN_KEYTIMESTAMP) {
@@ -501,8 +453,129 @@ public final class CmsKeyIdGenerator {
     }
 
     final String tsB62 = key.substring(0, LEN_KEYTIMESTAMP);
-    double sdouble = strToDouble(tsB62, 62, POWER_BASE62);
-    Long timestamp = doubleToTimestamp(sdouble);
+    long slong = strToLong(tsB62, 62, POWER_BASE62);
+    long timestamp = longToTimestamp(slong);
     return new Date(timestamp);
   }
+
+  static class StaffGate implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    private static final Map<String, StaffGate> gates =
+        new PassiveExpiringMap<>(1, TimeUnit.MINUTES, new ConcurrentHashMap<>());
+
+    private final String staffId;
+
+    private StaffGate(String staffId) {
+      this.staffId = staffId;
+    }
+
+    /**
+     * Synchronize briefly to acquire the user's key gate.
+     *
+     * @param staffId user's staff id
+     * @return user's gate
+     */
+    public static synchronized StaffGate getStaffGate(String staffId) {
+      StaffGate ret;
+      if (gates.containsKey(staffId)) {
+        ret = gates.get(staffId);
+      } else {
+        ret = new StaffGate(staffId);
+        gates.put(staffId, new StaffGate(staffId));
+      }
+
+      return ret;
+    }
+
+    /**
+     * Each unique user gets an instance of this class. Since this method is synchronized, each user
+     * can only call getNextValue on one thread at a time, even for multiple simultaneous requests.
+     *
+     * @return generated CWS/CMS key
+     */
+    private synchronized String getNextValue() {
+      String newValue;
+      do {
+        newValue = CmsKeyIdGenerator.generate(staffId, new Date());
+      } while (lastKeys.containsKey(newValue)); // safety
+
+      lastKeys.put(newValue, newValue);
+      return newValue;
+    }
+
+    @Override
+    public int hashCode() {
+      return 31 + ((staffId == null) ? 0 : staffId.hashCode());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj) {
+        return true;
+      }
+      if (obj == null || getClass() != obj.getClass()) {
+        return false;
+      }
+      StaffGate other = (StaffGate) obj;
+      if (staffId == null) {
+        return other.staffId == null;
+      } else
+        return staffId.equals(other.staffId);
+    }
+
+  }
+
+  /**
+   * Self-validating bean class for staff id.
+   *
+   * <p>
+   * javax.validation only works on real "bean" classes, not Java native classes like String or
+   * Long. Therefore, wrap the incoming staff id in a small class, which follows the Java Bean
+   * specification (i.e., getters and setters).
+   *
+   * @author CWDS API Team
+   */
+  public static final class StringKey {
+
+    @NotNull
+    @Size(min = 3, max = 3)
+    @Pattern(regexp = "[a-zA-Z0-9]+")
+    private String value;
+
+    /**
+     * Constructor.
+     *
+     * @param value String to evaluate
+     */
+    public StringKey(String value) {
+      this.value = value;
+    }
+
+    public String getValue() {
+      return value;
+    }
+
+    public void setValue(String value) {
+      this.value = value;
+    }
+  }
+
+  /**
+   * Utility struct class stores details of CWDS key decomposition.
+   *
+   * <p>
+   * <strong>WARNING</strong>: <strong>Do NOT change this struct!</strong> It maps directly the C++
+   * library.
+   * </p>
+   */
+  public static final class KeyDetail {
+
+    public String key; // NOSONAR
+    public String staffId; // NOSONAR
+    public String UITimestamp; // NOSONAR
+    public String PTimestamp; // NOSONAR
+  }
+
 }

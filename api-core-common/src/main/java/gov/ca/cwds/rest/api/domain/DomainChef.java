@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.domain;
 
+import gov.ca.cwds.rest.api.ApiException;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,19 +9,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
-import gov.ca.cwds.rest.api.ApiException;
-
 /**
  * Utility class for CWDS API domain field data conversion.
- * 
+ *
  * <p>
  * Class Naming Convention
  * </p>
- * 
+ *
  * <ul>
  * <li>"Cook": convert String parameter to strong type</li>
  * <li>"Uncook": convert strong type parameter to String</li>
@@ -30,7 +28,7 @@ import gov.ca.cwds.rest.api.ApiException;
  * Some methods may throw {@link ApiException}, if data conversion is logically impossible, where
  * noted. Otherwise, conversion methods may return null.
  * </p>
- * 
+ *
  * @author CWDS API Team
  */
 public class DomainChef {
@@ -72,14 +70,15 @@ public class DomainChef {
    * Formatter for LocalDate. "This class is immutable and thread-safe."
    */
   protected static final DateTimeFormatter localDateFormatter =
-      DateTimeFormatter.ofPattern(DATE_FORMAT);
+    DateTimeFormatter.ofPattern(DATE_FORMAT);
 
   /**
    * Constructor
-   * 
+   *
    * Private to prevent construction
    */
-  private DomainChef() {}
+  private DomainChef() {
+  }
 
   /**
    * @param uncookedBoolean true or false
@@ -94,7 +93,7 @@ public class DomainChef {
 
   /**
    * Transform camel case key/name to JSON suitable key.
-   * 
+   *
    * @param in incoming String to standardize
    * @return purified, JSON suitable key name
    */
@@ -154,8 +153,7 @@ public class DomainChef {
 
   /**
    * @param timestamp Timestamp to convert into String.
-   * @return Timestamp converted into strict format String
-   *         {@link DomainChef#TIMESTAMP_STRICT_FORMAT}
+   * @return Timestamp converted into strict format String {@link DomainChef#TIMESTAMP_STRICT_FORMAT}
    */
   public static String cookStrictTimestamp(Date timestamp) {
     if (timestamp != null) {
@@ -199,8 +197,7 @@ public class DomainChef {
     String trimDate = StringUtils.trim(date);
     if (StringUtils.isNotEmpty(trimDate)) {
       try {
-        LocalDate localDate = null;
-        return localDate = LocalDate.parse(trimDate, localDateFormatter);
+        return LocalDate.parse(trimDate, localDateFormatter);
       } catch (Exception e) {
         throw new ApiException(e);
       }
@@ -226,8 +223,7 @@ public class DomainChef {
 
   /**
    * @param timestamp timestamp to convert into Date
-   * @return Date A Date object based on strict timestamp format
-   *         {@link DomainChef#TIMESTAMP_STRICT_FORMAT}
+   * @return Date A Date object based on strict timestamp format {@link DomainChef#TIMESTAMP_STRICT_FORMAT}
    */
   public static Date uncookStrictTimestampString(String timestamp) {
     String trimTimestamp = StringUtils.trim(timestamp);
@@ -259,7 +255,7 @@ public class DomainChef {
 
   /**
    * Extract Date object from ISO8601 formatted String
-   * 
+   *
    * @param timestamp the string to extract from
    * @return Date
    */
@@ -313,17 +309,17 @@ public class DomainChef {
         return Integer.valueOf(matcher.group(1));
       } catch (NumberFormatException e) {
         throw new ApiException(
-            MessageFormat.format("Unable to convert zipcode to Integer '{0}' = {0}", zipcode), e);
+          MessageFormat.format("Unable to convert zipcode to Integer '{0}' = {0}", zipcode), e);
       }
     } else {
       throw new ApiException(
-          MessageFormat.format("Unable to uncook zipcode string '{0}' = {0}", zipcode));
+        MessageFormat.format("Unable to uncook zipcode string '{0}' = {0}", zipcode));
     }
   }
 
   /**
    * Concatenate date and time into single object.
-   * 
+   *
    * @param date - date object
    * @param time - time object
    * @return Date object which combines both date and time
@@ -338,10 +334,21 @@ public class DomainChef {
     } else {
       final DateTime srcTime = new DateTime(time);
       combinedDateTime = new DateTime(srcDate.getYear(), srcDate.getMonthOfYear(),
-          srcDate.getDayOfMonth(), srcTime.getHourOfDay(), srcTime.getMinuteOfHour(),
-          srcTime.getSecondOfMinute(), srcTime.getMillisOfSecond());
+        srcDate.getDayOfMonth(), srcTime.getHourOfDay(), srcTime.getMinuteOfHour(),
+        srcTime.getSecondOfMinute(), srcTime.getMillisOfSecond());
     }
     return combinedDateTime.toDate();
   }
+
+  /**
+   * Work-around for SonarQube: "exposes date implementation."
+   *
+   * @param incoming date to process
+   * @return new, fresh date
+   */
+  public static Date freshDate(Date incoming) {
+    return incoming != null ? new Date(incoming.getTime()) : null;
+  }
+
 
 }

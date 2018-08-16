@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import gov.ca.cwds.rest.api.domain.DomainChef;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +28,7 @@ import gov.ca.cwds.data.std.ApiPersonAware;
 /**
  * Column structure for CMS Client. OLTP class extends this one without decoration. Replication
  * class extends and adds replication columns.
- * 
+ *
  * @author CDWS API Team
  */
 @MappedSuperclass
@@ -319,7 +320,7 @@ public abstract class BaseClient extends CmsPersistentObject
 
   /**
    * constructor
-   * 
+   *
    * @param lastUpdatedId the last updated Id
    */
   public BaseClient(String lastUpdatedId) {
@@ -328,7 +329,7 @@ public abstract class BaseClient extends CmsPersistentObject
 
   /**
    * constructor
-   * 
+   *
    * @param lastUpdatedId the last updated Id
    * @param lastUpdatedTime the last updated time
    */
@@ -342,7 +343,7 @@ public abstract class BaseClient extends CmsPersistentObject
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.data.persistence.PersistentObject#getPrimaryKey()
    */
   @Override
@@ -394,7 +395,7 @@ public abstract class BaseClient extends CmsPersistentObject
    */
   @Override
   public Date getBirthDate() {
-    return birthDate;
+    return DomainChef.freshDate(birthDate);
   }
 
   /**
@@ -465,7 +466,7 @@ public abstract class BaseClient extends CmsPersistentObject
    * @return the confidentialityActionDate
    */
   public Date getConfidentialityActionDate() {
-    return confidentialityActionDate;
+    return DomainChef.freshDate(confidentialityActionDate);
   }
 
   /**
@@ -479,7 +480,7 @@ public abstract class BaseClient extends CmsPersistentObject
    * @return the creationDate
    */
   public Date getCreationDate() {
-    return creationDate;
+    return DomainChef.freshDate(creationDate);
   }
 
   /**
@@ -508,7 +509,7 @@ public abstract class BaseClient extends CmsPersistentObject
    */
   @Override
   public Date getDeathDate() {
-    return deathDate;
+    return DomainChef.freshDate(deathDate);
   }
 
   /**
@@ -571,7 +572,7 @@ public abstract class BaseClient extends CmsPersistentObject
    * @return the fatherParentalRightTermDate
    */
   public Date getFatherParentalRightTermDate() {
-    return fatherParentalRightTermDate;
+    return DomainChef.freshDate(fatherParentalRightTermDate);
   }
 
   /**
@@ -697,7 +698,7 @@ public abstract class BaseClient extends CmsPersistentObject
    * @return the motherParentalRightTermDate
    */
   public Date getMotherParentalRightTermDate() {
-    return motherParentalRightTermDate;
+    return DomainChef.freshDate(motherParentalRightTermDate);
   }
 
   /**
@@ -943,7 +944,7 @@ public abstract class BaseClient extends CmsPersistentObject
       });
     }
 
-    return ret.toArray(new ApiLanguageAware[0]);
+    return ret.toArray(new ApiLanguageAware[ret.size()]);
   }
 
   public static long getSerialversionuid() {
@@ -1015,7 +1016,7 @@ public abstract class BaseClient extends CmsPersistentObject
   }
 
   public void setConfidentialityActionDate(Date confidentialityActionDate) {
-    this.confidentialityActionDate = confidentialityActionDate;
+    this.confidentialityActionDate = DomainChef.freshDate(confidentialityActionDate);
   }
 
   public void setConfidentialityInEffectIndicator(String confidentialityInEffectIndicator) {
@@ -1023,7 +1024,7 @@ public abstract class BaseClient extends CmsPersistentObject
   }
 
   public void setCreationDate(Date creationDate) {
-    this.creationDate = creationDate;
+    this.creationDate = DomainChef.freshDate(creationDate);
   }
 
   public void setCurrCaChildrenServIndicator(String currCaChildrenServIndicator) {
@@ -1039,7 +1040,7 @@ public abstract class BaseClient extends CmsPersistentObject
   }
 
   public void setDeathDate(Date deathDate) {
-    this.deathDate = deathDate;
+    this.deathDate = DomainChef.freshDate(deathDate);
   }
 
   public void setDeathDateVerifiedIndicator(String deathDateVerifiedIndicator) {
@@ -1075,7 +1076,7 @@ public abstract class BaseClient extends CmsPersistentObject
   }
 
   public void setFatherParentalRightTermDate(Date fatherParentalRightTermDate) {
-    this.fatherParentalRightTermDate = fatherParentalRightTermDate;
+    this.fatherParentalRightTermDate = DomainChef.freshDate(fatherParentalRightTermDate);
   }
 
   public void setGenderCode(String genderCode) {
@@ -1135,7 +1136,7 @@ public abstract class BaseClient extends CmsPersistentObject
   }
 
   public void setMotherParentalRightTermDate(Date motherParentalRightTermDate) {
-    this.motherParentalRightTermDate = motherParentalRightTermDate;
+    this.motherParentalRightTermDate = DomainChef.freshDate(motherParentalRightTermDate);
   }
 
   public void setNamePrefixDescription(String namePrefixDescription) {
