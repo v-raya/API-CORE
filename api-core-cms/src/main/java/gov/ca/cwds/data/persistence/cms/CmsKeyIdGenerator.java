@@ -1,20 +1,23 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import gov.ca.cwds.rest.resources.ResourceParamValidator;
-import gov.ca.cwds.rest.services.ServiceException;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
 import org.apache.commons.collections4.map.PassiveExpiringMap;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import gov.ca.cwds.rest.resources.ResourceParamValidator;
+import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * Java port of gov.ca.cwds.rest.util.jni.KeyJNI and underlying shared library, cws_randgen.cpp.
@@ -119,6 +122,7 @@ public class CmsKeyIdGenerator {
   private static final long nSHIFT_DAY = 1L << 12; // NOSONAR 12 bit shift (2 ^ 12)
   private static final long nSHIFT_MONTH = 1L << 8; // NOSONAR 8 bit shift (2 ^ 8)
   private static final long nSHIFT_YEAR = 1L << 0; // NOSONAR 0 bit shift (2 ^ 0)
+
   //@formatter:off
   private static final long[] POWER_BASE62 = {
     1L,
@@ -140,15 +144,17 @@ public class CmsKeyIdGenerator {
     (long) Math.pow(62, 16),
     (long) Math.pow(62, 17),
     (long) Math.pow(62, 18)};
+
   private static final char[] ALPHABET = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
     'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
     'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
     'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+  //@formatter:on
+
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsKeyIdGenerator.class);
   private static final String DEFAULT_USER_ID = "0X5";
-  //@formatter:on
   private static final Map<String, String> lastKeys =
-    new PassiveExpiringMap<>(1, TimeUnit.SECONDS, new ConcurrentHashMap<>(10103));
+      new PassiveExpiringMap<>(1, TimeUnit.SECONDS, new ConcurrentHashMap<>(10103));
 
   /**
    * Static class only, do not instantiate.
@@ -170,7 +176,7 @@ public class CmsKeyIdGenerator {
    */
   public static String getNextValue(String staffId) {
     return StaffGate.getStaffGate(StringUtils.isNotBlank(staffId) ? staffId : DEFAULT_USER_ID)
-      .getNextValue();
+        .getNextValue();
   }
 
   /**
@@ -181,7 +187,7 @@ public class CmsKeyIdGenerator {
    */
   public static String createTimestampStr(final Date ts) {
     return ts == null ? createTimestampStr()
-      : longToStrN(7, timestampToLong(getTimestampSeed(ts)), POWER_BASE62);
+        : longToStrN(7, timestampToLong(getTimestampSeed(ts)), POWER_BASE62);
   }
 
   /**
@@ -411,7 +417,7 @@ public class CmsKeyIdGenerator {
    *
    * @param key 10 character, base-62 legacy key
    * @return UI identifier in format 0000-0000-0000-0000000. If provided key is null or empty, then
-   * null is returned.
+   *         null is returned.
    */
   public static String getUIIdentifierFromKey(String key) {
     if (StringUtils.isBlank(key)) {
@@ -423,15 +429,14 @@ public class CmsKeyIdGenerator {
     LOGGER.trace("strTimestamp={}, strStaffId={}", tsB62, staffB62);
 
     final String tsB10 =
-      StringUtils.leftPad(String.valueOf(Base62.toBase10(tsB62)), LEN_UIIDTIMESTAMP, '0');
+        StringUtils.leftPad(String.valueOf(Base62.toBase10(tsB62)), LEN_UIIDTIMESTAMP, '0');
     final String staffB10 =
-      StringUtils.leftPad(String.valueOf(Base62.toBase10(staffB62)), LEN_UIIDSTAFFID, '0');
+        StringUtils.leftPad(String.valueOf(Base62.toBase10(staffB62)), LEN_UIIDSTAFFID, '0');
     LOGGER.trace("tsB10={}, staffB10={}", tsB10, staffB10);
 
     final StringBuilder buf = new StringBuilder();
-    buf.append(tsB10, 0, 4).append('-').append(tsB10, 4, 8).append('-')
-      .append(tsB10, 8, 12).append('-').append(tsB10.substring(12))
-      .append(staffB10);
+    buf.append(tsB10, 0, 4).append('-').append(tsB10, 4, 8).append('-').append(tsB10, 8, 12)
+        .append('-').append(tsB10.substring(12)).append(staffB10);
 
     return buf.toString();
   }
@@ -457,8 +462,8 @@ public class CmsKeyIdGenerator {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Map<String, StaffGate> gates = new PassiveExpiringMap<>(1,
-      TimeUnit.MINUTES, new ConcurrentHashMap<>());
+    private static final Map<String, StaffGate> gates =
+        new PassiveExpiringMap<>(1, TimeUnit.MINUTES, new ConcurrentHashMap<>());
 
     private final String staffId;
 
@@ -502,7 +507,7 @@ public class CmsKeyIdGenerator {
 
     @Override
     public int hashCode() {
-      return  31  + ((staffId == null) ? 0 : staffId.hashCode());
+      return 31 + ((staffId == null) ? 0 : staffId.hashCode());
     }
 
     @Override
@@ -561,7 +566,7 @@ public class CmsKeyIdGenerator {
    * Utility struct class stores details of CWDS key decomposition.
    *
    * <p>
-   * <strong>WARNING</strong>: <strong>Do NOT change this struct</strong>. It maps directly the C++
+   * <strong>WARNING</strong>: <strong>Do NOT change this struct!</strong> It maps directly the C++
    * library.
    * </p>
    */
