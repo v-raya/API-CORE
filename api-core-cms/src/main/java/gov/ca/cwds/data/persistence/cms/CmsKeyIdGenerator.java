@@ -288,7 +288,7 @@ public class CmsKeyIdGenerator {
 
     // Determine the largest power of the number.
     for (p = 0; src >= powers[p]; p++) {
-      ; // NOSONAR
+      // NOSONAR
     }
 
     // Left-pad the string with the destination string width.
@@ -429,9 +429,9 @@ public class CmsKeyIdGenerator {
     LOGGER.trace("tsB10={}, staffB10={}", tsB10, staffB10);
 
     final StringBuilder buf = new StringBuilder();
-    buf.append(tsB10.substring(0, 4)).append('-').append(tsB10.substring(4, 8)).append('-')
-      .append(tsB10.substring(8, 12)).append('-').append(tsB10.substring(12))
-      .append(staffB10.substring(0));
+    buf.append(tsB10, 0, 4).append('-').append(tsB10, 4, 8).append('-')
+      .append(tsB10, 8, 12).append('-').append(tsB10.substring(12))
+      .append(staffB10);
 
     return buf.toString();
   }
@@ -457,11 +457,6 @@ public class CmsKeyIdGenerator {
 
     private static final long serialVersionUID = 1L;
 
-    // Two options for gate storage:
-    //
-    // private static final Map<String, WeakReference<StaffGate>> gates =
-    // Collections.synchronizedMap(new WeakHashMap<>(10103));
-
     private static final Map<String, StaffGate> gates = new PassiveExpiringMap<>(1,
       TimeUnit.MINUTES, new ConcurrentHashMap<>());
 
@@ -481,11 +476,9 @@ public class CmsKeyIdGenerator {
       StaffGate ret;
       if (gates.containsKey(staffId)) {
         ret = gates.get(staffId);
-        // ret = gates.get(staffId).get();
       } else {
         ret = new StaffGate(staffId);
         gates.put(staffId, new StaffGate(staffId));
-        // gates.put(staffId, new WeakReference<StaffGate>(new StaffGate(staffId)));
       }
 
       return ret;
@@ -509,10 +502,7 @@ public class CmsKeyIdGenerator {
 
     @Override
     public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + ((staffId == null) ? 0 : staffId.hashCode());
-      return result;
+      return  31  + ((staffId == null) ? 0 : staffId.hashCode());
     }
 
     @Override
@@ -520,21 +510,14 @@ public class CmsKeyIdGenerator {
       if (this == obj) {
         return true;
       }
-      if (obj == null) {
-        return false;
-      }
-      if (getClass() != obj.getClass()) {
+      if (obj == null || getClass() != obj.getClass()) {
         return false;
       }
       StaffGate other = (StaffGate) obj;
       if (staffId == null) {
-        if (other.staffId != null) {
-          return false;
-        }
-      } else if (!staffId.equals(other.staffId)) {
-        return false;
-      }
-      return true;
+        return other.staffId == null;
+      } else
+        return staffId.equals(other.staffId);
     }
 
   }
