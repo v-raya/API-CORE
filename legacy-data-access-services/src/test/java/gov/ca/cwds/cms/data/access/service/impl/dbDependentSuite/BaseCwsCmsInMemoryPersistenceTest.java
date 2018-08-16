@@ -26,11 +26,9 @@ import org.powermock.api.mockito.PowerMockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gov.ca.cwds.data.legacy.cms.entity.Client;
-import gov.ca.cwds.data.legacy.cms.entity.facade.BaseLegacyDataAccessTest;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 
-public abstract class BaseCwsCmsInMemoryPersistenceTest extends BaseLegacyDataAccessTest<Client> {
+public abstract class BaseCwsCmsInMemoryPersistenceTest {
 
   private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
   private static final DateTimeFormatter DATE_TIME_FORMATTER =
