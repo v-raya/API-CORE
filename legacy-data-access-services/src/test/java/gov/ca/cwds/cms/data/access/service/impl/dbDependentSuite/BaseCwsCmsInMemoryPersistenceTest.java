@@ -1,6 +1,12 @@
 package gov.ca.cwds.cms.data.access.service.impl.dbDependentSuite;
 
-import gov.ca.cwds.security.utils.PrincipalUtils;
+import static org.powermock.api.mockito.PowerMockito.when;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.function.Consumer;
+
 import org.dbunit.Assertion;
 import org.dbunit.JdbcDatabaseTester;
 import org.dbunit.database.IDatabaseConnection;
@@ -20,12 +26,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.function.Consumer;
-
-import static org.powermock.api.mockito.PowerMockito.when;
+import gov.ca.cwds.security.utils.PrincipalUtils;
 
 public abstract class BaseCwsCmsInMemoryPersistenceTest {
 
@@ -51,8 +52,8 @@ public abstract class BaseCwsCmsInMemoryPersistenceTest {
     when(PrincipalUtils.getStaffPersonId()).thenReturn("0X5");
   }
 
-  protected void executeInTransaction(
-      SessionFactory sessionFactory, Consumer<SessionFactory> consumer) {
+  protected void executeInTransaction(SessionFactory sessionFactory,
+      Consumer<SessionFactory> consumer) {
 
     Session session = sessionFactory.getCurrentSession();
     Transaction transaction = session.beginTransaction();
@@ -104,9 +105,8 @@ public abstract class BaseCwsCmsInMemoryPersistenceTest {
 
   protected void assertTableEquals(ITable expectedTable, ITable actualTable, String... ignoreCols)
       throws Exception {
-    ITable filteredTable =
-        DefaultColumnFilter.includedColumnsTable(
-            actualTable, expectedTable.getTableMetaData().getColumns());
+    ITable filteredTable = DefaultColumnFilter.includedColumnsTable(actualTable,
+        expectedTable.getTableMetaData().getColumns());
     Assertion.assertEqualsIgnoreCols(expectedTable, filteredTable, ignoreCols);
   }
 

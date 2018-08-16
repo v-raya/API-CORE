@@ -4,20 +4,46 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+import org.apache.commons.collections4.SortedBag;
+import org.apache.commons.collections4.bag.TreeBag;
+import org.apache.commons.collections4.map.PassiveExpiringMap;
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jetty.util.ConcurrentHashSet;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator.KeyDetail;
 import gov.ca.cwds.rest.services.ServiceException;
@@ -80,6 +106,8 @@ import gov.ca.cwds.rest.services.ServiceException;
  */
 public final class CmsKeyIdGeneratorTest {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(CmsKeyIdGeneratorTest.class);
+
   private static final int GOOD_KEY_LEN = CmsPersistentObject.CMS_ID_LEN;
   private static final Pattern RGX_LEGACY_KEY =
       Pattern.compile("([a-z0-9]{10})", Pattern.CASE_INSENSITIVE);
@@ -91,7 +119,7 @@ public final class CmsKeyIdGeneratorTest {
   // ===================
   @Test
   public void testNextValueIsDifferent() {
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 500; i++) {
       final String keyOne = CmsKeyIdGenerator.getNextValue("0yz");
       final String keySecond = CmsKeyIdGenerator.getNextValue("0yz");
       assertFalse(keyOne.equals(keySecond));
@@ -243,25 +271,24 @@ public final class CmsKeyIdGeneratorTest {
     final Calendar cal = Calendar.getInstance();
     cal.setTimeZone(TimeZone.getTimeZone("PST"));
     cal.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2017-06-09 13:04:22"));
-    final double actual = CmsKeyIdGenerator.timestampToDouble(cal);
+    final long actual = CmsKeyIdGenerator.timestampToLong(cal);
     // final double expected = 5.922526581E9;
     // assertThat(actual, is(equalTo(expected)));
     assertThat(actual, is(not(0)));
   }
 
-
   @Test(expected = ServiceException.class)
   public void makeKey_Args__String__Date__null_staff() throws Exception {
-    String staffId = null;
-    Date ts = mock(Date.class);
-    String actual = CmsKeyIdGenerator.makeKey(staffId, ts);
-    String expected = null;
+    final String staffId = null;
+    final Date ts = mock(Date.class);
+    final String actual = CmsKeyIdGenerator.makeKey(staffId, ts);
+    final String expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void generate_Args__String__null_staff() throws Exception {
-    String actual = CmsKeyIdGenerator.getNextValue(null);
+    final String actual = CmsKeyIdGenerator.getNextValue(null);
     assertTrue("bad generated key", RGX_LEGACY_KEY.matcher(actual).matches());
   }
 
@@ -274,23 +301,229 @@ public final class CmsKeyIdGeneratorTest {
 
   @Test
   public void getUIIdentifierFromKey_Args__String() throws Exception {
+    // ./cws_randgen -k 5Y3vKVs0X5
+    // 5Y3vKVs0X5 0X5 2012-11-25T11:15:22.180Z 2012-11-25-11.15.22.180000 0315-2076-8676-8002051
     final String key = "5Y3vKVs0X5";
     final String actual = CmsKeyIdGenerator.getUIIdentifierFromKey(key);
     final String expected = "0315-2076-8676-8002051";
     assertThat(actual, is(equalTo(expected)));
   }
 
+  /**
+   * <blockquote>
+   *
+   * <pre>
+   * ./cws_randgen -k 83UiZBWABC
+   * key:          83UiZBWABC
+   * staff:        ABC
+   * date:         2018-03-30T10:45:40.260Z
+   * UI 19-digit:  0457-6041-9493-4039134
+   * </pre>
+   *
+   * </blockquote>
+   *
+   * @throws Exception whatever. it's a test.
+   */
+  @Test
+  public void testDecodeKey() throws Exception {
+    final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+    final Date dateFromXtools = sdf.parse("2018-03-30T10:45:40.260");
+    final String thirdIdFromXTools = "83UiZBWABC";
+
+    final Date localDate = CmsKeyIdGenerator.getDateFromKey(thirdIdFromXTools);
+    System.out.println("localDate: " + sdf.format(localDate));
+    assertEquals(dateFromXtools.getTime(), localDate.getTime());
+  }
+
   @Test
   public void testGetDateFromThirdId() throws Exception {
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
-    Date dateFromXtools = sdf.parse("2018-03-30 10:45:40:260");
-    String thirdIdFromXTools = "83UiZBWABC";
-    String userIdFromXTools = "ABC";
+    final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+    final Date dateFromXtools = sdf.parse("2018-03-30T10:45:40.260");
+    final String thirdIdFromXTools = "83UiZBWABC";
+    final String userIdFromXTools = "ABC";
 
-    String thirdId = CmsKeyIdGenerator.generate(userIdFromXTools, dateFromXtools);
-    assertEquals(thirdId, thirdIdFromXTools);
-    Date localDate = CmsKeyIdGenerator.getDateFromKey(thirdId);
+    final String thirdId = CmsKeyIdGenerator.generate(userIdFromXTools, dateFromXtools);
+    System.out.println("thirdId: " + thirdId);
+
+    final Date localDate = CmsKeyIdGenerator.getDateFromKey(thirdId);
+    System.out.println(
+        "localDate: " + sdf.format(localDate) + ", dateFromXtools: " + sdf.format(dateFromXtools));
+
     assertEquals(dateFromXtools.getTime(), localDate.getTime());
+    assertEquals(thirdId, thirdIdFromXTools);
+  }
+
+  protected void iterateExpiringMap(Map<String, String> keepKey, Map<String, String> lastKey,
+      String[] staffIds, Date now, boolean add, boolean expired) {
+    for (String staffId : staffIds) {
+      String expected = keepKey.get(staffId);
+
+      if (add) {
+        expected = CmsKeyIdGenerator.generate(staffId, now);
+        lastKey.put(staffId, expected);
+        keepKey.put(staffId, expected);
+      }
+
+      final String actual = lastKey.get(staffId);
+      LOGGER.info("staff id: {}, actual: {}", staffId, actual);
+
+      if (expired) {
+        assertThat(actual, is(nullValue()));
+      } else {
+        assertThat(actual, is(equalTo(expected)));
+      }
+    }
+  }
+
+  @Test
+  public void testPassiveExpiringMap() throws Exception {
+    final Map<String, String> lastKey =
+        new PassiveExpiringMap<>(700, TimeUnit.MILLISECONDS, new ConcurrentHashMap<>());
+    final Map<String, String> keepKey = new HashMap<>();
+
+    final String[] staffIds = {"aaa", "aab", "aac", "aad", "aae", "aaf", "aag", "aah"};
+    final Date now = new Date();
+    LOGGER.info("\n\n****** Initialize key maps ... ******");
+    iterateExpiringMap(keepKey, lastKey, staffIds, now, true, false);
+
+    long waitMillis = 300;
+    LOGGER.info("\n\n****** Wait {}, verify that keys have NOT EXPIRED ... ******", waitMillis);
+    Thread.sleep(waitMillis);
+    iterateExpiringMap(keepKey, lastKey, staffIds, now, false, false);
+
+    waitMillis = 1800;
+    LOGGER.info("\n\n****** Wait {}, verify that keys have EXPIRED ... ******", waitMillis);
+    LOGGER.info("\n\n****** BEFORE iterating: lastKey.size(): {} ******", lastKey.size());
+    Thread.sleep(waitMillis);
+    iterateExpiringMap(keepKey, lastKey, staffIds, now, false, true);
+  }
+
+  @Test
+  @Ignore
+  public void generateBunchOfKeysFile() throws Exception {
+    String sID;
+    final Date start = new Date();
+    final File file = File.createTempFile("cws_IDs", ".txt");
+
+    try (final BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
+      for (int i = 0; i < 1000; i++) {
+        sID = CmsKeyIdGenerator.getNextValue("");
+        out.write(sID);
+        out.newLine();
+      }
+      LOGGER.info("File: " + file.getAbsolutePath());
+    } catch (IOException e) {
+      LOGGER.warn("Error creating temp file.", e);
+      return;
+    }
+
+    LOGGER.info("Time taken (milis): " + (System.currentTimeMillis() - start.getTime()));
+  }
+
+  private SortedBag<String> genKeys(String staffId, int threadNum, int idsPerThread,
+      Set<String> results) {
+    Thread.currentThread().setName(staffId + '_' + threadNum);
+    LOGGER.info("start: staff id: {}, thread #: {}", staffId, threadNum);
+
+    final SortedBag<String> bag = new TreeBag<>(String::compareTo);
+    final Set<String> staffResults = new HashSet<>(threadNum * idsPerThread);
+
+    for (int i = 0; i < idsPerThread; i++) {
+      final String key = CmsKeyIdGenerator.getNextValue(staffId);
+      staffResults.add(key);
+      bag.add(key);
+    }
+
+    results.addAll(staffResults);
+    LOGGER.info("stop:  staff id: {}, bag: {}, staffResults: {}", staffId, bag.size(),
+        staffResults.size());
+    return bag;
+  }
+
+  @Test
+  public void multiThreadTest() throws Exception {
+    LOGGER.info("multiThreadTest");
+    final int numberOfUsers = 50;
+    final int threadsPerUser = 2;
+    final int idsPerThread = 100;
+    final int expectedCount = numberOfUsers * threadsPerUser * idsPerThread;
+    final int maxRunningThreads = Math.max(Runtime.getRuntime().availableProcessors(), 4);
+    final Date start = new Date();
+
+    final List<String> staffIds = IntStream.rangeClosed(1, numberOfUsers).boxed()
+        .map(i -> StringUtils.leftPad(String.valueOf(i + 1), 3, "0")).collect(Collectors.toList());
+    final Set<String> results = new ConcurrentHashSet<>();
+    LOGGER.info("staffIds.size(): {}", staffIds.size());
+
+    // It's a unit test, not a stress test. Jenkins doesn't have CPU to spare.
+    final List<ForkJoinTask<?>> tasks = new ArrayList<>(expectedCount);
+    final ForkJoinPool threadPool = new ForkJoinPool(maxRunningThreads);
+
+    // Queue worker threads.
+    for (String staffId : staffIds) {
+      for (int j = 0; j < threadsPerUser; j++) {
+        final int threadNum = j + 1;
+        tasks.add(threadPool.submit(() -> genKeys(staffId, threadNum, idsPerThread, results)));
+      }
+    }
+
+    // Join threads, wait for tasks to finish.
+    for (ForkJoinTask<?> task : tasks) {
+      task.get(); // join thread
+    }
+
+    LOGGER.info("Time (milis): " + (System.currentTimeMillis() - start.getTime()));
+    final int actual = results.size();
+    LOGGER.info("expected keys: {}, actual keys: {}", expectedCount, actual);
+
+    assertEquals("Number of unique IDs generated NOT equals to total number of IDs generated.",
+        expectedCount, actual);
+  }
+
+  @Test
+  public void multiThreadStressTest() throws InterruptedException {
+    final int numberOfUsers = 20;
+    final int threadsPerUser = 5;
+    final int idsPerThread = 100;
+
+    final ArrayList[] ids = new ArrayList[numberOfUsers * threadsPerUser];
+    final ExecutorService exServer = Executors.newFixedThreadPool(numberOfUsers * threadsPerUser);
+    final Date start = new Date();
+
+    // Run multiple threads
+    for (int i = 0; i < numberOfUsers; i++) {
+      String staffId = StringUtils.leftPad(String.valueOf(i + 1), 3, "0");
+      for (int j = 0; j < threadsPerUser; j++) {
+        int threadNum = i * threadsPerUser + j + 1;
+        ArrayList<String> threadIds = new ArrayList<>(idsPerThread);
+        ids[threadNum - 1] = threadIds;
+
+        exServer.execute(new Runnable() {
+          @SuppressWarnings("unused")
+          @Override
+          public void run() {
+            for (int k = 0; k < idsPerThread; k++) {
+              threadIds.add(CmsKeyIdGenerator.getNextValue(staffId));
+            }
+          }
+        });
+      }
+    }
+    exServer.shutdown();
+    exServer.awaitTermination(1, TimeUnit.HOURS);
+    Date end = new Date();
+
+    final Set<String> idsSet = new HashSet<>();
+    for (int i = 0; i < ids.length; i++) {
+      idsSet.addAll(ids[i]);
+    }
+
+    LOGGER.info("Time (milis): " + (end.getTime() - start.getTime()));
+    LOGGER.info("Generated Unique IDs: " + idsSet.size() + " of " + (ids.length * idsPerThread)
+        + " expected");
+
+    assertEquals("Number of unique IDs generated NOT equals to total number of IDs generated.",
+        idsSet.size(), (ids.length * idsPerThread));
   }
 
 }
