@@ -19,8 +19,10 @@ import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 @Entity
 @Table(name = "SPRJ_RFT")
 @NamedQuery(
-    name = "gov.ca.cwds.data.legacy.cms.entity.SpecialProjectReferral.findByReferralIdAndSpecialProjectId",
-    query = "FROM SpecialProjectReferral WHERE FKREFERL_T = :referralId AND FKSPC_PRJT = :specialProjectId")
+  name = 
+  "gov.ca.cwds.data.legacy.cms.entity.SpecialProjectReferral.findByReferralIdAndSpecialProjectId",
+  query = "FROM SpecialProjectReferral "
+  + "WHERE FKREFERL_T = :referralId AND FKSPC_PRJT = :specialProjectId")
 
 public class SpecialProjectReferral extends CmsPersistentObject {
 
