@@ -1,11 +1,9 @@
 package gov.ca.cwds.data.legacy.cms.dao;
 
 import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import gov.ca.cwds.data.legacy.cms.entity.SpecialProject;
 import gov.ca.cwds.data.legacy.cms.persistence.BaseCwsCmsInMemoryPersistenceTest;
 
