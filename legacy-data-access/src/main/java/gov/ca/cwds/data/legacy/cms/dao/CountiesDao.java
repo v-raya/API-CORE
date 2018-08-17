@@ -1,18 +1,21 @@
 package gov.ca.cwds.data.legacy.cms.dao;
 
-import com.google.common.collect.ImmutableList;
-import com.google.inject.Inject;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.County;
-import gov.ca.cwds.data.BaseDaoImpl;
-import gov.ca.cwds.inject.CmsSessionFactory;
+import java.util.List;
+
+import javax.persistence.NoResultException;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.NoResultException;
-import java.util.List;
+import com.google.common.collect.ImmutableList;
+import com.google.inject.Inject;
+
+import gov.ca.cwds.data.BaseDaoImpl;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.County;
+import gov.ca.cwds.inject.CmsSessionFactory;
 
 /** @author CWDS CALS API Team */
 public class CountiesDao extends BaseDaoImpl<County> {
@@ -25,17 +28,17 @@ public class CountiesDao extends BaseDaoImpl<County> {
 
   @Override
   public List<County> findAll() {
-    Session session = this.getSessionFactory().getCurrentSession();
-    Query<County> query = session.createNamedQuery(County.NQ_ALL, County.class);
+    Session session = this.grabSession();
+    final Query<County> query = session.createNamedQuery(County.NQ_ALL, County.class);
     ImmutableList.Builder<County> entities = new ImmutableList.Builder<>();
     entities.addAll(query.list());
     return entities.build();
   }
 
   public County findByLogicalId(String logicalId) {
-    Session session = this.getSessionFactory().getCurrentSession();
+    Session session = this.grabSession();
     Class<County> entityClass = getEntityClass();
-    Query<County> query =
+    final Query<County> query =
         session.createNamedQuery(entityClass.getSimpleName() + ".findByLogicalId", County.class);
     query.setParameter("logicalId", logicalId);
     County county = null;

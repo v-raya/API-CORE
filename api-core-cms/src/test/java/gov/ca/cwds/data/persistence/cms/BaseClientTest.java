@@ -3,24 +3,21 @@ package gov.ca.cwds.data.persistence.cms;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
-
-import java.util.Date;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
 
 import gov.ca.cwds.common.OscarTheGrouch;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.std.ApiLanguageAware;
+import java.util.Date;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
 
 public class BaseClientTest extends OscarTheGrouch<Client> {
-
-  private static final class TestOnlyClient extends BaseClient {
-    // whatever
-  }
 
   BaseClient target;
 
@@ -29,6 +26,8 @@ public class BaseClientTest extends OscarTheGrouch<Client> {
   public void setup() throws Exception {
     super.setup();
     target = new TestOnlyClient();
+    target = new TestOnlyClient("0X5");
+    target = new TestOnlyClient("0X5", new Date());
   }
 
   @Test
@@ -463,6 +462,13 @@ public class BaseClientTest extends OscarTheGrouch<Client> {
   }
 
   @Test
+  public void getLimitedAccessCode_Args__() throws Exception {
+    String actual = target.getLimitedAccessCode();
+    String expected = "";
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
   public void getSoc158PlacementCode_Args__() throws Exception {
     String actual = target.getSoc158PlacementCode();
     String expected = "";
@@ -580,6 +586,10 @@ public class BaseClientTest extends OscarTheGrouch<Client> {
     target.secondaryLanguageType = (short) 1260;
     ApiLanguageAware[] actual = target.getLanguages();
     assertThat(actual, notNullValue());
+    assertEquals(actual[0].getLanguageSysId(), new Integer(target.primaryLanguageType));
+    assertEquals(actual[1].getLanguageSysId(), new Integer(target.secondaryLanguageType));
+    assertTrue(actual[0].getPrimary());
+    assertFalse(actual[1].getPrimary());
   }
 
   @Test
@@ -995,6 +1005,36 @@ public class BaseClientTest extends OscarTheGrouch<Client> {
   public void setZippyCreatedIndicator_Args__String() throws Exception {
     String zippyCreatedIndicator = null;
     target.setZippyCreatedIndicator(zippyCreatedIndicator);
+  }
+
+  private static final class TestOnlyClient extends BaseClient {
+    // whatever
+
+    /**
+     * Default constructor
+     */
+    public TestOnlyClient() {
+      super();
+    }
+
+    /**
+     * constructor
+     *
+     * @param lastUpdatedId the last updated Id
+     */
+    public TestOnlyClient(String lastUpdatedId) {
+      super(lastUpdatedId);
+    }
+
+    /**
+     * constructor
+     *
+     * @param lastUpdatedId the last updated Id
+     * @param lastUpdatedTime the last updated time
+     */
+    public TestOnlyClient(String lastUpdatedId, Date lastUpdatedTime) {
+      super(lastUpdatedId, lastUpdatedTime);
+    }
   }
 
 }

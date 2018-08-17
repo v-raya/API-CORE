@@ -1,13 +1,15 @@
 package gov.ca.cwds.data.stream;
 
-import gov.ca.cwds.data.BaseDaoImpl;
-import gov.ca.cwds.data.persistence.PersistentObject;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
 import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+
+import gov.ca.cwds.data.BaseDaoImpl;
+import gov.ca.cwds.data.persistence.PersistentObject;
 
 /**
  * @author CWDS TPT-2
@@ -25,7 +27,7 @@ public abstract class AbstractResultsStreamer<E extends PersistentObject> {
   protected abstract E getResult(ScrollableResults scrollableResults);
 
   public Stream<E> createStream() {
-    Session session = dao.getSessionFactory().getCurrentSession();
+    Session session = dao.grabSession();
     Class<E> entityClass = dao.getEntityClass();
     Query<E> query = queryCreator.createQuery(session, entityClass);
     ScrollableResults results = query.scroll(ScrollMode.SCROLL_INSENSITIVE);

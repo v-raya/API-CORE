@@ -11,7 +11,23 @@ public interface LoggingContext {
    * Allowed log parameters.
    */
   public enum LogParameter {
-    USER_ID, REMOTE_ADDRESS, SESSION_ID, REQUEST_ID, UNIQUE_ID, REQUEST_START_TIME
+    USER_ID,
+
+    STAFF_ID,
+
+    STAFF_COUNTY,
+
+    REMOTE_ADDRESS,
+
+    SESSION_ID,
+
+    REQUEST_ID,
+
+    UNIQUE_ID,
+
+    REQUEST_START_TIME,
+
+    RESPONSE_STATUS
   }
 
   /**
@@ -48,5 +64,4 @@ public interface LoggingContext {
    * @return Value of UNIQUE_ID log parameter
    */
   public String getUniqueId();
-
 }

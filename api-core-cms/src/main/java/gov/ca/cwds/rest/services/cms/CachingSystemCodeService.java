@@ -213,6 +213,11 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
     return valid;
   }
 
+  @Override
+  public long getCacheSize() {
+    return systemCodeCache.size();
+  }
+
   /**
    * Get cached object identified by given cache key.
    * 
@@ -294,7 +299,9 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
         systemMetaSet = metaList.getSystemMetas();
       }
 
+      final Set<SystemCode> sysCodes = new HashSet<>();
       for (SystemMeta sysMeta : systemMetaSet) {
+        sysCodes.clear();
         String metaId = sysMeta.getLogicalTableDsdName();
 
         /**
@@ -302,10 +309,9 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
          */
         cacheKey = CacheKey.createForMeta(metaId);
         SystemCodeListResponse sysCodeList = (SystemCodeListResponse) load(cacheKey);
-        Set<SystemCode> sysCodes = new HashSet<>();
         if (sysCodeList != null) {
           systemCodeMap.put(cacheKey, sysCodeList);
-          sysCodes = sysCodeList.getSystemCodes();
+          sysCodes.addAll(sysCodeList.getSystemCodes());
         }
 
         /**
