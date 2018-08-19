@@ -52,7 +52,7 @@ public abstract class AbstractBaseAuthorizer<T, I> extends BaseAuthorizer<T, I> 
       "StaffPerson [{}] with staffPrivilegeTypes = {} is performing action on object [{}]. "
         + "Authorization result = [{}]. {}",
       perryAccount.getStaffId(), staffPrivilegeTypes, instanceName, authorizationResult,
-      perryAccount);
+      perryAccount.toString().replaceAll("\n", " ").replaceAll("\r", ""));
   }
 
   protected boolean authorizeInstanceOperation(final T instance, List<Object> authorizationFacts) {
