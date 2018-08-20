@@ -60,6 +60,9 @@
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.ClientServiceProvider"/>
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.OtherClientName" />
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.TribalMembershipVerification" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.SpecialProject" />
+    <mapping class="gov.ca.cwds.data.legacy.cms.entity.SpecialProjectReferral" />
+   
 
 
     <mapping class="gov.ca.cwds.data.legacy.cms.entity.syscodes.ActiveServiceComponentType"/>

@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
+import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
@@ -18,17 +18,15 @@ import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
  */
 @Entity
 @Table(name = "SPRJ_RFT")
+@NamedQuery(
+  name = 
+  "gov.ca.cwds.data.legacy.cms.entity.SpecialProjectReferral.findByReferralIdAndSpecialProjectId",
+  query = "FROM SpecialProjectReferral "
+  + "WHERE FKREFERL_T = :referralId AND FKSPC_PRJT = :specialProjectId")
+
 public class SpecialProjectReferral extends CmsPersistentObject {
 
   private static final long serialVersionUID = 241170224860954003L;
-
-  public static final String FIND_BY_REFERRAL_ID_AND_SPECIAL_PROJECT_ID = 
-      "gov.ca.cwds.data.persistence.cms.SpecialProjectReferral.findByReferralIdAndSpecialProjectId";
-  static final String FIND_BY_REFERRAL_ID_AND_SPECIAL_PROJECT_ID_QUERY =
-      "FROM SpecialProjectReferral WHERE FKREFERL_T = referralId AND FKSPC_PRJT = specialProjectId";
-  
-  public static final String PARAM_REFERRAL_ID = "referralId";
-  public static final String PARAM_SPECIAL_PROJECT_ID = "specialProjectId";
 
   @Id
   @Column(name = "THIRD_ID", nullable = false, length = CMS_ID_LEN)
