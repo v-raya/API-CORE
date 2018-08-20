@@ -8,8 +8,6 @@ import gov.ca.cwds.data.legacy.cms.entity.SpecialProject;
 import gov.ca.cwds.data.legacy.cms.persistence.BaseCwsCmsInMemoryPersistenceTest;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({PrincipalUtils.class})
 public class SpecialProjectDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
 
   private SpecialProjectDao dao = null;
