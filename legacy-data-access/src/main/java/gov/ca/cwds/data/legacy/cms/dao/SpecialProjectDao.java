@@ -32,10 +32,15 @@ public class SpecialProjectDao extends BaseDaoImpl<SpecialProject> {
    */
   public List<SpecialProject> findActiveSafelySurrenderedBabiesSpecialProjectByGovernmentEntity(
       Short governmentEntity) {
+    
+    Class<SpecialProject> entityClass = getEntityClass();
+    String className = entityClass.getName();
+    String queryName = className + ".findActiveSSBByGovernmentEntity";
+  
     Require.requireNotNullAndNotEmpty(governmentEntity);
 
     final List<SpecialProject> specialProjects = currentSession()
-        .createNamedQuery(SpecialProject.FIND_ACTIVE_SSB_BY_GOVERNMENT_ENTITY, SpecialProject.class)
+        .createNamedQuery(queryName, entityClass)
         .setParameter(SpecialProject.PARAM_GOVERNMENT_ENTITY, governmentEntity).list();
 
     return ImmutableList.copyOf(specialProjects);
@@ -50,15 +55,17 @@ public class SpecialProjectDao extends BaseDaoImpl<SpecialProject> {
    */
   public List<SpecialProject> findSpecialProjectByGovernmentEntityAndName(String name, 
       Short governmentEntityType) {
+    Class<SpecialProject> entityClass = getEntityClass();
+    String className = entityClass.getName();
+    String queryName = className + ".findByProjectName";
+    
     Require.requireNotNullAndNotEmpty(governmentEntityType);
 
     final List<SpecialProject> specialProjects = currentSession()
-      .createNamedQuery(SpecialProject.FIND_BY_PROJECT_NAME, SpecialProject.class)
+      .createNamedQuery(queryName, entityClass)
       .setParameter(SpecialProject.PARAM_GOVERNMENT_ENTITY, governmentEntityType)
       .setParameter(SpecialProject.PARAM_NAME, name)
       .list();
     return ImmutableList.copyOf(specialProjects);
     }
-
-
 }

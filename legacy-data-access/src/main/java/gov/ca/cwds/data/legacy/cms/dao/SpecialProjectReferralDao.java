@@ -29,13 +29,16 @@ public class SpecialProjectReferralDao extends BaseDaoImpl<SpecialProjectReferra
 
   public List<SpecialProjectReferral> findSpecialProjectReferralsByReferralIdAndSpecialProjectId(String referralId,
       String specialProjectId) {
+    Class<SpecialProjectReferral> entityClass = getEntityClass();
+    String className = entityClass.getName();
+    String queryName = className + ".findByReferralIdAndSpecialProjectId";
     Require.requireNotNullAndNotEmpty(referralId);
     Require.requireNotNullAndNotEmpty(specialProjectId);
     
     final List<SpecialProjectReferral> specialProjects = currentSession()
-    .createNamedQuery(SpecialProjectReferral.FIND_BY_REFERRAL_ID_AND_SPECIAL_PROJECT_ID, SpecialProjectReferral.class)
-    .setParameter(SpecialProjectReferral.PARAM_REFERRAL_ID, referralId)
-    .setParameter(SpecialProjectReferral.PARAM_SPECIAL_PROJECT_ID, specialProjectId)
+    .createNamedQuery(queryName, entityClass)
+    .setParameter("referralId", referralId)
+    .setParameter("specialProjectId", specialProjectId)
     .list();
     
     return ImmutableList.copyOf(specialProjects);
