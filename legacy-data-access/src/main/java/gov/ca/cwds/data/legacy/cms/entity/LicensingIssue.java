@@ -44,6 +44,10 @@ public class LicensingIssue extends CmsPersistentObject {
   @Column(name = "CMPLT_DFCY")
   private String complaintDeficiencyCode;
 
+  @Basic
+  @Column(name = "ISS_NOTES")
+  private String issueNotes;
+
   public String getIdentifier() {
     return identifier;
   }
@@ -83,6 +87,14 @@ public class LicensingIssue extends CmsPersistentObject {
 
   public void setComplaintDeficiencyCode(String complaintDeficiencyCode) {
     this.complaintDeficiencyCode = complaintDeficiencyCode;
+  }
+
+  public String getIssueNotes() {
+    return issueNotes;
+  }
+
+  public void setIssueNotes(String issueNotes) {
+    this.issueNotes = issueNotes;
   }
 
   @Override
