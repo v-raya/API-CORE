@@ -498,6 +498,14 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     this.highlightFields = trim(highlight);
   }
 
+  @JsonProperty("last_known_address")
+  public ElasticSearchPersonAddress getLastKnownAddress() {
+    if (addresses != null && !addresses.isEmpty()) {
+      return addresses.get(0);
+    }
+    return null;
+  }
+
   /**
    * Convenience method streams variable argument enum entries into a EnumSet.
    * 
