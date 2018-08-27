@@ -456,7 +456,7 @@ public final class CmsKeyIdGeneratorTest {
   // idsSet.addAll(ids[i]);
   // }
   //
-  // LOGGER.info("Time (milis): " + (System.currentTimeMillis() - start.getTime()));
+  // LOGGER.info("Time (millis): " + (System.currentTimeMillis() - start.getTime()));
   // LOGGER.info("Generated Unique IDs: " + idsSet.size() + " of " + (ids.length * idsPerThread)
   // + " expected");
   //
