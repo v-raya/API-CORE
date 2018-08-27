@@ -20,10 +20,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ForkJoinPool;
@@ -33,8 +31,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.apache.commons.collections4.SortedBag;
-import org.apache.commons.collections4.bag.TreeBag;
 import org.apache.commons.collections4.map.PassiveExpiringMap;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Ignore;
@@ -468,34 +464,23 @@ public final class CmsKeyIdGeneratorTest {
   // idsSet.size(), (ids.length * idsPerThread));
   // }
 
-  private SortedBag<String> genKeys(String staffId, int threadNum, int idsPerThread,
+  private void genKeys(String staffId, int threadNum, int idsPerThread,
       Map<String, String> results) {
     Thread.currentThread().setName(staffId + '_' + threadNum);
     LOGGER.info("start: staff id: {}, thread #: {}", staffId, threadNum);
 
-    final SortedBag<String> bag = new TreeBag<>(String::compareTo);
-    final Set<String> staffResults = new HashSet<>(threadNum * idsPerThread);
-
+    int counter = 0;
     for (int i = 0; i < idsPerThread; i++) {
       final String key = CmsKeyIdGenerator.getNextValue(staffId);
-      staffResults.add(key);
-      bag.add(key);
-
       if (results.containsKey(key)) {
         LOGGER.error("KEY ALREADY GENERATED! staff id: {}, key: {}", staffId, key);
+      } else {
+        ++counter;
+        results.put(key, key);
       }
-
-      results.put(key, key);
     }
 
-    if (bag.uniqueSet().size() != staffResults.size()) {
-      LOGGER.warn("COUNT MISMATCH! staff id: {}, bag size: {}, bag unique: {}, staffResults: {}",
-          staffId, bag.size(), bag.uniqueSet().size(), staffResults.size());
-    }
-
-    LOGGER.info("stop:  staff id: {}, bag size: {}, bag unique: {}, staffResults: {}", staffId,
-        bag.size(), bag.uniqueSet().size(), staffResults.size());
-    return bag;
+    LOGGER.info("stop: staff id: {}, counter: {}", staffId, counter);
   }
 
   @Test
@@ -505,13 +490,12 @@ public final class CmsKeyIdGeneratorTest {
     final int threadsPerUser = 3;
     final int idsPerThread = 50;
     final int expectedCount = numberOfUsers * threadsPerUser * idsPerThread;
-    // final int maxRunningThreads = Math.min(Runtime.getRuntime().availableProcessors() / 2, 4);
-    final int maxRunningThreads = 2;
+    final int maxRunningThreads = Math.max(Runtime.getRuntime().availableProcessors() / 2, 2);
     final Date start = new Date();
 
     final List<String> staffIds = IntStream.rangeClosed(1, numberOfUsers).boxed()
         .map(i -> StringUtils.leftPad(String.valueOf(i + 1), 3, "0")).collect(Collectors.toList());
-    final Map<String, String> results = new ConcurrentHashMap<>();
+    final Map<String, String> results = new ConcurrentHashMap<>(expectedCount);
 
     // It's a unit test, not a stress test. Jenkins doesn't have CPU to spare.
     final List<ForkJoinTask<?>> tasks = new ArrayList<>(expectedCount);
