@@ -480,22 +480,25 @@ public final class CmsKeyIdGeneratorTest {
         expectedCount, actual);
   }
 
+  // JUnits should not normally run stress tests. Jenkins may not handle it well under load.
   @Test
   public void multiThreadStressTest() throws InterruptedException {
-    final int numberOfUsers = 20;
-    final int threadsPerUser = 5;
-    final int idsPerThread = 100;
+    final int numberOfUsers = 10;
+    final int threadsPerUser = 2;
+    final int idsPerThread = 25;
+    final int expectedCount = numberOfUsers * threadsPerUser;
 
-    final ArrayList[] ids = new ArrayList[numberOfUsers * threadsPerUser];
-    final ExecutorService exServer = Executors.newFixedThreadPool(numberOfUsers * threadsPerUser);
+    final List<String>[] ids = new ArrayList[expectedCount];
+    final ExecutorService exServer =
+        Executors.newFixedThreadPool(Math.max(Runtime.getRuntime().availableProcessors() / 2, 4));
     final Date start = new Date();
 
     // Run multiple threads
     for (int i = 0; i < numberOfUsers; i++) {
-      String staffId = StringUtils.leftPad(String.valueOf(i + 1), 3, "0");
+      final String staffId = StringUtils.leftPad(String.valueOf(i + 1), 3, "0");
       for (int j = 0; j < threadsPerUser; j++) {
         int threadNum = i * threadsPerUser + j + 1;
-        ArrayList<String> threadIds = new ArrayList<>(idsPerThread);
+        final List<String> threadIds = new ArrayList<>(idsPerThread);
         ids[threadNum - 1] = threadIds;
 
         exServer.execute(new Runnable() {
@@ -509,16 +512,18 @@ public final class CmsKeyIdGeneratorTest {
         });
       }
     }
+
     exServer.shutdown();
-    exServer.awaitTermination(1, TimeUnit.HOURS);
-    Date end = new Date();
+    exServer.awaitTermination(30, TimeUnit.SECONDS);
+
+    LOGGER.info("total id's generated: {}", ids.length);
 
     final Set<String> idsSet = new HashSet<>();
     for (int i = 0; i < ids.length; i++) {
       idsSet.addAll(ids[i]);
     }
 
-    LOGGER.info("Time (milis): " + (end.getTime() - start.getTime()));
+    LOGGER.info("Time (milis): " + (System.currentTimeMillis() - start.getTime()));
     LOGGER.info("Generated Unique IDs: " + idsSet.size() + " of " + (ids.length * idsPerThread)
         + " expected");
 
