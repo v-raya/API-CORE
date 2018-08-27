@@ -472,10 +472,9 @@ public final class CmsKeyIdGeneratorTest {
     int keysGenerated = 0;
     for (int i = 0; i < keysPerThread; i++) {
       final String key = CmsKeyIdGenerator.getNextValue(staffId);
-      if (results.containsKey(key)) {
+      if (results.put(key, key) != null) {
         LOGGER.error("KEY ALREADY GENERATED! staff id: {}, key: {}", staffId, key);
       } else {
-        results.put(key, key);
         ++keysGenerated;
       }
     }
@@ -498,7 +497,7 @@ public final class CmsKeyIdGeneratorTest {
     final Date start = new Date();
 
     final List<String> staffIds = IntStream.rangeClosed(1, numberOfUsers).boxed()
-        .map(i -> StringUtils.leftPad(String.valueOf(i + 1), 3, "0")).collect(Collectors.toList());
+        .map(i -> StringUtils.leftPad(String.valueOf(i + 1), 3, "b")).collect(Collectors.toList());
     final Map<String, String> results = new ConcurrentHashMap<>(expectedCount);
 
     // It's a unit test, not a stress test. Jenkins doesn't have CPU to spare.
@@ -518,9 +517,9 @@ public final class CmsKeyIdGeneratorTest {
       task.get(); // join thread
     }
 
-    LOGGER.info("Time (milis): " + (System.currentTimeMillis() - start.getTime()));
     final int actual = results.size();
-    LOGGER.info("expected keys: {}, actual keys: {}", expectedCount, actual);
+    LOGGER.info("Time (milis): {}, expected keys: {}, actual keys: {}",
+        (System.currentTimeMillis() - start.getTime()), expectedCount, actual);
 
     assertEquals("Number of unique IDs generated NOT equals to total number of IDs generated.",
         expectedCount, actual);

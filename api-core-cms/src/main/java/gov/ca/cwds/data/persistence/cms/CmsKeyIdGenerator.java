@@ -154,7 +154,7 @@ public class CmsKeyIdGenerator {
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsKeyIdGenerator.class);
   private static final String DEFAULT_USER_ID = "0X5";
   private static final Map<String, String> lastKeys =
-      new PassiveExpiringMap<>(1, TimeUnit.SECONDS, new ConcurrentHashMap<>(10103));
+      new PassiveExpiringMap<>(5, TimeUnit.SECONDS, new ConcurrentHashMap<>(20107));
 
   /**
    * Static class only, do not instantiate.
