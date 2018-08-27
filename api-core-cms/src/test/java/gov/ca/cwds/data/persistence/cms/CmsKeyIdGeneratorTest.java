@@ -464,23 +464,27 @@ public final class CmsKeyIdGeneratorTest {
   // idsSet.size(), (ids.length * idsPerThread));
   // }
 
-  private void genKeys(String staffId, int threadNum, int idsPerThread,
+  private void genKeys(String staffId, int threadNum, int keysPerThread,
       Map<String, String> results) {
     Thread.currentThread().setName(staffId + '_' + threadNum);
-    LOGGER.info("start: staff id: {}, thread #: {}", staffId, threadNum);
+    LOGGER.info("START: staff id: {}", staffId);
 
-    int counter = 0;
-    for (int i = 0; i < idsPerThread; i++) {
+    int keysGenerated = 0;
+    for (int i = 0; i < keysPerThread; i++) {
       final String key = CmsKeyIdGenerator.getNextValue(staffId);
       if (results.containsKey(key)) {
         LOGGER.error("KEY ALREADY GENERATED! staff id: {}, key: {}", staffId, key);
       } else {
-        ++counter;
         results.put(key, key);
+        ++keysGenerated;
       }
     }
 
-    LOGGER.info("stop: staff id: {}, counter: {}", staffId, counter);
+    if (keysGenerated != keysPerThread) {
+      LOGGER.error("KEY COUNT MISMATCH! staff id: {}, counter: {}, keysPerThread: {}",
+          keysGenerated, keysPerThread);
+    }
+    LOGGER.info("STOP:  staff id: {}, keys generated: {}", staffId, keysGenerated);
   }
 
   @Test
@@ -488,8 +492,8 @@ public final class CmsKeyIdGeneratorTest {
     LOGGER.info("multiThreadTest");
     final int numberOfUsers = 20;
     final int threadsPerUser = 3;
-    final int idsPerThread = 50;
-    final int expectedCount = numberOfUsers * threadsPerUser * idsPerThread;
+    final int keysPerThread = 50;
+    final int expectedCount = numberOfUsers * threadsPerUser * keysPerThread;
     final int maxRunningThreads = Math.max(Runtime.getRuntime().availableProcessors() / 2, 2);
     final Date start = new Date();
 
@@ -505,7 +509,7 @@ public final class CmsKeyIdGeneratorTest {
     for (String staffId : staffIds) {
       for (int j = 0; j < threadsPerUser; j++) {
         final int threadNum = j + 1;
-        tasks.add(threadPool.submit(() -> genKeys(staffId, threadNum, idsPerThread, results)));
+        tasks.add(threadPool.submit(() -> genKeys(staffId, threadNum, keysPerThread, results)));
       }
     }
 
