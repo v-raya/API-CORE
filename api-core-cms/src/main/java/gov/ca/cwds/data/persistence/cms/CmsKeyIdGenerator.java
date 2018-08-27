@@ -154,7 +154,7 @@ public class CmsKeyIdGenerator {
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsKeyIdGenerator.class);
   private static final String DEFAULT_USER_ID = "0X5";
   private static final Map<String, String> lastKeys =
-      new PassiveExpiringMap<>(1, TimeUnit.SECONDS, new ConcurrentHashMap<>(10103));
+      new PassiveExpiringMap<>(20, TimeUnit.SECONDS, new ConcurrentHashMap<>(20107));
 
   /**
    * Static class only, do not instantiate.
@@ -458,12 +458,17 @@ public class CmsKeyIdGenerator {
     return new Date(timestamp);
   }
 
+  /**
+   * Synchronize key generation on staff/user id. The same user can only generate one key at a time.
+   * 
+   * @author CWDS API Team
+   */
   static class StaffGate implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private static final Map<String, StaffGate> gates =
-        new PassiveExpiringMap<>(1, TimeUnit.MINUTES, new ConcurrentHashMap<>());
+        new PassiveExpiringMap<>(5, TimeUnit.MINUTES, new ConcurrentHashMap<>());
 
     private final String staffId;
 
@@ -483,7 +488,7 @@ public class CmsKeyIdGenerator {
         ret = gates.get(staffId);
       } else {
         ret = new StaffGate(staffId);
-        gates.put(staffId, new StaffGate(staffId));
+        gates.put(staffId, ret);
       }
 
       return ret;
