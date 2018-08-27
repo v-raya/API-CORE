@@ -26,8 +26,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.TimeUnit;
@@ -39,7 +37,6 @@ import org.apache.commons.collections4.SortedBag;
 import org.apache.commons.collections4.bag.TreeBag;
 import org.apache.commons.collections4.map.PassiveExpiringMap;
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.jetty.util.ConcurrentHashSet;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -420,8 +417,59 @@ public final class CmsKeyIdGeneratorTest {
     LOGGER.info("Time taken (milis): " + (System.currentTimeMillis() - start.getTime()));
   }
 
+  // JUnits should not normally run stress tests. Jenkins may not handle it well under load.
+  // @Test
+  // public void oldMultiThreadTest() throws InterruptedException {
+  // final int numberOfUsers = 10;
+  // final int threadsPerUser = 2;
+  // final int idsPerThread = 25;
+  // final int expectedCount = numberOfUsers * threadsPerUser;
+  //
+  // final List<String>[] ids = new ArrayList[expectedCount];
+  // final ExecutorService exServer =
+  // Executors.newFixedThreadPool(Math.max(Runtime.getRuntime().availableProcessors() / 2, 4));
+  // final Date start = new Date();
+  //
+  // // Run multiple threads
+  // for (int i = 0; i < numberOfUsers; i++) {
+  // final String staffId = StringUtils.leftPad(String.valueOf(i + 1), 3, "0");
+  // for (int j = 0; j < threadsPerUser; j++) {
+  // int threadNum = i * threadsPerUser + j + 1;
+  // final List<String> threadIds = new ArrayList<>(idsPerThread);
+  // ids[threadNum - 1] = threadIds;
+  //
+  // exServer.execute(new Runnable() {
+  // @SuppressWarnings("unused")
+  // @Override
+  // public void run() {
+  // for (int k = 0; k < idsPerThread; k++) {
+  // threadIds.add(CmsKeyIdGenerator.getNextValue(staffId));
+  // }
+  // }
+  // });
+  // }
+  // }
+  //
+  // exServer.shutdown();
+  // exServer.awaitTermination(30, TimeUnit.SECONDS);
+  //
+  // LOGGER.info("total id's generated: {}", ids.length);
+  //
+  // final Set<String> idsSet = new HashSet<>();
+  // for (int i = 0; i < ids.length; i++) {
+  // idsSet.addAll(ids[i]);
+  // }
+  //
+  // LOGGER.info("Time (milis): " + (System.currentTimeMillis() - start.getTime()));
+  // LOGGER.info("Generated Unique IDs: " + idsSet.size() + " of " + (ids.length * idsPerThread)
+  // + " expected");
+  //
+  // assertEquals("Number of unique IDs generated NOT equals to total number of IDs generated.",
+  // idsSet.size(), (ids.length * idsPerThread));
+  // }
+
   private SortedBag<String> genKeys(String staffId, int threadNum, int idsPerThread,
-      Set<String> results) {
+      Map<String, String> results) {
     Thread.currentThread().setName(staffId + '_' + threadNum);
     LOGGER.info("start: staff id: {}, thread #: {}", staffId, threadNum);
 
@@ -432,28 +480,38 @@ public final class CmsKeyIdGeneratorTest {
       final String key = CmsKeyIdGenerator.getNextValue(staffId);
       staffResults.add(key);
       bag.add(key);
+
+      if (results.containsKey(key)) {
+        LOGGER.error("KEY ALREADY GENERATED! staff id: {}, key: {}", staffId, key);
+      }
+
+      results.put(key, key);
     }
 
-    results.addAll(staffResults);
-    LOGGER.info("stop:  staff id: {}, bag: {}, staffResults: {}", staffId, bag.size(),
-        staffResults.size());
+    if (bag.uniqueSet().size() != staffResults.size()) {
+      LOGGER.warn("COUNT MISMATCH! staff id: {}, bag size: {}, bag unique: {}, staffResults: {}",
+          staffId, bag.size(), bag.uniqueSet().size(), staffResults.size());
+    }
+
+    LOGGER.info("stop:  staff id: {}, bag size: {}, bag unique: {}, staffResults: {}", staffId,
+        bag.size(), bag.uniqueSet().size(), staffResults.size());
     return bag;
   }
 
   @Test
   public void multiThreadTest() throws Exception {
     LOGGER.info("multiThreadTest");
-    final int numberOfUsers = 50;
-    final int threadsPerUser = 2;
-    final int idsPerThread = 100;
+    final int numberOfUsers = 20;
+    final int threadsPerUser = 3;
+    final int idsPerThread = 50;
     final int expectedCount = numberOfUsers * threadsPerUser * idsPerThread;
-    final int maxRunningThreads = Math.max(Runtime.getRuntime().availableProcessors(), 4);
+    // final int maxRunningThreads = Math.min(Runtime.getRuntime().availableProcessors() / 2, 4);
+    final int maxRunningThreads = 2;
     final Date start = new Date();
 
     final List<String> staffIds = IntStream.rangeClosed(1, numberOfUsers).boxed()
         .map(i -> StringUtils.leftPad(String.valueOf(i + 1), 3, "0")).collect(Collectors.toList());
-    final Set<String> results = new ConcurrentHashSet<>();
-    LOGGER.info("staffIds.size(): {}", staffIds.size());
+    final Map<String, String> results = new ConcurrentHashMap<>();
 
     // It's a unit test, not a stress test. Jenkins doesn't have CPU to spare.
     final List<ForkJoinTask<?>> tasks = new ArrayList<>(expectedCount);
@@ -478,57 +536,6 @@ public final class CmsKeyIdGeneratorTest {
 
     assertEquals("Number of unique IDs generated NOT equals to total number of IDs generated.",
         expectedCount, actual);
-  }
-
-  // JUnits should not normally run stress tests. Jenkins may not handle it well under load.
-  @Test
-  public void multiThreadStressTest() throws InterruptedException {
-    final int numberOfUsers = 10;
-    final int threadsPerUser = 2;
-    final int idsPerThread = 25;
-    final int expectedCount = numberOfUsers * threadsPerUser;
-
-    final List<String>[] ids = new ArrayList[expectedCount];
-    final ExecutorService exServer =
-        Executors.newFixedThreadPool(Math.max(Runtime.getRuntime().availableProcessors() / 2, 4));
-    final Date start = new Date();
-
-    // Run multiple threads
-    for (int i = 0; i < numberOfUsers; i++) {
-      final String staffId = StringUtils.leftPad(String.valueOf(i + 1), 3, "0");
-      for (int j = 0; j < threadsPerUser; j++) {
-        int threadNum = i * threadsPerUser + j + 1;
-        final List<String> threadIds = new ArrayList<>(idsPerThread);
-        ids[threadNum - 1] = threadIds;
-
-        exServer.execute(new Runnable() {
-          @SuppressWarnings("unused")
-          @Override
-          public void run() {
-            for (int k = 0; k < idsPerThread; k++) {
-              threadIds.add(CmsKeyIdGenerator.getNextValue(staffId));
-            }
-          }
-        });
-      }
-    }
-
-    exServer.shutdown();
-    exServer.awaitTermination(30, TimeUnit.SECONDS);
-
-    LOGGER.info("total id's generated: {}", ids.length);
-
-    final Set<String> idsSet = new HashSet<>();
-    for (int i = 0; i < ids.length; i++) {
-      idsSet.addAll(ids[i]);
-    }
-
-    LOGGER.info("Time (milis): " + (System.currentTimeMillis() - start.getTime()));
-    LOGGER.info("Generated Unique IDs: " + idsSet.size() + " of " + (ids.length * idsPerThread)
-        + " expected");
-
-    assertEquals("Number of unique IDs generated NOT equals to total number of IDs generated.",
-        idsSet.size(), (ids.length * idsPerThread));
   }
 
 }
