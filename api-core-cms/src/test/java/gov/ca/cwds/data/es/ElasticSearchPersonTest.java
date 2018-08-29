@@ -320,52 +320,6 @@ public class ElasticSearchPersonTest extends OscarTheGrouch<Client> {
   }
 
   @Test
-  public void setLastKnownAddresses_Args__Empty() throws Exception {
-    List<ElasticSearchPersonAddress> addresses = new ArrayList<>();
-    target.setAddresses(addresses);
-    ElasticSearchPersonAddress actual = target.getLastKnownAddress();
-    ElasticSearchPersonAddress expected = null;
-    assertThat(actual, is(equalTo(expected)));
-  }
-
-  @Test
-  public void setLastKnownAddresses_Args__One() throws Exception {
-    List<ElasticSearchPersonAddress> addresses = new ArrayList<>();
-    String streetAddress = "A";
-    String city = "B";
-    String state = "C";
-    ElasticSearchPersonAddress expected = new ElasticSearchPersonAddress();
-    expected.setCity(city);
-    expected.setState(state);
-    expected.setStreetAddress(streetAddress);
-    addresses.add(expected);
-    target.setAddresses(addresses);
-    ElasticSearchPersonAddress actual = target.getLastKnownAddress();
-    assertThat(actual, is(equalTo(expected)));
-  }
-
-  @Test
-  public void setLastKnownAddresses_Args__List() throws Exception {
-    List<ElasticSearchPersonAddress> addresses = new ArrayList<>();
-
-    ElasticSearchPersonAddress expected = new ElasticSearchPersonAddress();
-    expected.setCity("A");
-    expected.setState("B");
-    expected.setStreetAddress("C");
-    addresses.add(expected);
-
-    ElasticSearchPersonAddress secondAddress = new ElasticSearchPersonAddress();
-    secondAddress.setCity("D");
-    secondAddress.setState("E");
-    secondAddress.setStreetAddress("F");
-    addresses.add(secondAddress);
-
-    target.setAddresses(addresses);
-    ElasticSearchPersonAddress actual = target.getLastKnownAddress();
-    assertThat(actual, is(equalTo(expected)));
-  }
-
-  @Test
   public void getPhones_Args__() throws Exception {
     List<ElasticSearchPersonPhone> actual = target.getPhones();
     assertThat(actual, notNullValue());
