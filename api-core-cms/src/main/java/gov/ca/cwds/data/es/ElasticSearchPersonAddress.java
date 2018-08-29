@@ -1,8 +1,12 @@
 package gov.ca.cwds.data.es;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,6 +96,9 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
 
   @JsonProperty("active")
   private String active;
+
+  @JsonProperty("last_known")
+  private String lastKnown;
 
   @JsonProperty("phone_numbers")
   private List<ElasticSearchPersonPhone> phones = new ArrayList<>();
@@ -386,6 +393,35 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
   }
 
   @JsonIgnore
+  public String getLastKnown() {
+    return lastKnown;
+  }
+
+  public void setLastKnown(String lastKnown) {
+    this.lastKnown = lastKnown;
+  }
+
+  /**
+   * Getter for "searchable_address".
+   *
+   * @return searchable address
+   */
+  @JsonProperty("searchable_address")
+  public String[] getSearchableAddress() {
+    return constructSearchableAddressToIndex();
+  }
+
+  /**
+   * Getter for "autocomplete_searchable_address".
+   *
+   * @return street address to be indexed for autocomplete search
+   */
+  @JsonProperty("autocomplete_searchable_address")
+  public String[] getAutocompleteSearchableAddress() {
+    return constructSearchableAddressToIndex();
+  }
+
+  @JsonIgnore
   public ElasticSearchSystemCode getCountySystemCode() {
     return county;
   }
@@ -405,5 +441,20 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
 
   public void setCounty(ElasticSearchSystemCode county) {
     this.county = county;
+  }
+
+  private String[] constructSearchableAddressToIndex() {
+    Set<String> searchableAddress = new HashSet<>();
+    if (StringUtils.isNotBlank(this.streetNumber)) {
+      searchableAddress.add(this.streetNumber);
+    }
+    if (StringUtils.isNotBlank(this.streetName)) {
+      String[] street = this.streetName.split("\\s+");
+      Collections.addAll(searchableAddress, street);
+    }
+    if (!searchableAddress.isEmpty()) {
+      return searchableAddress.toArray(new String[searchableAddress.size()]);
+    }
+    return new String[0];
   }
 }

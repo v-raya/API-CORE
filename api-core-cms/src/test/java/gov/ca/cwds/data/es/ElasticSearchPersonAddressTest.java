@@ -229,6 +229,47 @@ public class ElasticSearchPersonAddressTest {
   }
 
   @Test
+  public void getActive_Args__() throws Exception {
+    String actual = target.getActive();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setActive_Args__() throws Exception {
+    String active = null;
+    target.setActive(active);
+  }
+
+
+  @Test
+  public void getLastKnown_Args__() throws Exception {
+    String actual = target.getLastKnown();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setLastKnown_Args__() throws Exception {
+    String lastKnown = null;
+    target.setLastKnown(lastKnown);
+  }
+
+  @Test
+  public void getSearchableAddress_Args__() throws Exception {
+    String[] actual = target.getSearchableAddress();
+    String[] expected = new String[0];
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getAutocompleteSearchableAddress_Args__() throws Exception {
+    String[] actual = target.getAutocompleteSearchableAddress();
+    String[] expected = new String[0];
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
   public void getApiAdrAddressType_Args__() throws Exception {
     Short actual = target.getApiAdrAddressType();
     Short expected = null;
