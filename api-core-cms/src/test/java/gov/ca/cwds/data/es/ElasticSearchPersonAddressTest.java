@@ -7,6 +7,8 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -266,6 +268,46 @@ public class ElasticSearchPersonAddressTest {
   public void getAutocompleteSearchableAddress_Args__() throws Exception {
     String[] actual = target.getAutocompleteSearchableAddress();
     String[] expected = new String[0];
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getSearchableAddress_Args__String() throws Exception {
+    target.setStreetNumber("1234");
+    target.setStreetName("Some Street");
+    String[] actual = target.getSearchableAddress();
+    Arrays.sort(actual);
+    String[] expected = {"1234", "Some", "Street"};
+    Arrays.sort(expected);
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getAutocompleteSearchableAddress_Args__String() throws Exception {
+    target.setStreetNumber("1234");
+    target.setStreetName("Some Street");
+    String[] actual = target.getAutocompleteSearchableAddress();
+    Arrays.sort(actual);
+    String[] expected = {"1234", "Some", "Street"};
+    Arrays.sort(expected);
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getSearchableAddress_Args__Blank() throws Exception {
+    target.setStreetNumber("");
+    target.setStreetName("");
+    String[] actual = target.getSearchableAddress();
+    String[] expected = {};
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getAutocompleteSearchableAddress_Args__Blank() throws Exception {
+    target.setStreetNumber("");
+    target.setStreetName("");
+    String[] actual = target.getAutocompleteSearchableAddress();
+    String[] expected = {};
     assertThat(actual, is(equalTo(expected)));
   }
 
