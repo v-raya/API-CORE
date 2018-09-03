@@ -312,6 +312,21 @@ public class ElasticSearchPersonAddressTest {
   }
 
   @Test
+  public void getAutocompleteCity_Args__() throws Exception {
+    String actual = target.getAutocompleteCity();
+    String expected = null;
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void getAutocompleteAddress_Args__String() throws Exception {
+    target.setCity("Abc");
+    String actual = target.getAutocompleteCity();
+    String expected = "Abc";
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
   public void getApiAdrAddressType_Args__() throws Exception {
     Short actual = target.getApiAdrAddressType();
     Short expected = null;
