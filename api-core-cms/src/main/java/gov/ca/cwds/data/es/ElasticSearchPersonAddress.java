@@ -421,6 +421,16 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
     return constructSearchableAddressToIndex();
   }
 
+  /**
+   * Getter for "autocomplete_city".
+   *
+   * @return city to be indexed for autocomplete search
+   */
+  @JsonProperty("autocomplete_city")
+  public String getAutocompleteCity() {
+    return this.city;
+  }
+
   @JsonIgnore
   public ElasticSearchSystemCode getCountySystemCode() {
     return county;
