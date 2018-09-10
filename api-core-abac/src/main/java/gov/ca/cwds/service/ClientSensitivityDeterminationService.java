@@ -1,12 +1,15 @@
 package gov.ca.cwds.service;
 
-import com.google.inject.Inject;
-import gov.ca.cwds.data.dao.cms.SensitivityDeterminationDao;
-import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.persistence.NoResultException;
+
+import com.google.inject.Inject;
+
+import gov.ca.cwds.data.dao.cms.SensitivityDeterminationDao;
+import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
 
 /**
  * Service to determine client sensitivity.
@@ -50,4 +53,5 @@ public class ClientSensitivityDeterminationService {
       return new HashMap<>();
     }
   }
+
 }

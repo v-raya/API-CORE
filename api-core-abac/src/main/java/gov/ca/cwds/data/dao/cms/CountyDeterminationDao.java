@@ -1,7 +1,5 @@
 package gov.ca.cwds.data.dao.cms;
 
-import com.google.inject.Inject;
-import gov.ca.cwds.inject.CwsRsSessionFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,6 +9,10 @@ import java.util.Map;
 import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+
+import com.google.inject.Inject;
+
+import gov.ca.cwds.inject.CwsRsSessionFactory;
 
 /**
  * Hibernate DAO for getting county of client from the {@code CLIENT_CNTY} table in a DB2
@@ -32,10 +34,10 @@ public class CountyDeterminationDao extends BaseAuthorizationDao {
   private static final String NQ_PARAM_CLIENT_IDS = "clientIds";
 
   private static final String SELECT_CLIENT_COUNTIES =
-    "SELECT GVR_ENTC FROM {h-schema}CLIENT_CNTY WHERE CLIENT_ID = :" + NQ_PARAM_CLIENT_ID;
+      "SELECT GVR_ENTC FROM {h-schema}CLIENT_CNTY WHERE CLIENT_ID = :" + NQ_PARAM_CLIENT_ID;
   private static final String SELECT_CLIENT_COUNTIES_MAP =
-    "SELECT CLIENT_ID, GVR_ENTC FROM {h-schema}CLIENT_CNTY WHERE CLIENT_ID IN :"
-      + NQ_PARAM_CLIENT_IDS;
+      "SELECT CLIENT_ID, GVR_ENTC FROM {h-schema}CLIENT_CNTY WHERE CLIENT_ID IN :"
+          + NQ_PARAM_CLIENT_IDS;
 
   @Inject
   public CountyDeterminationDao(@CwsRsSessionFactory SessionFactory sessionFactory) {
@@ -51,11 +53,12 @@ public class CountyDeterminationDao extends BaseAuthorizationDao {
   @SuppressWarnings("unchecked")
   public List<Short> getClientCounties(final String clientId) {
     final Pair<Session, Boolean> pair = grabSession();
-    Session session = pair.getLeft();
+    final Session session = pair.getLeft();
     try {
+      // DRS: Hibernate can't cache native queries without help.
       return session.createNativeQuery(SELECT_CLIENT_COUNTIES)
-        .setParameter(NQ_PARAM_CLIENT_ID, clientId).setCacheable(true)
-        .setCacheRegion(CLIENT_COUNTY_CACHE).getResultList();
+          .setParameter(NQ_PARAM_CLIENT_ID, clientId).setCacheable(true)
+          .setCacheRegion(CLIENT_COUNTY_CACHE).getResultList();
     } finally {
       finalizeSession();
     }
@@ -73,18 +76,20 @@ public class CountyDeterminationDao extends BaseAuthorizationDao {
     }
     final Map<String, List<Short>> clientCountiesMap = new HashMap<>(clientIds.size());
     final Pair<Session, Boolean> pair = grabSession();
-    Session session = pair.getLeft();
+    final Session session = pair.getLeft();
 
     List<Object[]> clientCountiesResults;
     try {
+      // DRS: Hibernate can't cache native queries without help.
       clientCountiesResults = session.createNativeQuery(SELECT_CLIENT_COUNTIES_MAP)
-        .setParameter(NQ_PARAM_CLIENT_IDS, clientIds).getResultList();
+          .setParameter(NQ_PARAM_CLIENT_IDS, clientIds).getResultList();
     } finally {
       finalizeSession();
     }
+
     for (Object[] result : clientCountiesResults) {
-      String clientId = (String)result[0];
-      Short county = (Short)result[1];
+      final String clientId = (String) result[0];
+      final Short county = (Short) result[1];
       if (!clientCountiesMap.containsKey(clientId)) {
         clientCountiesMap.put(clientId, new ArrayList<>());
       }

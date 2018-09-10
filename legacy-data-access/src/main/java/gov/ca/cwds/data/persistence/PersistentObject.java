@@ -29,7 +29,7 @@ public interface PersistentObject extends ApiMarker {
    * The key may be any serializable object, including String, Number (and its extensions), or
    * composite key types. By definition, a primary key is uniquely identifies a record and is
    * non-null. In contrast, other unique identifiers, such as unique indexes, are not necessarily
-   * constrained the non-null mandate, depending on the platform.
+   * constrained by the non-null mandate, depending on the platform.
    * 
    * @return the unique primary key
    */

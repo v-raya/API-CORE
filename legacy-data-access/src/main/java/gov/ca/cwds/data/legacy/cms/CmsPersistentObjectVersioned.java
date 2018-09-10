@@ -35,4 +35,5 @@ public abstract class CmsPersistentObjectVersioned extends CmsPersistentObjectBa
   public void setLastUpdateTime(Timestamp lastUpdatedTime) {
     this.lastUpdatedTime = (lastUpdatedTime == null ? null : (Timestamp) lastUpdatedTime.clone());
   }
+
 }

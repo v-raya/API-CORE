@@ -244,7 +244,7 @@ public class CmsKeyIdGenerator {
 
   /**
    * @param longTimestamp date decoded from Base62 to double
-   * @return date
+   * @return date as a long
    */
   public static long longToTimestamp(long longTimestamp) {
     final Calendar cal = Calendar.getInstance();
@@ -270,7 +270,6 @@ public class CmsKeyIdGenerator {
     longTimestamp -= day * nSHIFT_DAY;
 
     final long month = (longTimestamp / nSHIFT_MONTH);
-
     cal.set(Calendar.MONTH, (int) month);
     longTimestamp -= month * nSHIFT_MONTH;
 
@@ -453,8 +452,8 @@ public class CmsKeyIdGenerator {
     }
 
     final String tsB62 = key.substring(0, LEN_KEYTIMESTAMP);
-    long slong = strToLong(tsB62, 62, POWER_BASE62);
-    long timestamp = longToTimestamp(slong);
+    final long slong = strToLong(tsB62, 62, POWER_BASE62);
+    final long timestamp = longToTimestamp(slong);
     return new Date(timestamp);
   }
 
@@ -504,7 +503,7 @@ public class CmsKeyIdGenerator {
       String newValue;
       do {
         newValue = CmsKeyIdGenerator.generate(staffId, new Date());
-      } while (lastKeys.containsKey(newValue)); // safety
+      } while (lastKeys.containsKey(newValue)); // safety valve
 
       lastKeys.put(newValue, newValue);
       return newValue;
@@ -571,12 +570,11 @@ public class CmsKeyIdGenerator {
    * Utility struct class stores details of CWDS key decomposition.
    *
    * <p>
-   * <strong>WARNING</strong>: <strong>Do NOT change this struct!</strong> It maps directly the C++
-   * library.
+   * <strong>WARNING: Do NOT change this struct!</strong> It maps directly the C++ library.
+   * SonarQube is wrong here, very wrong.
    * </p>
    */
   public static final class KeyDetail {
-
     public String key; // NOSONAR
     public String staffId; // NOSONAR
     public String UITimestamp; // NOSONAR
