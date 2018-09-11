@@ -35,6 +35,10 @@ public class CrudsDaoImpl<T extends PersistentObject> extends AbstractDAO<T>
   /**
    * Grab a session! If a current session is available, return it, else open a new session.
    * 
+   * <p>
+   * <strong>WARNING:<strong> If you open it, then you close it.
+   * </p>
+   * 
    * @return usable session
    */
   public Session grabSession() {
