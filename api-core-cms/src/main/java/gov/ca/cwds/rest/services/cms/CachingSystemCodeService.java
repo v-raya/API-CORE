@@ -73,8 +73,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
 
     if (preloadCache) {
       try {
-        Map<CacheKey, Object> systemCodes = cacheLoader.loadAll();
-        systemCodeCache.putAll(systemCodes);
+        systemCodeCache.putAll(cacheLoader.loadAll());
       } catch (Exception e) {
         LOGGER.error("Error loading system codes", e);
         throw new ServiceException(e);
@@ -259,20 +258,13 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
 
       if (CacheKey.ALL_METAS_TYPE.equals(key.getType())) {
         // Load all system metas
-        SystemMetaListResponse metaList =
-            (SystemMetaListResponse) systemCodeService.loadSystemMetas();
-        objectToCache = metaList;
-
+        objectToCache = systemCodeService.loadSystemMetas();
       } else if (CacheKey.META_ID_TYPE.equals(key.getType())) {
         // Add SystemCodeListResponse objects keyed by Meta ID.
-        SystemCodeListResponse sysCodeList =
-            (SystemCodeListResponse) systemCodeService.loadSystemCodesForMeta(key.getValue());
-        objectToCache = sysCodeList;
-
+        objectToCache = systemCodeService.loadSystemCodesForMeta(key.getValue());
       } else if (CacheKey.SYSTEM_CODE_ID_TYPE.equals(key.getType())) {
         // Add SystemCode objects keyed by System Code ID.
-        SystemCode systemCode = (SystemCode) systemCodeService.loadSystemCode(key.getValue());
-        objectToCache = systemCode;
+        objectToCache = systemCodeService.loadSystemCode(key.getValue());
       }
 
       return objectToCache;
@@ -370,4 +362,5 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
     }
 
   }
+
 }
