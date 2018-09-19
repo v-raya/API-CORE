@@ -50,7 +50,6 @@ public class SystemMeta extends ReportingDomain implements Response {
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "Government Entity")
   private String shortDescriptionName;
 
-
   /**
    * Construct from all fields.
    * 
@@ -68,8 +67,6 @@ public class SystemMeta extends ReportingDomain implements Response {
     this.shortDescriptionName = shortDescriptionName;
   }
 
-
-  @SuppressWarnings("javadoc")
   public SystemMeta(gov.ca.cwds.data.persistence.cms.SystemMeta persistedSystemMeta) {
     this.logicalTableDsdName = persistedSystemMeta.getLogicalTableDsdName();
     this.userTableName = persistedSystemMeta.getUserTableName();
