@@ -15,30 +15,35 @@ public class CaresStackUtils {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CaresStackUtils.class);
 
+  private CaresStackUtils() {
+    // private, static methods only
+  }
+
   public static void logStack() {
-    if (LOGGER.isTraceEnabled()) {
+    logStack(LOGGER);
+  }
+
+  public static void logStack(Logger logger) {
+    if (logger.isTraceEnabled()) {
       try {
-        final StackTraceElement[] stack = Thread.currentThread().getStackTrace();
-        Arrays.stream(stack, 0, stack.length - 1)
-            .filter(e -> e.getClassName().startsWith("gov.ca.cwds")
-                && !e.getClassName().startsWith("gov.ca.cwds.rest.filters")
-                && !e.getClassName().contains("$$"))
-            .forEach(e -> LOGGER.info("\t{}", e));
+        final StackTraceElement[] stack = getStackTrace();
+        Arrays.stream(stack, 0, stack.length - 1).forEach(x -> logger.trace("\t{}", x));
       } catch (Exception e) {
+        logger.error("FAILED TO LOG STACK! {}", e); // how ironic
         throw e;
       }
     }
   }
 
   public static String stackToString() {
+    return stackToString("\n");
+  }
+
+  public static String stackToString(String delim) {
     StringBuilder buf = new StringBuilder();
     try {
-      final StackTraceElement[] stack = Thread.currentThread().getStackTrace();
-      Arrays.stream(stack, 0, stack.length - 1)
-          .filter(e -> e.getClassName().startsWith("gov.ca.cwds")
-              && !e.getClassName().startsWith("gov.ca.cwds.rest.filters")
-              && !e.getClassName().contains("$$"))
-          .forEach(e -> buf.append('\n').append(e));
+      final StackTraceElement[] stack = getStackTrace();
+      Arrays.stream(stack, 0, stack.length - 1).forEach(e -> buf.append(delim).append(e));
     } catch (Exception e) {
       throw e;
     }
