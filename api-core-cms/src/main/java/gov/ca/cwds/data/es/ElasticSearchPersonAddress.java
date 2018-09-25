@@ -414,7 +414,7 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
   /**
    * Getter for "autocomplete_searchable_address".
    *
-   * @return street address to be indexed for autocomplete search
+   * @return street address to be indexed for auto-complete search
    */
   @JsonProperty("autocomplete_searchable_address")
   public String[] getAutocompleteSearchableAddress() {
@@ -424,7 +424,7 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
   /**
    * Getter for "autocomplete_city".
    *
-   * @return city to be indexed for autocomplete search
+   * @return city to be indexed for auto-complete search
    */
   @JsonProperty("autocomplete_city")
   public String getAutocompleteCity() {
@@ -454,17 +454,21 @@ public class ElasticSearchPersonAddress extends ApiObjectIdentity
   }
 
   private String[] constructSearchableAddressToIndex() {
-    Set<String> searchableAddress = new HashSet<>();
+    final Set<String> searchableAddress = new HashSet<>();
     if (StringUtils.isNotBlank(this.streetNumber)) {
       searchableAddress.add(this.streetNumber);
     }
+
     if (StringUtils.isNotBlank(this.streetName)) {
-      String[] street = this.streetName.split("\\s+");
+      final String[] street = this.streetName.split("\\s+");
       Collections.addAll(searchableAddress, street);
     }
+
     if (!searchableAddress.isEmpty()) {
       return searchableAddress.toArray(new String[searchableAddress.size()]);
     }
+
     return new String[0];
   }
+
 }
