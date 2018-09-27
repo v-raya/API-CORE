@@ -1,10 +1,6 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
-import com.google.inject.Inject;
-import gov.ca.cwds.data.legacy.cms.dao.CsecHistoryDao;
-import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
-import gov.ca.cwds.security.annotations.Authorize;
-import gov.ca.cwds.security.utils.PrincipalUtils;
+import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT_ID;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -14,10 +10,20 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT_ID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.inject.Inject;
+
+import gov.ca.cwds.data.legacy.cms.dao.CsecHistoryDao;
+import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
+import gov.ca.cwds.security.annotations.Authorize;
+import gov.ca.cwds.security.utils.PrincipalUtils;
 
 /** @author CWDS TPT-3 Team */
 public class CsecHistoryService {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(CsecHistoryService.class);
 
   private final CsecHistoryDao csecHistoryDao;
 
@@ -30,32 +36,32 @@ public class CsecHistoryService {
     return csecHistoryDao.findByClientId(clientId);
   }
 
-  public void updateCsecHistoriesByClientId(
-      String clientId, List<CsecHistory> updatedCsecHistories) {
+  public void updateCsecHistoriesByClientId(String clientId,
+      List<CsecHistory> updatedCsecHistories) {
 
-    Collection<CsecHistory> persistedCsecHistories = csecHistoryDao.findByClientId(clientId);
-    Map<Serializable, CsecHistory> persistedMap =
-        persistedCsecHistories
-            .stream()
-            .collect(Collectors.toMap(CsecHistory::getPrimaryKey, Function.identity()));
+    final Collection<CsecHistory> persistedCsecHistories = csecHistoryDao.findByClientId(clientId);
+    final Map<Serializable, CsecHistory> persistedMap = persistedCsecHistories.stream()
+        .collect(Collectors.toMap(CsecHistory::getPrimaryKey, Function.identity()));
 
-    String userId = PrincipalUtils.getStaffPersonId();
-    LocalDateTime now = LocalDateTime.now();
+    final String userId = PrincipalUtils.getStaffPersonId();
+    final LocalDateTime now = LocalDateTime.now();
     for (CsecHistory csecHistory : updatedCsecHistories) {
-      CsecHistory persistedState = persistedMap.get(csecHistory.getPrimaryKey());
+      final CsecHistory persistedState = persistedMap.get(csecHistory.getPrimaryKey());
       if (persistedState == null) {
         createCsecHistory(userId, now, csecHistory);
       } else {
         updateCsecHistory(persistedState, csecHistory, userId, now);
       }
     }
-    Map<Serializable, CsecHistory> updatedMap =
-        updatedCsecHistories
-            .stream()
-            .collect(Collectors.toMap(CsecHistory::getPrimaryKey, Function.identity()));
+
+    final Map<Serializable, CsecHistory> updatedMap = updatedCsecHistories.stream()
+        .collect(Collectors.toMap(CsecHistory::getPrimaryKey, Function.identity()));
+
+    // WARNING: IBM doesn't delete from CSECHIST. Why are we??
     for (CsecHistory csecHistory : persistedCsecHistories) {
-      Serializable primaryKey = csecHistory.getPrimaryKey();
+      final Serializable primaryKey = csecHistory.getPrimaryKey();
       if (updatedMap.get(primaryKey) == null) {
+        LOGGER.warn("****** DELETE FROM CSECHIST! key: {} ******", primaryKey);
         csecHistoryDao.delete(primaryKey);
       }
     }
@@ -69,12 +75,13 @@ public class CsecHistoryService {
     csecHistoryDao.create(csecHistory);
   }
 
-  private void updateCsecHistory(
-      CsecHistory persistedState, CsecHistory newState, String userId, LocalDateTime now) {
+  private void updateCsecHistory(CsecHistory persistedState, CsecHistory newState, String userId,
+      LocalDateTime now) {
     persistedState.setEndDate(newState.getEndDate());
     persistedState.setSexualExploitationType(newState.getSexualExploitationType());
     persistedState.setStartDate(newState.getStartDate());
     persistedState.setLastUpdateId(userId);
     persistedState.setLastUpdateTime(now);
   }
+
 }
