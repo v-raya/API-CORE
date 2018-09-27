@@ -38,7 +38,7 @@ public class CsecHistoryService {
 
   public void updateCsecHistoriesByClientId(String clientId,
       List<CsecHistory> updatedCsecHistories) {
-
+    LOGGER.debug("Update CSEC history for client id: {}", clientId);
     final Collection<CsecHistory> persistedCsecHistories = csecHistoryDao.findByClientId(clientId);
     final Map<Serializable, CsecHistory> persistedMap = persistedCsecHistories.stream()
         .collect(Collectors.toMap(CsecHistory::getPrimaryKey, Function.identity()));
@@ -59,10 +59,11 @@ public class CsecHistoryService {
 
     // WARNING: IBM doesn't delete from CSECHIST. Why are we??
     for (CsecHistory csecHistory : persistedCsecHistories) {
-      final Serializable primaryKey = csecHistory.getPrimaryKey();
-      if (updatedMap.get(primaryKey) == null) {
-        LOGGER.warn("****** DELETE FROM CSECHIST! key: {} ******", primaryKey);
-        csecHistoryDao.delete(primaryKey);
+      final Serializable csecHistId = csecHistory.getPrimaryKey();
+      if (updatedMap.get(csecHistId) == null) {
+        LOGGER.warn("****** DELETE FROM CSECHIST! client id: {}, csec hist id: {} ******", clientId,
+            csecHistId);
+        csecHistoryDao.delete(csecHistId);
       }
     }
   }
