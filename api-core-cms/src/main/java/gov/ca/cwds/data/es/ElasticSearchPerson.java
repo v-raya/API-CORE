@@ -238,7 +238,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchPerson.class);
 
-  static gov.ca.cwds.rest.api.domain.cms.SystemCodeCache systemCodes =
+  static final gov.ca.cwds.rest.api.domain.cms.SystemCodeCache systemCodes =
       gov.ca.cwds.rest.api.domain.cms.SystemCodeCache.global();
 
   private static final long serialVersionUID = 1L;
@@ -540,7 +540,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
       this.screenings = null;
     }
     if (!keepers.contains(ESOptionalCollection.RELATIONSHIP)) {
-      LOGGER.trace("clear SCREENING");
+      LOGGER.trace("clear RELATIONSHIP");
       this.relationships = null;
     }
     if (!keepers.contains(ESOptionalCollection.CASE)) {
@@ -873,14 +873,15 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonProperty("autocomplete_search_bar")
   public String[] getAutocompleteSearchBar() {
     String[] autocompleteSearchBar = null;
-    Set<String> autocompleteSearchValues = new HashSet<>();
+    final Set<String> autocompleteSearchValues = new HashSet<>();
     if (StringUtils.isNotBlank(this.ssn)) {
       autocompleteSearchValues.add(this.ssn);
     }
     if (StringUtils.isNotBlank(this.dateOfBirth)) {
       autocompleteSearchValues.addAll(getDobValues(this.dateOfBirth));
     }
-    Set<String> allNames = getAllNames();
+
+    final Set<String> allNames = getAllNames();
     if (!allNames.isEmpty()) {
       autocompleteSearchValues.addAll(getAllNames());
     }
@@ -900,7 +901,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   public String[] getDateOfBirthAsText() {
     String[] dobAsText = null;
     if (StringUtils.isNotBlank(this.dateOfBirth)) {
-      Set<String> dobValues = getDobValues(this.dateOfBirth);
+      final Set<String> dobValues = getDobValues(this.dateOfBirth);
       dobAsText = dobValues.toArray(new String[dobValues.size()]);
     }
     return dobAsText;
@@ -915,7 +916,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   public String[] getSearchableDateOfBirth() {
     String[] searchableDob = null;
     if (StringUtils.isNotBlank(this.dateOfBirth)) {
-      Set<String> dobValues = getDobValues(this.dateOfBirth);
+      final Set<String> dobValues = getDobValues(this.dateOfBirth);
       searchableDob = dobValues.toArray(new String[dobValues.size()]);
     }
     return searchableDob;
@@ -929,7 +930,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonProperty("searchable_name")
   public String[] getSearchableName() {
     String[] searchableName = null;
-    Set<String> names = getAllNames();
+    final Set<String> names = getAllNames();
     if (!names.isEmpty()) {
       searchableName = names.toArray(new String[names.size()]);
     }
@@ -1006,7 +1007,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   }
 
   /**
-   * Set the clien index number
+   * Set the client index number
    * 
    * @param indexNumber The client index number
    */
@@ -1125,7 +1126,6 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
     this.highlightFields = highlightFields;
   }
 
-
   private Set<String> getAllNames() {
     Set<String> names = new HashSet<>();
 
@@ -1160,8 +1160,8 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   }
 
   private Set<String> getDobValues(String dateOfBirth) {
-    Set<String> dobValues = new HashSet<>();
-    Date date = DomainChef.uncookDateString(dateOfBirth);
+    final Set<String> dobValues = new HashSet<>();
+    final Date date = DomainChef.uncookDateString(dateOfBirth);
 
     // With zeros, e.g. 01/09/1995
     DateFormat df = new SimpleDateFormat("MMddyyyy");

@@ -1,19 +1,21 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
-import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import java.io.Serializable;
 import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+
 import org.hibernate.annotations.ColumnTransformer;
+
+import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 
 /**
  * @author CWDS TPT-3 Team
  */
-
 @MappedSuperclass
-@SuppressWarnings("squid:S3437") //LocalDate is serializable
+@SuppressWarnings("squid:S3437") // LocalDate is serializable
 public abstract class BaseClientAddress extends CmsPersistentObject {
 
   private static final long serialVersionUID = -3656767136797373958L;

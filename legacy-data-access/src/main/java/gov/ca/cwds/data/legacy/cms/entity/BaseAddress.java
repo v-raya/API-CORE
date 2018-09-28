@@ -1,16 +1,18 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
-import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+
 import org.hibernate.annotations.ColumnTransformer;
+
+import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 
 /**
  * @author CWDS TPT-3 Team
  */
-
 @MappedSuperclass
 public abstract class BaseAddress extends CmsPersistentObject {
 
