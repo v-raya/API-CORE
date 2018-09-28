@@ -1413,7 +1413,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   /**
    * Set CSEC history
    *
-   * @param csecs
+   * @param csecs CSEC history
    */
   public void setCsecs(List<ElasticSearchPersonCsec> csecs) {
     this.csecs = csecs;

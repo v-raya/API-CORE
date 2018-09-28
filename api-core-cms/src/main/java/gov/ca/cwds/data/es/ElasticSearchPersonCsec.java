@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * CSEC
+ * Person CSEC history.
  * 
  * @author CWDS API Team
  */
