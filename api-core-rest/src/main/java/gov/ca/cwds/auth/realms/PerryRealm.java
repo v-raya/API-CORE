@@ -4,8 +4,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
-import java.util.List;
-
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
@@ -43,7 +41,8 @@ public class PerryRealm extends AuthorizingRealm {
     checkNotNull(token, "Authentication Token cannot be null.");
     checkArgument(token instanceof PerryShiroToken, "Token must be of instance `PerryShiroToken`.");
     checkState(client != null, "PerryClient must be set.");
-    PerryShiroToken perryShiroToken = (PerryShiroToken) token;
+
+    final PerryShiroToken perryShiroToken = (PerryShiroToken) token;
     try {
       LOGGER.debug("Reaching out to Perry for authentication...");
       return mapIdentity(client.validateToken(perryShiroToken), token);
@@ -57,9 +56,8 @@ public class PerryRealm extends AuthorizingRealm {
   }
 
   protected AuthenticationInfo mapIdentity(String identity, AuthenticationToken token) {
-    final List<Object> principals = Lists.newArrayList(identity);
-    return new SimpleAuthenticationInfo(new SimplePrincipalCollection(principals, getName()),
-        token);
+    return new SimpleAuthenticationInfo(
+        new SimplePrincipalCollection(Lists.newArrayList(identity), getName()), token);
   }
 
   /**

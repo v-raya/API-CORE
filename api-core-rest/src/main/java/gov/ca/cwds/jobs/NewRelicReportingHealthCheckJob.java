@@ -74,4 +74,5 @@ public abstract class NewRelicReportingHealthCheckJob extends Job {
    * @return health check event type.
    */
   public abstract String getEventType();
+
 }

@@ -1,9 +1,11 @@
 package gov.ca.cwds.rest.views;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.common.base.Charsets;
+
 import gov.ca.cwds.rest.SwaggerConfiguration;
 import io.dropwizard.views.View;
-import org.apache.commons.lang3.StringUtils;
 
 public class SwaggerView extends View {
 
@@ -56,4 +58,5 @@ public class SwaggerView extends View {
   public String getSpId() {
     return swaggerConfiguration.getSpId();
   }
+
 }

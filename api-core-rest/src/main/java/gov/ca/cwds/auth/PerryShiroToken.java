@@ -28,7 +28,6 @@ public class PerryShiroToken implements AuthenticationToken {
     return token;
   }
 
-  @SuppressWarnings("javadoc")
   public String getToken() {
     return token;
   }

@@ -26,4 +26,5 @@ public class EmptyBodyFeature implements DynamicFeature {
       context.register(EmptyBodyFilter.class);
     }
   }
+
 }
