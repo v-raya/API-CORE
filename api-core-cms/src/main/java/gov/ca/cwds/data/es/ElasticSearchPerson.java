@@ -357,6 +357,10 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private List<ElasticSearchPersonAka> akas = new ArrayList<>();
 
+  @JsonProperty("csec")
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private List<ElasticSearchPersonCsec> csecs = new ArrayList<>();
+
   @JsonProperty("safety_alerts")
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private List<ElasticSearchSafetyAlert> safetyAlerts = new ArrayList<>();
@@ -1395,6 +1399,24 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
 
   public void setAkas(List<ElasticSearchPersonAka> akas) {
     this.akas = akas;
+  }
+
+  /**
+   *  Get CSEC history
+   *
+   * @return CSES history
+   */
+  public List<ElasticSearchPersonCsec> getCsecs() {
+    return csecs;
+  }
+
+  /**
+   * Set CSEC history
+   *
+   * @param csecs CSEC history
+   */
+  public void setCsecs(List<ElasticSearchPersonCsec> csecs) {
+    this.csecs = csecs;
   }
 
   /**
