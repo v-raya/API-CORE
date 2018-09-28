@@ -1040,6 +1040,19 @@ public class ElasticSearchPersonTest extends OscarTheGrouch<Client> {
   }
 
   @Test
+  public void getCsecs_A$() throws Exception {
+    List<ElasticSearchPersonCsec> actual = target.getCsecs();
+    List<ElasticSearchPersonCsec> expected = new ArrayList<>();
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
+  public void setCsecs_A$List() throws Exception {
+    List<ElasticSearchPersonCsec> csecs = new ArrayList<>();
+    target.setCsecs(csecs);
+  }
+
+  @Test
   public void getClientCounty_A$() throws Exception {
     Object actual = target.getClientCounty();
     Object expected = null;
