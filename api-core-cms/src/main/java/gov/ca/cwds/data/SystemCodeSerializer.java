@@ -11,8 +11,7 @@ import com.fasterxml.jackson.annotation.JacksonAnnotation;
 import com.google.inject.BindingAnnotation;
 
 /**
- * CWDS API annotation marks fields, methods, and parameters which should be translated via
- * SystemCodeCache
+ * CWDS API annotation marks fields, methods, and parameters to be translated via SystemCodeCache.
  * 
  * @author CWDS API Team
  * @see ApiSysCodeAware
@@ -45,4 +44,5 @@ public @interface SystemCodeSerializer {
    * @return whether to print "meta" field (the system code category)
    */
   boolean meta() default false;
+
 }

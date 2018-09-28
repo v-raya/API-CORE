@@ -95,8 +95,8 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short>
 
   /**
    * Build a {@link BitSet} from variable array of boolean flags (as arguments as
-   * CmsSystemCodeSerializer constructor). BitSet is used by our serializer factory to produce
-   * unique settings combinations per serializer, as needed.
+   * CmsSystemCodeSerializer constructor). The serializer factory uses BitSet to produce unique
+   * settings combinations per serializer, as needed.
    * 
    * @param flags variable array of boolean flags (as arguments as CmsSystemCodeSerializer
    *        constructor)
@@ -132,7 +132,7 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short>
     final BitSet bs =
         buildBits(cache != null, showShortDescription, showLogicalId, showMetaCategory);
     if (!styles.containsKey(bs)) {
-      LOGGER.debug("new CmsSystemCodeSerializer: {}, {}, {}, {}", cache != null,
+      LOGGER.trace("new CmsSystemCodeSerializer: {}, {}, {}, {}", cache != null,
           showShortDescription, showLogicalId, showMetaCategory);
       styles.put(bs, new CmsSystemCodeSerializer(cache, showShortDescription, showLogicalId,
           showMetaCategory));
@@ -197,7 +197,7 @@ public class CmsSystemCodeSerializer extends JsonSerializer<Short>
           jgen.writeStringField("logical_id", code.getLogicalId());
         }
       } else {
-        LOGGER.error("UNKNOWN SYS_ID: {}! NOT TRANSLATED!", s.intValue());
+        LOGGER.error("UNKNOWN SYS_ID: \"{}\" NOT TRANSLATED!", s.intValue());
         jgen.writeStringField("short_description", "NOT TRANSLATED");
       }
 

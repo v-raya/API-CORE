@@ -30,7 +30,7 @@ public class SysCodeSerializerInjector {
   @Inject
   public SysCodeSerializerInjector(final CmsSystemCodeSerializer sysCodeSerializer, // NOSONAR
       final ObjectMapper om) {
-    SimpleModule module =
+    final SimpleModule module =
         new SimpleModule("SystemCodeModule", new Version(0, 1, 0, "cms_sys_code", "alpha", ""));
     module.addSerializer(Short.class, sysCodeSerializer);
     om.registerModule(module);

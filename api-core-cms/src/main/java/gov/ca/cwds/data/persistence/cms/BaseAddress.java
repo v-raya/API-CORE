@@ -417,7 +417,8 @@ public abstract class BaseAddress extends CmsPersistentObject
     if (StringUtils.isNotBlank(this.unitNumber)) {
       buf.append(" #").append(this.unitNumber);
     }
-    return buf.toString();
+
+    return buf.toString().trim();
   }
 
   @Override

@@ -100,7 +100,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
   @Override
   public Set<SystemMeta> getAllSystemMetas() {
     Set<SystemMeta> systemMetas = new HashSet<>();
-    SystemMetaListResponse systemMetaListResponse =
+    final SystemMetaListResponse systemMetaListResponse =
         (SystemMetaListResponse) getFromCache(CacheKey.createForAllMetas());
     if (systemMetaListResponse != null) {
       systemMetas = systemMetaListResponse.getSystemMetas();
@@ -111,8 +111,8 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
 
   @Override
   public Set<SystemCode> getAllSystemCodes() {
-    Set<SystemCode> systemCodes = new HashSet<>();
-    Set<SystemMeta> systemMetas = getAllSystemMetas();
+    final Set<SystemCode> systemCodes = new HashSet<>();
+    final Set<SystemMeta> systemMetas = getAllSystemMetas();
 
     if (systemMetas != null) {
       for (SystemMeta systemMeta : systemMetas) {
@@ -146,7 +146,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
   @Override
   public Short getSystemCodeId(String shortDescription, String metaId) {
     Short sysId = null;
-    Set<SystemCode> systemCodes = getSystemCodesForMeta(metaId);
+    final Set<SystemCode> systemCodes = getSystemCodesForMeta(metaId);
     if (systemCodes != null) {
       for (SystemCode systemCode : systemCodes) {
         if (StringUtils.equalsIgnoreCase(StringUtils.trim(shortDescription),
@@ -161,7 +161,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
   @Override
   public SystemCodeDescriptor getSystemCodeDescriptor(Number systemCodeId) {
     SystemCodeDescriptor systemCodeDescriptor = null;
-    SystemCode systemCode = getSystemCode(systemCodeId);
+    final SystemCode systemCode = getSystemCode(systemCodeId);
     if (systemCode != null) {
       systemCodeDescriptor = systemCode.getSystemCodeDescriptor();
     }
@@ -173,8 +173,8 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
     Set<SystemCode> systemCodes = new HashSet<>();
 
     if (!StringUtils.isBlank(metaId)) {
-      CacheKey cacheKey = CacheKey.createForMeta(metaId);
-      SystemCodeListResponse systemCodeListResponse =
+      final CacheKey cacheKey = CacheKey.createForMeta(metaId);
+      final SystemCodeListResponse systemCodeListResponse =
           (SystemCodeListResponse) getFromCache(cacheKey);
       if (systemCodeListResponse != null) {
         systemCodes = systemCodeListResponse.getSystemCodes();
@@ -199,7 +199,7 @@ public class CachingSystemCodeService extends SystemCodeService implements Syste
   @Override
   public boolean verifyActiveSystemCodeDescriptionForMeta(String shortDesc, String metaId) {
     boolean valid = false;
-    Set<SystemCode> systemCodes = getSystemCodesForMeta(metaId);
+    final Set<SystemCode> systemCodes = getSystemCodesForMeta(metaId);
     if (systemCodes != null) {
       for (SystemCode systemCode : systemCodes) {
         if (StringUtils.equalsIgnoreCase(StringUtils.trim(shortDesc),

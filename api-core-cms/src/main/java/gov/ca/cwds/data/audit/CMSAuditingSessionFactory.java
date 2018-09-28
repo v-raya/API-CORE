@@ -16,10 +16,11 @@ import com.ibm.db2.jcc.DB2Connection;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import gov.ca.cwds.security.realm.PerrySubject;
 
-// This session factory is introduced exactly for CMS DB2 access monitoring
+// This session factory is introduced for CMS DB2 access monitoring
 @SuppressFBWarnings("JVR_JDBC_VENDOR_RELIANCE")
 public class CMSAuditingSessionFactory extends SessionFactoryDelegatingImpl implements Work {
 
+  private static final long serialVersionUID = 1L;
   private static final Logger LOGGER = LoggerFactory.getLogger(CMSAuditingSessionFactory.class);
 
   public CMSAuditingSessionFactory(SessionFactoryImplementor delegate) {
@@ -29,6 +30,8 @@ public class CMSAuditingSessionFactory extends SessionFactoryDelegatingImpl impl
   @Override
   public Session openSession() throws HibernateException {
     LOGGER.info("CMSAuditingSessionFactory.openSession");
+
+    // DRS: YOU are responsible for closing this session!
     final Session session = super.openSession();
     session.doWork(this);
     return session;
@@ -37,6 +40,8 @@ public class CMSAuditingSessionFactory extends SessionFactoryDelegatingImpl impl
   @Override
   public void execute(Connection connection) throws SQLException {
     LOGGER.info("CMSAuditingSessionFactory.execute");
+
+    // WARNING: the connection pool will likely NOT return a raw DB2Connection.
     final DB2Connection db2Connection = (DB2Connection) connection;
     final String racfid = PerrySubject.getPerryAccount().getUser();
     // racfid will be available as CURRENT CLIENT_USERID

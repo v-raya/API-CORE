@@ -15,7 +15,7 @@ import gov.ca.cwds.data.CmsSystemCodeDeserializer;
 import gov.ca.cwds.data.SystemCodeSerializer;
 
 /**
- * Base class for regular and replicated versions of table ADDRS_T.
+ * Base class for regular and replicated versions of table {@code CL_ADDRT}.
  * 
  * @author CWDS API Team
  */

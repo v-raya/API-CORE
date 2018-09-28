@@ -1,7 +1,8 @@
 package gov.ca.cwds.rest.validation;
 
-import gov.ca.cwds.rest.api.domain.cms.SystemCode;
 import java.util.Set;
+
+import gov.ca.cwds.rest.api.domain.cms.SystemCode;
 
 public class LogicalIdLovValidation extends LovValidation {
 
@@ -19,6 +20,8 @@ public class LogicalIdLovValidation extends LovValidation {
     if (logicalId.equals(systemCode.getLogicalId())) {
       return "N".equalsIgnoreCase(systemCode.getInactiveIndicator());
     }
+
     return false;
   }
+
 }

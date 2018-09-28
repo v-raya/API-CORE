@@ -1,8 +1,8 @@
 package gov.ca.cwds.rest.validation;
 
-import gov.ca.cwds.rest.api.domain.cms.SystemCode;
-
 import java.util.Set;
+
+import gov.ca.cwds.rest.api.domain.cms.SystemCode;
 
 abstract class LovValidation {
 
@@ -22,14 +22,15 @@ abstract class LovValidation {
       for (SystemCode systemCode : systemCodes) {
         valid = isValidCode(systemCodeId, systemCode, checkCategoryIdValueIsZero);
         if (valid) {
-          return true;
+          break;
         }
       }
     }
-    return valid;
 
+    return valid; // single return point.
   }
 
   protected abstract boolean isValidCode(Object systemCodeId, SystemCode systemCode,
       boolean checkCategoryIdValueIsZero);
+
 }

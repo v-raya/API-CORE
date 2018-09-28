@@ -27,9 +27,9 @@ public @interface ValidLogicalId {
 
   String message() default "must be a valid logical id code for category {category}";
 
-  Class<?>[]groups() default {};
+  Class<?>[] groups() default {};
 
-  Class<? extends Payload>[]payload() default {};
+  Class<? extends Payload>[] payload() default {};
 
   String category();
 
@@ -38,4 +38,5 @@ public @interface ValidLogicalId {
   String ignoredValue() default "";
 
   boolean required() default false;
+
 }

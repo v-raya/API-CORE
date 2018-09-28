@@ -2,27 +2,30 @@ package gov.ca.cwds.data.audit;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
-import gov.ca.cwds.security.realm.PerrySubject;
+
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.Type;
 
-//hibernate.session_factory.interceptor
+import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.security.realm.PerrySubject;
+
+// hibernate.session_factory.interceptor
 public class CMSAuditingInterceptor extends EmptyInterceptor {
+
+  private static final long serialVersionUID = 1L;
+
   @Override
-  public boolean onSave(
-    Object entity,
-    Serializable id,
-    Object[] state,
-    String[] propertyNames,
-    Type[] types) {
+  public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames,
+      Type[] types) {
     if (entity instanceof CmsPersistentObject) {
-      CmsPersistentObject cmsPersistentObject = (CmsPersistentObject) entity;
+      final CmsPersistentObject cmsPersistentObject = (CmsPersistentObject) entity;
       cmsPersistentObject.setLastUpdateTime(LocalDateTime.now());
-      String staffId = PerrySubject.getPerryAccount().getStaffId();
+
+      final String staffId = PerrySubject.getPerryAccount().getStaffId();
       cmsPersistentObject.setLastUpdateId(staffId);
       return true;
     }
+
     return false;
   }
 

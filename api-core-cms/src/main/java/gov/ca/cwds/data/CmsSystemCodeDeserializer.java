@@ -2,6 +2,9 @@ package gov.ca.cwds.data;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -35,6 +38,8 @@ import com.fasterxml.jackson.databind.node.IntNode;
  * @see CmsSystemCodeSerializer
  */
 public class CmsSystemCodeDeserializer extends StdDeserializer<Short> {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(CmsSystemCodeDeserializer.class);
 
   private static final long serialVersionUID = 1L;
 
@@ -77,13 +82,19 @@ public class CmsSystemCodeDeserializer extends StdDeserializer<Short> {
   public Short deserialize(final JsonParser jp, final DeserializationContext ctxt)
       throws IOException {
     Short sysId = null;
-    final JsonNode node = jp.getCodec().readTree(jp);
-    final IntNode sn = (IntNode) node.get("sys_id");
 
-    if (sn != null) {
-      sysId = sn.numberValue().shortValue();
-    } else if (node instanceof IntNode) {
-      sysId = node.numberValue().shortValue(); // short style.
+    try {
+
+      final JsonNode node = jp.getCodec().readTree(jp);
+      final IntNode sn = (IntNode) node.get("sys_id");
+
+      if (sn != null) {
+        sysId = sn.numberValue().shortValue();
+      } else if (node instanceof IntNode) {
+        sysId = node.numberValue().shortValue(); // short style.
+      }
+    } catch (Exception e) {
+      LOGGER.debug("FAILED TO DESERIALIZE sys_id!", e);
     }
 
     return sysId;

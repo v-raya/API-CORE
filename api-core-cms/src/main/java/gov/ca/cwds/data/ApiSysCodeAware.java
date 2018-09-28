@@ -12,7 +12,7 @@ public interface ApiSysCodeAware extends ApiMarker {
   /**
    * Getter for the unique SYS_ID code.
    * 
-   * @return the sys id
+   * @return the system code id
    */
   int getSysId();
 
