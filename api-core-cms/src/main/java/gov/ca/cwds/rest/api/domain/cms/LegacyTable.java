@@ -43,6 +43,8 @@ public enum LegacyTable {
 
   CROSS_REPORT("CRSS_RPT", "Cross Report"),
 
+  CSEC_HISTORY("CSECHIST", "CSEC History"),
+
   DELIVERED_SERVICE("DL_SVC_T", "Delivered Service"),
 
   EDUCATION_PROVIDER("ED_PVDRT", "Education Provider"),
