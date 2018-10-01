@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,6 +33,7 @@ public abstract class BaseEducationProviderContact extends CmsPersistentObject
   protected Long faxNumber;
 
   @Column(name = "FIRST_NME")
+  @ColumnTransformer(read = ("trim(FIRST_NME)"))
   protected String firstName;
 
   @Column(name = "FKED_PVDRT")
@@ -42,9 +44,11 @@ public abstract class BaseEducationProviderContact extends CmsPersistentObject
   protected String id;
 
   @Column(name = "LAST_NME")
+  @ColumnTransformer(read = ("trim(LAST_NME)"))
   protected String lastName;
 
   @Column(name = "MIDDLE_NM")
+  @ColumnTransformer(read = ("trim(MIDDLE_NM)"))
   protected String middleName;
 
   @Column(name = "NM_PREFIX")
