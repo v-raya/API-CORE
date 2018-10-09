@@ -9,6 +9,7 @@ import gov.ca.cwds.data.legacy.cms.entity.CaseLoad;
 import gov.ca.cwds.data.legacy.cms.entity.CaseLoadWeighting;
 import gov.ca.cwds.data.legacy.cms.entity.StaffPerson;
 import gov.ca.cwds.data.legacy.cms.entity.facade.CaseByStaff;
+import gov.ca.cwds.data.legacy.cms.entity.facade.ClientByStaff;
 import gov.ca.cwds.inject.CmsSessionFactory;
 import gov.ca.cwds.util.Require;
 import java.time.LocalDate;
@@ -59,6 +60,34 @@ public class CaseDao extends CrudsDaoImpl<Case> {
             .getResultList();
 
     return ImmutableList.copyOf(cases);
+  }
+
+  /**
+   * Returns clients which have relation to {@link StaffPerson} via {@link CaseAssignment}, {@link
+   * CaseLoad} and {@link CaseLoadWeighting} entities. Also the {@link CaseAssignment} is active,
+   * which means param activeDate is between startDate and endDate of the assignment.
+   *
+   * @param staffId - Identifier of Staff Person who can work on the returned cases.
+   * @param activeDate - The returned cases assignment will be active on this date. As usual this
+   *     param is a current date.
+   * @return Cases with active assignments that can be managed by requested staff person. N.B. The
+   *     returned objects are not of @Entity type.
+   */
+  public Collection<ClientByStaff> findClientsByStaffIdAndActiveDate(
+    final String staffId, final LocalDate activeDate) {
+    Require.requireNotNullAndNotEmpty(staffId);
+
+    final LocalDate date = activeDate != null ? activeDate : LocalDate.now();
+    final List<ClientByStaff> clients =
+      currentSession()
+        .getNamedNativeQuery(ClientByStaff.NATIVE_FIND_CLIENTS_BY_STAFF_ID)
+        .setResultSetMapping(ClientByStaff.MAPPING_CLIENT_BY_STAFF)
+        .setParameter(1, staffId)
+        .setParameter(2, date)
+        .setParameter(3, date)
+        .getResultList();
+
+    return ImmutableList.copyOf(clients);
   }
 
   public List<Case> findActiveByClient(String clientId) {
