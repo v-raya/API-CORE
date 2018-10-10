@@ -9,10 +9,12 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
+ * DTO for HealthCheck status
+ *
  * @author CWDS TPT-2
  */
 @JsonPropertyOrder({"healthy", "message", "error", "details", "timestamp"})
-public class HealthCheckResultDTO {
+public class HealthCheckResultDto {
 
   private boolean healthy;
   private String message;
@@ -20,6 +22,11 @@ public class HealthCheckResultDTO {
   private HashMap<String, Object> details;
   private String timestamp;
 
+  /**
+   * Single method to fill the object with a result from Dropwizard Health Checks
+   *
+   * @param result a result from Dropwizard Health Checks
+   */
   public void setResult(HealthCheck.Result result) {
     setHealthy(result.isHealthy());
     setMessage(result.getMessage());
@@ -74,8 +81,8 @@ public class HealthCheckResultDTO {
   }
 
   @Override
-  public boolean equals(Object o) {
-    return EqualsBuilder.reflectionEquals(this, o);
+  public boolean equals(Object object) {
+    return EqualsBuilder.reflectionEquals(this, object);
   }
 
   @Override

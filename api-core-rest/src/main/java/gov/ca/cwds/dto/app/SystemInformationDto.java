@@ -10,12 +10,14 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
+ * DTO for System Information Endpoint of CARES Applications
+ *
  * @author CWDS TPT-2
  */
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @JsonPropertyOrder({"application", "version", "build", "git_commit", "health_status",
   "health_checks"})
-public class SystemInformationDTO {
+public class SystemInformationDto {
 
   @JsonProperty(value = "application", required = true)
   private String applicationName;
@@ -33,7 +35,7 @@ public class SystemInformationDTO {
   private boolean healthStatus;
 
   @JsonProperty(value = "health_checks", required = true)
-  private SortedMap<String, HealthCheckResultDTO> healthCheckResults;
+  private SortedMap<String, HealthCheckResultDto> healthCheckResults;
 
   public String getApplicationName() {
     return applicationName;
@@ -75,12 +77,12 @@ public class SystemInformationDTO {
     this.healthStatus = healthStatus;
   }
 
-  public SortedMap<String, HealthCheckResultDTO> getHealthCheckResults() {
+  public SortedMap<String, HealthCheckResultDto> getHealthCheckResults() {
     return healthCheckResults;
   }
 
   public void setHealthCheckResults(
-    SortedMap<String, HealthCheckResultDTO> healthCheckResults) {
+    SortedMap<String, HealthCheckResultDto> healthCheckResults) {
     this.healthCheckResults = healthCheckResults;
   }
 
@@ -90,8 +92,8 @@ public class SystemInformationDTO {
   }
 
   @Override
-  public boolean equals(Object o) {
-    return EqualsBuilder.reflectionEquals(this, o);
+  public boolean equals(Object object) {
+    return EqualsBuilder.reflectionEquals(this, object);
   }
 
   @Override
