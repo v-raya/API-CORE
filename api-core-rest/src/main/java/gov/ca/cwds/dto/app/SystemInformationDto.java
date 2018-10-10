@@ -10,7 +10,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
- * DTO for System Information Endpoint of CARES Applications
+ * DTO for System Information Endpoint of CARES Applications.
  *
  * @author CWDS TPT-2
  */

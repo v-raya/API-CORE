@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
- * DTO for HealthCheck status
+ * DTO for HealthCheck status.
  *
  * @author CWDS TPT-2
  */
@@ -23,7 +23,7 @@ public class HealthCheckResultDto {
   private String timestamp;
 
   /**
-   * Single method to fill the object with a result from Dropwizard Health Checks
+   * Single method to fill the object with a result from Dropwizard Health Checks.
    *
    * @param result a result from Dropwizard Health Checks
    */
