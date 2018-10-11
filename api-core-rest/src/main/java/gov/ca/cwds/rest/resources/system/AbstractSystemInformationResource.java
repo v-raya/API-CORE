@@ -7,7 +7,7 @@ import gov.ca.cwds.dto.app.SystemInformationDto;
 import java.util.Map;
 
 /**
- * Abstract class for building RESTful SystemInformationResource classes in CARES Applications
+ * Abstract class for building RESTful SystemInformationResource classes in CARES Applications.
  *
  * @author CWDS TPT-2
  */

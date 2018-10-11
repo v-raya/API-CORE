@@ -30,7 +30,7 @@ public class HealthCheckResultDto {
   }
 
   /**
-   * Convenient constructor to instantiate from a HealthCheck.Result instance
+   * Convenient constructor to instantiate from a HealthCheck.Result instance.
    *
    * @param result instance of HealthCheckResultDto
    */
