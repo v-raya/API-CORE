@@ -14,3 +14,7 @@ To generate report run:
 
 generateAllLicenseFiles updates submodules licenses
 libLicenseReport creates the report file
+
+# Questions
+
+If you have any questions regarding the contents of this repository, please email the Office of Systems Integration at FOSS@osi.ca.gov.
