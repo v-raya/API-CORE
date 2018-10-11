@@ -134,14 +134,14 @@ public class CaseDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
       (sessionFactory) -> {
         Collection<ClientByStaff> clients = caseDao.findClientsByStaffIdAndActiveDate("0Ki", LocalDate.now());
         assertEquals(109, clients.size());
-        clients.stream().filter(client -> "JfaFqkC0Ki".equals(client.getClientIdentifier()))
+        clients.stream().filter(client -> "JfaFqkC0Ki".equals(client.getIdentifier()))
           .forEach(clientByStaff -> {
-            assertEquals("Charles", clientByStaff.getClientFirstName());
-            assertEquals("G", clientByStaff.getClientMiddleName());
-            assertEquals("Judson", clientByStaff.getClientLastName());
-            assertEquals("", clientByStaff.getClientNameSuffix());
-            assertEquals(LocalDate.parse("2004-10-20"), clientByStaff.getClientBirthDate());
-            assertEquals("N", clientByStaff.getClientSensitivityType());
+            assertEquals("Charles", clientByStaff.getFirstName());
+            assertEquals("G", clientByStaff.getMiddleName());
+            assertEquals("Judson", clientByStaff.getLastName());
+            assertEquals("", clientByStaff.getNameSuffix());
+            assertEquals(LocalDate.parse("2004-10-20"), clientByStaff.getBirthDate());
+            assertEquals("N", clientByStaff.getSensitivityType());
             assertEquals(LocalDate.parse("2005-05-02"), clientByStaff.getCasePlanReviewDueDate());
         });
       });

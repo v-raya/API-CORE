@@ -1,6 +1,5 @@
 package gov.ca.cwds.data.legacy.cms.entity.facade;
 
-import gov.ca.cwds.data.legacy.cms.entity.enums.AssignmentType;
 import gov.ca.cwds.data.std.ApiMarker;
 import java.time.LocalDate;
 import javax.persistence.Entity;
@@ -31,82 +30,82 @@ public class ClientByStaff implements ApiMarker {
   public static final String NATIVE_FIND_CLIENTS_BY_STAFF_ID = "ClientByStaff.nativeFindClientsByStaffId";
   public static final String MAPPING_CLIENT_BY_STAFF = "ClientByStaff.mapping";
 
-  private String clientIdentifier;
-  private String clientFirstName;
-  private String clientMiddleName;
-  private String clientLastName;
-  private String clientNameSuffix;
-  private String clientSensitivityType;
-  private LocalDate clientBirthDate;
+  private String identifier;
+  private String firstName;
+  private String middleName;
+  private String lastName;
+  private String nameSuffix;
+  private String sensitivityType;
+  private LocalDate birthDate;
   private LocalDate casePlanReviewDueDate;
 
-  public ClientByStaff(String clientIdentifier, String clientFirstName,
-    String clientMiddleName, String clientLastName, String clientNameSuffix,
-    String clientSensitivityType, LocalDate clientBirthDate, LocalDate casePlanReviewDueDate) {
-    this.clientIdentifier = clientIdentifier;
-    this.clientFirstName = clientFirstName;
-    this.clientMiddleName = clientMiddleName;
-    this.clientLastName = clientLastName;
-    this.clientNameSuffix = clientNameSuffix;
-    this.clientSensitivityType = clientSensitivityType;
-    this.clientBirthDate = clientBirthDate;
+  public ClientByStaff(String identifier, String firstName,
+    String middleName, String lastName, String nameSuffix,
+    String sensitivityType, LocalDate birthDate, LocalDate casePlanReviewDueDate) {
+    this.identifier = identifier;
+    this.firstName = firstName;
+    this.middleName = middleName;
+    this.lastName = lastName;
+    this.nameSuffix = nameSuffix;
+    this.sensitivityType = sensitivityType;
+    this.birthDate = birthDate;
     this.casePlanReviewDueDate = casePlanReviewDueDate;
   }
 
-  public String getClientIdentifier() {
-    return clientIdentifier;
+  public String getIdentifier() {
+    return identifier;
   }
 
-  public void setClientIdentifier(String clientIdentifier) {
-    this.clientIdentifier = clientIdentifier;
+  public void setIdentifier(String identifier) {
+    this.identifier = identifier;
   }
 
-  public String getClientFirstName() {
-    return clientFirstName;
+  public String getFirstName() {
+    return firstName;
   }
 
-  public void setClientFirstName(String clientFirstName) {
-    this.clientFirstName = clientFirstName;
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
   }
 
-  public String getClientMiddleName() {
-    return clientMiddleName;
+  public String getMiddleName() {
+    return middleName;
   }
 
-  public void setClientMiddleName(String clientMiddleName) {
-    this.clientMiddleName = clientMiddleName;
+  public void setMiddleName(String middleName) {
+    this.middleName = middleName;
   }
 
-  public String getClientLastName() {
-    return clientLastName;
+  public String getLastName() {
+    return lastName;
   }
 
-  public void setClientLastName(String clientLastName) {
-    this.clientLastName = clientLastName;
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
   }
 
-  public String getClientNameSuffix() {
-    return clientNameSuffix;
+  public String getNameSuffix() {
+    return nameSuffix;
   }
 
-  public void setClientNameSuffix(String clientNameSuffix) {
-    this.clientNameSuffix = clientNameSuffix;
+  public void setNameSuffix(String nameSuffix) {
+    this.nameSuffix = nameSuffix;
   }
 
-  public String getClientSensitivityType() {
-    return clientSensitivityType;
+  public String getSensitivityType() {
+    return sensitivityType;
   }
 
-  public void setClientSensitivityType(String clientSensitivityType) {
-    this.clientSensitivityType = clientSensitivityType;
+  public void setSensitivityType(String sensitivityType) {
+    this.sensitivityType = sensitivityType;
   }
 
-  public LocalDate getClientBirthDate() {
-    return clientBirthDate;
+  public LocalDate getBirthDate() {
+    return birthDate;
   }
 
-  public void setClientBirthDate(LocalDate clientBirthDate) {
-    this.clientBirthDate = clientBirthDate;
+  public void setBirthDate(LocalDate birthDate) {
+    this.birthDate = birthDate;
   }
 
   public LocalDate getCasePlanReviewDueDate() {
