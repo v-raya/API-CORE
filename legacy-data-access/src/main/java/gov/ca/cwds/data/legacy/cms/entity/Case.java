@@ -70,6 +70,7 @@ import org.hibernate.annotations.Type;
   @NamedNativeQuery(
     name = CaseByStaff.NATIVE_FIND_CASES_BY_STAFF_ID,
     query = "select distinct "
+
       + "  case_.IDENTIFIER as identifier, "
       + "  trim(case_.CASE_NM) as caseName, "
       + "  client.IDENTIFIER as clientIdentifier, "
