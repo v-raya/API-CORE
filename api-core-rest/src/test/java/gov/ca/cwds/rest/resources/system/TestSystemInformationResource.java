@@ -1,12 +1,12 @@
 package gov.ca.cwds.rest.resources.system;
 
-import com.codahale.metrics.health.HealthCheckRegistry;
 import gov.ca.cwds.dto.app.SystemInformationDto;
+import io.dropwizard.setup.Environment;
 
 public class TestSystemInformationResource extends AbstractSystemInformationResource {
 
-  TestSystemInformationResource(HealthCheckRegistry healthCheckRegistry) {
-    super(healthCheckRegistry);
+  TestSystemInformationResource(Environment environment) {
+    super(environment.healthChecks());
   }
 
   @Override

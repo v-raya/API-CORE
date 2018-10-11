@@ -8,6 +8,7 @@ import com.codahale.metrics.health.HealthCheck.Result;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import gov.ca.cwds.dto.app.HealthCheckResultDto;
 import gov.ca.cwds.dto.app.SystemInformationDto;
+import io.dropwizard.setup.Environment;
 import java.util.Map;
 import java.util.TreeMap;
 import org.junit.Before;
@@ -22,10 +23,14 @@ public class AbstractSystemInformationResourceTest {
   public void setUp() {
     final Map<String, Result> healthCheckResults = new TreeMap<>();
     healthCheckResults.put("test_health", Result.healthy("test is healthy"));
+
     HealthCheckRegistry healthCheckRegistry = Mockito.mock(HealthCheckRegistry.class);
     doReturn(healthCheckResults).when(healthCheckRegistry).runHealthChecks();
 
-    systemInformationResource = new TestSystemInformationResource(healthCheckRegistry);
+    Environment environment = Mockito.mock(Environment.class);
+    doReturn(healthCheckRegistry).when(environment).healthChecks();
+
+    systemInformationResource = new TestSystemInformationResource(environment);
   }
 
   @Test
