@@ -23,6 +23,26 @@ public class HealthCheckResultDto {
   private String timestamp;
 
   /**
+   * default constructor
+   */
+  public HealthCheckResultDto() {
+    // no-op
+  }
+
+  /**
+   * Convenient constructor to instantiate from a HealthCheck.Result instance
+   *
+   * @param result instance of HealthCheckResultDto
+   */
+  public HealthCheckResultDto(HealthCheck.Result result) {
+    healthy = result.isHealthy();
+    message = result.getMessage();
+    error = result.getError();
+    details = result.getDetails() == null ? null : new HashMap<>(result.getDetails());
+    timestamp = result.getTimestamp();
+  }
+
+  /**
    * Single method to fill the object with a result from Dropwizard Health Checks.
    *
    * @param result a result from Dropwizard Health Checks
