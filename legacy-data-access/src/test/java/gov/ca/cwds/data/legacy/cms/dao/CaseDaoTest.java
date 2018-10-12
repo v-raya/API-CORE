@@ -3,7 +3,10 @@ package gov.ca.cwds.data.legacy.cms.dao;
 import gov.ca.cwds.data.legacy.cms.entity.Case;
 import gov.ca.cwds.data.legacy.cms.entity.enums.LimitedAccess;
 import gov.ca.cwds.data.legacy.cms.entity.enums.ResponsibleAgency;
+import gov.ca.cwds.data.legacy.cms.entity.facade.ClientByStaff;
 import gov.ca.cwds.data.legacy.cms.persistence.BaseCwsCmsInMemoryPersistenceTest;
+import java.time.LocalDate;
+import java.util.Collection;
 import org.dbunit.Assertion;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
@@ -14,6 +17,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("squid:S1607")
 public class CaseDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
@@ -119,5 +123,27 @@ public class CaseDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
           List<Case> cases = caseDao.findClosedByClient("AaiU7IW999");
           assertEquals(2, cases.size());
         });
+  }
+
+  @Test
+  public void shouldFindClientsByStaffId() throws Exception {
+    cleanAllAndInsert("/dbunit/ClientsByStaffPerson.xml");
+
+    executeInTransaction(
+      sessionFactory,
+      (sessionFactory) -> {
+        Collection<ClientByStaff> clients = caseDao.findClientsByStaffIdAndActiveDate("0Ki", LocalDate.now());
+        assertEquals(114, clients.size());
+        clients.stream().filter(client -> "Ju2u3Pk0Ki".equals(client.getIdentifier()))
+          .forEach(clientByStaff -> {
+            assertEquals("Test", clientByStaff.getFirstName());
+            assertEquals("", clientByStaff.getMiddleName());
+            assertEquals("Gendricke", clientByStaff.getLastName());
+            assertEquals("", clientByStaff.getNameSuffix());
+            assertEquals(LocalDate.parse("1999-08-09"), clientByStaff.getBirthDate());
+            assertEquals("N", clientByStaff.getSensitivityType());
+            assertEquals(LocalDate.parse("2005-02-09"), clientByStaff.getCasePlanReviewDueDate());
+        });
+      });
   }
 }

@@ -4,6 +4,7 @@ import gov.ca.cwds.data.legacy.cms.entity.CaseLoad;
 import gov.ca.cwds.data.legacy.cms.entity.CaseLoadWeighting;
 import gov.ca.cwds.data.legacy.cms.entity.ReferralAssignment;
 import gov.ca.cwds.data.legacy.cms.entity.StaffPerson;
+import gov.ca.cwds.data.legacy.cms.entity.facade.ClientByStaff;
 import gov.ca.cwds.data.legacy.cms.entity.facade.ReferralByStaff;
 import java.time.LocalDate;
 import java.util.List;
@@ -56,6 +57,34 @@ public class ReferralDao extends BaseDaoImpl<Referral> {
             .getResultList();
 
     return ImmutableList.copyOf(referrals);
+  }
+
+  /**
+   * Returns clientss which have relation to {@link StaffPerson} via {@link ReferralAssignment},
+   * {@link CaseLoad} and {@link CaseLoadWeighting} entities. Also the {@link ReferralAssignment} is
+   * active, which means param activeDate is between startDate and endDate of the assignment.
+   *
+   * @param staffId - Identifier of Staff Person who can work on the returned referrals.
+   * @param activeDate - The returned referrals' assignments will be active on this date. As usual
+   *     this param is a current date.
+   * @return Referrals with active assignments that can be managed by requested staff person. N.B.
+   *     The returned objects are not of @Entity type.
+   */
+  public List<ClientByStaff> findClientsByStaffIdAndActiveDate(
+    String staffId, LocalDate activeDate) {
+    Require.requireNotNullAndNotEmpty(staffId);
+
+    final LocalDate date = activeDate != null ? activeDate : LocalDate.now();
+    final List<ClientByStaff> clients =
+      currentSession()
+        .getNamedNativeQuery(ClientByStaff.REFERRAL_FIND_CLIENTS_BY_STAFF_ID)
+        .setResultSetMapping(ClientByStaff.MAPPING_CLIENT_FROM_REFERRAL)
+        .setParameter(1, staffId)
+        .setParameter(2, date)
+        .setParameter(3, date)
+        .getResultList();
+
+    return ImmutableList.copyOf(clients);
   }
 
   public List<Referral> getActiveReferralsByClientId(String clientId) {

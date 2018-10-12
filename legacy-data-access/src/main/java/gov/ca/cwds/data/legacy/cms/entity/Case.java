@@ -4,6 +4,7 @@ import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.data.legacy.cms.entity.enums.LimitedAccess;
 import gov.ca.cwds.data.legacy.cms.entity.enums.ResponsibleAgency;
 import gov.ca.cwds.data.legacy.cms.entity.facade.CaseByStaff;
+import gov.ca.cwds.data.legacy.cms.entity.facade.ClientByStaff;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ActiveServiceComponentType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ApprovalStatusType;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.Country;
@@ -22,11 +23,13 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SqlResultSetMapping;
+import javax.persistence.SqlResultSetMappings;
 import javax.persistence.Table;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Fetch;
@@ -62,55 +65,111 @@ import org.hibernate.annotations.Type;
             + " and c.endDate is not null "
   ),
 })
-@NamedNativeQuery(
+
+@NamedNativeQueries({
+  @NamedNativeQuery(
     name = CaseByStaff.NATIVE_FIND_CASES_BY_STAFF_ID,
     query = "select distinct "
-        + "  case_.IDENTIFIER as identifier, "
-        + "  trim(case_.CASE_NM) as caseName, "
-        + "  client.IDENTIFIER as clientIdentifier, "
-        + "  trim(client.COM_FST_NM) as clientFirstName, "
-        + "  trim(client.COM_LST_NM) as clientLastName, "
-        + "  trim(service_component_type.SHORT_DSC) as activeServiceComponent, "
-        + "  case_assignment.IDENTIFIER as assignmentIdentifier, "
-        + "  case_assignment.ASGNMNT_CD as assignmentTypeCode, "
-        + "  case_assignment.START_DT as assignmentStartDate "
-        + "from "
-        + "  {h-schema}CASE_LDT caseload "
-        + "  left outer join {h-schema}CSLDWGHT caseloadweight "
-        + "    on caseload.IDENTIFIER = caseloadweight.FKCASE_LDT "
-        + "  left outer join {h-schema}ASGNM_T case_assignment "
-        + "    on caseload.IDENTIFIER=case_assignment.FKCASE_LDT "
-        + "    and case_assignment.ESTBLSH_CD='C' "
-        + "  left outer join {h-schema}CASE_T case_ "
-        + "    on case_assignment.ESTBLSH_ID=case_.IDENTIFIER "
-        + "  left outer join {h-schema}CLIENT_T client "
-        + "    on case_.FKCHLD_CLT = client.IDENTIFIER "
-        + "  left outer join {h-schema}SYS_CD_C service_component_type "
-        + "    on case_.SRV_CMPC = service_component_type.SYS_ID "
-        + "    and service_component_type.FKS_META_T = 'SRV_CMPC' "
-        + "where "
-        + "  caseloadweight.FKSTFPERST = ?1"
-        + "  and case_.END_DT is null "
-        + "  and case_assignment.START_DT <= ?2"
-        + "  and (case_assignment.END_DT is null or case_assignment.END_DT > ?3)"
-)
-@SqlResultSetMapping(
+
+      + "  case_.IDENTIFIER as identifier, "
+      + "  trim(case_.CASE_NM) as caseName, "
+      + "  client.IDENTIFIER as clientIdentifier, "
+      + "  trim(client.COM_FST_NM) as clientFirstName, "
+      + "  trim(client.COM_LST_NM) as clientLastName, "
+      + "  trim(service_component_type.SHORT_DSC) as activeServiceComponent, "
+      + "  case_assignment.IDENTIFIER as assignmentIdentifier, "
+      + "  case_assignment.ASGNMNT_CD as assignmentTypeCode, "
+      + "  case_assignment.START_DT as assignmentStartDate "
+      + "from "
+      + "  {h-schema}CASE_LDT caseload "
+      + "  left outer join {h-schema}CSLDWGHT caseloadweight "
+      + "    on caseload.IDENTIFIER = caseloadweight.FKCASE_LDT "
+      + "  left outer join {h-schema}ASGNM_T case_assignment "
+      + "    on caseload.IDENTIFIER=case_assignment.FKCASE_LDT "
+      + "    and case_assignment.ESTBLSH_CD='C' "
+      + "  left outer join {h-schema}CASE_T case_ "
+      + "    on case_assignment.ESTBLSH_ID=case_.IDENTIFIER "
+      + "  left outer join {h-schema}CLIENT_T client "
+      + "    on case_.FKCHLD_CLT = client.IDENTIFIER "
+      + "  left outer join {h-schema}SYS_CD_C service_component_type "
+      + "    on case_.SRV_CMPC = service_component_type.SYS_ID "
+      + "    and service_component_type.FKS_META_T = 'SRV_CMPC' "
+      + "where "
+      + "  caseloadweight.FKSTFPERST = ?1"
+      + "  and case_.END_DT is null "
+      + "  and case_assignment.START_DT <= ?2"
+      + "  and (case_assignment.END_DT is null or case_assignment.END_DT > ?3)"
+  ),
+  @NamedNativeQuery(
+    name = ClientByStaff.CASE_FIND_CLIENTS_BY_STAFF_ID,
+    query = "select distinct "
+      + "  client.IDENTIFIER as clientIdentifier,"
+      + "  trim(client.COM_FST_NM) as clientFirstName,"
+      + "  trim(client.COM_MID_NM) as clientMiddleName,"
+      + "  trim(client.COM_LST_NM) as clientLastName,"
+      + "  trim(client.SUFX_TLDSC) as clientNameSuffix,"
+      + "  client.SENSTV_IND as clientSensitivityType,"
+      + "  client.BIRTH_DT as clientBirthDate,"
+      + "  family_case_plan_episode.RVW_DUE_DT as casePlanReviewDueDate "
+      + "from "
+      + "  {h-schema}CASE_LDT caseload "
+      + "  left outer join {h-schema}CSLDWGHT caseloadweight "
+      + "    on caseload.IDENTIFIER = caseloadweight.FKCASE_LDT "
+      + "  left outer join {h-schema}ASGNM_T case_assignment "
+      + "    on caseload.IDENTIFIER=case_assignment.FKCASE_LDT "
+      + "    and case_assignment.ESTBLSH_CD='C' "
+      + "  left outer join {h-schema}CASE_T case_ "
+      + "    on case_assignment.ESTBLSH_ID=case_.IDENTIFIER "
+      + "  left outer join {h-schema}CLIENT_T client "
+      + "    on case_.FKCHLD_CLT = client.IDENTIFIER "
+      + "  left outer join {h-schema}CSPL_DET case_plan_children_detail on case_.IDENTIFIER = case_plan_children_detail.FKCASE_T"
+      + "  left outer join {h-schema}FCPL_EPT family_case_plan_episode on case_plan_children_detail.FKFCPL_EPT = family_case_plan_episode.IDENTIFIER "
+      + "where "
+      + "  caseloadweight.FKSTFPERST = ?1"
+      + "  and case_.END_DT is null "
+      + "  and case_assignment.START_DT <= ?2"
+      + "  and (case_assignment.END_DT is null or case_assignment.END_DT > ?3) "
+      + "  and (family_case_plan_episode.END_DT is null or family_case_plan_episode.END_DT > ?4)"
+  )
+})
+
+@SqlResultSetMappings({
+  @SqlResultSetMapping(
     name = CaseByStaff.MAPPING_CASE_BY_STAFF,
     classes = @ConstructorResult(
-        targetClass = CaseByStaff.class,
-        columns = {
-            @ColumnResult(name = "identifier"),
-            @ColumnResult(name = "caseName"),
-            @ColumnResult(name = "clientIdentifier"),
-            @ColumnResult(name = "clientFirstName"),
-            @ColumnResult(name = "clientLastName"),
-            @ColumnResult(name = "activeServiceComponent"),
-            @ColumnResult(name = "assignmentIdentifier"),
-            @ColumnResult(name = "assignmentTypeCode", type = String.class),
-            @ColumnResult(name = "assignmentStartDate", type = LocalDate.class)
-        }
+      targetClass = CaseByStaff.class,
+      columns = {
+        @ColumnResult(name = "identifier"),
+        @ColumnResult(name = "caseName"),
+        @ColumnResult(name = "clientIdentifier"),
+        @ColumnResult(name = "clientFirstName"),
+        @ColumnResult(name = "clientLastName"),
+        @ColumnResult(name = "activeServiceComponent"),
+        @ColumnResult(name = "assignmentIdentifier"),
+        @ColumnResult(name = "assignmentStartDate", type = LocalDate.class),
+        @ColumnResult(name = "assignmentTypeCode", type = String.class),
+        @ColumnResult(name = "assignmentStartDate", type = LocalDate.class)
+      }
     )
-)
+  ),
+  @SqlResultSetMapping(
+    name = ClientByStaff.MAPPING_CLIENT_FROM_CASE,
+    classes = @ConstructorResult(
+      targetClass = ClientByStaff.class,
+      columns = {
+        @ColumnResult(name = "clientIdentifier", type = String.class),
+        @ColumnResult(name = "clientFirstName", type = String.class),
+        @ColumnResult(name = "clientMiddleName", type = String.class),
+        @ColumnResult(name = "clientLastName", type = String.class),
+        @ColumnResult(name = "clientNameSuffix", type = String.class),
+        @ColumnResult(name = "clientSensitivityType", type = String.class),
+        @ColumnResult(name = "clientBirthDate", type = LocalDate.class),
+        @ColumnResult(name = "casePlanReviewDueDate", type = LocalDate.class)
+      }
+    )
+  )
+})
+
 @SuppressWarnings({"squid:S3437", "squid:S2160"})
 public class Case extends CmsPersistentObject {
 
