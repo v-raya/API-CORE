@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.util.SortedMap;
+import java.util.TreeMap;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -35,7 +36,7 @@ public class SystemInformationDto {
   private boolean healthStatus;
 
   @JsonProperty(value = "health_checks", required = true)
-  private SortedMap<String, HealthCheckResultDto> healthCheckResults;
+  private SortedMap<String, HealthCheckResultDto> healthCheckResults = new TreeMap<>();
 
   public String getApplicationName() {
     return applicationName;
