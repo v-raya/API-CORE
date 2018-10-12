@@ -133,7 +133,7 @@ public class CaseDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
       sessionFactory,
       (sessionFactory) -> {
         Collection<ClientByStaff> clients = caseDao.findClientsByStaffIdAndActiveDate("0Ki", LocalDate.now());
-        assertEquals(109, clients.size());
+        assertEquals(114, clients.size());
         clients.stream().filter(client -> "JfaFqkC0Ki".equals(client.getIdentifier()))
           .forEach(clientByStaff -> {
             assertEquals("Charles", clientByStaff.getFirstName());
