@@ -101,15 +101,16 @@ import org.hibernate.annotations.Type;
       + "  and (case_assignment.END_DT is null or case_assignment.END_DT > ?3)"
   ),
   @NamedNativeQuery(
-    name = ClientByStaff.NATIVE_FIND_CLIENTS_BY_STAFF_ID,
-    query = "select client.IDENTIFIER as clientIdentifier,"
-      + "  max(trim(client.COM_FST_NM)) as clientFirstName,"
-      + "  max(trim(client.COM_MID_NM)) as clientMiddleName,"
-      + "  max(trim(client.COM_LST_NM)) as clientLastName,"
-      + "  max(trim(client.SUFX_TLDSC)) as clientNameSuffix,"
-      + "  max(client.SENSTV_IND) as clientSensitivityType,"
-      + "  max(client.BIRTH_DT) as clientBirthDate,"
-      + "  max(family_case_plan_episode.RVW_DUE_DT) as casePlanReviewDueDate "
+    name = ClientByStaff.CASE_FIND_CLIENTS_BY_STAFF_ID,
+    query = "select distinct "
+      + "  client.IDENTIFIER as clientIdentifier,"
+      + "  trim(client.COM_FST_NM) as clientFirstName,"
+      + "  trim(client.COM_MID_NM) as clientMiddleName,"
+      + "  trim(client.COM_LST_NM) as clientLastName,"
+      + "  trim(client.SUFX_TLDSC) as clientNameSuffix,"
+      + "  client.SENSTV_IND as clientSensitivityType,"
+      + "  client.BIRTH_DT as clientBirthDate,"
+      + "  family_case_plan_episode.RVW_DUE_DT as casePlanReviewDueDate "
       + "from "
       + "  {h-schema}CASE_LDT caseload "
       + "  left outer join {h-schema}CSLDWGHT caseloadweight "
@@ -128,7 +129,7 @@ import org.hibernate.annotations.Type;
       + "  and case_.END_DT is null "
       + "  and case_assignment.START_DT <= ?2"
       + "  and (case_assignment.END_DT is null or case_assignment.END_DT > ?3) "
-      + "group by client.IDENTIFIER"
+      + "  and (family_case_plan_episode.END_DT is null or family_case_plan_episode.END_DT > ?4)"
   )
 })
 
@@ -152,7 +153,7 @@ import org.hibernate.annotations.Type;
     )
   ),
   @SqlResultSetMapping(
-    name = ClientByStaff.MAPPING_CLIENT_BY_STAFF,
+    name = ClientByStaff.MAPPING_CLIENT_FROM_CASE,
     classes = @ConstructorResult(
       targetClass = ClientByStaff.class,
       columns = {

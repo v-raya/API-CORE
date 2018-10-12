@@ -27,8 +27,10 @@ public class ClientByStaff implements ApiMarker {
 
   private static final long serialVersionUID = 1L;
 
-  public static final String NATIVE_FIND_CLIENTS_BY_STAFF_ID = "ClientByStaff.nativeFindClientsByStaffId";
-  public static final String MAPPING_CLIENT_BY_STAFF = "ClientByStaff.mapping";
+  public static final String CASE_FIND_CLIENTS_BY_STAFF_ID = "ClientByStaff.caseFindClientsByStaffId";
+  public static final String REFERRAL_FIND_CLIENTS_BY_STAFF_ID = "ClientByStaff.referralFindClientsByStaffId";
+  public static final String MAPPING_CLIENT_FROM_CASE = "ClientByStaff.caseMapping";
+  public static final String MAPPING_CLIENT_FROM_REFERRAL = "ClientByStaff.referralMapping";
 
   private String identifier;
   private String firstName;
@@ -50,6 +52,12 @@ public class ClientByStaff implements ApiMarker {
     this.sensitivityType = sensitivityType;
     this.birthDate = birthDate;
     this.casePlanReviewDueDate = casePlanReviewDueDate;
+  }
+
+  public ClientByStaff(String identifier, String firstName,
+    String middleName, String lastName, String nameSuffix,
+    String sensitivityType, LocalDate birthDate) {
+    this(identifier, firstName, middleName, lastName, nameSuffix, sensitivityType, birthDate, null);
   }
 
   public String getIdentifier() {
