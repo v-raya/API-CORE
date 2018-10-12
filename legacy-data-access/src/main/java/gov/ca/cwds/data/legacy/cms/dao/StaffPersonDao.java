@@ -20,11 +20,11 @@ public class StaffPersonDao extends BaseDaoImpl<StaffPerson> {
   }
 
   /**
-   * Returns collection of {@link StaffPerson} who are subordinates for a supervisor {@link
+   * Returns collection of {@link StaffBySupervisor} who are subordinates for a supervisor {@link
    * StaffPerson} by identifier of the supervisor. N.B. The returned objects are POJOs, not
    * of @Entity type.
    *
-   * @param identifier - RACF ID of the supervisor Staff Person.
+   * @param identifier - identifier of the supervisor Staff Person.
    * @return Returns subordinates for the supervisor. N.B. The returned objects are not of @Entity
    *     type.
    */
