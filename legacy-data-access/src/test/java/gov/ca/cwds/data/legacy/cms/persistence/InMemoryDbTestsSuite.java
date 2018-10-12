@@ -26,6 +26,7 @@ import gov.ca.cwds.data.legacy.cms.dao.SexualExploitationTypeDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.SpecialEducationDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.SpecialProjectDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.SpecialProjectReferralDaoTest;
+import gov.ca.cwds.data.legacy.cms.dao.StaffPersonDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.TribalAncestryNotificationDaoTest;
 import gov.ca.cwds.data.legacy.cms.dao.TribalMembershipVerificationDaoTest;
 import gov.ca.cwds.security.utils.PrincipalUtils;
@@ -72,6 +73,7 @@ import org.powermock.modules.junit4.PowerMockRunnerDelegate;
     SpecialEducationDaoTest.class,
     SpecialProjectDaoTest.class,
     SpecialProjectReferralDaoTest.class,
+    StaffPersonDaoTest.class,
     TribalAncestryNotificationDaoTest.class,
     TribalMembershipVerificationDaoTest.class
 })

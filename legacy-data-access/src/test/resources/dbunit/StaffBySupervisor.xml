@@ -1,0 +1,46 @@
+<dataset>
+  <STFPERST IDENTIFIER="aab" FIRST_NM="James               "
+    JOB_TL_DSC="                              " LAST_NM="LeBeau                   " MID_INI_NM=" "
+    NMPRFX_DSC="      " PHONE_NO="5599831765" TEL_EXT_NO="0" START_DT="2017-07-13" SUFX_TLDSC="    "
+    TLCMTR_IND="N" LST_UPD_ID="0X5" LST_UPD_TS="2017-09-01 10:01:01.166" FKCWS_OFFT="NpuJq9k0Wz"
+    AVLOC_DSC="                                                                                                                                                                "
+    SSRS_WKRID="7332" CNTY_SPFCD="20" DTYWKR_IND="N" FKCWSADDRT="PeQHipI0Wz"/>
+  <STFPERST IDENTIFIER="aad" FIRST_NM="Ratnesh             "
+    JOB_TL_DSC="                              " LAST_NM="Raval                    " MID_INI_NM=" "
+    NMPRFX_DSC="      " PHONE_NO="5594871890" TEL_EXT_NO="0" START_DT="2017-07-13" SUFX_TLDSC="    "
+    TLCMTR_IND="N" LST_UPD_ID="0Wz" LST_UPD_TS="2017-08-18 13:41:17.404" FKCWS_OFFT="NpuJq9k0Wz"
+    AVLOC_DSC="                                                                                                                                                                "
+    SSRS_WKRID="8998" CNTY_SPFCD="20" DTYWKR_IND="N" FKCWSADDRT="PeQHipI0Wz"/>
+  <STFPERST IDENTIFIER="0Ki" FIRST_NM="H                   "
+    JOB_TL_DSC="                              " LAST_NM="RAMES                    " MID_INI_NM=" "
+    NMPRFX_DSC="      " PHONE_NO="9165551212" TEL_EXT_NO="0" START_DT="2001-01-11" SUFX_TLDSC="    "
+    TLCMTR_IND="N" LST_UPD_ID="00E" LST_UPD_TS="2001-01-11 10:24:05.557584" FKCWS_OFFT="BsiXnWf00E"
+    AVLOC_DSC="                                                                                                                                                                "
+    SSRS_WKRID="2345" CNTY_SPFCD="28" DTYWKR_IND="N" FKCWSADDRT="U1sCcE900E"/>
+
+  <STFUATHT THIRD_ID="5UzTKNhaab" START_DT="2017-10-10" UNTAUTH_CD="S" LST_UPD_ID="aab"
+    LST_UPD_TS="2017-10-10 13:50:45.646" FKASG_UNIT="SKo5k17aab" FKSTFPERST="aab" CNTY_SPFCD="20"/>
+  <STFUATHT THIRD_ID="DaZXgWb0Wz" START_DT="2017-10-20" UNTAUTH_CD="N" LST_UPD_ID="0Wz"
+    LST_UPD_TS="2017-10-20 14:40:11.109" FKASG_UNIT="SKo5k17aab" FKSTFPERST="aad" CNTY_SPFCD="20"/>
+  <STFUATHT THIRD_ID="5u4xVLh00E" START_DT="2001-01-11" UNTAUTH_CD="S" LST_UPD_ID="00E"
+    LST_UPD_TS="2001-01-11 10:24:05.557" FKASG_UNIT="DOTqhPx00E" FKSTFPERST="0Ki" CNTY_SPFCD="28"/>
+  <STFUATHT THIRD_ID="ITU3Uwv00E" START_DT="2001-01-11" UNTAUTH_CD="S" LST_UPD_ID="00E"
+    LST_UPD_TS="2001-01-11 10:24:05.557" FKASG_UNIT="3GrtJNl00E" FKSTFPERST="0Ki" CNTY_SPFCD="28"/>
+
+  <ASG_UNIT IDENTIFIER="DOTqhPx00E" ASGDSK_IND="Y" PHONE_NO="0" TEL_EXT_NO="0" START_DT="2001-01-11"
+    LST_UPD_ID="00E" LST_UPD_TS="2001-01-11 10:24:05.557584" FKCWS_OFFT="BsiXnWf00E"
+    ASGMUNT_NM="Assignment Desk                              " CNTY_SPFCD="99"/>
+  <ASG_UNIT IDENTIFIER="SKo5k17aab" ASGDSK_IND="N" PHONE_NO="0" TEL_EXT_NO="0" START_DT="2017-10-10"
+    LST_UPD_ID="aab" LST_UPD_TS="2017-10-10 13:50:45.646" FKCWS_OFFT="NpuJq9k0Wz"
+    ASGMUNT_NM="Jim&#39;s assignement unit                       " CNTY_SPFCD="20"/>
+  <ASG_UNIT IDENTIFIER="3GrtJNl00E" ASGDSK_IND="N" PHONE_NO="0" TEL_EXT_NO="0" START_DT="2001-01-11"
+    LST_UPD_ID="00E" LST_UPD_TS="2001-01-11 10:24:05.557584" FKCWS_OFFT="BsiXnWf00E"
+    ASGMUNT_NM="Ramesh&#39;s AU                                  " CNTY_SPFCD="28"/>
+
+  <USERID_T IDENTIFIER="TXPA7an00E" LOGON_ID="RAMESHA " LST_UPD_ID="00E"
+    LST_UPD_TS="2001-01-11 10:24:05.557584" FKSTFPERST="0Ki" SYS_DMC="5394"/>
+  <USERID_T IDENTIFIER="Fcx1NUj0Wz" LOGON_ID="CWDS3   " LST_UPD_ID="0Wz"
+    LST_UPD_TS="2017-07-13 16:04:46.396" FKSTFPERST="aad" SYS_DMC="5599"/>
+  <USERID_T IDENTIFIER="74rPZ8n0Wz" LOGON_ID="CWDS1   " LST_UPD_ID="0Wz"
+    LST_UPD_TS="2017-07-13 15:57:22.682" FKSTFPERST="aab" SYS_DMC="5599"/>
+</dataset>
