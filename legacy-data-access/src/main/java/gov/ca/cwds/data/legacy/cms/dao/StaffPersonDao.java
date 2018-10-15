@@ -32,7 +32,7 @@ public class StaffPersonDao extends BaseDaoImpl<StaffPerson> {
    * @return Returns the immutable collection of subordinates for the supervisor. N.B. The returned
    *     objects are not of @Entity type.
    */
-  public Collection<StaffBySupervisor> nativeFindStaffBySupervisorId(final String identifier) {
+  public Collection<StaffBySupervisor> findStaffBySupervisorId(final String identifier) {
     Require.requireNotNullAndNotEmpty(identifier);
     final List<StaffBySupervisor> staffList =
         currentSession()

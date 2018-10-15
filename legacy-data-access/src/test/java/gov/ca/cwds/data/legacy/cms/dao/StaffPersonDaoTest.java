@@ -25,7 +25,7 @@ public class StaffPersonDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
         sessionFactory,
         (sessionFactory) -> {
           final Collection<StaffBySupervisor> staffList =
-              testSubject.nativeFindStaffBySupervisorId("aab");
+              testSubject.findStaffBySupervisorId("aab");
           assertEquals(1, staffList.size());
           final StaffBySupervisor expected =
               new StaffBySupervisor("aad", "CWDS3", "Ratnesh", "Raval", "5594871890", null);
@@ -40,7 +40,7 @@ public class StaffPersonDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
         sessionFactory,
         (sessionFactory) -> {
           final Collection<StaffBySupervisor> staffList =
-              testSubject.nativeFindStaffBySupervisorId("UnknownId");
+              testSubject.findStaffBySupervisorId("UnknownId");
           assertEquals(0, staffList.size());
         });
   }
@@ -52,7 +52,7 @@ public class StaffPersonDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
         sessionFactory,
         (sessionFactory) -> {
           final Collection<StaffBySupervisor> staffList =
-              testSubject.nativeFindStaffBySupervisorId("0Ki");
+              testSubject.findStaffBySupervisorId("0Ki");
           assertEquals(0, staffList.size());
         });
   }

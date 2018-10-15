@@ -24,7 +24,7 @@ import org.hibernate.annotations.NamedNativeQuery;
 public class StaffBySupervisor implements ApiMarker {
 
   public static final String NATIVE_FIND_STAFF_BY_SUPERVISOR_ID =
-      "StaffBySupervisor.nativeFindStaffBySupervisorId";
+      "StaffBySupervisor.findStaffBySupervisorId";
   public static final String MAPPING_STAFF_BY_SUPERVISOR = "StaffBySupervisor.mapping";
   private static final long serialVersionUID = 1L;
   private String identifier;
