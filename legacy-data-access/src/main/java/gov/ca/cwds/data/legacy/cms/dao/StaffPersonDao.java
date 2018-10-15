@@ -11,7 +11,11 @@ import java.util.Collection;
 import java.util.List;
 import org.hibernate.SessionFactory;
 
-/** @author CWDS CALS API Team */
+/**
+ * The DAO to work with StaffPerson entity
+ *
+ * @author CWDS CALS API Team
+ */
 public class StaffPersonDao extends BaseDaoImpl<StaffPerson> {
 
   @Inject
@@ -20,13 +24,13 @@ public class StaffPersonDao extends BaseDaoImpl<StaffPerson> {
   }
 
   /**
-   * Returns collection of {@link StaffBySupervisor} who are subordinates for a supervisor {@link
-   * StaffPerson} by identifier of the supervisor. N.B. The returned objects are POJOs, not
-   * of @Entity type.
+   * Returns the immutable collection of {@link StaffBySupervisor} who are subordinates for a
+   * supervisor {@link StaffPerson} by identifier of the supervisor. N.B. The returned objects are
+   * POJOs, not of @Entity type.
    *
    * @param identifier - identifier of the supervisor Staff Person.
-   * @return Returns subordinates for the supervisor. N.B. The returned objects are not of @Entity
-   *     type.
+   * @return Returns the immutable collection of subordinates for the supervisor. N.B. The returned
+   *     objects are not of @Entity type.
    */
   public Collection<StaffBySupervisor> nativeFindStaffBySupervisorId(final String identifier) {
     Require.requireNotNullAndNotEmpty(identifier);

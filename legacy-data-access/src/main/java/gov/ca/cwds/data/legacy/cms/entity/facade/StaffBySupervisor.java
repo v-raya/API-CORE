@@ -9,29 +9,24 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.NamedNativeQuery;
 
 /**
- * The POJO is intended to contain data from different tables and to be filled by
- * {@link SqlResultSetMapping} after {@link NamedNativeQuery} is invoked.
+ * The POJO is intended to contain data from different tables and to be filled by {@link
+ * SqlResultSetMapping} after {@link NamedNativeQuery} is invoked.
  *
- * <p>
- * The reason to use {@link NamedNativeQuery} and to create the 'facade' class is a performance
+ * <p>The reason to use {@link NamedNativeQuery} and to create the 'facade' class is a performance
  * issue with lots of joins when using {@link Entity} classes.
- * </p>
  *
- * <p>
- * N.B. {@link NamedNativeQuery} and {@link SqlResultSetMapping} are placed in
- * {@link gov.ca.cwds.data.legacy.cms.entity.StaffPerson} {@link Entity} class as they can be found by
+ * <p>N.B. {@link NamedNativeQuery} and {@link SqlResultSetMapping} are placed in {@link
+ * gov.ca.cwds.data.legacy.cms.entity.StaffPerson} {@link Entity} class as they can be found by
  * hibernate in {@link Entity} classes only.
- * </p>
  *
  * @author denys.davydov
  */
 public class StaffBySupervisor implements ApiMarker {
 
-  private static final long serialVersionUID = 1L;
-
-  public static final String NATIVE_FIND_STAFF_BY_SUPERVISOR_ID = "StaffBySupervisor.nativeFindStaffBySupervisorId";
+  public static final String NATIVE_FIND_STAFF_BY_SUPERVISOR_ID =
+      "StaffBySupervisor.nativeFindStaffBySupervisorId";
   public static final String MAPPING_STAFF_BY_SUPERVISOR = "StaffBySupervisor.mapping";
-
+  private static final long serialVersionUID = 1L;
   private String identifier;
   private String racfId;
   private String firstName;
@@ -41,6 +36,7 @@ public class StaffBySupervisor implements ApiMarker {
 
   /**
    * All args constructor is required by {@link SqlResultSetMapping}.
+   *
    * @param identifier unique identifier
    * @param racfId RACF ID
    * @param firstName first name
@@ -48,8 +44,13 @@ public class StaffBySupervisor implements ApiMarker {
    * @param phoneNumber phone number
    * @param email email
    */
-  public StaffBySupervisor(String identifier, String racfId, String firstName,
-    String lastName, String phoneNumber, String email) {
+  public StaffBySupervisor(
+      String identifier,
+      String racfId,
+      String firstName,
+      String lastName,
+      String phoneNumber,
+      String email) {
     this.identifier = identifier;
     this.racfId = racfId;
     this.firstName = firstName;
@@ -107,8 +108,8 @@ public class StaffBySupervisor implements ApiMarker {
   }
 
   @Override
-  public boolean equals(Object o) {
-    return EqualsBuilder.reflectionEquals(this, o);
+  public boolean equals(Object other) {
+    return EqualsBuilder.reflectionEquals(this, other);
   }
 
   @Override
@@ -119,12 +120,12 @@ public class StaffBySupervisor implements ApiMarker {
   @Override
   public String toString() {
     return new ToStringBuilder(this)
-      .append("identifier", identifier)
-      .append("racfId", racfId)
-      .append("firstName", firstName)
-      .append("lastName", lastName)
-      .append("phoneNumber", phoneNumber)
-      .append("email", email)
-      .toString();
+        .append("identifier", identifier)
+        .append("racfId", racfId)
+        .append("firstName", firstName)
+        .append("lastName", lastName)
+        .append("phoneNumber", phoneNumber)
+        .append("email", email)
+        .toString();
   }
 }
