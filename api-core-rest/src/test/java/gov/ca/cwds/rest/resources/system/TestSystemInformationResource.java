@@ -11,6 +11,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * Test SystemInformationResource. This is also an example for how to design
+ * SystemInformationResource in CARES app
+ */
 @Path("system-information")
 @Produces(MediaType.APPLICATION_JSON)
 public class TestSystemInformationResource extends AbstractSystemInformationResource {
