@@ -18,6 +18,11 @@ public abstract class AbstractSystemInformationResource {
 
   static final int HTTP_STATUS_NOT_HEALTHY = 465;
 
+  protected String applicationName;
+  protected String version;
+  protected String buildNumber;
+  protected String gitCommitHash;
+
   private HealthCheckRegistry healthCheckRegistry;
 
   protected SystemHealthStatusStrategy systemHealthStatusStrategy;
@@ -29,8 +34,13 @@ public abstract class AbstractSystemInformationResource {
     };
   }
 
-  protected SystemInformationDto prepareSystemInformation() {
+  private SystemInformationDto prepareSystemInformation() {
     final SystemInformationDto systemInformationDto = new SystemInformationDto();
+    systemInformationDto.setApplicationName(applicationName);
+    systemInformationDto.setVersion(version);
+    systemInformationDto.setBuildNumber(buildNumber);
+    systemInformationDto.setGitCommitHash(gitCommitHash);
+    
     final Map<String, Result> healthCheckResults = healthCheckRegistry.runHealthChecks();
     for (Map.Entry<String, Result> resultEntry : healthCheckResults.entrySet()) {
       systemInformationDto.getHealthCheckResults().put(resultEntry.getKey(),

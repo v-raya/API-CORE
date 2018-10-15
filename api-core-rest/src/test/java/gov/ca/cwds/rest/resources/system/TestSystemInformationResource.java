@@ -17,16 +17,10 @@ public class TestSystemInformationResource extends AbstractSystemInformationReso
 
   TestSystemInformationResource(Environment environment) {
     super(environment.healthChecks());
-  }
-
-  @Override
-  protected SystemInformationDto prepareSystemInformation() {
-    SystemInformationDto systemInformationDto = super.prepareSystemInformation();
-    systemInformationDto.setApplicationName("app1");
-    systemInformationDto.setVersion("1.0");
-    systemInformationDto.setBuildNumber("123");
-    systemInformationDto.setGitCommitHash("5fe64cdd988f8218b3568e886064be03cb990ae8");
-    return systemInformationDto;
+    super.applicationName = "app1";
+    super.version = "1.0";
+    super.buildNumber = "123";
+    super.gitCommitHash = "5fe64cdd988f8218b3568e886064be03cb990ae8";
   }
 
   @GET
