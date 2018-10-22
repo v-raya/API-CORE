@@ -10,7 +10,11 @@ import javax.persistence.NamedNativeQuery;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.SqlResultSetMappings;
 
-/** @author CWDS CALS API Team */
+/**
+ * StaffPerson entity
+ *
+ * @author CWDS CALS API Team
+ */
 @Entity
 @javax.persistence.Table(name = "STFPERST")
 @NamedNativeQueries({
@@ -37,7 +41,8 @@ import javax.persistence.SqlResultSetMappings;
               + "  AND stf.END_DT IS NULL"),
   @NamedNativeQuery(
       name = ClientCountByStaff.NATIVE_COUNT_CLIENTS_BY_STAFF_IDS,
-      query = "SELECT "
+      query =
+          "SELECT "
               + "    caseloadweight.FKSTFPERST AS identifier, "
               + "    count(DISTINCT case_.FKCHLD_CLT) AS caseClientsCount, "
               + "    count(DISTINCT allegation.FKCLIENT_T) AS referralClientsCount "

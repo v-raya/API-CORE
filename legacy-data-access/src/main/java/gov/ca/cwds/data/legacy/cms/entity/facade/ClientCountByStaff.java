@@ -7,8 +7,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
- * The POJO is to hold staff person statistic like a number of clients assigned to the staff person via
- * cases or via referrals
+ * The POJO is to hold staff person statistic like a number of clients assigned to the staff person
+ * via cases or via referrals.
  *
  * @author denys.davydov
  */
