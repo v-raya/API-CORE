@@ -2,7 +2,6 @@ package gov.ca.cwds.dto.app;
 
 import com.codahale.metrics.health.HealthCheck;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -19,7 +18,7 @@ public class HealthCheckResultDto {
   private boolean healthy;
   private String message;
   private Throwable error;
-  private HashMap<String, Object> details;
+  private Map<String, Object> details;
   private String timestamp;
 
   /**
@@ -38,7 +37,7 @@ public class HealthCheckResultDto {
     healthy = result.isHealthy();
     message = result.getMessage();
     error = result.getError();
-    details = result.getDetails() == null ? null : new HashMap<>(result.getDetails());
+    details = result.getDetails();
     timestamp = result.getTimestamp();
   }
 
@@ -84,7 +83,7 @@ public class HealthCheckResultDto {
   }
 
   public void setDetails(Map<String, Object> details) {
-    this.details = details == null ? null : new HashMap<>(details);
+    this.details = details;
   }
 
   public String getTimestamp() {
