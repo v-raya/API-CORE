@@ -147,7 +147,7 @@ import org.hibernate.annotations.Type;
       + "  trim(client.COM_MID_NM) as clientMiddleName,"
       + "  trim(client.COM_LST_NM) as clientLastName,"
       + "  trim(client.SUFX_TLDSC) as clientNameSuffix,"
-      + "  client.SENSTV_IND as clientSensitivityIndicator,"
+      + "  client.SENSTV_IND as clientSensitivityType,"
       + "  client.BIRTH_DT as clientBirthDate, "
       + "  NULL as casePlanReviewDueDate "
       + "from "
