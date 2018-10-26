@@ -142,7 +142,6 @@ public class CaseDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
             assertEquals("", clientByStaff.getNameSuffix());
             assertEquals(LocalDate.parse("1999-08-09"), clientByStaff.getBirthDate());
             assertEquals("N", clientByStaff.getSensitivityType());
-            assertEquals(LocalDate.parse("2005-02-09"), clientByStaff.getCasePlanReviewDueDate());
         });
       });
   }
