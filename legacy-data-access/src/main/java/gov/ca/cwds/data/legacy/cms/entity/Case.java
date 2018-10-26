@@ -102,15 +102,14 @@ import org.hibernate.annotations.Type;
   ),
   @NamedNativeQuery(
     name = ClientByStaff.CASE_FIND_CLIENTS_BY_STAFF_ID,
-    query = "SELECT "
+    query = "SELECT DISTINCT "
     + "  clientIdentifier,"
     + "  clientFirstName,"
     + "  clientMiddleName,"
     + "  clientLastName,"
     + "  clientNameSuffix,"
     + "  clientSensitivityType,"
-    + "  clientBirthDate,"
-    + "  MAX(casePlanReviewDueDate) as casePlanReviewDueDate "
+    + "  clientBirthDate"
       + " FROM ("
       + "select distinct "
       + "  client.IDENTIFIER as clientIdentifier,"
@@ -168,14 +167,6 @@ import org.hibernate.annotations.Type;
       + "  and (assignment_.END_DT is null or assignment_.END_DT > ?3) "
       + "  and referral.ORIGCLS_DT is null "
       + ") c "
-    + " GROUP BY "
-      + "clientIdentifier, "
-      + "clientFirstName, "
-      + "clientMiddleName, "
-      + "clientLastName,"
-      + "clientNameSuffix,"
-      + "clientSensitivityType,"
-      + "clientBirthDate"
   )
 })
 
@@ -210,7 +201,6 @@ import org.hibernate.annotations.Type;
         @ColumnResult(name = "clientNameSuffix", type = String.class),
         @ColumnResult(name = "clientSensitivityType", type = String.class),
         @ColumnResult(name = "clientBirthDate", type = LocalDate.class),
-        @ColumnResult(name = "casePlanReviewDueDate", type = LocalDate.class)
       }
     )
   )
