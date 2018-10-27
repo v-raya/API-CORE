@@ -1,15 +1,20 @@
 package gov.ca.cwds.data.legacy.cms.dao;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.legacy.cms.entity.StaffPerson;
-import gov.ca.cwds.data.legacy.cms.entity.facade.ClientCountByStaff;
+import gov.ca.cwds.data.legacy.cms.entity.facade.ClientIdsByStaff;
 import gov.ca.cwds.data.legacy.cms.entity.facade.StaffBySupervisor;
 import gov.ca.cwds.inject.CmsSessionFactory;
 import gov.ca.cwds.util.Require;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.hibernate.SessionFactory;
 
 /**
@@ -45,27 +50,36 @@ public class StaffPersonDao extends BaseDaoImpl<StaffPerson> {
   }
 
   /**
-   * Returns the immutable collection of {@link ClientCountByStaff} that contains clients count for
-   * each staff person from input staffIds list.
+   * Returns the immutable map of staff person identifier to set of client identifiers that are
+   * assigned to the staff person.
    *
-   * <p>N.B. If there are no clients assigned to a particular staff id then there will be no
-   * corresponding {@link ClientCountByStaff} object in returned collection.
+   * <p>N.B. If there are no clients assigned to a particular staff person then there will be an
+   * empty set mapped to them.
    *
-   * <p>N.B.2 The returned objects are POJOs, not of @Entity type.
-   *
-   * @param staffIds - identifier of the supervisor Staff Person.
-   * @return Returns the immutable collection of {@link ClientCountByStaff} that contain clients
-   *     count for each staff person from input staffIds list. N.B. The returned objects are not
-   *     of @Entity type.
+   * @param staffIds - identifiers of the Staff Persons.
+   * @return Returns the immutable map of staff person identifier to set of client identifiers that
+   *     are assigned to the staff person.
    */
-  public Collection<ClientCountByStaff> countClientsByStaffIds(final Collection<String> staffIds) {
+  public Map<String, Set<String>> findClientIdsByStaffIds(final Collection<String> staffIds) {
     Require.requireNotNullAndNotEmpty(staffIds);
-    final List<ClientCountByStaff> results =
+    final List<ClientIdsByStaff> clientIdsByStaffIds =
         currentSession()
-            .getNamedNativeQuery(ClientCountByStaff.NATIVE_COUNT_CLIENTS_BY_STAFF_IDS)
-            .setResultSetMapping(ClientCountByStaff.MAPPING_CLIENT_COUNT_BY_STAFF)
+            .getNamedNativeQuery(ClientIdsByStaff.NATIVE_FIND_CLIENT_IDS_BY_STAFF_IDS)
+            .setResultSetMapping(ClientIdsByStaff.MAPPING)
             .setParameter(1, staffIds)
             .getResultList();
-    return ImmutableList.copyOf(results);
+    final Map<String, Set<String>> results =
+        clientIdsByStaffIds
+            .stream()
+            .collect(
+                Collectors.groupingBy(
+                    ClientIdsByStaff::getStaffIdentifier,
+                    Collectors.mapping(ClientIdsByStaff::getClientIdentifier, Collectors.toSet())));
+    // add default empty Set for staffIds that have no clients
+    staffIds
+        .stream()
+        .filter(staffId -> !results.containsKey(staffId))
+        .forEach(staffId -> results.put(staffId, Collections.emptySet()));
+    return ImmutableMap.copyOf(results);
   }
 }

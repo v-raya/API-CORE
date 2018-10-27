@@ -2,14 +2,14 @@ package gov.ca.cwds.data.legacy.cms.dao;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.Assert.assertEquals;
 
-import gov.ca.cwds.data.legacy.cms.entity.facade.ClientCountByStaff;
 import gov.ca.cwds.data.legacy.cms.entity.facade.StaffBySupervisor;
 import gov.ca.cwds.data.legacy.cms.persistence.BaseCwsCmsInMemoryPersistenceTest;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -64,36 +64,39 @@ public class StaffPersonDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
   }
 
   @Test
-  public void countClientsByStaffIds_success_whenHave2ResultsBy3IdsInSearch() throws Exception {
+  public void findClientIdsByStaffIds_success_whenHave2ResultsBy3IdsInSearch()
+      throws Exception {
     // given
     cleanAllAndInsert("/dbunit/ClientCountByStaff.xml");
     executeInTransaction(
         sessionFactory,
         (sessionFactory) -> {
           // when
-          final Collection<ClientCountByStaff> actual =
-              testSubject.countClientsByStaffIds(Arrays.asList("0Ht", "0I2", "0ME"));
+          final Map<String, Set<String>> actual =
+              testSubject.findClientIdsByStaffIds(
+                  Arrays.asList("0Ht", "0I2", "0ME"));
 
           // then
-          assertThat(actual.size(), is(2));
-          assertThat(
-              actual,
-              containsInAnyOrder(
-                  new ClientCountByStaff("0Ht", 30, 22), new ClientCountByStaff("0ME", 18, 5)));
+          assertThat(actual.size(), is(3));
+          assertThat(actual.get("0Ht").size(), is(45));
+          assertThat(actual.get("0I2").size(), is(0));
+          assertThat(actual.get("0ME").size(), is(22));
         });
   }
 
   @Test
-  public void countClientsByStaffIds_empty_whenNoResults() {
+  public void findClientIdsByStaffIds_emptyListsIn2Maps_whenNoResults() {
     executeInTransaction(
         sessionFactory,
         (sessionFactory) -> {
           // when
-          final Collection<ClientCountByStaff> actual =
-              testSubject.countClientsByStaffIds(Arrays.asList("nothing", "here"));
+          final Map<String, Set<String>> actual =
+              testSubject.findClientIdsByStaffIds(Arrays.asList("nothing", "here"));
 
           // then
-          assertThat(actual.size(), is(0));
+          assertThat(actual.size(), is(2));
+          assertThat(actual.get("nothing").size(), is(0));
+          assertThat(actual.get("here").size(), is(0));
         });
   }
 }

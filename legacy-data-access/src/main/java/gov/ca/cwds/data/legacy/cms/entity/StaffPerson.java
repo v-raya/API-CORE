@@ -1,6 +1,6 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
-import gov.ca.cwds.data.legacy.cms.entity.facade.ClientCountByStaff;
+import gov.ca.cwds.data.legacy.cms.entity.facade.ClientIdsByStaff;
 import gov.ca.cwds.data.legacy.cms.entity.facade.StaffBySupervisor;
 import javax.persistence.ColumnResult;
 import javax.persistence.ConstructorResult;
@@ -40,12 +40,11 @@ import javax.persistence.SqlResultSetMappings;
               + "  AND a.UNTAUTH_CD <> 'S' "
               + "  AND stf.END_DT IS NULL"),
   @NamedNativeQuery(
-      name = ClientCountByStaff.NATIVE_COUNT_CLIENTS_BY_STAFF_IDS,
+      name = ClientIdsByStaff.NATIVE_FIND_CLIENT_IDS_BY_STAFF_IDS,
       query =
           "SELECT "
-              + "    caseloadweight.FKSTFPERST AS identifier, "
-              + "    count(DISTINCT case_.FKCHLD_CLT) AS caseClientsCount, "
-              + "    count(DISTINCT allegation.FKCLIENT_T) AS referralClientsCount "
+              + "    caseloadweight.FKSTFPERST AS staffIdentifier, "
+              + "    (CASE WHEN case_.FKCHLD_CLT IS NOT NULL THEN case_.FKCHLD_CLT ELSE allegation.FKCLIENT_T END) AS clientIdentifier "
               + "  FROM "
               + "    {h-schema}CASE_LDT caseload "
               + "    LEFT OUTER JOIN {h-schema}CSLDWGHT caseloadweight "
@@ -63,7 +62,7 @@ import javax.persistence.SqlResultSetMappings;
               + "    AND case_.END_DT IS NULL "
               + "    AND assignment_.END_DT IS NULL "
               + "    AND referral.ORIGCLS_DT IS NULL "
-              + "  GROUP BY caseloadweight.FKSTFPERST")
+              + "    AND allegation.DISPSN_DT IS NULL ")
 })
 @SqlResultSetMappings({
   @SqlResultSetMapping(
@@ -80,14 +79,13 @@ import javax.persistence.SqlResultSetMappings;
                 @ColumnResult(name = "email")
               })),
   @SqlResultSetMapping(
-      name = ClientCountByStaff.MAPPING_CLIENT_COUNT_BY_STAFF,
+      name = ClientIdsByStaff.MAPPING,
       classes =
           @ConstructorResult(
-              targetClass = ClientCountByStaff.class,
+              targetClass = ClientIdsByStaff.class,
               columns = {
-                @ColumnResult(name = "identifier", type = String.class),
-                @ColumnResult(name = "caseClientsCount", type = int.class),
-                @ColumnResult(name = "referralClientsCount", type = int.class)
+                @ColumnResult(name = "staffIdentifier", type = String.class),
+                @ColumnResult(name = "clientIdentifier", type = String.class)
               }))
 })
 public class StaffPerson extends BaseStaffPerson {
