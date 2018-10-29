@@ -85,7 +85,6 @@ public class CaseDao extends CrudsDaoImpl<Case> {
         .setParameter(1, staffId)
         .setParameter(2, date)
         .setParameter(3, date)
-        .setParameter(4, date)
         .getResultList();
 
     return ImmutableList.copyOf(clients);
