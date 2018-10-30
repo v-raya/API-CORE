@@ -44,7 +44,8 @@ import javax.persistence.SqlResultSetMappings;
       query =
           "SELECT "
               + "    caseloadweight.FKSTFPERST AS staffIdentifier, "
-              + "    (CASE WHEN case_.FKCHLD_CLT IS NOT NULL THEN case_.FKCHLD_CLT ELSE allegation.FKCLIENT_T END) AS clientIdentifier "
+              + "    (CASE WHEN case_.FKCHLD_CLT IS NOT NULL THEN case_.FKCHLD_CLT "
+              + "       ELSE allegation.FKCLIENT_T END) AS clientIdentifier "
               + "  FROM "
               + "    {h-schema}CASE_LDT caseload "
               + "    LEFT OUTER JOIN {h-schema}CSLDWGHT caseloadweight "

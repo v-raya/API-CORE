@@ -27,7 +27,7 @@ public class ClientIdsByStaff implements ApiMarker {
    *
    * @param staffIdentifier - staff person identifier
    * @param clientIdentifier - identifier for a client to whom staff person is assigned via referral
-   * or case
+   *     or case
    */
   public ClientIdsByStaff(String staffIdentifier, String clientIdentifier) {
     this.staffIdentifier = staffIdentifier;
@@ -59,7 +59,6 @@ public class ClientIdsByStaff implements ApiMarker {
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this);
   }
-
 
   @Override
   public String toString() {
