@@ -157,9 +157,10 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
   }
 
   /**
-   * Register filters in {@link FilterModule.configure} and configure them here.
-   * 
-   * @param environment
+   * Register filters in {@link FilterRegistration} and configure them here.
+   *
+   * @param environment - environment
+   * @param guiceBundle - guice bundle
    */
   private static void registerFilters(final Environment environment, GuiceBundle<?> guiceBundle) {
     BaseApiApplication.injector = guiceBundle.getInjector();
