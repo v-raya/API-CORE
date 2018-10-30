@@ -157,7 +157,7 @@ public abstract class BaseApiApplication<T extends MinimalApiConfiguration> exte
   }
 
   /**
-   * Registers filters in {@link FilterRegistration} and configure them here.
+   * Register filters in {@link FilterRegistration} and configure them here.
    *
    * @param environment
    * @param guiceBundle
