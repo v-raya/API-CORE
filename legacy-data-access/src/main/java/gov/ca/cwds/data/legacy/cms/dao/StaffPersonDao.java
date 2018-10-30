@@ -9,6 +9,7 @@ import gov.ca.cwds.data.legacy.cms.entity.facade.ClientIdsByStaff;
 import gov.ca.cwds.data.legacy.cms.entity.facade.StaffBySupervisor;
 import gov.ca.cwds.inject.CmsSessionFactory;
 import gov.ca.cwds.util.Require;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -57,16 +58,19 @@ public class StaffPersonDao extends BaseDaoImpl<StaffPerson> {
    * empty set mapped to them.
    *
    * @param staffIds - identifiers of the Staff Persons.
+   * @param date - the actual date
    * @return Returns the immutable map of staff person identifier to set of client identifiers that
    *     are assigned to the staff person.
    */
-  public Map<String, Set<String>> findClientIdsByStaffIds(final Collection<String> staffIds) {
+  public Map<String, Set<String>> findClientIdsByStaffIds(
+      final Collection<String> staffIds, final LocalDate date) {
     Require.requireNotNullAndNotEmpty(staffIds);
     final List<ClientIdsByStaff> clientIdsByStaffIds =
         currentSession()
             .getNamedNativeQuery(ClientIdsByStaff.NATIVE_FIND_CLIENT_IDS_BY_STAFF_IDS)
             .setResultSetMapping(ClientIdsByStaff.MAPPING)
             .setParameter(1, staffIds)
+            .setParameter(2, date != null ? date : LocalDate.now())
             .getResultList();
     final Map<String, Set<String>> results =
         clientIdsByStaffIds

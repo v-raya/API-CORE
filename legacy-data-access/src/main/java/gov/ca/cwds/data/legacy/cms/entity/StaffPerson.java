@@ -60,10 +60,10 @@ import javax.persistence.SqlResultSetMappings;
               + "      ON allegation.FKREFERL_T = referral.IDENTIFIER "
               + "  WHERE "
               + "    caseloadweight.FKSTFPERST IN (?1) "
-              + "    AND case_.END_DT IS NULL "
-              + "    AND assignment_.END_DT IS NULL "
-              + "    AND referral.ORIGCLS_DT IS NULL "
-              + "    AND allegation.DISPSN_DT IS NULL ")
+              + "    AND (case_.END_DT IS NULL OR case_.END_DT > ?2) "
+              + "    AND (assignment_.END_DT IS NULL OR assignment_.END_DT > ?2) "
+              + "    AND (referral.ORIGCLS_DT IS NULL OR referral.ORIGCLS_DT > ?2) "
+              + "    AND (allegation.DISPSN_DT IS NULL OR allegation.DISPSN_DT > ?2) ")
 })
 @SqlResultSetMappings({
   @SqlResultSetMapping(

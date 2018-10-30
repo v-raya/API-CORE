@@ -6,6 +6,7 @@ import static org.junit.Assert.assertEquals;
 
 import gov.ca.cwds.data.legacy.cms.entity.facade.StaffBySupervisor;
 import gov.ca.cwds.data.legacy.cms.persistence.BaseCwsCmsInMemoryPersistenceTest;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
@@ -24,7 +25,7 @@ public class StaffPersonDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
   }
 
   @Test
-  public void findStaffBySupervisorRacfId_success_whenSingleRecordFound() throws Exception {
+  public void findStaffBySupervisorId_success_whenSingleRecordFound() throws Exception {
     cleanAllAndInsert("/dbunit/StaffBySupervisor.xml");
     executeInTransaction(
         sessionFactory,
@@ -39,7 +40,7 @@ public class StaffPersonDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
   }
 
   @Test
-  public void findStaffBySupervisorRacfId_returnsEmpty_whenUnknownRacfId() throws Exception {
+  public void findStaffBySupervisorId_returnsEmpty_whenUnknownRacfId() throws Exception {
     cleanAllAndInsert("/dbunit/StaffBySupervisor.xml");
     executeInTransaction(
         sessionFactory,
@@ -51,7 +52,7 @@ public class StaffPersonDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
   }
 
   @Test
-  public void findStaffBySupervisorRacfId_returnsEmpty_whenSupervisorHasNoSubordinates()
+  public void findStaffBySupervisorId_returnsEmpty_whenSupervisorHasNoSubordinates()
       throws Exception {
     cleanAllAndInsert("/dbunit/StaffBySupervisor.xml");
     executeInTransaction(
@@ -74,7 +75,7 @@ public class StaffPersonDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
           // when
           final Map<String, Set<String>> actual =
               testSubject.findClientIdsByStaffIds(
-                  Arrays.asList("0Ht", "0I2", "0ME"));
+                  Arrays.asList("0Ht", "0I2", "0ME"), LocalDate.now());
 
           // then
           assertThat(actual.size(), is(3));
@@ -91,7 +92,7 @@ public class StaffPersonDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
         (sessionFactory) -> {
           // when
           final Map<String, Set<String>> actual =
-              testSubject.findClientIdsByStaffIds(Arrays.asList("nothing", "here"));
+              testSubject.findClientIdsByStaffIds(Arrays.asList("nothing", "here"), null);
 
           // then
           assertThat(actual.size(), is(2));
