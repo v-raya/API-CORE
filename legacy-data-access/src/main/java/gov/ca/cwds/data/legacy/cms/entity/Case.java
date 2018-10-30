@@ -161,6 +161,8 @@ import org.hibernate.annotations.Type;
       + "  and assignment_.START_DT <= ?2 "
       + "  and (assignment_.END_DT is null or assignment_.END_DT > ?3) "
       + "  and referral.ORIGCLS_DT is null "
+      + "  and (referral.ORIGCLS_DT IS NULL OR referral.ORIGCLS_DT > ?3) "
+      + "  and (allegation.DISPSN_DT IS NULL OR allegation.DISPSN_DT > ?3) "
       + ") c "
   )
 })
