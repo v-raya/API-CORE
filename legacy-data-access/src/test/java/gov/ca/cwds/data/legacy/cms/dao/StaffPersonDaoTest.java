@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
+import gov.ca.cwds.data.legacy.cms.entity.StaffPerson;
 import gov.ca.cwds.data.legacy.cms.entity.facade.StaffBySupervisor;
 import gov.ca.cwds.data.legacy.cms.persistence.BaseCwsCmsInMemoryPersistenceTest;
 import java.time.LocalDate;
@@ -99,5 +100,24 @@ public class StaffPersonDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
           assertThat(actual.get("nothing").size(), is(0));
           assertThat(actual.get("here").size(), is(0));
         });
+  }
+
+  @Test
+  public void find_success_whenTrimmedNames()
+    throws Exception {
+    // given
+    cleanAllAndInsert("/dbunit/StaffBySupervisor.xml");
+    executeInTransaction(
+      sessionFactory,
+      (sessionFactory) -> {
+        // when
+        final StaffPerson actual = testSubject.find("0Ki");
+
+        // then
+        assertThat(actual.getFirstName(), is("H"));
+        assertThat(actual.getLastName(), is("RAMES"));
+        assertThat(actual.getMidIniNm(), is(""));
+        assertThat(actual.getSufxTldsc(), is(""));
+      });
   }
 }
