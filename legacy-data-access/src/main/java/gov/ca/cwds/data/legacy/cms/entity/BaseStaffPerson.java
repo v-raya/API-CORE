@@ -11,6 +11,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.ColumnTransformer;
 
 /**
  * @author CWDS CALS API Team
@@ -85,6 +86,7 @@ public abstract class BaseStaffPerson implements PersistentObject {
 
     @Basic
     @javax.persistence.Column(name = "FIRST_NM", nullable = false, length = 20)
+    @ColumnTransformer(read = "trim(FIRST_NM)")
     public String getFirstName() {
         return firstName;
     }
@@ -95,6 +97,7 @@ public abstract class BaseStaffPerson implements PersistentObject {
 
     @Basic
     @javax.persistence.Column(name = "JOB_TL_DSC", nullable = false, length = 30)
+    @ColumnTransformer(read = "trim(JOB_TL_DSC)")
     public String getJobTlDsc() {
         return jobTlDsc;
     }
@@ -105,6 +108,7 @@ public abstract class BaseStaffPerson implements PersistentObject {
 
     @Basic
     @javax.persistence.Column(name = "LAST_NM", nullable = false, length = 25)
+    @ColumnTransformer(read = "trim(LAST_NM)")
     public String getLastName() {
         return lastName;
     }
@@ -115,6 +119,7 @@ public abstract class BaseStaffPerson implements PersistentObject {
 
     @Basic
     @javax.persistence.Column(name = "MID_INI_NM", nullable = false, length = 1)
+    @ColumnTransformer(read = "trim(MID_INI_NM)")
     public String getMidIniNm() {
         return midIniNm;
     }
@@ -125,6 +130,7 @@ public abstract class BaseStaffPerson implements PersistentObject {
 
     @Basic
     @javax.persistence.Column(name = "NMPRFX_DSC", nullable = false, length = 6)
+    @ColumnTransformer(read = "trim(NMPRFX_DSC)")
     public String getNmprfxDsc() {
         return nmprfxDsc;
     }
