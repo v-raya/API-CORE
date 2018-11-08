@@ -1,34 +1,5 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-
-import javax.persistence.Access;
-import javax.persistence.AccessType;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.annotations.ColumnTransformer;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.NamedQuery;
-import org.hibernate.annotations.Type;
-
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObjectVersioned;
 import gov.ca.cwds.data.legacy.cms.entity.converter.NullableBooleanConverter;
 import gov.ca.cwds.data.legacy.cms.entity.enums.AdoptionStatus;
@@ -44,35 +15,110 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.Soc158placementsStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.UnableToDetermineReason;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType;
 import gov.ca.cwds.data.persistence.PersistentObject;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
+import org.hibernate.annotations.ColumnTransformer;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.NamedQuery;
+import org.hibernate.annotations.Type;
 
-/** @author CWDS CALS API Team */
+/**
+ * @author CWDS CALS API Team
+ */
 @NamedQuery(name = "Client.find",
-    query = Client.CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY + " AND c.identifier = :childId")
+  query = Client.CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY + " AND c.identifier = :childId")
 @NamedQuery(name = "Client.findAll",
-    query = Client.CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY + " ORDER BY c.identifier ")
+  query = Client.CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY + " ORDER BY c.identifier ")
 @NamedQuery(name = "Client.findByFacilityId",
-    query = Client.CHILDREN_BY_FACILITY_ID_BASE_QUERY + " ORDER BY c.identifier ")
+  query = Client.CHILDREN_BY_FACILITY_ID_BASE_QUERY + " ORDER BY c.identifier ")
 @NamedQuery(name = "Client.findByFacilityIdAndChildId",
-    query = Client.CHILDREN_BY_FACILITY_ID_BASE_QUERY + " AND c.identifier = :childId")
+  query = Client.CHILDREN_BY_FACILITY_ID_BASE_QUERY + " AND c.identifier = :childId")
+@NamedNativeQuery(name = "Client.getAccessTypeByAssignment",
+  query = "SELECT COALESCE(MAX(CASE assignment_type "
+    + "                    WHEN 'P' "
+    + "                      THEN 'RW' "
+    + "                    WHEN 'S' "
+    + "                      THEN 'RW' "
+    + "                    END), 'NONE') "
+    + "FROM ( "
+    + "       SELECT DISTINCT case_assignment.ASGNMNT_CD assignment_type "
+    + "       FROM "
+    + "         {h-schema}CASE_LDT caseload "
+    + "         INNER JOIN {h-schema}CSLDWGHT caseloadweight "
+    + "           ON caseload.IDENTIFIER = caseloadweight.FKCASE_LDT "
+    + "         INNER JOIN {h-schema}ASGNM_T case_assignment "
+    + "           ON caseload.IDENTIFIER = case_assignment.FKCASE_LDT "
+    + "              AND case_assignment.ESTBLSH_CD = 'C' "
+    + "         INNER JOIN {h-schema}CASE_T case_ "
+    + "           ON case_assignment.ESTBLSH_ID = case_.IDENTIFIER "
+    + "         INNER JOIN {h-schema}CLIENT_T client "
+    + "           ON case_.FKCHLD_CLT = client.IDENTIFIER "
+    + "       WHERE "
+    + "         caseloadweight.FKSTFPERST = ?2 "
+    + "         AND case_.END_DT IS NULL "
+    + "         AND case_assignment.START_DT <= ?4 "
+    + "         AND (case_assignment.END_DT IS NULL OR case_assignment.END_DT >  ?3) "
+    + "         AND client.IDENTIFIER = ?1 "
+    + "       UNION "
+    + "       SELECT DISTINCT assignment_.ASGNMNT_CD assignment_type "
+    + "       FROM "
+    + "         {h-schema}CASE_LDT caseload "
+    + "         INNER JOIN {h-schema}CSLDWGHT caseloadweight "
+    + "           ON caseload.IDENTIFIER = caseloadweight.FKCASE_LDT "
+    + "         INNER JOIN {h-schema}ASGNM_T assignment_ "
+    + "           ON caseload.IDENTIFIER = assignment_.FKCASE_LDT AND assignment_.ESTBLSH_CD = 'R' "
+    + "         INNER JOIN {h-schema}REFERL_T referral "
+    + "           ON assignment_.ESTBLSH_ID = referral.IDENTIFIER "
+    + "         INNER JOIN {h-schema}ALLGTN_T allegation "
+    + "           ON allegation.FKREFERL_T = referral.IDENTIFIER "
+    + "         INNER JOIN {h-schema}CLIENT_T client "
+    + "           ON client.IDENTIFIER = allegation.FKCLIENT_T "
+    + "       WHERE "
+    + "         caseloadweight.FKSTFPERST = ?2 "
+    + "         AND assignment_.START_DT <= ?4 "
+    + "         AND (assignment_.END_DT IS NULL OR assignment_.END_DT >  ?3) "
+    + "         AND referral.ORIGCLS_DT IS NULL "
+    + "         AND (referral.ORIGCLS_DT IS NULL OR referral.ORIGCLS_DT >  ?3) "
+    + "         AND (allegation.DISPSN_DT IS NULL OR allegation.DISPSN_DT >  ?3) "
+    + "         AND client.IDENTIFIER = ?1 "
+    + "     )")
 @SuppressWarnings({"squid:S3437", "squid:S2160", "common-java:DuplicatedBlocks"})
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "CLIENT_T")
 public class Client extends CmsPersistentObjectVersioned implements IClient, PersistentObject {
 
-  private static final long serialVersionUID = 783532074047017463L;
-
   public static final String CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY =
-      "SELECT c FROM gov.ca.cwds.data.legacy.cms.entity.Client c" + " JOIN c.placementEpisodes pe"
-          + " JOIN pe.outOfHomePlacements ohp" + " JOIN ohp.placementHome ph"
-          + " WHERE ph.licenseNo = :licenseNumber" + " AND ohp.endDt is null"
-          + " AND pe.plepsEndt is null";
-
+    "SELECT c FROM gov.ca.cwds.data.legacy.cms.entity.Client c" + " JOIN c.placementEpisodes pe"
+      + " JOIN pe.outOfHomePlacements ohp" + " JOIN ohp.placementHome ph"
+      + " WHERE ph.licenseNo = :licenseNumber" + " AND ohp.endDt is null"
+      + " AND pe.plepsEndt is null";
   public static final String CHILDREN_BY_FACILITY_ID_BASE_QUERY =
-      "SELECT c FROM gov.ca.cwds.data.legacy.cms.entity.Client c" + " JOIN c.placementEpisodes pe"
-          + " JOIN pe.outOfHomePlacements ohp" + " JOIN ohp.placementHome ph"
-          + " WHERE ph.id = :facilityId" + " AND ohp.endDt is null" + " AND pe.plepsEndt is null";
-
+    "SELECT c FROM gov.ca.cwds.data.legacy.cms.entity.Client c" + " JOIN c.placementEpisodes pe"
+      + " JOIN pe.outOfHomePlacements ohp" + " JOIN ohp.placementHome ph"
+      + " WHERE ph.id = :facilityId" + " AND ohp.endDt is null" + " AND pe.plepsEndt is null";
+  private static final long serialVersionUID = 783532074047017463L;
   @Id
   @Column(name = "IDENTIFIER", nullable = false, length = 10)
   @Access(AccessType.PROPERTY) // to get id without fetching entire client
@@ -80,11 +126,11 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
 
   @OneToMany(fetch = FetchType.LAZY)
   @JoinColumn(name = "FKCLIENT_T", referencedColumnName = "IDENTIFIER", insertable = false,
-      updatable = false)
+    updatable = false)
   private Set<PlacementEpisode> placementEpisodes = new HashSet<>();
 
   @OneToMany(mappedBy = "client", fetch = FetchType.LAZY,
-      cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})
+    cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})
   private Set<ClientOtherEthnicity> otherEthnicities = new HashSet<>();
 
   @Column(name = "ADJDEL_IND", length = 1)
@@ -382,36 +428,36 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
     }
     Client client = (Client) o;
     return isCodesEqual(client) && isNamesAndAddressesEqual(client)
-        && (getChildClientIndicator() == client.getChildClientIndicator());
+      && (getChildClientIndicator() == client.getChildClientIndicator());
   }
 
   private boolean isCodesEqual(Client client) {
     return (getBirthCountryCode() == client.getBirthCountryCode())
-        && (getBirthStateCode() == client.getBirthStateCode());
+      && (getBirthStateCode() == client.getBirthStateCode());
   }
 
   private boolean isNamesEqual(Client client) {
     return Objects.equals(getCommonFirstName(), client.getCommonFirstName())
-        && Objects.equals(getCommonLastName(), client.getCommonLastName())
-        && Objects.equals(getCommonMiddleName(), client.getCommonMiddleName());
+      && Objects.equals(getCommonLastName(), client.getCommonLastName())
+      && Objects.equals(getCommonMiddleName(), client.getCommonMiddleName());
   }
 
   private boolean isBirthAndAddressesEqual(Client client) {
     return Objects.equals(getBirthCity(), client.getBirthCity())
-        && Objects.equals(getBirthDate(), client.getBirthDate())
-        && Objects.equals(getEmailAddress(), client.getEmailAddress());
+      && Objects.equals(getBirthDate(), client.getBirthDate())
+      && Objects.equals(getEmailAddress(), client.getEmailAddress());
   }
 
   private boolean isNamesAndAddressesEqual(Client client) {
     return Objects.equals(getBirthFacilityName(), client.getBirthFacilityName())
-        && isBirthAndAddressesEqual(client) && isNamesEqual(client);
+      && isBirthAndAddressesEqual(client) && isNamesEqual(client);
   }
 
   @Override
   public final int hashCode() {
     return Objects.hash(getBirthCountryCode(), getBirthStateCode(), getBirthCity(), getBirthDate(),
-        getBirthFacilityName(), getCommonFirstName(), getCommonLastName(), getCommonMiddleName(),
-        getEmailAddress(), getChildClientIndicator());
+      getBirthFacilityName(), getCommonFirstName(), getCommonLastName(), getCommonMiddleName(),
+      getEmailAddress(), getChildClientIndicator());
   }
 
   public String getIdentifier() {
@@ -875,7 +921,7 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
   }
 
   public void setTribalMembershipVerifcationIndicator(
-      boolean tribalMembershipVerifcationIndicator) {
+    boolean tribalMembershipVerifcationIndicator) {
     this.tribalMembershipVerifcationIndicator = tribalMembershipVerifcationIndicator;
   }
 
@@ -911,13 +957,17 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
     this.emailAddress = emailAddress;
   }
 
-  /** @return adjudicatedDelinquentIndicator (Boolean value or null) */
+  /**
+   * @return adjudicatedDelinquentIndicator (Boolean value or null)
+   */
   @SuppressWarnings("squid:S2447")
   public Boolean getAdjudicatedDelinquentIndicator() {
     return adjudicatedDelinquentIndicator;
   }
 
-  /** @param adjudicatedDelinquentIndicator (may be null) */
+  /**
+   * @param adjudicatedDelinquentIndicator (may be null)
+   */
   public void setAdjudicatedDelinquentIndicator(Boolean adjudicatedDelinquentIndicator) {
     this.adjudicatedDelinquentIndicator = adjudicatedDelinquentIndicator;
   }
@@ -927,7 +977,7 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
   }
 
   public void setEthnicityUnableToDetermineReason(
-      UnableToDetermineReason ethnicityUnableToDetermineReason) {
+    UnableToDetermineReason ethnicityUnableToDetermineReason) {
     this.ethnicityUnableToDetermineReason = ethnicityUnableToDetermineReason;
   }
 
@@ -936,7 +986,7 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
   }
 
   public void setHispanicUnableToDetermineReason(
-      UnableToDetermineReason hispanicUnableToDetermineReason) {
+    UnableToDetermineReason hispanicUnableToDetermineReason) {
     this.hispanicUnableToDetermineReason = hispanicUnableToDetermineReason;
   }
 
@@ -961,7 +1011,7 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
   }
 
   public void setSexualOrientationUnableToDetermineCode(
-      String sexualOrientationUnableToDetermineCode) {
+    String sexualOrientationUnableToDetermineCode) {
     this.sexualOrientationUnableToDetermineCode = sexualOrientationUnableToDetermineCode;
   }
 
@@ -970,7 +1020,7 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
   }
 
   public void setSexualOrientationNotListedDescription(
-      String sexualOrientationNotListedDescription) {
+    String sexualOrientationNotListedDescription) {
     this.sexualOrientationNotListedDescription = sexualOrientationNotListedDescription;
   }
 
