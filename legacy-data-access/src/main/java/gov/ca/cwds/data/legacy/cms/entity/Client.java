@@ -43,9 +43,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
-/**
- * @author CWDS CALS API Team
- */
+/** @author CWDS CALS API Team */
 @NamedQuery(name = "Client.find",
   query = Client.CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY + " AND c.identifier = :childId")
 @NamedQuery(name = "Client.findAll",
@@ -959,17 +957,13 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
     this.emailAddress = emailAddress;
   }
 
-  /**
-   * @return adjudicatedDelinquentIndicator (Boolean value or null)
-   */
+  /** @return adjudicatedDelinquentIndicator (Boolean value or null) */
   @SuppressWarnings("squid:S2447")
   public Boolean getAdjudicatedDelinquentIndicator() {
     return adjudicatedDelinquentIndicator;
   }
 
-  /**
-   * @param adjudicatedDelinquentIndicator (may be null)
-   */
+  /** @param adjudicatedDelinquentIndicator (may be null) */
   public void setAdjudicatedDelinquentIndicator(Boolean adjudicatedDelinquentIndicator) {
     this.adjudicatedDelinquentIndicator = adjudicatedDelinquentIndicator;
   }

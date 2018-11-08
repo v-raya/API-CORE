@@ -92,6 +92,12 @@ public class ClientDao extends BaseDaoImpl<Client> {
     return new ScalarResultsStreamer<>(this, queryCreator).createStream();
   }
 
+  /**
+   * Gets access type by assignment
+   * @param clientId client identifier
+   * @param staffId staff person id
+   * @return access type enum: {NONE, R, RW}
+   */
   public AccessType getAccessTypeByAssignment(String clientId, String staffId) {
     Session session = grabSession();
     return AccessType.valueOf(
