@@ -186,8 +186,9 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
   public void testGetAccessTypeByAssignment() throws Exception {
     cleanAllAndInsert("/dbunit/ClientsByStaffPerson.xml");
     executeInTransaction(sessionFactory, (sessionFactory) -> {
-      AccessType accessType = dao.getAccessTypeByAssignment("O9kIYi80Ki", "0Ki");
-      Assert.assertEquals(AccessType.RW, accessType);
+      Assert.assertEquals(AccessType.RW, dao.getAccessTypeByAssignment("O9kIYi80Ki", "0Ki"));
+      Assert.assertEquals(AccessType.R, dao.getAccessTypeByAssignment("AdQGgX00Ki", "0Ki"));
+      Assert.assertEquals(AccessType.NONE, dao.getAccessTypeByAssignment("AzDQD9cN/A", "0Ki"));
     });
   }
 

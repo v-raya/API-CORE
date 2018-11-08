@@ -60,6 +60,8 @@ import org.hibernate.annotations.Type;
     + "                      THEN 'RW' "
     + "                    WHEN 'S' "
     + "                      THEN 'RW' "
+    + "                    WHEN 'R' "
+    + "                      THEN 'R' "
     + "                    END), 'NONE') "
     + "FROM ( "
     + "       SELECT DISTINCT case_assignment.ASGNMNT_CD assignment_type "
