@@ -53,7 +53,7 @@ import org.hibernate.annotations.Type;
 @NamedQuery(name = "Client.findByFacilityIdAndChildId",
   query = Client.CHILDREN_BY_FACILITY_ID_BASE_QUERY + " AND c.identifier = :childId")
 @NamedNativeQuery(name = "Client.getAccessTypeByAssignment",
-  query = "SELECT COALESCE(MAX(CASE assignment_type "
+  query = "SELECT COALESCE(MAX(CASE c.assignment_type "
     + "                    WHEN 'P' "
     + "                      THEN 'RW' "
     + "                    WHEN 'S' "
@@ -102,7 +102,7 @@ import org.hibernate.annotations.Type;
     + "         AND (referral.ORIGCLS_DT IS NULL OR referral.ORIGCLS_DT >  ?3) "
     + "         AND (allegation.DISPSN_DT IS NULL OR allegation.DISPSN_DT >  ?3) "
     + "         AND client.IDENTIFIER = ?1 "
-    + "     )")
+    + "     ) c")
 @SuppressWarnings({"squid:S3437", "squid:S2160", "common-java:DuplicatedBlocks"})
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
