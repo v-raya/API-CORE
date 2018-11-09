@@ -8,6 +8,7 @@ import gov.ca.cwds.data.stream.QueryCreator;
 import gov.ca.cwds.data.stream.ScalarResultsStreamer;
 import gov.ca.cwds.inject.CmsSessionFactory;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 import javax.persistence.NoResultException;
@@ -94,6 +95,7 @@ public class ClientDao extends BaseDaoImpl<Client> {
 
   /**
    * Gets access type by assignment
+   *
    * @param clientId client identifier
    * @param staffId staff person id
    * @return access type enum: {NONE, R, RW}
@@ -102,10 +104,9 @@ public class ClientDao extends BaseDaoImpl<Client> {
     Session session = grabSession();
     return AccessType.valueOf(
       session.createNamedQuery(this.getEntityClass().getSimpleName() + ".getAccessTypeByAssignment")
-        .setParameter(1, clientId)
-        .setParameter(2, staffId)
-        .setParameter(3, LocalDateTime.now())
-        .setParameter(4, LocalDateTime.now())
+        .setParameterList("clientIds", Arrays.asList(clientId, "test"))
+        .setParameter("staffId", staffId)
+        .setParameter("now", LocalDateTime.now())
         .uniqueResult().toString());
   }
 

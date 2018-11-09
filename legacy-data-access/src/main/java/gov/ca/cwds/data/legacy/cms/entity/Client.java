@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
+import static gov.ca.cwds.data.legacy.cms.entity.Client.CLIENT_ASSIGNMENTS_BY_STAFF_QUERY;
+
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObjectVersioned;
 import gov.ca.cwds.data.legacy.cms.entity.converter.NullableBooleanConverter;
 import gov.ca.cwds.data.legacy.cms.entity.enums.AdoptionStatus;
@@ -43,7 +45,9 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
-/** @author CWDS CALS API Team */
+/**
+ * @author CWDS CALS API Team
+ */
 @NamedQuery(name = "Client.find",
   query = Client.CHILDREN_BY_LICENSE_NUMBER_BASE_QUERY + " AND c.identifier = :childId")
 @NamedQuery(name = "Client.findAll",
@@ -62,47 +66,9 @@ import org.hibernate.annotations.Type;
     + "                      THEN 'R' "
     + "                    END), 'NONE') "
     + "FROM ( "
-    + "       SELECT DISTINCT case_assignment.ASGNMNT_CD assignment_type "
-    + "       FROM "
-    + "         {h-schema}CASE_LDT caseload "
-    + "         INNER JOIN {h-schema}CSLDWGHT caseloadweight "
-    + "           ON caseload.IDENTIFIER = caseloadweight.FKCASE_LDT "
-    + "         INNER JOIN {h-schema}ASGNM_T case_assignment "
-    + "           ON caseload.IDENTIFIER = case_assignment.FKCASE_LDT "
-    + "              AND case_assignment.ESTBLSH_CD = 'C' "
-    + "         INNER JOIN {h-schema}CASE_T case_ "
-    + "           ON case_assignment.ESTBLSH_ID = case_.IDENTIFIER "
-    + "         INNER JOIN {h-schema}CLIENT_T client "
-    + "           ON case_.FKCHLD_CLT = client.IDENTIFIER "
-    + "       WHERE "
-    + "         caseloadweight.FKSTFPERST = ?2 "
-    + "         AND case_.END_DT IS NULL "
-    + "         AND case_assignment.START_DT <= ?4 "
-    + "         AND (case_assignment.END_DT IS NULL OR case_assignment.END_DT >  ?3) "
-    + "         AND client.IDENTIFIER = ?1 "
-    + "       UNION "
-    + "       SELECT DISTINCT assignment_.ASGNMNT_CD assignment_type "
-    + "       FROM "
-    + "         {h-schema}CASE_LDT caseload "
-    + "         INNER JOIN {h-schema}CSLDWGHT caseloadweight "
-    + "           ON caseload.IDENTIFIER = caseloadweight.FKCASE_LDT "
-    + "         INNER JOIN {h-schema}ASGNM_T assignment_ "
-    + "           ON caseload.IDENTIFIER = assignment_.FKCASE_LDT AND assignment_.ESTBLSH_CD = 'R' "
-    + "         INNER JOIN {h-schema}REFERL_T referral "
-    + "           ON assignment_.ESTBLSH_ID = referral.IDENTIFIER "
-    + "         INNER JOIN {h-schema}ALLGTN_T allegation "
-    + "           ON allegation.FKREFERL_T = referral.IDENTIFIER "
-    + "         INNER JOIN {h-schema}CLIENT_T client "
-    + "           ON client.IDENTIFIER = allegation.FKCLIENT_T "
-    + "       WHERE "
-    + "         caseloadweight.FKSTFPERST = ?2 "
-    + "         AND assignment_.START_DT <= ?4 "
-    + "         AND (assignment_.END_DT IS NULL OR assignment_.END_DT >  ?3) "
-    + "         AND referral.ORIGCLS_DT IS NULL "
-    + "         AND (referral.ORIGCLS_DT IS NULL OR referral.ORIGCLS_DT >  ?3) "
-    + "         AND (allegation.DISPSN_DT IS NULL OR allegation.DISPSN_DT >  ?3) "
-    + "         AND client.IDENTIFIER = ?1 "
-    + "     ) c")
+    + CLIENT_ASSIGNMENTS_BY_STAFF_QUERY
+    + " ) c "
+)
 @SuppressWarnings({"squid:S3437", "squid:S2160", "common-java:DuplicatedBlocks"})
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -118,6 +84,48 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
     "SELECT c FROM gov.ca.cwds.data.legacy.cms.entity.Client c" + " JOIN c.placementEpisodes pe"
       + " JOIN pe.outOfHomePlacements ohp" + " JOIN ohp.placementHome ph"
       + " WHERE ph.id = :facilityId" + " AND ohp.endDt is null" + " AND pe.plepsEndt is null";
+  public static final String CLIENT_ASSIGNMENTS_BY_STAFF_QUERY =
+    "       SELECT client.IDENTIFIER client_id, case_assignment.ASGNMNT_CD assignment_type "
+      + "       FROM "
+      + "         {h-schema}CASE_LDT caseload "
+      + "         INNER JOIN {h-schema}CSLDWGHT caseloadweight "
+      + "           ON caseload.IDENTIFIER = caseloadweight.FKCASE_LDT "
+      + "         INNER JOIN {h-schema}ASGNM_T case_assignment "
+      + "           ON caseload.IDENTIFIER = case_assignment.FKCASE_LDT "
+      + "              AND case_assignment.ESTBLSH_CD = 'C' "
+      + "         INNER JOIN {h-schema}CASE_T case_ "
+      + "           ON case_assignment.ESTBLSH_ID = case_.IDENTIFIER "
+      + "         INNER JOIN {h-schema}CLIENT_T client "
+      + "           ON case_.FKCHLD_CLT = client.IDENTIFIER "
+      + "       WHERE "
+      + "         caseloadweight.FKSTFPERST = :staffId "
+      + "         AND case_.END_DT IS NULL "
+      + "         AND case_assignment.START_DT <=  :now "
+      + "         AND (case_assignment.END_DT IS NULL OR case_assignment.END_DT >   :now) "
+      + "         AND client.IDENTIFIER IN (:clientIds)"
+      + "       UNION "
+      + "       SELECT client.IDENTIFIER client_id, assignment_.ASGNMNT_CD assignment_type "
+      + "       FROM "
+      + "         {h-schema}CASE_LDT caseload "
+      + "         INNER JOIN {h-schema}CSLDWGHT caseloadweight "
+      + "           ON caseload.IDENTIFIER = caseloadweight.FKCASE_LDT "
+      + "         INNER JOIN {h-schema}ASGNM_T assignment_ "
+      + "           ON caseload.IDENTIFIER = assignment_.FKCASE_LDT AND assignment_.ESTBLSH_CD = 'R' "
+      + "         INNER JOIN {h-schema}REFERL_T referral "
+      + "           ON assignment_.ESTBLSH_ID = referral.IDENTIFIER "
+      + "         INNER JOIN {h-schema}ALLGTN_T allegation "
+      + "           ON allegation.FKREFERL_T = referral.IDENTIFIER "
+      + "         INNER JOIN {h-schema}CLIENT_T client "
+      + "           ON client.IDENTIFIER = allegation.FKCLIENT_T "
+      + "       WHERE "
+      + "         caseloadweight.FKSTFPERST = :staffId "
+      + "         AND assignment_.START_DT <=  :now "
+      + "         AND (assignment_.END_DT IS NULL OR assignment_.END_DT >   :now) "
+      + "         AND referral.ORIGCLS_DT IS NULL "
+      + "         AND (referral.ORIGCLS_DT IS NULL OR referral.ORIGCLS_DT >   :now) "
+      + "         AND (allegation.DISPSN_DT IS NULL OR allegation.DISPSN_DT >   :now) "
+      + "         AND client.IDENTIFIER IN (:clientIds)";
+
   private static final long serialVersionUID = 783532074047017463L;
   @Id
   @Column(name = "IDENTIFIER", nullable = false, length = 10)
@@ -957,13 +965,17 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
     this.emailAddress = emailAddress;
   }
 
-  /** @return adjudicatedDelinquentIndicator (Boolean value or null) */
+  /**
+   * @return adjudicatedDelinquentIndicator (Boolean value or null)
+   */
   @SuppressWarnings("squid:S2447")
   public Boolean getAdjudicatedDelinquentIndicator() {
     return adjudicatedDelinquentIndicator;
   }
 
-  /** @param adjudicatedDelinquentIndicator (may be null) */
+  /**
+   * @param adjudicatedDelinquentIndicator (may be null)
+   */
   public void setAdjudicatedDelinquentIndicator(Boolean adjudicatedDelinquentIndicator) {
     this.adjudicatedDelinquentIndicator = adjudicatedDelinquentIndicator;
   }
