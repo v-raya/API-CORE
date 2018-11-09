@@ -22,6 +22,8 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.Soc158placementsStatus;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType;
 import gov.ca.cwds.data.legacy.cms.persistence.BaseCwsCmsInMemoryPersistenceTest;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Collections;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.junit.Assert;
@@ -189,6 +191,22 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
       Assert.assertEquals(AccessType.RW, dao.getAccessTypeByAssignment("O9kIYi80Ki", "0Ki"));
       Assert.assertEquals(AccessType.R, dao.getAccessTypeByAssignment("AdQGgX00Ki", "0Ki"));
       Assert.assertEquals(AccessType.NONE, dao.getAccessTypeByAssignment("AzDQD9cN/A", "0Ki"));
+    });
+  }
+
+  @Test
+  public void testFilterClientIdsByAssignment() throws Exception {
+    cleanAllAndInsert("/dbunit/ClientsByStaffPerson.xml");
+    executeInTransaction(sessionFactory, (sessionFactory) -> {
+      Assert.assertEquals(Collections.singletonList("O9kIYi80Ki"),
+        dao.filterClientIdsByAssignment(Collections.singletonList("O9kIYi80Ki"), "0Ki"));
+      Assert.assertEquals(Arrays.asList("O9kIYi80Ki", "AdQGgX00Ki"),
+        dao.filterClientIdsByAssignment(Arrays.asList("O9kIYi80Ki", "AdQGgX00Ki"), "0Ki"));
+      Assert.assertEquals(Arrays.asList("O9kIYi80Ki", "AdQGgX00Ki"),
+        dao.filterClientIdsByAssignment(Arrays.asList("O9kIYi80Ki", "AdQGgX00Ki", "AzDQD9cN/A"),
+          "0Ki"));
+      Assert.assertTrue(
+        dao.filterClientIdsByAssignment(Collections.singletonList("AzDQD9cN/A"), "0Ki").isEmpty());
     });
   }
 

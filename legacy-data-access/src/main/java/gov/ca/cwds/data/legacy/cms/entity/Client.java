@@ -34,6 +34,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -56,19 +57,30 @@ import org.hibernate.annotations.Type;
   query = Client.CHILDREN_BY_FACILITY_ID_BASE_QUERY + " ORDER BY c.identifier ")
 @NamedQuery(name = "Client.findByFacilityIdAndChildId",
   query = Client.CHILDREN_BY_FACILITY_ID_BASE_QUERY + " AND c.identifier = :childId")
-@NamedNativeQuery(name = "Client.getAccessTypeByAssignment",
-  query = "SELECT COALESCE(MAX(CASE c.assignment_type "
-    + "                    WHEN 'P' "
-    + "                      THEN 'RW' "
-    + "                    WHEN 'S' "
-    + "                      THEN 'RW' "
-    + "                    WHEN 'R' "
-    + "                      THEN 'R' "
-    + "                    END), 'NONE') "
-    + "FROM ( "
-    + CLIENT_ASSIGNMENTS_BY_STAFF_QUERY
-    + " ) c "
-)
+@NamedNativeQueries({
+  @NamedNativeQuery(name = "Client.getAccessTypeByAssignment",
+    query =
+      "SELECT COALESCE(MAX(CASE c.assignment_type "
+        + "                    WHEN 'P' "
+        + "                      THEN 'RW' "
+        + "                    WHEN 'S' "
+        + "                      THEN 'RW' "
+        + "                    WHEN 'R' "
+        + "                      THEN 'R' "
+        + "                    END), 'NONE') "
+        + "FROM ( "
+        + CLIENT_ASSIGNMENTS_BY_STAFF_QUERY
+        + " ) c "
+  ),
+  @NamedNativeQuery(name = "Client.filterClientIdsByAssignment",
+    query =
+      "SELECT DISTINCT c.client_id "
+        + "FROM ( "
+        + CLIENT_ASSIGNMENTS_BY_STAFF_QUERY
+        + " ) c "
+  )
+})
+
 @SuppressWarnings({"squid:S3437", "squid:S2160", "common-java:DuplicatedBlocks"})
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)

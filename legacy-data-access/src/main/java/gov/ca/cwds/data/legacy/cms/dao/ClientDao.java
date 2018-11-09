@@ -8,7 +8,8 @@ import gov.ca.cwds.data.stream.QueryCreator;
 import gov.ca.cwds.data.stream.ScalarResultsStreamer;
 import gov.ca.cwds.inject.CmsSessionFactory;
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 import javax.persistence.NoResultException;
@@ -101,13 +102,23 @@ public class ClientDao extends BaseDaoImpl<Client> {
    * @return access type enum: {NONE, R, RW}
    */
   public AccessType getAccessTypeByAssignment(String clientId, String staffId) {
-    Session session = grabSession();
     return AccessType.valueOf(
-      session.createNamedQuery(this.getEntityClass().getSimpleName() + ".getAccessTypeByAssignment")
-        .setParameterList("clientIds", Arrays.asList(clientId, "test"))
+      grabSession()
+        .createNamedQuery(this.getEntityClass().getSimpleName() + ".getAccessTypeByAssignment")
+        .setParameterList("clientIds", Collections.singletonList(clientId))
         .setParameter("staffId", staffId)
         .setParameter("now", LocalDateTime.now())
         .uniqueResult().toString());
+  }
+
+  @SuppressWarnings("unchecked")
+  public Collection<String> filterClientIdsByAssignment(Collection<String> clientIds,
+    String staffId) {
+    return grabSession()
+      .createNamedQuery(this.getEntityClass().getSimpleName() + ".filterClientIdsByAssignment")
+      .setParameterList("clientIds", clientIds)
+      .setParameter("staffId", staffId)
+      .setParameter("now", LocalDateTime.now()).list();
   }
 
   private Client findSingleFacility(String queryName, Consumer<Query<Client>> setParameters) {
