@@ -120,9 +120,22 @@ import org.hibernate.annotations.Type;
       + "  and assignment_.START_DT <= ?2 "
       + "  and (assignment_.END_DT is null or assignment_.END_DT > ?3) "
       + "  and referral.ORIGCLS_DT is null "
-  )
+  ),
+  @NamedNativeQuery(
+    name = Referral.FIND_ACTIVE_IDS_BY_CLIENT,
+    query =
+      "SELECT  "
+        + "  referral.IDENTIFIER "
+        + "FROM  "
+        + "  {h-schema}ALLGTN_T allegation "
+        + "LEFT JOIN {h-schema}REFERL_T referral ON referral.IDENTIFIER = allegation.FKREFERL_T "
+        + "WHERE "
+        + "  allegation.FKCLIENT_T = ?1 "
+        + "  AND (allegation.DISPSN_DT IS NULL OR allegation.DISPSN_DT > ?2) "
+        + "  AND (referral.ORIGCLS_DT IS NULL OR referral.ORIGCLS_DT > ?2) "
+        + "GROUP BY referral.IDENTIFIER "
+        + "ORDER BY max(referral.REF_RCV_DT) DESC ")
 })
-
 @SqlResultSetMappings({
   @SqlResultSetMapping(
     name = ReferralByStaff.MAPPING_CASE_BY_STAFF,
@@ -162,6 +175,7 @@ public class Referral extends CmsPersistentObject {
   private static final long serialVersionUID = -3111967263461123486L;
 
   public static final String FIND_ACTIVE_BY_CLIENT = "Referral.findActiveReferralsByClient";
+  public static final String FIND_ACTIVE_IDS_BY_CLIENT = "Referral.findActiveReferralIdsByClient";
   public static final String FIND_CLOSED_BY_CLIENT = "Referral.findClosedReferralsByClient";
   public static final String FIND_BY_CLIENT = "Referral.findReferralsByClient";
   public static final String PARAM_CLIENT_ID = "clientId";
