@@ -88,24 +88,25 @@ public class ReferralDao extends BaseDaoImpl<Referral> {
   }
 
   /**
-   * Returns list of referral ids for a client id and an active date (as usual it is today).
-   * The list is sorted by referral creation date in descending order, so that the first item in
-   * the list is an id of the most recently created referral.
+   * Returns list of referral ids for a client id and an active date (as usual it is today). The
+   * list is sorted by referral creation date in descending order, so that the first item in the
+   * list is an id of the most recently created referral.
    *
    * @param clientId - Identifier of the client.
-   * @param activeDate - The returned referrals will be active on this date. As usual
-   *     this param is a current date.
+   * @param activeDate - The returned referrals will be active on this date. As usual this param is
+   *     a current date.
    * @return Sorted by referral creation date in descending order list of referral ids.
    */
-  public List<String> findReferralIdsByClientIdAndActiveDate(String clientId, LocalDate activeDate) {
+  public List<String> findReferralIdsByClientIdAndActiveDate(
+      String clientId, LocalDate activeDate) {
     Require.requireNotNullAndNotEmpty(clientId);
     final LocalDate date = activeDate != null ? activeDate : LocalDate.now();
     final List<String> ids =
-      currentSession()
-        .getNamedNativeQuery(Referral.FIND_ACTIVE_IDS_BY_CLIENT)
-        .setParameter(1, clientId)
-        .setParameter(2, date)
-        .getResultList();
+        currentSession()
+            .getNamedNativeQuery(Referral.FIND_ACTIVE_IDS_BY_CLIENT)
+            .setParameter(1, clientId)
+            .setParameter(2, date)
+            .getResultList();
 
     return ImmutableList.copyOf(ids);
   }
