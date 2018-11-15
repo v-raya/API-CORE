@@ -134,7 +134,7 @@ import org.hibernate.annotations.Type;
         + "  AND (allegation.DISPSN_DT IS NULL OR allegation.DISPSN_DT > ?2) "
         + "  AND (referral.ORIGCLS_DT IS NULL OR referral.ORIGCLS_DT > ?2) "
         + "GROUP BY referral.IDENTIFIER "
-        + "ORDER BY max(referral.REF_RCV_DT) DESC ")
+        + "ORDER BY MAX(TIMESTAMP(referral.REF_RCV_DT, referral.REF_RCV_TM)) DESC ")
 })
 @SqlResultSetMappings({
   @SqlResultSetMapping(
