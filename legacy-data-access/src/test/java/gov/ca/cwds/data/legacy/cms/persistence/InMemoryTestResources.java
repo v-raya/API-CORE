@@ -3,8 +3,6 @@ package gov.ca.cwds.data.legacy.cms.persistence;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -117,6 +115,7 @@ public class InMemoryTestResources extends ExternalResource {
 
   private static Database getDatabase() throws SQLException, DatabaseException {
     Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+    H2Function.createTimestampAlias(connection);
     return DatabaseFactory.getInstance()
         .findCorrectDatabaseImplementation(new JdbcConnection(connection));
   }
