@@ -1,19 +1,16 @@
-package gov.ca.cwds.data.legacy.cms.persistence;
+package gov.ca.cwds.test.support;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 
-/**
- * @author denys.davydov
- */
 public class H2Function {
 
   public static void createTimestampAlias(final Connection connection) throws SQLException {
     Statement statement = connection.createStatement();
     statement.execute("CREATE ALIAS TIMESTAMP "
-      + "FOR \"gov.ca.cwds.data.legacy.cms.persistence.H2Function.timestampFunction\" ");
+      + "FOR \"gov.ca.cwds.test.support.H2Function.timestampFunction\" ");
     statement.close();
   }
 
