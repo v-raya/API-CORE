@@ -458,6 +458,9 @@ public class CmsKeyIdGenerator {
     return new Date(timestamp);
   }
 
+  private static final Map<String, StaffGate> gates =
+    new PassiveExpiringMap<>(5, TimeUnit.MINUTES, new ConcurrentHashMap<>());
+
   /**
    * Synchronize key generation on staff/user id. The same user can only generate one key at a time.
    * 
@@ -466,9 +469,6 @@ public class CmsKeyIdGenerator {
   static class StaffGate implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    private static final Map<String, StaffGate> gates =
-        new PassiveExpiringMap<>(5, TimeUnit.MINUTES, new ConcurrentHashMap<>());
 
     private final String staffId;
 

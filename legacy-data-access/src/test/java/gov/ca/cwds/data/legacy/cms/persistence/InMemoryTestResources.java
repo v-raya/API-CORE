@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.legacy.cms.persistence;
 
+import gov.ca.cwds.test.support.H2Function;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
