@@ -14,7 +14,7 @@ import gov.ca.cwds.data.es.ElasticSearchSafetyAlert;
  * 
  * @author CWDS API Team
  */
-public class ReplicatedSafetyAlerts implements RetrovillePerson {
+public class ReplicatedSafetyAlerts implements ReadablePerson {
 
   private static final long serialVersionUID = 8733181688462933133L;
 

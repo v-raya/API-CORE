@@ -15,7 +15,7 @@ import gov.ca.cwds.data.es.ElasticSearchPersonAka;
  * 
  * @author CWDS API Team
  */
-public class ReplicatedAkas implements RetrovillePerson {
+public class ReplicatedAkas implements ReadablePerson {
 
   private static final long serialVersionUID = 1L;
 

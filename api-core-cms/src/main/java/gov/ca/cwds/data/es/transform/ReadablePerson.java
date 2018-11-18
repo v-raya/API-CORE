@@ -8,15 +8,11 @@ import gov.ca.cwds.data.std.ApiPersonAware;
 
 /**
  * Empty person implementation. Useful for jobs which POJOs that return no personal information but
- * still implement ApiPersonAware.
- * 
- * <p>
- * Named after the Jimmy Neutron's home town.
- * </p>
+ * still implement {@link ApiPersonAware}.
  * 
  * @author CWDS API Team
  */
-public interface RetrovillePerson extends ApiPersonAware, PersistentObject, ApiMarker {
+public interface ReadablePerson extends ApiPersonAware, PersistentObject, ApiMarker {
 
   @Override
   default Date getBirthDate() {
