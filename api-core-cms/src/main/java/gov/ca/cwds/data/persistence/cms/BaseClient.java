@@ -1,6 +1,8 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import gov.ca.cwds.rest.api.domain.DomainChef;
+import static gov.ca.cwds.rest.api.domain.DomainChef.freshDate;
+import static org.apache.commons.lang3.StringUtils.trimToEmpty;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,7 +11,6 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Type;
 import org.slf4j.Logger;
@@ -351,525 +352,9 @@ public abstract class BaseClient extends CmsPersistentObject
     return getId();
   }
 
-  // ==================
-  // ACCESSORS:
-  // ==================
-
-  /**
-   * @return the adjudicatedDelinquentIndicator
-   */
-  public String getAdjudicatedDelinquentIndicator() {
-    return StringUtils.trimToEmpty(adjudicatedDelinquentIndicator);
-  }
-
-  /**
-   * @return the adoptionStatusCode
-   */
-  public String getAdoptionStatusCode() {
-    return StringUtils.trimToEmpty(adoptionStatusCode);
-  }
-
-  /**
-   * @return the alienRegistrationNumber
-   */
-  public String getAlienRegistrationNumber() {
-    return StringUtils.trimToEmpty(alienRegistrationNumber);
-  }
-
-  /**
-   * @return the birthCity
-   */
-  public String getBirthCity() {
-    return StringUtils.trimToEmpty(birthCity);
-  }
-
-  /**
-   * @return the birthCountryCodeType
-   */
-  public Short getBirthCountryCodeType() {
-    return birthCountryCodeType;
-  }
-
-  /**
-   * @return the birthDate
-   */
   @Override
-  public Date getBirthDate() {
-    return DomainChef.freshDate(birthDate);
-  }
-
-  /**
-   * @return the birthFacilityName
-   */
-  public String getBirthFacilityName() {
-    return StringUtils.trimToEmpty(birthFacilityName);
-  }
-
-  /**
-   * @return the birthStateCodeType
-   */
-  public Short getBirthStateCodeType() {
-    return birthStateCodeType;
-  }
-
-  /**
-   * @return the birthplaceVerifiedIndicator
-   */
-  public String getBirthplaceVerifiedIndicator() {
-    return StringUtils.trimToEmpty(birthplaceVerifiedIndicator);
-  }
-
-  /**
-   * @return the childClientIndicatorVar
-   */
-  public String getChildClientIndicatorVar() {
-    return StringUtils.trimToEmpty(childClientIndicatorVar);
-  }
-
-  /**
-   * @return the clientIndexNumber
-   */
-  @Override
-  public String getClientIndexNumber() {
-    return StringUtils.trimToEmpty(clientIndexNumber);
-  }
-
-  /**
-   * @return the commentDescription
-   */
-  public String getCommentDescription() {
-    return StringUtils.trimToEmpty(commentDescription);
-  }
-
-  /**
-   * @return the commonFirstName
-   */
-  public String getCommonFirstName() {
-    return StringUtils.trimToEmpty(commonFirstName);
-  }
-
-  /**
-   * @return the commonLastName
-   */
-  public String getCommonLastName() {
-    return StringUtils.trimToEmpty(commonLastName);
-  }
-
-  /**
-   * @return the commonMiddleName
-   */
-  public String getCommonMiddleName() {
-    return StringUtils.trimToEmpty(commonMiddleName);
-  }
-
-  /**
-   * @return the confidentialityActionDate
-   */
-  public Date getConfidentialityActionDate() {
-    return DomainChef.freshDate(confidentialityActionDate);
-  }
-
-  /**
-   * @return the confidentialityInEffectIndicator
-   */
-  public String getConfidentialityInEffectIndicator() {
-    return StringUtils.trimToEmpty(confidentialityInEffectIndicator);
-  }
-
-  /**
-   * @return the creationDate
-   */
-  public Date getCreationDate() {
-    return DomainChef.freshDate(creationDate);
-  }
-
-  /**
-   * @return the currCaChildrenServIndicator
-   */
-  public String getCurrCaChildrenServIndicator() {
-    return StringUtils.trimToEmpty(currCaChildrenServIndicator);
-  }
-
-  /**
-   * @return the currentlyOtherDescription
-   */
-  public String getCurrentlyOtherDescription() {
-    return StringUtils.trimToEmpty(currentlyOtherDescription);
-  }
-
-  /**
-   * @return the currentlyRegionalCenterIndicator
-   */
-  public String getCurrentlyRegionalCenterIndicator() {
-    return StringUtils.trimToEmpty(currentlyRegionalCenterIndicator);
-  }
-
-  /**
-   * @return the deathDate
-   */
-  @Override
-  public Date getDeathDate() {
-    return DomainChef.freshDate(deathDate);
-  }
-
-  /**
-   * @return the deathDateVerifiedIndicator
-   */
-  public String getDeathDateVerifiedIndicator() {
-    return StringUtils.trimToEmpty(deathDateVerifiedIndicator);
-  }
-
-  /**
-   * @return the deathPlace
-   */
-  public String getDeathPlace() {
-    return StringUtils.trimToEmpty(deathPlace);
-  }
-
-  /**
-   * @return the deathReasonText
-   */
-  public String getDeathReasonText() {
-    return StringUtils.trimToEmpty(deathReasonText);
-  }
-
-  /**
-   * @return the driverLicenseNumber
-   */
-  public String getDriverLicenseNumber() {
-    return StringUtils.trimToEmpty(driverLicenseNumber);
-  }
-
-  /**
-   * @return the driverLicenseStateCodeType
-   */
-  public Short getDriverLicenseStateCodeType() {
-    return driverLicenseStateCodeType;
-  }
-
-  /**
-   * @return the emailAddress
-   */
-  public String getEmailAddress() {
-    return StringUtils.trimToEmpty(emailAddress);
-  }
-
-  /**
-   * @return the estimatedDobCode
-   */
-  public String getEstimatedDobCode() {
-    return StringUtils.trimToEmpty(estimatedDobCode);
-  }
-
-  /**
-   * @return the ethUnableToDetReasonCode
-   */
-  public String getEthUnableToDetReasonCode() {
-    return StringUtils.trimToEmpty(ethUnableToDetReasonCode);
-  }
-
-  /**
-   * @return the fatherParentalRightTermDate
-   */
-  public Date getFatherParentalRightTermDate() {
-    return DomainChef.freshDate(fatherParentalRightTermDate);
-  }
-
-  /**
-   * @return the genderCode
-   */
-  public String getGenderCode() {
-    return StringUtils.trimToEmpty(genderCode);
-  }
-
-  /**
-   * @return the genderIdentityType
-   */
-  public Short getGenderIdentityType() {
-    return genderIdentityType;
-  }
-
-  /**
-   * @return the giNotListedDescription
-   */
-  public String getGiNotListedDescription() {
-    return giNotListedDescription;
-  }
-
-  /**
-   * @return the genderExpressionType
-   */
-  public Short getGenderExpressionType() {
-    return genderExpressionType;
-  }
-
-  /**
-   * @return the healthSummaryText
-   */
-  public String getHealthSummaryText() {
-    return StringUtils.trimToEmpty(healthSummaryText);
-  }
-
-  /**
-   * @return the hispUnableToDetReasonCode
-   */
-  public String getHispUnableToDetReasonCode() {
-    return StringUtils.trimToEmpty(hispUnableToDetReasonCode);
-  }
-
-  /**
-   * @return the hispanicOriginCode
-   */
-  public String getHispanicOriginCode() {
-    return StringUtils.trimToEmpty(hispanicOriginCode);
-  }
-
-  /**
-   * @return the id
-   */
-  public String getId() {
-    return StringUtils.trimToEmpty(id);
-  }
-
-  /**
-   * @return the immigrationCountryCodeType
-   */
-  public Short getImmigrationCountryCodeType() {
-    return immigrationCountryCodeType;
-  }
-
-  /**
-   * @return the immigrationStatusType
-   */
-  public Short getImmigrationStatusType() {
-    return immigrationStatusType;
-  }
-
-  /**
-   * @return the incapacitatedParentCode
-   */
-  public String getIncapacitatedParentCode() {
-    return StringUtils.trimToEmpty(incapacitatedParentCode);
-  }
-
-  /**
-   * @return the individualHealthCarePlanIndicator
-   */
-  public String getIndividualHealthCarePlanIndicator() {
-    return StringUtils.trimToEmpty(individualHealthCarePlanIndicator);
-  }
-
-  /**
-   * @return the limitationOnScpHealthIndicator
-   */
-  public String getLimitationOnScpHealthIndicator() {
-    return StringUtils.trimToEmpty(limitationOnScpHealthIndicator);
-  }
-
-  /**
-   * @return the literateCode
-   */
-  public String getLiterateCode() {
-    return StringUtils.trimToEmpty(literateCode);
-  }
-
-  /**
-   * @return the maritalCohabitatnHstryIndicatorVar
-   */
-  public String getMaritalCohabitatnHstryIndicatorVar() {
-    return StringUtils.trimToEmpty(maritalCohabitatnHstryIndicatorVar);
-  }
-
-  /**
-   * @return the maritalStatusType
-   */
-  public Short getMaritalStatusType() {
-    return maritalStatusType;
-  }
-
-  /**
-   * @return the militaryStatusCode
-   */
-  public String getMilitaryStatusCode() {
-    return StringUtils.trimToEmpty(militaryStatusCode);
-  }
-
-  /**
-   * @return the motherParentalRightTermDate
-   */
-  public Date getMotherParentalRightTermDate() {
-    return DomainChef.freshDate(motherParentalRightTermDate);
-  }
-
-  /**
-   * @return the namePrefixDescription
-   */
-  public String getNamePrefixDescription() {
-    return StringUtils.trimToEmpty(namePrefixDescription);
-  }
-
-  /**
-   * @return the nameType
-   */
-  public Short getNameType() {
-    return nameType;
-  }
-
-  /**
-   * @return the outstandingWarrantIndicator
-   */
-  public String getOutstandingWarrantIndicator() {
-    return StringUtils.trimToEmpty(outstandingWarrantIndicator);
-  }
-
-  /**
-   * @return the prevCaChildrenServIndicator
-   */
-  public String getPrevCaChildrenServIndicator() {
-    return StringUtils.trimToEmpty(prevCaChildrenServIndicator);
-  }
-
-  /**
-   * @return the prevOtherDescription
-   */
-  public String getPrevOtherDescription() {
-    return StringUtils.trimToEmpty(prevOtherDescription);
-  }
-
-  /**
-   * @return the prevRegionalCenterIndicator
-   */
-  public String getPrevRegionalCenterIndicator() {
-    return StringUtils.trimToEmpty(prevRegionalCenterIndicator);
-  }
-
-  /**
-   * @return the primaryEthnicityType
-   */
-  public Short getPrimaryEthnicityType() {
-    return primaryEthnicityType;
-  }
-
-  /**
-   * @return the primaryLanguageType
-   */
-  public Short getPrimaryLanguageType() {
-    return primaryLanguageType;
-  }
-
-  /**
-   * @return the religionType
-   */
-  public Short getReligionType() {
-    return religionType;
-  }
-
-  /**
-   * @return the secondaryLanguageType
-   */
-  public Short getSecondaryLanguageType() {
-    return secondaryLanguageType;
-  }
-
-  /**
-   * @return the sensitiveHlthInfoOnFileIndicator
-   */
-  public String getSensitiveHlthInfoOnFileIndicator() {
-    return StringUtils.trimToEmpty(sensitiveHlthInfoOnFileIndicator);
-  }
-
-  /**
-   * @return the sensitivityIndicator
-   */
-  @Override
-  public String getSensitivityIndicator() {
-    return StringUtils.trimToEmpty(sensitivityIndicator);
-  }
-
-  /**
-   * @return the sexualOrientationType
-   */
-  public Short getSexualOrientationType() {
-    return sexualOrientationType;
-  }
-
-  /**
-   * @return the soUnableToDetermineCode
-   */
-  public String getSoUnableToDetermineCode() {
-    return StringUtils.trimToEmpty(soUnableToDetermineCode);
-  }
-
-  /**
-   * @return the soNotListedDescrption
-   */
-  public String getSoNotListedDescrption() {
-    return soNotListedDescrption;
-  }
-
-
-  /**
-   * @return the soc158PlacementCode
-   */
-  public String getSoc158PlacementCode() {
-    return StringUtils.trimToEmpty(soc158PlacementCode);
-  }
-
-  /**
-   * @return the soc158SealedClientIndicator
-   */
-  @Override
-  public String getSoc158SealedClientIndicator() {
-    return StringUtils.trimToEmpty(soc158SealedClientIndicator);
-  }
-
-  /**
-   * @return the socialSecurityNumChangedCode
-   */
-  public String getSocialSecurityNumChangedCode() {
-    return StringUtils.trimToEmpty(socialSecurityNumChangedCode);
-  }
-
-  /**
-   * @return the socialSecurityNumber
-   */
-  public String getSocialSecurityNumber() {
-    return StringUtils.trimToEmpty(socialSecurityNumber);
-  }
-
-  /**
-   * @return the suffixTitleDescription
-   */
-  public String getSuffixTitleDescription() {
-    return StringUtils.trimToEmpty(suffixTitleDescription);
-  }
-
-  /**
-   * @return the tribalAncestryClientIndicatorVar
-   */
-  public String getTribalAncestryClientIndicatorVar() {
-    return StringUtils.trimToEmpty(tribalAncestryClientIndicatorVar);
-  }
-
-  /**
-   * @return the tribalMembrshpVerifctnIndicatorVar
-   */
-  public String getTribalMembrshpVerifctnIndicatorVar() {
-    return StringUtils.trimToEmpty(tribalMembrshpVerifctnIndicatorVar);
-  }
-
-  /**
-   * @return the unemployedParentCode
-   */
-  public String getUnemployedParentCode() {
-    return StringUtils.trimToEmpty(unemployedParentCode);
-  }
-
-  /**
-   * @return the zippyCreatedIndicator
-   */
-  public String getZippyCreatedIndicator() {
-    return StringUtils.trimToEmpty(zippyCreatedIndicator);
+  public String getLimitedAccessCode() {
+    return getSensitivityIndicator();
   }
 
   // =============================
@@ -916,6 +401,7 @@ public abstract class BaseClient extends CmsPersistentObject
   // ApiMultipleLanguagesAware:
   // =============================
 
+  @SuppressWarnings("serial")
   @Override
   @JsonIgnore
   public ApiLanguageAware[] getLanguages() {
@@ -945,6 +431,527 @@ public abstract class BaseClient extends CmsPersistentObject
     }
 
     return ret.toArray(new ApiLanguageAware[ret.size()]);
+  }
+
+  // ==================
+  // ACCESSORS:
+  // ==================
+
+  /**
+   * @return the adjudicatedDelinquentIndicator
+   */
+  public String getAdjudicatedDelinquentIndicator() {
+    return trimToEmpty(adjudicatedDelinquentIndicator);
+  }
+
+  /**
+   * @return the adoptionStatusCode
+   */
+  public String getAdoptionStatusCode() {
+    return trimToEmpty(adoptionStatusCode);
+  }
+
+  /**
+   * @return the alienRegistrationNumber
+   */
+  public String getAlienRegistrationNumber() {
+    return trimToEmpty(alienRegistrationNumber);
+  }
+
+  /**
+   * @return the birthCity
+   */
+  public String getBirthCity() {
+    return trimToEmpty(birthCity);
+  }
+
+  /**
+   * @return the birthCountryCodeType
+   */
+  public Short getBirthCountryCodeType() {
+    return birthCountryCodeType;
+  }
+
+  /**
+   * @return the birthDate
+   */
+  @Override
+  public Date getBirthDate() {
+    return freshDate(birthDate);
+  }
+
+  /**
+   * @return the birthFacilityName
+   */
+  public String getBirthFacilityName() {
+    return trimToEmpty(birthFacilityName);
+  }
+
+  /**
+   * @return the birthStateCodeType
+   */
+  public Short getBirthStateCodeType() {
+    return birthStateCodeType;
+  }
+
+  /**
+   * @return the birthplaceVerifiedIndicator
+   */
+  public String getBirthplaceVerifiedIndicator() {
+    return trimToEmpty(birthplaceVerifiedIndicator);
+  }
+
+  /**
+   * @return the childClientIndicatorVar
+   */
+  public String getChildClientIndicatorVar() {
+    return trimToEmpty(childClientIndicatorVar);
+  }
+
+  /**
+   * @return the clientIndexNumber
+   */
+  @Override
+  public String getClientIndexNumber() {
+    return trimToEmpty(clientIndexNumber);
+  }
+
+  /**
+   * @return the commentDescription
+   */
+  public String getCommentDescription() {
+    return trimToEmpty(commentDescription);
+  }
+
+  /**
+   * @return the commonFirstName
+   */
+  public String getCommonFirstName() {
+    return trimToEmpty(commonFirstName);
+  }
+
+  /**
+   * @return the commonLastName
+   */
+  public String getCommonLastName() {
+    return trimToEmpty(commonLastName);
+  }
+
+  /**
+   * @return the commonMiddleName
+   */
+  public String getCommonMiddleName() {
+    return trimToEmpty(commonMiddleName);
+  }
+
+  /**
+   * @return the confidentialityActionDate
+   */
+  public Date getConfidentialityActionDate() {
+    return freshDate(confidentialityActionDate);
+  }
+
+  /**
+   * @return the confidentialityInEffectIndicator
+   */
+  public String getConfidentialityInEffectIndicator() {
+    return trimToEmpty(confidentialityInEffectIndicator);
+  }
+
+  /**
+   * @return the creationDate
+   */
+  public Date getCreationDate() {
+    return freshDate(creationDate);
+  }
+
+  /**
+   * @return the currCaChildrenServIndicator
+   */
+  public String getCurrCaChildrenServIndicator() {
+    return trimToEmpty(currCaChildrenServIndicator);
+  }
+
+  /**
+   * @return the currentlyOtherDescription
+   */
+  public String getCurrentlyOtherDescription() {
+    return trimToEmpty(currentlyOtherDescription);
+  }
+
+  /**
+   * @return the currentlyRegionalCenterIndicator
+   */
+  public String getCurrentlyRegionalCenterIndicator() {
+    return trimToEmpty(currentlyRegionalCenterIndicator);
+  }
+
+  /**
+   * @return the deathDate
+   */
+  @Override
+  public Date getDeathDate() {
+    return freshDate(deathDate);
+  }
+
+  /**
+   * @return the deathDateVerifiedIndicator
+   */
+  public String getDeathDateVerifiedIndicator() {
+    return trimToEmpty(deathDateVerifiedIndicator);
+  }
+
+  /**
+   * @return the deathPlace
+   */
+  public String getDeathPlace() {
+    return trimToEmpty(deathPlace);
+  }
+
+  /**
+   * @return the deathReasonText
+   */
+  public String getDeathReasonText() {
+    return trimToEmpty(deathReasonText);
+  }
+
+  /**
+   * @return the driverLicenseNumber
+   */
+  public String getDriverLicenseNumber() {
+    return trimToEmpty(driverLicenseNumber);
+  }
+
+  /**
+   * @return the driverLicenseStateCodeType
+   */
+  public Short getDriverLicenseStateCodeType() {
+    return driverLicenseStateCodeType;
+  }
+
+  /**
+   * @return the emailAddress
+   */
+  public String getEmailAddress() {
+    return trimToEmpty(emailAddress);
+  }
+
+  /**
+   * @return the estimatedDobCode
+   */
+  public String getEstimatedDobCode() {
+    return trimToEmpty(estimatedDobCode);
+  }
+
+  /**
+   * @return the ethUnableToDetReasonCode
+   */
+  public String getEthUnableToDetReasonCode() {
+    return trimToEmpty(ethUnableToDetReasonCode);
+  }
+
+  /**
+   * @return the fatherParentalRightTermDate
+   */
+  public Date getFatherParentalRightTermDate() {
+    return freshDate(fatherParentalRightTermDate);
+  }
+
+  /**
+   * @return the genderCode
+   */
+  public String getGenderCode() {
+    return trimToEmpty(genderCode);
+  }
+
+  /**
+   * @return the genderIdentityType
+   */
+  public Short getGenderIdentityType() {
+    return genderIdentityType;
+  }
+
+  /**
+   * @return the giNotListedDescription
+   */
+  public String getGiNotListedDescription() {
+    return giNotListedDescription;
+  }
+
+  /**
+   * @return the genderExpressionType
+   */
+  public Short getGenderExpressionType() {
+    return genderExpressionType;
+  }
+
+  /**
+   * @return the healthSummaryText
+   */
+  public String getHealthSummaryText() {
+    return trimToEmpty(healthSummaryText);
+  }
+
+  /**
+   * @return the hispUnableToDetReasonCode
+   */
+  public String getHispUnableToDetReasonCode() {
+    return trimToEmpty(hispUnableToDetReasonCode);
+  }
+
+  /**
+   * @return the hispanicOriginCode
+   */
+  public String getHispanicOriginCode() {
+    return trimToEmpty(hispanicOriginCode);
+  }
+
+  /**
+   * @return the id
+   */
+  public String getId() {
+    return trimToEmpty(id);
+  }
+
+  /**
+   * @return the immigrationCountryCodeType
+   */
+  public Short getImmigrationCountryCodeType() {
+    return immigrationCountryCodeType;
+  }
+
+  /**
+   * @return the immigrationStatusType
+   */
+  public Short getImmigrationStatusType() {
+    return immigrationStatusType;
+  }
+
+  /**
+   * @return the incapacitatedParentCode
+   */
+  public String getIncapacitatedParentCode() {
+    return trimToEmpty(incapacitatedParentCode);
+  }
+
+  /**
+   * @return the individualHealthCarePlanIndicator
+   */
+  public String getIndividualHealthCarePlanIndicator() {
+    return trimToEmpty(individualHealthCarePlanIndicator);
+  }
+
+  /**
+   * @return the limitationOnScpHealthIndicator
+   */
+  public String getLimitationOnScpHealthIndicator() {
+    return trimToEmpty(limitationOnScpHealthIndicator);
+  }
+
+  /**
+   * @return the literateCode
+   */
+  public String getLiterateCode() {
+    return trimToEmpty(literateCode);
+  }
+
+  /**
+   * @return the maritalCohabitatnHstryIndicatorVar
+   */
+  public String getMaritalCohabitatnHstryIndicatorVar() {
+    return trimToEmpty(maritalCohabitatnHstryIndicatorVar);
+  }
+
+  /**
+   * @return the maritalStatusType
+   */
+  public Short getMaritalStatusType() {
+    return maritalStatusType;
+  }
+
+  /**
+   * @return the militaryStatusCode
+   */
+  public String getMilitaryStatusCode() {
+    return trimToEmpty(militaryStatusCode);
+  }
+
+  /**
+   * @return the motherParentalRightTermDate
+   */
+  public Date getMotherParentalRightTermDate() {
+    return freshDate(motherParentalRightTermDate);
+  }
+
+  /**
+   * @return the namePrefixDescription
+   */
+  public String getNamePrefixDescription() {
+    return trimToEmpty(namePrefixDescription);
+  }
+
+  /**
+   * @return the nameType
+   */
+  public Short getNameType() {
+    return nameType;
+  }
+
+  /**
+   * @return the outstandingWarrantIndicator
+   */
+  public String getOutstandingWarrantIndicator() {
+    return trimToEmpty(outstandingWarrantIndicator);
+  }
+
+  /**
+   * @return the prevCaChildrenServIndicator
+   */
+  public String getPrevCaChildrenServIndicator() {
+    return trimToEmpty(prevCaChildrenServIndicator);
+  }
+
+  /**
+   * @return the prevOtherDescription
+   */
+  public String getPrevOtherDescription() {
+    return trimToEmpty(prevOtherDescription);
+  }
+
+  /**
+   * @return the prevRegionalCenterIndicator
+   */
+  public String getPrevRegionalCenterIndicator() {
+    return trimToEmpty(prevRegionalCenterIndicator);
+  }
+
+  /**
+   * @return the primaryEthnicityType
+   */
+  public Short getPrimaryEthnicityType() {
+    return primaryEthnicityType;
+  }
+
+  /**
+   * @return the primaryLanguageType
+   */
+  public Short getPrimaryLanguageType() {
+    return primaryLanguageType;
+  }
+
+  /**
+   * @return the religionType
+   */
+  public Short getReligionType() {
+    return religionType;
+  }
+
+  /**
+   * @return the secondaryLanguageType
+   */
+  public Short getSecondaryLanguageType() {
+    return secondaryLanguageType;
+  }
+
+  /**
+   * @return the sensitiveHlthInfoOnFileIndicator
+   */
+  public String getSensitiveHlthInfoOnFileIndicator() {
+    return trimToEmpty(sensitiveHlthInfoOnFileIndicator);
+  }
+
+  /**
+   * @return the sensitivityIndicator
+   */
+  @Override
+  public String getSensitivityIndicator() {
+    return trimToEmpty(sensitivityIndicator);
+  }
+
+  /**
+   * @return the sexualOrientationType
+   */
+  public Short getSexualOrientationType() {
+    return sexualOrientationType;
+  }
+
+  /**
+   * @return the soUnableToDetermineCode
+   */
+  public String getSoUnableToDetermineCode() {
+    return trimToEmpty(soUnableToDetermineCode);
+  }
+
+  /**
+   * @return the soNotListedDescrption
+   */
+  public String getSoNotListedDescrption() {
+    return soNotListedDescrption;
+  }
+
+
+  /**
+   * @return the soc158PlacementCode
+   */
+  public String getSoc158PlacementCode() {
+    return trimToEmpty(soc158PlacementCode);
+  }
+
+  /**
+   * @return the soc158SealedClientIndicator
+   */
+  @Override
+  public String getSoc158SealedClientIndicator() {
+    return trimToEmpty(soc158SealedClientIndicator);
+  }
+
+  /**
+   * @return the socialSecurityNumChangedCode
+   */
+  public String getSocialSecurityNumChangedCode() {
+    return trimToEmpty(socialSecurityNumChangedCode);
+  }
+
+  /**
+   * @return the socialSecurityNumber
+   */
+  public String getSocialSecurityNumber() {
+    return trimToEmpty(socialSecurityNumber);
+  }
+
+  /**
+   * @return the suffixTitleDescription
+   */
+  public String getSuffixTitleDescription() {
+    return trimToEmpty(suffixTitleDescription);
+  }
+
+  /**
+   * @return the tribalAncestryClientIndicatorVar
+   */
+  public String getTribalAncestryClientIndicatorVar() {
+    return trimToEmpty(tribalAncestryClientIndicatorVar);
+  }
+
+  /**
+   * @return the tribalMembrshpVerifctnIndicatorVar
+   */
+  public String getTribalMembrshpVerifctnIndicatorVar() {
+    return trimToEmpty(tribalMembrshpVerifctnIndicatorVar);
+  }
+
+  /**
+   * @return the unemployedParentCode
+   */
+  public String getUnemployedParentCode() {
+    return trimToEmpty(unemployedParentCode);
+  }
+
+  /**
+   * @return the zippyCreatedIndicator
+   */
+  public String getZippyCreatedIndicator() {
+    return trimToEmpty(zippyCreatedIndicator);
   }
 
   public static long getSerialversionuid() {
@@ -1016,7 +1023,7 @@ public abstract class BaseClient extends CmsPersistentObject
   }
 
   public void setConfidentialityActionDate(Date confidentialityActionDate) {
-    this.confidentialityActionDate = DomainChef.freshDate(confidentialityActionDate);
+    this.confidentialityActionDate = freshDate(confidentialityActionDate);
   }
 
   public void setConfidentialityInEffectIndicator(String confidentialityInEffectIndicator) {
@@ -1024,7 +1031,7 @@ public abstract class BaseClient extends CmsPersistentObject
   }
 
   public void setCreationDate(Date creationDate) {
-    this.creationDate = DomainChef.freshDate(creationDate);
+    this.creationDate = freshDate(creationDate);
   }
 
   public void setCurrCaChildrenServIndicator(String currCaChildrenServIndicator) {
@@ -1040,7 +1047,7 @@ public abstract class BaseClient extends CmsPersistentObject
   }
 
   public void setDeathDate(Date deathDate) {
-    this.deathDate = DomainChef.freshDate(deathDate);
+    this.deathDate = freshDate(deathDate);
   }
 
   public void setDeathDateVerifiedIndicator(String deathDateVerifiedIndicator) {
@@ -1076,7 +1083,7 @@ public abstract class BaseClient extends CmsPersistentObject
   }
 
   public void setFatherParentalRightTermDate(Date fatherParentalRightTermDate) {
-    this.fatherParentalRightTermDate = DomainChef.freshDate(fatherParentalRightTermDate);
+    this.fatherParentalRightTermDate = freshDate(fatherParentalRightTermDate);
   }
 
   public void setGenderCode(String genderCode) {
@@ -1136,7 +1143,7 @@ public abstract class BaseClient extends CmsPersistentObject
   }
 
   public void setMotherParentalRightTermDate(Date motherParentalRightTermDate) {
-    this.motherParentalRightTermDate = DomainChef.freshDate(motherParentalRightTermDate);
+    this.motherParentalRightTermDate = freshDate(motherParentalRightTermDate);
   }
 
   public void setNamePrefixDescription(String namePrefixDescription) {
@@ -1233,13 +1240,6 @@ public abstract class BaseClient extends CmsPersistentObject
 
   public void setGenderExpressionType(Short genderExpressionType) {
     this.genderExpressionType = genderExpressionType;
-  }
-
-
-
-  @Override
-  public String getLimitedAccessCode() {
-    return getSensitivityIndicator();
   }
 
 }
