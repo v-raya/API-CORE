@@ -1,6 +1,6 @@
 package gov.ca.cwds.data.es.client;
 
-import static gov.ca.cwds.neutron.util.transform.JobTransformUtils.ifNull;
+import static org.apache.commons.lang3.StringUtils.trimToEmpty;
 
 import java.io.Serializable;
 import java.sql.ResultSet;
@@ -31,7 +31,7 @@ public class RawClientCounty extends ClientReference implements NeutronJdbcReade
   public RawClientCounty read(ResultSet rs) throws SQLException {
     super.read(rs);
     this.clientCounty = rs.getShort("CLC_GVR_ENTC");
-    this.clientCountyRule = ifNull(rs.getString("CLC_CNTY_RULE"));
+    this.clientCountyRule = trimToEmpty(rs.getString("CLC_CNTY_RULE"));
     return this;
   }
 

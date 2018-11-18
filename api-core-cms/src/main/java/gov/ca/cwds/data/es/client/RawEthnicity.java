@@ -1,6 +1,6 @@
 package gov.ca.cwds.data.es.client;
 
-import static gov.ca.cwds.neutron.util.transform.JobTransformUtils.ifNull;
+import static org.apache.commons.lang3.StringUtils.trimToEmpty;
 
 import java.io.Serializable;
 import java.sql.ResultSet;
@@ -32,7 +32,7 @@ public class RawEthnicity extends ClientReference implements NeutronJdbcReader<R
   @Override
   public RawEthnicity read(ResultSet rs) throws SQLException {
     super.read(rs);
-    clientEthnicityId = ifNull(rs.getString("ETHNICITY_CODE"));
+    clientEthnicityId = trimToEmpty(rs.getString("ETHNICITY_CODE"));
     clientEthnicityCode = rs.getShort("ETHNICITY_CODE");
     return this;
   }
