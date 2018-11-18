@@ -35,8 +35,8 @@ public interface ApiPhoneAware extends ApiMarker {
     Home, // NOSONAR
 
     /**
-     * Unknown phone type. Maybe one of those "no contract" deals from Walmart. Voice over IP. Home
-     * line listed as emergency contact. Can be anything.
+     * Unknown phone type. Maybe one of those "no contract" deals from Walmart or voice over IP.
+     * Home line listed as emergency contact. Could be anything.
      */
     Other // NOSONAR
   }
