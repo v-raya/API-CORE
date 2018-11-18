@@ -1,4 +1,4 @@
-package gov.ca.cwds.data.es.client;
+package gov.ca.cwds.data.es.transform;
 
 import static gov.ca.cwds.rest.api.domain.DomainChef.freshDate;
 
@@ -13,7 +13,6 @@ import javax.persistence.Enumerated;
 
 import org.hibernate.annotations.Type;
 
-import gov.ca.cwds.data.es.transform.CmsReplicationOperation;
 import gov.ca.cwds.data.persistence.cms.VarargPrimaryKey;
 
 public class RawCsec extends ClientReference implements NeutronJdbcReader<RawCsec> {

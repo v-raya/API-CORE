@@ -1,4 +1,4 @@
-package gov.ca.cwds.data.es.client;
+package gov.ca.cwds.data.es.transform;
 
 import static gov.ca.cwds.rest.api.domain.DomainChef.freshDate;
 import static org.apache.commons.lang3.StringUtils.trimToEmpty;
@@ -21,9 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Type;
 
-import gov.ca.cwds.data.es.transform.CmsReplicationOperation;
-import gov.ca.cwds.data.es.transform.PlacementHomeAddress;
-import gov.ca.cwds.data.es.transform.ReplicatedClient;
 import gov.ca.cwds.data.std.ApiGroupNormalizer;
 
 public class RawClient extends ClientReference implements NeutronJdbcReader<RawClient>,

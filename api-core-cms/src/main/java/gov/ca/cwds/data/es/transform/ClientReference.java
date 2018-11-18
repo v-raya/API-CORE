@@ -1,4 +1,4 @@
-package gov.ca.cwds.data.es.client;
+package gov.ca.cwds.data.es.transform;
 
 import static org.apache.commons.lang3.StringUtils.trimToEmpty;
 

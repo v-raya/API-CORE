@@ -1,4 +1,4 @@
-package gov.ca.cwds.data.es.client;
+package gov.ca.cwds.data.es.transform;
 
 import static gov.ca.cwds.rest.api.domain.DomainChef.freshDate;
 import static org.apache.commons.lang3.StringUtils.trimToEmpty;
@@ -14,7 +14,6 @@ import javax.persistence.Enumerated;
 
 import org.hibernate.annotations.Type;
 
-import gov.ca.cwds.data.es.transform.CmsReplicationOperation;
 import gov.ca.cwds.data.persistence.cms.VarargPrimaryKey;
 
 public class RawClientAddress extends ClientAddressReference

@@ -1,4 +1,4 @@
-package gov.ca.cwds.data.es.client;
+package gov.ca.cwds.data.es.transform;
 
 import java.util.Collection;
 
@@ -11,11 +11,6 @@ import gov.ca.cwds.data.es.ElasticSearchPersonAka;
 import gov.ca.cwds.data.es.ElasticSearchPersonCsec;
 import gov.ca.cwds.data.es.ElasticSearchSafetyAlert;
 import gov.ca.cwds.data.es.ElasticSearchSystemCode;
-import gov.ca.cwds.data.es.transform.CmsReplicationOperation;
-import gov.ca.cwds.data.es.transform.ElasticTransformer;
-import gov.ca.cwds.data.es.transform.ReplicatedAddress;
-import gov.ca.cwds.data.es.transform.ReplicatedClient;
-import gov.ca.cwds.data.es.transform.ReplicatedClientAddress;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
