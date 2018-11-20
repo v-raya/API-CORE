@@ -526,7 +526,7 @@ public final class CmsKeyIdGeneratorTest {
   }
 
   @Test
-  public void toBase62KeyTest() {
+  public void toBase62KeyTest_success() {
     Assert.assertThat("AfiTGrO0ND",
       is(equalTo(CmsKeyIdGenerator.getBase62Key("0606-2209-3706-2001439"))));
     Assert.assertThat("ANkfTZy75C",
@@ -537,6 +537,23 @@ public final class CmsKeyIdGeneratorTest {
       is(equalTo(CmsKeyIdGenerator.getBase62Key("0597-8741-7200-7238327"))));
     Assert.assertThat("0YIPkZU0S0",
       is(equalTo(CmsKeyIdGenerator.getBase62Key("0031-4206-2756-0001736"))));
+  }
+
+  @Test
+  public void toBase62KeyTest_do_not_matches_fail() {
+    try{
+      CmsKeyIdGenerator.getBase62Key("some-text");
+      Assert.fail();
+    } catch (IllegalArgumentException e) {
+      LOGGER.info(e.getMessage());
+    }
+
+    try{
+      CmsKeyIdGenerator.getBase62Key("O589-7630-0758-6027230");
+      Assert.fail();
+    } catch (IllegalArgumentException e) {
+      LOGGER.info(e.getMessage());
+    }
   }
 
 }
