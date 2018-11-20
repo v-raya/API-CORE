@@ -112,6 +112,7 @@ import gov.ca.cwds.rest.services.ServiceException;
 @SuppressWarnings({"fb-contrib:MDM_THREAD_YIELD", "findbugs:UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD"})
 public class CmsKeyIdGenerator {
 
+  private static final int LEN_KEYSTAFFID = 3;
   private static final int LEN_KEYTIMESTAMP = 7;
   private static final int LEN_UIIDSTAFFID = 6; // for converting a key to a UI identifier
   private static final int LEN_UIIDTIMESTAMP = 13;
@@ -154,7 +155,7 @@ public class CmsKeyIdGenerator {
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsKeyIdGenerator.class);
   private static final String DEFAULT_USER_ID = "0X5";
   private static final Map<String, String> lastKeys =
-      new PassiveExpiringMap<>(20, TimeUnit.SECONDS, new ConcurrentHashMap<>(20107));
+    new PassiveExpiringMap<>(20, TimeUnit.SECONDS, new ConcurrentHashMap<>(20107));
 
   /**
    * Static class only, do not instantiate.
@@ -176,7 +177,7 @@ public class CmsKeyIdGenerator {
    */
   public static String getNextValue(String staffId) {
     return StaffGate.getStaffGate(StringUtils.isNotBlank(staffId) ? staffId : DEFAULT_USER_ID)
-        .getNextValue();
+      .getNextValue();
   }
 
   /**
@@ -187,7 +188,7 @@ public class CmsKeyIdGenerator {
    */
   public static String createTimestampStr(final Date ts) {
     return ts == null ? createTimestampStr()
-        : longToStrN(7, timestampToLong(getTimestampSeed(ts)), POWER_BASE62);
+      : longToStrN(7, timestampToLong(getTimestampSeed(ts)), POWER_BASE62);
   }
 
   /**
@@ -417,7 +418,7 @@ public class CmsKeyIdGenerator {
    *
    * @param key 10 character, base-62 legacy key
    * @return UI identifier in format 0000-0000-0000-0000000. If provided key is null or empty, then
-   *         null is returned.
+   * null is returned.
    */
   public static String getUIIdentifierFromKey(String key) {
     if (StringUtils.isBlank(key)) {
@@ -429,16 +430,41 @@ public class CmsKeyIdGenerator {
     LOGGER.trace("strTimestamp={}, strStaffId={}", tsB62, staffB62);
 
     final String tsB10 =
-        StringUtils.leftPad(String.valueOf(Base62.toBase10(tsB62)), LEN_UIIDTIMESTAMP, '0');
+      StringUtils.leftPad(String.valueOf(Base62.toBase10(tsB62)), LEN_UIIDTIMESTAMP, '0');
     final String staffB10 =
-        StringUtils.leftPad(String.valueOf(Base62.toBase10(staffB62)), LEN_UIIDSTAFFID, '0');
+      StringUtils.leftPad(String.valueOf(Base62.toBase10(staffB62)), LEN_UIIDSTAFFID, '0');
     LOGGER.trace("tsB10={}, staffB10={}", tsB10, staffB10);
 
     final StringBuilder buf = new StringBuilder();
     buf.append(tsB10, 0, 4).append('-').append(tsB10, 4, 8).append('-').append(tsB10, 8, 12)
-        .append('-').append(tsB10.substring(12)).append(staffB10);
+      .append('-').append(tsB10.substring(12)).append(staffB10);
 
     return buf.toString();
+  }
+
+  /**
+   * Converts UIID to base62Key
+   *
+   * @param uiIdentifier - UIID
+   * @return Base62 key
+   */
+  public static String getKeyFromUIIdentifier(String uiIdentifier) {
+    if (StringUtils.isBlank(uiIdentifier)) {
+      return null;
+    }
+
+    if (!uiIdentifier.matches("\\d{4}-\\d{4}-\\d{4}-\\d{7}")) {
+      throw new IllegalArgumentException(
+        "uiIdentifier [" + uiIdentifier
+          + "] doesn't match to the pattern: \\d{4}-\\d{4}-\\d{4}-\\d{7}");
+    }
+
+    String noDashes = StringUtils.remove(uiIdentifier, '-');
+    long tsLong = Long.parseLong(noDashes.substring(0, LEN_UIIDTIMESTAMP));
+    long staffIdLong = Long.parseLong(noDashes.substring(LEN_UIIDTIMESTAMP));
+    String tsBase62 = StringUtils.leftPad(Base62.toBase62(tsLong), LEN_KEYTIMESTAMP, '0');
+    String staffIdBase62 = StringUtils.leftPad(Base62.toBase62(staffIdLong), LEN_KEYSTAFFID, '0');
+    return tsBase62 + staffIdBase62;
   }
 
   /**
@@ -462,8 +488,9 @@ public class CmsKeyIdGenerator {
     new PassiveExpiringMap<>(5, TimeUnit.MINUTES, new ConcurrentHashMap<>());
 
   /**
-   * Synchronize key generation on staff/user id. The same user can only generate one key at a time.
-   * 
+   * Synchronize key generation on staff/user id. The same user can only generate one key at a
+   * time.
+   *
    * @author CWDS API Team
    */
   static class StaffGate implements Serializable {
@@ -526,8 +553,9 @@ public class CmsKeyIdGenerator {
       StaffGate other = (StaffGate) obj;
       if (staffId == null) {
         return other.staffId == null;
-      } else
+      } else {
         return staffId.equals(other.staffId);
+      }
     }
 
   }
