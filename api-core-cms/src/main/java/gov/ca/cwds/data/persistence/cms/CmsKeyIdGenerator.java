@@ -112,6 +112,7 @@ import gov.ca.cwds.rest.services.ServiceException;
 @SuppressWarnings({"fb-contrib:MDM_THREAD_YIELD", "findbugs:UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD"})
 public class CmsKeyIdGenerator {
 
+  private static final int LEN_KEYSTAFFID = 3;
   private static final int LEN_KEYTIMESTAMP = 7;
   private static final int LEN_UIIDSTAFFID = 6; // for converting a key to a UI identifier
   private static final int LEN_UIIDTIMESTAMP = 13;
