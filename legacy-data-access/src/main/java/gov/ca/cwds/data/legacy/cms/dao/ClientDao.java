@@ -139,23 +139,6 @@ public class ClientDao extends BaseDaoImpl<Client> {
         .uniqueResult().toString());
   }
 
-  /**
-   * Gets assigned client Ids by supervisor Id
-   *
-   * @param clientIds collection of client's identifiers
-   * @param supervisorStaffId supervisor staff person id
-   * @return collection of Clint IDs
-   */
-  @SuppressWarnings("unchecked")
-  public Collection<String> filterClientIdsBySupervisor(Collection<String> clientIds,
-    String supervisorStaffId) {
-    return grabSession()
-      .createNamedQuery(this.getEntityClass().getSimpleName() + ".filterClientIdsBySupervisor")
-      .setParameterList("clientIds", clientIds)
-      .setParameter("staffId", supervisorStaffId)
-      .setParameter("now", LocalDate.now()).list();
-  }
-
   private Client findSingleFacility(String queryName, Consumer<Query<Client>> setParameters) {
     Session session = grabSession();
     Class<Client> entityClass = getEntityClass();

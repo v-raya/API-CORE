@@ -224,12 +224,12 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
     cleanAllAndInsert("/dbunit/ClientsBySupervisor.xml");
     executeInTransaction(sessionFactory, (sessionFactory) -> {
       Assert.assertEquals(Collections.singletonList("2Tao9dx00j"),
-        dao.filterClientIdsBySupervisor(Collections.singletonList("2Tao9dx00j"), "00j"));
+        dao.filterClientIdsByAssignment(Collections.singletonList("2Tao9dx00j"), "00j"));
       Assert.assertEquals(Arrays.asList("2Tao9dx00j"),
-        dao.filterClientIdsBySupervisor(Arrays.asList("2Tao9dx00j", "AzDQD9cN/A"),
+        dao.filterClientIdsByAssignment(Arrays.asList("2Tao9dx00j", "AzDQD9cN/A"),
           "00j"));
       Assert.assertTrue(
-        dao.filterClientIdsBySupervisor(Collections.singletonList("AzDQD9cN/A"), "00j").isEmpty());
+        dao.filterClientIdsByAssignment(Collections.singletonList("AzDQD9cN/A"), "00j").isEmpty());
     });
   }
 
