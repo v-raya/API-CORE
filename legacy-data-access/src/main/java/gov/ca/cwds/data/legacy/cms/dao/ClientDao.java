@@ -121,6 +121,40 @@ public class ClientDao extends BaseDaoImpl<Client> {
       .setParameter("now", LocalDateTime.now()).list();
   }
 
+  /**
+   * Gets client access type by supervisor Id
+   *
+   * @param clientId client identifier
+   * @param supervisorStaffId supervisor staff person id
+   * @return access type enum: {NONE, R, RW}
+   */
+  public AccessType getAccessTypeBySupervisor(String clientId, String supervisorStaffId) {
+    return AccessType.valueOf(
+      grabSession()
+        .createNamedQuery(this.getEntityClass().getSimpleName() + ".getAccessTypeBySupervisor")
+        .setParameterList("clientIds", Collections.singletonList(clientId))
+        .setParameter("staffId", supervisorStaffId)
+        .setParameter("now", LocalDateTime.now())
+        .uniqueResult().toString());
+  }
+
+  /**
+   * Gets assigned client Ids by supervisor Id
+   *
+   * @param clientIds collection of client's identifiers
+   * @param supervisorStaffId supervisor staff person id
+   * @return collection of Clint IDs
+   */
+  @SuppressWarnings("unchecked")
+  public Collection<String> filterClientIdsBySupervisor(Collection<String> clientIds,
+    String supervisorStaffId) {
+    return grabSession()
+      .createNamedQuery(this.getEntityClass().getSimpleName() + ".filterClientIdsBySupervisor")
+      .setParameterList("clientIds", clientIds)
+      .setParameter("staffId", supervisorStaffId)
+      .setParameter("now", LocalDateTime.now()).list();
+  }
+
   private Client findSingleFacility(String queryName, Consumer<Query<Client>> setParameters) {
     Session session = grabSession();
     Class<Client> entityClass = getEntityClass();

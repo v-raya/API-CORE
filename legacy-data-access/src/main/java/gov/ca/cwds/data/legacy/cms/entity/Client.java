@@ -1,6 +1,7 @@
 package gov.ca.cwds.data.legacy.cms.entity;
 
 import static gov.ca.cwds.data.legacy.cms.entity.Client.CLIENT_ASSIGNMENTS_BY_STAFF_QUERY;
+import static gov.ca.cwds.data.legacy.cms.entity.Client.CLIENT_ASSIGNMENTS_BY_SUPERVISOR_QUERY;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObjectVersioned;
 import gov.ca.cwds.data.legacy.cms.entity.converter.NullableBooleanConverter;
@@ -78,6 +79,27 @@ import org.hibernate.annotations.Type;
         + "FROM ( "
         + CLIENT_ASSIGNMENTS_BY_STAFF_QUERY
         + " ) c "
+  ),
+  @NamedNativeQuery(name = "Client.getAccessTypeBySupervisor",
+    query =
+      "SELECT COALESCE(MAX(CASE c.assignment_type "
+        + "                    WHEN 'P' "
+        + "                      THEN 'RW' "
+        + "                    WHEN 'S' "
+        + "                      THEN 'RW' "
+        + "                    WHEN 'R' "
+        + "                      THEN 'R' "
+        + "                    END), 'NONE') "
+        + "FROM ( "
+        + CLIENT_ASSIGNMENTS_BY_SUPERVISOR_QUERY
+        + " ) c "
+  ),
+  @NamedNativeQuery(name = "Client.filterClientIdsBySupervisor",
+    query =
+      "SELECT DISTINCT c.client_id "
+        + "FROM ( "
+        + CLIENT_ASSIGNMENTS_BY_SUPERVISOR_QUERY
+        + " ) c "
   )
 })
 
@@ -137,6 +159,68 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
       + "         AND (referral.ORIGCLS_DT IS NULL OR referral.ORIGCLS_DT >   :now) "
       + "         AND (allegation.DISPSN_DT IS NULL OR allegation.DISPSN_DT >   :now) "
       + "         AND client.IDENTIFIER IN (:clientIds)";
+
+  public static final String CLIENT_ASSIGNMENTS_BY_SUPERVISOR_QUERY =
+    "SELECT client.IDENTIFIER         client_id, "
+    + "  caseAssignment.ASGNMNT_CD assignment_type "
+    + "FROM {h-schema}CASE_LDT caseload "
+    + "  INNER JOIN {h-schema}CSLDWGHT caseloadWeight ON caseload.IDENTIFIER = caseloadWeight.FKCASE_LDT "
+    + "  INNER JOIN {h-schema}STFPERST staffPerson ON staffPerson.IDENTIFIER = caseloadWeight.FKSTFPERST "
+    + "  INNER JOIN {h-schema}STFUATHT staffPersonUnitAuthority "
+    + "    ON staffPersonUnitAuthority.FKSTFPERST = staffPerson.IDENTIFIER "
+    + "  INNER JOIN {h-schema}ASGNM_T caseAssignment "
+    + "    ON caseload.IDENTIFIER = caseAssignment.FKCASE_LDT AND caseAssignment.ESTBLSH_CD = 'C' "
+    + "  INNER JOIN {h-schema}CASE_T case_ ON caseAssignment.ESTBLSH_ID = case_.IDENTIFIER "
+    + "  INNER JOIN {h-schema}CLIENT_T client ON case_.FKCHLD_CLT = client.IDENTIFIER "
+    + "WHERE "
+    + "  staffPersonUnitAuthority.FKASG_UNIT IN ( "
+    + "    SELECT DISTINCT u.IDENTIFIER "
+    + "    FROM {h-schema}ASG_UNIT u "
+    + "      LEFT JOIN {h-schema}STFUATHT staffPersonUnitAuthority "
+    + "        ON staffPersonUnitAuthority.FKASG_UNIT = u.IDENTIFIER "
+    + "    WHERE staffPersonUnitAuthority.UNTAUTH_CD = 'S' "
+    + "          AND staffPersonUnitAuthority.END_DT IS NULL "
+    + "          AND staffPersonUnitAuthority.FKSTFPERST = :staffId "
+    + "  ) "
+    + "  AND staffPersonUnitAuthority.UNTAUTH_CD <> 'S' "
+    + "  AND staffPerson.END_DT IS NULL "
+    + "  AND case_.END_DT IS NULL "
+    + "  AND caseAssignment.START_DT <= :now "
+    + "  AND (caseAssignment.END_DT IS NULL OR caseAssignment.END_DT > :now) "
+    + "  AND client.IDENTIFIER IN (:clientIds) "
+    + "UNION "
+    + "SELECT "
+    + "  client.IDENTIFIER         client_id, "
+    + "  caseAssignment.ASGNMNT_CD assignment_type "
+    + "FROM {h-schema}CASE_LDT caseload "
+    + "  INNER JOIN {h-schema}CSLDWGHT caseloadWeight ON caseload.IDENTIFIER = caseloadWeight.FKCASE_LDT "
+    + "  INNER JOIN {h-schema}STFPERST staffPerson ON staffPerson.IDENTIFIER = caseloadWeight.FKSTFPERST "
+    + "  INNER JOIN {h-schema}STFUATHT staffPersonUnitAuthority "
+    + "    ON staffPersonUnitAuthority.FKSTFPERST = staffPerson.IDENTIFIER "
+    + "  INNER JOIN {h-schema}ASGNM_T caseAssignment "
+    + "    ON caseload.IDENTIFIER = caseAssignment.FKCASE_LDT AND caseAssignment.ESTBLSH_CD = 'R' "
+    + "  INNER JOIN {h-schema}REFERL_T referral "
+    + "    ON caseAssignment.ESTBLSH_ID = referral.IDENTIFIER "
+    + "  INNER JOIN {h-schema}ALLGTN_T allegation "
+    + "    ON allegation.FKREFERL_T = referral.IDENTIFIER "
+    + "  INNER JOIN {h-schema}CLIENT_T client ON client.IDENTIFIER = allegation.FKCLIENT_T "
+    + "WHERE "
+    + "  staffPersonUnitAuthority.FKASG_UNIT IN ( "
+    + "    SELECT DISTINCT u.IDENTIFIER "
+    + "    FROM {h-schema}ASG_UNIT u "
+    + "      LEFT JOIN STFUATHT staffPersonUnitAuthority "
+    + "        ON staffPersonUnitAuthority.FKASG_UNIT = u.IDENTIFIER "
+    + "    WHERE staffPersonUnitAuthority.UNTAUTH_CD = 'S' "
+    + "          AND staffPersonUnitAuthority.END_DT IS NULL "
+    + "          AND staffPersonUnitAuthority.FKSTFPERST = :staffId "
+    + "  ) "
+    + "  AND staffPersonUnitAuthority.UNTAUTH_CD <> 'S' "
+    + "  AND staffPerson.END_DT IS NULL "
+    + "  AND caseAssignment.START_DT <= :now "
+    + "  AND (caseAssignment.END_DT IS NULL OR caseAssignment.END_DT > :now) "
+    + "  AND (referral.ORIGCLS_DT IS NULL OR referral.ORIGCLS_DT > :now) "
+    + "  AND (allegation.DISPSN_DT IS NULL OR allegation.DISPSN_DT > :now) "
+    + "  AND client.IDENTIFIER IN (:clientIds)";
 
   private static final long serialVersionUID = 783532074047017463L;
   @Id

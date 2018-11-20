@@ -195,6 +195,15 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
   }
 
   @Test
+  public void testGetAccessTypeBySupervisor() throws Exception {
+    cleanAllAndInsert("/dbunit/ClientsBySupervisor.xml");
+    executeInTransaction(sessionFactory, (sessionFactory) -> {
+      Assert.assertEquals(AccessType.RW, dao.getAccessTypeBySupervisor("DTdjk8J0HS", "06s"));
+      Assert.assertEquals(AccessType.NONE, dao.getAccessTypeBySupervisor("AzDQD9cN/A", "06s"));
+    });
+  }
+
+  @Test
   public void testFilterClientIdsByAssignment() throws Exception {
     cleanAllAndInsert("/dbunit/ClientsByStaffPerson.xml");
     executeInTransaction(sessionFactory, (sessionFactory) -> {
@@ -207,6 +216,20 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
           "0Ki"));
       Assert.assertTrue(
         dao.filterClientIdsByAssignment(Collections.singletonList("AzDQD9cN/A"), "0Ki").isEmpty());
+    });
+  }
+
+  @Test
+  public void testFilterClientIdsBySupervisor() throws Exception {
+    cleanAllAndInsert("/dbunit/ClientsBySupervisor.xml");
+    executeInTransaction(sessionFactory, (sessionFactory) -> {
+      Assert.assertEquals(Collections.singletonList("2Tao9dx00j"),
+        dao.filterClientIdsBySupervisor(Collections.singletonList("2Tao9dx00j"), "00j"));
+      Assert.assertEquals(Arrays.asList("2Tao9dx00j"),
+        dao.filterClientIdsBySupervisor(Arrays.asList("2Tao9dx00j", "AzDQD9cN/A"),
+          "00j"));
+      Assert.assertTrue(
+        dao.filterClientIdsBySupervisor(Collections.singletonList("AzDQD9cN/A"), "00j").isEmpty());
     });
   }
 
