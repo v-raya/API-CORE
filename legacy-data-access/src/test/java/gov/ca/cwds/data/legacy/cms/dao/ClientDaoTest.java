@@ -216,6 +216,9 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
           "0Ki"));
       Assert.assertTrue(
         dao.filterClientIdsByAssignment(Collections.singletonList("AzDQD9cN/A"), "0Ki").isEmpty());
+      Assert.assertEquals(Collections.emptyList(),
+        dao.filterClientIdsByAssignment(Collections.emptyList(),
+          "0Ki"));
     });
   }
 

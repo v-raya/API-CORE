@@ -115,6 +115,9 @@ public class ClientDao extends BaseDaoImpl<Client> {
   @SuppressWarnings("unchecked")
   public Collection<String> filterClientIdsByAssignment(Collection<String> clientIds,
     String staffId) {
+    if (clientIds.isEmpty()) {
+      return clientIds;
+    }
     return grabSession()
       .createNamedQuery(this.getEntityClass().getSimpleName() + ".filterClientIdsByAssignment")
       .setParameterList("clientIds", clientIds)
