@@ -7,6 +7,7 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.AccessType;
 import gov.ca.cwds.data.stream.QueryCreator;
 import gov.ca.cwds.data.stream.ScalarResultsStreamer;
 import gov.ca.cwds.inject.CmsSessionFactory;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
@@ -107,7 +108,7 @@ public class ClientDao extends BaseDaoImpl<Client> {
         .createNamedQuery(this.getEntityClass().getSimpleName() + ".getAccessTypeByAssignment")
         .setParameterList("clientIds", Collections.singletonList(clientId))
         .setParameter("staffId", staffId)
-        .setParameter("now", LocalDateTime.now())
+        .setParameter("now", LocalDate.now())
         .uniqueResult().toString());
   }
 
@@ -118,7 +119,7 @@ public class ClientDao extends BaseDaoImpl<Client> {
       .createNamedQuery(this.getEntityClass().getSimpleName() + ".filterClientIdsByAssignment")
       .setParameterList("clientIds", clientIds)
       .setParameter("staffId", staffId)
-      .setParameter("now", LocalDateTime.now()).list();
+      .setParameter("now", LocalDate.now()).list();
   }
 
   /**
@@ -152,7 +153,7 @@ public class ClientDao extends BaseDaoImpl<Client> {
       .createNamedQuery(this.getEntityClass().getSimpleName() + ".filterClientIdsBySupervisor")
       .setParameterList("clientIds", clientIds)
       .setParameter("staffId", supervisorStaffId)
-      .setParameter("now", LocalDateTime.now()).list();
+      .setParameter("now", LocalDate.now()).list();
   }
 
   private Client findSingleFacility(String queryName, Consumer<Query<Client>> setParameters) {
