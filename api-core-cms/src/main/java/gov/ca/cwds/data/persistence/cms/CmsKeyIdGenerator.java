@@ -448,7 +448,7 @@ public class CmsKeyIdGenerator {
    * @param uiIdentifier - UIID
    * @return Base62 key
    */
-  public static String getBase62Key(String uiIdentifier) {
+  public static String getKeyFromUIIdentifier(String uiIdentifier) {
     if (StringUtils.isBlank(uiIdentifier)) {
       return null;
     }
