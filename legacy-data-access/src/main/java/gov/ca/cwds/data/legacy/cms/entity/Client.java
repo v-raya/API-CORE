@@ -2,6 +2,7 @@ package gov.ca.cwds.data.legacy.cms.entity;
 
 import static gov.ca.cwds.data.legacy.cms.entity.Client.CLIENT_ASSIGNMENTS_BY_STAFF_QUERY;
 import static gov.ca.cwds.data.legacy.cms.entity.Client.CLIENT_ASSIGNMENTS_BY_SUPERVISOR_QUERY;
+import static gov.ca.cwds.data.legacy.cms.entity.Client.COALESCE_QUERY_PREFIX;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObjectVersioned;
 import gov.ca.cwds.data.legacy.cms.entity.converter.NullableBooleanConverter;
@@ -61,15 +62,7 @@ import org.hibernate.annotations.Type;
 @NamedNativeQueries({
   @NamedNativeQuery(name = "Client.getAccessTypeByAssignment",
     query =
-      "SELECT COALESCE(MAX(CASE c.assignment_type "
-        + "                    WHEN 'P' "
-        + "                      THEN 'RW' "
-        + "                    WHEN 'S' "
-        + "                      THEN 'RW' "
-        + "                    WHEN 'R' "
-        + "                      THEN 'R' "
-        + "                    END), 'NONE') "
-        + "FROM ( "
+      COALESCE_QUERY_PREFIX
         + CLIENT_ASSIGNMENTS_BY_STAFF_QUERY
         + " ) c "
   ),
@@ -82,15 +75,7 @@ import org.hibernate.annotations.Type;
   ),
   @NamedNativeQuery(name = "Client.getAccessTypeBySupervisor",
     query =
-      "SELECT COALESCE(MAX(CASE c.assignment_type "
-        + "                    WHEN 'P' "
-        + "                      THEN 'RW' "
-        + "                    WHEN 'S' "
-        + "                      THEN 'RW' "
-        + "                    WHEN 'R' "
-        + "                      THEN 'R' "
-        + "                    END), 'NONE') "
-        + "FROM ( "
+      COALESCE_QUERY_PREFIX
         + CLIENT_ASSIGNMENTS_BY_SUPERVISOR_QUERY
         + " ) c "
   ),
@@ -222,7 +207,18 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
     + "  AND (allegation.DISPSN_DT IS NULL OR allegation.DISPSN_DT > :now) "
     + "  AND client.IDENTIFIER IN (:clientIds)";
 
+  public static final String COALESCE_QUERY_PREFIX = "SELECT COALESCE(MAX(CASE c.assignment_type "
+    + "                    WHEN 'P' "
+    + "                      THEN 'RW' "
+    + "                    WHEN 'S' "
+    + "                      THEN 'RW' "
+    + "                    WHEN 'R' "
+    + "                      THEN 'R' "
+    + "                    END), 'NONE') "
+    + "FROM ( ";
+
   private static final long serialVersionUID = 783532074047017463L;
+
   @Id
   @Column(name = "IDENTIFIER", nullable = false, length = 10)
   @Access(AccessType.PROPERTY) // to get id without fetching entire client
