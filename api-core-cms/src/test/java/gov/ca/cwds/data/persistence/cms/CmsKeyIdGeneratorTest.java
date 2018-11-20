@@ -527,33 +527,26 @@ public final class CmsKeyIdGeneratorTest {
 
   @Test
   public void toBase62KeyTest_success() {
-    Assert.assertThat("AfiTGrO0ND",
-      is(equalTo(CmsKeyIdGenerator.getBase62Key("0606-2209-3706-2001439"))));
-    Assert.assertThat("ANkfTZy75C",
-      is(equalTo(CmsKeyIdGenerator.getBase62Key("0589-7630-0758-6027230"))));
-    Assert.assertThat("ANkfTZy75D",
-      is(equalTo(CmsKeyIdGenerator.getBase62Key("0589-7630-0758-6027231"))));
-    Assert.assertThat("AWbb5yZzzz",
-      is(equalTo(CmsKeyIdGenerator.getBase62Key("0597-8741-7200-7238327"))));
-    Assert.assertThat("0YIPkZU0S0",
-      is(equalTo(CmsKeyIdGenerator.getBase62Key("0031-4206-2756-0001736"))));
+    Assert.assertThat(CmsKeyIdGenerator.getKeyFromUIIdentifier("0606-2209-3706-2001439"),
+      is(equalTo("AfiTGrO0ND")));
+    Assert.assertThat(CmsKeyIdGenerator.getKeyFromUIIdentifier("0589-7630-0758-6027230"),
+      is(equalTo("ANkfTZy75C")));
+    Assert.assertThat(CmsKeyIdGenerator.getKeyFromUIIdentifier("0589-7630-0758-6027231"),
+      is(equalTo("ANkfTZy75D")));
+    Assert.assertThat(CmsKeyIdGenerator.getKeyFromUIIdentifier("0597-8741-7200-7238327"),
+      is(equalTo("AWbb5yZzzz")));
+    Assert.assertThat(CmsKeyIdGenerator.getKeyFromUIIdentifier("0031-4206-2756-0001736"),
+      is(equalTo("0YIPkZU0S0")));
   }
 
-  @Test
-  public void toBase62KeyTest_do_not_matches_fail() {
-    try{
-      CmsKeyIdGenerator.getBase62Key("some-text");
-      Assert.fail();
-    } catch (IllegalArgumentException e) {
-      LOGGER.info(e.getMessage());
-    }
+  @Test(expected = IllegalArgumentException.class)
+  public void toBase62KeyTest_randomString_do_not_matches_fail() {
+    CmsKeyIdGenerator.getKeyFromUIIdentifier("some-text");
+  }
 
-    try{
-      CmsKeyIdGenerator.getBase62Key("O589-7630-0758-6027230");
-      Assert.fail();
-    } catch (IllegalArgumentException e) {
-      LOGGER.info(e.getMessage());
-    }
+  @Test(expected = IllegalArgumentException.class)
+  public void toBase62KeyTest_char_do_not_matches_fail() {
+    CmsKeyIdGenerator.getKeyFromUIIdentifier("O589-7630-0758-6027230");
   }
 
 }
