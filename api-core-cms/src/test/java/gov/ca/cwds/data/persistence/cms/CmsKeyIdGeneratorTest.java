@@ -537,6 +537,8 @@ public final class CmsKeyIdGeneratorTest {
       is(equalTo("AWbb5yZzzz")));
     Assert.assertThat(CmsKeyIdGenerator.getKeyFromUIIdentifier("0031-4206-2756-0001736"),
       is(equalTo("0YIPkZU0S0")));
+    Assert.assertThat(CmsKeyIdGenerator.getKeyFromUIIdentifier("0031-420-6275-60001736"),
+      is(equalTo("0YIPkZU0S0")));
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -547,6 +549,21 @@ public final class CmsKeyIdGeneratorTest {
   @Test(expected = IllegalArgumentException.class)
   public void toBase62KeyTest_char_do_not_matches_fail() {
     CmsKeyIdGenerator.getKeyFromUIIdentifier("O589-7630-0758-6027230");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void toBase62KeyTest_LessThen19Digits_fail() {
+    CmsKeyIdGenerator.getKeyFromUIIdentifier("589-7630-0758-6027230");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void toBase62KeyTest_MoreThen19Digits_fail() {
+    CmsKeyIdGenerator.getKeyFromUIIdentifier("23589-7630-0758-6027230");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void toBase62KeyTest_InvalidUIID_fail() {
+    CmsKeyIdGenerator.getKeyFromUIIdentifier("2760-3761-4095-7777777");
   }
 
 }
