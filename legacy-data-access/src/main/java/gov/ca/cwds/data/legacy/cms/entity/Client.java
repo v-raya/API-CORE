@@ -188,7 +188,7 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
     + "  staffPersonUnitAuthority.FKASG_UNIT IN ( "
     + "    SELECT DISTINCT u.IDENTIFIER "
     + "    FROM {h-schema}ASG_UNIT u "
-    + "      LEFT JOIN STFUATHT staffPersonUnitAuthority "
+    + "      LEFT JOIN {h-schema}STFUATHT staffPersonUnitAuthority "
     + "        ON staffPersonUnitAuthority.FKASG_UNIT = u.IDENTIFIER "
     + "    WHERE staffPersonUnitAuthority.UNTAUTH_CD = 'S' "
     + "          AND staffPersonUnitAuthority.END_DT IS NULL "
