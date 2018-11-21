@@ -71,8 +71,6 @@ import org.hibernate.annotations.Type;
       "SELECT DISTINCT c.client_id "
         + "FROM ( "
         + CLIENT_ASSIGNMENTS_BY_STAFF_QUERY
-        + "UNION "
-        + CLIENT_ASSIGNMENTS_BY_SUPERVISOR_QUERY
         + " ) c "
   ),
   @NamedNativeQuery(name = "Client.getAccessTypeBySupervisor",

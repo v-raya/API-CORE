@@ -222,19 +222,19 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
     });
   }
 
-  @Test
-  public void testFilterClientIdsBySupervisor() throws Exception {
-    cleanAllAndInsert("/dbunit/ClientsBySupervisor.xml");
-    executeInTransaction(sessionFactory, (sessionFactory) -> {
-      Assert.assertEquals(Collections.singletonList("2Tao9dx00j"),
-        dao.filterClientIdsByAssignment(Collections.singletonList("2Tao9dx00j"), "00j"));
-      Assert.assertEquals(Arrays.asList("2Tao9dx00j"),
-        dao.filterClientIdsByAssignment(Arrays.asList("2Tao9dx00j", "AzDQD9cN/A"),
-          "00j"));
-      Assert.assertTrue(
-        dao.filterClientIdsByAssignment(Collections.singletonList("AzDQD9cN/A"), "00j").isEmpty());
-    });
-  }
+//  @Test
+//  public void testFilterClientIdsBySupervisor() throws Exception {
+//    cleanAllAndInsert("/dbunit/ClientsBySupervisor.xml");
+//    executeInTransaction(sessionFactory, (sessionFactory) -> {
+//      Assert.assertEquals(Collections.singletonList("2Tao9dx00j"),
+//        dao.filterClientIdsByAssignment(Collections.singletonList("2Tao9dx00j"), "00j"));
+//      Assert.assertEquals(Arrays.asList("2Tao9dx00j"),
+//        dao.filterClientIdsByAssignment(Arrays.asList("2Tao9dx00j", "AzDQD9cN/A"),
+//          "00j"));
+//      Assert.assertTrue(
+//        dao.filterClientIdsByAssignment(Collections.singletonList("AzDQD9cN/A"), "00j").isEmpty());
+//    });
+//  }
 
   @Test
   public void findByFacilityIdAndChildId() throws Exception {
