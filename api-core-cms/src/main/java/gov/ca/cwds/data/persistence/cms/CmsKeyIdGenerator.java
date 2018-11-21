@@ -452,19 +452,21 @@ public class CmsKeyIdGenerator {
     if (StringUtils.isBlank(uiIdentifier)) {
       return null;
     }
-
-    if (!uiIdentifier.matches("\\d{4}-\\d{4}-\\d{4}-\\d{7}")) {
-      throw new IllegalArgumentException(
-        "uiIdentifier [" + uiIdentifier
-          + "] doesn't match to the pattern: \\d{4}-\\d{4}-\\d{4}-\\d{7}");
-    }
-
     String noDashes = StringUtils.remove(uiIdentifier, '-');
+    if (!noDashes.matches("\\d{19}")) {
+      throw new IllegalArgumentException(
+        "uiIdentifier must have 19 digits, actual:[" + uiIdentifier + "]");
+    }
     long tsLong = Long.parseLong(noDashes.substring(0, LEN_UIIDTIMESTAMP));
     long staffIdLong = Long.parseLong(noDashes.substring(LEN_UIIDTIMESTAMP));
     String tsBase62 = StringUtils.leftPad(Base62.toBase62(tsLong), LEN_KEYTIMESTAMP, '0');
     String staffIdBase62 = StringUtils.leftPad(Base62.toBase62(staffIdLong), LEN_KEYSTAFFID, '0');
-    return tsBase62 + staffIdBase62;
+    String result = tsBase62 + staffIdBase62;
+    if (result.length() > 10) {
+      throw new IllegalArgumentException("uiIdentifier [" + uiIdentifier + "] is invalid. Conversion result [" + result
+        + "] length is more then 10 characters");
+    }
+    return result;
   }
 
   /**
