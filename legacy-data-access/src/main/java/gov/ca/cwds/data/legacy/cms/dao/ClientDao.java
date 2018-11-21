@@ -138,7 +138,7 @@ public class ClientDao extends BaseDaoImpl<Client> {
         .createNamedQuery(this.getEntityClass().getSimpleName() + ".getAccessTypeBySupervisor")
         .setParameterList("clientIds", Collections.singletonList(clientId))
         .setParameter("staffId", supervisorStaffId)
-        .setParameter("now", LocalDateTime.now())
+        .setParameter("now", LocalDate.now())
         .uniqueResult().toString());
   }
 
