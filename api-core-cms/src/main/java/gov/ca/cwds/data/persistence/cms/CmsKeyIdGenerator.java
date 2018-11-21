@@ -463,7 +463,7 @@ public class CmsKeyIdGenerator {
     String staffIdBase62 = StringUtils.leftPad(Base62.toBase62(staffIdLong), LEN_KEYSTAFFID, '0');
     String result = tsBase62 + staffIdBase62;
     if (result.length() > 10) {
-      throw new IllegalArgumentException("uiIdentifier is invalid. Conversion result [" + result
+      throw new IllegalArgumentException("uiIdentifier [" + uiIdentifier + "] is invalid. Conversion result [" + result
         + "] length is more then 10 characters");
     }
     return result;
