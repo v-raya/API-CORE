@@ -115,6 +115,9 @@ public class ClientDao extends BaseDaoImpl<Client> {
   @SuppressWarnings("unchecked")
   public Collection<String> filterClientIdsByAssignment(Collection<String> clientIds,
     String staffId) {
+    if (clientIds.isEmpty()) {
+      return clientIds;
+    }
     return grabSession()
       .createNamedQuery(this.getEntityClass().getSimpleName() + ".filterClientIdsByAssignment")
       .setParameterList("clientIds", clientIds)
@@ -135,25 +138,8 @@ public class ClientDao extends BaseDaoImpl<Client> {
         .createNamedQuery(this.getEntityClass().getSimpleName() + ".getAccessTypeBySupervisor")
         .setParameterList("clientIds", Collections.singletonList(clientId))
         .setParameter("staffId", supervisorStaffId)
-        .setParameter("now", LocalDateTime.now())
+        .setParameter("now", LocalDate.now())
         .uniqueResult().toString());
-  }
-
-  /**
-   * Gets assigned client Ids by supervisor Id
-   *
-   * @param clientIds collection of client's identifiers
-   * @param supervisorStaffId supervisor staff person id
-   * @return collection of Clint IDs
-   */
-  @SuppressWarnings("unchecked")
-  public Collection<String> filterClientIdsBySupervisor(Collection<String> clientIds,
-    String supervisorStaffId) {
-    return grabSession()
-      .createNamedQuery(this.getEntityClass().getSimpleName() + ".filterClientIdsBySupervisor")
-      .setParameterList("clientIds", clientIds)
-      .setParameter("staffId", supervisorStaffId)
-      .setParameter("now", LocalDate.now()).list();
   }
 
   private Client findSingleFacility(String queryName, Consumer<Query<Client>> setParameters) {
