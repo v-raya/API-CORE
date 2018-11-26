@@ -199,6 +199,7 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
     cleanAllAndInsert("/dbunit/ClientsBySupervisor.xml");
     executeInTransaction(sessionFactory, (sessionFactory) -> {
       Assert.assertEquals(AccessType.RW, dao.getAccessTypeBySupervisor("DTdjk8J0HS", "06s"));
+      Assert.assertEquals(AccessType.RW, dao.getAccessTypeBySupervisor("2Tao9dx00j", "00j"));
       Assert.assertEquals(AccessType.NONE, dao.getAccessTypeBySupervisor("AzDQD9cN/A", "06s"));
     });
   }
