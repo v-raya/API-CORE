@@ -11,6 +11,9 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
+import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
+import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator.KeyDetail;
+import gov.ca.cwds.rest.services.ServiceException;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -30,16 +33,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
 import org.apache.commons.collections4.map.PassiveExpiringMap;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator.KeyDetail;
-import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * This JNI native library runs correctly on Linux Jenkins when libLZW.so and libstdc++.so.6 are
@@ -103,9 +103,9 @@ public final class CmsKeyIdGeneratorTest {
 
   private static final int GOOD_KEY_LEN = CmsPersistentObject.CMS_ID_LEN;
   private static final Pattern RGX_LEGACY_KEY =
-      Pattern.compile("([a-z0-9]{10})", Pattern.CASE_INSENSITIVE);
+    Pattern.compile("([a-z0-9]{10})", Pattern.CASE_INSENSITIVE);
   private static final Pattern RGX_LEGACY_TIMESTAMP =
-      Pattern.compile("([a-z0-9]{7})", Pattern.CASE_INSENSITIVE);
+    Pattern.compile("([a-z0-9]{7})", Pattern.CASE_INSENSITIVE);
 
   // ===================
   // GENERATE KEY:
@@ -182,7 +182,7 @@ public final class CmsKeyIdGeneratorTest {
   public void testGenKeyBadStaffTooLong() {
     // Wrong staff id length.
     final String key = CmsKeyIdGenerator
-        .getNextValue("ab7777d7d7d7s8283jh4jskksjajfkdjbjdjjjasdfkljcxmzxcvjdhshfjjdkksahf");
+      .getNextValue("ab7777d7d7d7s8283jh4jskksjajfkdjbjdjjjasdfkljcxmzxcvjdhshfjjdkksahf");
     // assertTrue("key generated", key == null || key.length() == 0);
   }
 
@@ -340,14 +340,14 @@ public final class CmsKeyIdGeneratorTest {
 
     final Date localDate = CmsKeyIdGenerator.getDateFromKey(thirdId);
     System.out.println(
-        "localDate: " + sdf.format(localDate) + ", dateFromXtools: " + sdf.format(dateFromXtools));
+      "localDate: " + sdf.format(localDate) + ", dateFromXtools: " + sdf.format(dateFromXtools));
 
     assertEquals(dateFromXtools.getTime(), localDate.getTime());
     assertEquals(thirdId, thirdIdFromXTools);
   }
 
   protected void iterateExpiringMap(Map<String, String> keepKey, Map<String, String> lastKey,
-      String[] staffIds, Date now, boolean add, boolean expired) {
+    String[] staffIds, Date now, boolean add, boolean expired) {
     for (String staffId : staffIds) {
       String expected = keepKey.get(staffId);
 
@@ -371,7 +371,7 @@ public final class CmsKeyIdGeneratorTest {
   @Test
   public void testPassiveExpiringMap() throws Exception {
     final Map<String, String> lastKey =
-        new PassiveExpiringMap<>(700, TimeUnit.MILLISECONDS, new ConcurrentHashMap<>());
+      new PassiveExpiringMap<>(700, TimeUnit.MILLISECONDS, new ConcurrentHashMap<>());
     final Map<String, String> keepKey = new HashMap<>();
 
     final String[] staffIds = {"aaa", "aab", "aac", "aad", "aae", "aaf", "aag", "aah"};
@@ -465,7 +465,7 @@ public final class CmsKeyIdGeneratorTest {
   // }
 
   private void genKeys(String staffId, int threadNum, int keysPerThread,
-      Map<String, String> results) {
+    Map<String, String> results) {
     Thread.currentThread().setName(staffId + '_' + threadNum);
     LOGGER.info("START: staff id: {}", staffId);
 
@@ -481,7 +481,7 @@ public final class CmsKeyIdGeneratorTest {
 
     if (keysGenerated != keysPerThread) {
       LOGGER.error("KEY COUNT MISMATCH! staff id: {}, counter: {}, keysPerThread: {}",
-          keysGenerated, keysPerThread);
+        keysGenerated, keysPerThread);
     }
     LOGGER.info("STOP:  staff id: {}, keys generated: {}", staffId, keysGenerated);
   }
@@ -497,7 +497,7 @@ public final class CmsKeyIdGeneratorTest {
     final Date start = new Date();
 
     final List<String> staffIds = IntStream.rangeClosed(1, numberOfUsers).boxed()
-        .map(i -> StringUtils.leftPad(String.valueOf(i + 1), 3, "b")).collect(Collectors.toList());
+      .map(i -> StringUtils.leftPad(String.valueOf(i + 1), 3, "b")).collect(Collectors.toList());
     final Map<String, String> results = new ConcurrentHashMap<>(expectedCount);
 
     // It's a unit test, not a stress test. Jenkins doesn't have CPU to spare.
@@ -519,10 +519,51 @@ public final class CmsKeyIdGeneratorTest {
 
     final int actual = results.size();
     LOGGER.info("Time (milis): {}, expected keys: {}, actual keys: {}",
-        (System.currentTimeMillis() - start.getTime()), expectedCount, actual);
+      (System.currentTimeMillis() - start.getTime()), expectedCount, actual);
 
     assertEquals("Number of unique IDs generated NOT equals to total number of IDs generated.",
-        expectedCount, actual);
+      expectedCount, actual);
+  }
+
+  @Test
+  public void toBase62KeyTest_success() {
+    Assert.assertThat(CmsKeyIdGenerator.getKeyFromUIIdentifier("0606-2209-3706-2001439"),
+      is(equalTo("AfiTGrO0ND")));
+    Assert.assertThat(CmsKeyIdGenerator.getKeyFromUIIdentifier("0589-7630-0758-6027230"),
+      is(equalTo("ANkfTZy75C")));
+    Assert.assertThat(CmsKeyIdGenerator.getKeyFromUIIdentifier("0589-7630-0758-6027231"),
+      is(equalTo("ANkfTZy75D")));
+    Assert.assertThat(CmsKeyIdGenerator.getKeyFromUIIdentifier("0597-8741-7200-7238327"),
+      is(equalTo("AWbb5yZzzz")));
+    Assert.assertThat(CmsKeyIdGenerator.getKeyFromUIIdentifier("0031-4206-2756-0001736"),
+      is(equalTo("0YIPkZU0S0")));
+    Assert.assertThat(CmsKeyIdGenerator.getKeyFromUIIdentifier("0031-420-6275-60001736"),
+      is(equalTo("0YIPkZU0S0")));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void toBase62KeyTest_randomString_do_not_matches_fail() {
+    CmsKeyIdGenerator.getKeyFromUIIdentifier("some-text");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void toBase62KeyTest_char_do_not_matches_fail() {
+    CmsKeyIdGenerator.getKeyFromUIIdentifier("O589-7630-0758-6027230");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void toBase62KeyTest_LessThen19Digits_fail() {
+    CmsKeyIdGenerator.getKeyFromUIIdentifier("589-7630-0758-6027230");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void toBase62KeyTest_MoreThen19Digits_fail() {
+    CmsKeyIdGenerator.getKeyFromUIIdentifier("23589-7630-0758-6027230");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void toBase62KeyTest_InvalidUIID_fail() {
+    CmsKeyIdGenerator.getKeyFromUIIdentifier("2760-3761-4095-7777777");
   }
 
 }
