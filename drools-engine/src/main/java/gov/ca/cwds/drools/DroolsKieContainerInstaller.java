@@ -49,11 +49,9 @@ class DroolsKieContainerInstaller {
 
   private void addDrlFiles() throws IOException {
     for (String resourceName : IOUtils
-        .readLines(getResourceStream(AUTO_DISCOVERY_FILENAME), "UTF-8")) {
-      if (resourceName.endsWith(".drl")) {
-        kfs.write("src/main/resources/" + resourceName,
-            IOUtils.toByteArray(getResourceStream(resourceName)));
-      }
+      .readLines(getResourceStream(AUTO_DISCOVERY_FILENAME), "UTF-8")) {
+      kfs.write("src/main/resources/" + resourceName,
+        IOUtils.toByteArray(getResourceStream(resourceName)));
     }
   }
 
