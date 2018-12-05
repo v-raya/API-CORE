@@ -157,8 +157,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * and cases.
    */
   public enum ESOptionalCollection {
+
     /**
-     * Just what the name says ...
+     * Default. Just what the name says ...
      */
     NONE,
 
@@ -186,6 +187,14 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
      * "Other client names"
      */
     AKA,
+
+    /**
+     * Commercially Sexually Exploited Children.
+     * <p>
+     * Convicted perpetrators should expect a reservation in Hell.
+     * </p>
+     */
+    CSEC,
 
     /**
      * Safety alerts
@@ -279,6 +288,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   private String nameSuffix;
 
   @JsonProperty("date_of_birth")
+  @JsonInclude(JsonInclude.Include.ALWAYS)
   private String dateOfBirth;
 
   @JsonProperty("date_of_death")
@@ -1402,7 +1412,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   }
 
   /**
-   *  Get CSEC history
+   * Get CSEC history
    *
    * @return CSES history
    */
