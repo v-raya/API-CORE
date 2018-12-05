@@ -276,15 +276,19 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   private String indexUpdateTime;
 
   @JsonProperty("first_name")
+  @JsonInclude(JsonInclude.Include.ALWAYS)
   private String firstName;
 
   @JsonProperty("middle_name")
+  @JsonInclude(JsonInclude.Include.ALWAYS)
   private String middleName;
 
   @JsonProperty("last_name")
+  @JsonInclude(JsonInclude.Include.ALWAYS)
   private String lastName;
 
   @JsonProperty("name_suffix")
+  @JsonInclude(JsonInclude.Include.ALWAYS)
   private String nameSuffix;
 
   @JsonProperty("date_of_birth")
@@ -298,6 +302,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   private String gender;
 
   @JsonProperty("ssn")
+  @JsonInclude(JsonInclude.Include.ALWAYS)
   private String ssn;
 
   @JsonProperty("client_index_number")
