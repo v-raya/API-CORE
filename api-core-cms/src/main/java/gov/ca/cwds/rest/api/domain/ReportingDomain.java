@@ -9,6 +9,7 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 
 /**
+ * 
  * @author CWDS API Team
  */
 public abstract class ReportingDomain extends DomainObject implements Request, Response {

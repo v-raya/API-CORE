@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.ca.cwds.data.std.ApiMarker;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.services.Service;
 import gov.ca.cwds.rest.services.ServiceException;
@@ -26,7 +27,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * @see ApiSimpleResourceService
  */
 public abstract class SimpleResourceService<K extends Serializable, Q extends Request, P extends gov.ca.cwds.rest.api.Response>
-    implements ApiSimpleResourceService<K, Q, P>, Service {
+    implements ApiSimpleResourceService<K, Q, P>, Service, ApiMarker {
 
   /**
    * Default serialization.

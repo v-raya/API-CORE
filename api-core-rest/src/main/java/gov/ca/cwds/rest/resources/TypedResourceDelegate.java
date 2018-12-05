@@ -1,9 +1,11 @@
 package gov.ca.cwds.rest.resources;
 
+import java.io.Serializable;
+
+import javax.ws.rs.core.Response;
+
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import java.io.Serializable;
-import javax.ws.rs.core.Response;
 
 /**
  * Interface for Resource delegates, intended for use by CRUD-aware resources. All resources should
@@ -52,4 +54,5 @@ public interface TypedResourceDelegate<P extends Serializable, Q extends Request
    * @return The {@link Response}
    */
   public Response update(P id, Q request);
+
 }
