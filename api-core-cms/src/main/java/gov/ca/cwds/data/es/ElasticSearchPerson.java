@@ -157,8 +157,9 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
    * and cases.
    */
   public enum ESOptionalCollection {
+
     /**
-     * Just what the name says ...
+     * Default. Just what the name says ...
      */
     NONE,
 
@@ -186,6 +187,14 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
      * "Other client names"
      */
     AKA,
+
+    /**
+     * Commercially Sexually Exploited Children.
+     * <p>
+     * Convicted perpetrators should expect a reservation in Hell.
+     * </p>
+     */
+    CSEC,
 
     /**
      * Safety alerts
@@ -267,18 +276,23 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   private String indexUpdateTime;
 
   @JsonProperty("first_name")
+  @JsonInclude(JsonInclude.Include.ALWAYS)
   private String firstName;
 
   @JsonProperty("middle_name")
+  @JsonInclude(JsonInclude.Include.ALWAYS)
   private String middleName;
 
   @JsonProperty("last_name")
+  @JsonInclude(JsonInclude.Include.ALWAYS)
   private String lastName;
 
   @JsonProperty("name_suffix")
+  @JsonInclude(JsonInclude.Include.ALWAYS)
   private String nameSuffix;
 
   @JsonProperty("date_of_birth")
+  @JsonInclude(JsonInclude.Include.ALWAYS)
   private String dateOfBirth;
 
   @JsonProperty("date_of_death")
@@ -288,6 +302,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   private String gender;
 
   @JsonProperty("ssn")
+  @JsonInclude(JsonInclude.Include.ALWAYS)
   private String ssn;
 
   @JsonProperty("client_index_number")
@@ -1402,7 +1417,7 @@ public class ElasticSearchPerson implements ApiTypedIdentifier<String> {
   }
 
   /**
-   *  Get CSEC history
+   * Get CSEC history
    *
    * @return CSES history
    */
