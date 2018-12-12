@@ -69,7 +69,7 @@ public class InMemoryTestResources extends ExternalResource {
 
   private void setUp() throws Exception {
     createDatabase();
-    BaseCwsCmsInMemoryPersistenceTest.sessionFactory = createHibrtnateSessionFactory();
+    BaseCwsCmsInMemoryPersistenceTest.sessionFactory = createHibernateSessionFactory();
 
     BaseCwsCmsInMemoryPersistenceTest.dbUnitTester =
         new JdbcDatabaseTester(DRIVER_CLASS_NAME, URL, USER, PASSWORD, SCHEMA);
@@ -99,7 +99,7 @@ public class InMemoryTestResources extends ExternalResource {
     runLiquibaseScript(LIQUIBASE_SCRIPT_PATH);
   }
 
-  private static SessionFactory createHibrtnateSessionFactory() {
+  private static SessionFactory createHibernateSessionFactory() {
     Configuration configuration = new Configuration();
     configuration.configure(HIBERNATE_CONFIG_PATH);
     configuration.setProperty("hibernate.connection.url", URL);
