@@ -5,13 +5,16 @@ import static com.google.common.base.Preconditions.checkArgument;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Optional;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.ActionRequest;
@@ -654,8 +657,16 @@ public class ElasticsearchDao implements Closeable {
     return jsonBuf.toString();
   }
 
-  private String readFile(String sourceFile) throws IOException {
-    return new ApiFileAssistant().readFile(sourceFile);
+  protected String readFile(String sourceFile) throws IOException {
+    String ret = null;
+    try {
+      ret = new ApiFileAssistant().readFile(sourceFile);
+    } catch (Exception e) {
+      LOGGER.warn("NO RESOURCE FOUND FOR '{}'. Try as regular file.", sourceFile);
+      ret = FileUtils.readFileToString(new File(sourceFile), Charset.defaultCharset());
+    }
+
+    return ret;
   }
 
 }
