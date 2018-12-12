@@ -2,12 +2,6 @@ package gov.ca.cwds.data.es;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Strings;
-import com.google.inject.Inject;
-import gov.ca.cwds.common.ApiFileAssistant;
-import gov.ca.cwds.rest.ElasticsearchConfiguration;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -17,6 +11,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Optional;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.ActionRequest;
@@ -38,6 +33,14 @@ import org.elasticsearch.indices.InvalidIndexNameException;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Strings;
+import com.google.inject.Inject;
+
+import gov.ca.cwds.common.ApiFileAssistant;
+import gov.ca.cwds.rest.ElasticsearchConfiguration;
+
 /**
  * A DAO for Elasticsearch.
  *
@@ -58,7 +61,7 @@ public class ElasticsearchDao implements Closeable {
 
   private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ElasticsearchDao.class);
 
-   /**
+  /**
    * Standard "people" index name.
    */
   protected static final String DEFAULT_PERSON_IDX_NM = "people";
@@ -96,7 +99,8 @@ public class ElasticsearchDao implements Closeable {
    */
   public String getDefaultAlias() {
     return this.config != null && StringUtils.isNotBlank(config.getElasticsearchAlias())
-        ? config.getElasticsearchAlias() : DEFAULT_PERSON_IDX_NM;
+        ? config.getElasticsearchAlias()
+        : DEFAULT_PERSON_IDX_NM;
   }
 
   /**
@@ -106,7 +110,8 @@ public class ElasticsearchDao implements Closeable {
    */
   public String getDefaultDocType() {
     return this.config != null && StringUtils.isNotBlank(config.getElasticsearchDocType())
-        ? config.getElasticsearchDocType() : DEFAULT_PERSON_DOC_TYPE;
+        ? config.getElasticsearchDocType()
+        : DEFAULT_PERSON_DOC_TYPE;
   }
 
   /**
@@ -190,7 +195,6 @@ public class ElasticsearchDao implements Closeable {
     }
   }
 
-
   /**
    * Creates or swaps index alias
    *
@@ -200,47 +204,41 @@ public class ElasticsearchDao implements Closeable {
    */
   public synchronized boolean createOrSwapAlias(final String alias, final String index) {
     final MetaData clusterMeta = getMetaData();
-
     String oldIndex = StringUtils.EMPTY;
 
     if (clusterMeta.hasIndex(alias)) {
       LOGGER.warn("CAN'T CREATE ALIAS {}! Index with the same name already exist. ", alias);
       return false;
     } else if (!clusterMeta.hasIndex(index)) {
-      LOGGER.warn("CAN'T CREATE ALIAS {}! Index with the name {} doesn't  exist. ",alias, index);
+      LOGGER.warn("CAN'T CREATE ALIAS {}! Index with the name {} doesn't  exist. ", alias, index);
       return false;
     } else if (clusterMeta.hasAlias(alias)) {
-      //Only one index assumed to be associated with alias.
-      oldIndex = clusterMeta.getAliasAndIndexLookup().get(alias).getIndices().get(0).getIndex()
-          .getName();
+      // Only one index assumed to be associated with alias.
+      oldIndex =
+          clusterMeta.getAliasAndIndexLookup().get(alias).getIndices().get(0).getIndex().getName();
       LOGGER.info("Swapping Alias {} from Index {} to Index {}.", alias, oldIndex, index);
     } else {
       LOGGER.info("Creating Alias {} for Index {}.", alias, index);
     }
 
     return createOrSwapAlias(alias, index, oldIndex);
-
   }
 
   /**
    *
    * @param alias Alias name
    * @param index New Index name
-   * @param oldIndex  Current Index Name
+   * @param oldIndex Current Index Name
    * @return true if successful
    */
   private boolean createOrSwapAlias(final String alias, final String index, final String oldIndex) {
-    IndicesAliasesRequestBuilder preparedAliases = getClient().admin().indices()
-      .prepareAliases();
+    IndicesAliasesRequestBuilder preparedAliases = getClient().admin().indices().prepareAliases();
     TimeValue timeout = TimeValue.timeValueMillis(TIMEOUT_MILLIS);
     if (StringUtils.isBlank(oldIndex)) {
-      return preparedAliases.addAlias(index, alias)
-          .get(timeout).isAcknowledged();
+      return preparedAliases.addAlias(index, alias).get(timeout).isAcknowledged();
     } else {
-      return preparedAliases.removeAlias(oldIndex, alias)
-          .addAlias(index, alias).get(timeout)
+      return preparedAliases.removeAlias(oldIndex, alias).addAlias(index, alias).get(timeout)
           .isAcknowledged();
-
     }
   }
 
@@ -405,8 +403,8 @@ public class ElasticsearchDao implements Closeable {
    * @param updateJson JSON to update existing document
    * @return prepared IndexRequest
    */
-  public ActionRequest bulkUpsert(final String id, final String insertJson, final String updateJson)
-      {
+  public ActionRequest bulkUpsert(final String id, final String insertJson,
+      final String updateJson) {
     return bulkUpsert(id, getDefaultAlias(), getDefaultDocType(), insertJson, updateJson);
   }
 
@@ -421,8 +419,9 @@ public class ElasticsearchDao implements Closeable {
    * </p>
    *
    * <p>
-   * This method calls Elasticsearch's <a href= "https://www.elastic.co/guide/en/elasticsearch/guide/current/_best_fields.html#dis-max-query"
-   * > "dis max"</a> query feature.
+   * This method calls Elasticsearch's <a href=
+   * "https://www.elastic.co/guide/en/elasticsearch/guide/current/_best_fields.html#dis-max-query" >
+   * "dis max"</a> query feature.
    * </p>
    *
    * @param searchTerm ES search String
