@@ -1,15 +1,14 @@
-package gov.ca.cwds.cms.data.access.service;
-
-import java.time.LocalDateTime;
-import java.util.function.Consumer;
+package gov.ca.cwds.cms.data.access.service.impl;
 
 import gov.ca.cwds.cms.data.access.dto.BaseEntityAwareDTO;
-import gov.ca.cwds.cms.data.access.service.impl.IdGenerator;
+import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
 import gov.ca.cwds.data.CrudsDao;
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.security.utils.PrincipalUtils;
+import java.time.LocalDateTime;
+import java.util.function.Consumer;
 
 public abstract class DefaultCmsDataAccessService<E extends CrudsDao<T>, T extends CmsPersistentObject, P extends BaseEntityAwareDTO<T>>
     extends DataAccessServiceBase<E, T, P> {
@@ -26,11 +25,11 @@ public abstract class DefaultCmsDataAccessService<E extends CrudsDao<T>, T exten
    * @throws DataAccessServicesException if something went wrong
    */
   @Override
-  public T create(P entityAwareDTO) throws DataAccessServicesException {
+  T create(P entityAwareDTO, boolean isXaTransaction) throws DataAccessServicesException {
     T entity = entityAwareDTO.getEntity();
     idSetter(entity).accept(IdGenerator.generateId());
     audit(entity);
-    return super.create(entityAwareDTO);
+    return super.create(entityAwareDTO, isXaTransaction);
   }
 
   /**
@@ -41,9 +40,9 @@ public abstract class DefaultCmsDataAccessService<E extends CrudsDao<T>, T exten
    * @throws DataAccessServicesException if something went wrong
    */
   @Override
-  public T update(P entityAwareDTO) throws DataAccessServicesException {
+  protected T update(P entityAwareDTO, boolean isXaTransaction) throws DataAccessServicesException {
     audit(entityAwareDTO.getEntity());
-    return super.update(entityAwareDTO);
+    return super.update(entityAwareDTO, isXaTransaction);
   }
 
   @Override

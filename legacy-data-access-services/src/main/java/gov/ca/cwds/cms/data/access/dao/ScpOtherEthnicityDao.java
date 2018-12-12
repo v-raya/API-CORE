@@ -1,7 +1,7 @@
 package gov.ca.cwds.cms.data.access.dao;
 
 import com.google.inject.Inject;
-import gov.ca.cwds.cms.data.access.inject.DataAccessServicesSessionFactory;
+import gov.ca.cwds.cms.data.access.inject.XaDasSessionFactory;
 import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.legacy.cms.entity.ScpOtherEthnicity;
 import org.hibernate.SessionFactory;
@@ -13,7 +13,7 @@ import org.hibernate.SessionFactory;
 public class ScpOtherEthnicityDao extends BaseDaoImpl<ScpOtherEthnicity> {
 
   @Inject
-  public ScpOtherEthnicityDao(@DataAccessServicesSessionFactory SessionFactory sessionFactory) {
+  public ScpOtherEthnicityDao(@XaDasSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 }

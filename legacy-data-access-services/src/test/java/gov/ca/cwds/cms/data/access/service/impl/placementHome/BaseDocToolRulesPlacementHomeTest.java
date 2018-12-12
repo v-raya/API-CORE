@@ -4,6 +4,7 @@ import static org.junit.Assert.fail;
 
 import gov.ca.cwds.cms.data.access.Constants.StaffPersonPrivileges;
 import gov.ca.cwds.cms.data.access.dao.PlacementHomeDao;
+import gov.ca.cwds.cms.data.access.dao.nonxa.NonXaPlacementHomeDao;
 import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
 import gov.ca.cwds.cms.data.access.service.impl.BaseDocToolRulesTest;
@@ -21,13 +22,19 @@ public abstract class BaseDocToolRulesPlacementHomeTest extends BaseDocToolRules
   protected PlacementHomeCoreService placementHomeService;
   protected BusinessValidationService businessValidationService;
   protected PlacementHomeEntityAwareDTO placementHomeEntityAwareDTO;
+
   @Mock
   protected PlacementHomeDao placementHomeDao;
+
+  @Mock
+  protected NonXaPlacementHomeDao nonXaPlacementHomeDao;
+
 
   @Before
   public void setUp() {
     businessValidationService = new BusinessValidationService(droolsService);
-    placementHomeService = new PlacementHomeCoreService(placementHomeDao);
+    placementHomeService = new PlacementHomeCoreService(placementHomeDao,
+      nonXaPlacementHomeDao);
     placementHomeEntityAwareDTO = prepareSuccessfulPlacementHomeEntityAwareDTO();
   }
 

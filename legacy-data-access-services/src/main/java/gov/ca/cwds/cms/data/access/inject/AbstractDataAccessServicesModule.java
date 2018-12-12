@@ -1,12 +1,9 @@
 package gov.ca.cwds.cms.data.access.inject;
 
-import org.hibernate.SessionFactory;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
-
 import gov.ca.cwds.cms.data.access.mapper.ClientMapper;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.mapper.ExternalInterfaceMapper;
@@ -21,6 +18,7 @@ import gov.ca.cwds.cms.data.access.service.impl.SubstituteCareProviderCoreServic
 import gov.ca.cwds.cms.data.access.service.impl.clientrelationship.ClientRelationshipCoreService;
 import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.CreateLifeCycle;
 import gov.ca.cwds.cms.data.access.service.impl.tribalmembership.TribalMembershipVerificationCoreService;
+import org.hibernate.SessionFactory;
 
 /**
  * Common module binds services for authorization, common client services, and singleton instances.
@@ -37,19 +35,51 @@ public abstract class AbstractDataAccessServicesModule extends AbstractModule {
   }
 
   @Provides
-  @DataAccessServicesSessionFactory
+  @XaDasSessionFactory
   @Inject
-  protected SessionFactory dataAccessServicesSessionFactory(Injector injector) {
-    return getDataAccessServicesSessionFactory(injector);
+  protected SessionFactory xaSessionFactory(Injector injector) {
+    return getXaSessionFactory(injector);
+  }
+
+  @Provides
+  @NonXaDasSessionFactory
+  @Inject
+  protected SessionFactory nonXaSessionFactory(Injector injector) {
+    return getNotXaSessionFactory(injector);
   }
 
   /**
-   * Child classes must provide an appropriate session factory for authorization services.
+   * Child classes must provide an appropriate session factory for data access services.
+   * Use this method when you have only one session factory
    *
    * @param injector Guice injector
    * @return appropriate session factory
    */
-  protected abstract SessionFactory getDataAccessServicesSessionFactory(Injector injector);
+  protected SessionFactory getDataAccessServicesSessionFactory(Injector injector) {
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   * Child classes must provide an appropriate session factory for data access services.
+   * Use this method when you have both XA and non-XA session factories
+   *
+   * @param injector Guice injector
+   * @return appropriate session factory
+   */
+  protected SessionFactory getXaSessionFactory(Injector injector) {
+    return getDataAccessServicesSessionFactory(injector);
+  }
+
+  /**
+   * Child classes must provide an appropriate session factory for data access services.
+   * Use this method when you have both XA and non-XA session factories
+   *
+   * @param injector Guice injector
+   * @return appropriate session factory
+   */
+  protected SessionFactory getNotXaSessionFactory(Injector injector) {
+    return getDataAccessServicesSessionFactory(injector);
+  }
 
   protected void configureDataAccessServices() {
     bind(PlacementHomeCoreService.class);

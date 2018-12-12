@@ -6,16 +6,7 @@ import static gov.ca.cwds.cms.data.access.service.impl.IdGenerator.generateId;
 import static gov.ca.cwds.cms.data.access.utils.ParametersValidator.checkNotPersisted;
 import static gov.ca.cwds.security.utils.PrincipalUtils.getStaffPersonId;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Date;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.authorizer.PlacementHomeResultReadAuthorizer;
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.cms.data.access.Constants.PhoneticSearchTables;
@@ -32,6 +23,7 @@ import gov.ca.cwds.cms.data.access.dao.PlacementHomeDao;
 import gov.ca.cwds.cms.data.access.dao.PlacementHomeProfileDao;
 import gov.ca.cwds.cms.data.access.dao.PlacementHomeUcDao;
 import gov.ca.cwds.cms.data.access.dao.SsaName3Dao;
+import gov.ca.cwds.cms.data.access.dao.nonxa.NonXaPlacementHomeDao;
 import gov.ca.cwds.cms.data.access.dto.AppAndLicHistoryAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.CLCEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.OtherAdultInHomeEntityAwareDTO;
@@ -41,7 +33,6 @@ import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.mapper.ExternalInterfaceMapper;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
-import gov.ca.cwds.cms.data.access.service.DataAccessServiceBase;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessBundle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
@@ -65,6 +56,12 @@ import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeUc;
 import gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Date;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Service for create/update/find PlacementHome with business validation and data processing.
@@ -134,8 +131,8 @@ public class PlacementHomeCoreService
    * @param crudDao Placement Home DAO
    */
   @Inject
-  public PlacementHomeCoreService(PlacementHomeDao crudDao) {
-    super(crudDao);
+  public PlacementHomeCoreService(PlacementHomeDao crudDao, NonXaPlacementHomeDao nonXaCrudDao) {
+    super(crudDao, nonXaCrudDao);
   }
 
   @Override
@@ -155,15 +152,16 @@ public class PlacementHomeCoreService
 
   @Authorize(PlacementHomeResultReadAuthorizer.PLACEMENT_HOME_RESULT_READ_OBJECT)
   @Override
-  public PlacementHome find(Serializable primaryKey) {
-    return crudDao.findByFacilityId((String) primaryKey);
+  protected PlacementHome find(Serializable primaryKey, boolean isXaTransaction) {
+    return getCrudDao(isXaTransaction).findByFacilityId((String) primaryKey);
   }
 
   @Override
-  public PlacementHome create(
-      @Authorize("placementHome:create:entityAwareDTO.entity") PlacementHomeEntityAwareDTO entityAwareDto)
+  protected PlacementHome create(
+    @Authorize("placementHome:create:entityAwareDTO.entity") PlacementHomeEntityAwareDTO entityAwareDto,
+    boolean isXaTransaction)
       throws DataAccessServicesException {
-    return super.create(entityAwareDto);
+    return super.create(entityAwareDto, isXaTransaction);
   }
 
   protected class CreateLifecycle extends DefaultDataAccessLifeCycle<PlacementHomeEntityAwareDTO> {
@@ -403,7 +401,7 @@ public class PlacementHomeCoreService
       final PlacementHome placementHome = parameterObject.getEntity();
       final CLCEntityAwareDTO clcEntityAwareDTO = parameterObject.getCountyLicenseCase();
       clcEntityAwareDTO.setPlacementHomeId(placementHome.getIdentifier());
-      CountyLicenseCase countyLicenseCase = countyLicenseCaseService.create(clcEntityAwareDTO);
+      CountyLicenseCase countyLicenseCase = countyLicenseCaseService.xaCreate(clcEntityAwareDTO);
       placementHome.setCountyLicenseCase(countyLicenseCase);
     }
 
@@ -411,7 +409,7 @@ public class PlacementHomeCoreService
         PlacementHomeEntityAwareDTO parameterObject) throws DataAccessServicesException {
       for (AppAndLicHistoryAwareDTO appAndLicHistoryAwareDTO : parameterObject
           .getAppAndLicHistory()) {
-        applicationAndLicenseStatusHistoryService.create(appAndLicHistoryAwareDTO);
+        applicationAndLicenseStatusHistoryService.xaCreate(appAndLicHistoryAwareDTO);
       }
     }
 

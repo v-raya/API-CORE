@@ -1,8 +1,8 @@
-package gov.ca.cwds.cms.data.access.service;
-
-import java.io.Serializable;
+package gov.ca.cwds.cms.data.access.service.impl;
 
 import gov.ca.cwds.cms.data.access.dto.BaseEntityAwareDTO;
+import gov.ca.cwds.cms.data.access.service.DataAccessService;
+import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessBundle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
@@ -10,6 +10,7 @@ import gov.ca.cwds.data.CrudsDao;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
+import java.io.Serializable;
 
 /**
  * Abstract implementation for DataAccessServiceBase.
@@ -20,24 +21,49 @@ import gov.ca.cwds.security.utils.PrincipalUtils;
  * @author CWDS TPT-3 Team
  */
 public abstract class DataAccessServiceBase<E extends CrudsDao<T>, T extends PersistentObject, P extends BaseEntityAwareDTO<T>>
-    implements DataAccessService<T, P> {
+  implements DataAccessService<T, P> {
 
-  protected final E crudDao;
+  private final E xaCrudDao;
+  private final E nonXaCrudDao;
 
   private DataAccessServiceLifecycle<P> updateLifecycle;
   private DataAccessServiceLifecycle<P> createLifecycle;
 
-  protected DataAccessServiceBase(E crudDao) {
-    this.crudDao = crudDao;
+  protected DataAccessServiceBase(E xaCrudDao) {
+    this.xaCrudDao = xaCrudDao;
+    this.nonXaCrudDao = xaCrudDao;
+  }
+
+  protected DataAccessServiceBase(E xaCrudDao, E nonXaCrudDao) {
+    this.xaCrudDao = xaCrudDao;
+    this.nonXaCrudDao = nonXaCrudDao;
   }
 
   @Override
   public T find(Serializable primaryKey) {
-    return crudDao.find(primaryKey);
+    return find(primaryKey, false);
+  }
+
+  @Override
+  public T xaFind(Serializable primaryKey) {
+    return find(primaryKey, true);
+  }
+
+  T find(Serializable primaryKey, boolean isXaTransaction) {
+    return getCrudDao(isXaTransaction).find(primaryKey);
   }
 
   @Override
   public T create(P entityAwareDTO) throws DataAccessServicesException {
+    return create(entityAwareDTO, false);
+  }
+
+  @Override
+  public T xaCreate(P entityAwareDTO) throws DataAccessServicesException {
+    return create(entityAwareDTO, true);
+  }
+
+  T create(P entityAwareDTO, boolean isXaTransaction) throws DataAccessServicesException {
     if (getCreateLifeCycle() == null) {
       createLifecycle = new DefaultDataAccessLifeCycle<>();
     } else {
@@ -55,13 +81,22 @@ public abstract class DataAccessServiceBase<E extends CrudsDao<T>, T extends Per
     createLifecycle.businessValidation(dataAccessBundle, perryAccount);
     createLifecycle.afterBusinessValidation(dataAccessBundle);
 
-    final T t = crudDao.create(entityAwareDTO.getEntity());
+    final T t = getCrudDao(isXaTransaction).create(entityAwareDTO.getEntity());
     createLifecycle.afterStore(dataAccessBundle);
     return t;
   }
 
   @Override
   public T update(P entityAwareDTO) throws DataAccessServicesException {
+    return update(entityAwareDTO, false);
+  }
+
+  @Override
+  public T xaUpdate(P entityAwareDTO) throws DataAccessServicesException {
+    return update(entityAwareDTO, true);
+  }
+
+  T update(P entityAwareDTO, boolean isXaTransaction) throws DataAccessServicesException {
     if (getUpdateLifeCycle() == null) {
       updateLifecycle = new DefaultDataAccessLifeCycle<>();
     } else {
@@ -79,14 +114,23 @@ public abstract class DataAccessServiceBase<E extends CrudsDao<T>, T extends Per
     updateLifecycle.businessValidation(dataAccessBundle, perryAccount);
     updateLifecycle.afterBusinessValidation(dataAccessBundle);
 
-    final T t = crudDao.update(entityAwareDTO.getEntity());
+    final T t = getCrudDao(isXaTransaction).update(entityAwareDTO.getEntity());
     updateLifecycle.afterStore(dataAccessBundle);
     return t;
   }
 
   @Override
   public final T delete(Serializable primaryKey) {
-    return crudDao.delete(primaryKey);
+    return delete(primaryKey, false);
+  }
+
+  @Override
+  public final T xaDelete(Serializable primaryKey) {
+    return delete(primaryKey, true);
+  }
+
+  final T delete(Serializable primaryKey, boolean isXaTransaction) {
+    return getCrudDao(isXaTransaction).delete(primaryKey);
   }
 
   protected void doEnrichDataAccessBundle(final DataAccessBundle<P> dataAccessBundle) {
@@ -98,5 +142,9 @@ public abstract class DataAccessServiceBase<E extends CrudsDao<T>, T extends Per
   protected abstract DataAccessServiceLifecycle<P> getCreateLifeCycle();
 
   protected abstract DataAccessServiceLifecycle<P> getDeleteLifeCycle();
+
+  protected E getCrudDao(boolean isXaTransaction) {
+    return isXaTransaction ? xaCrudDao : nonXaCrudDao;
+  }
 
 }

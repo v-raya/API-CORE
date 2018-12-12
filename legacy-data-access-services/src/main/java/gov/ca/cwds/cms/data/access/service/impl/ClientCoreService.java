@@ -3,26 +3,11 @@ package gov.ca.cwds.cms.data.access.service.impl;
 import static gov.ca.cwds.authorizer.ClientResultReadAuthorizer.CLIENT_RESULT_READ_OBJECT;
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.cms.data.access.Constants;
 import gov.ca.cwds.cms.data.access.dto.ClientEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.OtherClientNameDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
-import gov.ca.cwds.cms.data.access.service.DataAccessServiceBase;
-import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessBundle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
@@ -50,6 +35,17 @@ import gov.ca.cwds.data.legacy.cms.entity.SafetyAlert;
 import gov.ca.cwds.security.annotations.Authorize;
 import gov.ca.cwds.security.realm.PerryAccount;
 import gov.ca.cwds.security.utils.PrincipalUtils;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /** @author CWDS TPT-3 Team */
 public class ClientCoreService
@@ -97,11 +93,6 @@ public class ClientCoreService
   }
 
   @Override
-  public Client create(ClientEntityAwareDTO entityAwareDTO) throws DataAccessServicesException {
-    return super.create(entityAwareDTO);
-  }
-
-  @Override
   @Authorize(CLIENT_READ_CLIENT)
   public Client find(Serializable primaryKey) {
     return super.find(primaryKey);
@@ -109,29 +100,29 @@ public class ClientCoreService
 
   @Authorize(CLIENT_RESULT_READ_OBJECT)
   public Client getClientByLicNumAndChildId(String licenseNumber, String childId) {
-    return crudDao.findByLicNumAndChildId(licenseNumber, childId);
+    return getCrudDao(true).findByLicNumAndChildId(licenseNumber, childId);
   }
 
   @Authorize(CLIENT_RESULT_READ_OBJECT)
   public Client getClientByFacilityIdAndChildId(String facilityId, String childId) {
-    return crudDao.findByFacilityIdAndChildId(facilityId, childId);
+    return getCrudDao(true).findByFacilityIdAndChildId(facilityId, childId);
   }
 
   @Authorize(CLIENT_RESULT_READ_OBJECT)
   public List<Client> getClientsByLicenseNumber(String licenseNumber) {
-    Stream<Client> clients = crudDao.streamByLicenseNumber(licenseNumber);
+    Stream<Client> clients = getCrudDao(true).streamByLicenseNumber(licenseNumber);
     return clients.collect(Collectors.toList());
   }
 
   @Authorize(CLIENT_RESULT_READ_OBJECT)
   public List<Client> getClientsByLicenseNumber(Integer licenseNumber) {
-    Stream<Client> clients = crudDao.streamByLicenseNumber(licenseNumber);
+    Stream<Client> clients = getCrudDao(true).streamByLicenseNumber(licenseNumber);
     return clients.collect(Collectors.toList());
   }
 
   @Authorize(CLIENT_RESULT_READ_OBJECT)
   public List<Client> streamByFacilityId(String facilityId) {
-    Stream<Client> clients = crudDao.streamByFacilityId(facilityId);
+    Stream<Client> clients = getCrudDao(true).streamByFacilityId(facilityId);
     return clients.collect(Collectors.toList());
   }
 
@@ -165,7 +156,7 @@ public class ClientCoreService
       List<NearFatality> nearFatalities = nearFatalityDao.findNearFatalitiesByClientId(clientId);
       clientEntityAwareDTO.getNearFatalities().addAll(nearFatalities);
 
-      Client persistentClientState = crudDao.find(clientId);
+      Client persistentClientState = getCrudDao(true).find(clientId);
       clientEntityAwareDTO.setPersistentClientState(persistentClientState);
 
       Short nameTypeId = clientEntityAwareDTO.getEntity().getNameType().getSystemId();
@@ -232,7 +223,7 @@ public class ClientCoreService
     private void enrichExistingOtherEthnicities(Client client) {
       String clientId = client.getIdentifier();
 
-      Client persistedClient = crudDao.find(clientId);
+      Client persistedClient = getCrudDao(true).find(clientId);
       Map<Short, ClientOtherEthnicity> persistedEthnicitiesMap =
           getOtherEthnicityMap(persistedClient.getOtherEthnicities());
       Map<Short, ClientOtherEthnicity> ethnicitiesMap =

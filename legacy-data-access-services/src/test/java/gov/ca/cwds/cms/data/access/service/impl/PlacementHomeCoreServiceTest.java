@@ -10,9 +10,15 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import gov.ca.cwds.cms.data.access.dao.PlacementHomeDao;
+import gov.ca.cwds.cms.data.access.dao.nonxa.NonXaPlacementHomeDao;
+import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
+import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
+import gov.ca.cwds.drools.DroolsException;
+import gov.ca.cwds.security.utils.PrincipalUtils;
 import java.io.Serializable;
 import java.util.function.Function;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,13 +26,6 @@ import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareOnlyThisForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-
-import gov.ca.cwds.cms.data.access.dao.PlacementHomeDao;
-import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
-import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
-import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
-import gov.ca.cwds.drools.DroolsException;
-import gov.ca.cwds.security.utils.PrincipalUtils;
 
 /** @author CWDS TPT-3 Team */
 @RunWith(PowerMockRunner.class)
@@ -40,6 +39,9 @@ public class PlacementHomeCoreServiceTest
 
   @Mock
   private PlacementHomeDao placementHomeDao;
+
+  @Mock
+  private NonXaPlacementHomeDao nonXaPlacementHomeDao;
 
   private PlacementHomeCoreService target;
 
@@ -62,14 +64,15 @@ public class PlacementHomeCoreServiceTest
     when(PrincipalUtils.getStaffPersonId()).thenReturn(USER_ID);
     when(placementHomeDao.create(any(PlacementHome.class)))
         .thenReturn(function.apply(PLACEMENT_ID));
-    target = PowerMockito.spy(new PlacementHomeCoreService(placementHomeDao));
+    target = PowerMockito.spy(new PlacementHomeCoreService(placementHomeDao,
+      nonXaPlacementHomeDao));
     when(target.getCreateLifeCycle()).thenReturn(null);
   }
 
   @Test
   public void create() throws Exception {
     final PlacementHome placementHome =
-        target.create(placementFunction.apply(function.apply(PLACEMENT_ID)));
+      target.create(placementFunction.apply(function.apply(PLACEMENT_ID)), true);
     assertNotNull(placementHome);
     assertEquals(PLACEMENT_ID, placementHome.getIdentifier());
   }

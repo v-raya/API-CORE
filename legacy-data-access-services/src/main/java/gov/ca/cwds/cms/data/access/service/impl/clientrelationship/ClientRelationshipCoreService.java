@@ -1,16 +1,12 @@
 package gov.ca.cwds.cms.data.access.service.impl.clientrelationship;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.google.inject.Inject;
-
 import gov.ca.cwds.cms.data.access.dto.ClientRelationshipAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.ClientRelationshipDTO;
 import gov.ca.cwds.cms.data.access.mapper.ClientMapper;
 import gov.ca.cwds.cms.data.access.service.ClientRelationshipService;
-import gov.ca.cwds.cms.data.access.service.DataAccessServiceBase;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
+import gov.ca.cwds.cms.data.access.service.impl.DataAccessServiceBase;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
 import gov.ca.cwds.data.legacy.cms.dao.ClientRelationshipDao;
@@ -19,6 +15,8 @@ import gov.ca.cwds.data.legacy.cms.entity.ClientRelationship;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.ClientRelationshipType;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.security.utils.PrincipalUtils;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Service for create/update/find ClientRelationship with business validation and data processing.
@@ -122,15 +120,15 @@ public class ClientRelationshipCoreService extends
     clientRelationship.setStartDate(clientRelationshipDto.getStartDate());
 
     // DRS: HOT-2176: isolate "possible non-threadsafe access to session".
-    crudDao.getSessionFactory().getCurrentSession().flush();
+    getCrudDao(true).getSessionFactory().getCurrentSession().flush();
     final Client legacyPrimaryClient =
         clientMapper.toLegacyClient(clientRelationshipDto.getSecondaryClient());
     final Client legacySecondaryClient =
         clientMapper.toLegacyClient(clientRelationshipDto.getPrimaryClient());
 
-    clientRelationship.setSecondaryClient(crudDao.getSessionFactory().getCurrentSession()
+    clientRelationship.setSecondaryClient(getCrudDao(true).getSessionFactory().getCurrentSession()
         .load(Client.class, legacySecondaryClient.getIdentifier()));
-    clientRelationship.setPrimaryClient(crudDao.getSessionFactory().getCurrentSession()
+    clientRelationship.setPrimaryClient(getCrudDao(true).getSessionFactory().getCurrentSession()
         .load(Client.class, legacyPrimaryClient.getIdentifier()));
 
     final ClientRelationshipAwareDTO awareDto = new ClientRelationshipAwareDTO();

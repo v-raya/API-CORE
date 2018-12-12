@@ -3,8 +3,8 @@ package gov.ca.cwds.cms.data.access.service.impl.tribalmembership;
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT_ID;
 
 import gov.ca.cwds.cms.data.access.dto.TribalMembershipVerificationAwareDto;
-import gov.ca.cwds.cms.data.access.service.DataAccessServiceBase;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
+import gov.ca.cwds.cms.data.access.service.impl.DataAccessServiceBase;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
 import gov.ca.cwds.data.legacy.cms.dao.TribalMembershipVerificationDao;
@@ -58,9 +58,10 @@ public class TribalMembershipVerificationCoreService
     return super.update(entityAwareDTO);
   }
 
+
   public List<TribalMembershipVerification> getByClientId(
       @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
-    return crudDao.findByClientId(clientId);
+    return getCrudDao(true).findByClientId(clientId);
   }
 
   @Override
