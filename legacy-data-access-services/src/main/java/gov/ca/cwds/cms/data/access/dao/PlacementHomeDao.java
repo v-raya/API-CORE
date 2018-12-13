@@ -1,17 +1,14 @@
 package gov.ca.cwds.cms.data.access.dao;
 
+import com.google.inject.Inject;
+import gov.ca.cwds.cms.data.access.inject.XaDasSessionFactory;
+import gov.ca.cwds.data.BaseDaoImpl;
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 import javax.persistence.NoResultException;
-
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.inject.Inject;
-
-import gov.ca.cwds.cms.data.access.inject.DataAccessServicesSessionFactory;
-import gov.ca.cwds.data.BaseDaoImpl;
-import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 
 /**
  * @author CWDS CALS API Team
@@ -21,7 +18,7 @@ public class PlacementHomeDao extends BaseDaoImpl<PlacementHome> {
   private static final Logger LOG = LoggerFactory.getLogger(PlacementHomeDao.class);
 
   @Inject
-  public PlacementHomeDao(@DataAccessServicesSessionFactory SessionFactory sessionFactory) {
+  public PlacementHomeDao(@XaDasSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

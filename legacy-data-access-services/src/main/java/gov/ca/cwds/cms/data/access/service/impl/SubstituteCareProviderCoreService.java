@@ -21,7 +21,6 @@ import gov.ca.cwds.cms.data.access.dto.ExtendedSCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
-import gov.ca.cwds.cms.data.access.service.DataAccessServiceBase;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessBundle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
@@ -70,9 +69,9 @@ public class SubstituteCareProviderCoreService
   @Override
   public SubstituteCareProvider create(
       @Authorize("substituteCareProvider:create:scpEntityAwareDTO.entity")
-          SCPEntityAwareDTO entityAwareDTO)
+          SCPEntityAwareDTO entityAwareDto)
       throws DataAccessServicesException {
-    return super.create(entityAwareDTO);
+    return super.create(entityAwareDto);
   }
 
   @Override

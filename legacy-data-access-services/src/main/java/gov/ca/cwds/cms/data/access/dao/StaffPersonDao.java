@@ -3,19 +3,17 @@ package gov.ca.cwds.cms.data.access.dao;
 import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.inject.XaDasSessionFactory;
 import gov.ca.cwds.data.BaseDaoImpl;
-import gov.ca.cwds.data.legacy.cms.entity.PlacementHomeUc;
+import gov.ca.cwds.data.legacy.cms.entity.StaffPerson;
 import org.hibernate.SessionFactory;
 
 /**
- * @author CWDS CALS API Team
+ * Created by Alexander Serbin on 12/12/2018.
  */
-
-public class PlacementHomeUcDao extends BaseDaoImpl<PlacementHomeUc> {
+public class StaffPersonDao extends BaseDaoImpl<StaffPerson> {
 
   @Inject
-  public PlacementHomeUcDao(@XaDasSessionFactory SessionFactory sessionFactory) {
+  public StaffPersonDao(@XaDasSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 
 }
-

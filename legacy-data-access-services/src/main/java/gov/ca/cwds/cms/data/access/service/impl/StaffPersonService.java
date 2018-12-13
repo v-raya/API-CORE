@@ -1,25 +1,22 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
-import java.io.Serializable;
-
 import com.google.inject.Inject;
-
+import gov.ca.cwds.cms.data.access.dao.StaffPersonDao;
 import gov.ca.cwds.cms.data.access.dto.StaffPersonEntityAwareDTO;
-import gov.ca.cwds.cms.data.access.service.DataAccessServiceBase;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
-import gov.ca.cwds.data.legacy.cms.dao.StaffPersonDao;
 import gov.ca.cwds.data.legacy.cms.entity.StaffPerson;
+import java.io.Serializable;
 
 /** @author CWDS CALS API Team */
 public class StaffPersonService
     extends DataAccessServiceBase<StaffPersonDao, StaffPerson, StaffPersonEntityAwareDTO> {
 
   @Override
-  public StaffPerson create(StaffPersonEntityAwareDTO entityAwareDTO)
+  public StaffPerson create(StaffPersonEntityAwareDTO entityAwareDto)
       throws DataAccessServicesException {
-    return super.create(entityAwareDTO);
+    return super.create(entityAwareDto);
   }
 
   @Inject

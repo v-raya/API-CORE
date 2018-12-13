@@ -3,8 +3,8 @@ package gov.ca.cwds.cms.data.access.service.impl.tribalmembership;
 import static gov.ca.cwds.cms.data.access.Constants.Authorize.CLIENT_READ_CLIENT_ID;
 
 import gov.ca.cwds.cms.data.access.dto.TribalMembershipVerificationAwareDto;
-import gov.ca.cwds.cms.data.access.service.DataAccessServiceBase;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
+import gov.ca.cwds.cms.data.access.service.impl.DataAccessServiceBase;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
 import gov.ca.cwds.data.legacy.cms.dao.TribalMembershipVerificationDao;
@@ -40,27 +40,28 @@ public class TribalMembershipVerificationCoreService
   }
 
   @Override
-  public TribalMembershipVerification create(TribalMembershipVerificationAwareDto entityAwareDTO)
+  public TribalMembershipVerification create(TribalMembershipVerificationAwareDto entityAwareDto)
       throws DataAccessServicesException {
     String staffPerson = PrincipalUtils.getStaffPersonId();
-    entityAwareDTO.getEntity().setLastUpdateTime(LocalDateTime.now());
-    entityAwareDTO.getEntity().setLastUpdateId(staffPerson);
-    entityAwareDTO.getEntity().setThirdId(CmsKeyIdGenerator.getNextValue(staffPerson));
-    return super.create(entityAwareDTO);
+    entityAwareDto.getEntity().setLastUpdateTime(LocalDateTime.now());
+    entityAwareDto.getEntity().setLastUpdateId(staffPerson);
+    entityAwareDto.getEntity().setThirdId(CmsKeyIdGenerator.getNextValue(staffPerson));
+    return super.create(entityAwareDto);
   }
 
   @Override
-  public TribalMembershipVerification update(TribalMembershipVerificationAwareDto entityAwareDTO)
+  public TribalMembershipVerification update(TribalMembershipVerificationAwareDto entityAwareDto)
       throws DataAccessServicesException {
     String staffPerson = PrincipalUtils.getStaffPersonId();
-    entityAwareDTO.getEntity().setLastUpdateTime(LocalDateTime.now());
-    entityAwareDTO.getEntity().setLastUpdateId(staffPerson);
-    return super.update(entityAwareDTO);
+    entityAwareDto.getEntity().setLastUpdateTime(LocalDateTime.now());
+    entityAwareDto.getEntity().setLastUpdateId(staffPerson);
+    return super.update(entityAwareDto);
   }
+
 
   public List<TribalMembershipVerification> getByClientId(
       @Authorize(CLIENT_READ_CLIENT_ID) final String clientId) {
-    return crudDao.findByClientId(clientId);
+    return getCrudDao(true).findByClientId(clientId);
   }
 
   @Override
