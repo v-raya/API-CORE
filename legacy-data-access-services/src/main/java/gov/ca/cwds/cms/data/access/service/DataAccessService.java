@@ -5,6 +5,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
 
 /**
+ * Interface for legacy data access services.
  * @author CWDS CALS API Team
  */
 public interface DataAccessService<T extends PersistentObject, P extends BaseEntityAwareDTO<T>> {

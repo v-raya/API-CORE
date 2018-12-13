@@ -6,6 +6,7 @@ import gov.ca.cwds.cms.data.access.inject.NonXaDasSessionFactory;
 import org.hibernate.SessionFactory;
 
 /**
+ * NonXaPlacementHomeDao.
  * @author CWDS CALS API Team.
  */
 public class NonXaPlacementHomeDao extends PlacementHomeDao {
