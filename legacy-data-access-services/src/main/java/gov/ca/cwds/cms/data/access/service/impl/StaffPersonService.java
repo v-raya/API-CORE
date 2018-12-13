@@ -14,9 +14,9 @@ public class StaffPersonService
     extends DataAccessServiceBase<StaffPersonDao, StaffPerson, StaffPersonEntityAwareDTO> {
 
   @Override
-  public StaffPerson create(StaffPersonEntityAwareDTO entityAwareDTO)
+  public StaffPerson create(StaffPersonEntityAwareDTO entityAwareDto)
       throws DataAccessServicesException {
-    return super.create(entityAwareDTO);
+    return super.create(entityAwareDto);
   }
 
   @Inject

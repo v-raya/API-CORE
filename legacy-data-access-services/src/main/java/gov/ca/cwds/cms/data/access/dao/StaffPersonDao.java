@@ -7,7 +7,7 @@ import gov.ca.cwds.data.legacy.cms.entity.StaffPerson;
 import org.hibernate.SessionFactory;
 
 /**
- * Created by Alexander Serbin on 12/12/2018
+ * Created by Alexander Serbin on 12/12/2018.
  */
 public class StaffPersonDao extends BaseDaoImpl<StaffPerson> {
 

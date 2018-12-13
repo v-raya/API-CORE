@@ -17,19 +17,19 @@ public interface DataAccessService<T extends PersistentObject, P extends BaseEnt
     throw new UnsupportedOperationException();
   }
 
-  default T create(P entityAwareDTO) throws DataAccessServicesException {
+  default T create(P entityAwareDto) throws DataAccessServicesException {
     throw new UnsupportedOperationException();
   }
 
-  default T xaCreate(P entityAwareDTO) throws DataAccessServicesException {
+  default T xaCreate(P entityAwareDto) throws DataAccessServicesException {
     throw new UnsupportedOperationException();
   }
 
-  default T update(P entityAwareDTO) throws DataAccessServicesException {
+  default T update(P entityAwareDto) throws DataAccessServicesException {
     throw new UnsupportedOperationException();
   }
 
-  default T xaUpdate(P entityAwareDTO) throws DataAccessServicesException {
+  default T xaUpdate(P entityAwareDto) throws DataAccessServicesException {
     throw new UnsupportedOperationException();
   }
 

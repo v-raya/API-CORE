@@ -54,13 +54,13 @@ public abstract class DataAccessServiceBase<E extends CrudsDao<T>, T extends Per
   }
 
   @Override
-  public T create(P entityAwareDTO) throws DataAccessServicesException {
-    return create(entityAwareDTO, false);
+  public T create(P entityAwareDto) throws DataAccessServicesException {
+    return create(entityAwareDto, false);
   }
 
   @Override
-  public T xaCreate(P entityAwareDTO) throws DataAccessServicesException {
-    return create(entityAwareDTO, true);
+  public T xaCreate(P entityAwareDto) throws DataAccessServicesException {
+    return create(entityAwareDto, true);
   }
 
   T create(P entityAwareDTO, boolean isXaTransaction) throws DataAccessServicesException {
@@ -87,13 +87,13 @@ public abstract class DataAccessServiceBase<E extends CrudsDao<T>, T extends Per
   }
 
   @Override
-  public T update(P entityAwareDTO) throws DataAccessServicesException {
-    return update(entityAwareDTO, false);
+  public T update(P entityAwareDto) throws DataAccessServicesException {
+    return update(entityAwareDto, false);
   }
 
   @Override
-  public T xaUpdate(P entityAwareDTO) throws DataAccessServicesException {
-    return update(entityAwareDTO, true);
+  public T xaUpdate(P entityAwareDto) throws DataAccessServicesException {
+    return update(entityAwareDto, true);
   }
 
   T update(P entityAwareDTO, boolean isXaTransaction) throws DataAccessServicesException {

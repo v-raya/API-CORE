@@ -69,9 +69,9 @@ public class SubstituteCareProviderCoreService
   @Override
   public SubstituteCareProvider create(
       @Authorize("substituteCareProvider:create:scpEntityAwareDTO.entity")
-          SCPEntityAwareDTO entityAwareDTO)
+          SCPEntityAwareDTO entityAwareDto)
       throws DataAccessServicesException {
-    return super.create(entityAwareDTO);
+    return super.create(entityAwareDto);
   }
 
   @Override

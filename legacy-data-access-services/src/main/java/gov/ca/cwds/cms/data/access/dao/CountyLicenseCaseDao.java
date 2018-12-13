@@ -7,6 +7,7 @@ import gov.ca.cwds.data.legacy.cms.entity.CountyLicenseCase;
 import org.hibernate.SessionFactory;
 
 /**
+ * CountyLicenseCaseDao.
  * @author CWDS CALS API Team
  */
 public class CountyLicenseCaseDao extends BaseDaoImpl<CountyLicenseCase> {

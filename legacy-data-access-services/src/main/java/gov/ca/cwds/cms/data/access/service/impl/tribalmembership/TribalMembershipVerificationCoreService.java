@@ -40,22 +40,22 @@ public class TribalMembershipVerificationCoreService
   }
 
   @Override
-  public TribalMembershipVerification create(TribalMembershipVerificationAwareDto entityAwareDTO)
+  public TribalMembershipVerification create(TribalMembershipVerificationAwareDto entityAwareDto)
       throws DataAccessServicesException {
     String staffPerson = PrincipalUtils.getStaffPersonId();
-    entityAwareDTO.getEntity().setLastUpdateTime(LocalDateTime.now());
-    entityAwareDTO.getEntity().setLastUpdateId(staffPerson);
-    entityAwareDTO.getEntity().setThirdId(CmsKeyIdGenerator.getNextValue(staffPerson));
-    return super.create(entityAwareDTO);
+    entityAwareDto.getEntity().setLastUpdateTime(LocalDateTime.now());
+    entityAwareDto.getEntity().setLastUpdateId(staffPerson);
+    entityAwareDto.getEntity().setThirdId(CmsKeyIdGenerator.getNextValue(staffPerson));
+    return super.create(entityAwareDto);
   }
 
   @Override
-  public TribalMembershipVerification update(TribalMembershipVerificationAwareDto entityAwareDTO)
+  public TribalMembershipVerification update(TribalMembershipVerificationAwareDto entityAwareDto)
       throws DataAccessServicesException {
     String staffPerson = PrincipalUtils.getStaffPersonId();
-    entityAwareDTO.getEntity().setLastUpdateTime(LocalDateTime.now());
-    entityAwareDTO.getEntity().setLastUpdateId(staffPerson);
-    return super.update(entityAwareDTO);
+    entityAwareDto.getEntity().setLastUpdateTime(LocalDateTime.now());
+    entityAwareDto.getEntity().setLastUpdateId(staffPerson);
+    return super.update(entityAwareDto);
   }
 
 
