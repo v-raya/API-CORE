@@ -61,7 +61,7 @@ public abstract class AbstractBaseAuthorizer<T, I> extends BaseAuthorizer<T, I> 
     if (staffPrivilegeTypes.isEmpty()) {
       LOGGER.info(
         "Authorization: staff person has no privileges. Authorization result = [{}]. {}",
-        false, perryAccount.toString().replaceAll("\n", " ").replaceAll("\r", ""));
+        Boolean.FALSE, perryAccount.toString().replaceAll("\n", " ").replaceAll("\r", ""));
       return false;
     }
     if (authorizationFacts == null) {
