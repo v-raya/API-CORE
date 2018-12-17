@@ -2,6 +2,8 @@ package gov.ca.cwds.authorizer;
 
 import static gov.ca.cwds.authorizer.util.ClientConditionUtils.toClientCondition;
 
+import gov.ca.cwds.security.realm.PerryAccount;
+import gov.ca.cwds.security.realm.PerrySubject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -20,6 +22,8 @@ import gov.ca.cwds.service.ClientSensitivityDeterminationService;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Base class for Client Result and Client Abstract Authorizer.
@@ -27,6 +31,8 @@ import java.util.stream.Stream;
  * @author CWDS TPT-3 Team
  */
 public class ClientBaseReadAuthorizer extends AbstractBaseAuthorizer<Client, String> {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ClientBaseReadAuthorizer.class);
 
   @Inject
   private ClientSensitivityDeterminationService sensitivityDeterminationService;
@@ -85,6 +91,11 @@ public class ClientBaseReadAuthorizer extends AbstractBaseAuthorizer<Client, Str
   private boolean checkId(final String clientId, final Sensitivity sensitivity,
     final ClientCondition clientCondition) {
     if (sensitivity == null) {
+      final PerryAccount perryAccount = PerrySubject.getPerryAccount();
+      LOGGER.info(
+        "Authorization: client [{}] is not restricted and result is [{}].",
+        clientId, true,
+        perryAccount.toString().replaceAll("\n", " ").replaceAll("\r", ""));
       return true;
     }
 
