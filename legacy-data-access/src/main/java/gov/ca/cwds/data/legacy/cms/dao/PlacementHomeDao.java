@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Placement Home Dao.
  * @author CWDS CALS API Team
  */
 public class PlacementHomeDao extends BaseDaoImpl<PlacementHome> {
@@ -39,8 +40,8 @@ public class PlacementHomeDao extends BaseDaoImpl<PlacementHome> {
       placementHome = query.getSingleResult();
     } catch (NoResultException e) {
       LOG.trace(
-        "All hail SonarQube!\n\"Bow down before the one you serve. You're going to get what you deserve.\"",
-        e);
+        "All hail SonarQube!\n\"Bow down before the one you serve. You're going to get what "
+          + "you deserve.\"", e);
       LOG.warn("There is no result for facilityId = {}", facilityId);
     }
 

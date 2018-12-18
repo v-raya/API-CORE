@@ -8,6 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.hibernate.SessionFactory;
 
 /**
+ * Provides daos for using in legacy data access services.
  * Created by Alexander Serbin on 12/12/2018
  */
 abstract class AbstractDaoProvider {

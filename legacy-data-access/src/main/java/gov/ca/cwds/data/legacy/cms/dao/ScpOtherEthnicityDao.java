@@ -7,6 +7,7 @@ import gov.ca.cwds.inject.CmsSessionFactory;
 import org.hibernate.SessionFactory;
 
 /**
+ * ScpOtherEthnicityDao.
  * Created by Alexander Serbin on 12/12/2018
  */
 public class ScpOtherEthnicityDao extends BaseDaoImpl<ScpOtherEthnicity> {

@@ -7,6 +7,7 @@ import gov.ca.cwds.inject.CmsSessionFactory;
 import org.hibernate.SessionFactory;
 
 /**
+ * PlacementFacilityTypeHistoryDao.
  * Created by Alexander Serbin on 12/12/2018
  */
 public class PlacementFacilityTypeHistoryDao extends BaseDaoImpl<PlacementFacilityTypeHistory> {

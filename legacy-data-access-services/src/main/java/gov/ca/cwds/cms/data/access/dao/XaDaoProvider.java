@@ -5,6 +5,7 @@ import gov.ca.cwds.cms.data.access.inject.XaDasSessionFactory;
 import org.hibernate.SessionFactory;
 
 /**
+ * Provides dao based on XA session factory.
  * Created by Alexander Serbin on 12/12/2018
  */
 public class XaDaoProvider extends AbstractDaoProvider {
