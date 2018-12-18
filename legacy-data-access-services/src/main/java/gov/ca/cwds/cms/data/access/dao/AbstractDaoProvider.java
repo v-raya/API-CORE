@@ -4,7 +4,6 @@ import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3Dao;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import org.hibernate.SessionFactory;
 
 /**
@@ -23,7 +22,7 @@ abstract class AbstractDaoProvider {
     try {
       Constructor<D> ctor = daoClass.getConstructor(SessionFactory.class);
       return ctor.newInstance(sessionFactory);
-    } catch (NoSuchMethodException |InstantiationException | IllegalAccessException | InvocationTargetException e) {
+    } catch (Exception e) {
       throw new IllegalStateException(e);
     }
   }

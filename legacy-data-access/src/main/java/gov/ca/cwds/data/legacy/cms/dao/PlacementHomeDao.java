@@ -48,7 +48,10 @@ public class PlacementHomeDao extends BaseDaoImpl<PlacementHome> {
     return placementHome;
   }
 
-  public Optional<String> findLicenceNumberByFacilityId(String facilityId) {
+  /**
+   * Returns facility license number by facility id.
+  */
+ public Optional<String> findLicenceNumberByFacilityId(String facilityId) {
     return currentSession()
       .createNamedQuery(PlacementHome.FIND_LICENSE_NUMBER_BY_FACILITY_ID_QUERY_NAME,
         String.class)
