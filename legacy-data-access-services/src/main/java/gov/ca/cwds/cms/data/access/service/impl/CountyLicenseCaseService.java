@@ -1,11 +1,12 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
 import com.google.inject.Inject;
-import gov.ca.cwds.cms.data.access.dao.CountyLicenseCaseDao;
+import gov.ca.cwds.cms.data.access.dao.XaDaoProvider;
 import gov.ca.cwds.cms.data.access.dto.CLCEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessBundle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
+import gov.ca.cwds.data.legacy.cms.dao.CountyLicenseCaseDao;
 import gov.ca.cwds.data.legacy.cms.entity.CountyLicenseCase;
 
 /** @author CWDS TPT-3 Team */
@@ -13,8 +14,8 @@ public class CountyLicenseCaseService
     extends DataAccessServiceBase<CountyLicenseCaseDao, CountyLicenseCase, CLCEntityAwareDTO> {
 
   @Inject
-  public CountyLicenseCaseService(CountyLicenseCaseDao crudDao) {
-    super(crudDao);
+  public CountyLicenseCaseService(XaDaoProvider xaDaoProvider) {
+    super(xaDaoProvider.getDao(CountyLicenseCaseDao.class));
   }
 
   @Override

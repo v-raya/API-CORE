@@ -1,11 +1,12 @@
 package gov.ca.cwds.cms.data.access.service.impl;
 
 import com.google.inject.Inject;
-import gov.ca.cwds.cms.data.access.dao.StaffPersonDao;
+import gov.ca.cwds.cms.data.access.dao.XaDaoProvider;
 import gov.ca.cwds.cms.data.access.dto.StaffPersonEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.DataAccessServicesException;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
+import gov.ca.cwds.data.legacy.cms.dao.StaffPersonDao;
 import gov.ca.cwds.data.legacy.cms.entity.StaffPerson;
 import java.io.Serializable;
 
@@ -20,8 +21,8 @@ public class StaffPersonService
   }
 
   @Inject
-  public StaffPersonService(StaffPersonDao crudDao) {
-    super(crudDao);
+  public StaffPersonService(XaDaoProvider xaDaoProvider) {
+    super(xaDaoProvider.getDao(StaffPersonDao.class));
   }
 
   @Override

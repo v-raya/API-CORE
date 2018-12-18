@@ -16,12 +16,13 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -55,19 +56,29 @@ import org.hibernate.annotations.NotFoundAction;
 /**
  * @author CWDS CALS API Team
  */
-@NamedQuery(
-  name = "PlacementHome.find",
-  query = "SELECT ph FROM gov.ca.cwds.data.legacy.cms.entity.PlacementHome ph "
-    + " LEFT JOIN FETCH ph.countyLicenseCase cls"
-    + " LEFT JOIN FETCH cls.staffPerson sp"
-    + " LEFT JOIN FETCH cls.licensingVisits lv"
-    + " WHERE ph.identifier = :facilityId"
+@NamedQueries({
+  @NamedQuery(
+    name = "PlacementHome.find",
+    query = "SELECT ph FROM gov.ca.cwds.data.legacy.cms.entity.PlacementHome ph "
+      + " LEFT JOIN FETCH ph.countyLicenseCase cls"
+      + " LEFT JOIN FETCH cls.staffPerson sp"
+      + " LEFT JOIN FETCH cls.licensingVisits lv"
+      + " WHERE ph.identifier = :facilityId"
+  ),
+  @NamedQuery(
+    name = PlacementHome.FIND_LICENSE_NUMBER_BY_FACILITY_ID_QUERY_NAME,
+    query = "SELECT ph.licenseNo FROM gov.ca.cwds.data.legacy.cms.entity.PlacementHome ph "
+      + " WHERE ph.identifier = :facilityId"
+  )}
 )
 @Entity
 @Table(name = "PLC_HM_T")
 public class PlacementHome extends CmsPersistentObject {
 
   private static final long serialVersionUID = 8516376534560115438L;
+
+  public static final String FIND_LICENSE_NUMBER_BY_FACILITY_ID_QUERY_NAME =
+    "PlacementHome.findLicenseNumberByFacilityIdQueryName";
 
   /**
    * PLACEMENT_FACILITY_TYPE - The system generated number assigned to each type of placement

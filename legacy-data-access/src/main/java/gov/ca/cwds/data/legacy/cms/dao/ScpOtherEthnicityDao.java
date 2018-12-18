@@ -1,19 +1,19 @@
-package gov.ca.cwds.cms.data.access.dao;
+package gov.ca.cwds.data.legacy.cms.dao;
 
 import com.google.inject.Inject;
-import gov.ca.cwds.cms.data.access.inject.XaDasSessionFactory;
 import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.legacy.cms.entity.ScpOtherEthnicity;
+import gov.ca.cwds.inject.CmsSessionFactory;
 import org.hibernate.SessionFactory;
 
 /**
- * @author CWDS CALS API Team
+ * Created by Alexander Serbin on 12/12/2018
  */
-
 public class ScpOtherEthnicityDao extends BaseDaoImpl<ScpOtherEthnicity> {
 
   @Inject
-  public ScpOtherEthnicityDao(@XaDasSessionFactory SessionFactory sessionFactory) {
+  public ScpOtherEthnicityDao(@CmsSessionFactory final SessionFactory sessionFactory) {
     super(sessionFactory);
   }
+
 }
