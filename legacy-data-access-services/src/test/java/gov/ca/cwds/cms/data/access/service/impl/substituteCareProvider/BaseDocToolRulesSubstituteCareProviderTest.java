@@ -3,7 +3,7 @@ package gov.ca.cwds.cms.data.access.service.impl.substituteCareProvider;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
-import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderDao;
+import gov.ca.cwds.cms.data.access.dao.XaDaoProvider;
 import gov.ca.cwds.cms.data.access.dto.ExtendedSCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.BusinessValidationService;
@@ -32,7 +32,7 @@ public abstract class BaseDocToolRulesSubstituteCareProviderTest extends BaseDoc
     PlacementHomeInformation placementHomeInformation = new PlacementHomeInformation();
     entityAwareDTO.setPlacementHomeInformation(placementHomeInformation);
 
-    scpService = new SubstituteCareProviderCoreService(mock(SubstituteCareProviderDao.class));
+    scpService = new SubstituteCareProviderCoreService(mock(XaDaoProvider.class));
 
     entityAwareDTO.setEntity(new SubstituteCareProvider());
   }

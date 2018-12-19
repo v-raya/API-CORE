@@ -9,14 +9,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.cms.data.access.Constants;
 import gov.ca.cwds.cms.data.access.Constants.PhoneticSearchTables;
-import gov.ca.cwds.cms.data.access.dao.CountyOwnershipDao;
-import gov.ca.cwds.cms.data.access.dao.OutOfStateCheckDao;
-import gov.ca.cwds.cms.data.access.dao.PhoneContactDetailDao;
-import gov.ca.cwds.cms.data.access.dao.PlacementHomeInformationDao;
-import gov.ca.cwds.cms.data.access.dao.ScpOtherEthnicityDao;
-import gov.ca.cwds.cms.data.access.dao.SsaName3Dao;
-import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderDao;
-import gov.ca.cwds.cms.data.access.dao.SubstituteCareProviderUcDao;
+import gov.ca.cwds.cms.data.access.dao.XaDaoProvider;
 import gov.ca.cwds.cms.data.access.dto.ExtendedSCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.SCPEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.mapper.CountyOwnershipMapper;
@@ -27,7 +20,15 @@ import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
 import gov.ca.cwds.cms.data.access.service.rules.SubstituteCareProviderDroolsConfiguration;
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
+import gov.ca.cwds.data.legacy.cms.dao.CountyOwnershipDao;
+import gov.ca.cwds.data.legacy.cms.dao.OutOfStateCheckDao;
+import gov.ca.cwds.data.legacy.cms.dao.PhoneContactDetailDao;
+import gov.ca.cwds.data.legacy.cms.dao.PlacementHomeInformationDao;
+import gov.ca.cwds.data.legacy.cms.dao.ScpOtherEthnicityDao;
+import gov.ca.cwds.data.legacy.cms.dao.SsaName3Dao;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
+import gov.ca.cwds.data.legacy.cms.dao.SubstituteCareProviderDao;
+import gov.ca.cwds.data.legacy.cms.dao.SubstituteCareProviderUCDao;
 import gov.ca.cwds.data.legacy.cms.entity.CountyOwnership;
 import gov.ca.cwds.data.legacy.cms.entity.OutOfStateCheck;
 import gov.ca.cwds.data.legacy.cms.entity.PhoneContactDetail;
@@ -52,18 +53,27 @@ public class SubstituteCareProviderCoreService
             SubstituteCareProviderDao, SubstituteCareProvider, SCPEntityAwareDTO> {
 
   @Inject private BusinessValidationService businessValidationService;
-  @Inject private SubstituteCareProviderUcDao substituteCareProviderUcDao;
-  @Inject private CountyOwnershipDao countyOwnershipDao;
   @Inject private CountyOwnershipMapper countyOwnershipMapper;
-  @Inject private PlacementHomeInformationDao placementHomeInformationDao;
-  @Inject private PhoneContactDetailDao phoneContactDetailDao;
-  @Inject private SsaName3Dao scpSsaName3Dao;
-  @Inject private ScpOtherEthnicityDao scpOtherEthnicityDao;
-  @Inject private OutOfStateCheckDao outOfStateCheckDao;
+
+  private SubstituteCareProviderUCDao substituteCareProviderUcDao;
+  private CountyOwnershipDao countyOwnershipDao;
+  private PlacementHomeInformationDao placementHomeInformationDao;
+  private PhoneContactDetailDao phoneContactDetailDao;
+  private SsaName3Dao scpSsaName3Dao;
+  private ScpOtherEthnicityDao scpOtherEthnicityDao;
+  private OutOfStateCheckDao outOfStateCheckDao;
+
 
   @Inject
-  public SubstituteCareProviderCoreService(SubstituteCareProviderDao crudDao) {
-    super(crudDao);
+  public SubstituteCareProviderCoreService(XaDaoProvider xaDaoProvider) {
+    super(xaDaoProvider.getDao(SubstituteCareProviderDao.class));
+    placementHomeInformationDao = xaDaoProvider.getDao(PlacementHomeInformationDao.class);
+    phoneContactDetailDao = xaDaoProvider.getDao(PhoneContactDetailDao.class);
+    scpSsaName3Dao = xaDaoProvider.getSsaName3Dao();
+    scpOtherEthnicityDao = xaDaoProvider.getDao(ScpOtherEthnicityDao.class);
+    outOfStateCheckDao = xaDaoProvider.getDao(OutOfStateCheckDao.class);
+    substituteCareProviderUcDao = xaDaoProvider.getDao(SubstituteCareProviderUCDao.class);
+    countyOwnershipDao = xaDaoProvider.getDao(CountyOwnershipDao.class);
   }
 
   @Override
@@ -244,7 +254,7 @@ public class SubstituteCareProviderCoreService
   }
 
   public void setSubstituteCareProviderUcDao(
-      SubstituteCareProviderUcDao substituteCareProviderUcDao) {
+      SubstituteCareProviderUCDao substituteCareProviderUcDao) {
     this.substituteCareProviderUcDao = substituteCareProviderUcDao;
   }
 

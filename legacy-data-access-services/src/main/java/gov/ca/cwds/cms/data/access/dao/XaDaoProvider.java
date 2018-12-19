@@ -5,14 +5,14 @@ import gov.ca.cwds.cms.data.access.inject.XaDasSessionFactory;
 import org.hibernate.SessionFactory;
 
 /**
- * @author CWDS CALS API Team
+ * Provides dao based on XA session factory.
+ * Created by Alexander Serbin on 12/12/2018
  */
-public class SsaName3Dao extends gov.ca.cwds.data.legacy.cms.dao.SsaName3Dao {
+public class XaDaoProvider extends AbstractDaoProvider {
 
   @Inject
-  public SsaName3Dao(@XaDasSessionFactory SessionFactory sessionFactory) {
+  public XaDaoProvider(@XaDasSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 
 }
-

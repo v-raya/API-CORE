@@ -10,20 +10,8 @@ import com.google.inject.Inject;
 import gov.ca.cwds.authorizer.PlacementHomeResultReadAuthorizer;
 import gov.ca.cwds.cms.data.access.CWSIdentifier;
 import gov.ca.cwds.cms.data.access.Constants.PhoneticSearchTables;
-import gov.ca.cwds.cms.data.access.dao.BackgroundCheckDao;
-import gov.ca.cwds.cms.data.access.dao.CountyOwnershipDao;
-import gov.ca.cwds.cms.data.access.dao.EmergencyContactDetailDao;
-import gov.ca.cwds.cms.data.access.dao.ExternalInterfaceDao;
-import gov.ca.cwds.cms.data.access.dao.OtherAdultsInPlacementHomeDao;
-import gov.ca.cwds.cms.data.access.dao.OtherChildrenInPlacementHomeDao;
-import gov.ca.cwds.cms.data.access.dao.OtherPeopleScpRelationshipDao;
-import gov.ca.cwds.cms.data.access.dao.OutOfStateCheckDao;
-import gov.ca.cwds.cms.data.access.dao.PlacementFacilityTypeHistoryDao;
-import gov.ca.cwds.cms.data.access.dao.PlacementHomeDao;
-import gov.ca.cwds.cms.data.access.dao.PlacementHomeProfileDao;
-import gov.ca.cwds.cms.data.access.dao.PlacementHomeUcDao;
-import gov.ca.cwds.cms.data.access.dao.SsaName3Dao;
-import gov.ca.cwds.cms.data.access.dao.nonxa.NonXaPlacementHomeDao;
+import gov.ca.cwds.cms.data.access.dao.NonXaDaoProvider;
+import gov.ca.cwds.cms.data.access.dao.XaDaoProvider;
 import gov.ca.cwds.cms.data.access.dto.AppAndLicHistoryAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.CLCEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.dto.OtherAdultInHomeEntityAwareDTO;
@@ -39,6 +27,19 @@ import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DefaultDataAccessLifeCycle;
 import gov.ca.cwds.cms.data.access.service.rules.PlacementHomeDroolsConfiguration;
 import gov.ca.cwds.cms.data.access.utils.ParametersValidator;
+import gov.ca.cwds.data.legacy.cms.dao.BackgroundCheckDao;
+import gov.ca.cwds.data.legacy.cms.dao.CountyOwnershipDao;
+import gov.ca.cwds.data.legacy.cms.dao.EmergencyContactDetailDao;
+import gov.ca.cwds.data.legacy.cms.dao.ExternalInterfaceDao;
+import gov.ca.cwds.data.legacy.cms.dao.OtherAdultsInPlacementHomeDao;
+import gov.ca.cwds.data.legacy.cms.dao.OtherChildrenInPlacementHomeDao;
+import gov.ca.cwds.data.legacy.cms.dao.OtherPeopleScpRelationshipDao;
+import gov.ca.cwds.data.legacy.cms.dao.OutOfStateCheckDao;
+import gov.ca.cwds.data.legacy.cms.dao.PlacementFacilityTypeHistoryDao;
+import gov.ca.cwds.data.legacy.cms.dao.PlacementHomeDao;
+import gov.ca.cwds.data.legacy.cms.dao.PlacementHomeProfileDao;
+import gov.ca.cwds.data.legacy.cms.dao.PlacementHomeUcDao;
+import gov.ca.cwds.data.legacy.cms.dao.SsaName3Dao;
 import gov.ca.cwds.data.legacy.cms.dao.SsaName3ParameterObject;
 import gov.ca.cwds.data.legacy.cms.entity.BackgroundCheck;
 import gov.ca.cwds.data.legacy.cms.entity.CountyLicenseCase;
@@ -75,49 +76,13 @@ public class PlacementHomeCoreService
   private BusinessValidationService businessValidationService;
 
   @Inject
-  private PlacementHomeUcDao placementHomeUcDao;
-
-  @Inject
   private CountyOwnershipMapper countyOwnershipMapper;
-
-  @Inject
-  private CountyOwnershipDao countyOwnershipDao;
-
-  @Inject
-  private ExternalInterfaceDao externalInterfaceDao;
 
   @Inject
   private ExternalInterfaceMapper externalInterfaceMapper;
 
   @Inject
-  private EmergencyContactDetailDao emergencyContactDetailDao;
-
-  @Inject
-  private PlacementHomeProfileDao placementHomeProfileDao;
-
-  @Inject
-  private PlacementFacilityTypeHistoryDao placementFacilityTypeHistoryDao;
-
-  @Inject
   private SubstituteCareProviderCoreService substituteCareProviderService;
-
-  @Inject
-  private OtherChildrenInPlacementHomeDao otherChildrenInPlacementHomeDao;
-
-  @Inject
-  private OtherPeopleScpRelationshipDao otherPeopleScpRelationshipDao;
-
-  @Inject
-  private OtherAdultsInPlacementHomeDao otherAdultsInPlacementHomeDao;
-
-  @Inject
-  private OutOfStateCheckDao outOfStateCheckDao;
-
-  @Inject
-  private BackgroundCheckDao backgroundCheckDao;
-
-  @Inject
-  private SsaName3Dao ssaName3Dao;
 
   @Inject
   private CountyLicenseCaseService countyLicenseCaseService;
@@ -125,14 +90,49 @@ public class PlacementHomeCoreService
   @Inject
   private ApplicationAndLicenseStatusHistoryService applicationAndLicenseStatusHistoryService;
 
+  private PlacementHomeUcDao placementHomeUcDao;
+
+  private CountyOwnershipDao countyOwnershipDao;
+
+  private ExternalInterfaceDao externalInterfaceDao;
+
+  private EmergencyContactDetailDao emergencyContactDetailDao;
+
+  private PlacementHomeProfileDao placementHomeProfileDao;
+
+  private PlacementFacilityTypeHistoryDao placementFacilityTypeHistoryDao;
+
+  private OtherChildrenInPlacementHomeDao otherChildrenInPlacementHomeDao;
+
+  private OtherPeopleScpRelationshipDao otherPeopleScpRelationshipDao;
+
+  private OtherAdultsInPlacementHomeDao otherAdultsInPlacementHomeDao;
+
+  private OutOfStateCheckDao outOfStateCheckDao;
+
+  private BackgroundCheckDao backgroundCheckDao;
+
+  private SsaName3Dao ssaName3Dao;
+
   /**
    * Constructor with injected services.
-   *
-   * @param crudDao Placement Home DAO
    */
   @Inject
-  public PlacementHomeCoreService(PlacementHomeDao crudDao, NonXaPlacementHomeDao nonXaCrudDao) {
-    super(crudDao, nonXaCrudDao);
+  public PlacementHomeCoreService(XaDaoProvider xaDaoFacade, NonXaDaoProvider nonXaDaoFacade) {
+    super(xaDaoFacade.getDao(PlacementHomeDao.class), nonXaDaoFacade.getDao(PlacementHomeDao.class));
+    placementHomeUcDao = xaDaoFacade.getDao(PlacementHomeUcDao.class);
+    countyOwnershipDao = xaDaoFacade.getDao(CountyOwnershipDao.class);
+    externalInterfaceDao = xaDaoFacade.getDao(ExternalInterfaceDao.class);
+    emergencyContactDetailDao = xaDaoFacade.getDao(EmergencyContactDetailDao.class);
+    emergencyContactDetailDao = xaDaoFacade.getDao(EmergencyContactDetailDao.class);
+    placementHomeProfileDao = xaDaoFacade.getDao(PlacementHomeProfileDao.class);
+    placementFacilityTypeHistoryDao = xaDaoFacade.getDao(PlacementFacilityTypeHistoryDao.class);
+    otherChildrenInPlacementHomeDao = xaDaoFacade.getDao(OtherChildrenInPlacementHomeDao.class);
+    otherPeopleScpRelationshipDao = xaDaoFacade.getDao(OtherPeopleScpRelationshipDao.class);
+    otherAdultsInPlacementHomeDao = xaDaoFacade.getDao(OtherAdultsInPlacementHomeDao.class);
+    outOfStateCheckDao = xaDaoFacade.getDao(OutOfStateCheckDao.class);
+    backgroundCheckDao = xaDaoFacade.getDao(BackgroundCheckDao.class);
+    ssaName3Dao = xaDaoFacade.getSsaName3Dao();
   }
 
   @Override
