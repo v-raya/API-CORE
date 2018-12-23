@@ -157,11 +157,7 @@ public class ClientDao extends BaseDaoImpl<Client> {
         .setParameter("clientId", clientId)
         .setMaxResults(1)
         .getResultList();
-    if (clientCounties.isEmpty()) {
-      return new ClientCounty("4. NO COUNTY", 0, null, null, "");
-    } else {
-      return clientCounties.get(0);
-    }
+    return clientCounties.isEmpty() ? new ClientCounty("4. NO COUNTY", 0, null, null, "") : clientCounties.get(0);
   }
 
   private Client findSingleFacility(String queryName, Consumer<Query<Client>> setParameters) {
