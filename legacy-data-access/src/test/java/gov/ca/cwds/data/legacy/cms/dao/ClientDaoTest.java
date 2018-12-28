@@ -19,6 +19,7 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.MilitaryStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.ParentUnemployedStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Soc158placementsStatus;
+import gov.ca.cwds.data.legacy.cms.entity.facade.ClientCounty;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType;
 import gov.ca.cwds.data.legacy.cms.persistence.BaseCwsCmsInMemoryPersistenceTest;
 import java.time.LocalDate;
@@ -183,6 +184,69 @@ public class ClientDaoTest extends BaseCwsCmsInMemoryPersistenceTest {
 
     assertTableEquals(expectedTable, actualTable);
   }
+
+  @Test
+  public void testGetClientCountyWhenOpenCase() throws Exception {
+    cleanAllAndInsert("/dbunit/ClientsCounty.xml");
+    executeInTransaction(sessionFactory, (sessionFactory) -> {
+      ClientCounty clientCounty = dao.getClientCounty("MBML9l400b");
+      Assert.assertEquals("1. CASE", clientCounty.getRule());
+      Assert.assertEquals(LocalDate.parse("1998-03-16"), clientCounty.getStartDate());
+      Assert.assertNull(clientCounty.getEndDate());
+      Assert.assertEquals("Bj0FpSc00b", clientCounty.getIdentifier());
+      Assert.assertEquals(Integer.valueOf(1110), clientCounty.getCountyCode());
+    });
+  }
+
+  @Test
+  public void testGetClientCountyWhenClosedCase() throws Exception {
+    cleanAllAndInsert("/dbunit/ClientsCounty.xml");
+    executeInTransaction(sessionFactory, (sessionFactory) -> {
+      ClientCounty clientCounty = dao.getClientCounty("9gItc1g0Ki");
+      Assert.assertEquals("1. CASE", clientCounty.getRule());
+      Assert.assertEquals(LocalDate.parse("2004-05-20"), clientCounty.getStartDate());
+      Assert.assertEquals(LocalDate.parse("2004-05-20"), clientCounty.getEndDate());
+      Assert.assertEquals("AaYsYMS0Ki", clientCounty.getIdentifier());
+      Assert.assertEquals(Integer.valueOf(1095), clientCounty.getCountyCode());
+    });
+  }
+
+  @Test
+  public void testGetClientCountyWhenOpenReferral() throws Exception {
+    cleanAllAndInsert("/dbunit/ClientsCounty.xml");
+    executeInTransaction(sessionFactory, (sessionFactory) -> {
+      ClientCounty clientCounty = dao.getClientCounty("Abi5qGw04Z");
+      Assert.assertEquals("2. REFERRAL", clientCounty.getRule());
+      Assert.assertEquals(LocalDate.parse("2018-05-14"), clientCounty.getStartDate());
+      Assert.assertNull(clientCounty.getEndDate());
+      Assert.assertEquals("MALNh7Caaf", clientCounty.getIdentifier());
+      Assert.assertEquals(Integer.valueOf(1087), clientCounty.getCountyCode());
+    });
+  }
+
+  @Test
+  public void testGetClientCountyWhenClosedReferral() throws Exception {
+    cleanAllAndInsert("/dbunit/ClientsCounty.xml");
+    executeInTransaction(sessionFactory, (sessionFactory) -> {
+      ClientCounty clientCounty = dao.getClientCounty("OvSr3QI09a");
+      Assert.assertEquals("2. REFERRAL", clientCounty.getRule());
+      Assert.assertEquals(LocalDate.parse("1998-06-16"), clientCounty.getStartDate());
+      Assert.assertEquals(LocalDate.parse("1998-06-16"), clientCounty.getEndDate());
+      Assert.assertEquals("1yZ7BZ409a", clientCounty.getIdentifier());
+      Assert.assertEquals(Integer.valueOf(1080), clientCounty.getCountyCode());
+    });
+  }
+
+  @Test
+  public void testGetClientCountyWhenNoCounty() throws Exception {
+    cleanAllAndInsert("/dbunit/ClientsCounty.xml");
+    executeInTransaction(sessionFactory, (sessionFactory) -> {
+      ClientCounty clientCounty = dao.getClientCounty("O9kIYi80Ki");
+      Assert.assertEquals("4. NO COUNTY", clientCounty.getRule());
+      Assert.assertEquals(Integer.valueOf(0), clientCounty.getCountyCode());
+    });
+  }
+
 
   @Test
   public void testGetAccessTypeByAssignment() throws Exception {

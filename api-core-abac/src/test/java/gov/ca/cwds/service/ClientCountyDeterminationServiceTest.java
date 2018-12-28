@@ -1,5 +1,6 @@
 package gov.ca.cwds.service;
 
+import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -48,7 +49,8 @@ public class ClientCountyDeterminationServiceTest {
 
     final CountyDeterminationDao countyDeterminationDao =
         new CountyDeterminationDao(daoTestRule.getSessionFactory());
-    testSubject = new ClientCountyDeterminationService(countyDeterminationDao);
+    final ClientDao clientDao = new ClientDao(daoTestRule.getSessionFactory());
+    testSubject = new ClientCountyDeterminationService(countyDeterminationDao, clientDao);
   }
 
   @Test

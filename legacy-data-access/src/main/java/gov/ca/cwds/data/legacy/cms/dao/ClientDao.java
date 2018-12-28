@@ -4,13 +4,15 @@ import com.google.inject.Inject;
 import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.legacy.cms.entity.Client;
 import gov.ca.cwds.data.legacy.cms.entity.enums.AccessType;
+import gov.ca.cwds.data.legacy.cms.entity.facade.ClientCounty;
 import gov.ca.cwds.data.stream.QueryCreator;
 import gov.ca.cwds.data.stream.ScalarResultsStreamer;
 import gov.ca.cwds.inject.CmsSessionFactory;
+import gov.ca.cwds.util.Require;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 import javax.persistence.NoResultException;
@@ -140,6 +142,22 @@ public class ClientDao extends BaseDaoImpl<Client> {
         .setParameter("staffId", supervisorStaffId)
         .setParameter("now", LocalDate.now())
         .uniqueResult().toString());
+  }
+
+  /**
+   * Method returns Client county base on algorithm from IBM DocTool Rule R - 10672
+   * @param clientId 10 character Client Id
+   * @return ClientCounty facade entity with client county information
+   */
+  public ClientCounty getClientCounty(String clientId) {
+    Require.requireNotNullAndNotEmpty(clientId);
+    List<ClientCounty> clientCounties = currentSession()
+        .getNamedNativeQuery(ClientCounty.QUERY_CLIENT_COUNTY)
+        .setResultSetMapping(ClientCounty.MAPPING_CLIENT_COUNTY)
+        .setParameter("clientId", clientId)
+        .setMaxResults(1)
+        .getResultList();
+    return clientCounties.isEmpty() ? new ClientCounty("4. NO COUNTY", 0, null, null, "") : clientCounties.get(0);
   }
 
   private Client findSingleFacility(String queryName, Consumer<Query<Client>> setParameters) {
