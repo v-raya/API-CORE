@@ -10,10 +10,22 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import gov.ca.cwds.cms.data.access.dao.PlacementHomeDao;
-import gov.ca.cwds.cms.data.access.dao.nonxa.NonXaPlacementHomeDao;
+import gov.ca.cwds.cms.data.access.dao.NonXaDaoProvider;
+import gov.ca.cwds.cms.data.access.dao.XaDaoProvider;
 import gov.ca.cwds.cms.data.access.dto.PlacementHomeEntityAwareDTO;
 import gov.ca.cwds.cms.data.access.service.lifecycle.DataAccessServiceLifecycle;
+import gov.ca.cwds.data.legacy.cms.dao.BackgroundCheckDao;
+import gov.ca.cwds.data.legacy.cms.dao.CountyOwnershipDao;
+import gov.ca.cwds.data.legacy.cms.dao.EmergencyContactDetailDao;
+import gov.ca.cwds.data.legacy.cms.dao.ExternalInterfaceDao;
+import gov.ca.cwds.data.legacy.cms.dao.OtherAdultsInPlacementHomeDao;
+import gov.ca.cwds.data.legacy.cms.dao.OtherChildrenInPlacementHomeDao;
+import gov.ca.cwds.data.legacy.cms.dao.OtherPeopleScpRelationshipDao;
+import gov.ca.cwds.data.legacy.cms.dao.OutOfStateCheckDao;
+import gov.ca.cwds.data.legacy.cms.dao.PlacementFacilityTypeHistoryDao;
+import gov.ca.cwds.data.legacy.cms.dao.PlacementHomeDao;
+import gov.ca.cwds.data.legacy.cms.dao.PlacementHomeProfileDao;
+import gov.ca.cwds.data.legacy.cms.dao.PlacementHomeUcDao;
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 import gov.ca.cwds.drools.DroolsException;
 import gov.ca.cwds.security.utils.PrincipalUtils;
@@ -38,10 +50,25 @@ public class PlacementHomeCoreServiceTest
   public static final String PLACEMENT_ID = "2212121212";
 
   @Mock
-  private PlacementHomeDao placementHomeDao;
+  protected XaDaoProvider xaDaoProvider;
 
   @Mock
-  private NonXaPlacementHomeDao nonXaPlacementHomeDao;
+  protected NonXaDaoProvider nonXaDaoProvider;
+
+  @Mock
+  private PlacementHomeDao placementHomeDao;
+
+  @Mock protected PlacementHomeUcDao placementHomeUcDao;
+  @Mock protected CountyOwnershipDao countyOwnershipDao;
+  @Mock protected ExternalInterfaceDao externalInterfaceDao;
+  @Mock protected EmergencyContactDetailDao emergencyContactDetailDao;
+  @Mock protected PlacementHomeProfileDao placementHomeProfileDao;
+  @Mock protected PlacementFacilityTypeHistoryDao placementFacilityTypeHistoryDao;
+  @Mock protected OtherChildrenInPlacementHomeDao otherChildrenInPlacementHomeDao;
+  @Mock protected OtherPeopleScpRelationshipDao otherPeopleScpRelationshipDao;
+  @Mock protected OtherAdultsInPlacementHomeDao otherAdultsInPlacementHomeDao;
+  @Mock protected OutOfStateCheckDao outOfStateCheckDao;
+  @Mock protected BackgroundCheckDao backgroundCheckDao;
 
   private PlacementHomeCoreService target;
 
@@ -62,10 +89,25 @@ public class PlacementHomeCoreServiceTest
   public void init() throws DroolsException {
     PowerMockito.mockStatic(PrincipalUtils.class);
     when(PrincipalUtils.getStaffPersonId()).thenReturn(USER_ID);
+    when(xaDaoProvider.getDao(any())).thenReturn(placementHomeDao);
+    when(nonXaDaoProvider.getDao(any())).thenReturn(placementHomeDao);
     when(placementHomeDao.create(any(PlacementHome.class)))
         .thenReturn(function.apply(PLACEMENT_ID));
-    target = PowerMockito.spy(new PlacementHomeCoreService(placementHomeDao,
-      nonXaPlacementHomeDao));
+    when(xaDaoProvider.getDao(PlacementHomeUcDao.class)).thenReturn(placementHomeUcDao);
+    when(xaDaoProvider.getDao(CountyOwnershipDao.class)).thenReturn(countyOwnershipDao);
+    when(xaDaoProvider.getDao(ExternalInterfaceDao.class)).thenReturn(externalInterfaceDao);
+    when(xaDaoProvider.getDao(EmergencyContactDetailDao.class)).thenReturn(emergencyContactDetailDao);
+    when(xaDaoProvider.getDao(EmergencyContactDetailDao.class)).thenReturn(emergencyContactDetailDao);
+    when(xaDaoProvider.getDao(PlacementHomeProfileDao.class)).thenReturn(placementHomeProfileDao);
+    when(xaDaoProvider.getDao(PlacementFacilityTypeHistoryDao.class)).thenReturn(placementFacilityTypeHistoryDao);
+    when(xaDaoProvider.getDao(OtherChildrenInPlacementHomeDao.class)).thenReturn(otherChildrenInPlacementHomeDao);
+    when(xaDaoProvider.getDao(OtherPeopleScpRelationshipDao.class)).thenReturn(otherPeopleScpRelationshipDao);
+    when(xaDaoProvider.getDao(OtherAdultsInPlacementHomeDao.class)).thenReturn(otherAdultsInPlacementHomeDao);
+    when(xaDaoProvider.getDao(OutOfStateCheckDao.class)).thenReturn(outOfStateCheckDao);
+    when(xaDaoProvider.getDao(BackgroundCheckDao.class)).thenReturn(backgroundCheckDao);
+    when(xaDaoProvider.getSsaName3Dao()).thenReturn(null);
+    target = PowerMockito.spy(new PlacementHomeCoreService(xaDaoProvider,
+      nonXaDaoProvider));
     when(target.getCreateLifeCycle()).thenReturn(null);
   }
 

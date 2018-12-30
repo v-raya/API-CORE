@@ -1,5 +1,7 @@
 package gov.ca.cwds.service;
 
+import gov.ca.cwds.data.legacy.cms.dao.ClientDao;
+import gov.ca.cwds.data.legacy.cms.entity.facade.ClientCounty;
 import java.util.Collection;
 import java.util.List;
 
@@ -14,10 +16,12 @@ import java.util.Map;
 public class ClientCountyDeterminationService {
 
   private final CountyDeterminationDao countyDeterminationDao;
+  private final ClientDao clientDao;
 
   @Inject
-  public ClientCountyDeterminationService(CountyDeterminationDao countyDeterminationDao) {
+  public ClientCountyDeterminationService(CountyDeterminationDao countyDeterminationDao, ClientDao clientDao) {
     this.countyDeterminationDao = countyDeterminationDao;
+    this.clientDao = clientDao;
   }
 
   /**
@@ -28,6 +32,17 @@ public class ClientCountyDeterminationService {
    */
   public List<Short> getClientCountiesById(final String clientId) {
     return countyDeterminationDao.getClientCounties(clientId);
+  }
+
+  /**
+   * This method determines client county by Client ID from main operational database
+   * instead of replicated table
+   *
+   * @param clientId Client ID
+   * @return ClientCounty one Client county
+   */
+  public ClientCounty getClientCountiesRealtimeById(final String clientId) {
+    return clientDao.getClientCounty(clientId);
   }
 
   /**

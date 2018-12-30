@@ -11,6 +11,7 @@ import org.junit.Test;
 /**
  * Created by TPT2 on 12/11/2017.
  */
+
 public class R00168Test extends BaseDocToolRulesPlacementHomeTest {
 
   @Before

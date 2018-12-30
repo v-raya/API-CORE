@@ -1,32 +1,27 @@
 package gov.ca.cwds.data.legacy.cms.dao;
 
+import com.google.inject.Inject;
+import gov.ca.cwds.data.BaseDaoImpl;
+import gov.ca.cwds.data.DaoException;
+import gov.ca.cwds.inject.CmsSessionFactory;
 import java.text.SimpleDateFormat;
-
 import javax.persistence.ParameterMode;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.procedure.ProcedureCall;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
-
-import gov.ca.cwds.data.DaoException;
-import gov.ca.cwds.inject.CmsSessionFactory;
-
 /**
  * @author CWDS CALS API Team
  */
-public class SsaName3Dao {
+public class SsaName3Dao extends BaseDaoImpl {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SsaName3Dao.class);
 
-  private final SessionFactory sessionFactory;
-
   @Inject
   public SsaName3Dao(@CmsSessionFactory SessionFactory sessionFactory) {
-    this.sessionFactory = sessionFactory;
+    super(sessionFactory);
   }
 
   /**
@@ -36,7 +31,7 @@ public class SsaName3Dao {
    * @param parameterObject stored procedure parameters
    */
   public void callStoredProc(SsaName3ParameterObject parameterObject) {
-    final Session session = sessionFactory.getCurrentSession();
+    final Session session = getSessionFactory().getCurrentSession();
     final String STORED_PROC_NAME = "SPSSANAME3";
     final String schema =
         (String) session.getSessionFactory().getProperties().get("hibernate.default_schema");

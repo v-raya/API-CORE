@@ -2,6 +2,7 @@ package gov.ca.cwds.data.legacy.cms.entity;
 
 import static gov.ca.cwds.data.legacy.cms.entity.Client.CLIENT_ASSIGNMENTS_BY_STAFF_QUERY;
 import static gov.ca.cwds.data.legacy.cms.entity.Client.CLIENT_ASSIGNMENTS_BY_SUPERVISOR_QUERY;
+import static gov.ca.cwds.data.legacy.cms.entity.Client.CLIENT_COUNTY_QUERY;
 import static gov.ca.cwds.data.legacy.cms.entity.Client.COALESCE_QUERY_PREFIX;
 
 import gov.ca.cwds.data.legacy.cms.CmsPersistentObjectVersioned;
@@ -17,6 +18,7 @@ import gov.ca.cwds.data.legacy.cms.entity.enums.ParentUnemployedStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Sensitivity;
 import gov.ca.cwds.data.legacy.cms.entity.enums.Soc158placementsStatus;
 import gov.ca.cwds.data.legacy.cms.entity.enums.UnableToDetermineReason;
+import gov.ca.cwds.data.legacy.cms.entity.facade.ClientCounty;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import java.io.Serializable;
@@ -28,6 +30,8 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -39,6 +43,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -80,8 +85,25 @@ import org.hibernate.annotations.Type;
       COALESCE_QUERY_PREFIX
         + CLIENT_ASSIGNMENTS_BY_SUPERVISOR_QUERY
         + " ) c "
+  ),
+  @NamedNativeQuery(name = "Client.getClientCounty",
+    query = CLIENT_COUNTY_QUERY
   )
 })
+
+@SqlResultSetMapping(
+  name = ClientCounty.MAPPING_CLIENT_COUNTY,
+  classes = @ConstructorResult(
+    targetClass = ClientCounty.class,
+    columns = {
+      @ColumnResult(name = "rule", type = String.class),
+      @ColumnResult(name = "countyCode", type = Integer.class),
+      @ColumnResult(name = "startDate", type = LocalDate.class),
+      @ColumnResult(name = "endDate", type = LocalDate.class),
+      @ColumnResult(name = "identifier", type = String.class)
+    }
+  )
+)
 
 @SuppressWarnings({"squid:S3437", "squid:S2160", "common-java:DuplicatedBlocks"})
 @Entity
@@ -211,6 +233,28 @@ public class Client extends CmsPersistentObjectVersioned implements IClient, Per
     + "                      THEN 'R' "
     + "                    END), 'NONE') "
     + "FROM ( ";
+
+  public static final String CLIENT_COUNTY_QUERY =
+    "SELECT '1. CASE' as rule, A.GVR_ENTC as countyCode, A.START_DT as startDate, A.END_DT as endDate, A.IDENTIFIER as identifier "
+    + "FROM {h-schema}CASE_T A, {h-schema}STFPERST B "
+    + "WHERE A.FKCHLD_CLT = :clientId "
+    + "      AND A.FKSTFPERST = B.IDENTIFIER "
+    + "union "
+    + "SELECT '2. REFERRAL' as rule, D.GVR_ENTC as countyCode, A.REF_RCV_DT as startDate, A.REFCLSR_DT as endDate, A.IDENTIFIER as identifier "
+    + "FROM {h-schema}REFERL_T A, {h-schema}REFR_CLT B, {h-schema}STFPERST C, {h-schema}CWS_OFFT D "
+    + "WHERE A.IDENTIFIER = B.FKREFERL_T "
+    + "      AND FKCLIENT_T = :clientId "
+    + "      AND A.FKSTFPERST = C.IDENTIFIER "
+    + "      AND C.FKCWS_OFFT = D.IDENTIFIER "
+    + "union "
+    + "SELECT '3. RELATIONSHIP' as rule, A.GVR_ENTC as countyCode, A.START_DT as startDate, A.END_DT as endDate, A.IDENTIFIER as identifier "
+    + "FROM {h-schema}CASE_T A, {h-schema}CLN_RELT B,  {h-schema}STFPERST C "
+    + "WHERE (B.FKCLIENT_0 = :clientId "
+    + "       OR  B.FKCLIENT_T = :clientId) "
+    + "      AND (A.FKCHLD_CLT = B.FKCLIENT_T "
+    + "           OR  A.FKCHLD_CLT = B.FKCLIENT_0) "
+    + "      AND A.FKSTFPERST = C.IDENTIFIER "
+    + "order by 1, 4 desc, 3 desc";
 
   private static final long serialVersionUID = 783532074047017463L;
 
