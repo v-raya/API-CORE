@@ -49,7 +49,7 @@ public abstract class AbstractBaseAuthorizer<T, I> extends BaseAuthorizer<T, I> 
     String instanceName =
       Optional.ofNullable(instance).map(t -> t.getClass().getSimpleName()).orElse(null);
     LOGGER.info(
-      "StaffPerson [{}] with staffPrivilegeTypes = {} is performing action on object [{}]. "
+      "Authorization: StaffPerson [{}] with staffPrivilegeTypes = {} is performing action on object [{}]. "
         + "Authorization result = [{}]. {}",
       perryAccount.getStaffId(), staffPrivilegeTypes, instanceName, authorizationResult,
       perryAccount.toString().replaceAll("\n", " ").replaceAll("\r", ""));
@@ -59,6 +59,9 @@ public abstract class AbstractBaseAuthorizer<T, I> extends BaseAuthorizer<T, I> 
     final PerryAccount perryAccount = PerrySubject.getPerryAccount();
     final Set<StaffPrivilegeType> staffPrivilegeTypes = toStaffPersonPrivilegeTypes(perryAccount);
     if (staffPrivilegeTypes.isEmpty()) {
+      LOGGER.info(
+        "Authorization: staff person has no privileges. Authorization result = [{}]. {}",
+        Boolean.FALSE, perryAccount.toString().replaceAll("\n", " ").replaceAll("\r", ""));
       return false;
     }
     if (authorizationFacts == null) {
